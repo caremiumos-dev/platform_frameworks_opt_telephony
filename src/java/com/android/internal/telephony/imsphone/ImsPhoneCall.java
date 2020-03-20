@@ -16,21 +16,20 @@
 
 package com.android.internal.telephony.imsphone;
 
-import android.annotation.UnsupportedAppUsage;
-import com.android.ims.internal.ConferenceParticipant;
-import android.telephony.Rlog;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.telephony.DisconnectCause;
-import android.telephony.Rlog;
 import android.telephony.ims.ImsStreamMediaProfile;
 import android.util.Log;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsException;
+import com.android.ims.internal.ConferenceParticipant;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
+import com.android.telephony.Rlog;
 
 import java.util.List;
 
@@ -124,6 +123,12 @@ public class ImsPhoneCall extends Call {
     }
 
     @Override
+    public void hangup(@android.telecom.Call.RejectReason int rejectReason)
+            throws CallStateException {
+        mOwner.hangup(this, rejectReason);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[ImsPhoneCall ");
@@ -199,7 +204,9 @@ public class ImsPhoneCall extends Call {
             }
 
             if (hasOnlyDisconnectedConnections) {
-                mState = State.DISCONNECTED;
+                synchronized(this) {
+                    mState = State.DISCONNECTED;
+                }
                 if (VDBG) {
                     Rlog.v(LOG_TAG, "connectionDisconnected : " + mCallContext + " state = " +
                             mState);
@@ -235,13 +242,17 @@ public class ImsPhoneCall extends Call {
      * Called when this Call is being hung up locally (eg, user pressed "end")
      */
     @UnsupportedAppUsage
-    void
-    onHangupLocal() {
+    @VisibleForTesting
+    public void onHangupLocal() {
         for (int i = 0, s = mConnections.size(); i < s; i++) {
             ImsPhoneConnection cn = (ImsPhoneConnection)mConnections.get(i);
             cn.onHangupLocal();
         }
-        mState = State.DISCONNECTING;
+        synchronized(this) {
+            if (mState.isAlive()) {
+                mState = State.DISCONNECTING;
+            }
+        }
         if (VDBG) {
             Rlog.v(LOG_TAG, "onHangupLocal : " + mCallContext + " state = " + mState);
         }

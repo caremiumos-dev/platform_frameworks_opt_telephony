@@ -16,16 +16,15 @@
 
 package com.android.internal.telephony.test;
 
+import android.compat.annotation.UnsupportedAppUsage;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 
 import com.android.internal.telephony.ATParseEx;
 import com.android.internal.telephony.DriverCall;
-
-import dalvik.annotation.compat.UnsupportedAppUsage;
+import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -30,21 +30,20 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
+import android.net.TetheringManager;
 import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.SignalThresholdInfo;
-import android.telephony.TelephonyManager;
 import android.util.LocalLog;
-import android.util.SparseIntArray;
 import android.view.Display;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -66,7 +65,6 @@ public class DeviceStateMonitor extends Handler {
     protected static final String TAG = DeviceStateMonitor.class.getSimpleName();
 
     static final int EVENT_RIL_CONNECTED                = 0;
-    static final int EVENT_UPDATE_MODE_CHANGED          = 1;
     @VisibleForTesting
     static final int EVENT_SCREEN_STATE_CHANGED         = 2;
     static final int EVENT_POWER_SAVE_MODE_CHANGED      = 3;
@@ -76,9 +74,7 @@ public class DeviceStateMonitor extends Handler {
     static final int EVENT_RADIO_AVAILABLE              = 6;
     @VisibleForTesting
     static final int EVENT_WIFI_CONNECTION_CHANGED      = 7;
-
-    // TODO(b/74006656) load hysteresis values from a property when DeviceStateMonitor starts
-    private static final int HYSTERESIS_KBPS = 50;
+    static final int EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH = 8;
 
     private static final int WIFI_UNAVAILABLE = 0;
     private static final int WIFI_AVAILABLE = 1;
@@ -163,6 +159,11 @@ public class DeviceStateMonitor extends Handler {
      */
     private boolean mIsWifiConnected;
 
+    /**
+     * True indicates we should always enable the signal strength reporting from radio.
+     */
+    private boolean mIsAlwaysSignalStrengthReportingEnabled;
+
     @VisibleForTesting
     static final int CELL_INFO_INTERVAL_SHORT_MS = 2000;
     @VisibleForTesting
@@ -170,9 +171,6 @@ public class DeviceStateMonitor extends Handler {
 
     /** The minimum required wait time between cell info requests to the modem */
     private int mCellInfoMinInterval = CELL_INFO_INTERVAL_SHORT_MS;
-
-
-    private SparseIntArray mUpdateModes = new SparseIntArray();
 
     /**
      * The unsolicited response filter. See IndicationFilter defined in types.hal for the definition
@@ -220,9 +218,9 @@ public class DeviceStateMonitor extends Handler {
                     msg = obtainMessage(EVENT_CHARGING_STATE_CHANGED);
                     msg.arg1 = 0;   // not charging
                     break;
-                case ConnectivityManager.ACTION_TETHER_STATE_CHANGED:
+                case TetheringManager.ACTION_TETHER_STATE_CHANGED:
                     ArrayList<String> activeTetherIfaces = intent.getStringArrayListExtra(
-                            ConnectivityManager.EXTRA_ACTIVE_TETHER);
+                            TetheringManager.EXTRA_ACTIVE_TETHER);
 
                     boolean isTetheringOn = activeTetherIfaces != null
                             && activeTetherIfaces.size() > 0;
@@ -257,8 +255,14 @@ public class DeviceStateMonitor extends Handler {
         mIsTetheringOn = false;
         mIsLowDataExpected = false;
 
-        log("DeviceStateMonitor mIsPowerSaveOn=" + mIsPowerSaveOn + ",mIsScreenOn="
-                + mIsScreenOn + ",mIsCharging=" + mIsCharging, false);
+        log("DeviceStateMonitor mIsTetheringOn=" + mIsTetheringOn
+                + ", mIsScreenOn=" + mIsScreenOn
+                + ", mIsCharging=" + mIsCharging
+                + ", mIsPowerSaveOn=" + mIsPowerSaveOn
+                + ", mIsLowDataExpected=" + mIsLowDataExpected
+                + ", mIsWifiConnected=" + mIsWifiConnected
+                + ", mIsAlwaysSignalStrengthReportingEnabled="
+                + mIsAlwaysSignalStrengthReportingEnabled, false);
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
@@ -310,12 +314,8 @@ public class DeviceStateMonitor extends Handler {
         // We should not turn off signal strength update if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
-        // 3. When the update mode is IGNORE_SCREEN_OFF. This mode is used in some corner cases like
-        //    when Bluetooth carkit is connected, we still want to update signal strength even
-        //    when screen is off.
-        if (mIsCharging || mIsScreenOn
-                || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH)
-                == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
+        // 3. Any of system services is registrating to always listen to signal strength changes
+        if (mIsAlwaysSignalStrengthReportingEnabled || mIsCharging || mIsScreenOn) {
             return false;
         }
 
@@ -332,10 +332,7 @@ public class DeviceStateMonitor extends Handler {
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. When data tethering is on.
-        // 4. When the update mode is IGNORE_SCREEN_OFF.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn
-                || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_FULL_NETWORK_STATE)
-                == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
+        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
             return false;
         }
 
@@ -351,10 +348,7 @@ public class DeviceStateMonitor extends Handler {
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. When data tethering is on.
-        // 4. When the update mode is IGNORE_SCREEN_OFF.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn
-                || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_DATA_CALL_DORMANCY_CHANGED)
-                == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
+        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
             return false;
         }
 
@@ -370,10 +364,7 @@ public class DeviceStateMonitor extends Handler {
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. When data tethering is on.
-        // 4. When the update mode is IGNORE_SCREEN_OFF.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn
-                || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_LINK_CAPACITY_ESTIMATE)
-                == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
+        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
             return false;
         }
 
@@ -390,9 +381,7 @@ public class DeviceStateMonitor extends Handler {
         // 2. When the screen is on.
         // 3. When data tethering is on.
         // 4. When the update mode is IGNORE_SCREEN_OFF.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn
-                || mUpdateModes.get(TelephonyManager.INDICATION_FILTER_PHYSICAL_CHANNEL_CONFIG)
-                == TelephonyManager.INDICATION_UPDATE_MODE_IGNORE_SCREEN_OFF) {
+        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
             return false;
         }
 
@@ -401,31 +390,12 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
-     * Set indication update mode
+     * Set if Telephony need always report signal strength.
      *
-     * @param filters Indication filters. Should be a bitmask of INDICATION_FILTER_XXX.
-     * @param mode The voice activation state
+     * @param isEnable
      */
-    public void setIndicationUpdateMode(int filters, int mode) {
-        sendMessage(obtainMessage(EVENT_UPDATE_MODE_CHANGED, filters, mode));
-    }
-
-    private void onSetIndicationUpdateMode(int filters, int mode) {
-        if ((filters & TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH) != 0) {
-            mUpdateModes.put(TelephonyManager.INDICATION_FILTER_SIGNAL_STRENGTH, mode);
-        }
-        if ((filters & TelephonyManager.INDICATION_FILTER_FULL_NETWORK_STATE) != 0) {
-            mUpdateModes.put(TelephonyManager.INDICATION_FILTER_FULL_NETWORK_STATE, mode);
-        }
-        if ((filters & TelephonyManager.INDICATION_FILTER_DATA_CALL_DORMANCY_CHANGED) != 0) {
-            mUpdateModes.put(TelephonyManager.INDICATION_FILTER_DATA_CALL_DORMANCY_CHANGED, mode);
-        }
-        if ((filters & TelephonyManager.INDICATION_FILTER_LINK_CAPACITY_ESTIMATE) != 0) {
-            mUpdateModes.put(TelephonyManager.INDICATION_FILTER_LINK_CAPACITY_ESTIMATE, mode);
-        }
-        if ((filters & TelephonyManager.INDICATION_FILTER_PHYSICAL_CHANNEL_CONFIG) != 0) {
-            mUpdateModes.put(TelephonyManager.INDICATION_FILTER_PHYSICAL_CHANNEL_CONFIG, mode);
-        }
+    public void setAlwaysReportSignalStrength(boolean isEnable) {
+        sendMessage(obtainMessage(EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH, isEnable ? 1 : 0));
     }
 
     /**
@@ -441,9 +411,6 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_RADIO_AVAILABLE:
                 onReset();
                 break;
-            case EVENT_UPDATE_MODE_CHANGED:
-                onSetIndicationUpdateMode(msg.arg1, msg.arg2);
-                break;
             case EVENT_SCREEN_STATE_CHANGED:
             case EVENT_POWER_SAVE_MODE_CHANGED:
             case EVENT_CHARGING_STATE_CHANGED:
@@ -452,6 +419,9 @@ public class DeviceStateMonitor extends Handler {
                 break;
             case EVENT_WIFI_CONNECTION_CHANGED:
                 onUpdateDeviceState(msg.what, msg.arg1 != WIFI_UNAVAILABLE);
+                break;
+            case EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH:
+                onUpdateDeviceState(msg.what, msg.arg1 != 0);
                 break;
             default:
                 throw new IllegalStateException("Unexpected message arrives. msg = " + msg.what);
@@ -487,7 +457,10 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_WIFI_CONNECTION_CHANGED:
                 if (mIsWifiConnected == state) return;
                 mIsWifiConnected = state;
-
+                break;
+            case EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH:
+                if (mIsAlwaysSignalStrengthReportingEnabled == state) return;
+                mIsAlwaysSignalStrengthReportingEnabled = state;
                 break;
             default:
                 return;
@@ -597,7 +570,12 @@ public class DeviceStateMonitor extends Handler {
         mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSI,
                 AccessNetworkThresholds.CDMA2000, AccessNetworkType.CDMA2000, true);
         if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
-            // Defaultly we only need SSRSRP for NGRAN signal criterial reporting
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSRQ,
+                    AccessNetworkThresholds.EUTRAN_RSRQ, AccessNetworkType.EUTRAN, false);
+            mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_RSSNR,
+                    AccessNetworkThresholds.EUTRAN_RSSNR, AccessNetworkType.EUTRAN, true);
+
+            // Defaultly we only need SSRSRP for NGRAN signal criteria reporting
             mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSRSRP,
                     AccessNetworkThresholds.NGRAN_RSRSRP, AccessNetworkType.NGRAN, true);
             mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_SSRSRQ,
@@ -616,6 +594,10 @@ public class DeviceStateMonitor extends Handler {
                 LINK_CAPACITY_UPLINK_THRESHOLDS, AccessNetworkType.EUTRAN);
         mPhone.setLinkCapacityReportingCriteria(LINK_CAPACITY_DOWNLINK_THRESHOLDS,
                 LINK_CAPACITY_UPLINK_THRESHOLDS, AccessNetworkType.CDMA2000);
+        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
+            mPhone.setLinkCapacityReportingCriteria(LINK_CAPACITY_DOWNLINK_THRESHOLDS,
+                    LINK_CAPACITY_UPLINK_THRESHOLDS, AccessNetworkType.NGRAN);
+        }
     }
 
     private void setCellInfoMinInterval(int rate) {
@@ -701,6 +683,8 @@ public class DeviceStateMonitor extends Handler {
         ipw.println("mIsLowDataExpected=" + mIsLowDataExpected);
         ipw.println("mUnsolicitedResponseFilter=" + mUnsolicitedResponseFilter);
         ipw.println("mIsWifiConnected=" + mIsWifiConnected);
+        ipw.println("mIsAlwaysSignalStrengthReportingEnabled="
+                + mIsAlwaysSignalStrengthReportingEnabled);
         ipw.println("Local logs:");
         ipw.increaseIndent();
         mLocalLog.dump(fd, ipw, args);
@@ -751,7 +735,29 @@ public class DeviceStateMonitor extends Handler {
             -98,  /* SIGNAL_STRENGTH_GREAT */
         };
 
-        // TODO Add EUTRAN_RSRQ and EUTRAN_RSSNI
+        /**
+         * List of default dB RSRQ thresholds for EUTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the LTE RSRQ defaults in {@link CarrierConfigManager}.
+         */
+        public static final int[] EUTRAN_RSRQ = new int[] {
+            -19,  /* SIGNAL_STRENGTH_POOR */
+            -17,  /* SIGNAL_STRENGTH_MODERATE */
+            -14,  /* SIGNAL_STRENGTH_GOOD */
+            -12   /* SIGNAL_STRENGTH_GREAT */
+        };
+
+        /**
+         * List of default 10*dB RSSNR thresholds for EUTRAN {@link AccessNetworkType}.
+         *
+         * These thresholds are taken from the LTE RSSNR defaults in {@link CarrierConfigManager}.
+         */
+        public static final int[] EUTRAN_RSSNR = new int[] {
+            -30,  /* SIGNAL_STRENGTH_POOR */
+            10,   /* SIGNAL_STRENGTH_MODERATE */
+            45,   /* SIGNAL_STRENGTH_GOOD */
+            130   /* SIGNAL_STRENGTH_GREAT */
+        };
 
         /**
          * List of dBm thresholds for CDMA2000 {@link AccessNetworkType}.
@@ -769,30 +775,30 @@ public class DeviceStateMonitor extends Handler {
          * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
          */
         public static final int[] NGRAN_RSRSRP = new int[] {
-            -125, /* SIGNAL_STRENGTH_POOR */
-            -115, /* SIGNAL_STRENGTH_MODERATE */
-            -105, /* SIGNAL_STRENGTH_GOOD */
-            -95,  /* SIGNAL_STRENGTH_GREAT */
+            -110, /* SIGNAL_STRENGTH_POOR */
+            -90, /* SIGNAL_STRENGTH_MODERATE */
+            -80, /* SIGNAL_STRENGTH_GOOD */
+            -65,  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
          * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
          */
         public static final int[] NGRAN_RSRSRQ = new int[] {
-            -14, /* SIGNAL_STRENGTH_POOR */
-            -12, /* SIGNAL_STRENGTH_MODERATE */
-            -10, /* SIGNAL_STRENGTH_GOOD */
-            -8  /* SIGNAL_STRENGTH_GREAT */
+            -16, /* SIGNAL_STRENGTH_POOR */
+            -11, /* SIGNAL_STRENGTH_MODERATE */
+            -9, /* SIGNAL_STRENGTH_GOOD */
+            -7  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
          * List of dB thresholds for NGRAN {@link AccessNetworkType} SSSINR
          */
         public static final int[] NGRAN_SSSINR = new int[] {
-            -8, /* SIGNAL_STRENGTH_POOR */
-            0, /* SIGNAL_STRENGTH_MODERATE */
-            8, /* SIGNAL_STRENGTH_GOOD */
-            16  /* SIGNAL_STRENGTH_GREAT */
+            -5, /* SIGNAL_STRENGTH_POOR */
+            5, /* SIGNAL_STRENGTH_MODERATE */
+            15, /* SIGNAL_STRENGTH_GOOD */
+            30  /* SIGNAL_STRENGTH_GREAT */
         };
     }
 
@@ -812,10 +818,13 @@ public class DeviceStateMonitor extends Handler {
             10000,  // file downloading
             20000,  // 4K video streaming
             50000,  // LTE-Advanced speeds
+            75000,
             100000,
             200000, // 5G speeds
             500000,
-            1000000
+            1000000,
+            1500000,
+            2000000
     };
 
     /** Uplink reporting thresholds in kbps */
@@ -827,7 +836,9 @@ public class DeviceStateMonitor extends Handler {
             10000,  // file uploading
             20000,  // 4K video calling
             50000,
+            75000,
             100000,
-            200000
+            200000,
+            500000
     };
 }

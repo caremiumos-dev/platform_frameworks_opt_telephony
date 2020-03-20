@@ -242,6 +242,10 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void sendCdmaSMSExpectMore(byte[] pdu, Message result) {
+    }
+
+    @Override
     public void sendImsGsmSms (String smscPDU, String pdu,
             int retry, int messageRef, Message response) {
     }
@@ -335,8 +339,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message response) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, int ran, Message response) {
     }
 
     @Override

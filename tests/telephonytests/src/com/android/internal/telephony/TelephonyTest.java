@@ -30,6 +30,7 @@ import static org.mockito.Mockito.eq;
 
 import android.app.ActivityManager;
 import android.app.IActivityManager;
+import android.app.usage.NetworkStatsManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.IIntentSender;
@@ -268,7 +269,12 @@ public abstract class TelephonyTest {
     protected UiccCard mUiccCard;
     @Mock
     protected MultiSimSettingController mMultiSimSettingController;
+    @Mock
+    protected IccCard mIccCard;
+    @Mock
+    protected NetworkStatsManager mStatsManager;
 
+    protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
     protected TelephonyManager mTelephonyManager;
     protected TelephonyRegistryManager mTelephonyRegistryManager;
@@ -399,6 +405,7 @@ public abstract class TelephonyTest {
         doReturn(mUiccProfile).when(mUiccCard).getUiccProfile();
 
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         mTelephonyRegistryManager = (TelephonyRegistryManager) mContext.getSystemService(
             Context.TELEPHONY_REGISTRY_SERVICE);
         mSubscriptionManager = (SubscriptionManager) mContext.getSystemService(
@@ -548,6 +555,8 @@ public abstract class TelephonyTest {
                 nullable(Intent[].class), nullable(String[].class), anyInt(),
                 nullable(Bundle.class), anyInt());
         doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(anyInt());
+        doReturn(true).when(mTelephonyManager).isDataCapable();
+
         doReturn(TelephonyManager.PHONE_TYPE_GSM).when(mTelephonyManager).getPhoneType();
         doReturn(mServiceState).when(mSST).getServiceState();
         mSST.mSS = mServiceState;
@@ -573,6 +582,7 @@ public abstract class TelephonyTest {
         doAnswer((invocation)->Math.max(mTelephonyManager.getActiveModemCount(),
                 mTelephonyManager.getPhoneCount()))
                 .when(mTelephonyManager).getSupportedModemCount();
+        doReturn(mStatsManager).when(mContext).getSystemService(eq(Context.NETWORK_STATS_SERVICE));
 
         //Data
         //Initial state is: userData enabled, provisioned.
@@ -661,14 +671,14 @@ public abstract class TelephonyTest {
         @Override
         public Bundle call(String method, String arg, Bundle extras) {
             switch (method) {
-                case BlockedNumberContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
+                case BlockedNumberContract.SystemContract.METHOD_SHOULD_SYSTEM_BLOCK_NUMBER:
                     Bundle bundle = new Bundle();
                     int blockStatus = mBlockedNumbers.contains(arg)
                             ? BlockedNumberContract.STATUS_BLOCKED_IN_LIST
                             : BlockedNumberContract.STATUS_NOT_BLOCKED;
                     bundle.putInt(BlockedNumberContract.RES_BLOCK_STATUS, blockStatus);
                     return bundle;
-                case BlockedNumberContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
+                case BlockedNumberContract.SystemContract.METHOD_NOTIFY_EMERGENCY_CONTACT:
                     mNumEmergencyContactNotifications++;
                     return new Bundle();
                 default:
@@ -711,8 +721,6 @@ public abstract class TelephonyTest {
     protected void setupMockPackagePermissionChecks() throws Exception {
         doReturn(new String[]{TAG}).when(mPackageManager).getPackagesForUid(anyInt());
         doReturn(mPackageInfo).when(mPackageManager).getPackageInfo(eq(TAG), anyInt());
-        doReturn(mPackageInfo).when(mPackageManager).getPackageInfoAsUser(
-                eq(TAG), anyInt(), anyInt());
     }
 
     protected void setupMocksForTelephonyPermissions() throws Exception {

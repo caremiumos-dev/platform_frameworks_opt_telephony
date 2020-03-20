@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.internal.telephony;
+package com.android.internal.telephony.nitz;
 
-import static com.android.internal.telephony.NitzStateMachineTestSupport.ARBITRARY_DEBUG_INFO;
-import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_DEFAULT_BOOSTED;
-import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_DIFFERENT_OFFSETS;
-import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_SAME_OFFSET;
-import static com.android.internal.telephony.TimeZoneLookupHelper.CountryResult.QUALITY_SINGLE_ZONE;
+import static com.android.internal.telephony.nitz.NitzStateMachineTestSupport.ARBITRARY_DEBUG_INFO;
+import static com.android.internal.telephony.nitz.TimeZoneLookupHelper.CountryResult.QUALITY_DEFAULT_BOOSTED;
+import static com.android.internal.telephony.nitz.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_DIFFERENT_OFFSETS;
+import static com.android.internal.telephony.nitz.TimeZoneLookupHelper.CountryResult.QUALITY_MULTIPLE_ZONES_SAME_OFFSET;
+import static com.android.internal.telephony.nitz.TimeZoneLookupHelper.CountryResult.QUALITY_SINGLE_ZONE;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,9 +29,10 @@ import static org.junit.Assert.assertTrue;
 
 import android.icu.util.GregorianCalendar;
 import android.icu.util.TimeZone;
+import android.timezone.CountryTimeZones.OffsetResult;
 
-import com.android.internal.telephony.TimeZoneLookupHelper.CountryResult;
-import com.android.internal.telephony.TimeZoneLookupHelper.OffsetResult;
+import com.android.internal.telephony.NitzData;
+import com.android.internal.telephony.nitz.TimeZoneLookupHelper.CountryResult;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -161,7 +162,7 @@ public class TimeZoneLookupHelperTest {
             // The zone chosen is a side effect of zone ordering in the data files so we just check
             // the isOnlyMatch value.
             OffsetResult offsetResult = mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, usIso);
-            assertFalse(offsetResult.getIsOnlyMatch());
+            assertFalse(offsetResult.isOnlyMatch());
         }
 
         // Try MDT / -6 hours in summer after America/North_Dakota/Beulah switched to central time.
@@ -169,7 +170,7 @@ public class TimeZoneLookupHelperTest {
             String nitzString = "11/11/05,00:00:00-24,1"; // 2011-11-05 00:00:00 UTC, UTC-6, DST
             NitzData nitzData = NitzData.parse(nitzString);
             OffsetResult offsetResult = mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, usIso);
-            assertTrue(offsetResult.getIsOnlyMatch());
+            assertTrue(offsetResult.isOnlyMatch());
         }
     }
 
@@ -184,7 +185,7 @@ public class TimeZoneLookupHelperTest {
             String nitzString = "15/06/01,00:00:00-24,1"; // 2015-06-01 00:00:00 UTC, UTC-6, DST
             NitzData nitzData = NitzData.parse(nitzString);
             OffsetResult offsetResult = mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, usIso);
-            assertTrue(offsetResult.getIsOnlyMatch());
+            assertTrue(offsetResult.isOnlyMatch());
         }
 
         // Try MST for a recent summer date: No ambiguity here.
@@ -192,7 +193,7 @@ public class TimeZoneLookupHelperTest {
             String nitzString = "15/06/01,00:00:00-28,0"; // 2015-06-01 00:00:00 UTC, UTC-7, not DST
             NitzData nitzData = NitzData.parse(nitzString);
             OffsetResult offsetResult = mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, usIso);
-            assertTrue(offsetResult.getIsOnlyMatch());
+            assertTrue(offsetResult.isOnlyMatch());
         }
 
         // Try MST for a recent winter date: There are multiple zones to pick from because of the
@@ -201,7 +202,7 @@ public class TimeZoneLookupHelperTest {
             String nitzString = "15/01/01,00:00:00-28,0"; // 2015-01-01 00:00:00 UTC, UTC-7, not DST
             NitzData nitzData = NitzData.parse(nitzString);
             OffsetResult offsetResult = mTimeZoneLookupHelper.lookupByNitzCountry(nitzData, usIso);
-            assertFalse(offsetResult.getIsOnlyMatch());
+            assertFalse(offsetResult.isOnlyMatch());
         }
     }
 
@@ -376,7 +377,7 @@ public class TimeZoneLookupHelperTest {
         OffsetResult majorityOffsetResult =
                 mTimeZoneLookupHelper.lookupByNitzCountry(majorityNitzData, countryIsoCode);
         assertEquals(zone("Pacific/Auckland"), majorityOffsetResult.getTimeZone());
-        assertTrue(majorityOffsetResult.getIsOnlyMatch());
+        assertTrue(majorityOffsetResult.isOnlyMatch());
 
         // Data correct for the Chatham Islands.
         int chathamWinterOffset = majorityWinterOffset + ((int) TimeUnit.MINUTES.toMillis(45));
@@ -385,7 +386,7 @@ public class TimeZoneLookupHelperTest {
         OffsetResult chathamOffsetResult =
                 mTimeZoneLookupHelper.lookupByNitzCountry(chathamNitzData, countryIsoCode);
         assertEquals(zone("Pacific/Chatham"), chathamOffsetResult.getTimeZone());
-        assertTrue(chathamOffsetResult.getIsOnlyMatch());
+        assertTrue(chathamOffsetResult.isOnlyMatch());
 
         // NITZ data that makes no sense for NZ results in no match.
         int nonsenseOffset = (int) TimeUnit.HOURS.toMillis(5);
@@ -416,7 +417,7 @@ public class TimeZoneLookupHelperTest {
         OffsetResult chuukOffsetResult =
                 mTimeZoneLookupHelper.lookupByNitzCountry(chuukNitzData, countryIsoCode);
         assertEquals(zone("Pacific/Chuuk"), chuukOffsetResult.getTimeZone());
-        assertTrue(chuukOffsetResult.getIsOnlyMatch());
+        assertTrue(chuukOffsetResult.isOnlyMatch());
 
         // NITZ data that makes no sense for FM: no boost means we should get nothing.
         int nonsenseOffset = (int) TimeUnit.HOURS.toMillis(5);
@@ -470,7 +471,7 @@ public class TimeZoneLookupHelperTest {
     }
 
     private static void assertOffsetResultMetadata(boolean isOnlyMatch, OffsetResult lookupResult) {
-        assertEquals(isOnlyMatch, lookupResult.getIsOnlyMatch());
+        assertEquals(isOnlyMatch, lookupResult.isOnlyMatch());
     }
 
     private static long createUtcTime(

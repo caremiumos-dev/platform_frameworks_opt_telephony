@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.sip;
 
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.rtp.AudioGroup;
@@ -29,7 +30,6 @@ import android.os.AsyncResult;
 import android.os.Message;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
 
@@ -39,8 +39,7 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneNotifier;
-
-import dalvik.annotation.compat.UnsupportedAppUsage;
+import com.android.telephony.Rlog;
 
 import java.text.ParseException;
 import java.util.List;
@@ -184,6 +183,12 @@ public class SipPhone extends SipPhoneBase {
                 throw new CallStateException("phone not ringing");
             }
         }
+    }
+
+    @Override
+    public Connection startConference(String[] participantsToDial, DialArgs dialArgs)
+            throws CallStateException {
+        throw new CallStateException("startConference: not supported");
     }
 
     @Override
@@ -542,6 +547,16 @@ public class SipPhone extends SipPhoneBase {
                             + ": " + this + " on phone " + getPhone());
                 }
             }
+        }
+
+        /**
+         * Hangup the ringing call with a specified reason; reason is not supported on SIP.
+         * @param rejectReason
+         */
+        @Override
+        public void hangup(@android.telecom.Call.RejectReason int rejectReason)
+                throws CallStateException  {
+            hangup();
         }
 
         SipConnection initIncomingCall(SipAudioCall sipAudioCall, boolean makeCallWait) {
@@ -1019,6 +1034,19 @@ public class SipPhone extends SipPhoneBase {
         public void deflect(String number) throws CallStateException {
             //Deflect is not supported.
             throw new CallStateException ("deflect is not supported for SipPhone");
+        }
+
+        @Override
+        public void transfer(String number, boolean isConfirmationRequired)
+                throws CallStateException {
+            //Transfer is not supported.
+            throw new CallStateException("transfer is not supported for SipPhone");
+        }
+
+        @Override
+        public void consultativeTransfer(Connection other) throws CallStateException {
+            //Transfer is not supported.
+            throw new CallStateException("transfer is not supported for SipPhone");
         }
 
         private void log(String s) {

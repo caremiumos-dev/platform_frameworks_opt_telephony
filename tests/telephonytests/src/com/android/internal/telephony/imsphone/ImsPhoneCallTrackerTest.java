@@ -15,9 +15,21 @@
  */
 package com.android.internal.telephony.imsphone;
 
+import static android.net.NetworkStats.DEFAULT_NETWORK_YES;
+import static android.net.NetworkStats.METERED_YES;
+import static android.net.NetworkStats.ROAMING_NO;
+import static android.net.NetworkStats.SET_FOREGROUND;
+import static android.net.NetworkStats.TAG_NONE;
+import static android.net.NetworkStats.UID_ALL;
+
+import static com.android.testutils.NetworkStatsUtilsKt.assertNetworkStatsEquals;
+
+import static junit.framework.Assert.assertNotNull;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
@@ -30,28 +42,33 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import android.annotation.Nullable;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.NetworkStats;
+import android.net.NetworkStats.Entry;
+import android.net.netstats.provider.INetworkStatsProviderCallback;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.PersistableBundle;
+import android.os.RemoteException;
 import android.telecom.VideoProfile;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsCallSession;
 import android.telephony.ims.ImsMmTelManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsStreamMediaProfile;
-import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -71,6 +88,7 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyTest;
+import com.android.internal.telephony.imsphone.ImsPhoneCallTracker.VtDataUsageProvider;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -88,12 +106,12 @@ import org.mockito.stubbing.Answer;
 public class ImsPhoneCallTrackerTest extends TelephonyTest {
     private ImsPhoneCallTracker mCTUT;
     private MmTelFeature.Listener mMmTelListener;
-    private RegistrationManager.RegistrationCallback mRegistrationCallback;
     private ImsMmTelManager.CapabilityCallback mCapabilityCallback;
     private ImsCall.Listener mImsCallListener;
     private ImsCall mImsCall;
     private ImsCall mSecondImsCall;
     private Bundle mBundle = new Bundle();
+    @Nullable private VtDataUsageProvider mVtDataUsageProvider;
     @Mock
     private ImsCallSession mImsCallSession;
     @Mock
@@ -102,6 +120,10 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     private ImsPhoneConnection.Listener mImsPhoneConnectionListener;
     @Mock
     private ImsConfig mImsConfig;
+    @Mock
+    private ImsPhoneConnection mImsPhoneConnection;
+    @Mock
+    private INetworkStatsProviderCallback mVtDataUsageProviderCb;
 
     private void imsCallMocking(final ImsCall imsCall) throws Exception {
 
@@ -163,6 +185,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         mImsCall = spy(new ImsCall(mContext, mImsCallProfile));
         mSecondImsCall = spy(new ImsCall(mContext, mImsCallProfile));
         mImsPhoneConnectionListener = mock(ImsPhoneConnection.Listener.class);
+        mImsPhoneConnection = mock(ImsPhoneConnection.class);
         imsCallMocking(mImsCall);
         imsCallMocking(mSecondImsCall);
         doReturn(ImsFeature.STATE_READY).when(mImsManager).getImsServiceState();
@@ -193,14 +216,8 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 mSecondImsCall.setListener(mImsCallListener);
                 return mSecondImsCall;
             }
-        }).when(mImsManager).makeCall(eq(mImsCallProfile), (String []) any(),
+        }).when(mImsManager).makeCall(eq(mImsCallProfile), (String[]) any(),
                 (ImsCall.Listener) any());
-
-        doAnswer(invocation -> {
-            mRegistrationCallback = invocation.getArgument(0);
-            return mRegistrationCallback;
-        }).when(mImsManager).addRegistrationCallback(
-                any(RegistrationManager.RegistrationCallback.class));
 
         doAnswer(invocation -> {
             mCapabilityCallback = (ImsMmTelManager.CapabilityCallback) invocation.getArguments()[0];
@@ -228,6 +245,14 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 ImsReasonInfo.CODE_WFC_SERVICE_NOT_AVAILABLE_IN_THIS_LOCATION);
         mCTUT.setDataEnabled(true);
 
+        final ArgumentCaptor<VtDataUsageProvider> vtDataUsageProviderCaptor =
+                ArgumentCaptor.forClass(VtDataUsageProvider.class);
+        verify(mStatsManager).registerNetworkStatsProvider(anyString(),
+                vtDataUsageProviderCaptor.capture());
+        mVtDataUsageProvider = vtDataUsageProviderCaptor.getValue();
+        assertNotNull(mVtDataUsageProvider);
+        mVtDataUsageProvider.setProviderCallbackBinder(mVtDataUsageProviderCb);
+
         logd("ImsPhoneCallTracker initiated");
         processAllMessages();
     }
@@ -236,39 +261,6 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     public void tearDown() throws Exception {
         mCTUT = null;
         super.tearDown();
-    }
-
-    @Test
-    @SmallTest
-    public void testImsRegistered() {
-        // when IMS is registered
-        mRegistrationCallback.onRegistered(ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN);
-        // then service state should be IN_SERVICE and ImsPhone state set to registered
-        verify(mImsPhone).setServiceState(eq(ServiceState.STATE_IN_SERVICE));
-        verify(mImsPhone).setImsRegistrationState(eq(
-                RegistrationManager.REGISTRATION_STATE_REGISTERED));
-    }
-
-    @Test
-    @SmallTest
-    public void testImsRegistering() {
-        // when IMS is registering
-        mRegistrationCallback.onRegistering(ImsRegistrationImplBase.REGISTRATION_TECH_LTE);
-        // then service state should be OUT_OF_SERVICE and ImsPhone state set to not registered
-        verify(mImsPhone).setServiceState(eq(ServiceState.STATE_OUT_OF_SERVICE));
-        verify(mImsPhone).setImsRegistrationState(eq(
-                RegistrationManager.REGISTRATION_STATE_REGISTERING));
-    }
-
-    @Test
-    @SmallTest
-    public void testImsDeregistered() {
-        // when IMS is deregistered
-        mRegistrationCallback.onUnregistered(new ImsReasonInfo());
-        // then service state should be OUT_OF_SERVICE and ImsPhone state set to not registered
-        verify(mImsPhone).setServiceState(eq(ServiceState.STATE_OUT_OF_SERVICE));
-        verify(mImsPhone).setImsRegistrationState(eq(
-                RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED));
     }
 
     @Test
@@ -748,18 +740,18 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
 
         // First handover from LTE to WIFI; this takes us into a mid-call state.
         call.getImsCallSessionListenerProxy().callSessionHandover(call.getCallSession(),
-                ServiceState.RIL_RADIO_TECHNOLOGY_LTE, ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN,
+                TelephonyManager.NETWORK_TYPE_LTE, TelephonyManager.NETWORK_TYPE_IWLAN,
                 new ImsReasonInfo());
         // Handover back to LTE.
         call.getImsCallSessionListenerProxy().callSessionHandover(call.getCallSession(),
-                ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN, ServiceState.RIL_RADIO_TECHNOLOGY_LTE,
+                TelephonyManager.NETWORK_TYPE_IWLAN, TelephonyManager.NETWORK_TYPE_LTE,
                 new ImsReasonInfo());
         verify(mImsPhoneConnectionListener).onConnectionEvent(eq(
                 TelephonyManager.EVENT_HANDOVER_VIDEO_FROM_WIFI_TO_LTE), isNull());
 
         // Finally hand back to WIFI
         call.getImsCallSessionListenerProxy().callSessionHandover(call.getCallSession(),
-                ServiceState.RIL_RADIO_TECHNOLOGY_LTE, ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN,
+                TelephonyManager.NETWORK_TYPE_LTE, TelephonyManager.NETWORK_TYPE_IWLAN,
                 new ImsReasonInfo());
         verify(mImsPhoneConnectionListener).onConnectionEvent(eq(
                 TelephonyManager.EVENT_HANDOVER_VIDEO_FROM_LTE_TO_WIFI), isNull());
@@ -1020,6 +1012,78 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
                 mCTUT.maybeRemapReasonCode(
                         new ImsReasonInfo(ImsReasonInfo.CODE_SIP_FORBIDDEN, 0,
                                 "SERVICE not allowed in this location")));
+    }
+
+    @Test
+    @SmallTest
+    public void testNoHoldErrorMessageWhenCallDisconnected() {
+        when(mImsPhoneConnection.getImsCall()).thenReturn(mImsCall);
+        mCTUT.getConnections().add(mImsPhoneConnection);
+        when(mImsPhoneConnection.getState()).thenReturn(ImsPhoneCall.State.DISCONNECTED);
+        final ImsReasonInfo info = new ImsReasonInfo(ImsReasonInfo.CODE_UNSPECIFIED,
+                ImsReasonInfo.CODE_UNSPECIFIED, null);
+        mCTUT.getImsCallListener().onCallHoldFailed(mImsPhoneConnection.getImsCall(), info);
+        verify(mImsPhoneConnection, never()).onConnectionEvent(
+                eq(android.telecom.Connection.EVENT_CALL_HOLD_FAILED), any());
+    }
+
+    @Test
+    @SmallTest
+    public void testVtDataUsageProvider() throws RemoteException {
+        mVtDataUsageProvider.onRequestStatsUpdate(11);
+
+        // Verify that requestStatsUpdate triggers onStatsUpdated, where the initial token should
+        // be reported with current stats.
+        assertVtDataUsageUpdated(0, 0, 0);
+
+        // Establish a MT call.
+        testImsMTCallAccept();
+        final ImsPhoneConnection connection = mCTUT.mForegroundCall.getFirstConnection();
+        final ImsCall call = connection.getImsCall();
+        mCTUT.updateVtDataUsage(call, 51);
+
+        // Make another request, and verify stats updated accordingly, with previously issued token.
+        reset(mVtDataUsageProviderCb);
+        mVtDataUsageProvider.onRequestStatsUpdate(13);
+        assertVtDataUsageUpdated(11, 25, 25);
+
+        // Update accumulated data usage twice. updateVtDataUsage takes accumulated stats from
+        // boot up.
+        reset(mVtDataUsageProviderCb);
+        mCTUT.updateVtDataUsage(call, 70);
+        mCTUT.updateVtDataUsage(call, 91);
+        verify(mVtDataUsageProviderCb, never()).notifyStatsUpdated(anyInt(), any(), any());
+
+        // Verify that diff stats from last update is reported accordingly.
+        mVtDataUsageProvider.onRequestStatsUpdate(13);
+        // Rounding error occurs so (70-51)/2 + (91-70)/2 = 19 is expected for both direction.
+        assertVtDataUsageUpdated(13, 19, 19);
+    }
+
+    private void assertVtDataUsageUpdated(int expectedToken, long rxBytes, long txBytes)
+            throws RemoteException {
+        final ArgumentCaptor<NetworkStats> ifaceStatsCaptor = ArgumentCaptor.forClass(
+                NetworkStats.class);
+        final ArgumentCaptor<NetworkStats> uidStatsCaptor = ArgumentCaptor.forClass(
+                NetworkStats.class);
+
+        verify(mVtDataUsageProviderCb).notifyStatsUpdated(eq(expectedToken),
+                ifaceStatsCaptor.capture(), uidStatsCaptor.capture());
+
+        // Default dialer's package uid is not set during test, thus the uid stats looks the same
+        // as iface stats and the records are always merged into the same entry.
+        // TODO: Mock different dialer's uid and verify uid stats has corresponding uid in the
+        //  records.
+        NetworkStats expectedStats = new NetworkStats(0L, 0);
+
+        if (rxBytes != 0 || txBytes != 0) {
+            expectedStats = expectedStats.addEntry(
+                    new Entry(NetworkStats.IFACE_VT, UID_ALL, SET_FOREGROUND,
+                            TAG_NONE, METERED_YES, ROAMING_NO, DEFAULT_NETWORK_YES, rxBytes, 0L,
+                            txBytes, 0L, 0L));
+        }
+        assertNetworkStatsEquals(expectedStats, ifaceStatsCaptor.getValue());
+        assertNetworkStatsEquals(expectedStats, uidStatsCaptor.getValue());
     }
 
     private ImsPhoneConnection placeCallAndMakeActive() {

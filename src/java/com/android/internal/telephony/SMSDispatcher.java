@@ -30,12 +30,12 @@ import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_
 import static com.android.internal.telephony.IccSmsInterfaceManager.SMS_MESSAGE_PRIORITY_NOT_SPECIFIED;
 import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
-import android.annotation.UnsupportedAppUsage;
 import android.annotation.UserIdInt;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -43,7 +43,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -63,7 +62,6 @@ import android.service.carrier.CarrierMessagingServiceWrapper;
 import android.service.carrier.CarrierMessagingServiceWrapper.CarrierMessagingCallbackWrapper;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
@@ -86,6 +84,7 @@ import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1239,15 +1238,15 @@ public abstract class SMSDispatcher extends Handler {
             }
 
             if (error == RESULT_ERROR_NONE) {
-                PackageManager pm = mContext.getPackageManager();
+                UserHandle userHandle = UserHandle.of(trackers[0].mUserId);
+                PackageManager pm = mContext.createContextAsUser(userHandle, 0).getPackageManager();
 
                 try {
                     // Get package info via packagemanager
                     appInfo =
-                            pm.getPackageInfoAsUser(
+                            pm.getPackageInfo(
                                     trackers[0].getAppPackageName(),
-                                    PackageManager.GET_SIGNATURES,
-                                    trackers[0].mUserId);
+                                    PackageManager.GET_SIGNATURES);
                 } catch (PackageManager.NameNotFoundException e) {
                     Rlog.e(TAG, "Can't get calling app package info: refusing to send SMS");
                     error = RESULT_ERROR_GENERIC_FAILURE;
@@ -1405,9 +1404,7 @@ public abstract class SMSDispatcher extends Handler {
         try {
             ApplicationInfo appInfo = pm.getApplicationInfoAsUser(appPackage, 0,
                 UserHandle.getUserHandleForUid(userId));
-            return appInfo.loadSafeLabel(pm, PackageItemInfo.DEFAULT_MAX_LABEL_SIZE_PX,
-                    PackageItemInfo.SAFE_LABEL_FLAG_TRIM
-                            | PackageItemInfo.SAFE_LABEL_FLAG_FIRST_LINE);
+            return appInfo.loadSafeLabel(pm);
         } catch (PackageManager.NameNotFoundException e) {
             Rlog.e(TAG, "PackageManager Name Not Found for package " + appPackage);
             return appPackage;  // fall back to package name if we can't get app label
@@ -1840,15 +1837,14 @@ public abstract class SMSDispatcher extends Handler {
             AtomicInteger unsentPartCount, AtomicBoolean anyPartFailed, Uri messageUri,
             SmsHeader smsHeader, boolean expectMore, String fullMessageText, boolean isText,
             boolean persistMessage, int priority, int validityPeriod, boolean isForVvm) {
-        // Get calling app package name via UID from Binder call
-        PackageManager pm = mContext.getPackageManager();
 
         // Get package info via packagemanager
-        final int userId = UserHandle.getUserHandleForUid(Binder.getCallingUid()).getIdentifier();
+        UserHandle callingUser = UserHandle.getUserHandleForUid(Binder.getCallingUid());
+        final int userId = callingUser.getIdentifier();
+        PackageManager pm = mContext.createContextAsUser(callingUser, 0).getPackageManager();
         PackageInfo appInfo = null;
         try {
-            appInfo = pm.getPackageInfoAsUser(
-                    callingPackage, PackageManager.GET_SIGNATURES, userId);
+            appInfo = pm.getPackageInfo(callingPackage, PackageManager.GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
             // error will be logged in sendRawPdu
         }

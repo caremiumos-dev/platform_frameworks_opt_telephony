@@ -23,7 +23,6 @@ import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
@@ -41,6 +40,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.util.SMSDispatcherUtil;
+import com.android.telephony.Rlog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -235,13 +235,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     public ImsSmsDispatcher(Phone phone, SmsDispatchersController smsDispatchersController) {
         super(phone, smsDispatchersController);
 
-        mImsManagerConnector = new FeatureConnector<ImsManager>(mContext, mPhone.getPhoneId(),
+        mImsManagerConnector = new FeatureConnector<>(mContext, mPhone.getPhoneId(),
                 new FeatureConnector.Listener<ImsManager>() {
-                    @Override
-                    public boolean isSupported() {
-                        return ImsManager.isImsSupportedOnDevice(mContext);
-                    }
-
                     @Override
                     public ImsManager getFeatureManager() {
                         return ImsManager.getInstance(mContext, phone.getPhoneId());
@@ -277,7 +272,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private boolean isLteService() {
         return ((mPhone.getServiceState().getRilDataRadioTechnology() ==
             ServiceState.RIL_RADIO_TECHNOLOGY_LTE) && (mPhone.getServiceState().
-                getDataRegState() == ServiceState.STATE_IN_SERVICE));
+                getDataRegistrationState() == ServiceState.STATE_IN_SERVICE));
     }
 
     private boolean isLimitedLteService() {

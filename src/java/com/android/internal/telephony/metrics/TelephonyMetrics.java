@@ -42,9 +42,10 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Telephony.Sms.Intents;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.CallQuality;
 import android.telephony.DisconnectCause;
-import android.telephony.Rlog;
+import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -74,6 +75,7 @@ import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.SmsResponse;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsPhoneCall;
 import com.android.internal.telephony.nano.TelephonyProto;
 import com.android.internal.telephony.nano.TelephonyProto.ActiveSubscriptionInfo;
@@ -108,6 +110,7 @@ import com.android.internal.telephony.nano.TelephonyProto.TimeInterval;
 import com.android.internal.telephony.protobuf.nano.MessageNano;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -447,6 +450,11 @@ public class TelephonyMetrics {
                         + " NR Frequency Range " + event.serviceState.nrFrequencyRange
                         + " NR State " + event.serviceState.nrState
                         + ")");
+                for (int i = 0; i < event.serviceState.networkRegistrationInfo.length; i++) {
+                    pw.print("reg info: domain="
+                            + event.serviceState.networkRegistrationInfo[i].domain
+                            + ", rat=" + event.serviceState.networkRegistrationInfo[i].rat);
+                }
             } else {
                 pw.print(telephonyEventToString(event.type));
             }
@@ -919,6 +927,26 @@ public class TelephonyMetrics {
             ssProto.dataOperator.numeric = serviceState.getOperatorNumeric();
         }
 
+        // Log PS WWAN only because CS WWAN would be exactly the same as voiceRat, and PS WLAN
+        // would be always IWLAN in the rat field.
+        // Note that we intentionally do not log reg state because it changes too frequently that
+        // will grow the proto size too much.
+        List<TelephonyServiceState.NetworkRegistrationInfo> nriList = new ArrayList<>();
+        NetworkRegistrationInfo nri = serviceState.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        if (nri != null) {
+            TelephonyServiceState.NetworkRegistrationInfo nriProto =
+                    new TelephonyServiceState.NetworkRegistrationInfo();
+            nriProto.domain = TelephonyServiceState.Domain.DOMAIN_PS;
+            nriProto.transport = TelephonyServiceState.Transport.TRANSPORT_WWAN;
+            nriProto.rat = ServiceState.networkTypeToRilRadioTechnology(
+                    nri.getAccessNetworkTechnology());
+            nriList.add(nriProto);
+            ssProto.networkRegistrationInfo =
+                    new TelephonyServiceState.NetworkRegistrationInfo[nriList.size()];
+            nriList.toArray(ssProto.networkRegistrationInfo);
+        }
+
         ssProto.voiceRat = serviceState.getRilVoiceRadioTechnology();
         ssProto.dataRat = serviceState.getRilDataRadioTechnology();
         ssProto.channelNumber = serviceState.getChannelNumber();
@@ -1148,6 +1176,17 @@ public class TelephonyMetrics {
     public void writeDataStallEvent(int phoneId, int recoveryAction) {
         addTelephonyEvent(new TelephonyEventBuilder(phoneId)
                 .setDataStallRecoveryAction(recoveryAction).build());
+    }
+
+    /**
+     * Write SignalStrength event
+     *
+     * @param phoneId Phone id
+     * @param signalStrength Signal strength at the time of data stall recovery
+     */
+    public void writeSignalStrengthEvent(int phoneId, int signalStrength) {
+        addTelephonyEvent(new TelephonyEventBuilder(phoneId)
+                .setSignalStrength(signalStrength).build());
     }
 
     /**
@@ -1543,6 +1582,10 @@ public class TelephonyMetrics {
                 call.isEmergencyCall = conn.isEmergencyCall();
                 call.emergencyNumberInfo = convertEmergencyNumberToEmergencyNumberInfo(
                         conn.getEmergencyNumberInfo());
+                EmergencyNumberTracker emergencyNumberTracker = conn.getEmergencyNumberTracker();
+                call.emergencyNumberDatabaseVersion = emergencyNumberTracker != null
+                        ? emergencyNumberTracker.getEmergencyNumberDbVersion()
+                        : TelephonyManager.INVALID_EMERGENCY_NUMBER_DB_VERSION;
             }
         }
     }
@@ -2063,6 +2106,9 @@ public class TelephonyMetrics {
             cq.averageRelativeJitterMillis = callQuality.getAverageRelativeJitter();
             cq.maxRelativeJitterMillis = callQuality.getMaxRelativeJitter();
             cq.codecType = convertImsCodec(callQuality.getCodecType());
+            cq.rtpInactivityDetected = callQuality.isRtpInactivityDetected();
+            cq.rxSilenceDetected = callQuality.isIncomingSilenceDetected();
+            cq.txSilenceDetected = callQuality.isOutgoingSilenceDetected();
         }
         return cq;
     }
@@ -2094,10 +2140,15 @@ public class TelephonyMetrics {
      * @param phoneId Phone id
      * @param session IMS call session
      * @param reasonInfo Call end reason
+     * @param cqm Call Quality Metrics
+     * @param emergencyNumber Emergency Number Info
+     * @param countryIso Network country iso
+     * @param emergencyNumberDatabaseVersion Emergency Number Database Version
      */
     public void writeOnImsCallTerminated(int phoneId, ImsCallSession session,
                                          ImsReasonInfo reasonInfo, CallQualityMetrics cqm,
-                                         EmergencyNumber emergencyNumber, String countryIso) {
+                                         EmergencyNumber emergencyNumber, String countryIso,
+                                         int emergencyNumberDatabaseVersion) {
         InProgressCallSession callSession = mInProgressCallSessions.get(phoneId);
         if (callSession == null) {
             Rlog.e(TAG, "Call session is missing");
@@ -2119,6 +2170,8 @@ public class TelephonyMetrics {
                     callSessionEvent.setIsImsEmergencyCall(true);
                     callSessionEvent.setImsEmergencyNumberInfo(
                             convertEmergencyNumberToEmergencyNumberInfo(emergencyNumber));
+                    callSessionEvent.setEmergencyNumberDatabaseVersion(
+                            emergencyNumberDatabaseVersion);
                 }
             }
             callSession.addEvent(callSessionEvent);
@@ -2509,7 +2562,8 @@ public class TelephonyMetrics {
      *
      * @param emergencyNumber Updated emergency number
      */
-    public void writeEmergencyNumberUpdateEvent(int phoneId, EmergencyNumber emergencyNumber) {
+    public void writeEmergencyNumberUpdateEvent(int phoneId, EmergencyNumber emergencyNumber,
+            int emergencyNumberDatabaseVersion) {
         if (emergencyNumber == null) {
             return;
         }
@@ -2517,7 +2571,7 @@ public class TelephonyMetrics {
                 convertEmergencyNumberToEmergencyNumberInfo(emergencyNumber);
 
         TelephonyEvent event = new TelephonyEventBuilder(phoneId).setUpdatedEmergencyNumber(
-                emergencyNumberInfo).build();
+                emergencyNumberInfo, emergencyNumberDatabaseVersion).build();
         addTelephonyEvent(event);
     }
 

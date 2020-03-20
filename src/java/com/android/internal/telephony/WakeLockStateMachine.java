@@ -16,17 +16,17 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.os.PowerManager;
-import android.telephony.Rlog;
 
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import com.android.telephony.Rlog;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

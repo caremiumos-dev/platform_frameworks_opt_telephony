@@ -16,15 +16,12 @@
 
 package com.android.internal.telephony.uicc;
 
-import static com.android.internal.telephony.TelephonyProperties.PROPERTY_TEST_CSIM;
-
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Message;
-import android.os.SystemProperties;
-import android.telephony.Rlog;
+import android.sysprop.TelephonyProperties;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
@@ -37,6 +34,7 @@ import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.util.BitwiseInputStream;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -904,9 +902,9 @@ public class RuimRecords extends IccRecords {
         // to determine if the SIM is provisioned.  Otherwise,
         // consider the SIM is provisioned. (for case of ordinal
         // USIM only UICC.)
-        // If PROPERTY_TEST_CSIM is defined, bypess provision check
-        // and consider the SIM is provisioned.
-        if (SystemProperties.getBoolean(PROPERTY_TEST_CSIM, false)) {
+        // If test_csim is true, bypess provision check and
+        // consider the SIM is provisioned.
+        if (TelephonyProperties.test_csim().orElse(false)) {
             return true;
         }
 
@@ -938,6 +936,7 @@ public class RuimRecords extends IccRecords {
 
     @Override
     protected void handleFileUpdate(int efid) {
+        mLoaded.set(false);
         mAdnCache.reset();
         fetchRuimRecords();
     }
@@ -966,13 +965,21 @@ public class RuimRecords extends IccRecords {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        Rlog.d(LOG_TAG, "[RuimRecords] " + s);
+        if (mParentApp != null) {
+            Rlog.d(LOG_TAG, "[RuimRecords-" + mParentApp.getPhoneId() + "] " + s);
+        } else {
+            Rlog.d(LOG_TAG, "[RuimRecords] " + s);
+        }
     }
 
     @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
-        Rlog.e(LOG_TAG, "[RuimRecords] " + s);
+        if (mParentApp != null) {
+            Rlog.e(LOG_TAG, "[RuimRecords-" + mParentApp.getPhoneId() + "] " + s);
+        } else {
+            Rlog.e(LOG_TAG, "[RuimRecords] " + s);
+        }
     }
 
     @Override

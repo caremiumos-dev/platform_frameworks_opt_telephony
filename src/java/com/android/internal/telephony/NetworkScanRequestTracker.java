@@ -19,6 +19,7 @@ package com.android.internal.telephony;
 import static android.os.Binder.withCleanCallingIdentity;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.EUTRAN;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.GERAN;
+import static android.telephony.AccessNetworkConstants.AccessNetworkType.NGRAN;
 import static android.telephony.AccessNetworkConstants.AccessNetworkType.UTRAN;
 
 import android.content.Context;
@@ -133,7 +134,8 @@ public final class NetworkScanRequestTracker {
         }
         for (RadioAccessSpecifier ras : nsri.mRequest.getSpecifiers()) {
             if (ras.getRadioAccessNetwork() != GERAN && ras.getRadioAccessNetwork() != UTRAN
-                    && ras.getRadioAccessNetwork() != EUTRAN) {
+                    && ras.getRadioAccessNetwork() != EUTRAN
+                    && ras.getRadioAccessNetwork() != NGRAN) {
                 return false;
             }
             if (ras.getBands() != null && ras.getBands().length > NetworkScanRequest.MAX_BANDS) {
@@ -189,7 +191,7 @@ public final class NetworkScanRequestTracker {
      */
     public static Set<String> getAllowedMccMncsForLocationRestrictedScan(Context context) {
         return withCleanCallingIdentity(() -> SubscriptionController.getInstance()
-            .getAvailableSubscriptionInfoList(context.getOpPackageName()).stream()
+            .getAvailableSubscriptionInfoList(context.getOpPackageName(), null).stream()
             .flatMap(NetworkScanRequestTracker::getAllowableMccMncsFromSubscriptionInfo)
             .collect(Collectors.toSet()));
     }

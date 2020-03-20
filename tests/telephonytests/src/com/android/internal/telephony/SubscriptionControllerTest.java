@@ -15,6 +15,8 @@
  */
 package com.android.internal.telephony;
 
+import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -24,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
@@ -66,6 +67,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
     private static final int SINGLE_SIM = 1;
     private static final int DUAL_SIM = 2;
     private String mCallingPackage;
+    private String mCallingFeature;
     private SubscriptionController mSubscriptionControllerUT;
     private MockContentResolver mMockContentResolver;
     private FakeTelephonyProvider mFakeTelephonyProvider;
@@ -75,6 +77,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
     private ITelephonyRegistry.Stub mTelephonyRegisteryMock;
     @Mock
     private MultiSimSettingController mMultiSimSettingControllerMock;
+    @Mock
+    private ISetOpportunisticDataCallback mSetOpptDataCallback;
 
     private static final String MAC_ADDRESS_PREFIX = "mac_";
     private static final String DISPLAY_NAME_PREFIX = "my_phone_";
@@ -95,9 +99,10 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         mSubscriptionControllerUT = SubscriptionController.init(mContext);
         mCallingPackage = mContext.getOpPackageName();
+        mCallingFeature = null;
 
         doReturn(1).when(mProxyController).getMaxRafSupported();
-        mContextFixture.putIntArrayResource(com.android.internal.R.array.sim_colors, new int[]{5});
+        mContextFixture.putIntArrayResource(android.R.array.simColors, new int[]{5});
     }
 
     @After
@@ -129,18 +134,20 @@ public class SubscriptionControllerTest extends TelephonyTest {
     @Test @SmallTest
     public void testInsertSim() {
         //verify there is no sim inserted in the SubscriptionManager
-        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage));
+        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage,
+                mCallingFeature));
 
         int slotID = 0;
         //insert one Subscription Info
         mSubscriptionControllerUT.addSubInfoRecord("test", slotID);
 
         //verify there is one sim
-        assertEquals(1, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage));
+        assertEquals(1, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage,
+                mCallingFeature));
 
         //sanity for slot id and sub id
         List<SubscriptionInfo> mSubList = mSubscriptionControllerUT
-                .getActiveSubscriptionInfoList(mCallingPackage);
+                .getActiveSubscriptionInfoList(mCallingPackage, mCallingFeature);
         assertTrue(mSubList != null && mSubList.size() > 0);
         for (int i = 0; i < mSubList.size(); i++) {
             assertTrue(SubscriptionManager.isValidSubscriptionId(
@@ -165,7 +172,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         /* Getting, there is no direct getter function for each fields of property */
         SubscriptionInfo subInfo = mSubscriptionControllerUT
-                .getActiveSubscriptionInfo(subID, mCallingPackage);
+                .getActiveSubscriptionInfo(subID, mCallingPackage, mCallingFeature);
 
         /* Setting */
         mSubscriptionControllerUT.setDisplayNameUsingSrc(disName, subID,
@@ -176,7 +183,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.setOpportunistic(isOpportunistic, subID, mCallingPackage);
 
         subInfo = mSubscriptionControllerUT
-            .getActiveSubscriptionInfo(subID, mCallingPackage);
+            .getActiveSubscriptionInfo(subID, mCallingPackage, mCallingFeature);
 
         assertNotNull(subInfo);
         assertEquals(dataRoaming, subInfo.getDataRoaming());
@@ -206,7 +213,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         int nameSource = SubscriptionManager.NAME_SOURCE_SIM_SPN;
         mSubscriptionControllerUT.setDisplayNameUsingSrc(disName, subID, nameSource);
         SubscriptionInfo subInfo = mSubscriptionControllerUT
-                .getActiveSubscriptionInfo(subID, mCallingPackage);
+                .getActiveSubscriptionInfo(subID, mCallingPackage, mCallingFeature);
         assertNotNull(subInfo);
         assertEquals(disName, subInfo.getDisplayName());
         assertEquals(nameSource, subInfo.getNameSource());
@@ -253,7 +260,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.setMccMnc(mCcMncVERIZON, 1);
 
         SubscriptionInfo subInfo = mSubscriptionControllerUT
-                .getActiveSubscriptionInfo(1, mCallingPackage);
+                .getActiveSubscriptionInfo(1, mCallingPackage, mCallingFeature);
         assertNotNull(subInfo);
         assertEquals(Integer.parseInt(mCcMncVERIZON.substring(0, 3)), subInfo.getMcc());
         assertEquals(Integer.parseInt(mCcMncVERIZON.substring(3)), subInfo.getMnc());
@@ -272,7 +279,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.setCarrierId(carrierId, 1);
 
         SubscriptionInfo subInfo = mSubscriptionControllerUT
-                .getActiveSubscriptionInfo(1, mCallingPackage);
+                .getActiveSubscriptionInfo(1, mCallingPackage, mCallingFeature);
         assertNotNull(subInfo);
         assertEquals(carrierId, subInfo.getCarrierId());
 
@@ -359,27 +366,32 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertEquals("1", mSubscriptionControllerUT.getSubscriptionProperty(
                 subID,
                 SubscriptionManager.ENHANCED_4G_MODE_ENABLED,
-                mCallingPackage));
+                mCallingPackage,
+                mCallingFeature));
 
         assertEquals("0", mSubscriptionControllerUT.getSubscriptionProperty(
                 subID,
                 SubscriptionManager.VT_IMS_ENABLED,
-                mCallingPackage));
+                mCallingPackage,
+                mCallingFeature));
 
         assertEquals("1", mSubscriptionControllerUT.getSubscriptionProperty(
                 subID,
                 SubscriptionManager.WFC_IMS_ENABLED,
-                mCallingPackage));
+                mCallingPackage,
+                mCallingFeature));
 
         assertEquals("2", mSubscriptionControllerUT.getSubscriptionProperty(
                 subID,
                 SubscriptionManager.WFC_IMS_MODE,
-                mCallingPackage));
+                mCallingPackage,
+                mCallingFeature));
 
         assertEquals("3", mSubscriptionControllerUT.getSubscriptionProperty(
                 subID,
                 SubscriptionManager.WFC_IMS_ROAMING_MODE,
-                mCallingPackage));
+                mCallingPackage,
+                mCallingFeature));
     }
 
     @Test
@@ -448,7 +460,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         // Neither sub1 or sub2 are opportunistic. So getOpportunisticSubscriptions
         // should return empty list and no callback triggered.
         List<SubscriptionInfo> opptSubList = mSubscriptionControllerUT
-                .getOpportunisticSubscriptions(mCallingPackage);
+                .getOpportunisticSubscriptions(mCallingPackage, mCallingFeature);
 
         assertTrue(opptSubList.isEmpty());
         verify(mTelephonyRegisteryMock, times(0))
@@ -460,7 +472,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         verify(mTelephonyRegisteryMock, times(1))
                 .notifyOpportunisticSubscriptionInfoChanged();
         opptSubList = mSubscriptionControllerUT
-                .getOpportunisticSubscriptions(mCallingPackage);
+                .getOpportunisticSubscriptions(mCallingPackage, mCallingFeature);
         assertEquals(1, opptSubList.size());
         assertEquals("test2", opptSubList.get(0).getIccId());
 
@@ -481,7 +493,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         makeThisDeviceMultiSimCapable();
 
         // verify there are no sim's in the system.
-        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage));
+        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage,
+                mCallingFeature));
 
         addAndVerifyRemoteSimAddition(1, 0);
     }
@@ -489,14 +502,15 @@ public class SubscriptionControllerTest extends TelephonyTest {
     private void addAndVerifyRemoteSimAddition(int num, int numOfCurrentSubs) {
         // Verify the number of current subs in the system
         assertEquals(numOfCurrentSubs,
-                mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage));
+                mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage, mCallingFeature));
 
         // if there are current subs in the system, get that info
         List<SubscriptionInfo> mSubList;
         ArrayList<String> macAddresses = new ArrayList<>();
         ArrayList<String> displayNames = new ArrayList<>();
         if (numOfCurrentSubs > 0) {
-            mSubList = mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage);
+            mSubList = mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                    mCallingFeature);
             assertNotNull(mSubList);
             assertEquals(numOfCurrentSubs, mSubList.size());
             for (SubscriptionInfo info : mSubList) {
@@ -536,7 +550,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
             assertEquals(expectedNumOfSubs, subIdsList.size());
 
             // validate slot index, sub id etc
-            mSubList = mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage);
+            mSubList = mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                    mCallingFeature);
             assertNotNull(mSubList);
             assertEquals(expectedNumOfSubs, mSubList.size());
 
@@ -566,7 +581,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         makeThisDeviceMultiSimCapable();
 
         // verify that there are no subscription info records
-        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage));
+        assertEquals(0, mSubscriptionControllerUT.getAllSubInfoCount(mCallingPackage,
+                mCallingFeature));
         Map<Integer, ArrayList<Integer>> slotIndexToSubsMap =
                 mSubscriptionControllerUT.getSlotIndexToSubIdsMap();
         assertNotNull(slotIndexToSubsMap);
@@ -708,8 +724,9 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 subIdList, mContext.getOpPackageName());
         assertNotEquals(null, groupId);
 
-        List<SubscriptionInfo> subInfoList = mSubscriptionControllerUT
-                .getActiveSubscriptionInfoList(mContext.getOpPackageName());
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoList(mContext.getOpPackageName(),
+                        null);
 
         // Put sub3 into slot 1 to make sub2 inactive.
         mContextFixture.addCallingOrSelfPermission(
@@ -775,7 +792,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         doReturn(true).when(mTelephonyManager).hasCarrierPrivileges(1);
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(new int[] {2}, groupId, "packageName2");
         List<SubscriptionInfo> infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(groupId, "packageName2");
+                .getSubscriptionsInGroup(groupId, "packageName2", null);
         assertEquals(2, infoList.size());
     }
 
@@ -807,7 +824,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(
                 new int[] {2}, groupId, "packageName1");
         List<SubscriptionInfo> infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
-                groupId, "packageName1");
+                groupId, "packageName1", null);
         assertEquals(2, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
         assertEquals(2, infoList.get(1).getSubscriptionId());
@@ -815,7 +832,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.removeSubscriptionsFromGroup(
                 new int[] {2}, groupId, "packageName1");
         infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
-                groupId, "packageName1");
+                groupId, "packageName1", null);
         assertEquals(1, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
 
@@ -835,7 +852,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(
                 new int[] {2}, groupId, "packageName1");
         infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
-                groupId, "packageName1");
+                groupId, "packageName1", null);
         assertEquals(2, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
         assertEquals(2, infoList.get(1).getSubscriptionId());
@@ -843,7 +860,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         mSubscriptionControllerUT.removeSubscriptionsFromGroup(
                 new int[] {2}, groupId, "packageName1");
         infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
-                groupId, "packageName1");
+                groupId, "packageName1", null);
         assertEquals(1, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
     }
@@ -878,7 +895,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         verify(mTelephonyRegisteryMock, times(2))
                 .notifyOpportunisticSubscriptionInfoChanged();
         List<SubscriptionInfo> opptSubList = mSubscriptionControllerUT
-                .getOpportunisticSubscriptions(mCallingPackage);
+                .getOpportunisticSubscriptions(mCallingPackage, mCallingFeature);
         assertEquals(1, opptSubList.size());
         assertEquals(2, opptSubList.get(0).getSubscriptionId());
         assertEquals(false, opptSubList.get(0).isGroupDisabled());
@@ -893,7 +910,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         verify(mTelephonyRegisteryMock, times(3))
                 .notifyOpportunisticSubscriptionInfoChanged();
-        opptSubList = mSubscriptionControllerUT.getOpportunisticSubscriptions(mCallingPackage);
+        opptSubList = mSubscriptionControllerUT.getOpportunisticSubscriptions(mCallingPackage,
+                mCallingFeature);
         assertEquals(1, opptSubList.size());
         assertEquals(2, opptSubList.get(0).getSubscriptionId());
         assertEquals(true, opptSubList.get(0).isGroupDisabled());
@@ -914,7 +932,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertTrue(mSubscriptionControllerUT.isActiveSubId(1));
         assertTrue(mSubscriptionControllerUT.isActiveSubId(2));
         assertTrue(TelephonyPermissions.checkCallingOrSelfReadPhoneState(mContext, 1,
-                mContext.getOpPackageName(), "getSubscriptionsInGroup"));
+                mContext.getOpPackageName(), null, "getSubscriptionsInGroup"));
 
         int[] subIdList = new int[] {1};
         ParcelUuid groupUuid = mSubscriptionControllerUT.createSubscriptionGroup(
@@ -922,8 +940,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertNotEquals(null, groupUuid);
 
         // Sub 1 and sub 2 should be in same group.
-        List<SubscriptionInfo> infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        List<SubscriptionInfo> infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupUuid, mContext.getOpPackageName(), null);
         assertNotEquals(null, infoList);
         assertEquals(1, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
@@ -932,8 +950,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(
                 subIdList, groupUuid, mContext.getOpPackageName());
-        infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(groupUuid,
+                mContext.getOpPackageName(), null);
         assertEquals(2, infoList.size());
         assertEquals(2, infoList.get(1).getSubscriptionId());
 
@@ -941,8 +959,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         subIdList = new int[] {1};
         mSubscriptionControllerUT.removeSubscriptionsFromGroup(
                 subIdList, groupUuid, mContext.getOpPackageName());
-        infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(groupUuid,
+                mContext.getOpPackageName(), null);
         assertEquals(1, infoList.size());
         assertEquals(2, infoList.get(0).getSubscriptionId());
 
@@ -950,8 +968,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         groupUuid = new ParcelUuid(UUID.randomUUID());
         mSubscriptionControllerUT.addSubscriptionsIntoGroup(
                 subIdList, groupUuid, mContext.getOpPackageName());
-        infoList = mSubscriptionControllerUT
-                .getSubscriptionsInGroup(groupUuid, mContext.getOpPackageName());
+        infoList = mSubscriptionControllerUT.getSubscriptionsInGroup(groupUuid,
+                mContext.getOpPackageName(), null);
         assertEquals(1, infoList.size());
         assertEquals(1, infoList.get(0).getSubscriptionId());
     }
@@ -1054,18 +1072,6 @@ public class SubscriptionControllerTest extends TelephonyTest {
                 UiccSlotInfo.CARD_STATE_INFO_PRESENT, logicalSlotIndex, true, true);
     }
 
-    // TODO: Move this test once SubscriptionManager.setAlwaysAllowMmsData is moved to telephony
-    // manager.
-    @Test
-    @SmallTest
-    public void testSetAlwaysAllowMmsData() throws Exception {
-        mSubscriptionControllerUT.setAlwaysAllowMmsData(0, true);
-        verify(mDataEnabledSettings).setAlwaysAllowMmsData(eq(true));
-        clearInvocations(mDataEnabledSettings);
-        mSubscriptionControllerUT.setAlwaysAllowMmsData(0, false);
-        verify(mDataEnabledSettings).setAlwaysAllowMmsData(eq(false));
-    }
-
     @Test
     @SmallTest
     public void testNameSourcePriority() throws Exception {
@@ -1087,6 +1093,24 @@ public class SubscriptionControllerTest extends TelephonyTest {
         assertTrue(mSubscriptionControllerUT.getNameSourcePriority(
                 SubscriptionManager.NAME_SOURCE_SIM_PNN)
                 > mSubscriptionControllerUT.getNameSourcePriority(
-                SubscriptionManager.NAME_SOURCE_DEFAULT_SOURCE));
+                SubscriptionManager.NAME_SOURCE_DEFAULT));
+    }
+
+    @Test
+    @SmallTest
+    public void testSetPreferredDataSubscriptionId_phoneSwitcherNotInitialized() throws Exception {
+        replaceInstance(PhoneSwitcher.class, "sPhoneSwitcher", null, null);
+
+        mSubscriptionControllerUT.setPreferredDataSubscriptionId(1, true, mSetOpptDataCallback);
+        verify(mSetOpptDataCallback).onComplete(SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION);
+    }
+
+    @Test
+    @SmallTest
+    public void testGetPreferredDataSubscriptionId_phoneSwitcherNotInitialized() throws Exception {
+        replaceInstance(PhoneSwitcher.class, "sPhoneSwitcher", null, null);
+
+        assertEquals(SubscriptionManager.DEFAULT_SUBSCRIPTION_ID,
+                mSubscriptionControllerUT.getPreferredDataSubscriptionId());
     }
 }

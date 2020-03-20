@@ -27,10 +27,10 @@ import android.os.Handler;
 import android.os.RegistrantList;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.sysprop.TelephonyProperties;
 import android.telephony.Annotation.CallState;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneStateListener;
-import android.telephony.Rlog;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -42,6 +42,7 @@ import com.android.internal.telephony.GlobalSettingsHelper;
 import com.android.internal.telephony.MultiSimSettingController;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.SubscriptionController;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -236,8 +237,7 @@ public class DataEnabledSettings {
         // User data should always be true for opportunistic subscription.
         if (isStandAloneOpportunistic(mPhone.getSubId(), mPhone.getContext())) return true;
 
-        boolean defaultVal = "true".equalsIgnoreCase(SystemProperties.get(
-                "ro.com.android.mobiledata", "true"));
+        boolean defaultVal = TelephonyProperties.mobile_data().orElse(true);
 
         return GlobalSettingsHelper.getBoolean(mPhone.getContext(),
                 Settings.Global.MOBILE_DATA, mPhone.getSubId(), defaultVal);
@@ -264,16 +264,23 @@ public class DataEnabledSettings {
     }
 
     /**
-     * Set allowing mobile data during voice call.
+     * Set allowing mobile data during voice call. This is used for allowing data on the non-default
+     * data SIM. When a voice call is placed on the non-default data SIM on DSDS devices, users will
+     * not be able to use mobile data. By calling this API, data will be temporarily enabled on the
+     * non-default data SIM during the life cycle of the voice call.
      *
      * @param allow {@code true} if allowing using data during voice call, {@code false} if
      * disallowed
      *
-     * @return {@code false} if the setting is changed.
+     * @return {@code true} if operation is successful. otherwise {@code false}.
      */
     public synchronized boolean setAllowDataDuringVoiceCall(boolean allow) {
         localLog("setAllowDataDuringVoiceCall", allow);
+        if (allow == isDataAllowedInVoiceCall()) {
+            return true;
+        }
         mDataEnabledOverride.setDataAllowedInVoiceCall(allow);
+
         boolean changed = SubscriptionController.getInstance()
                 .setDataEnabledOverrideRules(mPhone.getSubId(), mDataEnabledOverride.getRules());
         if (changed) {
@@ -448,7 +455,7 @@ public class DataEnabledSettings {
 
     private static boolean isStandAloneOpportunistic(int subId, Context context) {
         SubscriptionInfo info = SubscriptionController.getInstance().getActiveSubscriptionInfo(
-                subId, context.getOpPackageName());
+                subId, context.getOpPackageName(), null);
         return (info != null) && info.isOpportunistic() && info.getGroupUuid() == null;
     }
 

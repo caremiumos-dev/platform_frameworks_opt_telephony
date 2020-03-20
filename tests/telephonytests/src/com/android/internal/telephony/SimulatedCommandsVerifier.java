@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.test;
 
+import android.compat.annotation.UnsupportedAppUsage;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.os.Handler;
@@ -32,8 +33,6 @@ import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-
-import dalvik.annotation.compat.UnsupportedAppUsage;
 
 public class SimulatedCommandsVerifier implements CommandsInterface {
     private static SimulatedCommandsVerifier sInstance;
@@ -843,6 +842,11 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
+    public void sendCdmaSMSExpectMore(byte[] pdu, Message response) {
+
+    }
+
+    @Override
     public void sendImsGsmSms(String smscPDU, String pdu, int retry, int messageRef,
                               Message response) {
 
@@ -949,7 +953,7 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, int ran, Message response) {
 
     }
 

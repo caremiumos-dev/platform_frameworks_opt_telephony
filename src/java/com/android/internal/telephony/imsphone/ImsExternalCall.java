@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony.imsphone;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.telephony.ims.ImsExternalCallState;
 
 import com.android.internal.telephony.Call;
@@ -58,6 +58,12 @@ public class ImsExternalCall extends Call {
     @Override
     public void hangup() throws CallStateException {
 
+    }
+
+    @Override
+    public void hangup(@android.telecom.Call.RejectReason int rejectReason)
+            throws CallStateException {
+        // tumbleweed
     }
 
     /**

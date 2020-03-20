@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony.imsphone;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -33,8 +33,8 @@ import android.telecom.VideoProfile;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallProfile;
 import android.telephony.ims.ImsStreamMediaProfile;
 import android.text.TextUtils;
@@ -47,7 +47,9 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.telephony.Rlog;
 
 import java.util.Objects;
 
@@ -184,6 +186,7 @@ public class ImsPhoneConnection extends Connection implements
         mHandler = new MyHandler(mOwner.getLooper());
         mHandlerMessenger = new Messenger(mHandler);
         mImsCall = imsCall;
+        mIsAdhocConference = isMultiparty();
 
         if ((imsCall != null) && (imsCall.getCallProfile() != null)) {
             mAddress = imsCall.getCallProfile().getCallExtra(ImsCallProfile.EXTRA_OI);
@@ -258,6 +261,37 @@ public class ImsPhoneConnection extends Connection implements
             setAudioModeIsVoip(true);
         }
     }
+
+    /** This is an MO conference call, created when dialing */
+    public ImsPhoneConnection(Phone phone, String[] participantsToDial, ImsPhoneCallTracker ct,
+            ImsPhoneCall parent, boolean isEmergency) {
+        super(PhoneConstants.PHONE_TYPE_IMS);
+        createWakeLock(phone.getContext());
+        acquireWakeLock();
+
+        mOwner = ct;
+        mHandler = new MyHandler(mOwner.getLooper());
+        mHandlerMessenger = new Messenger(mHandler);
+
+        mDialString = mAddress = Connection.ADHOC_CONFERENCE_ADDRESS;
+        mParticipantsToDial = participantsToDial;
+        mIsAdhocConference = true;
+
+        mIsIncoming = false;
+        mCnapName = null;
+        mCnapNamePresentation = PhoneConstants.PRESENTATION_ALLOWED;
+        mNumberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
+        mCreateTime = System.currentTimeMillis();
+
+        mParent = parent;
+        parent.attachFake(this, ImsPhoneCall.State.DIALING);
+
+        if (phone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_use_voip_mode_for_ims)) {
+            setAudioModeIsVoip(true);
+        }
+    }
+
 
     public void dispose() {
     }
@@ -376,6 +410,32 @@ public class ImsPhoneConnection extends Connection implements
             }
         } else {
             throw new CallStateException("phone not ringing");
+        }
+    }
+
+    @Override
+    public void transfer(String number, boolean isConfirmationRequired) throws CallStateException {
+        try {
+            if (mImsCall != null) {
+                mImsCall.transfer(number, isConfirmationRequired);
+            } else {
+                throw new CallStateException("no valid ims call to transfer");
+            }
+        } catch (ImsException e) {
+            throw new CallStateException("cannot transfer call");
+        }
+    }
+
+    @Override
+    public void consultativeTransfer(Connection other) throws CallStateException {
+        try {
+            if (mImsCall != null) {
+                mImsCall.consultativeTransfer(((ImsPhoneConnection) other).getImsCall());
+            } else {
+                throw new CallStateException("no valid ims call to transfer");
+            }
+        } catch (ImsException e) {
+            throw new CallStateException("cannot transfer call");
         }
     }
 
@@ -1094,6 +1154,20 @@ public class ImsPhoneConnection extends Connection implements
         }
     }
 
+    /**
+     * Get the corresponding EmergencyNumberTracker associated with the connection.
+     * @return the EmergencyNumberTracker
+     */
+    public EmergencyNumberTracker getEmergencyNumberTracker() {
+        if (mOwner != null) {
+            Phone phone = mOwner.getPhone();
+            if (phone != null) {
+                return phone.getEmergencyNumberTracker();
+            }
+        }
+        return null;
+    }
+
     public boolean hasRttTextStream() {
         return mRttTextStream != null;
     }
@@ -1134,17 +1208,18 @@ public class ImsPhoneConnection extends Connection implements
      * @param extras The ImsCallProfile extras.
      */
     private void updateImsCallRatFromExtras(Bundle extras) {
-        if (extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE) ||
-                extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT)) {
+        if (extras.containsKey(ImsCallProfile.EXTRA_CALL_NETWORK_TYPE)
+                || extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE)
+                || extras.containsKey(ImsCallProfile.EXTRA_CALL_RAT_TYPE_ALT)) {
 
             ImsCall call = getImsCall();
-            int callTech = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+            int networkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
             if (call != null) {
-                callTech = call.getRadioTechnology();
+                networkType = call.getNetworkType();
             }
 
-            // Report any changes for call tech change
-            setCallRadioTech(callTech);
+            // Report any changes for network type change
+            setCallRadioTech(ServiceState.networkTypeToRilRadioTechnology(networkType));
         }
     }
 
@@ -1252,6 +1327,8 @@ public class ImsPhoneConnection extends Connection implements
         sb.append(getTelecomCallId());
         sb.append(" address: ");
         sb.append(Rlog.pii(LOG_TAG, getAddress()));
+        sb.append(" isAdhocConf: ");
+        sb.append(isAdhocConference() ? "Y" : "N");
         sb.append(" ImsCall: ");
         synchronized (this) {
             if (mImsCall == null) {

@@ -29,11 +29,11 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.sysprop.TelephonyProperties;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -44,9 +44,11 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.MccTable.MccMnc;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -561,6 +563,10 @@ public class LocaleTracker extends Handler {
             timeZoneCountryIsoDebugInfo = countryIsoDebugInfo;
         }
 
+        if (mLastServiceState == ServiceState.STATE_POWER_OFF) {
+            countryIso = "";
+        }
+
         log("updateLocale: countryIso = " + countryIso
                 + ", countryIsoDebugInfo = " + countryIsoDebugInfo);
         if (!Objects.equals(countryIso, mCurrentCountryIso)) {
@@ -571,8 +577,14 @@ public class LocaleTracker extends Handler {
             mLocalLog.log(msg);
             mCurrentCountryIso = countryIso;
 
-            TelephonyManager.setTelephonyProperty(mPhone.getPhoneId(),
-                    TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, mCurrentCountryIso);
+            int phoneId = mPhone.getPhoneId();
+            if (SubscriptionManager.isValidPhoneId(phoneId)) {
+                List<String> newProp = new ArrayList<>(
+                        TelephonyProperties.operator_iso_country());
+                while (newProp.size() <= phoneId) newProp.add(null);
+                newProp.set(phoneId, mCurrentCountryIso);
+                TelephonyProperties.operator_iso_country(newProp);
+            }
 
             Intent intent = new Intent(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
             intent.putExtra(TelephonyManager.EXTRA_NETWORK_COUNTRY, countryIso);

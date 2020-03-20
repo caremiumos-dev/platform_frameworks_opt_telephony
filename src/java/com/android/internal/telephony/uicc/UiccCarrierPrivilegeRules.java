@@ -17,7 +17,7 @@
 package com.android.internal.telephony.uicc;
 
 import android.annotation.Nullable;
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,13 +27,13 @@ import android.os.AsyncResult;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
-import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccAccessRule;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
 import com.android.internal.telephony.CommandException;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -438,7 +438,7 @@ public class UiccCarrierPrivilegeRules extends Handler {
             CommandException.Error error = ((CommandException) (ar.exception)).getCommandError();
             int[] results = (int[]) ar.result;
             int statusCode = 0;
-            if (results.length == 3) {
+            if (ar.result != null && results.length == 3) {
                 byte[] bytes = new byte[]{(byte) results[1], (byte) results[2]};
                 statusCode = Integer.parseInt(IccUtils.bytesToHexString(bytes), 16);
                 log("status code: " + String.valueOf(statusCode));

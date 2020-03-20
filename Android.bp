@@ -35,10 +35,12 @@ filegroup {
     ],
     path: "src/java",
 }
+
 filegroup {
     name: "jarjar-rules-shared",
     srcs: ["jarjar-rules-shared.txt"],
 }
+
 
 java_library {
     name: "telephony-common",
@@ -50,6 +52,7 @@ java_library {
     srcs: [
         ":opt-telephony-common-srcs",
         ":framework-telephony-stack-shared-srcs",
+        ":net-utils-telephony-common-srcs",
         "src/java/**/I*.aidl",
         "src/java/**/*.logtags",
     ],
@@ -65,7 +68,7 @@ java_library {
         "android.hardware.radio-V1.5-java",
         "voip-common",
         "ims-common",
-        "services",
+        "unsupportedappusage",
     ],
     static_libs: [
         "android.hardware.radio.config-V1.0-java-shallow",
@@ -74,6 +77,8 @@ java_library {
         "android.hardware.radio.deprecated-V1.0-java-shallow",
         "ecc-protos-lite",
         "libphonenumber-nogeocoder",
+        "PlatformProperties",
+        "net-utils-framework-common",
         "telephony-protos",
     ],
 
@@ -84,4 +89,3 @@ java_library {
         },
     },
 }
-

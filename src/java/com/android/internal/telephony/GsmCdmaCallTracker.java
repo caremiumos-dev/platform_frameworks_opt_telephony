@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,14 +28,13 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
-import android.os.SystemProperties;
+import android.sysprop.TelephonyProperties;
 import android.telecom.TelecomManager;
-import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellLocation;
 import android.telephony.DisconnectCause;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
@@ -45,6 +44,7 @@ import android.util.EventLog;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -119,7 +119,8 @@ public class GsmCdmaCallTracker extends CallTracker {
             if (intent.getAction().equals(
                     TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED)) {
 
-                boolean isInEcm = intent.getBooleanExtra(PhoneConstants.PHONE_IN_ECM_STATE, false);
+                boolean isInEcm = intent.getBooleanExtra(
+                        TelephonyManager.EXTRA_PHONE_IN_ECM_STATE, false);
                 log("Received ACTION_EMERGENCY_CALLBACK_MODE_CHANGED isInEcm = " + isInEcm);
 
                 // If we exit ECM mode, notify all connections.
@@ -656,14 +657,13 @@ public class GsmCdmaCallTracker extends CallTracker {
      * @throws CallStateException
      */
     public void checkForDialIssues(boolean isEmergencyCall) throws CallStateException {
-        String disableCall = SystemProperties.get(
-                TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
+        boolean disableCall = TelephonyProperties.disable_call().orElse(false);
 
         if (mCi.getRadioState() != TelephonyManager.RADIO_POWER_ON) {
             throw new CallStateException(CallStateException.ERROR_POWER_OFF,
                     "Modem not powered");
         }
-        if (disableCall.equals("true")) {
+        if (disableCall) {
             throw new CallStateException(CallStateException.ERROR_CALLING_DISABLED,
                     "Calling disabled via ro.telephony.disable-call property");
         }
@@ -1539,7 +1539,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                     causeCode == CallFailCause.BEARER_NOT_AVAIL ||
                     causeCode == CallFailCause.ERROR_UNSPECIFIED) {
 
-                    CellLocation loc = mPhone.getCellLocation();
+                    CellLocation loc = mPhone.getCellIdentity().asCellLocation();
                     int cid = -1;
                     if (loc != null) {
                         if (loc instanceof GsmCellLocation) {
@@ -1550,6 +1550,22 @@ public class GsmCdmaCallTracker extends CallTracker {
                     }
                     EventLog.writeEvent(EventLogTags.CALL_DROP, causeCode, cid,
                             TelephonyManager.getDefault().getNetworkType());
+                }
+
+                if (isEmcRetryCause(causeCode)) {
+                    String dialString = "";
+                    for(Connection conn : mForegroundCall.mConnections) {
+                        GsmCdmaConnection gsmCdmaConnection = (GsmCdmaConnection)conn;
+                        dialString = gsmCdmaConnection.getOrigDialString();
+                        gsmCdmaConnection.getCall().detach(gsmCdmaConnection);
+                        mDroppedDuringPoll.remove(gsmCdmaConnection);
+                    }
+                    mPhone.notifyVolteSilentRedial(dialString, causeCode);
+                    updatePhoneState();
+                    if (mDroppedDuringPoll.isEmpty()) {
+                        log("LAST_CALL_FAIL_CAUSE - no Dropped normal Call");
+                        return;
+                    }
                 }
 
                 for (int i = 0, s = mDroppedDuringPoll.size(); i < s ; i++) {
@@ -1756,6 +1772,14 @@ public class GsmCdmaCallTracker extends CallTracker {
     @Override
     public GsmCdmaPhone getPhone() {
         return mPhone;
+    }
+
+    private boolean isEmcRetryCause(int causeCode) {
+        if (causeCode == CallFailCause.EMC_REDIAL_ON_IMS ||
+            causeCode == CallFailCause.EMC_REDIAL_ON_VOWIFI) {
+            return true;
+        }
+        return false;
     }
 
     @UnsupportedAppUsage

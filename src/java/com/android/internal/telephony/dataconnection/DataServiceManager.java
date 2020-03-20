@@ -43,7 +43,6 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.AnomalyReporter;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
@@ -56,6 +55,7 @@ import android.text.TextUtils;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConfigurationManager;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.telephony.Rlog;
 
 import java.util.HashSet;
 import java.util.List;
@@ -194,7 +194,6 @@ public class DataServiceManager extends Handler {
         public void onServiceDisconnected(ComponentName name) {
             if (DBG) log("onServiceDisconnected");
             removeMessages(EVENT_WATCHDOG_TIMEOUT);
-            mIDataService.asBinder().unlinkToDeath(mDeathRecipient, 0);
             mIDataService = null;
             mBound = false;
             mServiceBindingChangedRegistrants.notifyResult(false);

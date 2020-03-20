@@ -38,7 +38,6 @@ import android.os.UserManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -62,6 +61,7 @@ import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.IccCardStatus.PinState;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -392,7 +392,7 @@ public class UiccProfile extends IccCard {
                     nameSource = SubscriptionManager.NAME_SOURCE_SIM_PNN;
                 } else {
                     newCarrierName = phone.getCarrierName();    // Get the name from carrier id.
-                    nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT_SOURCE;
+                    nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT;
                 }
             }
         }
@@ -444,7 +444,7 @@ public class UiccProfile extends IccCard {
             int nameSource) {
         /* update display name with carrier override */
         SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
-                subId, mContext.getOpPackageName());
+                subId, mContext.getOpPackageName(), null);
 
         if (subInfo == null) {
             return;
@@ -587,6 +587,12 @@ public class UiccProfile extends IccCard {
                  */
                 if (VDBG) {
                     log("updateExternalState: app state is unknown; setting state to NOT_READY");
+                }
+                setExternalState(IccCardConstants.State.NOT_READY);
+                break;
+            case APPSTATE_DETECTED:
+                if (VDBG) {
+                    log("updateExternalState: app state is detected; setting state to NOT_READY");
                 }
                 setExternalState(IccCardConstants.State.NOT_READY);
                 break;

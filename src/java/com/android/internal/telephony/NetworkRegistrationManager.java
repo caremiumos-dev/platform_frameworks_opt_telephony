@@ -38,9 +38,10 @@ import android.telephony.INetworkService;
 import android.telephony.INetworkServiceCallback;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.NetworkService;
-import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
+
+import com.android.telephony.Rlog;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -212,9 +213,6 @@ public class NetworkRegistrationManager extends Handler {
                     + AccessNetworkConstants.transportTypeToString(mTransportType)
                     + " is now disconnected.");
             mTargetBindingPackageName = null;
-            if (mINetworkService != null) {
-                mINetworkService.asBinder().unlinkToDeath(mDeathRecipient, 0);
-            }
         }
     }
 

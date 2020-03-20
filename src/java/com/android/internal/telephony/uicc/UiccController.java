@@ -21,8 +21,8 @@ import static android.telephony.TelephonyManager.UNSUPPORTED_CARD_ID;
 
 import static java.util.Arrays.copyOf;
 
-import android.annotation.UnsupportedAppUsage;
 import android.app.BroadcastOptions;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +35,6 @@ import android.os.RegistrantList;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
 import android.text.TextUtils;
@@ -51,6 +50,7 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -696,15 +696,30 @@ public class UiccController extends Handler {
             cardString = card.getIccId();
         }
 
-        // EID may be unpopulated if RadioConfig<1.2
-        // If so, just register for EID loaded and skip this stuff
-        if (isEuicc && cardString == null
-                && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
-            ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, index);
-        }
-
         if (cardString != null) {
             addCardId(cardString);
+        }
+
+        // EID is unpopulated if Radio HAL < 1.4 (RadioConfig < 1.2)
+        // If so, just register for EID loaded and skip this stuff
+        if (isEuicc && mDefaultEuiccCardId != UNSUPPORTED_CARD_ID) {
+            if (cardString == null) {
+                ((EuiccCard) card).registerForEidReady(this, EVENT_EID_READY, index);
+            } else {
+                // If we know the EID from IccCardStatus, just use it to set mDefaultEuiccCardId if
+                // it's not already set.
+                // This is needed in cases where slot status doesn't include EID, and we don't want
+                // to register for EID from APDU because we already know cardString from a previous
+                // APDU
+                if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID
+                        || mDefaultEuiccCardId == TEMPORARILY_UNSUPPORTED_CARD_ID) {
+                    mDefaultEuiccCardId = convertToPublicCardId(cardString);
+                    String logStr = "IccCardStatus eid=" + cardString + " slot=" + slotId
+                            + " mDefaultEuiccCardId=" + mDefaultEuiccCardId;
+                    sLocalLog.log(logStr);
+                    log(logStr);
+                }
+            }
         }
 
         if (DBG) log("Notifying IccChangedRegistrants");
@@ -996,7 +1011,6 @@ public class UiccController extends Handler {
         options.setBackgroundActivityStartsAllowed(true);
         Intent intent = new Intent(TelephonyManager.ACTION_SIM_SLOT_STATUS_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
-        intent.addFlags(Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
         mContext.sendBroadcast(intent, android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE,
                 options.toBundle());
     }

@@ -30,18 +30,16 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.util.NotificationChannelController;
+import com.android.telephony.Rlog;
 
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 /**
  * This contains Carrier specific logic based on the states/events
@@ -166,8 +164,8 @@ public class CarrierServiceStateTracker extends Handler {
         if (mSST.mSS == null) {
             return true; //something has gone wrong, return true and not show the notification.
         }
-        return (mSST.mSS.getVoiceRegState() == ServiceState.STATE_IN_SERVICE
-                || mSST.mSS.getDataRegState() == ServiceState.STATE_IN_SERVICE);
+        return (mSST.mSS.getState() == ServiceState.STATE_IN_SERVICE
+                || mSST.mSS.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
     }
 
     private boolean isPhoneRegisteredForWifiCalling() {

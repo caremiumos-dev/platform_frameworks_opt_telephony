@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -69,6 +69,9 @@ public class CarrierServiceBindHelper {
     public SparseArray<String> mLastSimState = new SparseArray<>();
     private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
 
+    // whether we have successfully bound to the service
+    private boolean mServiceBound = false;
+
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -86,12 +89,14 @@ public class CarrierServiceBindHelper {
     };
 
     private static final int EVENT_REBIND = 0;
-    private static final int EVENT_PERFORM_IMMEDIATE_UNBIND = 1;
+    @VisibleForTesting
+    public static final int EVENT_PERFORM_IMMEDIATE_UNBIND = 1;
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 2;
 
     @UnsupportedAppUsage
-    private Handler mHandler = new Handler() {
+    @VisibleForTesting
+    public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int phoneId;
@@ -272,9 +277,13 @@ public class CarrierServiceBindHelper {
 
             String error;
             try {
-                if (mContext.bindServiceAsUser(carrierService, connection,
-                        Context.BIND_AUTO_CREATE |  Context.BIND_FOREGROUND_SERVICE,
-                        mHandler, Process.myUserHandle())) {
+                if (mContext.createContextAsUser(Process.myUserHandle(), 0)
+                        .bindService(carrierService,
+                                Context.BIND_AUTO_CREATE | Context.BIND_FOREGROUND_SERVICE,
+                                (r) -> mHandler.post(r),
+                                connection)) {
+                    log("service bound");
+                    mServiceBound = true;
                     return;
                 }
 
@@ -329,8 +338,18 @@ public class CarrierServiceBindHelper {
             carrierServiceClass = null;
 
             // Actually unbind
-            log("Unbinding from carrier app");
-            mContext.unbindService(connection);
+            if (mServiceBound) {
+                log("Unbinding from carrier app");
+                mServiceBound = false;
+                try {
+                    mContext.unbindService(connection);
+                } catch (IllegalArgumentException e) {
+                    //TODO(b/151328766): Figure out why we unbind without binding
+                    loge("Tried to unbind without binding e=" + e);
+                }
+            } else {
+                log("Not bound, skipping unbindService call");
+            }
             connection = null;
             mUnbindScheduledUptimeMillis = -1;
         }
@@ -364,6 +383,18 @@ public class CarrierServiceBindHelper {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             log("Disconnected from carrier app: " + name.flattenToString());
+            connected = false;
+        }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            log("Binding from carrier app died: " + name.flattenToString());
+            connected = false;
+        }
+
+        @Override
+        public void onNullBinding(ComponentName name) {
+            log("Null binding from carrier app: " + name.flattenToString());
             connected = false;
         }
 

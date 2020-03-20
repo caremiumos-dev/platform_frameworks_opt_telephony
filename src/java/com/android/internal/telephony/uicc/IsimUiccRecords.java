@@ -16,16 +16,16 @@
 
 package com.android.internal.telephony.uicc;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Message;
-import android.telephony.Rlog;
+import android.telephony.SubscriptionManager;
 
 import com.android.internal.telephony.CommandsInterface;
-import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.gsm.SimTlv;
+import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -45,9 +45,6 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
                                                         // STOPSHIP if true
     public static final String INTENT_ISIM_REFRESH = "com.android.intent.isim_refresh";
 
-    private static final int EVENT_APP_READY = 1;
-    private static final int EVENT_ISIM_AUTHENTICATE_DONE          = 91;
-
     // ISIM EF records (see 3GPP TS 31.103)
     @UnsupportedAppUsage
     private String mIsimImpi;               // IMS private user identity
@@ -61,9 +58,6 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     private String[] mIsimPcscf;            // IMS Proxy Call Session Control Function
     @UnsupportedAppUsage
     private String auth_rsp;
-
-    @UnsupportedAppUsage
-    private final Object mLock = new Object();
 
     private static final int TAG_ISIM_VALUE = 0x80;     // From 3GPP TS 31.103
 
@@ -115,25 +109,6 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
                 case EVENT_REFRESH:
                     broadcastRefresh();
                     super.handleMessage(msg);
-                    break;
-
-                case EVENT_ISIM_AUTHENTICATE_DONE:
-                    ar = (AsyncResult)msg.obj;
-                    log("EVENT_ISIM_AUTHENTICATE_DONE");
-                    if (ar.exception != null) {
-                        log("Exception ISIM AKA: " + ar.exception);
-                    } else {
-                        try {
-                            auth_rsp = (String)ar.result;
-                            log("ISIM AKA: auth_rsp = " + auth_rsp);
-                        } catch (Exception e) {
-                            log("Failed to parse ISIM AKA contents: " + e);
-                        }
-                    }
-                    synchronized (mLock) {
-                        mLock.notifyAll();
-                    }
-
                     break;
 
                 default:
@@ -344,6 +319,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
                 mRecordsToLoad++;
 
             default:
+                mLoaded.set(false);
                 fetchIsimRecords();
                 break;
         }
@@ -352,7 +328,7 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     private void broadcastRefresh() {
         Intent intent = new Intent(INTENT_ISIM_REFRESH);
         log("send ISim REFRESH: " + INTENT_ISIM_REFRESH);
-        intent.putExtra(PhoneConstants.PHONE_KEY, mParentApp.getPhoneId());
+        SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mParentApp.getPhoneId());
         mContext.sendBroadcast(intent);
     }
 
@@ -434,12 +410,20 @@ public class IsimUiccRecords extends IccRecords implements IsimRecords {
     @UnsupportedAppUsage
     @Override
     protected void log(String s) {
-        if (DBG) Rlog.d(LOG_TAG, "[ISIM] " + s);
+        if (mParentApp != null) {
+            Rlog.d(LOG_TAG, "[ISIM-" + mParentApp.getPhoneId() + "] " + s);
+        } else {
+            Rlog.d(LOG_TAG, "[ISIM] " + s);
+        }
     }
 
     @Override
     protected void loge(String s) {
-        if (DBG) Rlog.e(LOG_TAG, "[ISIM] " + s);
+        if (mParentApp != null) {
+            Rlog.e(LOG_TAG, "[ISIM-" + mParentApp.getPhoneId() + "] " + s);
+        } else {
+            Rlog.e(LOG_TAG, "[ISIM] " + s);
+        }
     }
 
     @Override

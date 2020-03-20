@@ -16,7 +16,7 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -29,13 +29,13 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.Rlog;
 import android.telephony.SmsManager;
 import android.util.AtomicFile;
 import android.util.Xml;
 
 import com.android.internal.telephony.util.XmlUtils;
 import com.android.internal.util.FastXmlSerializer;
+import com.android.telephony.Rlog;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

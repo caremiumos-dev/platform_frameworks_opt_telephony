@@ -242,6 +242,17 @@ message TelephonyServiceState {
     optional string numeric = 3;
   }
 
+  message NetworkRegistrationInfo {
+    // Network domain
+    optional Domain domain = 1;
+
+    // Network transport
+    optional Transport transport = 2;
+
+    // Radio access technology
+    optional RadioAccessTechnology rat = 3;
+  }
+
   // Roaming type
   enum RoamingType {
 
@@ -302,6 +313,29 @@ message TelephonyServiceState {
     NR_STATE_CONNECTED = 3;
   }
 
+  // Domain type
+  enum Domain {
+    // Unknown
+    DOMAIN_UNKNOWN = 0;
+
+    // Circuit switching domain
+    DOMAIN_CS = 1;
+
+    // Packet switching domain
+    DOMAIN_PS = 2;
+  }
+
+  enum Transport {
+    // Unknown
+    TRANSPORT_UNKNOWN = 0;
+
+    // Transport type for Wireless Wide Area Networks (i.e. Cellular)
+    TRANSPORT_WWAN = 1;
+
+    // Transport type for Wireless Local Area Networks (i.e. Wifi)
+    TRANSPORT_WLAN = 2;
+  }
+
   // Current registered operator
   optional TelephonyOperator voice_operator = 1;
 
@@ -328,6 +362,9 @@ message TelephonyServiceState {
 
   // Current NR state
   optional NrState nr_state = 9;
+
+  // Network registration info
+  repeated NetworkRegistrationInfo networkRegistrationInfo = 10;
 }
 
 // Radio access families
@@ -766,7 +803,7 @@ message TelephonyEvent {
     // along with the event if it is available
     MODEM_RESTART = 11;
 
-    // System time overwritten by NITZ (Network time)
+    // A system time update suggestion was made from a received NITZ (Network time) signal
     NITZ_TIME = 12;
 
     // Carrier Identification Matching Event
@@ -798,6 +835,9 @@ message TelephonyEvent {
 
     // Network capabilities change event.
     NETWORK_CAPABILITIES_CHANGED = 22;
+
+    // Signal strength
+    SIGNAL_STRENGTH = 23;
   }
 
   enum ApnType {
@@ -1747,7 +1787,7 @@ message TelephonyEvent {
   // Modem restart event
   optional ModemRestart modem_restart = 14;
 
-  // NITZ time in milliseconds
+  // NITZ time in milliseconds (see TelephonyEvent.Type.NITZ_TIME)
   optional int64 nitz_timestamp_millis = 15;
 
   // Carrier id matching event
@@ -1780,6 +1820,16 @@ message TelephonyEvent {
 
   // NetworkCapabilities changed info.
   optional NetworkCapabilitiesInfo network_capabilities = 26;
+
+  // Signal strength
+  optional int32 signal_strength = 27;
+
+  // Indicate the version of emergency number database in Android platform
+  optional int32 emergency_number_database_version = 28;
+  // [
+  //  (datapol.semantic_type) = ST_SOFTWARE_ID,
+  //  (datapol.qualifier) = { is_public: true }
+  //]
 }
 
 message ActiveSubscriptionInfo {
@@ -2089,6 +2139,13 @@ message TelephonyCallSession {
 
       // Indicate the emergency call information dialed from the CS call
       optional EmergencyNumberInfo emergency_number_info = 8;
+
+      // Indicate the version of emergency number database in Android platform
+      optional int32 emergency_number_database_version = 9;
+      // [
+      //  (datapol.semantic_type) = ST_SOFTWARE_ID,
+      //  (datapol.qualifier) = { is_public: true }
+      //]
     }
 
     // Single Radio Voice Call Continuity(SRVCC) progress state
@@ -2185,6 +2242,18 @@ message TelephonyCallSession {
 
       // the codec type of an ongoing call
       optional AudioCodec codec_type = 11;
+
+      // true if no incoming RTP is received for a continuous duration of 4 seconds
+      optional bool rtp_inactivity_detected = 12;
+
+      // true if only silence RTP packets are received for 20 seconds immediately
+      // after call is connected
+      optional bool rx_silence_detected = 13;
+
+      // true if only silence RTP packets are sent for 20 seconds immediately
+      // after call is connected
+      optional bool tx_silence_detected = 14;
+
     }
 
     message CallQualitySummary {
@@ -2315,6 +2384,13 @@ message TelephonyCallSession {
 
     // Emergency call info
     optional EmergencyNumberInfo ims_emergency_number_info = 27;
+
+    // Indicate the version of emergency number database in Android platform
+    optional int32 emergency_number_database_version = 28;
+    // [
+    //  (datapol.semantic_type) = ST_SOFTWARE_ID,
+    //  (datapol.qualifier) = { is_public: true }
+    //]
   }
 
   // Time when call has started, in minutes since epoch,

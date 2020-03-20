@@ -18,24 +18,23 @@ package com.android.internal.telephony.cdma;
 
 import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.os.Message;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 
+import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.GsmCdmaPhone;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SMSDispatcher;
+import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SmsDispatchersController;
 import com.android.internal.telephony.SmsHeader;
-import com.android.internal.telephony.util.SMSDispatcherUtil;
-import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.SmsMessageBase;
-
+import com.android.internal.telephony.util.SMSDispatcherUtil;
+import com.android.telephony.Rlog;
 
 public class CdmaSMSDispatcher extends SMSDispatcher {
     private static final String TAG = "CdmaSMSDispatcher";
@@ -147,11 +146,13 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
 
         int currentDataNetwork = mPhone.getServiceState().getDataNetworkType();
         boolean imsSmsDisabled = (currentDataNetwork == TelephonyManager.NETWORK_TYPE_EHRPD
-                    || (ServiceState.isLte(currentDataNetwork)
-                    && !mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()))
-                    && mPhone.getServiceState().getVoiceNetworkType()
-                    == TelephonyManager.NETWORK_TYPE_1xRTT
-                    && ((GsmCdmaPhone) mPhone).mCT.mState != PhoneConstants.State.IDLE;
+                || (currentDataNetwork == TelephonyManager.NETWORK_TYPE_LTE
+                || currentDataNetwork == TelephonyManager.NETWORK_TYPE_LTE_CA
+                || currentDataNetwork == TelephonyManager.NETWORK_TYPE_NR)
+                && !mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed())
+                && mPhone.getServiceState().getVoiceNetworkType()
+                        == TelephonyManager.NETWORK_TYPE_1xRTT
+                && ((GsmCdmaPhone) mPhone).mCT.mState != PhoneConstants.State.IDLE;
 
         // sms over cdma is used:
         //   if sms over IMS is not supported AND
@@ -161,7 +162,11 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
         //   SMS over IMS is being handled by the ImsSmsDispatcher implementation and has indicated
         //   that the message should fall back to sending over CS.
         if (0 == tracker.mImsRetry && !isIms() || imsSmsDisabled || tracker.mUsesImsServiceForIms) {
-            mCi.sendCdmaSms(pdu, reply);
+            if (tracker.mRetryCount == 0 && tracker.mExpectMore) {
+                mCi.sendCdmaSMSExpectMore(pdu, reply);
+            } else {
+                mCi.sendCdmaSms(pdu, reply);
+            }
         } else {
             mCi.sendImsCdmaSms(pdu, tracker.mImsRetry, tracker.mMessageRef, reply);
             // increment it here, so in case of SMS_FAIL_RETRY over IMS

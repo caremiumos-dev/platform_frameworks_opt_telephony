@@ -17,15 +17,16 @@
 package com.android.internal.telephony;
 
 import android.Manifest;
-import android.annotation.UnsupportedAppUsage;
 import android.app.AppOpsManager;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.service.carrier.CarrierMessagingService;
-import android.telephony.Rlog;
 import android.util.Log;
+
+import com.android.telephony.Rlog;
 
 /**
  * Permissions checks for SMS functionality
@@ -96,7 +97,8 @@ public class SmsPermissions {
             }
         }
 
-        TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(mPhone.getSubId(), message);
+        TelephonyPermissions.enforceCallingOrSelfCarrierPrivilege(
+                mContext, mPhone.getSubId(), message);
     }
 
     /**
@@ -119,7 +121,8 @@ public class SmsPermissions {
      *                           permission revoked at runtime.
      * @return whether the caller has the OP_SEND_SMS AppOps bit.
      */
-    public boolean checkCallingOrSelfCanSendSms(String callingPackage, String message) {
+    public boolean checkCallingOrSelfCanSendSms(String callingPackage, String callingAttributionTag,
+            String message) {
         mContext.enforceCallingOrSelfPermission(Manifest.permission.SEND_SMS, message);
         return mAppOps.noteOp(AppOpsManager.OPSTR_SEND_SMS, Binder.getCallingUid(), callingPackage)
                 == AppOpsManager.MODE_ALLOWED;

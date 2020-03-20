@@ -16,20 +16,21 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.UnsupportedAppUsage;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.telephony.Annotation.RilRadioTechnology;
 import android.telephony.DisconnectCause;
-import android.telephony.Rlog;
 import android.telephony.ServiceState;
+import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.emergency.EmergencyNumber;
 import android.util.Log;
 
 import com.android.ims.internal.ConferenceParticipant;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
+import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public abstract class Connection {
     private static final String TAG = "Connection";
+
+    public static final String ADHOC_CONFERENCE_ADDRESS = "tel:conf-factory";
 
     public interface PostDialListener {
         void onPostDialWait();
@@ -184,6 +187,8 @@ public abstract class Connection {
     protected String mAddress;     // MAY BE NULL!!!
     @UnsupportedAppUsage
     protected String mDialString;          // outgoing calls only
+    protected String[] mParticipantsToDial;// outgoing calls only
+    protected boolean mIsAdhocConference;
     @UnsupportedAppUsage
     protected int mNumberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
     @UnsupportedAppUsage
@@ -310,6 +315,20 @@ public abstract class Connection {
     @UnsupportedAppUsage
     public String getAddress() {
         return mAddress;
+    }
+
+    /**
+     * Gets the participants address (e.g. phone number) associated with connection.
+     *
+     * @return address or null if unavailable
+     */
+    public String[] getParticipantsToDial() {
+        return mParticipantsToDial;
+    }
+
+    // return whether connection is AdhocConference or not
+    public boolean isAdhocConference() {
+        return mIsAdhocConference;
     }
 
     /**
@@ -644,6 +663,17 @@ public abstract class Connection {
      * Deflect individual Connection
      */
     public abstract void deflect(String number) throws CallStateException;
+
+    /**
+     * Transfer individual Connection
+     */
+    public abstract void transfer(String number, boolean isConfirmationRequired)
+            throws CallStateException;
+
+    /**
+     * Transfer individual Connection for consultative transfer
+     */
+    public abstract void consultativeTransfer(Connection other) throws CallStateException;
 
     /**
      * Hangup individual Connection
@@ -1029,7 +1059,7 @@ public abstract class Connection {
             int previousCount = mExtras.size();
             // Prevent vendors from passing in extras other than primitive types and android API
             // parcelables.
-            mExtras = mExtras.filterValues();
+            mExtras = TelephonyUtils.filterValues(mExtras);
             int filteredCount = mExtras.size();
             if (filteredCount != previousCount) {
                 Rlog.i(TAG, "setConnectionExtras: filtering " + (previousCount - filteredCount)
