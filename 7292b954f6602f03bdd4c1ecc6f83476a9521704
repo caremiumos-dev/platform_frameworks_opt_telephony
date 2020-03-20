@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "c7c0f6f1_c0477652",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T18:45:59Z",
+      "side": 1,
+      "message": "The alternative is that if you get a CCC that isn\u0027t for identified carrier then we should just wipe out the carrier-config-provided certs.\n\nThat said, if there is no valid SIM, then there can\u0027t be a network (unless it\u0027s emergency IMS), so I don\u0027t think this is a functional problem, perhaps just a formalism thing. Suggest to do in a follow-up CL since it doesn\u0027t break anything.\n\nThere is technically a race where if the carrier certs aren\u0027t cleared, a new SIM is inserted, then the time between when we receive CCC for specific carrier and a network is set up using the new carrier SIM. could give the old package privileges to see the new networks; however, that is also only theoretical, not practical.\n\nI feel like the cleaner change would be to clear on non-specific CCC and just leave subId entirely out of the picture. Hunter, what do you think?",
+      "parentUuid": "5e615cbe_a96c62fa",
+      "range": {
+        "startLine": 156,
+        "startChar": 48,
+        "endLine": 156,
+        "endChar": 53
+      },
+      "revId": "7292b954f6602f03bdd4c1ecc6f83476a9521704",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fba0aeee_d2723f66",
         "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
         "patchSetId": 7
