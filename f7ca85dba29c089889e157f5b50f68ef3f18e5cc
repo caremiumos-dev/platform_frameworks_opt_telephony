@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1178b6cd_25bbe07b",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-03-20T23:03:58Z",
+      "side": 1,
+      "message": "I think we can just make a registrant rather than having an equivalent object.",
+      "range": {
+        "startLine": 106,
+        "startChar": 18,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "f7ca85dba29c089889e157f5b50f68ef3f18e5cc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
