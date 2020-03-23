@@ -124,7 +124,10 @@ public class GsmCdmaConnection extends Connection {
         mHandler = new MyHandler(mOwner.getLooper());
 
         mAddress = dc.number;
-        setEmergencyCallInfo(mOwner);
+
+        if (PhoneNumberUtils.isEmergencyNumber(phone.getSubId(), mAddress)) {
+            setEmergencyCallInfo(mOwner);
+        }
 
         mIsIncoming = dc.isMT;
         mCreateTime = System.currentTimeMillis();
