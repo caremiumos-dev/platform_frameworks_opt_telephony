@@ -1418,8 +1418,17 @@ public class ImsPhone extends ImsPhoneBase {
 
     /* package */ void
     initiateSilentRedial() {
+        initiateSilentRedial(false);
+    }
+
+    /* package */ void
+    initiateSilentRedial(boolean isEmergency) {
         String result = mLastDialString;
-        AsyncResult ar = new AsyncResult(null, result, null);
+        DialArgs dialArgs = new DialArgs.Builder().setIsEmergency(isEmergency).build();
+        int cause = CallFailCause.LOCAL_CALL_CS_RETRY_REQUIRED;
+        AsyncResult ar = new AsyncResult(null,
+                                         new SilentRedialParam(result, cause, dialArgs),
+                                         null);
         if (ar != null) {
             mSilentRedialRegistrants.notifyRegistrants(ar);
         }
