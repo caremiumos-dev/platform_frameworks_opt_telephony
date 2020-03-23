@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1332068_3313b547",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-23T18:28:56Z",
+      "side": 1,
+      "message": "update 2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "8ca549b67352c4b166edda84139bb2a1f0c3793b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00883629_019d1790",
+        "filename": "src/java/com/android/internal/telephony/EcbmHandler.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-23T18:28:56Z",
+      "side": 1,
+      "message": "Lets abstract out the dependency on GsmCdmaPhone and ImsPhone in this case, it looks like GsmCdmaPhone and ImsPhone can register to handle ECBM enter/exit events without needing a specific dependency added here....\n\nCan we standardize the enter/exit methods and consolidate them in Phone so that ImsPhone and GsmCdmaPhone can implement them and EcbmHandler just provides the ability to register methods to call when we need to exit?",
+      "range": {
+        "startLine": 149,
+        "startChar": 51,
+        "endLine": 150,
+        "endChar": 49
+      },
+      "revId": "8ca549b67352c4b166edda84139bb2a1f0c3793b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
