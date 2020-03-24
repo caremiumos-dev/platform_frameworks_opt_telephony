@@ -6609,9 +6609,30 @@ public class RIL extends BaseCommands implements CommandsInterface {
             active = result.active;
             protocolType = result.type;
             ifname = result.ifname;
-            laList = result.addresses.stream().map(a -> new LinkAddress(
-                    InetAddresses.parseNumericAddress(a.address), 0, a.properties, 0,
-                    a.deprecationTime, a.expirationTime)).collect(Collectors.toList());
+            laList = result.addresses.stream().map(la -> {
+                InetAddress address = null;
+                int prefixLength = -1;
+                try {
+                    String[] pieces = la.address.split("/", 2);
+                    address = InetAddresses.parseNumericAddress(pieces[0]);
+                    if (pieces.length == 1) {
+                        prefixLength = (address instanceof Inet4Address) ? 32 : 128;
+                    } else if (pieces.length == 2) {
+                        prefixLength = Integer.parseInt(pieces[1]);
+                    }
+                } catch (NullPointerException e) {            // Null string.
+                } catch (ArrayIndexOutOfBoundsException e) {  // No prefix length.
+                } catch (NumberFormatException e) {           // Non-numeric prefix.
+                } catch (IllegalArgumentException e) {        // Invalid IP address.
+                }
+
+                if (address == null || prefixLength == -1) {
+                    throw new IllegalArgumentException("Invalid link address " + la);
+                }
+
+                return new LinkAddress(address, prefixLength, la.properties, 0,
+                        la.deprecationTime, la.expirationTime);
+            }).collect(Collectors.toList());
 
             dnses = result.dnses.stream().toArray(String[]::new);
             gateways = result.gateways.stream().toArray(String[]::new);
