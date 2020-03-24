@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96f1133b_65423999",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-24T17:11:31Z",
+      "side": 1,
+      "message": "Please provide short description and bug number associated with this fix as well as a \"Test: \" line with the testing performed.\n\nPlease provide a topic to relate this to the packages/services/Telephony portion of the change.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c18f3c_db15f66f",
+        "filename": "src/java/com/android/internal/telephony/CallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-24T17:11:31Z",
+      "side": 1,
+      "message": "please follow the formatting conventions of above",
+      "range": {
+        "startLine": 76,
+        "startChar": 56,
+        "endLine": 76,
+        "endChar": 61
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc55a43_f9e2e6df",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-24T17:11:31Z",
+      "side": 1,
+      "message": "please follow the conventions of above (dont use default, add listener in ListenerBase below)",
+      "range": {
+        "startLine": 122,
+        "startChar": 21,
+        "endLine": 122,
+        "endChar": 46
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "895a8c7f_0897b7a2",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-24T17:11:31Z",
+      "side": 1,
+      "message": "Please provide a brief description of when/how this parameter is used.",
+      "range": {
+        "startLine": 286,
+        "startChar": 3,
+        "endLine": 288,
+        "endChar": 24
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec58b524_aecbaa21",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-24T17:11:31Z",
+      "side": 1,
+      "message": "It is not obvious why you are clearing the mSuppServiceNotification when only one listener has been added (especially because multiple listeners can be added here). Can you please provide a clarifying comment?",
+      "range": {
+        "startLine": 873,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 47
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
