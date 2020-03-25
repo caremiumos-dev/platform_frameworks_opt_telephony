@@ -1,0 +1,48 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000002104402",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1266863?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "e14006c4_93a6b092",
+          "description": "Change to \"src/java/com/android/internal/telephony/Connection.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/Connection.java",
+              "range": {
+                "startLine": 289,
+                "startChar": 80,
+                "endLine": 289,
+                "endChar": 88
+              },
+              "replacement": "retrieved"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "113056ff_e93d333f",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-03-25T08:36:32Z",
+      "side": 1,
+      "message": "Common typo found: \"retrived\" -- should it be \"retrieved\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line.",
+      "range": {
+        "startLine": 289,
+        "startChar": 80,
+        "endLine": 289,
+        "endChar": 88
+      },
+      "revId": "b1212d0b5645c298d0764065bc0d31477a7f590a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
