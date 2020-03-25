@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "68815876_7fba310e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-03-25T07:53:41Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "96f1133b_65423999",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46c18f3c_db15f66f",
         "filename": "src/java/com/android/internal/telephony/CallTracker.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46dfee2e_082340af",
+        "filename": "src/java/com/android/internal/telephony/CallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-03-25T07:53:41Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "46c18f3c_db15f66f",
+      "range": {
+        "startLine": 76,
+        "startChar": 56,
+        "endLine": 76,
+        "endChar": 61
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8ef89e23_6f1b1bcb",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-03-25T07:53:41Z",
+      "side": 1,
+      "message": "fine",
+      "parentUuid": "9dc55a43_f9e2e6df",
+      "range": {
+        "startLine": 122,
+        "startChar": 21,
+        "endLine": 122,
+        "endChar": 46
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "895a8c7f_0897b7a2",
         "filename": "src/java/com/android/internal/telephony/Connection.java",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "c20c4b40_adf1e914",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-03-25T07:53:41Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "895a8c7f_0897b7a2",
+      "range": {
+        "startLine": 286,
+        "startChar": 3,
+        "endLine": 288,
+        "endChar": 24
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec58b524_aecbaa21",
         "filename": "src/java/com/android/internal/telephony/Connection.java",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00ad1d44_77a0a19a",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-03-25T07:53:41Z",
+      "side": 1,
+      "message": "ideally here just needs to pass down one time, so clearing the mSuppServiceNotification is required, because i am afraid this will impact handover cases.",
+      "parentUuid": "ec58b524_aecbaa21",
+      "range": {
+        "startLine": 873,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 47
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
