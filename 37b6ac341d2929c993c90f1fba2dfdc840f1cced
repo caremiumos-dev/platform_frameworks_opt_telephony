@@ -234,6 +234,30 @@
       "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d00d16d7_ac298760",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-25T16:31:27Z",
+      "side": 1,
+      "message": "Sorry, I meant can you provide a comment in the code explaining why so that someone looking at this code later can understand why.",
+      "parentUuid": "00ad1d44_77a0a19a",
+      "range": {
+        "startLine": 873,
+        "startChar": 8,
+        "endLine": 873,
+        "endChar": 47
+      },
+      "revId": "37b6ac341d2929c993c90f1fba2dfdc840f1cced",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
