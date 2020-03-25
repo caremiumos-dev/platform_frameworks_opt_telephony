@@ -1083,6 +1083,22 @@ public class SubscriptionControllerTest extends TelephonyTest {
     }
 
     @Test
+    public void testGetActiveSubscriptionInfoWithCarrierPrivileges() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo.
+        testInsertSim();
+        setupIdentifierCarrierPrivilegesTest();
+        int subId = getFirstSubId();
+
+        SubscriptionInfo subscriptionInfo = mSubscriptionControllerUT.getActiveSubscriptionInfo(
+                subId, mCallingPackage, mCallingFeature);
+
+        assertNotNull(subscriptionInfo);
+        assertTrue(subscriptionInfo.getIccId().length() > 0);
+        assertTrue(subscriptionInfo.getCardString().length() > 0);
+    }
+
+    @Test
     public void testGetActiveSubscriptionWithPrivilegedPermission() throws Exception {
         // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
         // privileges the ICC ID should be available in the SubscriptionInfo.
@@ -1147,6 +1163,23 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         assertNotNull(subscriptionInfo);
         assertEquals(DISPLAY_NUMBER, subscriptionInfo.getNumber());
+    }
+
+    @Test
+    public void testGetActiveSubscriptionInfoForSimSlotIndexWithCarrierPrivileges()
+            throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo.
+        testInsertSim();
+        setupIdentifierCarrierPrivilegesTest();
+
+        SubscriptionInfo subscriptionInfo =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoForSimSlotIndex(0,
+                        mCallingPackage, mCallingFeature);
+
+        assertNotNull(subscriptionInfo);
+        assertTrue(subscriptionInfo.getIccId().length() > 0);
+        assertTrue(subscriptionInfo.getCardString().length() > 0);
     }
 
     @Test
@@ -1218,6 +1251,24 @@ public class SubscriptionControllerTest extends TelephonyTest {
     }
 
     @Test
+    public void testGetActiveSubscriptionInfoListWithCarrierPrivileges() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
+        testInsertSim();
+        setupIdentifierCarrierPrivilegesTest();
+
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionControllerUT.getActiveSubscriptionInfoList(mCallingPackage,
+                        mCallingFeature);
+
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertTrue(info.getIccId().length() > 0);
+            assertTrue(info.getCardString().length() > 0);
+        }
+    }
+
+    @Test
     public void testGetActiveSubscriptionInfoListWithPrivilegedPermission() throws Exception {
         // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
         // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
@@ -1286,6 +1337,23 @@ public class SubscriptionControllerTest extends TelephonyTest {
     }
 
     @Test
+    public void testGetSubscriptionsInGroupWithCarrierPrivileges() throws Exception {
+        // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
+        // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
+        ParcelUuid groupUuid = setupGetSubscriptionsInGroupTest();
+        setupIdentifierCarrierPrivilegesTest();
+
+        List<SubscriptionInfo> subInfoList = mSubscriptionControllerUT.getSubscriptionsInGroup(
+                groupUuid, mCallingPackage, mCallingFeature);
+
+        assertTrue(subInfoList.size() > 0);
+        for (SubscriptionInfo info : subInfoList) {
+            assertTrue(info.getIccId().length() > 0);
+            assertTrue(info.getCardString().length() > 0);
+        }
+    }
+
+    @Test
     public void testGetSubscriptionsInGroupWithPrivilegedPermission() throws Exception {
         // If the calling package has the READ_PRIVILEGED_PHONE_STATE permission or carrier
         // privileges the ICC ID should be available in the SubscriptionInfo objects in the List.
@@ -1317,6 +1385,14 @@ public class SubscriptionControllerTest extends TelephonyTest {
         doReturn(AppOpsManager.MODE_DEFAULT).when(mAppOpsManager).noteOp(
                 eq(AppOpsManager.OPSTR_WRITE_SMS), anyInt(), anyString(),
                 nullable(String.class), nullable(String.class));
+    }
+
+    private void setupIdentifierCarrierPrivilegesTest() throws Exception {
+        mContextFixture.removeCallingOrSelfPermission(ContextFixture.PERMISSION_ENABLE_ALL);
+        mContextFixture.addCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE);
+        setupMocksForTelephonyPermissions();
+        setIdentifierAccess(false);
+        setCarrierPrivileges(true);
     }
 
     private int getFirstSubId() throws Exception {
