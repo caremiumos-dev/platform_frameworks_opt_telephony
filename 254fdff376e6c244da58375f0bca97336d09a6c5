@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b91a41b6_d2252d4d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3597,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-03-25T19:00:42Z",
+      "side": 1,
+      "message": "here upon PROVISIONED change, we\u0027ll write false to it anyway. So what was the impact of not fixing the bug?",
+      "range": {
+        "startLine": 3595,
+        "startChar": 0,
+        "endLine": 3597,
+        "endChar": 17
+      },
+      "revId": "254fdff376e6c244da58375f0bca97336d09a6c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
