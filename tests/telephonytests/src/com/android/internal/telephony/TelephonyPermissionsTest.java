@@ -23,7 +23,6 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -366,7 +365,7 @@ public class TelephonyPermissionsTest {
             throws Exception {
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(true)).thenReturn(
                 new int[]{SUB_ID});
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(false)).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
         when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
                 mTelephonyManagerMockForSub2);
