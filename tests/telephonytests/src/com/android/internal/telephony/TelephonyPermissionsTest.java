@@ -107,6 +107,8 @@ public class TelephonyPermissionsTest {
                 mMockDevicePolicyManager);
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(anyBoolean())).thenReturn(
                 new int[]{SUB_ID});
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
+                new int[] {SUB_ID});
 
         // By default, assume we have no permissions or app-ops bits.
         doThrow(new SecurityException()).when(mMockContext)
@@ -370,7 +372,7 @@ public class TelephonyPermissionsTest {
             throws Exception {
         when(mMockSubscriptionManager.getActiveSubscriptionIdList(true)).thenReturn(
                 new int[]{SUB_ID});
-        when(mMockSubscriptionManager.getActiveSubscriptionIdList(false)).thenReturn(
+        when(mMockSubscriptionManager.getCompleteActiveSubscriptionIdList()).thenReturn(
                 new int[]{SUB_ID, SUB_ID_2});
         when(mTelephonyManagerMock.createForSubscriptionId(eq(SUB_ID_2))).thenReturn(
                 mTelephonyManagerMockForSub2);
