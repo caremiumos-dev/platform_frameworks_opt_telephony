@@ -1,0 +1,9 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Daniel Bright <dbright@google.com>
+Submitted-by: Nathan Harold <nharold@google.com>
+Submitted-at: Fri, 27 Mar 2020 01:50:31 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1269220
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
