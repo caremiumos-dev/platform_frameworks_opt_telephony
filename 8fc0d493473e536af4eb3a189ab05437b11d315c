@@ -46,6 +46,30 @@
       "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59ea9bfc_0a43486b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-03-30T21:20:30Z",
+      "side": 1,
+      "message": "These test cases are failing on AOSP as well, they are not being ignored...\n\nWere you able to run these tests on AOSP and verify they were failing using the command \"atest FrameworksTelephonyTests:ImsPhoneTest\"? \n\nLooking at the issue quickly, it looks like it can be fixed with something along the lines of:\nassertNotNull(messageArgumentCaptor.getValue().obj);\nSS ss \u003d messageArgumentCaptor.getValue().obj;\nassertEquals(msg, ss.mOnComplete);",
+      "parentUuid": "0e5c6194_1f532d61",
+      "range": {
+        "startLine": 459,
+        "startChar": 5,
+        "endLine": 459,
+        "endChar": 14
+      },
+      "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
