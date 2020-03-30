@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a45212c9_cbb48144",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4396,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-03-30T20:27:39Z",
+      "side": 1,
+      "message": "Its ultimately up to the dialer app how to handle the connection events sent; we shouldn\u0027t be modifying the lower level telephony code and worrying about how Dialer handles it.",
+      "parentUuid": "2dc82579_3984d6b5",
+      "range": {
+        "startLine": 4396,
+        "startChar": 25,
+        "endLine": 4396,
+        "endChar": 44
+      },
+      "revId": "83db85fe6f69c4de5634279f071e7ce593662b6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41ecd66a_98da0abc",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 2
