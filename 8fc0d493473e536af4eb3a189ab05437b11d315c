@@ -22,6 +22,30 @@
       "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e5c6194_1f532d61",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-03-30T10:33:12Z",
+      "side": 1,
+      "message": "If the onComplete(Message), the parameter of getOutgoingCallerIdDisplay, is not used as it is, problem occurs during process assertEquals.\n\n    @Override\n    public void getOutgoingCallerIdDisplay(Message onComplete) {\n        if (DBG) logd(\"getCLIR\");\n        Message resp;\n+       SS ss \u003d new SS(onComplete);\n+       resp \u003d obtainMessage(EVENT_GET_CLIR_DONE, ss);\n\n        try {\n            ImsUtInterface ut \u003d mCT.getUtInterface();\n            ut.queryCLIR(resp);\n        } catch (ImsException e) {\n            sendErrorResponse(onComplete, e);\n        }\n    }\n\nWe tried to change the type of the below param but failed.\nmessageArgumentCaptor.getValue().obj\n\nIn case of CallForwarding, AOSP ignores the test.\nMaybe it is because onComplete is changed and used as below.\n\n    Cf cf \u003d new Cf(dialingNumber, GsmMmiCode.isVoiceUnconditionalForwarding(\n            commandInterfaceCFReason, serviceClass), onComplete);\n    resp \u003d obtainMessage(EVENT_SET_CALL_FORWARD_DONE,\n            isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, cf);\n\nCan\u0027t we ignore the test?\nOr can you give me a guide to pass this test?",
+      "parentUuid": "f8ee8e68_f08150f7",
+      "range": {
+        "startLine": 459,
+        "startChar": 5,
+        "endLine": 459,
+        "endChar": 14
+      },
+      "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
