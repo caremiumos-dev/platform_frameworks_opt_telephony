@@ -68,6 +68,7 @@ import android.util.SparseArray;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
+import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
@@ -715,13 +716,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 break;
 
             case EVENT_UNSOL_OEM_HOOK_RAW:
-                ar = (AsyncResult)msg.obj;
-                if (ar.exception == null) {
-                    byte[] data = (byte[])ar.result;
-                    mNotifier.notifyOemHookRawEventForSubscriber(this, data);
-                } else {
-                    Rlog.e(LOG_TAG, "OEM hook raw exception: " + ar.exception);
-                }
+                // deprecated, ignore
                 break;
 
             case EVENT_CONFIG_LCE:
@@ -3686,7 +3681,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @return true if the IMS capability for the registration technology specified is available,
      * false otherwise.
      */
-    public boolean isImsCapabilityAvailable(int capability, int regTech) {
+    public boolean isImsCapabilityAvailable(int capability, int regTech) throws ImsException {
         Phone imsPhone = mImsPhone;
         boolean isAvailable = false;
         if (imsPhone != null) {

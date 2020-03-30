@@ -25,7 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
-import android.hardware.radio.V1_2.IndicationFilter;
+import android.hardware.radio.V1_5.IndicationFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -308,85 +308,70 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
-     * @return True if signal strength update should be turned off.
+     * @return True if signal strength update should be enabled. See details in
+     *         android.hardware.radio@1.2::IndicationFilter::SIGNAL_STRENGTH.
      */
-    private boolean shouldTurnOffSignalStrength() {
-        // We should not turn off signal strength update if one of the following condition is true.
+    private boolean shouldEnableSignalStrengthReports() {
+        // We should enable signal strength update if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. Any of system services is registrating to always listen to signal strength changes
-        if (mIsAlwaysSignalStrengthReportingEnabled || mIsCharging || mIsScreenOn) {
-            return false;
-        }
-
-        // In all other cases, we turn off signal strength update.
-        return true;
+        return mIsAlwaysSignalStrengthReportingEnabled || mIsCharging || mIsScreenOn;
     }
 
     /**
-     * @return True if full network update should be turned off. Only significant changes will
-     * trigger the network update unsolicited response.
+     * @return True if full network state update should be enabled. When off, only significant
+     *         changes will trigger the network update unsolicited response. See details in
+     *         android.hardware.radio@1.2::IndicationFilter::FULL_NETWORK_STATE.
      */
-    private boolean shouldTurnOffFullNetworkUpdate() {
-        // We should not turn off full network update if one of the following condition is true.
-        // 1. The device is charging.
-        // 2. When the screen is on.
-        // 3. When data tethering is on.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
-            return false;
-        }
-
-        // In all other cases, we turn off full network state update.
-        return true;
+    private boolean shouldEnableFullNetworkStateReports() {
+        return shouldEnableHighPowerConsumptionIndications();
     }
 
     /**
-     * @return True if data dormancy status update should be turned off.
+     * @return True if data call dormancy changed update should be enabled. See details in
+     *         android.hardware.radio@1.2::IndicationFilter::DATA_CALL_DORMANCY_CHANGED.
      */
-    private boolean shouldTurnOffDormancyUpdate() {
-        // We should not turn off data dormancy update if one of the following condition is true.
-        // 1. The device is charging.
-        // 2. When the screen is on.
-        // 3. When data tethering is on.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
-            return false;
-        }
-
-        // In all other cases, we turn off data dormancy update.
-        return true;
+    private boolean shouldEnableDataCallDormancyChangedReports() {
+        return shouldEnableHighPowerConsumptionIndications();
     }
 
     /**
-     * @return True if link capacity estimate update should be turned off.
+     * @return True if link capacity estimate update should be enabled. See details in
+     *         android.hardware.radio@1.2::IndicationFilter::LINK_CAPACITY_ESTIMATE.
      */
-    private boolean shouldTurnOffLinkCapacityEstimate() {
-        // We should not turn off link capacity update if one of the following condition is true.
-        // 1. The device is charging.
-        // 2. When the screen is on.
-        // 3. When data tethering is on.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
-            return false;
-        }
-
-        // In all other cases, we turn off link capacity update.
-        return true;
+    private boolean shouldEnableLinkCapacityEstimateReports() {
+        return shouldEnableHighPowerConsumptionIndications();
     }
 
     /**
-     * @return True if physical channel config update should be turned off.
+     * @return True if physical channel config update should be enabled. See details in
+     *         android.hardware.radio@1.2::IndicationFilter::PHYSICAL_CHANNEL_CONFIG.
      */
-    private boolean shouldTurnOffPhysicalChannelConfig() {
-        // We should not turn off physical channel update if one of the following condition is true.
+    private boolean shouldEnablePhysicalChannelConfigReports() {
+        return shouldEnableHighPowerConsumptionIndications();
+    }
+
+    /**
+     * @return True if barring info update should be enabled. See details in
+     *         android.hardware.radio@1.5::IndicationFilter::BARRING_INFO.
+     */
+    private boolean shouldEnableBarringInfoReports() {
+        return shouldEnableHighPowerConsumptionIndications();
+    }
+
+    /**
+     * A common policy to determine if we should enable the necessary indications update,
+     * for power consumption's sake.
+     *
+     * @return True if the response update should be enabled.
+     */
+    private boolean shouldEnableHighPowerConsumptionIndications() {
+        // We should enable indications reports if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
-        // 3. When data tethering is on.
-        // 4. When the update mode is IGNORE_SCREEN_OFF.
-        if (mIsCharging || mIsScreenOn || mIsTetheringOn) {
-            return false;
-        }
-
-        // In all other cases, we turn off physical channel config update.
-        return true;
+        // 3. When the tethering is on.
+        return mIsCharging || mIsScreenOn || mIsTetheringOn;
     }
 
     /**
@@ -435,6 +420,7 @@ public class DeviceStateMonitor extends Handler {
      * @param state True if enabled/on, otherwise disabled/off.
      */
     private void onUpdateDeviceState(int eventType, boolean state) {
+        final boolean shouldEnableBarringInfoReportsOld = shouldEnableBarringInfoReports();
         switch (eventType) {
             case EVENT_SCREEN_STATE_CHANGED:
                 if (mIsScreenOn == state) return;
@@ -479,27 +465,39 @@ public class DeviceStateMonitor extends Handler {
         }
 
         int newFilter = 0;
-        if (!shouldTurnOffSignalStrength()) {
+        if (shouldEnableSignalStrengthReports()) {
             newFilter |= IndicationFilter.SIGNAL_STRENGTH;
         }
 
-        if (!shouldTurnOffFullNetworkUpdate()) {
+        if (shouldEnableFullNetworkStateReports()) {
             newFilter |= IndicationFilter.FULL_NETWORK_STATE;
         }
 
-        if (!shouldTurnOffDormancyUpdate()) {
+        if (shouldEnableDataCallDormancyChangedReports()) {
             newFilter |= IndicationFilter.DATA_CALL_DORMANCY_CHANGED;
         }
 
-        if (!shouldTurnOffLinkCapacityEstimate()) {
+        if (shouldEnableLinkCapacityEstimateReports()) {
             newFilter |= IndicationFilter.LINK_CAPACITY_ESTIMATE;
         }
 
-        if (!shouldTurnOffPhysicalChannelConfig()) {
+        if (shouldEnablePhysicalChannelConfigReports()) {
             newFilter |= IndicationFilter.PHYSICAL_CHANNEL_CONFIG;
         }
 
+        final boolean shouldEnableBarringInfoReports = shouldEnableBarringInfoReports();
+        if (shouldEnableBarringInfoReports) {
+            newFilter |= IndicationFilter.BARRING_INFO;
+        }
+
         setUnsolResponseFilter(newFilter, false);
+
+        // Pull barring info AFTER setting filter, the order matters
+        if (shouldEnableBarringInfoReports && !shouldEnableBarringInfoReportsOld) {
+            if (DBG) log("Manually pull barring info...", true);
+            // use a null message since we don't care of receiving response
+            mPhone.mCi.getBarringInfo(null);
+        }
     }
 
     /**

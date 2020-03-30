@@ -851,7 +851,7 @@ public class SubscriptionInfoUpdater extends Handler {
             int index =
                     findSubscriptionInfoForIccid(existingSubscriptions, embeddedProfile.getIccid());
             int prevCarrierId = TelephonyManager.UNKNOWN_CARRIER_ID;
-            int nameSource = SubscriptionManager.NAME_SOURCE_DEFAULT;
+            int nameSource = SubscriptionManager.NAME_SOURCE_CARRIER_ID;
             if (index < 0) {
                 // No existing entry for this ICCID; create an empty one.
                 SubscriptionController.getInstance().insertEmptySubInfoRecord(
@@ -906,10 +906,10 @@ public class SubscriptionInfoUpdater extends Handler {
             // If cardId = unsupported or unitialized, we have no reason to update DB.
             // Additionally, if the device does not support cardId for default eUICC, the CARD_ID
             // field should not contain the EID
-            if (cardId >= 0 && UiccController.getInstance().getCardIdForDefaultEuicc()
+            UiccController uiccController = UiccController.getInstance();
+            if (cardId >= 0 && uiccController.getCardIdForDefaultEuicc()
                     != TelephonyManager.UNSUPPORTED_CARD_ID) {
-                values.put(SubscriptionManager.CARD_ID,
-                        mEuiccManager.createForCardId(cardId).getEid());
+                values.put(SubscriptionManager.CARD_ID, uiccController.convertToCardString(cardId));
             }
             hasChanges = true;
             contentResolver.update(SubscriptionManager.CONTENT_URI, values,

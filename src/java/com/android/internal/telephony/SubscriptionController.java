@@ -213,6 +213,9 @@ public class SubscriptionController extends ISub.Stub {
         // clear SLOT_INDEX for all subs
         clearSlotIndexForSubInfoRecords();
 
+        // Cache Setting values
+        cacheSettingValues();
+
         if (DBG) logdl("[SubscriptionController] init by Context");
     }
 
@@ -246,6 +249,26 @@ public class SubscriptionController extends ISub.Stub {
         ContentValues value = new ContentValues(1);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, SubscriptionManager.INVALID_SIM_SLOT_INDEX);
         mContext.getContentResolver().update(SubscriptionManager.CONTENT_URI, value, null, null);
+    }
+
+    /**
+     * Cache the Settings values by reading these values from Setting from disk to prevent disk I/O
+     * access during the API calling. This is based on an assumption that the Settings system will
+     * itself cache this value after the first read and thus only the first read after boot will
+     * access the disk.
+     */
+    private void cacheSettingValues() {
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_SMS_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
     }
 
     @UnsupportedAppUsage
@@ -320,7 +343,7 @@ public class SubscriptionController extends ISub.Stub {
         int nameSource = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.NAME_SOURCE));
         int iconTint = cursor.getInt(cursor.getColumnIndexOrThrow(
-                SubscriptionManager.COLOR));
+                SubscriptionManager.HUE));
         String number = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.NUMBER));
         int dataRoaming = cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -1406,7 +1429,7 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.ICC_ID, uniqueId);
         int color = getUnusedColor(mContext.getOpPackageName(), null);
         // default SIM color differs between slots
-        value.put(SubscriptionManager.COLOR, color);
+        value.put(SubscriptionManager.HUE, color);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, slotIndex);
         value.put(SubscriptionManager.CARRIER_NAME, "");
         value.put(SubscriptionManager.CARD_ID, uniqueId);
@@ -1523,7 +1546,7 @@ public class SubscriptionController extends ISub.Stub {
         try {
             validateSubId(subId);
             ContentValues value = new ContentValues(1);
-            value.put(SubscriptionManager.COLOR, tint);
+            value.put(SubscriptionManager.HUE, tint);
             if (DBG) logd("[setIconTint]- tint:" + tint + " set");
 
             int result = mContext.getContentResolver().update(
@@ -1548,7 +1571,7 @@ public class SubscriptionController extends ISub.Stub {
      */
     public static int getNameSourcePriority(@SimDisplayNameSource int nameSource) {
         int index = Arrays.asList(
-                SubscriptionManager.NAME_SOURCE_DEFAULT,
+                SubscriptionManager.NAME_SOURCE_CARRIER_ID,
                 SubscriptionManager.NAME_SOURCE_SIM_PNN,
                 SubscriptionManager.NAME_SOURCE_SIM_SPN,
                 SubscriptionManager.NAME_SOURCE_CARRIER,
@@ -1609,7 +1632,7 @@ public class SubscriptionController extends ISub.Stub {
             }
             ContentValues value = new ContentValues(1);
             value.put(SubscriptionManager.DISPLAY_NAME, nameToSet);
-            if (nameSource >= SubscriptionManager.NAME_SOURCE_DEFAULT) {
+            if (nameSource >= SubscriptionManager.NAME_SOURCE_CARRIER_ID) {
                 if (DBG) logd("Set nameSource=" + nameSource);
                 value.put(SubscriptionManager.NAME_SOURCE, nameSource);
             }

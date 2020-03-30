@@ -203,20 +203,14 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     @Override
     public void notifyUserMobileDataStateChanged(Phone sender, boolean state) {
-        mTelephonyRegistryMgr.notifyUserMobileDataStateChanged(
-            sender.getSubId(), sender.getPhoneId(), state);
-    }
-
-    @Override
-    public void notifyOemHookRawEventForSubscriber(Phone sender, byte[] rawData) {
-        mTelephonyRegistryMgr.notifyOemHookRawEventForSubscriber(sender.getSubId(),
-            sender.getPhoneId(), rawData);
+        mTelephonyRegistryMgr.notifyUserMobileDataStateChanged(sender.getPhoneId(),
+                sender.getSubId(), state);
     }
 
     @Override
     public void notifyDisplayInfoChanged(Phone sender, DisplayInfo displayInfo) {
-        mTelephonyRegistryMgr.notifyDisplayInfoChanged(
-                sender.getSubId(), sender.getPhoneId(), displayInfo);
+        mTelephonyRegistryMgr.notifyDisplayInfoChanged(sender.getPhoneId(), sender.getSubId(),
+                displayInfo);
     }
 
     @Override
