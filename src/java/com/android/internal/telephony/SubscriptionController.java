@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION;
 import static android.telephony.UiccSlotInfo.CARD_STATE_INFO_PRESENT;
 
 import android.Manifest;
@@ -41,6 +42,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
+import android.telephony.AnomalyReporter;
 import android.telephony.CarrierConfigManager;
 import android.telephony.RadioAccessFamily;
 import android.telephony.SubscriptionInfo;
@@ -211,6 +213,9 @@ public class SubscriptionController extends ISub.Stub {
         // clear SLOT_INDEX for all subs
         clearSlotIndexForSubInfoRecords();
 
+        // Cache Setting values
+        cacheSettingValues();
+
         if (DBG) logdl("[SubscriptionController] init by Context");
     }
 
@@ -244,6 +249,26 @@ public class SubscriptionController extends ISub.Stub {
         ContentValues value = new ContentValues(1);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, SubscriptionManager.INVALID_SIM_SLOT_INDEX);
         mContext.getContentResolver().update(SubscriptionManager.CONTENT_URI, value, null, null);
+    }
+
+    /**
+     * Cache the Settings values by reading these values from Setting from disk to prevent disk I/O
+     * access during the API calling. This is based on an assumption that the Settings system will
+     * itself cache this value after the first read and thus only the first read after boot will
+     * access the disk.
+     */
+    private void cacheSettingValues() {
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_SMS_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
     }
 
     @UnsupportedAppUsage
@@ -318,7 +343,7 @@ public class SubscriptionController extends ISub.Stub {
         int nameSource = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.NAME_SOURCE));
         int iconTint = cursor.getInt(cursor.getColumnIndexOrThrow(
-                SubscriptionManager.COLOR));
+                SubscriptionManager.HUE));
         String number = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.NUMBER));
         int dataRoaming = cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -412,7 +437,8 @@ public class SubscriptionController extends ISub.Stub {
      * @return null if there isn't a match, or subscription info if there is one.
      */
     public SubscriptionInfo getSubInfoForIccId(String iccId) {
-        List<SubscriptionInfo> info = getSubInfo(SubscriptionManager.ICC_ID + "=" + iccId, null);
+        List<SubscriptionInfo> info = getSubInfo(
+                SubscriptionManager.ICC_ID + "=\'" + iccId + "\'", null);
         if (info == null || info.size() == 0) return null;
         // Should be at most one subscription with the iccid.
         return info.get(0);
@@ -515,7 +541,7 @@ public class SubscriptionController extends ISub.Stub {
             if (subList != null) {
                 for (SubscriptionInfo si : subList) {
                     if (si.getSubscriptionId() == subId) {
-                        if (DBG) {
+                        if (VDBG) {
                             logd("[getActiveSubscriptionInfo]+ subId=" + subId + " subInfo=" + si);
                         }
 
@@ -1403,7 +1429,7 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.ICC_ID, uniqueId);
         int color = getUnusedColor(mContext.getOpPackageName(), null);
         // default SIM color differs between slots
-        value.put(SubscriptionManager.COLOR, color);
+        value.put(SubscriptionManager.HUE, color);
         value.put(SubscriptionManager.SIM_SLOT_INDEX, slotIndex);
         value.put(SubscriptionManager.CARRIER_NAME, "");
         value.put(SubscriptionManager.CARD_ID, uniqueId);
@@ -1520,7 +1546,7 @@ public class SubscriptionController extends ISub.Stub {
         try {
             validateSubId(subId);
             ContentValues value = new ContentValues(1);
-            value.put(SubscriptionManager.COLOR, tint);
+            value.put(SubscriptionManager.HUE, tint);
             if (DBG) logd("[setIconTint]- tint:" + tint + " set");
 
             int result = mContext.getContentResolver().update(
@@ -1545,7 +1571,7 @@ public class SubscriptionController extends ISub.Stub {
      */
     public static int getNameSourcePriority(@SimDisplayNameSource int nameSource) {
         int index = Arrays.asList(
-                SubscriptionManager.NAME_SOURCE_DEFAULT,
+                SubscriptionManager.NAME_SOURCE_CARRIER_ID,
                 SubscriptionManager.NAME_SOURCE_SIM_PNN,
                 SubscriptionManager.NAME_SOURCE_SIM_SPN,
                 SubscriptionManager.NAME_SOURCE_CARRIER,
@@ -1606,7 +1632,7 @@ public class SubscriptionController extends ISub.Stub {
             }
             ContentValues value = new ContentValues(1);
             value.put(SubscriptionManager.DISPLAY_NAME, nameToSet);
-            if (nameSource >= SubscriptionManager.NAME_SOURCE_DEFAULT) {
+            if (nameSource >= SubscriptionManager.NAME_SOURCE_CARRIER_ID) {
                 if (DBG) logd("Set nameSource=" + nameSource);
                 value.put(SubscriptionManager.NAME_SOURCE, nameSource);
             }
@@ -2947,8 +2973,23 @@ public class SubscriptionController extends ISub.Stub {
         final long token = Binder.clearCallingIdentity();
 
         try {
-            PhoneSwitcher.getInstance().trySetOpportunisticDataSubscription(
-                    subId, needValidation, callback);
+            PhoneSwitcher phoneSwitcher = PhoneSwitcher.getInstance();
+            if (phoneSwitcher == null) {
+                logd("Set preferred data sub: phoneSwitcher is null.");
+                AnomalyReporter.reportAnomaly(
+                        UUID.fromString("a3ab0b9d-f2aa-4baf-911d-7096c0d4645a"),
+                        "Set preferred data sub: phoneSwitcher is null.");
+                if (callback != null) {
+                    try {
+                        callback.onComplete(SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION);
+                    } catch (RemoteException exception) {
+                        logd("RemoteException " + exception);
+                    }
+                }
+                return;
+            }
+
+            phoneSwitcher.trySetOpportunisticDataSubscription(subId, needValidation, callback);
         } finally {
             Binder.restoreCallingIdentity(token);
         }
@@ -2960,7 +3001,15 @@ public class SubscriptionController extends ISub.Stub {
         final long token = Binder.clearCallingIdentity();
 
         try {
-            return PhoneSwitcher.getInstance().getOpportunisticDataSubscriptionId();
+            PhoneSwitcher phoneSwitcher = PhoneSwitcher.getInstance();
+            if (phoneSwitcher == null) {
+                AnomalyReporter.reportAnomaly(
+                        UUID.fromString("a3ab0b9d-f2aa-4baf-911d-7096c0d4645a"),
+                        "Get preferred data sub: phoneSwitcher is null.");
+                return SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
+            }
+
+            return phoneSwitcher.getOpportunisticDataSubscriptionId();
         } finally {
             Binder.restoreCallingIdentity(token);
         }

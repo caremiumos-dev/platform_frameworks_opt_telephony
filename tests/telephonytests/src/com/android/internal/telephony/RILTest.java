@@ -34,6 +34,7 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_ENTER_SIM_PUK2;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_ACTIVITY_INFO;
+import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_BARRING_INFO;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_CELL_INFO_LIST;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_CURRENT_CALLS;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_HARDWARE_CONFIG;
@@ -208,6 +209,7 @@ public class RILTest extends TelephonyTest {
     private static final int CQI = 2147483647;
     private static final int DBM = -74;
     private static final int EARFCN = 262140;
+    private static final List<Integer> BANDS = Arrays.asList(1, 2);
     private static final int BANDWIDTH = 5000;
     private static final int ECIO = -124;
     private static final String EMPTY_ALPHA_LONG = "";
@@ -1079,6 +1081,23 @@ public class RILTest extends TelephonyTest {
     }
 
     @Test
+    public void testGetBarringInfo() throws Exception {
+        // Not supported on Radio 1.0.
+        mRILUnderTest.getBarringInfo(obtainMessage());
+        verify(mRadioProxy, never()).getBarringInfo(anyInt());
+
+        // Make radio version 1.5 to support the operation.
+        try {
+            replaceInstance(RIL.class, "mRadioVersion", mRILUnderTest, mRadioVersionV15);
+        } catch (Exception e) {
+        }
+        mRILUnderTest.getBarringInfo(obtainMessage());
+        verify(mRadioProxy).getBarringInfo(mSerialNumberCaptor.capture());
+        verifyRILResponse(
+                mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_GET_BARRING_INFO);
+    }
+
+    @Test
     public void testInvokeOemRilRequestStrings() throws Exception {
         String[] strings = new String[]{"a", "b", "c"};
         mRILUnderTest.invokeOemRilRequestStrings(strings, obtainMessage());
@@ -1170,8 +1189,9 @@ public class RILTest extends TelephonyTest {
         CellInfoLte expected = new CellInfoLte();
         expected.setRegistered(false);
         expected.setTimeStamp(TIMESTAMP);
-        CellIdentityLte cil = new CellIdentityLte(CI, PCI, TAC, EARFCN, Integer.MAX_VALUE, MCC_STR,
-                MNC_STR, EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT, Collections.emptyList(), null);
+        CellIdentityLte cil = new CellIdentityLte(CI, PCI, TAC, EARFCN, new int[] {},
+                Integer.MAX_VALUE, MCC_STR, MNC_STR, EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT,
+                Collections.emptyList(), null);
         CellSignalStrengthLte css = new CellSignalStrengthLte(
                 RSSI, RSRP, RSRQ, RSSNR, CQI, TIMING_ADVANCE);
         expected.setCellIdentity(cil);
@@ -1359,8 +1379,8 @@ public class RILTest extends TelephonyTest {
         expected.setRegistered(false);
         expected.setTimeStamp(TIMESTAMP);
         CellIdentityLte cil = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR, ALPHA_LONG, ALPHA_SHORT,
-                Collections.emptyList(), null);
+                CI, PCI, TAC, EARFCN, new int[] {}, BANDWIDTH, MCC_STR, MNC_STR,
+                ALPHA_LONG, ALPHA_SHORT, Collections.emptyList(), null);
         CellSignalStrengthLte css = new CellSignalStrengthLte(
                 RSSI, RSRP, RSRQ, RSSNR, CQI, TIMING_ADVANCE);
         expected.setCellIdentity(cil);
@@ -1380,8 +1400,9 @@ public class RILTest extends TelephonyTest {
         CellInfoLte expected = new CellInfoLte();
         expected.setRegistered(false);
         expected.setTimeStamp(TIMESTAMP);
-        CellIdentityLte cil = new CellIdentityLte(CI, PCI, TAC, EARFCN, BANDWIDTH, MCC_STR, MNC_STR,
-                EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT, Collections.emptyList(), null);
+        CellIdentityLte cil = new CellIdentityLte(CI, PCI, TAC, EARFCN, new int[] {},
+                BANDWIDTH, MCC_STR, MNC_STR, EMPTY_ALPHA_LONG, EMPTY_ALPHA_SHORT,
+                Collections.emptyList(), null);
         CellSignalStrengthLte css = new CellSignalStrengthLte(
                 RSSI, RSRP, RSRQ, RSSNR, CQI, TIMING_ADVANCE);
         expected.setCellIdentity(cil);
@@ -1404,8 +1425,8 @@ public class RILTest extends TelephonyTest {
         expected.setRegistered(false);
         expected.setTimeStamp(TIMESTAMP);
         CellIdentityLte cil = new CellIdentityLte(
-                CI, PCI, TAC, EARFCN, BANDWIDTH, null, null, ALPHA_LONG, ALPHA_SHORT,
-                Collections.emptyList(), null);
+                CI, PCI, TAC, EARFCN, new int[] {}, BANDWIDTH, null, null, ALPHA_LONG,
+                ALPHA_SHORT, Collections.emptyList(), null);
         CellSignalStrengthLte css = new CellSignalStrengthLte(
                 RSSI, RSRP, RSRQ, RSSNR, CQI, TIMING_ADVANCE);
         expected.setCellIdentity(cil);
@@ -1625,7 +1646,7 @@ public class RILTest extends TelephonyTest {
                 (CellSignalStrengthNr) cellInfoNr.getCellSignalStrength();
 
         CellIdentityNr expectedCellIdentity = new CellIdentityNr(PCI, TAC, NRARFCN,
-                Collections.emptyList(), MCC_STR, MNC_STR, CI, ALPHA_LONG, ALPHA_SHORT,
+                new int[] {}, MCC_STR, MNC_STR, CI, ALPHA_LONG, ALPHA_SHORT,
                 Collections.emptyList());
         CellSignalStrengthNr expectedSignalStrength = new CellSignalStrengthNr(-RSRP, -RSRQ,
                 SIGNAL_NOISE_RATIO, -RSRP, -RSRQ, SIGNAL_NOISE_RATIO);
@@ -1692,6 +1713,60 @@ public class RILTest extends TelephonyTest {
         result14.mtu = 1500;
 
         assertEquals(response, RIL.convertDataCallResult(result14));
+
+        // Test V1.5 SetupDataCallResult
+        android.hardware.radio.V1_5.SetupDataCallResult result15 =
+                new android.hardware.radio.V1_5.SetupDataCallResult();
+        result15.cause = android.hardware.radio.V1_4.DataCallFailCause.NONE;
+        result15.suggestedRetryTime = -1;
+        result15.cid = 0;
+        result15.active = android.hardware.radio.V1_4.DataConnActiveStatus.ACTIVE;
+        result15.type = android.hardware.radio.V1_4.PdpProtocolType.IPV4V6;
+        result15.ifname = "ifname";
+
+        android.hardware.radio.V1_5.LinkAddress la1 = new android.hardware.radio.V1_5.LinkAddress();
+        la1.address = "10.0.2.15";
+        la1.properties = 0;
+        la1.deprecationTime = -1;
+        la1.expirationTime = -1;
+
+        android.hardware.radio.V1_5.LinkAddress la2 = new android.hardware.radio.V1_5.LinkAddress();
+        la2.address = "2607:fb90:a620:651d:eabe:f8da:c107:44be/64";
+        la2.properties = 0;
+        la2.deprecationTime = -1;
+        la2.expirationTime = -1;
+        result15.addresses = new ArrayList<>(Arrays.asList(la1, la2));
+        result15.dnses = new ArrayList<>(Arrays.asList("10.0.2.3", "fd00:976a::9"));
+        result15.gateways = new ArrayList<>(Arrays.asList("10.0.2.15", "fe80::2"));
+        result15.pcscf = new ArrayList<>(Arrays.asList(
+                "fd00:976a:c206:20::6", "fd00:976a:c206:20::9", "fd00:976a:c202:1d::9"));
+        result15.mtuV4 = 1500;
+        result15.mtuV6 = 3000;
+
+        response = new DataCallResponse.Builder()
+                .setCause(0)
+                .setSuggestedRetryTime(-1)
+                .setId(0)
+                .setLinkStatus(2)
+                .setProtocolType(ApnSetting.PROTOCOL_IPV4V6)
+                .setInterfaceName("ifname")
+                .setAddresses(Arrays.asList(
+                        new LinkAddress(InetAddresses.parseNumericAddress("10.0.2.15"), 32),
+                        new LinkAddress("2607:fb90:a620:651d:eabe:f8da:c107:44be/64")))
+                .setDnsAddresses(Arrays.asList(InetAddresses.parseNumericAddress("10.0.2.3"),
+                        InetAddresses.parseNumericAddress("fd00:976a::9")))
+                .setGatewayAddresses(Arrays.asList(InetAddresses.parseNumericAddress("10.0.2.15"),
+                        InetAddresses.parseNumericAddress("fe80::2")))
+                .setPcscfAddresses(Arrays.asList(
+                        InetAddresses.parseNumericAddress("fd00:976a:c206:20::6"),
+                        InetAddresses.parseNumericAddress("fd00:976a:c206:20::9"),
+                        InetAddresses.parseNumericAddress("fd00:976a:c202:1d::9")))
+                .setMtuV4(1500)
+                .setMtuV6(3000)
+                .setVersion(5)
+                .build();
+
+        assertEquals(response, RIL.convertDataCallResult(result15));
     }
 
     @Test

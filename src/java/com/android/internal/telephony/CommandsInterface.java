@@ -51,6 +51,8 @@ public interface CommandsInterface {
     static final int CLIR_INVOCATION = 1;   // (restrict CLI presentation)
     static final int CLIR_SUPPRESSION = 2;  // (allow CLI presentation)
 
+    // Used as return value for CDMA SS query
+    static final int SS_STATUS_UNKNOWN          = 0xff;
 
     // Used as parameters for call forward methods below
     static final int CF_ACTION_DISABLE          = 0;
@@ -1268,7 +1270,24 @@ public interface CommandsInterface {
     void writeSmsToRuim(int status, byte[] pdu, Message response);
 
     @UnsupportedAppUsage
-    void setRadioPower(boolean on, Message response);
+    default void setRadioPower(boolean on, Message response) {
+        setRadioPower(on, false, false, response);
+    }
+
+    /**
+     * Sets the radio power on/off state (off is sometimes
+     * called "airplane mode").
+     *
+     * @param on true means "on", false means "off".
+     * @param forEmergencyCall true means the purpose of turning radio power on is for emergency
+     *                         call. No effect if power is set false.
+     * @param isSelectedPhoneForEmergencyCall true means this phone / modem is selected to place
+     *                                  emergency call after turning power on. No effect if power
+     *                                  or forEmergency is set false.
+     * @param response sent when operation completes.
+     */
+    default void setRadioPower(boolean on, boolean forEmergencyCall,
+            boolean isSelectedPhoneForEmergencyCall, Message response) {}
 
     @UnsupportedAppUsage
     void acknowledgeLastIncomingGsmSms(boolean success, int cause, Message response);
@@ -2479,4 +2498,29 @@ public interface CommandsInterface {
     default List<ClientRequestStats> getClientRequestStats() {
         return null;
     }
+
+    /**
+     * Registers the handler for RIL_UNSOL_BARRING_INFO_CHANGED events.
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    default void registerForBarringInfoChanged(Handler h, int what, Object obj) {};
+
+    /**
+     * Unregisters the handler for RIL_UNSOL_BARRING_INFO_CHANGED events.
+     *
+     * @param h Handler for notification message.
+     */
+    default void unregisterForBarringInfoChanged(Handler h) {};
+
+    /**
+     * Get all the barring info for the current camped cell applicable to the current user.
+     *
+     * AsyncResult.result is the object of {@link android.telephony.BarringInfo}.
+     *
+     * @param result Message will be sent back to handler and result.obj will be the AsycResult.
+     */
+    default void getBarringInfo(Message result) {};
 }

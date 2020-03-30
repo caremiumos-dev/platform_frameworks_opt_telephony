@@ -68,6 +68,7 @@ import android.util.SparseArray;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
+import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
@@ -206,8 +207,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_GET_UICC_APPS_ENABLEMENT_DONE  = 54;
     protected static final int EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE = 55;
     protected static final int EVENT_REGISTRATION_FAILED = 56;
+    protected static final int EVENT_BARRING_INFO_CHANGED = 57;
 
-    protected static final int EVENT_LAST = EVENT_REGISTRATION_FAILED;
+    protected static final int EVENT_LAST = EVENT_BARRING_INFO_CHANGED;
 
     // For shared prefs.
     private static final String GSM_ROAMING_LIST_OVERRIDE_PREFIX = "gsm_roaming_list_";
@@ -714,13 +716,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 break;
 
             case EVENT_UNSOL_OEM_HOOK_RAW:
-                ar = (AsyncResult)msg.obj;
-                if (ar.exception == null) {
-                    byte[] data = (byte[])ar.result;
-                    mNotifier.notifyOemHookRawEventForSubscriber(this, data);
-                } else {
-                    Rlog.e(LOG_TAG, "OEM hook raw exception: " + ar.exception);
-                }
+                // deprecated, ignore
                 break;
 
             case EVENT_CONFIG_LCE:
@@ -3546,6 +3542,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /*
+     * This function is for CSFB SS. GsmCdmaPhone overrides this function.
+     */
+    public void setCallWaiting(boolean enable, int serviceClass, Message onComplete) {
+    }
+
+    /*
      * Returns the subscription id.
      */
     @UnsupportedAppUsage
@@ -3679,7 +3681,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @return true if the IMS capability for the registration technology specified is available,
      * false otherwise.
      */
-    public boolean isImsCapabilityAvailable(int capability, int regTech) {
+    public boolean isImsCapabilityAvailable(int capability, int regTech) throws ImsException {
         Phone imsPhone = mImsPhone;
         boolean isAvailable = false;
         if (imsPhone != null) {
