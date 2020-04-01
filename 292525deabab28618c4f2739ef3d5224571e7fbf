@@ -45,6 +45,30 @@
       "revId": "292525deabab28618c4f2739ef3d5224571e7fbf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c40924_918de88e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1549814
+      },
+      "writtenOn": "2020-04-01T04:54:24Z",
+      "side": 0,
+      "message": "Dear Malcolm Chen,\nI considered this issue a little more.\nThe solution is to delete this condition of firstBoot() or checking DEVICE_PROVISIONED setting.\nBecause it needed to set false as default, whenever sharedPreference doesn\u0027t exist no matter device is provisioned or not. \nI\u0027ll update patch soon.",
+      "parentUuid": "293d9f05_f4e41c7d",
+      "range": {
+        "startLine": 2551,
+        "startChar": 16,
+        "endLine": 2551,
+        "endChar": 96
+      },
+      "revId": "292525deabab28618c4f2739ef3d5224571e7fbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "254fdff376e6c244da58375f0bca97336d09a6c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72768a71_45085e4c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3597,
+      "author": {
+        "id": 1549814
+      },
+      "writtenOn": "2020-04-01T04:54:24Z",
+      "side": 1,
+      "message": "yes, there is no impact on Q or R os. \nbut on P os, there wasn\u0027t logic to set DATA_RAOMING_IS_USER_SETTING value at here.\nSo in case of P os and DEVICE_PROVISIONED value \u003d1, that value was not initialized well",
+      "parentUuid": "b91a41b6_d2252d4d",
+      "range": {
+        "startLine": 3595,
+        "startChar": 0,
+        "endLine": 3597,
+        "endChar": 17
+      },
+      "revId": "254fdff376e6c244da58375f0bca97336d09a6c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
