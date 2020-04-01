@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5a68a92_c826c33a",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "nit magic constant",
+      "range": {
+        "startLine": 388,
+        "startChar": 46,
+        "endLine": 388,
+        "endChar": 48
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c653535b_ec15222b",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "looks like it should be logged as an error.",
+      "range": {
+        "startLine": 389,
+        "startChar": 25,
+        "endLine": 389,
+        "endChar": 28
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc3ac1cc_66845f06",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "this is a no-op. Rlog.pii() just returns a formatted string.",
+      "range": {
+        "startLine": 392,
+        "startChar": 26,
+        "endLine": 392,
+        "endChar": 29
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bbf01a7_c6957b30",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "How does imsi return null? AFAICT decodeImsi() always returns a String.",
+      "range": {
+        "startLine": 403,
+        "startChar": 28,
+        "endLine": 403,
+        "endChar": 32
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eba82dc_1aeb02df",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "nit: If this is really NonNull, it\u0027d be helpful to annotate it as such.",
+      "range": {
+        "startLine": 430,
+        "startChar": 16,
+        "endLine": 430,
+        "endChar": 22
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d425f1d_a00e909c",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "This is really complicated, and it will need to be thoroughly unit tested unless there\u0027s a more straightforward way to implement it.",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 73
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "978b6d5a_66bce20a",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "This can all go in a single format string, simplifying the block considerably, though I am confident there\u0027s a better way to do this. There might be something helpful in IccUtils.",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 74
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ad36cc_bbdaa793",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "this is a little janky. It seems more-correct to fetch the record regardless and then just pick the right IMSI at the higher layer (giving precedence to other app types).\n\nIf this is really the right thing to do, please add a comment explaining why this one record should have a special pattern compared to every other record in CSIM.",
+      "range": {
+        "startLine": 889,
+        "startChar": 0,
+        "endLine": 890,
+        "endChar": 75
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e50b5372_abaa15e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "I think mApplicationCount should be volatile. It doesn\u0027t look like we need to lock on it unless the intention is to block reads while the entire call to update() executes, but I suspect that could deadlock because a call to update could well trigger a refresh of all the records. I followed the code around for a few minutes and gave up, but if you need this get() to lock until update() is complete, please explain why with a very thorough comment.",
+      "range": {
+        "startLine": 1523,
+        "startChar": 8,
+        "endLine": 1523,
+        "endChar": 20
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06aaa365_ae2cac9b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-04-01T06:43:02Z",
+      "side": 1,
+      "message": "there need to be static tests for RuimRecords#decodeImsi(). I assert that as-is there\u0027s zero confidence that method works as we expect it to. Come up with some reasonable test vectors and run it through. You can expose it with @VisibleForTesting.",
+      "range": {
+        "startLine": 20,
+        "startChar": 13,
+        "endLine": 20,
+        "endChar": 28
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
