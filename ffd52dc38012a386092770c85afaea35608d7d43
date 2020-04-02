@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d7a3ab2_4c1d4883",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccCardApplication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-04-02T20:03:23Z",
+      "side": 1,
+      "message": "Check for EVENT_PIN1_PUK1_DONE here, since that is the only case you are modifying in PhoneInterfaceManager.",
+      "range": {
+        "startLine": 390,
+        "startChar": 16,
+        "endLine": 399,
+        "endChar": 17
+      },
+      "revId": "ffd52dc38012a386092770c85afaea35608d7d43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
