@@ -1,0 +1,13 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Lint+2: nazish tabassum <quic_ntabassu@quicinc.com>
+Code-Review+1: nazish tabassum <quic_ntabassu@quicinc.com>
+Code-Review+2: Daniel Bright <dbright@google.com>
+Open-Source-Licensing+1: nazish tabassum <quic_ntabassu@quicinc.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Qualcomm-Review+1: Ajay Nambi <anambi@quicinc.com>
+Submitted-by: Daniel Bright <dbright@google.com>
+Submitted-at: Fri, 03 Apr 2020 22:18:11 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1276972
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
