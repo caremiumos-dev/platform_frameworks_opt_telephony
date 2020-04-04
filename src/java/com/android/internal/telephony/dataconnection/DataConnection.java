@@ -1266,15 +1266,11 @@ public class DataConnection extends StateMachine {
                 }
             }
 
-            // Mark NOT_METERED in the following cases,
-            // 1. All APNs in APN settings are unmetered.
-            // 2. The non-restricted data and is intended for unmetered use only.
-            if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride)
-                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
-                result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            } else {
-                result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            }
+            // DataConnection has the immutable NOT_METERED capability only if all APNs in the
+            // APN setting are unmetered according to carrier config METERED_APN_TYPES_STRINGS.
+            // All other cases should use the dynamic TEMPORARILY_NOT_METERED capability instead.
+            result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED,
+                    !ApnSettingUtils.isMetered(mApnSetting, mPhone));
 
             result.maybeMarkCapabilitiesRestricted();
         }
@@ -1292,19 +1288,19 @@ public class DataConnection extends StateMachine {
         result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING,
                 !mPhone.getServiceState().getDataRoaming());
 
-        result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
-
-        // Override values set above when requested by policy
-        if ((mSubscriptionOverride & OVERRIDE_UNMETERED) != 0) {
-            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-        }
-        if ((mSubscriptionOverride & OVERRIDE_CONGESTED) != 0) {
-            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
+        if ((mSubscriptionOverride & OVERRIDE_CONGESTED) == 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         }
 
-        // Override set by DcTracker
-        if (mUnmeteredOverride) {
-            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        // Mark TEMPORARILY_NOT_METERED in the following cases:
+        // 1. The non-restricted data is intended for unmetered use only.
+        // 2. DcTracker set an unmetered override due to network/location (eg. 5G).
+        // 3. SubscriptionManager set an unmetered override as requested by policy.
+        if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride) || mUnmeteredOverride
+                || (mSubscriptionOverride & OVERRIDE_UNMETERED) != 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
+        } else {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
         }
 
         return result;
