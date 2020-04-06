@@ -118,6 +118,30 @@
       "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfa0df74_b5fc84f2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneTest.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-04-06T07:04:16Z",
+      "side": 1,
+      "message": "Sorry for late response.\nWithout this patch, the following error occurred when I ran the callForwarding test after removing @FlakyTest and @Ignore.(atest FrameworksTelephonyTests:ImsPhoneTest)\n\n\n\n---------------------------------------------------------------------------------------------\n[18/33] com.android.internal.telephony.imsphone.ImsPhoneTest#testCallForwardingOption: FAILED (204ms)\n\nSTACKTRACE:\nArgument(s) are different! Wanted:\nmImsUtInterface.updateCallForward(\n    1,\n    0,\n    \"1234\",\n    1,\n    0,\n    { when\u003d-1m24s579ms what\u003d0 target\u003dandroid.os.Handler_1_Proxy }\n);\n-\u003e at com.android.internal.telephony.imsphone.ImsPhoneTest.testCallForwardingOption(ImsPhoneTest.java:498)\nActual invocation has different arguments:\nmImsUtInterface.updateCallForward(\n    1,\n    0,\n    \"1234\",\n    1,\n    0,\n    { when\u003d-1m24s579ms what\u003d12 arg1\u003d1 obj\u003dcom.android.internal.telephony.imsphone.ImsPhone$Cf@e347df4 target\u003dcom.android.internal.telephony.imsphone.ImsPhone }\n);\n-\u003e at com.android.internal.telephony.imsphone.ImsPhone.setCallForwardingOption(ImsPhone.java:1111)\n---------------------------------------------------------------------------------------------\n\n\n\nI guess, when obj(onComplete) is changed, error occurs even if casting is done.\nWhen I modified it as below, it failed also.\n\nCf cf \u003d (Cf)messageArgumentCaptor.getValue().obj;\nassertEquals(msg, cf.mOnComplete);\n\nIs there a way to pass the test without ignoring it?",
+      "parentUuid": "cbb4ac62_a0a868da",
+      "range": {
+        "startLine": 459,
+        "startChar": 5,
+        "endLine": 459,
+        "endChar": 14
+      },
+      "revId": "8fc0d493473e536af4eb3a189ab05437b11d315c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
