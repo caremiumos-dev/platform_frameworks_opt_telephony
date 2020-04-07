@@ -1,0 +1,31 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000002331260",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1195415?revision\u003d8",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "5f5069e3_d40f500c",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-04-07T15:40:31Z",
+      "side": 1,
+      "message": "Disapproved license (NOT_A_CONTRIBUTION) :\nNot a Contribution.\n",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 23
+      },
+      "revId": "bbfbefc34e4d86f27718806263d4259967681b79",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
