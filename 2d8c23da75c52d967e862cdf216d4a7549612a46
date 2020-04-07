@@ -22,6 +22,30 @@
       "revId": "2d8c23da75c52d967e862cdf216d4a7549612a46",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2154e398_5c5a7cec",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-04-07T10:11:47Z",
+      "side": 0,
+      "message": "@Brad Ebinger,\n\nIs it needed to prevent internal merge conflict?\nIf not, I think the build error will let vendors know there are some changes instead.",
+      "parentUuid": "c66c4370_ae7fcbb3",
+      "range": {
+        "startLine": 309,
+        "startChar": 9,
+        "endLine": 309,
+        "endChar": 28
+      },
+      "revId": "2d8c23da75c52d967e862cdf216d4a7549612a46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
