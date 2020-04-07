@@ -70,6 +70,7 @@ import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccIoResult;
 import com.android.internal.telephony.uicc.IccSlotStatus;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
@@ -517,6 +518,12 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void supplyNetworkDepersonalization(String netpin, Message result) {
+        unimplemented(result);
+    }
+
+    @Override
+    public void supplySimDepersonalization(PersoSubState persoType,
+            String conrolKey, Message result) {
         unimplemented(result);
     }
 
@@ -2209,6 +2216,12 @@ public class SimulatedCommands extends BaseCommands
     public void registerForExitEmergencyCallbackMode(Handler h, int what, Object obj) {
         SimulatedCommandsVerifier.getInstance().registerForExitEmergencyCallbackMode(h, what, obj);
         super.registerForExitEmergencyCallbackMode(h, what, obj);
+    }
+
+    @Override
+    public void registerForSrvccStateChanged(Handler h, int what, Object obj) {
+        SimulatedCommandsVerifier.getInstance().registerForSrvccStateChanged(h, what, obj);
+        super.registerForSrvccStateChanged(h, what, obj);
     }
 
     public void notifyRadioOn() {

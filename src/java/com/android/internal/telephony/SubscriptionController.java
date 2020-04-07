@@ -492,7 +492,7 @@ public class SubscriptionController extends ISub.Stub {
     private int getUnusedColor(String callingPackage, String callingFeatureId) {
         List<SubscriptionInfo> availableSubInfos = getActiveSubscriptionInfoList(callingPackage,
                 callingFeatureId);
-        colorArr = mContext.getResources().getIntArray(android.R.array.simColors);
+        colorArr = mContext.getResources().getIntArray(com.android.internal.R.array.sim_colors);
         int colorIdx = 0;
 
         if (availableSubInfos != null) {
@@ -3331,7 +3331,7 @@ public class SubscriptionController extends ISub.Stub {
      * Helper function to create selection argument of a list of subId.
      * The result should be: "in (subId1, subId2, ...)".
      */
-    private String getSelectionForSubIdList(int[] subId) {
+    public static String getSelectionForSubIdList(int[] subId) {
         StringBuilder selection = new StringBuilder();
         selection.append(SubscriptionManager.UNIQUE_KEY_SUBSCRIPTION_ID);
         selection.append(" IN (");
