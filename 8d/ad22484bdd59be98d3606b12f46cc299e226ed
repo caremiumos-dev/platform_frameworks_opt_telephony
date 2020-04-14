@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+1: Hunter Knepshield <hknepshield@google.com>
+Code-Review+2: Amit Mahajan <amitmahajan@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Cassie Han <xih@google.com>
+Submitted-at: Tue, 14 Apr 2020 02:27:39 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1285260
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
