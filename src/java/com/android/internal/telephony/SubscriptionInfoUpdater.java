@@ -410,6 +410,24 @@ public class SubscriptionInfoUpdater extends Handler {
 
     protected void handleSimReady(int phoneId) {
         List<Integer> cardIds = new ArrayList<>();
+        logd("handleSimReady: phoneId: " + phoneId);
+
+        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd(" SIM" + (phoneId + 1) + " hot plug in");
+            sIccId[phoneId] = null;
+        }
+
+        IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
+        IccRecords records = (iccCard != null) ? iccCard.getIccRecords() : null;
+        if ((records != null) && (IccUtils.stripTrailingFs(records.getFullIccId()) != null)) {
+            // Call updateSubscriptionInfoByIccId() only if was
+            // not done earlier from SIM Locked event
+            if (sIccId[phoneId] == null) {
+                sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+
+                updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+            }
+        }
 
         cardIds.add(getCardIdFromPhoneId(phoneId));
         updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
@@ -421,7 +439,6 @@ public class SubscriptionInfoUpdater extends Handler {
         broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
         broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
     }
-
 
     protected void handleSimNotReady(int phoneId) {
         logd("handleSimNotReady: phoneId: " + phoneId);
@@ -485,9 +502,14 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("handleSimLoaded: IccID null");
             return;
         }
-        sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
-        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        // Call updateSubscriptionInfoByIccId() only if was not done earlier from SIM READY event
+        if (sIccId[phoneId] == null) {
+            sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+
+            updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        }
+
         List<SubscriptionInfo> subscriptionInfos =
                 mSubscriptionController.getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
