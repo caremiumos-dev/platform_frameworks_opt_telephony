@@ -431,18 +431,37 @@ public class SubscriptionInfoUpdater extends Handler {
 
     protected void handleSimReady(int phoneId) {
         List<Integer> cardIds = new ArrayList<>();
+        logd("handleSimReady: phoneId: " + phoneId);
+
+        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd(" SIM" + (phoneId + 1) + " hot plug in");
+            sIccId[phoneId] = null;
+        }
+        UiccSlot uiccSlot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
+        if (uiccSlot == null) {
+            logd("handleSimReady: uiccSlot null");
+            return;
+        }
+
+        String iccId = uiccSlot.getIccId();
+        if (IccUtils.stripTrailingFs(iccId) == null) {
+            logd("handleSimReady: IccID null");
+            return;
+        }
+        sIccId[phoneId] = IccUtils.stripTrailingFs(iccId);
+
+        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
 
         cardIds.add(getCardIdFromPhoneId(phoneId));
         updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
-        if (hasChanges) {
-            SubscriptionController.getInstance().notifySubscriptionInfoChanged();
-        }
+            if (hasChanges) {
+                SubscriptionController.getInstance().notifySubscriptionInfoChanged();
+            }
         });
         broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_READY, null);
         broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
         broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
     }
-
 
     protected void handleSimNotReady(int phoneId) {
         logd("handleSimNotReady: phoneId: " + phoneId);
@@ -505,7 +524,14 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("handleSimLoaded: IccID null");
             return;
         }
-        sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+        String iccId = sIccId[phoneId];
+
+        // Call updateSubscriptionInfoByIccId() only if was not done earlier from SIM READY event
+        if (iccId == null) {
+            sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+
+            updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        }
 
         updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
         List<SubscriptionInfo> subscriptionInfos = SubscriptionController.getInstance()
