@@ -19,7 +19,6 @@ package com.android.internal.telephony.cdnr;
 import android.annotation.NonNull;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
-import android.text.TextUtils;
 
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IccRecords.OperatorPlmnInfo;
@@ -39,19 +38,21 @@ public final class CarrierConfigEfData implements EfData {
         mConfig = config;
     }
 
+    /** @hide */
+    public boolean getCarrierNameOverrideBool() {
+        return mConfig.getBoolean(CarrierConfigManager.KEY_CARRIER_NAME_OVERRIDE_BOOL);
+    }
+
     @Override
     public String getServiceProviderName() {
-        String spn = mConfig.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
-        if (TextUtils.isEmpty(spn)) return null;
-        return spn;
+        return mConfig.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
     }
 
     @Override
     public int getServiceProviderNameDisplayCondition() {
-        int condition = mConfig.getInt(
+        return mConfig.getInt(
                 CarrierConfigManager.KEY_SPN_DISPLAY_CONDITION_OVERRIDE_INT,
                 IccRecords.INVALID_CARRIER_NAME_DISPLAY_CONDITION_BITMASK);
-        return condition;
     }
 
     @Override
