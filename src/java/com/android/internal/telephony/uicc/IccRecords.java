@@ -32,6 +32,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.util.ArrayUtils;
@@ -54,6 +55,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class IccRecords extends Handler implements IccConstants {
     protected static final boolean DBG = true;
     protected static final boolean VDBG = false; // STOPSHIP if true
+    protected static final String LOG_TAG = "IccRecords";
 
     public static final int PLMN_MIN_LENGTH = CellIdentity.MCC_LENGTH
             + CellIdentity.MNC_MIN_LENGTH;
@@ -769,11 +771,38 @@ public abstract class IccRecords extends Handler implements IccConstants {
         return mSpn;
     }
 
-    protected void setServiceProviderName(String spn) {
+    /** Set Service Provider Name. */
+    @VisibleForTesting
+    public void setServiceProviderName(String spn) {
         if (!TextUtils.equals(mSpn, spn)) {
             mSpn = spn != null ? spn.trim() : null;
             mSpnUpdatedRegistrants.notifyRegistrants();
         }
+    }
+
+    @VisibleForTesting
+    public void setCarrierNameDisplayCondition(int displayCondition) {
+        mCarrierNameDisplayCondition = displayCondition;
+    }
+
+    @VisibleForTesting
+    public void setServiceProviderDisplayInformation(String[] spdi) {
+        mSpdi = spdi;
+    }
+
+    @VisibleForTesting
+    public void setPnns(PlmnNetworkName[] pnns) {
+        mPnns = pnns;
+    }
+
+    @VisibleForTesting
+    public void setOpl(OperatorPlmnInfo[] opl) {
+        mOpl = opl;
+    }
+
+    @VisibleForTesting
+    public void setEhplmns(String[] ehplmns) {
+        mEhplmns = ehplmns;
     }
 
     /**
@@ -1230,7 +1259,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
                             - SystemClock.elapsedRealtime();
                     if (sleepTime > 0) rsp.wait(sleepTime);
                 } catch (InterruptedException e) {
-                    Rlog.w("IccRecords", "getIccSimChallengeResponse: InterruptedException.");
+                    Rlog.w(LOG_TAG, "getIccSimChallengeResponse: InterruptedException.");
                 }
             } while (SystemClock.elapsedRealtime() - startTime < ICC_SIM_CHALLENGE_TIMEOUT_MILLIS
                     && rsp.authRsp == null && rsp.exception == null);
@@ -1398,7 +1427,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
                 if (pnnIdx < pnns.length && pnns[pnnIdx] != null) {
                     return pnns[pnnIdx].getName();
                 } else {
-                    Rlog.e("IccRecords", "Invalid PNN record for Record" + pnnIdx);
+                    Rlog.e(LOG_TAG, "Invalid PNN record for Record" + pnnIdx);
                     break;
                 }
             }
