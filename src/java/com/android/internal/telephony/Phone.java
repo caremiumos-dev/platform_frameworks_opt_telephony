@@ -3527,6 +3527,18 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return TelephonyManager.UNKNOWN_CARRIER_ID;
     }
 
+    /**
+     * Get network name for the provided PLMN and LacTac
+     * @param plmn PLMN
+     * @param lacTac LAC or TAC
+     * @return network name of the provided PLMN and lacTac
+     *
+     * @hide
+     */
+    @Nullable public String getNetworkNameForPlmn(String plmn, int lacTac) {
+        return null;
+    }
+
     public String getCarrierName() {
         return null;
     }
