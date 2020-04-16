@@ -86,6 +86,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
+import com.android.internal.telephony.cdnr.PlmnNetworkNameResolver;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.dataconnection.TransportManager;
@@ -232,6 +233,8 @@ public class GsmCdmaPhone extends Phone {
 
     private final SettingsObserver mSettingsObserver;
 
+    private PlmnNetworkNameResolver mPnnr;
+
     // Constructors
 
     public GsmCdmaPhone(Context context, CommandsInterface ci, PhoneNotifier notifier, int phoneId,
@@ -291,6 +294,8 @@ public class GsmCdmaPhone extends Phone {
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED),
                 EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE);
+
+        mPnnr = new PlmnNetworkNameResolver(context);
 
         loadTtyMode();
         logd("GsmCdmaPhone: constructor: sub = " + mPhoneId);
@@ -1816,6 +1821,20 @@ public class GsmCdmaPhone extends Phone {
         return mCarrierResolver.getCarrierId();
     }
 
+    /**
+     * Get network name for the provided PLMN and LacTac
+     * @param plmn PLMN
+     * @param lacTac LAC or TAC
+     * @return network name of the provided PLMN and lacTac
+     *
+     * @hide
+     */
+    @Override
+    @Nullable public String getNetworkNameForPlmn(String plmn, int lacTac) {
+        if (mPnnr == null) return null;
+        return mPnnr.getNetworkNameForPlmn(plmn, lacTac);
+    }
+
     @Override
     public String getCarrierName() {
         return mCarrierResolver.getCarrierName();
@@ -2767,6 +2786,9 @@ public class GsmCdmaPhone extends Phone {
                     loge("didn't get broadcastEmergencyCallStateChanges from carrier config");
                 }
 
+                // Update PlmnNetworkNameResolver
+                mPnnr.updateCarrierConfig(b);
+
                 // Changing the cdma roaming settings based carrier config.
                 if (b != null) {
                     int config_cdma_roaming_mode = b.getInt(
@@ -2837,6 +2859,11 @@ public class GsmCdmaPhone extends Phone {
                 }
 
                 updateVoiceMail();
+
+                // Update PlmnNetworkNameResolver
+                if (isPhoneTypeGsm()) {
+                    mPnnr.updateSimRecords((SIMRecords) mIccRecords.get());
+                }
 
                 mSimRecordsLoadedRegistrants.notifyRegistrants();
                 break;
