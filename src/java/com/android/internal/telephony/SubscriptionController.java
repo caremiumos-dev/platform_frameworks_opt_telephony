@@ -473,10 +473,14 @@ public class SubscriptionController extends ISub.Stub {
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public void notifySubscriptionInfoChanged() {
+        notifySubscriptionInfoChanged(null);
+    }
+
+    public void notifySubscriptionInfoChanged(String debugStr) {
         TelephonyRegistryManager trm =
                 (TelephonyRegistryManager)
                         mContext.getSystemService(Context.TELEPHONY_REGISTRY_SERVICE);
-        if (DBG) logd("notifySubscriptionInfoChanged:");
+        if (DBG) logd("notifySubscriptionInfoChanged: " + debugStr);
         trm.notifySubscriptionInfoChanged();
 
         // FIXME: Remove if listener technique accepted.
@@ -1441,7 +1445,7 @@ public class SubscriptionController extends ISub.Stub {
             refreshCachedActiveSubscriptionInfoList();
 
             if (isSubscriptionForRemoteSim(subscriptionType)) {
-                notifySubscriptionInfoChanged();
+                notifySubscriptionInfoChanged("addSubInfo");
             } else {  // Handle Local SIM devices
                 // Set Display name after sub id is set above so as to get valid simCarrierName
                 int subId = getSubIdUsingPhoneId(slotIndex);
@@ -1596,7 +1600,7 @@ public class SubscriptionController extends ISub.Stub {
             }
             updateDefaultSubIdsIfNeeded(info.getSubscriptionId(), info.getSubscriptionType());
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("removeSubInfo");
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
@@ -1699,7 +1703,7 @@ public class SubscriptionController extends ISub.Stub {
                 // TODO: This can be removed once SubscriptionController is not running on devices
                 // that don't need it, such as TVs.
                 if (DBG) logd("[setPlmnSpn] No valid subscription to store info");
-                notifySubscriptionInfoChanged();
+                notifySubscriptionInfoChanged("setPlmnSpn");
                 return false;
             }
             String carrierText = "";
@@ -1745,7 +1749,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setCarrierText");
 
             return result;
         } finally {
@@ -1779,7 +1783,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setIconTint");
 
             return result;
         } finally {
@@ -1948,7 +1952,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setDisplayNameUsingSrc");
 
             return result;
         } finally {
@@ -1994,7 +1998,7 @@ public class SubscriptionController extends ISub.Stub {
             refreshCachedActiveSubscriptionInfoList();
 
             if (DBG) logd("[setDisplayNumber]- update result :" + result);
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setDisplayNumber");
 
             return result;
         } finally {
@@ -2030,7 +2034,7 @@ public class SubscriptionController extends ISub.Stub {
         refreshCachedActiveSubscriptionInfoList();
 
         if (DBG) logd("[setAssociatedPlmns]- update result :" + count);
-        notifySubscriptionInfoChanged();
+        notifySubscriptionInfoChanged("setAssociatedPlmns");
     }
 
     /**
@@ -2062,7 +2066,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setDataRoaming");
 
             return result;
         } finally {
@@ -2162,7 +2166,7 @@ public class SubscriptionController extends ISub.Stub {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setCarrierId");
 
             return result;
         } finally {
@@ -2200,7 +2204,7 @@ public class SubscriptionController extends ISub.Stub {
         // Refresh the Cache of Active Subscription Info List
         refreshCachedActiveSubscriptionInfoList();
 
-        notifySubscriptionInfoChanged();
+        notifySubscriptionInfoChanged("setMccMnc");
 
         return result;
     }
@@ -2234,7 +2238,7 @@ public class SubscriptionController extends ISub.Stub {
         // Refresh the Cache of Active Subscription Info List
         refreshCachedActiveSubscriptionInfoList();
 
-        notifySubscriptionInfoChanged();
+        notifySubscriptionInfoChanged("setImsi");
 
         return result;
     }
@@ -2261,7 +2265,7 @@ public class SubscriptionController extends ISub.Stub {
             refreshCachedActiveSubscriptionInfoList();
 
             notifyUiccAppsEnableChanged();
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setUiccApplicationsEnabled");
 
             return result;
         } finally {
@@ -2338,7 +2342,7 @@ public class SubscriptionController extends ISub.Stub {
         // Refresh the Cache of Active Subscription Info List
         refreshCachedActiveSubscriptionInfoList();
 
-        notifySubscriptionInfoChanged();
+        notifySubscriptionInfoChanged("setCountryIso");
         return result;
     }
 
@@ -3250,7 +3254,7 @@ public class SubscriptionController extends ISub.Stub {
             int ret = setSubscriptionProperty(subId, SubscriptionManager.IS_OPPORTUNISTIC,
                     String.valueOf(opportunistic ? 1 : 0));
 
-            if (ret != 0) notifySubscriptionInfoChanged();
+            if (ret != 0) notifySubscriptionInfoChanged("setOpportunistic");
 
             return ret;
         } finally {
@@ -3396,7 +3400,7 @@ public class SubscriptionController extends ISub.Stub {
 
             refreshCachedActiveSubscriptionInfoList();
 
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("createSubscriptionGroup");
 
             MultiSimSettingController.getInstance().notifySubscriptionGroupChanged(groupUUID);
 
@@ -3515,7 +3519,7 @@ public class SubscriptionController extends ISub.Stub {
             if (result > 0) {
                 updateGroupOwner(groupUuid, callingPackage);
                 refreshCachedActiveSubscriptionInfoList();
-                notifySubscriptionInfoChanged();
+                notifySubscriptionInfoChanged("addSubscriptionsIntoGroup");
                 MultiSimSettingController.getInstance().notifySubscriptionGroupChanged(groupUuid);
             }
         } finally {
@@ -3580,7 +3584,7 @@ public class SubscriptionController extends ISub.Stub {
             if (result > 0) {
                 updateGroupOwner(groupUuid, callingPackage);
                 refreshCachedActiveSubscriptionInfoList();
-                notifySubscriptionInfoChanged();
+                notifySubscriptionInfoChanged("removeSubscriptionsFromGroup");
             }
         } finally {
             Binder.restoreCallingIdentity(identity);
@@ -4247,7 +4251,7 @@ public class SubscriptionController extends ISub.Stub {
         if (result) {
             // Refresh the Cache of Active Subscription Info List
             refreshCachedActiveSubscriptionInfoList();
-            notifySubscriptionInfoChanged();
+            notifySubscriptionInfoChanged("setDataEnabledOverrideRules");
         }
 
         return result;
