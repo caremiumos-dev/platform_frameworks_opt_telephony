@@ -73,6 +73,7 @@ import com.android.internal.telephony.LinkCapacityEstimate;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.RetryManager;
 import com.android.internal.telephony.ServiceStateTracker;
@@ -95,6 +96,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -181,6 +183,8 @@ public class DataConnection extends StateMachine {
     private final String mTagSuffix;
 
     private final LocalLog mHandoverLocalLog = new LocalLog(100);
+
+    private int[] mAdministratorUids = new int[0];
 
     /**
      * Used internally for saving connecting parameters.
@@ -329,8 +333,8 @@ public class DataConnection extends StateMachine {
     static final int EVENT_DATA_CONNECTION_METEREDNESS_CHANGED = BASE + 28;
     static final int EVENT_NR_FREQUENCY_CHANGED = BASE + 29;
     static final int EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED = BASE + 30;
-    private static final int CMD_TO_STRING_COUNT =
-            EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED - BASE + 1;
+    static final int EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED = BASE + 31;
+    private static final int CMD_TO_STRING_COUNT = EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -372,6 +376,8 @@ public class DataConnection extends StateMachine {
         sCmdToString[EVENT_NR_FREQUENCY_CHANGED - BASE] = "EVENT_NR_FREQUENCY_CHANGED";
         sCmdToString[EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED - BASE] =
                 "EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED";
+        sCmdToString[EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED - BASE] =
+                "EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -610,9 +616,7 @@ public class DataConnection extends StateMachine {
         if (nri != null) {
             networkType = nri.getAccessNetworkTechnology();
             mRilRat = ServiceState.networkTypeToRilRadioTechnology(networkType);
-            if (isBandwidthSourceKey(DctConstants.BANDWIDTH_SOURCE_CARRIER_CONFIG_KEY)) {
-                updateLinkBandwidthsFromCarrierConfig(mRilRat);
-            }
+            updateLinkBandwidthsFromCarrierConfig(mRilRat);
         }
 
         mNetworkInfo = new NetworkInfo(ConnectivityManager.TYPE_MOBILE,
@@ -1133,9 +1137,12 @@ public class DataConnection extends StateMachine {
 
 
     private void updateLinkBandwidthsFromModem(LinkCapacityEstimate lce) {
+        if (DBG) log("updateLinkBandwidthsFromModem: lce=" + lce);
         boolean downlinkUpdated = false;
         boolean uplinkUpdated = false;
-        if (mPhone.getLceStatus() == RILConstants.LCE_ACTIVE) {
+        // LCE status deprecated in IRadio 1.2, so only check for IRadio < 1.2
+        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_2)
+                || mPhone.getLceStatus() == RILConstants.LCE_ACTIVE) {
             if (lce.downlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
                 mDownlinkBandwidth = lce.downlinkCapacityKbps;
                 downlinkUpdated = true;
@@ -1145,7 +1152,6 @@ public class DataConnection extends StateMachine {
                 uplinkUpdated = true;
             }
         }
-        if (DBG) log("updateLinkBandwidthsFromModem");
         if (!downlinkUpdated || !uplinkUpdated) {
             String ratName = ServiceState.rilRadioTechnologyToString(mRilRat);
             if (mRilRat == ServiceState.RIL_RADIO_TECHNOLOGY_LTE && isNRConnected()) {
@@ -1412,6 +1418,8 @@ public class DataConnection extends StateMachine {
         final boolean suspended =
                 mNetworkInfo.getDetailedState() == NetworkInfo.DetailedState.SUSPENDED;
         result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED, !suspended);
+
+        result.setAdministratorUids(mAdministratorUids);
 
         return result;
     }
@@ -1941,6 +1949,10 @@ public class DataConnection extends StateMachine {
             // tear down the connection through networkAgent unwanted callback if all requests for
             // this connection are going away.
             mRestrictedNetworkOverride = shouldRestrictNetwork();
+
+            mPhone.getCarrierPrivilegesTracker()
+                    .registerCarrierPrivilegesListener(
+                            getHandler(), EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED, null);
         }
         @Override
         public boolean processMessage(Message msg) {
@@ -2030,6 +2042,12 @@ public class DataConnection extends StateMachine {
                     }
                     retVal = HANDLED;
                     break;
+                case EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED:
+                    AsyncResult asyncResult = (AsyncResult) msg.obj;
+                    int[] administratorUids = (int[]) asyncResult.result;
+                    mAdministratorUids = Arrays.copyOf(administratorUids, administratorUids.length);
+                    retVal = HANDLED;
+                    break;
                 default:
                     if (VDBG) {
                         log("DcActivatingState not handled msg.what=" +
@@ -2073,9 +2091,7 @@ public class DataConnection extends StateMachine {
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED,
                     mNetworkInfo.getReason(), null);
             updateTcpBufferSizes(mRilRat);
-            if (isBandwidthSourceKey(DctConstants.BANDWIDTH_SOURCE_CARRIER_CONFIG_KEY)) {
-                updateLinkBandwidthsFromCarrierConfig(mRilRat);
-            }
+            updateLinkBandwidthsFromCarrierConfig(mRilRat);
 
             final NetworkAgentConfig.Builder configBuilder = new NetworkAgentConfig.Builder();
             configBuilder.setLegacyType(ConnectivityManager.TYPE_MOBILE);
@@ -2157,7 +2173,7 @@ public class DataConnection extends StateMachine {
                 // All network agents start out in CONNECTING mode, but DcNetworkAgents are
                 // created when the network is already connected. Hence, send the connected
                 // notification immediately.
-                mNetworkAgent.setConnected();
+                mNetworkAgent.markConnected();
             }
 
             if (mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
@@ -2207,6 +2223,8 @@ public class DataConnection extends StateMachine {
 
             TelephonyMetrics.getInstance().writeRilDataCallEvent(mPhone.getPhoneId(),
                     mCid, mApnSetting.getApnTypeBitmask(), RilDataCall.State.DISCONNECTED);
+
+            mPhone.getCarrierPrivilegesTracker().unregisterCarrierPrivilegesListener(getHandler());
         }
 
         @Override
@@ -2527,6 +2545,19 @@ public class DataConnection extends StateMachine {
                     retVal = HANDLED;
                     break;
                 }
+                case EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED:
+                    AsyncResult asyncResult = (AsyncResult) msg.obj;
+                    int[] administratorUids = (int[]) asyncResult.result;
+                    mAdministratorUids = Arrays.copyOf(administratorUids, administratorUids.length);
+
+                    // Administrator UIDs changed, so update NetworkAgent with new
+                    // NetworkCapabilities
+                    if (mNetworkAgent != null) {
+                        mNetworkAgent.sendNetworkCapabilities(
+                                getNetworkCapabilities(), DataConnection.this);
+                    }
+                    retVal = HANDLED;
+                    break;
                 default:
                     if (VDBG) {
                         log("DcActiveState not handled msg.what=" + getWhatToString(msg.what));
