@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8decdf8d_993a3e01",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1265670
+      },
+      "writtenOn": "2020-04-20T01:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15dd7152_43df1684",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 304,
+        "endChar": 24
+      },
+      "revId": "0cd1621b3f4d029119583b3c41a275a07698195b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c16d8214_14eb4ab7",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "0cd1621b3f4d029119583b3c41a275a07698195b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dea5de09_b591a43e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1265670
+      },
+      "writtenOn": "2020-04-20T01:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c16d8214_14eb4ab7",
+      "range": {
+        "startLine": 309,
+        "startChar": 56,
+        "endLine": 309,
+        "endChar": 58
+      },
+      "revId": "0cd1621b3f4d029119583b3c41a275a07698195b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
