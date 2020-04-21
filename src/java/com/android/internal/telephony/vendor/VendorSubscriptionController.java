@@ -16,11 +16,13 @@
 
 package com.android.internal.telephony.vendor;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.RemoteException;
@@ -38,6 +40,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.telephony.SubscriptionController;
+import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 
 import java.util.Iterator;
@@ -54,6 +57,8 @@ public class VendorSubscriptionController extends SubscriptionController {
     private static final boolean VDBG = Rlog.isLoggable(LOG_TAG, Log.VERBOSE);
 
     private static int sNumPhones;
+
+    private static final int EVENT_UICC_APPS_ENABLEMENT_DONE = 101;
 
     private static final int PROVISIONED = 1;
     private static final int NOT_PROVISIONED = 0;
@@ -141,6 +146,51 @@ public class VendorSubscriptionController extends SubscriptionController {
         }
         return retVal;
     }
+
+    @Override
+    public int setUiccApplicationsEnabled(boolean enabled, int subId) {
+        if (DBG) logd("[setUiccApplicationsEnabled]+ enabled:" + enabled + " subId:" + subId);
+
+        ContentValues value = new ContentValues(1);
+        value.put(SubscriptionManager.UICC_APPLICATIONS_ENABLED, enabled);
+
+        int result = mContext.getContentResolver().update(
+                SubscriptionManager.getUriForSubscriptionId(subId), value, null, null);
+
+        // Refresh the Cache of Active Subscription Info List
+        refreshCachedActiveSubscriptionInfoList();
+
+        notifySubscriptionInfoChanged();
+
+        if (isActiveSubId(subId)) {
+            Phone phone = PhoneFactory.getPhone(getPhoneId(subId));
+            phone.enableUiccApplications(enabled, Message.obtain(
+                    mSubscriptionHandler, EVENT_UICC_APPS_ENABLEMENT_DONE, enabled));
+        }
+
+        return result;
+    }
+
+    /*
+     * Handler Class
+     */
+    private Handler mSubscriptionHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case EVENT_UICC_APPS_ENABLEMENT_DONE: {
+                    logd("EVENT_UICC_APPS_ENABLEMENT_DONE");
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    if (ar.exception != null) {
+                        logd("Received exception: " + ar.exception);
+                        return;
+                    }
+                    updateUserPreferences();
+                    break;
+                }
+            }
+        }
+    };
 
     protected boolean isRadioAvailableOnAllSubs() {
         for (int i = 0; i < sNumPhones; i++) {

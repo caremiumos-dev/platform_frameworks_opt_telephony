@@ -432,4 +432,9 @@ public class TelephonyComponentFactory {
             Looper looper) {
         return PhoneSwitcher.make(maxDataAttachModemCount, context, looper);
     }
+
+    public MultiSimSettingController initMultiSimSettingController(Context c,
+            SubscriptionController sc) {
+        return MultiSimSettingController.init(c, sc);
+    }
 }
