@@ -1,0 +1,10 @@
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Code-Review+1: Sooraj Sasindran <sasindran@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Brad Ebinger <breadley@google.com>
+Submitted-at: Thu, 23 Apr 2020 20:30:37 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1191587
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
