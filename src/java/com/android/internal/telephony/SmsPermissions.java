@@ -132,6 +132,26 @@ public class SmsPermissions {
     }
 
     /**
+     * Check that the caller (or self, if this is not an IPC) can get the total capacity of SMS
+     * storage on the RUIM or (U)SIM card.
+     *
+     * The default SMS application can get the total capacity of SMS, otherwise the caller must have
+     * {@link android.Manifest.permission#READ_PRIVILEGED_PHONE_STATE} or carrier privileges.
+     *
+     * @return true if the caller is default SMS app or has the required permission and privileges.
+     *              Otherwise, false;
+     */
+    public boolean checkCallingOrSelfCanGetSmsCapacity(String callingPackage, String message) {
+        // Allow it to the default SMS app always.
+        if (!isCallerDefaultSmsPackage(callingPackage)) {
+            TelephonyPermissions
+                        .enforeceCallingOrSelfReadPrivilegedPhoneStatePermissionOrCarrierPrivilege(
+                                mContext, mPhone.getSubId(), message);
+        }
+        return true;
+    }
+
+    /**
      * Check that the caller (or self, if this is not an IPC) can get SMSC address from (U)SIM.
      *
      * The default SMS application can get SMSC address, otherwise the caller must have
