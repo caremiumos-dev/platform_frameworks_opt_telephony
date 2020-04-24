@@ -222,6 +222,7 @@ public class SmsPermissionsTest extends TelephonyTest {
             // expected
         }
     }
+
     @Test
     public void testCheckCallingOrSelfCanSetSmscAddressPermissions_defaultSmsApp() {
         mCallerIsDefaultSmsPackage = true;
@@ -248,6 +249,39 @@ public class SmsPermissionsTest extends TelephonyTest {
                 Manifest.permission.MODIFY_PHONE_STATE)).thenReturn(PERMISSION_DENIED);
         try {
             assertFalse(mSmsPermissionsTest.checkCallingOrSelfCanSetSmscAddress(PACKAGE, MESSAGE));
+            fail();
+        } catch (SecurityException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmsCapacityPermissions_defaultSmsApp() {
+        mCallerIsDefaultSmsPackage = true;
+        // Other permissions shouldn't matter.
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanGetSmsCapacity(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmsCapacityPermissions_hasReadPrivilegedPhoneState() {
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_GRANTED);
+        assertTrue(mSmsPermissionsTest.checkCallingOrSelfCanGetSmsCapacity(PACKAGE, MESSAGE));
+    }
+
+    @Test
+    public void testCheckCallingOrSelfCanGetSmsCapacityPermissions_noPermissions() {
+        Mockito.when(mMockContext.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(
+                mTelephonyManager);
+        Mockito.when(mMockContext.checkCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE))
+                .thenReturn(PERMISSION_DENIED);
+        try {
+            mSmsPermissionsTest.checkCallingOrSelfCanGetSmsCapacity(PACKAGE, MESSAGE);
             fail();
         } catch (SecurityException e) {
             // expected

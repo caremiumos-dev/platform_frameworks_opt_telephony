@@ -1395,10 +1395,11 @@ public class IccSmsInterfaceManager {
                 SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
     }
 
-    public int getSmsCapacityOnIcc() {
-        mContext.enforceCallingOrSelfPermission(
-                android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE,
-                "getSmsCapacityOnIcc");
+    public int getSmsCapacityOnIcc(String callingPackage) {
+        if (!mSmsPermissions.checkCallingOrSelfCanGetSmsCapacity(
+                callingPackage, "getSmsCapacityOnIcc")) {
+            return 0;
+        }
 
         int numberOnIcc = 0;
         if (mPhone.getIccRecordsLoaded()) {
