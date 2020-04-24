@@ -42,6 +42,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.hardware.display.DisplayManager;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
@@ -91,6 +92,7 @@ import android.util.EventLog;
 import android.util.LocalLog;
 import android.util.Pair;
 import android.util.SparseArray;
+import android.view.Display;
 import android.view.WindowManager;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -343,24 +345,7 @@ public class DcTracker extends Handler {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            if (action.equals(Intent.ACTION_SCREEN_ON)) {
-                // TODO: Evaluate hooking this up with DeviceStateMonitor
-                if (DBG) log("screen on");
-                mIsScreenOn = true;
-                stopNetStatPoll();
-                startNetStatPoll();
-                restartDataStallAlarm();
-                reevaluateUnmeteredConnections();
-            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-                if (DBG) log("screen off");
-                mIsScreenOn = false;
-                stopNetStatPoll();
-                startNetStatPoll();
-                restartDataStallAlarm();
-                stopHysteresisAlarm();
-                stopWatchdogAlarm();
-                setDataConnectionUnmetered(false);
-            } else if (action.equals(INTENT_DATA_STALL_ALARM)) {
+            if (action.equals(INTENT_DATA_STALL_ALARM)) {
                 onActionIntentDataStallAlarm(intent);
             } else if (action.equals(INTENT_PROVISIONING_APN_ALARM)) {
                 if (DBG) log("Provisioning apn alarm");
@@ -645,6 +630,38 @@ public class DcTracker extends Handler {
 
     private DataStallRecoveryHandler mDsRecoveryHandler;
 
+    private final DisplayManager.DisplayListener mDisplayListener =
+            new DisplayManager.DisplayListener() {
+                @Override
+                public void onDisplayAdded(int displayId) {}
+
+                @Override
+                public void onDisplayRemoved(int displayId) {}
+
+                @Override
+                public void onDisplayChanged(int displayId) {
+                    if (isScreenOn()) {
+                        if (!mIsScreenOn) {
+                            mIsScreenOn = true;
+                            stopNetStatPoll();
+                            startNetStatPoll();
+                            restartDataStallAlarm();
+                            reevaluateUnmeteredConnections();
+                        }
+                    } else {
+                        if (mIsScreenOn) {
+                            mIsScreenOn = false;
+                            stopNetStatPoll();
+                            startNetStatPoll();
+                            restartDataStallAlarm();
+                            stopHysteresisAlarm();
+                            stopWatchdogAlarm();
+                            setDataConnectionUnmetered(false);
+                        }
+                    }
+                }
+            };
+
     /**
      * Request network completion message map. Key is the APN type, value is the list of completion
      * messages to be sent. Using a list because there might be multiple network requests for
@@ -676,8 +693,6 @@ public class DcTracker extends Handler {
         mDsRecoveryHandler = new DataStallRecoveryHandler();
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(INTENT_DATA_STALL_ALARM);
         filter.addAction(INTENT_PROVISIONING_APN_ALARM);
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
@@ -5131,5 +5146,25 @@ public class DcTracker extends Handler {
         } else {
             onSimNotReady();
         }
+    }
+
+    private boolean isScreenOn() {
+        final DisplayManager dm = (DisplayManager) mPhone.getContext().getSystemService(
+                Context.DISPLAY_SERVICE);
+        Display[] displays = dm.getDisplays();
+
+        if (displays != null) {
+            for (Display display : displays) {
+                if (display.getState() == Display.STATE_ON) {
+                    log("Screen " + Display.typeToString(display.getType()) + " on");
+                    return true;
+                }
+            }
+            log("Screens all off");
+            return false;
+        }
+
+        log("No displays found");
+        return false;
     }
 }
