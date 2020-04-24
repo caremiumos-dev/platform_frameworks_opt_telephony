@@ -1,0 +1,11 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+1: Susheel Kumar N <snyamala@codeaurora.org>
+Code-Review+2: Sarah Chin <sarahchin@google.com>
+Qualcomm-Review+1: Ajay Nambi <anambi@quicinc.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Sarah Chin <sarahchin@google.com>
+Submitted-at: Fri, 24 Apr 2020 21:04:10 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1154435
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
