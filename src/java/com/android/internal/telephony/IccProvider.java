@@ -406,7 +406,9 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                adnRecords = iccIpb.getAdnRecordsInEfForSubscriber(subId, efType);
+                synchronized (this) {
+                    adnRecords = iccIpb.getAdnRecordsInEfForSubscriber(subId, efType);
+                }
             }
         } catch (RemoteException ex) {
             // ignore it
