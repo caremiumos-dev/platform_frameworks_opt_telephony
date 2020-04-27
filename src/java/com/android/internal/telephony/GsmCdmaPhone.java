@@ -83,6 +83,7 @@ import android.util.Pair;
 
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
@@ -91,6 +92,7 @@ import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -109,7 +111,6 @@ import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
 import com.android.internal.telephony.util.ArrayUtils;
 import com.android.telephony.Rlog;
-import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -2226,6 +2227,9 @@ public class GsmCdmaPhone extends Phone {
             mCi.getCLIR(onComplete);
         } else {
             loge("getOutgoingCallerIdDisplay: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
         }
     }
 
@@ -2245,6 +2249,27 @@ public class GsmCdmaPhone extends Phone {
                     obtainMessage(EVENT_SET_CLIR_COMPLETE, commandInterfaceCLIRMode, 0, onComplete));
         } else {
             loge("setOutgoingCallerIdDisplay: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
+        }
+    }
+
+    @Override
+    public void queryCLIP(Message onComplete) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.queryCLIP(onComplete);
+            return;
+        }
+
+        if (isPhoneTypeGsm()) {
+            mCi.queryCLIP(onComplete);
+        } else {
+            loge("queryCLIP: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
         }
     }
 
@@ -3159,7 +3184,7 @@ public class GsmCdmaPhone extends Phone {
                                 simOperatorNumeric);
                     }
                 }
-                updateDataConnectionTracker();
+                updateCurrentCarrierInProvider();
             }
         }
 
@@ -4029,10 +4054,9 @@ public class GsmCdmaPhone extends Phone {
         return dialString;
     }
 
-    /**
-     * @return operator numeric.
-     */
-    private String getOperatorNumeric() {
+    @Override
+    @NonNull
+    public String getOperatorNumeric() {
         String operatorNumeric = null;
         if (isPhoneTypeGsm()) {
             IccRecords r = mIccRecords.get();
@@ -4074,7 +4098,7 @@ public class GsmCdmaPhone extends Phone {
                     + " operatorNumeric = " + operatorNumeric);
 
         }
-        return operatorNumeric;
+        return TextUtils.emptyIfNull(operatorNumeric);
     }
 
     /**

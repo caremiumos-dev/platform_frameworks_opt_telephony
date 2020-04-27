@@ -47,7 +47,6 @@ import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
 import android.telephony.ClientRequestStats;
-import android.telephony.DisplayInfo;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.PhysicalChannelConfig;
@@ -57,6 +56,7 @@ import android.telephony.RadioAccessSpecifier;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyDisplayInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.emergency.EmergencyNumber;
@@ -2430,8 +2430,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /** Send notification that display info has changed. */
-    public void notifyDisplayInfoChanged(DisplayInfo displayInfo) {
-        mNotifier.notifyDisplayInfoChanged(this, displayInfo);
+    public void notifyDisplayInfoChanged(TelephonyDisplayInfo telephonyDisplayInfo) {
+        mNotifier.notifyDisplayInfoChanged(this, telephonyDisplayInfo);
     }
 
     public void notifySignalStrength() {
@@ -3598,6 +3598,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void setCallWaiting(boolean enable, int serviceClass, Message onComplete) {
     }
 
+    public void queryCLIP(Message onComplete) {
+    }
+
     /*
      * Returns the subscription id.
      */
@@ -4044,16 +4047,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return getLocaleFromCarrierProperties();
     }
 
-    public void updateDataConnectionTracker() {
-        if (mTransportManager != null) {
-            for (int transport : mTransportManager.getAvailableTransports()) {
-                if (getDcTracker(transport) != null) {
-                    getDcTracker(transport).update();
-                }
-            }
-        }
-    }
-
     public boolean updateCurrentCarrierInProvider() {
         return false;
     }
@@ -4257,6 +4250,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return false;
     }
 
+    /**
+     * Get the SIM's MCC/MNC
+     *
+     * @return MCC/MNC in string format, empty string if not available.
+     */
+    @NonNull
+    public String getOperatorNumeric() {
+        return "";
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
@@ -4294,8 +4297,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" isInEmergencySmsMode=" + isInEmergencySmsMode());
         pw.println(" isEcmCanceledForEmergency=" + isEcmCanceledForEmergency());
         pw.println(" service state=" + getServiceState());
-        String privilegedUids = Arrays.toString(mCarrierPrivilegesTracker.mPrivilegedUids);
-        pw.println(" administratorUids=" + privilegedUids);
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
 
@@ -4415,6 +4416,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             }
 
             pw.flush();
+            pw.println("++++++++++++++++++++++++++++++++");
+        }
+
+        if (getCarrierPrivilegesTracker() != null) {
+            pw.println("CarrierPrivilegesTracker:");
+            getCarrierPrivilegesTracker().dump(fd, pw, args);
             pw.println("++++++++++++++++++++++++++++++++");
         }
 
