@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b1ec0eb_d6e7ab5f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2020-04-28T22:25:37Z",
+      "side": 1,
+      "message": "uneasy about filesystem access from this thread - should we do this on a helper thread?",
+      "range": {
+        "startLine": 323,
+        "startChar": 7,
+        "endLine": 328,
+        "endChar": 23
+      },
+      "revId": "10b3825698264b3d8c194016895695876197f8ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66934845_01446a21",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2020-04-28T22:25:37Z",
+      "side": 1,
+      "message": "ditto - should we move the read to another thread (and probably do it at class creation time if we\u0027re trying to recover state after a crash)?",
+      "range": {
+        "startLine": 442,
+        "startChar": 9,
+        "endLine": 449,
+        "endChar": 29
+      },
+      "revId": "10b3825698264b3d8c194016895695876197f8ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
