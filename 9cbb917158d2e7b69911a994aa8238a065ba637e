@@ -22,6 +22,30 @@
       "revId": "9cbb917158d2e7b69911a994aa8238a065ba637e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3869d698_b355b9e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1380100
+      },
+      "writtenOn": "2020-04-28T08:42:34Z",
+      "side": 1,
+      "message": "Did you mean we should write the length of mEmails and mAdditionalNumbers, because  createFromParcel() has read these length by \"source.readInt();\" at line104 and line97?",
+      "parentUuid": "518a6f17_88023072",
+      "range": {
+        "startLine": 324,
+        "startChar": 8,
+        "endLine": 325,
+        "endChar": 50
+      },
+      "revId": "9cbb917158d2e7b69911a994aa8238a065ba637e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
