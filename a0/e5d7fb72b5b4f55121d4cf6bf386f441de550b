@@ -1,0 +1,12 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Open-Source-Licensing+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Verified+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Code-Review+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Lint+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-at: Tue, 28 Apr 2020 18:12:08 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1296783
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
