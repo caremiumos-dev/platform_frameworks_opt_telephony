@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "707f5d7f_fa69188d",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-05-02T01:04:00Z",
+      "side": 1,
+      "message": "You do not need the retry related code now. Also this causes compilation error.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 91
+      },
+      "revId": "5d74e234b2e34b9bdf6ecdcd6c2a24e43446f9fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
