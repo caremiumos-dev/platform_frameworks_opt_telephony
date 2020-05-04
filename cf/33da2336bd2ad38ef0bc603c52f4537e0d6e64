@@ -1,0 +1,10 @@
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Amit Mahajan <amitmahajan@google.com>
+Qualcomm-Review+1: Ajay Nambi <anambi@quicinc.com>
+Submitted-by: Amit Mahajan <amitmahajan@google.com>
+Submitted-at: Mon, 04 May 2020 22:48:19 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1290551
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
