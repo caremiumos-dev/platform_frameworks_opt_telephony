@@ -1,0 +1,8 @@
+Code-Review+2: Sarah Chin <sarahchin@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Sooraj Sasindran <sasindran@google.com>
+Submitted-at: Mon, 04 May 2020 17:54:51 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1300412
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
