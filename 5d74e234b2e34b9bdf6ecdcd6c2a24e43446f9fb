@@ -22,6 +22,30 @@
       "revId": "5d74e234b2e34b9bdf6ecdcd6c2a24e43446f9fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "403a2a54_8316ce54",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1305827
+      },
+      "writtenOn": "2020-05-04T05:49:16Z",
+      "side": 1,
+      "message": "This change will need configs defined in fwk/base gerrit: https://android-review.googlesource.com/c/platform/frameworks/base/+/1205618\n\nWe need to override base class retry methods for:\n1. Storing failure reason to track failures and display reason on UI once retries are exhausted\n2. To read retry timer value from config which has different value from default retry time",
+      "parentUuid": "707f5d7f_fa69188d",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 91
+      },
+      "revId": "5d74e234b2e34b9bdf6ecdcd6c2a24e43446f9fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
