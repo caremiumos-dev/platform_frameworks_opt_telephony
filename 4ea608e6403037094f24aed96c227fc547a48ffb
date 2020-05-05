@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbd7dc5e_09c87664",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-05-05T20:23:02Z",
+      "side": 1,
+      "message": "Ideally these reason codes should be in the config instead of being hardcoded, but it\u0027s ok for now I guess.",
+      "revId": "4ea608e6403037094f24aed96c227fc547a48ffb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
