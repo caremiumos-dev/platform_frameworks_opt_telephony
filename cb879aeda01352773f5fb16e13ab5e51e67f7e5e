@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0f07ad7_bce6c59f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-05-06T23:53:12Z",
+      "side": 1,
+      "message": "I think you are seeing failures because this needs to be getCompleteActiveSubscriptionIdList.\n\nAnd in fact it seems getActiveSubscriptionIdList can be completely removed from this file and replaced with getCompleteActiveSubscriptionIdList, since after your CLs TelephonyPermissions does not use the former API.",
+      "range": {
+        "startLine": 359,
+        "startChar": 38,
+        "endLine": 359,
+        "endChar": 65
+      },
+      "revId": "cb879aeda01352773f5fb16e13ab5e51e67f7e5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
