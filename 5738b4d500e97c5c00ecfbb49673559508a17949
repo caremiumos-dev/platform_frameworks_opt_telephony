@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b418d751_212e0ee0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2062,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-05-06T00:45:47Z",
+      "side": 1,
+      "message": "shouldn\u0027t this move into initialAttachApnSetting \u003d\u003d null block? The logic above should not select any emergency APN for initial attach.",
+      "range": {
+        "startLine": 2054,
+        "startChar": 0,
+        "endLine": 2062,
+        "endChar": 13
+      },
+      "revId": "5738b4d500e97c5c00ecfbb49673559508a17949",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
