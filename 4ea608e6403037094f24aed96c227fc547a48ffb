@@ -16,6 +16,24 @@
       "revId": "4ea608e6403037094f24aed96c227fc547a48ffb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2e0f3a_a5a2941a",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-07T05:26:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbd7dc5e_09c87664",
+      "revId": "4ea608e6403037094f24aed96c227fc547a48ffb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
