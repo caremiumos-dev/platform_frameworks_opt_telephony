@@ -22,6 +22,30 @@
       "revId": "cb879aeda01352773f5fb16e13ab5e51e67f7e5e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac187648_d945ff71",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyPermissionsTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1326377
+      },
+      "writtenOn": "2020-05-10T21:32:13Z",
+      "side": 1,
+      "message": "Done. This failed before but probably for the new int[] {} declaration. Fixed.",
+      "parentUuid": "b0f07ad7_bce6c59f",
+      "range": {
+        "startLine": 359,
+        "startChar": 38,
+        "endLine": 359,
+        "endChar": 65
+      },
+      "revId": "cb879aeda01352773f5fb16e13ab5e51e67f7e5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
