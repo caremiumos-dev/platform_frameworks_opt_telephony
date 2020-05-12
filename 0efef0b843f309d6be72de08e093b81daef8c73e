@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6724f93f_b7005891",
+        "filename": "src/java/com/android/internal/telephony/uicc/CsimFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-05-12T18:26:47Z",
+      "side": 1,
+      "message": "Verified from\nhttps://www.3gpp2.org/Public_html/Misc/C.P0065-B%20CSIM%20v2.15%20EV\u0026V.pdf",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 47,
+        "endChar": 25
+      },
+      "revId": "0efef0b843f309d6be72de08e093b81daef8c73e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13eaf3be_235f07c8",
+        "filename": "src/java/com/android/internal/telephony/uicc/CsimFileHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-05-12T18:26:47Z",
+      "side": 1,
+      "message": "Verified from \"5.5.4 Contents of files at the DFMMSS level\" in https://www.3gpp2.org/Public_html/Misc/C.P0065-B%20CSIM%20v2.15%20EV\u0026V.pdf",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 49
+      },
+      "revId": "0efef0b843f309d6be72de08e093b81daef8c73e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d472008_8c1803b0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-05-12T18:26:47Z",
+      "side": 1,
+      "message": "Verified per https://www.3gpp2.org/Public_html/Misc/C.P0065-B%20CSIM%20v2.15%20EV\u0026V.pdf",
+      "range": {
+        "startLine": 75,
+        "startChar": 3,
+        "endLine": 78,
+        "endChar": 43
+      },
+      "revId": "0efef0b843f309d6be72de08e093b81daef8c73e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48dcc1b4_e5a68589",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-05-12T18:26:47Z",
+      "side": 1,
+      "message": "Verified per: TS 131 102 - V9.15.0 section 4.6",
+      "range": {
+        "startLine": 110,
+        "startChar": 24,
+        "endLine": 110,
+        "endChar": 31
+      },
+      "revId": "0efef0b843f309d6be72de08e093b81daef8c73e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
