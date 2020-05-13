@@ -334,7 +334,9 @@ public class DataConnection extends StateMachine {
     static final int EVENT_NR_FREQUENCY_CHANGED = BASE + 29;
     static final int EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED = BASE + 30;
     static final int EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED = BASE + 31;
-    private static final int CMD_TO_STRING_COUNT = EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED - BASE + 1;
+    static final int EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED = BASE + 32;
+    private static final int CMD_TO_STRING_COUNT =
+                EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -378,6 +380,8 @@ public class DataConnection extends StateMachine {
                 "EVENT_CARRIER_CONFIG_LINK_BANDWIDTHS_CHANGED";
         sCmdToString[EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED - BASE] =
                 "EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED";
+        sCmdToString[EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED - BASE] =
+                "EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -456,6 +460,7 @@ public class DataConnection extends StateMachine {
 
     void setLinkPropertiesHttpProxy(ProxyInfo proxy) {
         mLinkProperties.setHttpProxy(proxy);
+        sendMessage(obtainMessage(EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED));
     }
 
     public static class UpdateLinkPropertyResult {
@@ -2580,6 +2585,12 @@ public class DataConnection extends StateMachine {
                     if (mNetworkAgent != null) {
                         mNetworkAgent.sendNetworkCapabilities(
                                 getNetworkCapabilities(), DataConnection.this);
+                    }
+                    retVal = HANDLED;
+                    break;
+                case EVENT_DATA_CONNECTION_LINK_PROPERTIES_CHANGED:
+                    if (mNetworkAgent != null) {
+                        mNetworkAgent.sendLinkProperties(mLinkProperties, DataConnection.this);
                     }
                     retVal = HANDLED;
                     break;
