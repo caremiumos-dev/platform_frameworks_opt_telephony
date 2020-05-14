@@ -32,7 +32,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
 import android.os.SystemClock;
+import android.os.SystemConfigManager;
 import android.os.UserHandle;
+import android.permission.PermissionManager;
 import android.service.carrier.CarrierService;
 import android.telephony.PackageChangeReceiver;
 import android.telephony.SubscriptionManager;
@@ -47,6 +49,7 @@ import com.android.internal.telephony.util.TelephonyUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -268,6 +271,18 @@ public class CarrierServiceBindHelper {
             carrierServiceClass = candidateServiceClass;
 
             log("Binding to " + carrierPackage + " for phone " + phoneId);
+
+            // Grant default permissions in case this is a non-system carrier app.
+            SystemConfigManager systemConfig = mContext.getSystemService(SystemConfigManager.class);
+            Set<String> defaultCarrierApps =
+                    systemConfig.getDisabledUntilUsedPreinstalledCarrierApps();
+            if (defaultCarrierApps.contains(carrierPackage)) {
+                PermissionManager permissionManager =
+                        mContext.getSystemService(PermissionManager.class);
+                permissionManager.grantDefaultPermissionsToEnabledCarrierApps(
+                        new String[] { carrierPackage },
+                        Process.myUserHandle(), Runnable::run, isSuccess -> { });
+            }
 
             // Log debug information
             bindCount++;
