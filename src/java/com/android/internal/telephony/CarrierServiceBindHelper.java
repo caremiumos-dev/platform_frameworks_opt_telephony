@@ -32,7 +32,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
 import android.os.SystemClock;
+import android.os.SystemConfigManager;
 import android.os.UserHandle;
+import android.permission.PermissionManager;
 import android.service.carrier.CarrierService;
 import android.telephony.PackageChangeReceiver;
 import android.telephony.SubscriptionManager;
@@ -47,6 +49,7 @@ import com.android.internal.telephony.util.TelephonyUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -68,6 +71,12 @@ public class CarrierServiceBindHelper {
     @VisibleForTesting
     public SparseArray<String> mLastSimState = new SparseArray<>();
     private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
+
+    // Subset of disabled-until-used-carrier-apps for which default permissions should be granted,
+    // even to non-system apps. (This could come from a system config instead to avoid specific app
+    // references in platform code - just hard-coded here as an example).
+    private static final Set<String> DEFAULT_PERMISSION_CARRIER_APPS =
+            Set.of("com.google.android.apps.tycho");
 
     // whether we have successfully bound to the service
     private boolean mServiceBound = false;
@@ -268,6 +277,24 @@ public class CarrierServiceBindHelper {
             carrierServiceClass = candidateServiceClass;
 
             log("Binding to " + carrierPackage + " for phone " + phoneId);
+
+            // Grant default permissions in case this is a non-system carrier app.
+            SystemConfigManager systemConfig = mContext.getSystemService(SystemConfigManager.class);
+            Set<String> defaultCarrierApps =
+                    systemConfig.getDisabledUntilUsedPreinstalledCarrierApps();
+            if (defaultCarrierApps.contains(carrierPackage)
+                    && DEFAULT_PERMISSION_CARRIER_APPS.contains(carrierPackage)) {
+                PermissionManager permissionManager =
+                        mContext.getSystemService(PermissionManager.class);
+                permissionManager.grantDefaultPermissionsToEnabledCarrierApps(
+                        new String[] { carrierPackage },
+                        Process.myUserHandle(), new Executor() {
+                            @Override
+                            public void execute(Runnable r) {
+                                r.run();
+                            }
+                        }, isSuccess -> { });
+            }
 
             // Log debug information
             bindCount++;
