@@ -84,7 +84,7 @@ public class CarrierAppUtilsTest {
     public void testDisableCarrierAppsUntilPrivileged_EmptyList() {
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 mTelephonyManager, mContentResolver, USER_ID, new ArraySet<>(),
-                ASSOCIATED_APPS);
+                ASSOCIATED_APPS, new ArraySet<>());
         Mockito.verifyNoMoreInteractions(mPackageManager, mTelephonyManager);
     }
 
@@ -101,7 +101,8 @@ public class CarrierAppUtilsTest {
         systemCarrierAppsDisabledUntilUsed.add("com.example.missing.app");
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 mTelephonyManager, mContentResolver, USER_ID,
-                systemCarrierAppsDisabledUntilUsed, ASSOCIATED_APPS);
+                systemCarrierAppsDisabledUntilUsed, ASSOCIATED_APPS,
+                systemCarrierAppsDisabledUntilUsed);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppHiddenUntilInstalled(
                 Mockito.anyString(), Mockito.anyBoolean());
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -122,7 +123,8 @@ public class CarrierAppUtilsTest {
                         | PackageManager.MATCH_FACTORY_ONLY,
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppHiddenUntilInstalled(
                 Mockito.anyString(), Mockito.anyBoolean());
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -156,7 +158,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -184,7 +187,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -211,7 +215,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -240,7 +245,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -271,7 +277,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppInstallState(
@@ -316,7 +323,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
@@ -362,7 +370,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppHiddenUntilInstalled(
@@ -407,7 +416,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
@@ -438,7 +448,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -466,7 +477,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
-                ASSOCIATED_APPS);
+                ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -494,7 +505,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -521,7 +533,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
-                ASSOCIATED_APPS);
+                ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -549,7 +561,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -576,7 +589,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver, USER_ID, CARRIER_APPS,
-                ASSOCIATED_APPS);
+                ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -605,7 +618,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -633,7 +647,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
-                USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                USER_ID, CARRIER_APPS, ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -675,7 +689,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
@@ -721,7 +736,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
@@ -769,7 +785,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
@@ -800,7 +817,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
-                USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                USER_ID, CARRIER_APPS, ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager).setSystemAppInstallState(
@@ -831,7 +848,8 @@ public class CarrierAppUtilsTest {
         Mockito.when(mTelephonyManager.checkCarrierPrivilegesForPackageAnyPhone(CARRIER_APP))
                 .thenReturn(TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
-                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                mTelephonyManager, mContentResolver, USER_ID, CARRIER_APPS, ASSOCIATED_APPS,
+                CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(
@@ -861,7 +879,7 @@ public class CarrierAppUtilsTest {
                 USER_ID)).thenReturn(appInfo);
         CarrierAppUtils.disableCarrierAppsUntilPrivileged(CALLING_PACKAGE, mPackageManager,
                 null /* telephonyManager */, mContentResolver,
-                USER_ID, CARRIER_APPS, ASSOCIATED_APPS);
+                USER_ID, CARRIER_APPS, ASSOCIATED_APPS, CARRIER_APPS);
         Mockito.verify(mPackageManager).setSystemAppHiddenUntilInstalled(
                 CARRIER_APP, true);
         Mockito.verify(mPackageManager, Mockito.never()).setSystemAppInstallState(

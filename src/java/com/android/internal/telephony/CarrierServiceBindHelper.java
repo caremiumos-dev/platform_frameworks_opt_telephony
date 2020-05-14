@@ -43,10 +43,12 @@ import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.server.SystemConfig;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -268,6 +270,15 @@ public class CarrierServiceBindHelper {
             carrierServiceClass = candidateServiceClass;
 
             log("Binding to " + carrierPackage + " for phone " + phoneId);
+
+            // Grant default permissions in case this is a non-system carrier app.
+            SystemConfig systemConfig = SystemConfig.getInstance();
+            Set<String> defaultPermissionCarrierApps =
+                    systemConfig.getDefaultPermissionCarrierApps();
+            if (defaultPermissionCarrierApps.contains(carrierPackage)) {
+                mContext.getPackageNamager().grantDefaultPermissionsToEnabledCarrierApps(
+                    new String[] { carrierPackage }, UserHandle.USER_SYSTEM);
+            }
 
             // Log debug information
             bindCount++;
