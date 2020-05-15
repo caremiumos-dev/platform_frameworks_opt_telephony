@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99a6481a_1d221012",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1399364
+      },
+      "writtenOn": "2020-05-15T05:09:45Z",
+      "side": 1,
+      "message": "Should this be UserHandle.SYSTEM? What you have is fine as long as rebind() is guaranteed to be called from system process.",
+      "range": {
+        "startLine": 284,
+        "startChar": 32,
+        "endLine": 284,
+        "endChar": 44
+      },
+      "revId": "1ba611a24e79316900cd8dea62c7b3f5c1dd8ecf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
