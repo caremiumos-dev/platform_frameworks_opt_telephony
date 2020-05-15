@@ -19,6 +19,7 @@ package com.android.internal.telephony.vendor;
 import static android.telephony.SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
 import static android.telephony.SubscriptionManager.INVALID_PHONE_INDEX;
 import static android.telephony.SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+import static android.telephony.TelephonyManager.RADIO_POWER_UNAVAILABLE;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -241,6 +242,11 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
 
     @Override
     protected boolean onEvaluate(boolean requestsChanged, String reason) {
+        if (!updateHalCommandToUse()) {
+            log("Wait for HAL command update");
+            return false;
+        }
+
         StringBuilder sb = new StringBuilder(reason);
 
         boolean diffDetected = requestsChanged;
@@ -257,6 +263,7 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
 
         // Check to see if there is any active subscription on any phone
         boolean hasAnyActiveSubscription = false;
+        boolean hasSubRefreshedOnThePreferredPhone = false;
 
         // Check if phoneId to subId mapping is changed.
         for (int i = 0; i < mActiveModemCount; i++) {
@@ -267,6 +274,11 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
             if (sub != mPhoneSubscriptions[i]) {
                 sb.append(" phone[").append(i).append("] ").append(mPhoneSubscriptions[i]);
                 sb.append("->").append(sub);
+                if (SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId)
+                        && mPhoneSubscriptions[i] == mPreferredDataSubId) {
+                    sb.append("sub refreshed");
+                    hasSubRefreshedOnThePreferredPhone = true;
+                }
                 mPhoneSubscriptions[i] = sub;
                 diffDetected = true;
             }
@@ -307,6 +319,9 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
             }
             mDdsSwitchState = DdsSwitchState.REQUIRED;
             diffDetected = true;
+        } else if (hasSubRefreshedOnThePreferredPhone) {
+            // Tell connectivity the real active data phone
+            notifyPreferredDataSubIdChanged();
         }
 
         if (diffDetected) {
@@ -405,10 +420,9 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
         return phoneId;
     }
 
-    private boolean isUiccProvisioned(int phoneId) {
+    protected boolean isUiccProvisioned(int phoneId) {
         boolean isUiccApplicationEnabled = true;
         // FIXME get the SubscriptionManager.UICC_APPLICATIONS_ENABLED value and use it here
-
         log("isUiccProvisioned: status= " + isUiccApplicationEnabled + " phoneid=" + phoneId);
         return mSubscriptionController.isActiveSubId(mPhoneSubscriptions[phoneId]) && isUiccApplicationEnabled; 
     }
@@ -483,18 +497,12 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
             }
 
             int phoneId = phone.getPhoneId();
-            return ((mFgCsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mFgCsCalls[phoneId].getState() != Call.State.DISCONNECTED) ||
-                    (mBgCsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mBgCsCalls[phoneId].getState() != Call.State.DISCONNECTED) ||
-                    (mRiCsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mRiCsCalls[phoneId].getState() != Call.State.DISCONNECTED) ||
-                    (mFgImsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mFgImsCalls[phoneId].getState() != Call.State.DISCONNECTED) ||
-                    (mBgImsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mBgImsCalls[phoneId].getState() != Call.State.DISCONNECTED) ||
-                    (mRiImsCalls[phoneId].getState() != Call.State.IDLE &&
-                    mRiImsCalls[phoneId].getState() != Call.State.DISCONNECTED));
+            return (mFgCsCalls[phoneId].getState().isAlive() ||
+                    mBgCsCalls[phoneId].getState().isAlive() ||
+                    mRiCsCalls[phoneId].getState().isAlive() ||
+                    mFgImsCalls[phoneId].getState().isAlive() ||
+                    mBgImsCalls[phoneId].getState().isAlive() ||
+                    mRiImsCalls[phoneId].getState().isAlive());
          }
     }
 
@@ -644,5 +652,24 @@ public class VendorPhoneSwitcher extends PhoneSwitcher {
      */
     private boolean isCallInProgress() {
         return SubscriptionManager.isValidPhoneId(mPhoneIdInVoiceCall);
+    }
+
+    private boolean updateHalCommandToUse() {
+        if (mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
+            boolean isRadioAvailable = true;
+            for (int i = 0; i < mActiveModemCount; i++) {
+                isRadioAvailable &= PhoneFactory.getPhone(i).mCi.getRadioState()
+                                != RADIO_POWER_UNAVAILABLE;
+            }
+            if (isRadioAvailable) {
+                log("update HAL command");
+                mHalCommandToUse = mRadioConfig.isSetPreferredDataCommandSupported()
+                        ? HAL_COMMAND_PREFERRED_DATA : HAL_COMMAND_ALLOW_DATA;
+                return true;
+            } else {
+                log("radio is unavailable");
+            }
+        }
+        return mHalCommandToUse != HAL_COMMAND_UNKNOWN;
     }
 }
