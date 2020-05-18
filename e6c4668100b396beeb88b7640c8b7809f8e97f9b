@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c509689_53e9f66e",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1038867
+      },
+      "writtenOn": "2020-05-18T15:20:12Z",
+      "side": 1,
+      "message": "what is the use case for this change? why we did not upstream?",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f6e4c56_10c52dde",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1038867
+      },
+      "writtenOn": "2020-05-18T15:20:12Z",
+      "side": 1,
+      "message": "same question as above.",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10870723_e9191a48",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1038867
+      },
+      "writtenOn": "2020-05-18T15:20:12Z",
+      "side": 1,
+      "message": "we missed this change to upstream?",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d2d55e_e3d0c2d6",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1038867
+      },
+      "writtenOn": "2020-05-18T15:20:12Z",
+      "side": 1,
+      "message": "can we have this code in our extended class?",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5dd9751_2576ce38",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1038867
+      },
+      "writtenOn": "2020-05-18T15:20:12Z",
+      "side": 1,
+      "message": "this change is needed for? Is this upstreamable?",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
