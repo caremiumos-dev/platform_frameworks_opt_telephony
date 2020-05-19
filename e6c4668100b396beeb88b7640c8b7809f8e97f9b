@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9447b064_78ad6de0",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1047203
+      },
+      "writtenOn": "2020-05-19T04:14:43Z",
+      "side": 1,
+      "message": "Above variable changes on latest LKG TAG \n\nhttps://review-android.quicinc.com/#/c/3163788/2/opt/telephony/src/java/com/qualcomm/qti/internal/telephony/QtiPhoneSwitcher.java",
+      "range": {
+        "startLine": 277,
+        "startChar": 62,
+        "endLine": 277,
+        "endChar": 81
+      },
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c509689_53e9f66e",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
         "patchSetId": 2
