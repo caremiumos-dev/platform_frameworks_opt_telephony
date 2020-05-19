@@ -1022,6 +1022,7 @@ public class SubscriptionInfoUpdater extends Handler {
     }
 
     private boolean isCarrierServicePackage(int phoneId, String pkgName) {
+        logee("checking CarrierServicePackage for pkg=" + pkgName);
         if (pkgName.equals(getDefaultCarrierServicePackageName())) return false;
 
         List<String> carrierPackageNames = TelephonyManager.from(sContext)
@@ -1029,6 +1030,10 @@ public class SubscriptionInfoUpdater extends Handler {
                         new Intent(CarrierService.CARRIER_SERVICE_INTERFACE), phoneId);
         if (DBG) logd("Carrier Packages For Subscription = " + carrierPackageNames);
         return carrierPackageNames != null && carrierPackageNames.contains(pkgName);
+    }
+
+    private void logee(String msg) {
+        android.util.Slog.e("CJK", "SubscriptionInfoUpdater: " + msg);
     }
 
     /**
@@ -1084,6 +1089,7 @@ public class SubscriptionInfoUpdater extends Handler {
         }
 
         if (!isCarrierServicePackage(phoneId, configPackageName)) {
+            logee("certs received in SubscriptionInfoUpdater=" + java.util.Arrays.toString(certs));
             loge("Cannot manage subId=" + currentSubId + ", carrierPackage=" + configPackageName);
         } else {
             boolean isOpportunistic = config.getBoolean(

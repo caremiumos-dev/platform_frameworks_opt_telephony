@@ -62,6 +62,7 @@ import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -78,6 +79,10 @@ public class CarrierPrivilegesTracker extends Handler {
     private static final String TAG = CarrierPrivilegesTracker.class.getSimpleName();
 
     private static final boolean VDBG = false;
+
+    // This logs sensitive information (including installed packages, carrier privileged
+    // packages, and package certificate hashes).
+    private static final boolean LOG_SENSITIVE = true; // STOPSHIP if true
 
     private static final String SHA_1 = "SHA-1";
     private static final String SHA_256 = "SHA-256";
@@ -158,6 +163,7 @@ public class CarrierPrivilegesTracker extends Handler {
 
                     switch (action) {
                         case CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED: {
+                            log("Received ACTION_CARRIER_CONFIG_CHANGED");
                             Bundle extras = intent.getExtras();
                             int slotIndex = extras.getInt(EXTRA_SLOT_INDEX);
                             int subId =
@@ -248,6 +254,7 @@ public class CarrierPrivilegesTracker extends Handler {
                 break;
             }
             case ACTION_CARRIER_CONFIG_CERTS_UPDATED: {
+                log("Handling ACTION_CARRIER_CONFIG_CHANGED");
                 int subId = msg.arg1;
                 int slotIndex = msg.arg2;
                 handleCarrierConfigUpdated(subId, slotIndex);
@@ -288,7 +295,11 @@ public class CarrierPrivilegesTracker extends Handler {
     }
 
     private void handleCarrierConfigUpdated(int subId, int slotIndex) {
-        if (slotIndex != mPhone.getPhoneId()) return;
+        if (slotIndex != mPhone.getPhoneId()) {
+            log("ACTION_CARRIER_CONFIG_CHANGED for wrong phoneId - " + slotIndex);
+            return;
+        }
+        log("cc certs at start of update: " + mCarrierConfigCerts);
 
         Set<String> updatedCarrierConfigCerts = Collections.EMPTY_SET;
 
@@ -296,8 +307,14 @@ public class CarrierPrivilegesTracker extends Handler {
         // an expected event. When this happens, clear the certificates from the previous configs.
         // The certs will be cleared in maybeUpdateCertsAndNotifyRegistrants() below.
         if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            log("Updating cc");
             updatedCarrierConfigCerts = getCarrierConfigCerts(subId);
         }
+
+        log("CarrierConfigUpdated:"
+                + " subId=" + subId
+                + " slotIndex=" + slotIndex
+                + " updated CarrierConfig certs=" + updatedCarrierConfigCerts);
 
         mLocalLog.log("CarrierConfigUpdated:"
                 + " subId=" + subId
@@ -309,12 +326,14 @@ public class CarrierPrivilegesTracker extends Handler {
     private Set<String> getCarrierConfigCerts(int subId) {
         PersistableBundle carrierConfigs = mCarrierConfigManager.getConfigForSubId(subId);
         if (!mCarrierConfigManager.isConfigForIdentifiedCarrier(carrierConfigs)) {
+            log("Not config for identified carrier - setting empty cc certs");
             return Collections.EMPTY_SET;
         }
 
         Set<String> updatedCarrierConfigCerts = new ArraySet<>();
         String[] carrierConfigCerts =
                 carrierConfigs.getStringArray(KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
+        log("cc certs in broadcast: " + Arrays.toString(carrierConfigCerts));
 
         if (carrierConfigCerts != null) {
             for (String cert : carrierConfigCerts) {
@@ -429,6 +448,9 @@ public class CarrierPrivilegesTracker extends Handler {
         if (VDBG) {
             msg += " installed pkgs=" + getObfuscatedPackages();
         }
+        if (LOG_SENSITIVE) {
+            msg += " privileged pkgs=" + getPrivilegedPackageInfo();
+        }
         mLocalLog.log(msg);
     }
 
@@ -442,8 +464,12 @@ public class CarrierPrivilegesTracker extends Handler {
 
     private void maybeUpdateCertsAndNotifyRegistrants(
             Set<String> currentCerts, Set<String> updatedCerts) {
-        if (currentCerts.equals(updatedCerts)) return;
+        if (currentCerts.equals(updatedCerts)) {
+            log("certs not changing: current=" + currentCerts + " vs updated=" + updatedCerts);
+            return;
+        }
 
+        log("updated cc certs to: " + updatedCerts);
         currentCerts.clear();
         currentCerts.addAll(updatedCerts);
 
@@ -460,11 +486,35 @@ public class CarrierPrivilegesTracker extends Handler {
         mPrivilegedUids = currentPrivilegedUids;
         mRegistrantList.notifyResult(mPrivilegedUids);
 
+        log("new privileged UIDs=" + Arrays.toString(mPrivilegedUids));
         mLocalLog.log("Privileged UIDs changed. New UIDs=" + Arrays.toString(mPrivilegedUids));
+
+        if (LOG_SENSITIVE) {
+            log("Privileged Package infos: " + getPrivilegedPackageInfo());
+            mLocalLog.log("Privileged Package infos: " + getPrivilegedPackageInfo());
+        }
     }
 
     private int[] getCurrentPrivilegedUidsForAllUsers() {
         Set<Integer> privilegedUids = new ArraySet<>();
+
+        // Overflows log buffer otherwise
+        List<String> pkgs = new ArrayList<>(mInstalledPackageCerts.keySet());
+        int i = 0;
+        StringBuilder str = new StringBuilder();
+        for (String pkg : pkgs) {
+            str.append(pkg);
+            str.append(", ");
+            i++;
+            if (i == 10) {
+                log("pkgs=" + str.toString());
+                i = 0;
+                str = new StringBuilder();
+            }
+        }
+        if (i != 0) {
+            log("pkgs=" + str.toString());
+        }
         for (Map.Entry<String, Set<String>> e : mInstalledPackageCerts.entrySet()) {
             if (isPackagePrivileged(e.getValue())) {
                 privilegedUids.addAll(getUidsForPackage(e.getKey()));
@@ -523,6 +573,30 @@ public class CarrierPrivilegesTracker extends Handler {
             pw.println("CarrierPrivilegesTracker - Obfuscated Pkgs + Certs: "
                     + getObfuscatedPackages());
         }
+
+        if (LOG_SENSITIVE) {
+            log("CarrierPrivilegesTracker - PrivilegedPackges: " + getPrivilegedPackageInfo());
+            pw.println(
+                    "CarrierPrivilegesTracker - PrivilegedPackges: " + getPrivilegedPackageInfo());
+        }
+    }
+
+    private String getPrivilegedPackageInfo() {
+        if (!LOG_SENSITIVE) {
+            return "";
+        }
+
+        StringJoiner pkgs = new StringJoiner(",", "{", "}");
+        for (Map.Entry<String, Set<String>> e : mInstalledPackageCerts.entrySet()) {
+            Set<String> matchingCerts = new ArraySet<>();
+            if (isPackagePrivileged(e.getValue())) {
+                String pkgInfo =
+                        String.format("pkg=%s uids=%s pkgCerts=%s",
+                                e.getKey(), getUidsForPackage(e.getKey()), e.getValue());
+                pkgs.add(pkgInfo);
+            }
+        }
+        return pkgs.toString();
     }
 
     /**
@@ -540,5 +614,9 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     public void unregisterCarrierPrivilegesListener(Handler handler) {
         sendMessage(obtainMessage(ACTION_UNREGISTER_LISTENER, handler));
+    }
+
+    private void log(String msg) {
+        Rlog.e("CJK", "CPT: " + msg);
     }
 }
