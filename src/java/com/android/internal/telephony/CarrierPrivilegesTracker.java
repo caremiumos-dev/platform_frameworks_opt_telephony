@@ -79,6 +79,10 @@ public class CarrierPrivilegesTracker extends Handler {
 
     private static final boolean VDBG = false;
 
+    // This logs sensitive information (including installed packages, carrier privileged
+    // packages, and package certificate hashes).
+    private static final boolean LOG_SENSITIVE = false; // STOPSHIP if true
+
     private static final String SHA_1 = "SHA-1";
     private static final String SHA_256 = "SHA-256";
 
@@ -429,6 +433,9 @@ public class CarrierPrivilegesTracker extends Handler {
         if (VDBG) {
             msg += " installed pkgs=" + getObfuscatedPackages();
         }
+        if (LOG_SENSITIVE) {
+            msg += " privileged pkgs=" + getPrivilegedPackageInfo();
+        }
         mLocalLog.log(msg);
     }
 
@@ -461,6 +468,10 @@ public class CarrierPrivilegesTracker extends Handler {
         mRegistrantList.notifyResult(mPrivilegedUids);
 
         mLocalLog.log("Privileged UIDs changed. New UIDs=" + Arrays.toString(mPrivilegedUids));
+
+        if (LOG_SENSITIVE) {
+            mLocalLog.log("Privileged Package infos: " + getPrivilegedPackageInfo());
+        }
     }
 
     private int[] getCurrentPrivilegedUidsForAllUsers() {
@@ -523,6 +534,29 @@ public class CarrierPrivilegesTracker extends Handler {
             pw.println("CarrierPrivilegesTracker - Obfuscated Pkgs + Certs: "
                     + getObfuscatedPackages());
         }
+
+        if (LOG_SENSITIVE) {
+            pw.println("CarrierPrivilegesTracker - PrivilegedPackges: "
+                    + getPrivilegedPackageInfo());
+        }
+    }
+
+    private String getPrivilegedPackageInfo() {
+        if (!LOG_SENSITIVE) {
+            return "";
+        }
+
+        StringJoiner pkgs = new StringJoiner(",", "{", "}");
+        for (Map.Entry<String, Set<String>> e : mInstalledPackageCerts.entrySet()) {
+            Set<String> matchingCerts = new ArraySet<>();
+            if (isPackagePrivileged(e.getValue())) {
+                String pkgInfo =
+                        String.format("pkg=%s uids=%s pkgCerts=%s",
+                                e.getKey(), getUidsForPackage(e.getKey()), e.getValue());
+                pkgs.add(pkgInfo);
+            }
+        }
+        return pkgs.toString();
     }
 
     /**
