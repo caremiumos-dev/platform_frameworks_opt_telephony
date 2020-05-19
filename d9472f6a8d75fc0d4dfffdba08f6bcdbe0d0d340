@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f8decab_d211211d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3774,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-05-19T20:19:23Z",
+      "side": 1,
+      "message": "Do we need to also remove the code to stop ringback in onCallHandover?",
+      "range": {
+        "startLine": 3774,
+        "startChar": 28,
+        "endLine": 3774,
+        "endChar": 45
+      },
+      "revId": "d9472f6a8d75fc0d4dfffdba08f6bcdbe0d0d340",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
