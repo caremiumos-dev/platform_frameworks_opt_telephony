@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa7508b7_5f7d6f2d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-05-19T21:58:58Z",
+      "side": 1,
+      "message": "It\u0027s traditional to use \"VDBG\". There\u0027s no specific logic to it.",
+      "range": {
+        "startLine": 80,
+        "startChar": 33,
+        "endLine": 80,
+        "endChar": 39
+      },
+      "revId": "fdbfc3eaf50caaf59109294160308a8971f4e56f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcdb9362_a40af258",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-05-19T21:58:58Z",
+      "side": 1,
+      "message": "()",
+      "range": {
+        "startLine": 524,
+        "startChar": 22,
+        "endLine": 524,
+        "endChar": 43
+      },
+      "revId": "fdbfc3eaf50caaf59109294160308a8971f4e56f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
