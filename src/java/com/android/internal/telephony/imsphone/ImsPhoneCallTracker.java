@@ -3769,6 +3769,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mSrvccState = state;
 
         if (mSrvccState == Call.SrvccState.COMPLETED) {
+            // If the dialing call had ringback, ensure it stops now, otherwise it'll keep playing
+            // afer the SRVCC completes.
+            mForegroundCall.maybeStopRingback();
+
             resetState();
             transferHandoverConnections(mForegroundCall);
             transferHandoverConnections(mBackgroundCall);
