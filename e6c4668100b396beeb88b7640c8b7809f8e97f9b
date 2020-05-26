@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "ec5d35be_4e5f53b3",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-26T15:44:34Z",
+      "side": 1,
+      "message": "This is a bug fix, got missed earlier",
+      "parentUuid": "3c509689_53e9f66e",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f6e4c56_10c52dde",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
         "patchSetId": 2
@@ -56,6 +74,24 @@
       "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ce01a58_e7518805",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-26T15:44:34Z",
+      "side": 1,
+      "message": "Bug fix, got missed earlier",
+      "parentUuid": "6f6e4c56_10c52dde",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "d85793fc_0408d377",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-26T15:44:34Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "10870723_e9191a48",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1d2d55e_e3d0c2d6",
         "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
         "patchSetId": 2
@@ -93,6 +147,24 @@
     },
     {
       "key": {
+        "uuid": "33ed16c3_d53f1efc",
+        "filename": "src/java/com/android/internal/telephony/vendor/VendorPhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-26T15:44:34Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "c1d2d55e_e3d0c2d6",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5dd9751_2576ce38",
         "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
         "patchSetId": 2
@@ -107,6 +179,24 @@
       "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd028f5b_698b0563",
+        "filename": "src/java/com/android/internal/telephony/vendor/dataconnection/VendorDcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-05-26T15:44:34Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "c5dd9751_2576ce38",
+      "revId": "e6c4668100b396beeb88b7640c8b7809f8e97f9b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
