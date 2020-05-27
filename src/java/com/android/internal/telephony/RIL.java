@@ -209,8 +209,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
     //***** Instance Variables
 
     @UnsupportedAppUsage
-    final WakeLock mWakeLock;           // Wake lock associated with request/response
-    final WakeLock mAckWakeLock;        // Wake lock associated with ack sent
+    @VisibleForTesting
+    public final WakeLock mWakeLock;           // Wake lock associated with request/response
+    @VisibleForTesting
+    public final WakeLock mAckWakeLock;        // Wake lock associated with ack sent
     final int mWakeLockTimeout;         // Timeout associated with request/response
     final int mAckWakeLockTimeout;      // Timeout associated with ack sent
     // The number of wakelock requests currently active.  Don't release the lock
@@ -983,6 +985,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 } catch (RemoteException | RuntimeException e) {
                     handleRadioProxyExceptionForRR(rr, "supplySimDepersonalization", e);
                 }
+            }
+        } else {
+            if (result != null) {
+                AsyncResult.forMessage(result, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                result.sendToTarget();
             }
         }
     }
@@ -2520,6 +2528,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         AsyncResult.forMessage(result, null,
                                 CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                         result.sendToTarget();
+                        return;
                     }
                     request.specifiers.add(rasInHalFormat);
                 }
@@ -2556,6 +2565,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         AsyncResult.forMessage(result, null,
                                 CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                         result.sendToTarget();
+                        return;
                     }
 
                     request.specifiers.add(rasInHalFormat);
@@ -2597,6 +2607,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         AsyncResult.forMessage(result, null,
                                 CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                         result.sendToTarget();
+                        return;
                     }
 
                     request.specifiers.add(rasInHalFormat);

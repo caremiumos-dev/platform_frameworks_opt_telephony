@@ -62,7 +62,6 @@ import android.telephony.data.DataServiceCallback;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Pair;
-import android.util.StatsLog;
 import android.util.TimeUtils;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -77,6 +76,7 @@ import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.RetryManager;
 import com.android.internal.telephony.ServiceStateTracker;
+import com.android.internal.telephony.TelephonyStatsLog;
 import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkType;
 import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkType;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
@@ -454,8 +454,26 @@ public class DataConnection extends StateMachine {
         return mApnSetting;
     }
 
-    void setLinkPropertiesHttpProxy(ProxyInfo proxy) {
-        mLinkProperties.setHttpProxy(proxy);
+    /**
+     * Update http proxy of link properties based on current apn setting
+     */
+    private void updateLinkPropertiesHttpProxy() {
+        if (mApnSetting == null
+                || TextUtils.isEmpty(mApnSetting.getProxyAddressAsString())) {
+            return;
+        }
+        try {
+            int port = mApnSetting.getProxyPort();
+            if (port == -1) {
+                port = 8080;
+            }
+            ProxyInfo proxy = ProxyInfo.buildDirectProxy(
+                    mApnSetting.getProxyAddressAsString(), port);
+            mLinkProperties.setHttpProxy(proxy);
+        } catch (NumberFormatException e) {
+            loge("onDataSetupComplete: NumberFormatException making ProxyProperties ("
+                    + mApnSetting.getProxyPort() + "): " + e);
+        }
     }
 
     public static class UpdateLinkPropertyResult {
@@ -1380,15 +1398,11 @@ public class DataConnection extends StateMachine {
                 }
             }
 
-            // Mark NOT_METERED in the following cases,
-            // 1. All APNs in APN settings are unmetered.
-            // 2. The non-restricted data and is intended for unmetered use only.
-            if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride)
-                    || !ApnSettingUtils.isMetered(mApnSetting, mPhone)) {
-                result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            } else {
-                result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-            }
+            // DataConnection has the immutable NOT_METERED capability only if all APNs in the
+            // APN setting are unmetered according to carrier config METERED_APN_TYPES_STRINGS.
+            // All other cases should use the dynamic TEMPORARILY_NOT_METERED capability instead.
+            result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED,
+                    !ApnSettingUtils.isMetered(mApnSetting, mPhone));
 
             if (result.deduceRestrictedCapability()) {
                 result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
@@ -1410,19 +1424,19 @@ public class DataConnection extends StateMachine {
         result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING,
                 !mPhone.getServiceState().getDataRoaming());
 
-        result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
-
-        // Override values set above when requested by policy
-        if ((mSubscriptionOverride & SUBSCRIPTION_OVERRIDE_UNMETERED) != 0) {
-            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-        }
-        if ((mSubscriptionOverride & SUBSCRIPTION_OVERRIDE_CONGESTED) != 0) {
-            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
+        if ((mSubscriptionOverride & SUBSCRIPTION_OVERRIDE_CONGESTED) == 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         }
 
-        // Override set by DcTracker
-        if (mUnmeteredOverride) {
-            result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        // Mark TEMPORARILY_NOT_METERED in the following cases:
+        // 1. The non-restricted data is intended for unmetered use only.
+        // 2. DcTracker set an unmetered override due to network/location (eg. 5G).
+        // 3. SubscriptionManager set an unmetered override as requested by policy.
+        if ((mUnmeteredUseOnly && !mRestrictedNetworkOverride) || mUnmeteredOverride
+                || (mSubscriptionOverride & SUBSCRIPTION_OVERRIDE_UNMETERED) != 0) {
+            result.addCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
+        } else {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED);
         }
 
         final boolean suspended =
@@ -1732,6 +1746,7 @@ public class DataConnection extends StateMachine {
                                 + " drs=" + mDataRegState
                                 + " mRilRat=" + mRilRat);
                     }
+                    updateNetworkInfo();
                     break;
                 default:
                     if (DBG) {
@@ -1742,6 +1757,19 @@ public class DataConnection extends StateMachine {
 
             return retVal;
         }
+    }
+
+    private void updateNetworkInfo() {
+        final ServiceState state = mPhone.getServiceState();
+
+        NetworkRegistrationInfo nri = state.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, mTransportType);
+        int subtype = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (nri != null) {
+            subtype = nri.getAccessNetworkTechnology();
+        }
+
+        mNetworkInfo.setSubtype(subtype, TelephonyManager.getNetworkTypeName(subtype));
     }
 
     private void updateNetworkInfoSuspendState() {
@@ -1804,8 +1832,8 @@ public class DataConnection extends StateMachine {
         public void enter() {
             mTag += 1;
             if (DBG) log("DcInactiveState: enter() mTag=" + mTag);
-            StatsLog.write(StatsLog.MOBILE_CONNECTION_STATE_CHANGED,
-                    StatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__INACTIVE,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED,
+                    TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__INACTIVE,
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
@@ -1944,8 +1972,8 @@ public class DataConnection extends StateMachine {
     private class DcActivatingState extends State {
         @Override
         public void enter() {
-            StatsLog.write(StatsLog.MOBILE_CONNECTION_STATE_CHANGED,
-                    StatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__ACTIVATING,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED,
+                    TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__ACTIVATING,
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
@@ -2078,12 +2106,14 @@ public class DataConnection extends StateMachine {
 
         @Override public void enter() {
             if (DBG) log("DcActiveState: enter dc=" + DataConnection.this);
-            StatsLog.write(StatsLog.MOBILE_CONNECTION_STATE_CHANGED,
-                    StatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__ACTIVE,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED,
+                    TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__ACTIVE,
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
                         ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+
+            updateNetworkInfo();
 
             // If we were retrying there maybe more than one, otherwise they'll only be one.
             notifyAllWithEvent(null, DctConstants.EVENT_DATA_SETUP_COMPLETE,
@@ -2100,6 +2130,7 @@ public class DataConnection extends StateMachine {
 
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.CONNECTED,
                     mNetworkInfo.getReason(), null);
+            mNetworkInfo.setExtraInfo(mApnSetting.getApnName());
             updateTcpBufferSizes(mRilRat);
             updateLinkBandwidthsFromCarrierConfig(mRilRat);
 
@@ -2176,7 +2207,7 @@ public class DataConnection extends StateMachine {
                 final NetworkProvider provider = (null == factory) ? null : factory.getProvider();
 
                 mDisabledApnTypeBitMask |= getDisallowedApnTypes();
-
+                updateLinkPropertiesHttpProxy();
                 mNetworkAgent = new DcNetworkAgent(DataConnection.this,
                         mPhone, mNetworkInfo, mScore, configBuilder.build(), provider,
                         mTransportType);
@@ -2366,6 +2397,7 @@ public class DataConnection extends StateMachine {
                 case EVENT_DATA_CONNECTION_ROAM_ON:
                 case EVENT_DATA_CONNECTION_ROAM_OFF:
                 case EVENT_DATA_CONNECTION_OVERRIDE_CHANGED: {
+                    updateNetworkInfo();
                     if (mNetworkAgent != null) {
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
                                 DataConnection.this);
@@ -2387,6 +2419,7 @@ public class DataConnection extends StateMachine {
                 }
                 case EVENT_DATA_CONNECTION_VOICE_CALL_STARTED:
                 case EVENT_DATA_CONNECTION_VOICE_CALL_ENDED: {
+                    updateNetworkInfo();
                     updateNetworkInfoSuspendState();
                     if (mNetworkAgent != null) {
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
@@ -2586,8 +2619,8 @@ public class DataConnection extends StateMachine {
     private class DcDisconnectingState extends State {
         @Override
         public void enter() {
-            StatsLog.write(StatsLog.MOBILE_CONNECTION_STATE_CHANGED,
-                    StatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__DISCONNECTING,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED,
+                    TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__DISCONNECTING,
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
@@ -2644,8 +2677,9 @@ public class DataConnection extends StateMachine {
     private class DcDisconnectionErrorCreatingConnection extends State {
         @Override
         public void enter() {
-            StatsLog.write(StatsLog.MOBILE_CONNECTION_STATE_CHANGED,
-                    StatsLog.MOBILE_CONNECTION_STATE_CHANGED__STATE__DISCONNECTION_ERROR_CREATING_CONNECTION,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_CONNECTION_STATE_CHANGED,
+                    TelephonyStatsLog
+                            .MOBILE_CONNECTION_STATE_CHANGED__STATE__DISCONNECTION_ERROR_CREATING_CONNECTION,
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null

@@ -17,6 +17,7 @@
 package com.android.internal.telephony;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.telephony.TelephonyManager.MULTISIM_ALLOWED;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION;
 import static android.telephony.UiccSlotInfo.CARD_STATE_INFO_PRESENT;
 
@@ -35,7 +36,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.ParcelUuid;
+import android.os.RegistrantList;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
@@ -152,6 +155,7 @@ public class SubscriptionController extends ISub.Stub {
     @UnsupportedAppUsage
     private int[] colorArr;
     private long mLastISubServiceRegTime;
+    private RegistrantList mUiccAppsEnableChangeRegList = new RegistrantList();
 
     // The properties that should be shared and synced across grouped subscriptions.
     private static final Set<String> GROUP_SHARING_PROPERTIES = new HashSet<>(Arrays.asList(
@@ -1431,9 +1435,10 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.CARRIER_NAME, "");
         value.put(SubscriptionManager.CARD_ID, uniqueId);
         value.put(SubscriptionManager.SUBSCRIPTION_TYPE, subscriptionType);
-        if (isSubscriptionForRemoteSim(subscriptionType)) {
+        if (!TextUtils.isEmpty(displayName)) {
             value.put(SubscriptionManager.DISPLAY_NAME, displayName);
-        } else {
+        }
+        if (!isSubscriptionForRemoteSim(subscriptionType)) {
             UiccCard card = mUiccController.getUiccCardForPhone(slotIndex);
             if (card != null) {
                 String cardId = card.getCardId();
@@ -1938,23 +1943,49 @@ public class SubscriptionController extends ISub.Stub {
     public int setUiccApplicationsEnabled(boolean enabled, int subId) {
         if (DBG) logd("[setUiccApplicationsEnabled]+ enabled:" + enabled + " subId:" + subId);
 
-        ContentValues value = new ContentValues(1);
-        value.put(SubscriptionManager.UICC_APPLICATIONS_ENABLED, enabled);
+        enforceModifyPhoneState("setUiccApplicationsEnabled");
 
-        int result = mContext.getContentResolver().update(
-                SubscriptionManager.getUriForSubscriptionId(subId), value, null, null);
+        long identity = Binder.clearCallingIdentity();
+        try {
+            ContentValues value = new ContentValues(1);
+            value.put(SubscriptionManager.UICC_APPLICATIONS_ENABLED, enabled);
 
-        // Refresh the Cache of Active Subscription Info List
-        refreshCachedActiveSubscriptionInfoList();
+            int result = mContext.getContentResolver().update(
+                    SubscriptionManager.getUriForSubscriptionId(subId), value, null, null);
 
-        notifySubscriptionInfoChanged();
+            // Refresh the Cache of Active Subscription Info List
+            refreshCachedActiveSubscriptionInfoList();
 
-        if (isActiveSubId(subId)) {
-            Phone phone = PhoneFactory.getPhone(getPhoneId(subId));
-            phone.enableUiccApplications(enabled, null);
+            notifyUiccAppsEnableChanged();
+            notifySubscriptionInfoChanged();
+
+            return result;
+        } finally {
+            Binder.restoreCallingIdentity(identity);
         }
+    }
 
-        return result;
+    /**
+     * Register to change of uicc applications enablement changes.
+     * @param notifyNow whether to notify target upon registration.
+     */
+    public void registerForUiccAppsEnabled(Handler handler, int what, Object object,
+            boolean notifyNow) {
+        mUiccAppsEnableChangeRegList.addUnique(handler, what, object);
+        if (notifyNow) {
+            handler.obtainMessage(what, object).sendToTarget();
+        }
+    }
+
+    /**
+     * Unregister to change of uicc applications enablement changes.
+     */
+    public void unregisterForUiccAppsEnabled(Handler handler) {
+        mUiccAppsEnableChangeRegList.remove(handler);
+    }
+
+    private void notifyUiccAppsEnableChanged() {
+        mUiccAppsEnableChangeRegList.notifyRegistrants();
     }
 
     /**
@@ -3480,7 +3511,22 @@ public class SubscriptionController extends ISub.Stub {
             // We need to send intents to Euicc if we are turning on an inactive slot.
             // Euicc will decide whether to ask user to switch to DSDS, or change SIM
             // slot mapping.
-            enableSubscriptionOverEuiccManager(subId, enable, physicalSlotIndex);
+            EuiccManager euiccManager =
+                    (EuiccManager) mContext.getSystemService(Context.EUICC_SERVICE);
+            if (euiccManager != null && euiccManager.isEnabled()) {
+                enableSubscriptionOverEuiccManager(subId, enable, physicalSlotIndex);
+            } else {
+                // Enable / disable uicc applications.
+                if (!info.areUiccApplicationsEnabled()) setUiccApplicationsEnabled(enable, subId);
+                // If euiccManager is not enabled, we try to switch to DSDS if possible,
+                // or switch slot if not.
+                if (mTelephonyManager.isMultiSimSupported() == MULTISIM_ALLOWED) {
+                    PhoneConfigurationManager.getInstance().switchMultiSimConfig(
+                            mTelephonyManager.getSupportedModemCount());
+                } else {
+                    UiccController.getInstance().switchSlots(new int[]{physicalSlotIndex}, null);
+                }
+            }
             return true;
         } else {
             // Enable / disable uicc applications.
@@ -3682,6 +3728,17 @@ public class SubscriptionController extends ISub.Stub {
             subIdsList.clear();
             subIdsList.add(subId);
         }
+
+
+        // Remove the slot from sSlotIndexToSubIds if it has the same sub id with the added slot
+        for (Entry<Integer, ArrayList<Integer>> entry : sSlotIndexToSubIds.entrySet()) {
+            if (entry.getKey() != slotIndex && entry.getValue() != null
+                    && entry.getValue().contains(subId)) {
+                logdl("addToSubIdList - remove " + entry.getKey());
+                sSlotIndexToSubIds.remove(entry.getKey());
+            }
+        }
+
         if (DBG) logdl("slotIndex, subId combo is added to the map.");
         return true;
     }
