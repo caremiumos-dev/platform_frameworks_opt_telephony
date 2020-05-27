@@ -15,6 +15,7 @@
  */
 package com.android.internal.telephony;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
@@ -84,7 +85,7 @@ public class RatRatcheterTest extends TelephonyTest {
     }
 
     private NetworkRegistrationInfo createNetworkRegistrationInfo(
-            int domain, int accessNetworkTechnology, boolean isUsingCarrierAggregation) {
+            int domain, int accessNetworkTechnology) {
 
         LteVopsSupportInfo lteVopsSupportInfo =
                 new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_SUPPORTED,
@@ -104,8 +105,7 @@ public class RatRatcheterTest extends TelephonyTest {
                 false,  // isDcNrRestricted
                 false,  // isNrAvailable
                 false,  // isEndcAvailable
-                lteVopsSupportInfo,  // lteVopsSupportInfo
-                isUsingCarrierAggregation);  // isUsingCarrierAggregation
+                lteVopsSupportInfo);  // lteVopsSupportInfo
     }
 
     private void setNetworkRegistrationInfo(ServiceState ss, int accessNetworkTechnology) {
@@ -120,9 +120,9 @@ public class RatRatcheterTest extends TelephonyTest {
         }
 
         nri1 = createNetworkRegistrationInfo(NetworkRegistrationInfo.DOMAIN_PS,
-                accessNetworkTechnology, isUsingCarrierAggregation);
+                accessNetworkTechnology);
         nri2 = createNetworkRegistrationInfo(NetworkRegistrationInfo.DOMAIN_CS,
-                accessNetworkTechnology, isUsingCarrierAggregation);
+                accessNetworkTechnology);
 
         ss.addNetworkRegistrationInfo(nri1);
         ss.addNetworkRegistrationInfo(nri2);
@@ -140,9 +140,12 @@ public class RatRatcheterTest extends TelephonyTest {
         setNetworkRegistrationInfo(oldSS, TelephonyManager.NETWORK_TYPE_LTE_CA);
         setNetworkRegistrationInfo(newSS, TelephonyManager.NETWORK_TYPE_LTE);
 
+        System.out.println("OldSS: " + oldSS);
+        assertTrue(oldSS.isUsingCarrierAggregation());
         RatRatcheter ratRatcheter = new RatRatcheter(mPhone);
         ratRatcheter.ratchet(oldSS, newSS, false);
 
+        assertEquals(oldSS, newSS);
         assertTrue(newSS.isUsingCarrierAggregation());
     }
 
