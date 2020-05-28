@@ -22,6 +22,30 @@
       "revId": "24a0130e212363ad76b8170b38d6f1116e44c8e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4159ed4c_7c3f71bf",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2020-05-28T19:34:32Z",
+      "side": 1,
+      "message": "The official documentation for IntentFilter#addDataScheme does not enumerate the types of data schemes that can be used here. However, it is included when the ACTION_PACKAGE_ADDED broadcast is sent out. Added a comment inline to specify this.\n\nhttps://developer.android.com/reference/android/content/IntentFilter#addDataScheme(java.lang.String)\n\nhttps://source.corp.google.com/android/frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java;l\u003d646",
+      "parentUuid": "1cf564b4_ece1946d",
+      "range": {
+        "startLine": 235,
+        "startChar": 37,
+        "endLine": 235,
+        "endChar": 44
+      },
+      "revId": "24a0130e212363ad76b8170b38d6f1116e44c8e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
