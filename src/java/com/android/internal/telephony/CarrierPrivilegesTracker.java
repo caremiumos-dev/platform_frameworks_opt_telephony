@@ -217,14 +217,28 @@ public class CarrierPrivilegesTracker extends Handler {
         mPhone = phone;
         mLocalLog = new LocalLog(100);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
-        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
-        filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
-        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
-        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        mContext.registerReceiver(mIntentReceiver, filter);
+        IntentFilter certFilter = new IntentFilter();
+        certFilter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        certFilter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
+        certFilter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
+        mContext.registerReceiverAsUser(
+                mIntentReceiver,
+                UserHandle.ALL,
+                certFilter,
+                null /* broadcastPermission */,
+                this /* handler */);
+
+        IntentFilter packageFilter = new IntentFilter();
+        packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        packageFilter.addDataScheme("package");
+        mContext.registerReceiverAsUser(
+                mIntentReceiver,
+                UserHandle.ALL,
+                packageFilter,
+                null /* broadcastPermission */,
+                this /* handler */);
 
         mRegistrantList = new RegistrantList();
         mCarrierConfigCerts = new ArraySet<>();
