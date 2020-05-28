@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cf564b4_ece1946d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-05-28T17:51:09Z",
+      "side": 1,
+      "message": "nit: is this documented somewhere? It looks like a magic constant.",
+      "range": {
+        "startLine": 235,
+        "startChar": 37,
+        "endLine": 235,
+        "endChar": 44
+      },
+      "revId": "24a0130e212363ad76b8170b38d6f1116e44c8e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
