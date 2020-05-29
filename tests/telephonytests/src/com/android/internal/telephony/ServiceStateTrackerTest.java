@@ -2580,6 +2580,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     @Test
     public void testShouldForceDisplayNoService_forceBasedOnLocale() {
+        doReturn(mLocaleTracker).when(mSST).getLocaleTracker();
         // set up unaffected locale (US) and clear the resource
         doReturn("us").when(mLocaleTracker).getCurrentCountry();
         mContextFixture.putStringArrayResource(

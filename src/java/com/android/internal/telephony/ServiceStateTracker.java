@@ -2855,10 +2855,15 @@ public class ServiceStateTracker extends Handler {
         if (ArrayUtils.isEmpty(countriesWithNoService)) {
             return false;
         }
-        String currentCountry = mLocaleTracker.getCurrentCountry();
-        for (String country : countriesWithNoService) {
-            if (country.equalsIgnoreCase(currentCountry)) {
-                return true;
+        for (Phone phone : PhoneFactory.getPhones()) {
+            if (phone != null) {
+                LocaleTracker localeTracker = phone.getServiceStateTracker().getLocaleTracker();
+                String currentCountry = localeTracker.getCurrentCountry();
+                for (String country : countriesWithNoService) {
+                    if (country.equalsIgnoreCase(currentCountry)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
