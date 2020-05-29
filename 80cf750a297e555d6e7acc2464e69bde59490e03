@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d47b0138_dc2a66c4",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-05-29T23:26:22Z",
+      "side": 1,
+      "message": "Don\u0027t notify here. Just logging an error is ok. This is an extremely unlikely case because we register for EVENT_NETWORK_LOCKED only when mIccRecords (and mUiccApplication) are non-null. I think here after we once registered they were set to null, which is not a common scenario I think. Not sure if there\u0027s some special test sequence that is exposing this, but notifying only in non-null cases is good enough IMO.",
+      "revId": "80cf750a297e555d6e7acc2464e69bde59490e03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa9255d_52d62240",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-05-29T23:26:22Z",
+      "side": 1,
+      "message": "Add the null check here as well.",
+      "revId": "80cf750a297e555d6e7acc2464e69bde59490e03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
