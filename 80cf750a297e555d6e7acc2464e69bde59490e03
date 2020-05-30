@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8718f956_631fc1f3",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-05-30T01:08:34Z",
+      "side": 1,
+      "message": "I think they keep adding and then quickly removing the sim and push it into a race case.",
+      "parentUuid": "d47b0138_dc2a66c4",
+      "revId": "80cf750a297e555d6e7acc2464e69bde59490e03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa9255d_52d62240",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "80cf750a297e555d6e7acc2464e69bde59490e03",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abbf12f_5e8d9d93",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-05-30T01:08:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa9255d_52d62240",
+      "revId": "80cf750a297e555d6e7acc2464e69bde59490e03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
