@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee1e6bbc_e7e16104",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcNetworkAgent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2020-06-01T06:13:05Z",
+      "side": 1,
+      "message": "If this relies on aosp/1310538 then this is a very wrong fix. Instead move this into NetworkAgentConfig. Telephony should be able to use hidden methods yet, so you don\u0027t need a new SystemApi in R for that.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 46
+      },
+      "revId": "bfce8c66dbcce698b5bbc74f92fc4d009cc5b3de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
