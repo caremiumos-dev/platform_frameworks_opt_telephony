@@ -1,0 +1,12 @@
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Open-Source-Licensing+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Verified+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Code-Review+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Lint+2: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Autosubmit+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Presubmit-Ready+1: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-by: Xiangyu/Malcolm Chen <refuhoo@google.com>
+Submitted-at: Fri, 05 Jun 2020 18:36:36 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1324702
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
