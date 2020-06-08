@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "712b9844_f40bd4b6",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-06-08T16:58:15Z",
+      "side": 1,
+      "message": "Any reason why priority is not being filled in as well?",
+      "range": {
+        "startLine": 634,
+        "startChar": 60,
+        "endLine": 634,
+        "endChar": 94
+      },
+      "revId": "6395cb16dc41b4132db15a10c14c17dba87bdc63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e7f2fa8_4f819630",
+        "filename": "src/java/com/android/internal/telephony/SmsDispatchersController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-06-08T16:58:15Z",
+      "side": 1,
+      "message": "Same here, should the priority be passed here?",
+      "range": {
+        "startLine": 702,
+        "startChar": 20,
+        "endLine": 702,
+        "endChar": 54
+      },
+      "revId": "6395cb16dc41b4132db15a10c14c17dba87bdc63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
