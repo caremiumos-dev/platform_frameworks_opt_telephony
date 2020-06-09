@@ -22,6 +22,30 @@
       "revId": "05819eadb094b7c3a749867a532d645180c8e421",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f81d8513_13a3cd2e",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2020-06-09T21:44:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47f01d8f_5d1d8493",
+      "range": {
+        "startLine": 72,
+        "startChar": 12,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "05819eadb094b7c3a749867a532d645180c8e421",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
