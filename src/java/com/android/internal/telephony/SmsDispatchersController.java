@@ -631,8 +631,8 @@ public class SmsDispatchersController extends Handler {
             int priority, boolean expectMore, int validityPeriod, boolean isForVvm) {
         if (mImsSmsDispatcher.isAvailable() || mImsSmsDispatcher.isEmergencySmsSupport(destAddr)) {
             mImsSmsDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
-                    messageUri, callingPkg, persistMessage, SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED, isForVvm);
+                    messageUri, callingPkg, persistMessage, priority,
+                    false /*expectMore*/, validityPeriod, isForVvm);
         } else {
             if (isCdmaMo()) {
                 mCdmaDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent,
@@ -699,8 +699,8 @@ public class SmsDispatchersController extends Handler {
         if (mImsSmsDispatcher.isAvailable()) {
             mImsSmsDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
                     deliveryIntents, messageUri, callingPkg, persistMessage,
-                    SMS_MESSAGE_PRIORITY_NOT_SPECIFIED,
-                    false /*expectMore*/, SMS_MESSAGE_PERIOD_NOT_SPECIFIED);
+                    priority,
+                    false /*expectMore*/, validityPeriod);
         } else {
             if (isCdmaMo()) {
                 mCdmaDispatcher.sendMultipartText(destAddr, scAddr, parts, sentIntents,
