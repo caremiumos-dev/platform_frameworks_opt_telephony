@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a990fad0_75519011",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2020-06-10T03:51:45Z",
+      "side": 1,
+      "message": "This is in the internal Gerrit",
+      "parentUuid": "4ec415cb_ccea09bf",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "05819eadb094b7c3a749867a532d645180c8e421",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "47f01d8f_5d1d8493",
         "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "This is just a cherry pick change. You should do a clean CP otherwise AOSP and internal master will be out of sync",
       "parentUuid": "f81d8513_13a3cd2e",
+      "range": {
+        "startLine": 72,
+        "startChar": 12,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "05819eadb094b7c3a749867a532d645180c8e421",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3ec7747_a22026b3",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2020-06-10T03:51:45Z",
+      "side": 1,
+      "message": "Sorry for the missing context: statsd puller support for Java is not supposed to be here until R code is published. To minimize merge conflicts in other telephony components, we discussed with Robert about the options, and eventually on our side we decided to stub this class, so the rest can be exactly the same as the internal master. This would be fixed once the R code is published.",
+      "parentUuid": "b6905446_fff2685f",
       "range": {
         "startLine": 72,
         "startChar": 12,
