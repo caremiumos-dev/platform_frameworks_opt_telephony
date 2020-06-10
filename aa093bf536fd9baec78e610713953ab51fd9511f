@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "713e4cc2_29b00817",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1594376
+      },
+      "writtenOn": "2020-06-10T02:18:20Z",
+      "side": 1,
+      "message": "It seems that the ims type also contains NET_CAPABILITY_TEMPORARILY_NOT_METERED.\nPlease review codes.",
+      "revId": "aa093bf536fd9baec78e610713953ab51fd9511f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
