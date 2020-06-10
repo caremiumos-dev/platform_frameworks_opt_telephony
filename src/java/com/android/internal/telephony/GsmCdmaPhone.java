@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.CommandException.Error.GENERIC_FAILURE;
+import static com.android.internal.telephony.CommandException.Error.SIM_BUSY;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_DISABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ERASURE;
@@ -83,6 +85,7 @@ import android.util.Pair;
 
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
@@ -91,6 +94,7 @@ import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -109,7 +113,6 @@ import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
 import com.android.internal.telephony.util.ArrayUtils;
 import com.android.telephony.Rlog;
-import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -163,6 +166,9 @@ public class GsmCdmaPhone extends Phone {
     // string to define how the carrier specifies its own ota sp number
     private String mCarrierOtaSpNumSchema;
     private Boolean mUiccApplicationsEnabled = null;
+    @VisibleForTesting
+    public static int ENABLE_UICC_APPS_MAX_RETRIES = 3;
+    private static final int REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS = 5000;
 
     // A runnable which is used to automatically exit from Ecm after a period of time.
     private Runnable mExitEcmRunnable = new Runnable() {
@@ -263,8 +269,16 @@ public class GsmCdmaPhone extends Phone {
                 this, this.mCi);
         mDataEnabledSettings = mTelephonyComponentFactory
                 .inject(DataEnabledSettings.class.getName()).makeDataEnabledSettings(this);
+        mDeviceStateMonitor = mTelephonyComponentFactory.inject(DeviceStateMonitor.class.getName())
+                .makeDeviceStateMonitor(this);
 
-        // DcTracker uses SST so needs to be created after it is instantiated
+        // DisplayInfoController creates an OverrideNetworkTypeController, which uses
+        // DeviceStateMonitor so needs to be crated after it is instantiated.
+        mDisplayInfoController = mTelephonyComponentFactory.inject(
+                DisplayInfoController.class.getName()).makeDisplayInfoController(this);
+
+        // DcTracker uses ServiceStateTracker and DisplayInfoController so needs to be created
+        // after they are instantiated
         for (int transport : mTransportManager.getAvailableTransports()) {
             mDcTrackers.put(transport, mTelephonyComponentFactory.inject(DcTracker.class.getName())
                     .makeDcTracker(this, transport));
@@ -278,9 +292,6 @@ public class GsmCdmaPhone extends Phone {
                 EVENT_SET_CARRIER_DATA_ENABLED, null, false);
 
         mSST.registerForNetworkAttached(this, EVENT_REGISTERED_TO_NETWORK, null);
-        mDeviceStateMonitor = mTelephonyComponentFactory.inject(DeviceStateMonitor.class.getName())
-                .makeDeviceStateMonitor(this);
-
         mSST.registerForVoiceRegStateOrRatChanged(this, EVENT_VRS_OR_RAT_CHANGED, null);
 
         mSettingsObserver = new SettingsObserver(context, this);
@@ -290,6 +301,9 @@ public class GsmCdmaPhone extends Phone {
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED),
                 EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE);
+
+        SubscriptionController.getInstance().registerForUiccAppsEnabled(this,
+                EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED, null, false);
 
         loadTtyMode();
         logd("GsmCdmaPhone: constructor: sub = " + mPhoneId);
@@ -338,7 +352,8 @@ public class GsmCdmaPhone extends Phone {
         mCi.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
         mCi.registerForOn(this, EVENT_RADIO_ON, null);
         mCi.registerForRadioStateChanged(this, EVENT_RADIO_STATE_CHANGED, null);
-        mCi.registerUiccApplicationEnablementChanged(this, EVENT_UICC_APPS_ENABLEMENT_CHANGED,
+        mCi.registerUiccApplicationEnablementChanged(this,
+                EVENT_UICC_APPS_ENABLEMENT_STATUS_CHANGED,
                 null);
         mCi.setOnSuppServiceNotification(this, EVENT_SSN, null);
         mCi.setOnRegistrationFailed(this, EVENT_REGISTRATION_FAILED, null);
@@ -578,6 +593,16 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public TransportManager getTransportManager() {
         return mTransportManager;
+    }
+
+    @Override
+    public DeviceStateMonitor getDeviceStateMonitor() {
+        return mDeviceStateMonitor;
+    }
+
+    @Override
+    public DisplayInfoController getDisplayInfoController() {
+        return mDisplayInfoController;
     }
 
     @Override
@@ -927,6 +952,14 @@ public class GsmCdmaPhone extends Phone {
             // three way calls in CDMA will be handled by feature codes
             loge("conference: not possible in CDMA");
         }
+    }
+
+    @Override
+    public void dispose() {
+        // Note: this API is currently never called. We are defining actions here in case
+        // we need to dispose GsmCdmaPhone/Phone object.
+        super.dispose();
+        SubscriptionController.getInstance().unregisterForUiccAppsEnabled(this);
     }
 
     @Override
@@ -2226,6 +2259,9 @@ public class GsmCdmaPhone extends Phone {
             mCi.getCLIR(onComplete);
         } else {
             loge("getOutgoingCallerIdDisplay: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
         }
     }
 
@@ -2245,6 +2281,27 @@ public class GsmCdmaPhone extends Phone {
                     obtainMessage(EVENT_SET_CLIR_COMPLETE, commandInterfaceCLIRMode, 0, onComplete));
         } else {
             loge("setOutgoingCallerIdDisplay: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
+        }
+    }
+
+    @Override
+    public void queryCLIP(Message onComplete) {
+        Phone imsPhone = mImsPhone;
+        if (useSsOverIms(onComplete)) {
+            imsPhone.queryCLIP(onComplete);
+            return;
+        }
+
+        if (isPhoneTypeGsm()) {
+            mCi.queryCLIP(onComplete);
+        } else {
+            loge("queryCLIP: not possible in CDMA");
+            AsyncResult.forMessage(onComplete, null,
+                    new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED));
+            onComplete.sendToTarget();
         }
     }
 
@@ -2528,7 +2585,7 @@ public class GsmCdmaPhone extends Phone {
             } else {
                 found.onUssdFinished(ussdMessage, isUssdRequest);
             }
-        } else if (!isUssdError && ussdMessage != null) {
+        } else if (!isUssdError && !TextUtils.isEmpty(ussdMessage)) {
             // pending USSD not found
             // The network may initiate its own USSD request
 
@@ -3037,7 +3094,7 @@ public class GsmCdmaPhone extends Phone {
                 }
                 break;
             case EVENT_GET_UICC_APPS_ENABLEMENT_DONE:
-            case EVENT_UICC_APPS_ENABLEMENT_CHANGED: {
+            case EVENT_UICC_APPS_ENABLEMENT_STATUS_CHANGED:
                 ar = (AsyncResult) msg.obj;
                 if (ar == null) return;
                 if (ar.exception != null) {
@@ -3046,24 +3103,29 @@ public class GsmCdmaPhone extends Phone {
                 }
 
                 mUiccApplicationsEnabled = (Boolean) ar.result;
-                reapplyUiccAppsEnablementIfNeeded();
+            // Intentional falling through.
+            case EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED:
+                reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
                 break;
-            }
+
             case EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE: {
                 ar = (AsyncResult) msg.obj;
                 if (ar == null || ar.exception == null) return;
-                // TODO: b/146181737 don't throw exception and uncomment the retry below.
-                boolean expectedValue = (boolean) ar.userObj;
+                Pair<Boolean, Integer> userObject = (Pair) ar.userObj;
+                if (userObject == null) return;
+                boolean expectedValue = userObject.first;
+                int retries = userObject.second;
                 CommandException.Error error = ((CommandException) ar.exception).getCommandError();
-                throw new RuntimeException("Error received when re-applying uicc application"
+                loge("Error received when re-applying uicc application"
                         + " setting to " +  expectedValue + " on phone " + mPhoneId
-                        + " Error code: " + error);
-//                if (error == INTERNAL_ERR || error == SIM_BUSY) {
-//                    // Retry for certain errors, but not for others like RADIO_NOT_AVAILABLE or
-//                    // SIM_ABSENT, as they will trigger it whey they become available.
-//                    postDelayed(()->reapplyUiccAppsEnablementIfNeeded(), 1000);
-//                }
-//                break;
+                        + " Error code: " + error + " retry count left: " + retries);
+                if (retries > 0 && (error == GENERIC_FAILURE || error == SIM_BUSY)) {
+                    // Retry for certain errors, but not for others like RADIO_NOT_AVAILABLE or
+                    // SIM_ABSENT, as they will trigger it whey they become available.
+                    postDelayed(()->reapplyUiccAppsEnablementIfNeeded(retries - 1),
+                            REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS);
+                }
+                break;
             }
             default:
                 super.handleMessage(msg);
@@ -3159,11 +3221,11 @@ public class GsmCdmaPhone extends Phone {
                                 simOperatorNumeric);
                     }
                 }
-                updateDataConnectionTracker();
+                updateCurrentCarrierInProvider();
             }
         }
 
-        reapplyUiccAppsEnablementIfNeeded();
+        reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
     }
 
     private void processIccRecordEvents(int eventCode) {
@@ -4029,10 +4091,9 @@ public class GsmCdmaPhone extends Phone {
         return dialString;
     }
 
-    /**
-     * @return operator numeric.
-     */
-    private String getOperatorNumeric() {
+    @Override
+    @NonNull
+    public String getOperatorNumeric() {
         String operatorNumeric = null;
         if (isPhoneTypeGsm()) {
             IccRecords r = mIccRecords.get();
@@ -4074,7 +4135,7 @@ public class GsmCdmaPhone extends Phone {
                     + " operatorNumeric = " + operatorNumeric);
 
         }
-        return operatorNumeric;
+        return TextUtils.emptyIfNull(operatorNumeric);
     }
 
     /**
@@ -4347,7 +4408,7 @@ public class GsmCdmaPhone extends Phone {
         updateUiTtyMode(ttyMode);
     }
 
-    private void reapplyUiccAppsEnablementIfNeeded() {
+    private void reapplyUiccAppsEnablementIfNeeded(int retries) {
         UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
 
         // If no card is present or we don't have mUiccApplicationsEnabled yet, do nothing.
@@ -4369,7 +4430,8 @@ public class GsmCdmaPhone extends Phone {
         // configured state.
         if (expectedValue != mUiccApplicationsEnabled) {
             mCi.enableUiccApplications(expectedValue, Message.obtain(
-                    this, EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE, expectedValue));
+                    this, EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE,
+                    new Pair<Boolean, Integer>(expectedValue, retries)));
         }
     }
 

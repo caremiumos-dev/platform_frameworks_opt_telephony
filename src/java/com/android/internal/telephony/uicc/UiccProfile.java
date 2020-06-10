@@ -197,8 +197,13 @@ public class UiccProfile extends IccCard {
             logWithLocalLog("handleMessage: Received " + eventName + " for phoneId " + mPhoneId);
             switch (msg.what) {
                 case EVENT_NETWORK_LOCKED:
-                    mNetworkLockedRegistrants.notifyRegistrants(new AsyncResult(
-                            null, mUiccApplication.getPersoSubState().ordinal(), null));
+                    if (mUiccApplication != null) {
+                        mNetworkLockedRegistrants.notifyRegistrants(new AsyncResult(
+                                null, mUiccApplication.getPersoSubState().ordinal(), null));
+                    } else {
+                        log("EVENT_NETWORK_LOCKED: mUiccApplication is NULL, "
+                                + "mNetworkLockedRegistrants not notified.");
+                    }
                     // intentional fall through
                 case EVENT_RADIO_OFF_OR_UNAVAILABLE:
                 case EVENT_ICC_LOCKED:
@@ -346,7 +351,12 @@ public class UiccProfile extends IccCard {
             if (isGsm) {
                 mCurrentAppType = UiccController.APP_FAM_3GPP;
             } else {
-                mCurrentAppType = UiccController.APP_FAM_3GPP2;
+                UiccCardApplication newApp = getApplication(UiccController.APP_FAM_3GPP2);
+                if(newApp != null) {
+                    mCurrentAppType = UiccController.APP_FAM_3GPP2;
+                } else {
+                    mCurrentAppType = UiccController.APP_FAM_3GPP;
+                }
             }
         }
     }
@@ -766,8 +776,15 @@ public class UiccProfile extends IccCard {
             mNetworkLockedRegistrants.add(r);
 
             if (getState() == IccCardConstants.State.NETWORK_LOCKED) {
-                r.notifyRegistrant(
-                        new AsyncResult(null, mUiccApplication.getPersoSubState().ordinal(), null));
+                if (mUiccApplication != null) {
+                    r.notifyRegistrant(
+                            new AsyncResult(null, mUiccApplication.getPersoSubState().ordinal(),
+                                    null));
+
+                } else {
+                    log("registerForNetworkLocked: not notifying registrants, "
+                            + "mUiccApplication == null");
+                }
             }
         }
     }
@@ -1661,6 +1678,21 @@ public class UiccProfile extends IccCard {
     }
 
     /**
+     * Make sure the iccid in SIM record matches the current active subId. If not, return false.
+     * When SIM switching in eSIM is happening, there are rare cases that setOperatorBrandOverride
+     * is called on old subId while new iccid is already loaded on SIM record. For those cases
+     * setOperatorBrandOverride would apply to the wrong (new) iccid. This check is to avoid it.
+     */
+    private boolean checkSubIdAndIccIdMatch(String iccid) {
+        if (TextUtils.isEmpty(iccid)) return false;
+        SubscriptionInfo subInfo = SubscriptionController.getInstance()
+                .getActiveSubscriptionInfoForSimSlotIndex(
+                        getPhoneId(), mContext.getOpPackageName(), null);
+        return subInfo != null && IccUtils.stripTrailingFs(subInfo.getIccId()).equals(
+                IccUtils.stripTrailingFs(iccid));
+    }
+
+    /**
      * Sets the overridden operator brand.
      */
     public boolean setOperatorBrandOverride(String brand) {
@@ -1669,6 +1701,10 @@ public class UiccProfile extends IccCard {
 
         String iccId = getIccId();
         if (TextUtils.isEmpty(iccId)) {
+            return false;
+        }
+        if (!checkSubIdAndIccIdMatch(iccId)) {
+            loge("iccId doesn't match current active subId.");
             return false;
         }
 

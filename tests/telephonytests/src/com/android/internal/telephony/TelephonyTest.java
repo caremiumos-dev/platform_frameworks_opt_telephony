@@ -50,10 +50,12 @@ import android.os.Message;
 import android.os.MessageQueue;
 import android.os.RegistrantList;
 import android.os.ServiceManager;
+import android.os.UserManager;
 import android.provider.BlockedNumberContract;
 import android.provider.DeviceConfig;
 import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.CarrierConfigManager;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
@@ -172,6 +174,8 @@ public abstract class TelephonyTest {
     @Mock
     protected DcTracker mDcTracker;
     @Mock
+    protected DisplayInfoController mDisplayInfoController;
+    @Mock
     protected GsmCdmaCall mGsmCdmaCall;
     @Mock
     protected ImsCall mImsCall;
@@ -284,6 +288,8 @@ public abstract class TelephonyTest {
     protected EuiccManager mEuiccManager;
     protected PackageManager mPackageManager;
     protected ConnectivityManager mConnectivityManager;
+    protected CarrierConfigManager mCarrierConfigManager;
+    protected UserManager mUserManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -418,6 +424,9 @@ public abstract class TelephonyTest {
         mConnectivityManager = (ConnectivityManager)
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         mPackageManager = mContext.getPackageManager();
+        mCarrierConfigManager =
+                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
 
         //mTelephonyComponentFactory
         doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
@@ -439,6 +448,8 @@ public abstract class TelephonyTest {
                 .makeIccPhoneBookInterfaceManager(nullable(Phone.class));
         doReturn(mDcTracker).when(mTelephonyComponentFactory)
                 .makeDcTracker(nullable(Phone.class), anyInt());
+        doReturn(mDisplayInfoController).when(mTelephonyComponentFactory)
+                .makeDisplayInfoController(nullable(Phone.class));
         doReturn(mWspTypeDecoder).when(mTelephonyComponentFactory)
                 .makeWspTypeDecoder(nullable(byte[].class));
         doReturn(mImsCT).when(mTelephonyComponentFactory)
@@ -483,6 +494,8 @@ public abstract class TelephonyTest {
         doReturn(PhoneConstants.PHONE_TYPE_GSM).when(mPhone).getPhoneType();
         doReturn(mCT).when(mPhone).getCallTracker();
         doReturn(mSST).when(mPhone).getServiceStateTracker();
+        doReturn(mDeviceStateMonitor).when(mPhone).getDeviceStateMonitor();
+        doReturn(mDisplayInfoController).when(mPhone).getDisplayInfoController();
         doReturn(mEmergencyNumberTracker).when(mPhone).getEmergencyNumberTracker();
         doReturn(mCarrierSignalAgent).when(mPhone).getCarrierSignalAgent();
         doReturn(mCarrierActionAgent).when(mPhone).getCarrierActionAgent();
@@ -649,6 +662,8 @@ public abstract class TelephonyTest {
     }
 
     protected void tearDown() throws Exception {
+        // Ensure there are no references to handlers between tests.
+        PhoneConfigurationManager.unregisterAllMultiSimConfigChangeRegistrants();
         // unmonitor TestableLooper for TelephonyTest class
         if (mTestableLooper != null) {
             unmonitorTestableLooper(mTestableLooper);
@@ -657,6 +672,7 @@ public abstract class TelephonyTest {
         for (TestableLooper looper : mTestableLoopers) {
             looper.destroy();
         }
+        TestableLooper.remove(TelephonyTest.this);
 
         mSimulatedCommands.dispose();
         SharedPreferences sharedPreferences = mContext.getSharedPreferences((String) null, 0);

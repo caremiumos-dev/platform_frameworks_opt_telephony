@@ -35,6 +35,8 @@ import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Registrant;
+import android.os.RegistrantList;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SignalThresholdInfo;
@@ -82,6 +84,8 @@ public class DeviceStateMonitor extends Handler {
     private final Phone mPhone;
 
     private final LocalLog mLocalLog = new LocalLog(100);
+
+    private final RegistrantList mPhysicalChannelConfigRegistrants = new RegistrantList();
 
     private final NetworkRequest mWifiNetworkRequest =
             new NetworkRequest.Builder()
@@ -464,7 +468,9 @@ public class DeviceStateMonitor extends Handler {
             sendDeviceState(LOW_DATA_EXPECTED, mIsLowDataExpected);
         }
 
-        int newFilter = 0;
+        // Registration Failure is always reported.
+        int newFilter = IndicationFilter.REGISTRATION_FAILURE;
+
         if (shouldEnableSignalStrengthReports()) {
             newFilter |= IndicationFilter.SIGNAL_STRENGTH;
         }
@@ -488,6 +494,13 @@ public class DeviceStateMonitor extends Handler {
         final boolean shouldEnableBarringInfoReports = shouldEnableBarringInfoReports();
         if (shouldEnableBarringInfoReports) {
             newFilter |= IndicationFilter.BARRING_INFO;
+        }
+
+        // notify PhysicalChannelConfig registrants if state changes
+        if ((newFilter & IndicationFilter.PHYSICAL_CHANNEL_CONFIG)
+                != (mUnsolicitedResponseFilter & IndicationFilter.PHYSICAL_CHANNEL_CONFIG)) {
+            mPhysicalChannelConfigRegistrants.notifyResult(
+                    (newFilter & IndicationFilter.PHYSICAL_CHANNEL_CONFIG) != 0);
         }
 
         setUnsolResponseFilter(newFilter, false);
@@ -654,6 +667,28 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
+     * Register for PhysicalChannelConfig notifications changed. On change, msg.obj will be an
+     * AsyncResult with a boolean result. AsyncResult.result is true if notifications are enabled
+     * and false if they are disabled.
+     *
+     * @param h Handler to notify
+     * @param what msg.what when the message is delivered
+     * @param obj AsyncResult.userObj when the message is delivered
+     */
+    public void registerForPhysicalChannelConfigNotifChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mPhysicalChannelConfigRegistrants.add(r);
+    }
+
+    /**
+     * Unregister for PhysicalChannelConfig notifications changed.
+     * @param h Handler to notify
+     */
+    public void unregisterForPhysicalChannelConfigNotifChanged(Handler h) {
+        mPhysicalChannelConfigRegistrants.remove(h);
+    }
+
+    /**
      * @param msg Debug message
      * @param logIntoLocalLog True if log into the local log
      */
@@ -739,10 +774,10 @@ public class DeviceStateMonitor extends Handler {
          * These thresholds are taken from the LTE RSRQ defaults in {@link CarrierConfigManager}.
          */
         public static final int[] EUTRAN_RSRQ = new int[] {
-            -19,  /* SIGNAL_STRENGTH_POOR */
+            -20,  /* SIGNAL_STRENGTH_POOR */
             -17,  /* SIGNAL_STRENGTH_MODERATE */
             -14,  /* SIGNAL_STRENGTH_GOOD */
-            -12   /* SIGNAL_STRENGTH_GREAT */
+            -11   /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -784,9 +819,9 @@ public class DeviceStateMonitor extends Handler {
          */
         public static final int[] NGRAN_RSRSRQ = new int[] {
             -16, /* SIGNAL_STRENGTH_POOR */
-            -11, /* SIGNAL_STRENGTH_MODERATE */
+            -12, /* SIGNAL_STRENGTH_MODERATE */
             -9, /* SIGNAL_STRENGTH_GOOD */
-            -7  /* SIGNAL_STRENGTH_GREAT */
+            -6  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**

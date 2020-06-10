@@ -87,7 +87,6 @@ import android.util.LocalLog;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
-import android.util.StatsLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
@@ -120,6 +119,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -129,6 +130,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 /**
  * {@hide}
@@ -449,7 +451,6 @@ public class ServiceStateTracker extends Handler {
     protected final GsmCdmaPhone mPhone;
 
     private CellIdentity mCellIdentity;
-    private CellIdentity mNewCellIdentity;
     private static final int MS_PER_HOUR = 60 * 60 * 1000;
     private final NitzStateMachine mNitzState;
 
@@ -742,7 +743,6 @@ public class ServiceStateTracker extends Handler {
         mLastNitzData = null;
         mNitzState.handleNetworkUnavailable();
         mCellIdentity = null;
-        mNewCellIdentity = null;
         mSignalStrengthUpdatedTime = System.currentTimeMillis();
 
         //cancel any pending pollstate request on voice tech switching
@@ -859,27 +859,39 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
-     * Notify all mDataConnectionRatChangeRegistrants using an
-     * AsyncResult in msg.obj where AsyncResult#result contains the
-     * new RAT as an Integer Object.
+     * Get registration info
+     *
+     * @param transport The transport type
+     * @return Pair of registration info including {@link ServiceState.RegState} and
+     * {@link RilRadioTechnology}.
+     *
      */
-    protected void notifyDataRegStateRilRadioTechnologyChanged(int transport) {
+    @Nullable
+    private Pair<Integer, Integer> getRegistrationInfo(@TransportType int transport) {
         NetworkRegistrationInfo nrs = mSS.getNetworkRegistrationInfo(
                 NetworkRegistrationInfo.DOMAIN_PS, transport);
         if (nrs != null) {
             int rat = ServiceState.networkTypeToRilRadioTechnology(
                     nrs.getAccessNetworkTechnology());
             int drs = regCodeToServiceState(nrs.getRegistrationState());
-            if (DBG) {
-                log("notifyDataRegStateRilRadioTechnologyChanged: drs=" + drs + " rat=" + rat);
-            }
+            return new Pair<>(drs, rat);
+        }
+        return null;
+    }
 
-            RegistrantList registrantList = mDataRegStateOrRatChangedRegistrants.get(transport);
-            if (registrantList != null) {
-                registrantList.notifyResult(new Pair<>(drs, rat));
+    /**
+     * Notify all mDataConnectionRatChangeRegistrants using an
+     * AsyncResult in msg.obj where AsyncResult#result contains the
+     * new RAT as an Integer Object.
+     */
+    protected void notifyDataRegStateRilRadioTechnologyChanged(@TransportType int transport) {
+        RegistrantList registrantList = mDataRegStateOrRatChangedRegistrants.get(transport);
+        if (registrantList != null) {
+            Pair<Integer, Integer> registrationInfo = getRegistrationInfo(transport);
+            if (registrationInfo != null) {
+                registrantList.notifyResult(registrationInfo);
             }
         }
-        setDataNetworkTypeForPhone(mSS.getRilDataRadioTechnology());
     }
 
     /**
@@ -1993,15 +2005,6 @@ public class ServiceStateTracker extends Handler {
         return cdmaRoaming && !isSameOperatorNameFromSimAndSS(s);
     }
 
-    private boolean isNrStateChanged(
-            NetworkRegistrationInfo oldRegState, NetworkRegistrationInfo newRegState) {
-        if (oldRegState == null || newRegState == null) {
-            return oldRegState != newRegState;
-        }
-
-        return oldRegState.getNrState() != newRegState.getNrState();
-    }
-
     private boolean updateNrFrequencyRangeFromPhysicalChannelConfigs(
             List<PhysicalChannelConfig> physicalChannelConfigs, ServiceState ss) {
         int newFrequencyRange = ServiceState.FREQUENCY_RANGE_UNKNOWN;
@@ -2169,8 +2172,6 @@ public class ServiceStateTracker extends Handler {
                     }
                 }
 
-                mNewCellIdentity = networkRegState.getCellIdentity();
-
                 if (DBG) {
                     log("handlePollStateResultMessage: CS cellular. " + networkRegState);
                 }
@@ -2207,8 +2208,9 @@ public class ServiceStateTracker extends Handler {
                 // (2 or more cells) to a new cell if they camp for emergency service only.
                 if (serviceState == ServiceState.STATE_OUT_OF_SERVICE) {
                     mLastPhysicalChannelConfigList = null;
-                    nrHasChanged |= updateNrFrequencyRangeFromPhysicalChannelConfigs(null, mNewSS);
                 }
+                nrHasChanged |= updateNrFrequencyRangeFromPhysicalChannelConfigs(
+                        mLastPhysicalChannelConfigList, mNewSS);
                 nrHasChanged |= updateNrStateFromPhysicalChannelConfigs(
                         mLastPhysicalChannelConfigList, mNewSS);
                 setPhyCellInfoFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
@@ -3070,7 +3072,6 @@ public class ServiceStateTracker extends Handler {
         switch (mCi.getRadioState()) {
             case TelephonyManager.RADIO_POWER_UNAVAILABLE:
                 mNewSS.setStateOutOfService();
-                mNewCellIdentity = null;
                 setSignalStrengthDefaultValues();
                 mLastNitzData = null;
                 mNitzState.handleNetworkUnavailable();
@@ -3079,7 +3080,6 @@ public class ServiceStateTracker extends Handler {
 
             case TelephonyManager.RADIO_POWER_OFF:
                 mNewSS.setStateOff();
-                mNewCellIdentity = null;
                 setSignalStrengthDefaultValues();
                 mLastNitzData = null;
                 mNitzState.handleNetworkUnavailable();
@@ -3124,6 +3124,35 @@ public class ServiceStateTracker extends Handler {
                 }
                 break;
         }
+    }
+
+    /**
+     * Get the highest-priority CellIdentity for a provided ServiceState.
+     *
+     * Choose a CellIdentity for ServiceState using the following rules:
+     * 1) WWAN only (WLAN is excluded)
+     * 2) Registered > Camped
+     * 3) CS > PS
+     *
+     * @param ss a Non-Null ServiceState object
+     *
+     * @return a list of CellIdentity objects in *decreasing* order of preference.
+     */
+    @VisibleForTesting public static @NonNull List<CellIdentity> getPrioritizedCellIdentities(
+            @NonNull final ServiceState ss) {
+        final List<NetworkRegistrationInfo> regInfos = ss.getNetworkRegistrationInfoList();
+        if (regInfos.isEmpty()) return Collections.emptyList();
+
+        return regInfos.stream()
+            .filter(nri -> nri.getCellIdentity() != null)
+            .filter(nri -> nri.getTransportType() == AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+            .sorted(Comparator
+                    .comparing(NetworkRegistrationInfo::isRegistered)
+                    .thenComparing((nri) -> nri.getDomain() & NetworkRegistrationInfo.DOMAIN_CS)
+                    .reversed())
+            .map(nri -> nri.getCellIdentity())
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     private void pollStateDone() {
@@ -3197,7 +3226,13 @@ public class ServiceStateTracker extends Handler {
                     : TelephonyManager.NETWORK_TYPE_UNKNOWN;
             int newRAT = newNrs != null ? newNrs.getAccessNetworkTechnology()
                     : TelephonyManager.NETWORK_TYPE_UNKNOWN;
-            hasRilDataRadioTechnologyChanged.put(transport, oldRAT != newRAT);
+
+            boolean isOldCA = oldNrs != null ? (oldNrs.getDataSpecificInfo() != null
+                    ? oldNrs.getDataSpecificInfo().isUsingCarrierAggregation() : false) : false;
+            boolean isNewCA = newNrs!= null ? (newNrs. getDataSpecificInfo() != null
+                    ? newNrs. getDataSpecificInfo().isUsingCarrierAggregation() : false) : false;
+
+            hasRilDataRadioTechnologyChanged.put(transport, oldRAT != newRAT || isOldCA != isNewCA);
             if (oldRAT != newRAT) {
                 anyDataRatChanged = true;
             }
@@ -3223,14 +3258,15 @@ public class ServiceStateTracker extends Handler {
         boolean hasNrFrequencyRangeChanged =
                 mSS.getNrFrequencyRange() != mNewSS.getNrFrequencyRange();
 
-        boolean hasNrStateChanged = isNrStateChanged(
-                mSS.getNetworkRegistrationInfo(
-                        NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkType.EUTRAN),
-                mNewSS.getNetworkRegistrationInfo(
-                        NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkType.EUTRAN));
+        boolean hasNrStateChanged = mSS.getNrState() != mNewSS.getNrState();
 
-        boolean hasLocationChanged = (mCellIdentity == null ? mNewCellIdentity != null
-                : !mCellIdentity.isSameCell(mNewCellIdentity));
+        final List<CellIdentity> prioritizedCids = getPrioritizedCellIdentities(mNewSS);
+
+        final CellIdentity primaryCellIdentity = prioritizedCids.isEmpty()
+                ? null : prioritizedCids.get(0);
+
+        boolean hasLocationChanged = mCellIdentity == null
+                ? primaryCellIdentity != null : !mCellIdentity.isSameCell(primaryCellIdentity);
 
         // ratchet the new tech up through its rat family but don't drop back down
         // until cell change or device is OOS
@@ -3316,7 +3352,7 @@ public class ServiceStateTracker extends Handler {
             // TODO: we may add filtering to reduce the event logged,
             // i.e. check preferred network setting, only switch to 2G, etc
             if (hasRilVoiceRadioTechnologyChanged) {
-                int cid = getCidFromCellIdentity(mNewCellIdentity);
+                int cid = getCidFromCellIdentity(primaryCellIdentity);
                 // NOTE: this code was previously located after mSS and mNewSS are swapped, so
                 // existing logs were incorrectly using the new state for "network_from"
                 // and STATE_OUT_OF_SERVICE for "network_to". To avoid confusion, use a new log tag
@@ -3352,10 +3388,7 @@ public class ServiceStateTracker extends Handler {
         // clean slate for next time
         mNewSS.setStateOutOfService();
 
-        // swap mCellIdentity and mNewCellIdentity to put new state in mCellIdentity
-        CellIdentity tempCellId = mCellIdentity;
-        mCellIdentity = mNewCellIdentity;
-        mNewCellIdentity = tempCellId;
+        mCellIdentity = primaryCellIdentity;
 
         if (hasRilVoiceRadioTechnologyChanged) {
             updatePhoneObject();
@@ -3365,7 +3398,7 @@ public class ServiceStateTracker extends Handler {
                 Context.TELEPHONY_SERVICE);
         if (anyDataRatChanged) {
             tm.setDataNetworkTypeForPhone(mPhone.getPhoneId(), mSS.getRilDataRadioTechnology());
-            StatsLog.write(StatsLog.MOBILE_RADIO_TECHNOLOGY_CHANGED,
+            TelephonyStatsLog.write(TelephonyStatsLog.MOBILE_RADIO_TECHNOLOGY_CHANGED,
                     ServiceState.rilRadioTechnologyToNetworkType(
                             mSS.getRilDataRadioTechnology()), mPhone.getPhoneId());
         }
@@ -3414,10 +3447,13 @@ public class ServiceStateTracker extends Handler {
             // incomplete.
             // CellIdentity can return a null MCC and MNC in CDMA
             String localeOperator = operatorNumeric;
-            if (isInvalidOperatorNumeric(operatorNumeric) && (mCellIdentity != null)
-                    && mCellIdentity.getMccString() != null
-                    && mCellIdentity.getMncString() != null) {
-                localeOperator = mCellIdentity.getMccString() + mCellIdentity.getMncString();
+            if (isInvalidOperatorNumeric(operatorNumeric)) {
+                for (CellIdentity cid : prioritizedCids) {
+                    if (!TextUtils.isEmpty(cid.getPlmn())) {
+                        localeOperator = cid.getPlmn();
+                        break;
+                    }
+                }
             }
 
             if (isInvalidOperatorNumeric(localeOperator)) {
@@ -3426,16 +3462,10 @@ public class ServiceStateTracker extends Handler {
                 // operator numeric in locale tracker is null. The async update will allow getting
                 // cell info from the modem instead of using the cached one.
                 mLocaleTracker.updateOperatorNumeric("");
-            } else if (mSS.getRilDataRadioTechnology() != ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN) {
-                // If the device is on IWLAN, modems manufacture a ServiceState with the MCC/MNC of
-                // the SIM as if we were talking to towers. Telephony code then uses that with
-                // mccTable to suggest a timezone. We shouldn't do that if the MCC/MNC is from IWLAN
-
-                // Update IDD.
+            } else {
                 if (!mPhone.isPhoneTypeGsm()) {
                     setOperatorIdd(localeOperator);
                 }
-
                 mLocaleTracker.updateOperatorNumeric(localeOperator);
             }
 
@@ -3490,6 +3520,7 @@ public class ServiceStateTracker extends Handler {
                     // Update all transports if preference changed so that consumers can be notified
                     // that ServiceState#getRilDataRadioTechnology has changed.
                     || hasDataTransportPreferenceChanged) {
+                setDataNetworkTypeForPhone(mSS.getRilDataRadioTechnology());
                 notifyDataRegStateRilRadioTechnologyChanged(transport);
                 mPhone.notifyAllActiveDataConnections();
             }
@@ -3541,6 +3572,14 @@ public class ServiceStateTracker extends Handler {
 
         if (hasLocationChanged) {
             mPhone.notifyLocationChanged(getCellIdentity());
+        }
+
+        if (hasNrStateChanged) {
+            mNrStateChangedRegistrants.notifyRegistrants();
+        }
+
+        if (hasNrFrequencyRangeChanged) {
+            mNrFrequencyChangedRegistrants.notifyRegistrants();
         }
 
         if (mPhone.isPhoneTypeGsm()) {
@@ -3750,7 +3789,7 @@ public class ServiceStateTracker extends Handler {
         }
 
         // Retrieve the current country information
-        // with the MCC got from opeatorNumeric.
+        // with the MCC got from operatorNumeric.
         String idd = mHbpcdUtils.getIddByMcc(
                 Integer.parseInt(operatorNumeric.substring(0,3)));
         if (idd != null && !idd.isEmpty()) {
@@ -4485,7 +4524,10 @@ public class ServiceStateTracker extends Handler {
             mDataRegStateOrRatChangedRegistrants.put(transport, new RegistrantList());
         }
         mDataRegStateOrRatChangedRegistrants.get(transport).add(r);
-        notifyDataRegStateRilRadioTechnologyChanged(transport);
+        Pair<Integer, Integer> registrationInfo = getRegistrationInfo(transport);
+        if (registrationInfo != null) {
+            r.notifyResult(registrationInfo);
+        }
     }
 
     /**
@@ -5115,7 +5157,6 @@ public class ServiceStateTracker extends Handler {
         pw.println(" mPendingRadioPowerOffAfterDataOff=" + mPendingRadioPowerOffAfterDataOff);
         pw.println(" mPendingRadioPowerOffAfterDataOffTag=" + mPendingRadioPowerOffAfterDataOffTag);
         pw.println(" mCellIdentity=" + Rlog.pii(VDBG, mCellIdentity));
-        pw.println(" mNewCellIdentity=" + Rlog.pii(VDBG, mNewCellIdentity));
         pw.println(" mLastCellInfoReqTime=" + mLastCellInfoReqTime);
         dumpCellInfoList(pw);
         pw.flush();

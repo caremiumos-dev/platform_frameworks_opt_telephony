@@ -21,6 +21,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ComponentInfo;
@@ -83,6 +84,11 @@ public class EuiccController extends IEuiccController.Stub {
             EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR;
     private static final String EXTRA_EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION =
             EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION;
+
+    /** Restrictions limiting access to the PendingIntent */
+    private static final String RESOLUTION_ACTIVITY_PACKAGE_NAME = "com.android.phone";
+    private static final String RESOLUTION_ACTIVITY_CLASS_NAME =
+            "com.android.phone.euicc.EuiccResolutionUiDispatcherActivity";
 
     private static EuiccController sInstance;
 
@@ -397,9 +403,6 @@ public class EuiccController extends IEuiccController.Stub {
                     break;
                 default:
                     resultCode = ERROR;
-                    extrasIntent.putExtra(
-                            EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE,
-                            result.getResult());
                     addExtrasToResultIntent(extrasIntent, result.getResult());
                     break;
             }
@@ -477,20 +480,19 @@ public class EuiccController extends IEuiccController.Stub {
      * b) {@link EuiccManager#EXTRA_EMBEDDED_SUBSCRIPTION_SMDX_REASON_CODE} ->
      * ReasonCode[5.2.6.2] from GSMA (SGP.22 v2.2
      */
-    Intent addExtrasToResultIntent(Intent intent, int resultCode) {
+    private void addExtrasToResultIntent(Intent intent, int resultCode) {
         final int firstByteBitOffset = 24;
         int errorCodeMask = 0xFFFFFF;
-        int operationCodeMask = 0xFF << firstByteBitOffset;
+        int operationCode = resultCode >>> firstByteBitOffset;
 
         intent.putExtra(
                 EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, resultCode);
 
-        intent.putExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE,
-                (resultCode & operationCodeMask) >> firstByteBitOffset);
+        intent.putExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_OPERATION_CODE, operationCode);
 
         // check to see if the operation code is EuiccManager#OPERATION_SMDX_SUBJECT_REASON_CODE
-        final boolean isSmdxSubjectReasonCode = (resultCode >> firstByteBitOffset)
-                == EuiccManager.OPERATION_SMDX_SUBJECT_REASON_CODE;
+        final boolean isSmdxSubjectReasonCode =
+                (operationCode == EuiccManager.OPERATION_SMDX_SUBJECT_REASON_CODE);
 
         if (isSmdxSubjectReasonCode) {
             final Pair<String, String> subjectReasonCode = decodeSmdxSubjectAndReasonCode(
@@ -504,7 +506,6 @@ public class EuiccController extends IEuiccController.Stub {
             final int errorCode = resultCode & errorCodeMask;
             intent.putExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE, errorCode);
         }
-        return intent;
     }
 
     void downloadSubscription(int cardId, DownloadableSubscription subscription,
@@ -1260,6 +1261,9 @@ public class EuiccController extends IEuiccController.Stub {
             String callingPackage, int resolvableErrors, boolean confirmationCodeRetried,
             EuiccOperation op, int cardId) {
         Intent intent = new Intent(EuiccManager.ACTION_RESOLVE_ERROR);
+        intent.setPackage(RESOLUTION_ACTIVITY_PACKAGE_NAME);
+        intent.setComponent(new ComponentName(
+                        RESOLUTION_ACTIVITY_PACKAGE_NAME, RESOLUTION_ACTIVITY_CLASS_NAME));
         intent.putExtra(EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_RESOLUTION_ACTION,
                 resolutionAction);
         intent.putExtra(EuiccService.EXTRA_RESOLUTION_CALLING_PACKAGE, callingPackage);

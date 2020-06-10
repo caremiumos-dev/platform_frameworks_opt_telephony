@@ -37,6 +37,7 @@ import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCall;
+import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
 import com.android.internal.telephony.test.TestConferenceEventPackageParser;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
@@ -76,6 +77,15 @@ public class TelephonyTester {
             "com.android.internal.telephony.TestDialogEventPackage";
 
     private static final String EXTRA_FILENAME = "filename";
+    /**
+     * Used to inject the conference event package by bypassing the ImsCall and doing the
+     * injection via ImsPhoneCallTracker.  This is useful in scenarios where the
+     * adb shell cmd phone ims conference-event-package disable
+     * command is used to disable network CEP data and it is desired to still inject CEP data.
+     * Where the network CEP data is not explicitly disabled using the command above, it is not
+     * necessary to bypass the ImsCall.
+     */
+    private static final String EXTRA_BYPASS_IMSCALL = "bypassImsCall";
     private static final String EXTRA_STARTPACKAGE = "startPackage";
     private static final String EXTRA_SENDPACKAGE = "sendPackage";
     private static final String EXTRA_DIALOGID = "dialogId";
@@ -134,6 +144,7 @@ public class TelephonyTester {
     private static final String EXTRA_NR_FREQUENCY_RANGE = "nr_frequency_range";
     private static final String EXTRA_NR_STATE = "nr_state";
     private static final String EXTRA_OPERATOR = "operator";
+    private static final String EXTRA_OPERATOR_RAW = "operator_raw";
 
     private static final String ACTION_RESET = "reset";
 
@@ -162,7 +173,8 @@ public class TelephonyTester {
                 } else if (action.equals(ACTION_TEST_CONFERENCE_EVENT_PACKAGE)) {
                     log("inject simulated conference event package");
                     handleTestConferenceEventPackage(context,
-                            intent.getStringExtra(EXTRA_FILENAME));
+                            intent.getStringExtra(EXTRA_FILENAME),
+                            intent.getBooleanExtra(EXTRA_BYPASS_IMSCALL, false));
                 } else if (action.equals(ACTION_TEST_DIALOG_EVENT_PACKAGE)) {
                     log("handle test dialog event package intent");
                     handleTestDialogEventPackageIntent(intent);
@@ -277,22 +289,15 @@ public class TelephonyTester {
      * @param context The context.
      * @param fileName The name of the test conference event package file to read.
      */
-    private void handleTestConferenceEventPackage(Context context, String fileName) {
+    private void handleTestConferenceEventPackage(Context context, String fileName,
+            boolean isBypassingImsCall) {
         // Attempt to get the active IMS call before parsing the test XML file.
         ImsPhone imsPhone = (ImsPhone) mPhone;
         if (imsPhone == null) {
             return;
         }
 
-        ImsPhoneCall imsPhoneCall = imsPhone.getForegroundCall();
-        if (imsPhoneCall == null) {
-            return;
-        }
-
-        ImsCall imsCall = imsPhoneCall.getImsCall();
-        if (imsCall == null) {
-            return;
-        }
+        ImsPhoneCallTracker tracker = (ImsPhoneCallTracker) imsPhone.getCallTracker();
 
         File packageFile = new File(context.getFilesDir(), fileName);
         final FileInputStream is;
@@ -309,7 +314,21 @@ public class TelephonyTester {
             return;
         }
 
-        imsCall.conferenceStateUpdated(imsConferenceState);
+        if (isBypassingImsCall) {
+            tracker.injectTestConferenceState(imsConferenceState);
+        } else {
+            ImsPhoneCall imsPhoneCall = imsPhone.getForegroundCall();
+            if (imsPhoneCall == null) {
+                return;
+            }
+
+            ImsCall imsCall = imsPhoneCall.getImsCall();
+            if (imsCall == null) {
+                return;
+            }
+
+            imsCall.conferenceStateUpdated(imsConferenceState);
+        }
     }
 
     /**
@@ -384,6 +403,12 @@ public class TelephonyTester {
             String operator = mServiceStateTestIntent.getStringExtra(EXTRA_OPERATOR);
             ss.setOperatorName(operator, operator, "");
             log("Override operator with " + operator);
+        }
+        if (mServiceStateTestIntent.hasExtra(EXTRA_OPERATOR_RAW)) {
+            String operator_raw = mServiceStateTestIntent.getStringExtra(EXTRA_OPERATOR_RAW);
+            ss.setOperatorAlphaLongRaw(operator_raw);
+            ss.setOperatorAlphaShortRaw(operator_raw);
+            log("Override operator_raw with " + operator_raw);
         }
         if (mServiceStateTestIntent.hasExtra(EXTRA_NR_FREQUENCY_RANGE)) {
             ss.setNrFrequencyRange(mServiceStateTestIntent.getIntExtra(EXTRA_NR_FREQUENCY_RANGE,
