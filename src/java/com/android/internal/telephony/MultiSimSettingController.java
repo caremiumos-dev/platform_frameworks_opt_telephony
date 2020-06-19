@@ -39,6 +39,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.CarrierConfigManager;
@@ -395,10 +396,11 @@ public class MultiSimSettingController extends Handler {
 
     /**
      * Wait for subInfo initialization (after boot up) and carrier config load for all active
-     * subscriptions before re-evaluate multi SIM settings.
+     * subscriptions and boot completed before re-evaluate multi SIM settings.
      */
     private boolean isReadyToReevaluate() {
-        return mSubInfoInitialized && isCarrierConfigLoadedForAllSub();
+        return mSubInfoInitialized && isCarrierConfigLoadedForAllSub()
+                && SystemProperties.getBoolean("sys.boot_completed", false);
     }
 
     private void reEvaluateAll() {
