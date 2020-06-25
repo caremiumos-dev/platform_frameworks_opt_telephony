@@ -560,7 +560,7 @@ public abstract class SMSDispatcher extends Handler {
                 Rlog.e(TAG, "bindService() for carrier messaging service failed");
                 mSenderCallback.onSendMultipartSmsComplete(
                         CarrierMessagingService.SEND_STATUS_RETRY_ON_CARRIER_NETWORK,
-                        null /* smsResponse */);
+                        null /* messageRefs */);
             } else {
                 Rlog.d(TAG, "bindService() for carrier messaging service succeeded");
             }
@@ -589,7 +589,7 @@ public abstract class SMSDispatcher extends Handler {
                 Rlog.e(TAG, "Exception sending the SMS: " + e);
                 mSenderCallback.onSendMultipartSmsComplete(
                         CarrierMessagingService.SEND_STATUS_RETRY_ON_CARRIER_NETWORK,
-                        null /* smsResponse */);
+                        null /* messageRefs */);
             }
         }
     }
@@ -625,13 +625,7 @@ public abstract class SMSDispatcher extends Handler {
             checkCallerIsPhoneOrCarrierApp();
             final long identity = Binder.clearCallingIdentity();
             try {
-                for (int i = 0; i < mSmsSender.mTrackers.length; i++) {
-                    int messageRef = 0;
-                    if (messageRefs != null && messageRefs.length > i) {
-                        messageRef = messageRefs[i];
-                    }
-                    processSendSmsResponse(mSmsSender.mTrackers[i], result, messageRef);
-                }
+                processSendMultipartSmsResponse(mSmsSender.mTrackers, result, messageRefs);
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -650,6 +644,59 @@ public abstract class SMSDispatcher extends Handler {
         @Override
         public void onDownloadMmsComplete(int result) {
             Rlog.e(TAG, "Unexpected onDownloadMmsComplete call with result: " + result);
+        }
+    }
+
+    private void processSendMultipartSmsResponse(
+            SmsTracker[] trackers, int result, int[] messageRefs) {
+        if (trackers == null) {
+            Rlog.e(TAG, "processSendMultipartSmsResponse: null trackers");
+            return;
+        }
+
+        switch (result) {
+            case CarrierMessagingService.SEND_STATUS_OK:
+                Rlog.d(TAG, "Sending SMS by IP succeeded.");
+                for (int i = 0; i < trackers.length; i++) {
+                    int messageRef = 0;
+                    if (messageRefs != null && messageRefs.length > i) {
+                        messageRef = messageRefs[i];
+                    }
+                    sendMessage(
+                            obtainMessage(
+                                    EVENT_SEND_SMS_COMPLETE,
+                                    new AsyncResult(
+                                            trackers[i],
+                                            new SmsResponse(
+                                                    messageRef, null /* ackPdu */, NO_ERROR_CODE),
+                                            null /* exception */)));
+                }
+                break;
+            case CarrierMessagingService.SEND_STATUS_ERROR:
+                Rlog.d(TAG, "Sending SMS by IP failed.");
+                for (int i = 0; i < trackers.length; i++) {
+                    int messageRef = 0;
+                    if (messageRefs != null && messageRefs.length > i) {
+                        messageRef = messageRefs[i];
+                    }
+                    sendMessage(
+                            obtainMessage(
+                                    EVENT_SEND_SMS_COMPLETE,
+                                    new AsyncResult(
+                                            trackers[i],
+                                            new SmsResponse(
+                                                    messageRef, null /* ackPdu */, NO_ERROR_CODE),
+                                            new CommandException(
+                                                    CommandException.Error.GENERIC_FAILURE))));
+                }
+                break;
+            case CarrierMessagingService.SEND_STATUS_RETRY_ON_CARRIER_NETWORK:
+                Rlog.d(TAG, "Sending SMS by IP failed. Retry on carrier network.");
+                sendSubmitPdu(trackers);
+                break;
+            default:
+                Rlog.d(TAG, "Unknown result " + result + " Retry on carrier network.");
+                sendSubmitPdu(trackers);
         }
     }
 
