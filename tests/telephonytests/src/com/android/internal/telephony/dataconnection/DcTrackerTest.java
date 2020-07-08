@@ -31,6 +31,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
@@ -128,6 +129,7 @@ public class DcTrackerTest extends TelephonyTest {
     public static final String FAKE_APN7 = "FAKE APN 7";
     public static final String FAKE_APN8 = "FAKE APN 8";
     public static final String FAKE_APN9 = "FAKE APN 9";
+    public static final String FAKE_APN10 = "FAKE APN 10";
     public static final String FAKE_IFNAME = "FAKE IFNAME";
     public static final String FAKE_PCSCF_ADDRESS = "22.33.44.55";
     public static final String FAKE_GATEWAY = "11.22.33.44";
@@ -239,6 +241,10 @@ public class DcTrackerTest extends TelephonyTest {
 
         private String mFakeApn5Types = "dun";
 
+        private String mFakeApn8Types = "ims";
+
+        private String mFakeApn10Types = "default";
+
         private int mNetworkTypeBitmask = NETWORK_TYPE_LTE_BITMASK;
 
         private int mRowIdOffset = 0;
@@ -251,6 +257,14 @@ public class DcTrackerTest extends TelephonyTest {
             mFakeApn5Types = apnTypes;
         }
 
+        public void setFakeApn8Types(String apnTypes) {
+            mFakeApn8Types = apnTypes;
+        }
+
+        public void setFakeApn10Types(String apnTypes) {
+            mFakeApn10Types = apnTypes;
+        }
+
         public void setFakeApn1NetworkTypeBitmask(int bitmask) {
             mNetworkTypeBitmask = bitmask;
         }
@@ -259,12 +273,13 @@ public class DcTrackerTest extends TelephonyTest {
             mRowIdOffset = rowIdOffset;
         }
 
-        public void setFakePreferredApn(Object[] fakeApn) {
-            mPreferredApn = fakeApn;
+        public void setFakePreferredApn(String apn) {
+            mPreferredApn = getFakeApns().get(apn);
         }
 
-        public Object[] getFakeApn1() {
-            return new Object[]{
+        public HashMap<String, Object[]> getFakeApns() {
+            HashMap<String, Object[]> map = new HashMap<>();
+            map.put(FAKE_APN1, new Object[]{
                     2163 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "sp-mode",              // name
@@ -295,11 +310,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn2() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN2, new Object[]{
                     2164 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "mopera U",             // name
@@ -330,11 +342,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn3() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN3, new Object[]{
                     2165 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "b-mobile for Nexus",   // name
@@ -365,11 +374,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn4() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN4, new Object[]{
                     2166 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "sp-mode ehrpd",        // name
@@ -400,11 +406,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn5() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN5, new Object[]{
                     2167 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "b-mobile for Nexus",   // name
@@ -435,11 +438,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn6() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN6, new Object[]{
                     2168 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "sp-mode",              // name
@@ -470,11 +470,8 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn7() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN7, new Object[]{
                     2169 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "sp-mode",              // name
@@ -505,11 +502,8 @@ public class DcTrackerTest extends TelephonyTest {
                     1,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn8() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN8, new Object[]{
                     2170 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "IMS",                  // name
@@ -522,7 +516,7 @@ public class DcTrackerTest extends TelephonyTest {
                     "",                     // user
                     "",                     // password
                     -1,                     // authtype
-                    "ims",                  // types
+                    mFakeApn8Types,         // types
                     "IP",                   // protocol
                     "IP",                   // roaming_protocol
                     1,                      // carrier_enabled
@@ -540,11 +534,8 @@ public class DcTrackerTest extends TelephonyTest {
                     -1,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
-        }
-
-        public Object[] getFakeApn9() {
-            return new Object[]{
+            });
+            map.put(FAKE_APN9, new Object[]{
                     2171 + mRowIdOffset,    // id
                     FAKE_PLMN,              // numeric
                     "sp-mode nr",           // name
@@ -575,7 +566,40 @@ public class DcTrackerTest extends TelephonyTest {
                     0,                      // apn_set_id
                     -1,                     // carrier_id
                     -1                      // skip_464xlat
-            };
+            });
+            map.put(FAKE_APN10, new Object[]{
+                    2172 + mRowIdOffset,    // id
+                    FAKE_PLMN,              // numeric
+                    "sp-mode",              // name
+                    FAKE_APN10,              // apn
+                    "",                     // proxy
+                    "",                     // port
+                    "",                     // mmsc
+                    "",                     // mmsproxy
+                    "",                     // mmsport
+                    "",                     // user
+                    "",                     // password
+                    -1,                     // authtype
+                    mFakeApn10Types,         // types
+                    "IPV4V6",               // protocol
+                    "IPV4V6",               // roaming_protocol
+                    1,                      // carrier_enabled
+                    ServiceState.RIL_RADIO_TECHNOLOGY_LTE, // bearer
+                    0,                      // bearer_bitmask
+                    0,                      // profile_id
+                    1,                      // modem_cognitive
+                    0,                      // max_conns
+                    0,                      // wait_time
+                    0,                      // max_conns_time
+                    0,                      // mtu
+                    "",                     // mvno_type
+                    "",                     // mnvo_match_data
+                    NETWORK_TYPE_LTE_BITMASK,  // network_type_bitmask
+                    1,                      // apn_set_id
+                    -1,                     // carrier_id
+                    -1                      // skip_464xlat
+            });
+            return map;
         }
 
         @Override
@@ -597,15 +621,17 @@ public class DcTrackerTest extends TelephonyTest {
 
                     logd("Query '" + FAKE_PLMN + "' APN settings");
                     MatrixCursor mc = new MatrixCursor(FAKE_APN_COLUMNS);
-                    mc.addRow(getFakeApn1());
-                    mc.addRow(getFakeApn2());
-                    mc.addRow(getFakeApn3());
-                    mc.addRow(getFakeApn4());
-                    mc.addRow(getFakeApn5());
-                    mc.addRow(getFakeApn6());
-                    mc.addRow(getFakeApn7());
-                    mc.addRow(getFakeApn8());
-                    mc.addRow(getFakeApn9());
+                    HashMap<String, Object[]> map = getFakeApns();
+                    mc.addRow(map.get(FAKE_APN1));
+                    mc.addRow(map.get(FAKE_APN2));
+                    mc.addRow(map.get(FAKE_APN3));
+                    mc.addRow(map.get(FAKE_APN4));
+                    mc.addRow(map.get(FAKE_APN5));
+                    mc.addRow(map.get(FAKE_APN6));
+                    mc.addRow(map.get(FAKE_APN7));
+                    mc.addRow(map.get(FAKE_APN8));
+                    mc.addRow(map.get(FAKE_APN9));
+                    mc.addRow(map.get(FAKE_APN10));
 
                     return mc;
                 }
@@ -1644,13 +1670,8 @@ public class DcTrackerTest extends TelephonyTest {
         mApnSettingContentProvider.setFakeApn1Types("default,dun");
         mApnSettingContentProvider.setFakeApn5Types("default,dun");
 
-        // Set prefer apn set id.
-        ContentResolver cr = mContext.getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(Telephony.Carriers.APN_SET_ID, 0);
-        cr.update(PREFERAPN_URI, values, null, null);
-        // Set FAKE_APN5 as the preferred APN.
-        mApnSettingContentProvider.setFakePreferredApn(mApnSettingContentProvider.getFakeApn5());
+        // Set preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN5, 0);
 
         sendInitializationEvents();
 
@@ -2609,5 +2630,214 @@ public class DcTrackerTest extends TelephonyTest {
             fail();
         }
         waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+    }
+
+    /**
+     * Test that the connection shared with DUN and default is deactivated when turn off tethering
+     * if the following conditions are true:
+     * - The DUN APN is NOT the preferred APN.
+     * - The device supports single PDN.
+     */
+    @Test
+    public void testDisconnectSharedDunConnectionWhenOtherApnAndSinglePdn() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Set default as a support APN type of FAKE_APN5
+        mApnSettingContentProvider.setFakeApn5Types("default,dun");
+        setSingleDcAllowed();
+
+        // Connect DUN APN and share with default type.
+        setSharedDunConnection(FAKE_APN5, 0);
+
+        // Set preferred APN to an other APN.
+        setPreferredApn(FAKE_APN1, 0);
+
+        clearInvocations(mSimulatedCommandsVerifier);
+        mDct.disableApn(ApnSetting.TYPE_DUN, DcTracker.RELEASE_TYPE_DETACH);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    /**
+     * Test that the connection shared with DUN and default is NOT deactivated when turn off
+     * tethering if the following conditions are true:
+     * - The DUN APN is the preferred APN.
+     * - The device supports single PDN.
+     */
+    @Test
+    public void testNotDisconnectSharedDunConnectionWhenPreferredApnAndSinglePdn() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Set default as a support APN type of FAKE_APN5
+        mApnSettingContentProvider.setFakeApn5Types("default,dun");
+        setSingleDcAllowed();
+
+        // Connect DUN APN and share with default type.
+        setSharedDunConnection(FAKE_APN5, 0);
+
+        // Does not change preferred APN.
+        mDct.disableApn(ApnSetting.TYPE_DUN, DcTracker.RELEASE_TYPE_DETACH);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(0)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    /**
+     * Test that the connection shared with DUN and default is NOT deactivated when turn off
+     * tethering if the device supports multi PDN.
+     */
+    @Test
+    public void testNotDisconnectSharedDunConnectionWhenMultiPdn() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Set default as a support APN type of FAKE_APN5
+        mApnSettingContentProvider.setFakeApn5Types("default,dun");
+
+        // Connect DUN APN and share with default type.
+        setSharedDunConnection(FAKE_APN5, 0);
+
+        mDct.disableApn(ApnSetting.TYPE_DUN, DcTracker.RELEASE_TYPE_DETACH);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(0)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    /**
+     * Test that the connection shared with some APN types is deactivated if SET ID of the current
+     * connected APN is different from the new preferred APN's one.
+     */
+    @Test
+    public void testDisconnectSharedConnectionWhenDifferentApnSetId() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Change a support APN type of FAKE_APN1
+        mApnSettingContentProvider.setFakeApn1Types("default,mms");
+        // Set preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN1, 0);
+
+        sendInitializationEvents();
+
+        // Connect Default APN and share with MMS type.
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        mDct.enableApn(ApnSetting.TYPE_MMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        // Change preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN7, 1);
+
+        clearInvocations(mSimulatedCommandsVerifier);
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_APN_CHANGED, null));
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(1)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    /**
+     * Test that the connection shared with some APN  types is NOT deactivated if the SET ID of the
+     * current connected APN is same as the new preferred APN's one.
+     */
+    @Test
+    public void testNotDisconnectSharedConnectionWhenSameApnSetId() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Change a support APN type of FAKE_APN10
+        mApnSettingContentProvider.setFakeApn10Types("default,mms");
+        // Set preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN10, 1);
+
+        sendInitializationEvents();
+
+        // Connect Default APN and share with MMS type.
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        mDct.enableApn(ApnSetting.TYPE_MMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        // Change preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN7, 1);
+
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_APN_CHANGED, null));
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(0)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    /**
+     * Test that the connection shared with IMS and any type is NOT deactivated if the SET ID of the
+     * current connected APN is MATCH_ALL_APN_SET_ID.
+     */
+    @Test
+    public void testNotDisconnectSharedConnectionWhenAllMatchApnSetId() {
+        doReturn(FAKE_PLMN).when(mPhone).getOperatorNumeric();
+        // Change a support APN type of FAKE_APN8
+        mApnSettingContentProvider.setFakeApn8Types("default,ims");
+        // Set preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN8, -1);
+
+        sendInitializationEvents();
+
+        // Connect IMS APN and share with Default type.
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        // Change preferred APN and prefer apn set id.
+        setPreferredApn(FAKE_APN1, 0);
+
+        mDct.disableApn(ApnSetting.TYPE_DEFAULT, DcTracker.RELEASE_TYPE_DETACH);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Data connection is running on a different thread. Have to wait.
+        waitForMs(200);
+
+        verify(mSimulatedCommandsVerifier, times(0)).deactivateDataCall(
+                eq(DataService.REQUEST_REASON_NORMAL), anyInt(), any(Message.class));
+    }
+
+    private void setSingleDcAllowed() {
+        mBundle.putIntArray(CarrierConfigManager.KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY,
+                new int[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
+    }
+
+    private void setSharedDunConnection(String dunApn, int setId) {
+        // Set preferred APN to DUN APN
+        setPreferredApn(dunApn, setId);
+
+        sendInitializationEvents();
+
+        // Connect DUN APN and share with default type.
+        mDct.enableApn(ApnSetting.TYPE_DUN, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, atLeastOnce()).setupDataCall(
+                anyInt(), dpCaptor.capture(), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), any(), anyInt(), any(), any(), anyBoolean(),
+                any(Message.class));
+
+        DataProfile dp = dpCaptor.getValue();
+        assertEquals(dp.getApn(), dunApn);
+    }
+
+    private void setPreferredApn(String apn, int setId) {
+        ContentResolver cr = mContext.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(Telephony.Carriers.APN_SET_ID, setId);
+        cr.update(PREFERAPN_URI, values, null, null);
+        mApnSettingContentProvider.setFakePreferredApn(apn);
     }
 }
