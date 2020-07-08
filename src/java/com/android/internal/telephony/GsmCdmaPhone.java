@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.CommandException.Error.GENERIC_FAILURE;
+import static com.android.internal.telephony.CommandException.Error.SIM_BUSY;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_DISABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ERASURE;
@@ -93,6 +95,7 @@ import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
+import com.android.internal.telephony.metrics.VoiceCallSessionStats;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -164,6 +167,12 @@ public class GsmCdmaPhone extends Phone {
     // string to define how the carrier specifies its own ota sp number
     private String mCarrierOtaSpNumSchema;
     private Boolean mUiccApplicationsEnabled = null;
+    // keeps track of when we have triggered an emergency call due to the ril.test.emergencynumber
+    // param being set and we should generate a simulated exit from the modem upon exit of ECbM.
+    private boolean mIsTestingEmergencyCallbackMode = false;
+    @VisibleForTesting
+    public static int ENABLE_UICC_APPS_MAX_RETRIES = 3;
+    private static final int REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS = 5000;
 
     // A runnable which is used to automatically exit from Ecm after a period of time.
     private Runnable mExitEcmRunnable = new Runnable() {
@@ -247,6 +256,7 @@ public class GsmCdmaPhone extends Phone {
 
         // phone type needs to be set before other initialization as other objects rely on it
         mPrecisePhoneType = precisePhoneType;
+        mVoiceCallSessionStats = new VoiceCallSessionStats(mPhoneId, this);
         initOnce(ci);
         initRatSpecific(precisePhoneType);
         // CarrierSignalAgent uses CarrierActionAgent in construction so it needs to be created
@@ -432,8 +442,19 @@ public class GsmCdmaPhone extends Phone {
                 tm.setSimOperatorNumericForPhone(mPhoneId, operatorNumeric);
 
                 SubscriptionController.getInstance().setMccMnc(operatorNumeric, getSubId());
+
                 // Sets iso country property by retrieving from build-time system property
-                setIsoCountryProperty(operatorNumeric);
+                String iso = "";
+                try {
+                    iso = MccTable.countryCodeForMcc(operatorNumeric.substring(0, 3));
+                } catch (StringIndexOutOfBoundsException ex) {
+                    Rlog.e(LOG_TAG, "init: countryCodeForMcc error", ex);
+                }
+
+                logd("init: set 'gsm.sim.operator.iso-country' to iso=" + iso);
+                tm.setSimCountryIsoForPhone(mPhoneId, iso);
+                SubscriptionController.getInstance().setCountryIso(iso, getSubId());
+
                 // Updates MCC MNC device configuration information
                 logd("update mccmnc=" + operatorNumeric);
                 MccTable.updateMccMncConfiguration(mContext, operatorNumeric);
@@ -441,31 +462,6 @@ public class GsmCdmaPhone extends Phone {
 
             // Sets current entry in the telephony carrier table
             updateCurrentCarrierInProvider(operatorNumeric);
-        }
-    }
-
-    //CDMA
-    /**
-     * Sets PROPERTY_ICC_OPERATOR_ISO_COUNTRY property
-     *
-     */
-    private void setIsoCountryProperty(String operatorNumeric) {
-        TelephonyManager tm = TelephonyManager.from(mContext);
-        if (TextUtils.isEmpty(operatorNumeric)) {
-            logd("setIsoCountryProperty: clear 'gsm.sim.operator.iso-country'");
-            tm.setSimCountryIsoForPhone(mPhoneId, "");
-            SubscriptionController.getInstance().setCountryIso("", getSubId());
-        } else {
-            String iso = "";
-            try {
-                iso = MccTable.countryCodeForMcc(operatorNumeric.substring(0, 3));
-            } catch (StringIndexOutOfBoundsException ex) {
-                Rlog.e(LOG_TAG, "setIsoCountryProperty: countryCodeForMcc error", ex);
-            }
-
-            logd("setIsoCountryProperty: set 'gsm.sim.operator.iso-country' to iso=" + iso);
-            tm.setSimCountryIsoForPhone(mPhoneId, iso);
-            SubscriptionController.getInstance().setCountryIso(iso, getSubId());
         }
     }
 
@@ -1415,6 +1411,7 @@ public class GsmCdmaPhone extends Phone {
         if (isDialedNumberSwapped && isEmergency) {
             // Triggers ECM when CS call ends only for test emergency calls using
             // ril.test.emergencynumber.
+            mIsTestingEmergencyCallbackMode = true;
             mCi.testingEmergencyCall();
         }
         if (isPhoneTypeGsm()) {
@@ -3100,24 +3097,27 @@ public class GsmCdmaPhone extends Phone {
                 mUiccApplicationsEnabled = (Boolean) ar.result;
             // Intentional falling through.
             case EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED:
-                reapplyUiccAppsEnablementIfNeeded();
+                reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
                 break;
 
             case EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE: {
                 ar = (AsyncResult) msg.obj;
                 if (ar == null || ar.exception == null) return;
-                // TODO: b/146181737 don't throw exception and uncomment the retry below.
-                boolean expectedValue = (boolean) ar.userObj;
+                Pair<Boolean, Integer> userObject = (Pair) ar.userObj;
+                if (userObject == null) return;
+                boolean expectedValue = userObject.first;
+                int retries = userObject.second;
                 CommandException.Error error = ((CommandException) ar.exception).getCommandError();
-                throw new RuntimeException("Error received when re-applying uicc application"
+                loge("Error received when re-applying uicc application"
                         + " setting to " +  expectedValue + " on phone " + mPhoneId
-                        + " Error code: " + error);
-//                if (error == INTERNAL_ERR || error == SIM_BUSY) {
-//                    // Retry for certain errors, but not for others like RADIO_NOT_AVAILABLE or
-//                    // SIM_ABSENT, as they will trigger it whey they become available.
-//                    postDelayed(()->reapplyUiccAppsEnablementIfNeeded(), 1000);
-//                }
-//                break;
+                        + " Error code: " + error + " retry count left: " + retries);
+                if (retries > 0 && (error == GENERIC_FAILURE || error == SIM_BUSY)) {
+                    // Retry for certain errors, but not for others like RADIO_NOT_AVAILABLE or
+                    // SIM_ABSENT, as they will trigger it whey they become available.
+                    postDelayed(()->reapplyUiccAppsEnablementIfNeeded(retries - 1),
+                            REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS);
+                }
+                break;
             }
             default:
                 super.handleMessage(msg);
@@ -3217,7 +3217,7 @@ public class GsmCdmaPhone extends Phone {
             }
         }
 
-        reapplyUiccAppsEnablementIfNeeded();
+        reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
     }
 
     private void processIccRecordEvents(int eventCode) {
@@ -3473,7 +3473,15 @@ public class GsmCdmaPhone extends Phone {
             if (mWakeLock.isHeld()) {
                 mWakeLock.release();
             }
-            mCi.exitEmergencyCallbackMode(null);
+            Message msg = null;
+            if (mIsTestingEmergencyCallbackMode) {
+                // prevent duplicate exit messages from happening due to this message being handled
+                // as well as an UNSOL when the modem exits ECbM. Instead, only register for this
+                // message callback when this is a test and we will not be receiving the UNSOL from
+                // the modem.
+                msg = obtainMessage(EVENT_EXIT_EMERGENCY_CALLBACK_RESPONSE);
+            }
+            mCi.exitEmergencyCallbackMode(msg);
         }
     }
 
@@ -3513,8 +3521,9 @@ public class GsmCdmaPhone extends Phone {
         if (mEcmExitRespRegistrant != null) {
             mEcmExitRespRegistrant.notifyRegistrant(ar);
         }
-        // if exiting ecm success
-        if (ar.exception == null) {
+        // if exiting is successful or we are testing and the modem responded with an error upon
+        // exit, which may occur in some IRadio implementations.
+        if (ar.exception == null || mIsTestingEmergencyCallbackMode) {
             if (isInEcm()) {
                 setIsInEcm(false);
             }
@@ -3530,6 +3539,7 @@ public class GsmCdmaPhone extends Phone {
             mDataEnabledSettings.setInternalDataEnabled(true);
             notifyEmergencyCallRegistrants(false);
         }
+        mIsTestingEmergencyCallbackMode = false;
     }
 
     //CDMA
@@ -4400,7 +4410,7 @@ public class GsmCdmaPhone extends Phone {
         updateUiTtyMode(ttyMode);
     }
 
-    private void reapplyUiccAppsEnablementIfNeeded() {
+    private void reapplyUiccAppsEnablementIfNeeded(int retries) {
         UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
 
         // If no card is present or we don't have mUiccApplicationsEnabled yet, do nothing.
@@ -4422,7 +4432,8 @@ public class GsmCdmaPhone extends Phone {
         // configured state.
         if (expectedValue != mUiccApplicationsEnabled) {
             mCi.enableUiccApplications(expectedValue, Message.obtain(
-                    this, EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE, expectedValue));
+                    this, EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE,
+                    new Pair<Boolean, Integer>(expectedValue, retries)));
         }
     }
 

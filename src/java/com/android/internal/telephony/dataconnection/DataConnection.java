@@ -711,11 +711,26 @@ public class DataConnection extends StateMachine {
         // old modem backward compatibility).
         boolean isModemRoaming = mPhone.getServiceState().getDataRoamingFromRegistration();
 
+        // If the apn is NOT metered, we will allow data roaming regardless of the setting.
+        boolean isUnmeteredApnType = !ApnSettingUtils.isMeteredApnType(
+                cp.mApnContext.getApnTypeBitmask(), mPhone);
+
         // Set this flag to true if the user turns on data roaming. Or if we override the roaming
         // state in framework, we should set this flag to true as well so the modem will not reject
         // the data call setup (because the modem actually thinks the device is roaming).
         boolean allowRoaming = mPhone.getDataRoamingEnabled()
-                || (isModemRoaming && !mPhone.getServiceState().getDataRoaming());
+                || (isModemRoaming && (!mPhone.getServiceState().getDataRoaming()
+                || isUnmeteredApnType));
+
+        if (DBG) {
+            log("allowRoaming=" + allowRoaming
+                    + ", mPhone.getDataRoamingEnabled()=" + mPhone.getDataRoamingEnabled()
+                    + ", isModemRoaming=" + isModemRoaming
+                    + ", mPhone.getServiceState().getDataRoaming()="
+                    + mPhone.getServiceState().getDataRoaming()
+                    + ", isUnmeteredApnType=" + isUnmeteredApnType
+            );
+        }
 
         // Check if this data setup is a handover.
         LinkProperties linkProperties = null;
@@ -1295,15 +1310,13 @@ public class DataConnection extends StateMachine {
         }
 
         // If data is enabled, this data connection can't be for unmetered used only because
-        // everyone should be able to use it.
+        // everyone should be able to use it if:
+        // 1. Device is not roaming, or
+        // 2. Device is roaming and data roaming is turned on
         if (mPhone.getDataEnabledSettings().isDataEnabled()) {
-            return false;
-        }
-
-        // If the device is roaming and data roaming it turned on, then this data connection can't
-        // be for unmetered use only.
-        if (mDct.getDataRoamingEnabled() && mPhone.getServiceState().getDataRoaming()) {
-            return false;
+            if (!mPhone.getServiceState().getDataRoaming() || mDct.getDataRoamingEnabled()) {
+                return false;
+            }
         }
 
         // The data connection can only be unmetered used only if all attached APN contexts
@@ -2137,6 +2150,7 @@ public class DataConnection extends StateMachine {
             final NetworkAgentConfig.Builder configBuilder = new NetworkAgentConfig.Builder();
             configBuilder.setLegacyType(ConnectivityManager.TYPE_MOBILE);
             configBuilder.setLegacyTypeName(NETWORK_TYPE);
+            configBuilder.setLegacyExtraInfo(mApnSetting.getApnName());
             final CarrierSignalAgent carrierSignalAgent = mPhone.getCarrierSignalAgent();
             if (carrierSignalAgent.hasRegisteredReceivers(TelephonyManager
                     .ACTION_CARRIER_SIGNAL_REDIRECTED)) {

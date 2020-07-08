@@ -300,6 +300,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             // This is a hack to delay DIAL so that it is sent out to RIL only after
             // EVENT_SWITCH_RESULT is received. We've seen failures when adding a new call to
             // multi-way conference calls due to DIAL being sent out before SWITCH is processed
+            // TODO: setup duration metrics won't capture this
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -328,7 +329,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         }
         mHangupPendingMO = false;
         mMetrics.writeRilDial(mPhone.getPhoneId(), mPendingMO, clirMode, uusInfo);
-
+        mPhone.getVoiceCallSessionStats().onRilDial(mPendingMO);
 
         if ( mPendingMO.getAddress() == null || mPendingMO.getAddress().length() == 0
                 || mPendingMO.getAddress().indexOf(PhoneNumberUtils.WILD) >= 0) {
@@ -551,6 +552,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             Rlog.i("phone", "acceptCall: incoming...");
             // Always unmute when answering a new call
             setMute(false);
+            mPhone.getVoiceCallSessionStats().onRilAcceptCall(mRingingCall.getConnections());
             mCi.acceptCall(obtainCompleteMessage());
         } else if (mRingingCall.getState() == GsmCdmaCall.State.WAITING) {
             if (isPhoneTypeGsm()) {
@@ -875,9 +877,12 @@ public class GsmCdmaCallTracker extends CallTracker {
                     }
 
                     mConnections[i] = new GsmCdmaConnection(mPhone, dc, this, i);
+                    log("New connection is not mPendingMO. Creating new GsmCdmaConnection,"
+                            + " objId=" + System.identityHashCode(mConnections[i]));
 
                     Connection hoConnection = getHoConnection(dc);
                     if (hoConnection != null) {
+                        log("Handover connection found.");
                         // Single Radio Voice Call Continuity (SRVCC) completed
                         mConnections[i].migrateFrom(hoConnection);
                         // Updating connect time for silent redial cases (ex: Calls are transferred
@@ -886,6 +891,8 @@ public class GsmCdmaCallTracker extends CallTracker {
                                 hoConnection.mPreHandoverState != GsmCdmaCall.State.HOLDING &&
                                 dc.state == DriverCall.State.ACTIVE) {
                             mConnections[i].onConnectedInOrOut();
+                        } else {
+                            mConnections[i].onConnectedConnectionMigrated();
                         }
 
                         mHandoverConnections.remove(hoConnection);
@@ -906,6 +913,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                         mPhone.notifyHandoverStateChanged(mConnections[i]);
                     } else {
                         // find if the MT call is a new ring or unknown connection
+                        log("New connection is not mPendingMO nor a pending handover.");
                         newRinging = checkMtFindNewRinging(dc,i);
                         if (newRinging == null) {
                             unknownConnectionAppeared = true;
@@ -1084,6 +1092,7 @@ public class GsmCdmaCallTracker extends CallTracker {
         if (locallyDisconnectedConnections.size() > 0) {
             mMetrics.writeRilCallList(mPhone.getPhoneId(), locallyDisconnectedConnections,
                     getNetworkCountryIso());
+            mPhone.getVoiceCallSessionStats().onRilCallListChanged(locallyDisconnectedConnections);
         }
 
         /* Disconnect any pending Handover connections */
@@ -1155,6 +1164,7 @@ public class GsmCdmaCallTracker extends CallTracker {
             if (conn != null) activeConnections.add(conn);
         }
         mMetrics.writeRilCallList(mPhone.getPhoneId(), activeConnections, getNetworkCountryIso());
+        mPhone.getVoiceCallSessionStats().onRilCallListChanged(activeConnections);
     }
 
     private void handleRadioNotAvailable() {
@@ -1574,6 +1584,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                 mPhone.notifyPreciseCallStateChanged();
                 mMetrics.writeRilCallList(mPhone.getPhoneId(), mDroppedDuringPoll,
                         getNetworkCountryIso());
+                mPhone.getVoiceCallSessionStats().onRilCallListChanged(mDroppedDuringPoll);
                 mDroppedDuringPoll.clear();
             break;
 

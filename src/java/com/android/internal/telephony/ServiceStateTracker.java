@@ -1619,12 +1619,12 @@ public class ServiceStateTracker extends Handler {
                     mPhone.notifyPhysicalChannelConfiguration(list);
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged = false;
-                    if (updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS)) {
-                        mNrFrequencyChangedRegistrants.notifyRegistrants();
-                        hasChanged = true;
-                    }
                     if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
                         mNrStateChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
+                    if (updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrFrequencyChangedRegistrants.notifyRegistrants();
                         hasChanged = true;
                     }
                     hasChanged |= RatRatcheter
@@ -1635,6 +1635,7 @@ public class ServiceStateTracker extends Handler {
                         mPhone.notifyServiceStateChanged(mSS);
                         TelephonyMetrics.getInstance().writeServiceStateChanged(
                                 mPhone.getPhoneId(), mSS);
+                        mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
                     }
                 }
                 break;
@@ -2218,6 +2219,7 @@ public class ServiceStateTracker extends Handler {
                 if (nrHasChanged) {
                     TelephonyMetrics.getInstance().writeServiceStateChanged(
                             mPhone.getPhoneId(), mSS);
+                    mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
                 }
 
                 if (mPhone.isPhoneTypeGsm()) {
@@ -2780,6 +2782,13 @@ public class ServiceStateTracker extends Handler {
             } else if (!TextUtils.isEmpty(plmn) && !TextUtils.isEmpty(wfcVoiceSpnFormat)) {
                 // Show PLMN + Wi-Fi Calling if there is no valid SPN in the above case
                 String originalPlmn = plmn.trim();
+
+                PersistableBundle config = getCarrierConfig();
+                if (mIccRecords != null && config.getBoolean(
+                        CarrierConfigManager.KEY_WFC_CARRIER_NAME_OVERRIDE_BY_PNN_BOOL)) {
+                    originalPlmn = mIccRecords.getPnnHomeName();
+                }
+
                 plmn = String.format(wfcVoiceSpnFormat, originalPlmn);
             } else if (mSS.getState() == ServiceState.STATE_POWER_OFF
                     || (showPlmn && TextUtils.equals(spn, plmn))) {
@@ -3203,6 +3212,10 @@ public class ServiceStateTracker extends Handler {
                 mTransportManager.getAvailableTransports().length);
         boolean anyDataRegChanged = false;
         boolean anyDataRatChanged = false;
+        boolean hasAlphaRawChanged =
+                mSS.getOperatorAlphaLongRaw() != mNewSS.getOperatorAlphaLongRaw()
+                        || mSS.getOperatorAlphaShortRaw() != mNewSS.getOperatorAlphaShortRaw();
+
         for (int transport : mTransportManager.getAvailableTransports()) {
             NetworkRegistrationInfo oldNrs = mSS.getNetworkRegistrationInfo(
                     NetworkRegistrationInfo.DOMAIN_PS, transport);
@@ -3232,7 +3245,10 @@ public class ServiceStateTracker extends Handler {
             boolean isNewCA = newNrs!= null ? (newNrs. getDataSpecificInfo() != null
                     ? newNrs. getDataSpecificInfo().isUsingCarrierAggregation() : false) : false;
 
-            hasRilDataRadioTechnologyChanged.put(transport, oldRAT != newRAT || isOldCA != isNewCA);
+            // If the carrier enable KEY_SHOW_CARRIER_DATA_ICON_PATTERN_STRING and the operator name
+            // match this pattern, the data rat display LteAdvanced indicator.
+            hasRilDataRadioTechnologyChanged.put(transport,
+                    oldRAT != newRAT || isOldCA != isNewCA || hasAlphaRawChanged);
             if (oldRAT != newRAT) {
                 anyDataRatChanged = true;
             }
@@ -3489,6 +3505,7 @@ public class ServiceStateTracker extends Handler {
 
         if (hasChanged || hasNrStateChanged) {
             TelephonyMetrics.getInstance().writeServiceStateChanged(mPhone.getPhoneId(), mSS);
+            mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
         }
 
         boolean shouldLogAttachedChange = false;
@@ -5039,16 +5056,19 @@ public class ServiceStateTracker extends Handler {
         List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
                 .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
                         null);
-        for (SubscriptionInfo info : subInfoList) {
-            // If we have an active opportunistic subscription whose data is IN_SERVICE, we needs
-            // to get signal strength to decide data switching threshold. In this case, we poll
-            // latest signal strength from modem.
-            if (info.isOpportunistic()) {
-                TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
-                        .createForSubscriptionId(info.getSubscriptionId());
-                ServiceState ss = tm.getServiceState();
-                if (ss != null && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
-                    return true;
+        if (!ArrayUtils.isEmpty(subInfoList)) {
+            for (SubscriptionInfo info : subInfoList) {
+                // If we have an active opportunistic subscription whose data is IN_SERVICE,
+                // we need to get signal strength to decide data switching threshold. In this case,
+                // we poll latest signal strength from modem.
+                if (info.isOpportunistic()) {
+                    TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                            .createForSubscriptionId(info.getSubscriptionId());
+                    ServiceState ss = tm.getServiceState();
+                    if (ss != null
+                            && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                        return true;
+                    }
                 }
             }
         }
@@ -5629,6 +5649,7 @@ public class ServiceStateTracker extends Handler {
             if (networkRegistrationInfos.get(i) != null) {
                 updateOperatorNameForCellIdentity(
                         networkRegistrationInfos.get(i).getCellIdentity());
+                servicestate.addNetworkRegistrationInfo(networkRegistrationInfos.get(i));
             }
         }
     }
@@ -5738,10 +5759,12 @@ public class ServiceStateTracker extends Handler {
     public Set<Integer> getNrContextIds() {
         Set<Integer> idSet = new HashSet<>();
 
-        for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
-            if (isNrPhysicalChannelConfig(config)) {
-                for (int id : config.getContextIds()) {
-                    idSet.add(id);
+        if (!ArrayUtils.isEmpty(mLastPhysicalChannelConfigList)) {
+            for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
+                if (isNrPhysicalChannelConfig(config)) {
+                    for (int id : config.getContextIds()) {
+                        idSet.add(id);
+                    }
                 }
             }
         }

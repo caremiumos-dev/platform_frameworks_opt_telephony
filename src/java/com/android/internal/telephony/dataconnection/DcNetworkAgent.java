@@ -93,6 +93,7 @@ public class DcNetworkAgent extends NetworkAgent {
         mTransportType = transportType;
         mDataConnection = dc;
         mNetworkInfo = new NetworkInfo(ni);
+        setLegacyExtraInfo(ni.getExtraInfo());
         // TODO: Remove after b/151487565 is fixed.
         sNetworkAgents.add(this);
         checkRedundantIms();
@@ -237,9 +238,9 @@ public class DcNetworkAgent extends NetworkAgent {
                 // only log metrics for DataConnection with NET_CAPABILITY_INTERNET
                 if (mNetworkCapabilities == null
                         || networkCapabilities.hasCapability(
-                                NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-                                        != mNetworkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
+                                NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED)
+                        != mNetworkCapabilities.hasCapability(
+                                NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED)) {
                     TelephonyMetrics.getInstance().writeNetworkCapabilitiesChangedEvent(
                             mPhone.getPhoneId(), networkCapabilities);
                 }

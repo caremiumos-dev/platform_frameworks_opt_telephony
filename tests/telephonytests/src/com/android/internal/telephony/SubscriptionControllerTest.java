@@ -17,6 +17,8 @@ package com.android.internal.telephony;
 
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION;
 
+import static com.android.internal.telephony.uicc.IccCardStatus.CardState.CARDSTATE_PRESENT;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -24,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doReturn;
@@ -36,6 +40,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -47,6 +52,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import androidx.test.filters.FlakyTest;
 
+import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccSlot;
 
@@ -79,6 +85,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
     private MultiSimSettingController mMultiSimSettingControllerMock;
     @Mock
     private ISetOpportunisticDataCallback mSetOpptDataCallback;
+    @Mock
+    private Handler mHandler;
 
     private static final String MAC_ADDRESS_PREFIX = "mac_";
     private static final String DISPLAY_NAME_PREFIX = "my_phone_";
@@ -1067,7 +1075,11 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
 
     private UiccSlotInfo getFakeUiccSlotInfo(boolean active, int logicalSlotIndex) {
-        return new UiccSlotInfo(active, false, "fake card Id",
+        return getFakeUiccSlotInfo(active, logicalSlotIndex, "fake card Id");
+    }
+
+    private UiccSlotInfo getFakeUiccSlotInfo(boolean active, int logicalSlotIndex, String cardId) {
+        return new UiccSlotInfo(active, false, cardId,
                 UiccSlotInfo.CARD_STATE_INFO_PRESENT, logicalSlotIndex, true, true);
     }
 
@@ -1097,6 +1109,36 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testGetAvailableSubscriptionList_withTrailingF() throws Exception {
+        // TODO b/123300875 slot index 1 is not expected to be valid
+        mSubscriptionControllerUT.addSubInfoRecord("123", 1);   // sub 1
+        mSubscriptionControllerUT.addSubInfoRecord("456", 0);   // sub 2
+
+        // Remove "123" from active sim list but have it inserted.
+        UiccSlot[] uiccSlots = {mUiccSlot};
+        IccCardStatus.CardState cardState = CARDSTATE_PRESENT;
+        doReturn(uiccSlots).when(mUiccController).getUiccSlots();
+        doReturn(cardState).when(mUiccSlot).getCardState();
+        // IccId ends with a 'F' which should be ignored and taking into account.
+        doReturn("123F").when(mUiccSlot).getIccId();
+        mSubscriptionControllerUT.clearSubInfoRecord(1);
+
+        // Active sub list should return 1 now.
+        List<SubscriptionInfo> infoList = mSubscriptionControllerUT
+                .getActiveSubscriptionInfoList(mCallingPackage, mCallingFeature);
+        assertEquals(1, infoList.size());
+        assertEquals("456", infoList.get(0).getIccId());
+
+        // Available sub list should still return two.
+        infoList = mSubscriptionControllerUT
+                .getAvailableSubscriptionInfoList(mCallingPackage, mCallingFeature);
+        assertEquals(2, infoList.size());
+        assertEquals("123", infoList.get(0).getIccId());
+        assertEquals("456", infoList.get(1).getIccId());
+    }
+
+    @Test
+    @SmallTest
     public void testSetPreferredDataSubscriptionId_phoneSwitcherNotInitialized() throws Exception {
         replaceInstance(PhoneSwitcher.class, "sPhoneSwitcher", null, null);
 
@@ -1111,5 +1153,56 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         assertEquals(SubscriptionManager.DEFAULT_SUBSCRIPTION_ID,
                 mSubscriptionControllerUT.getPreferredDataSubscriptionId());
+    }
+
+    @Test
+    public void testSetSubscriptionEnabled_disableActivePsim_cardIdWithTrailingF() {
+        String iccId = "123F";
+        mSubscriptionControllerUT.addSubInfoRecord(iccId, 0);
+        mSubscriptionControllerUT.registerForUiccAppsEnabled(mHandler, 0, null, false);
+        UiccSlotInfo slot = getFakeUiccSlotInfo(true, 0, iccId + "FF");
+        UiccSlotInfo[] uiccSlotInfos = {slot};
+        doReturn(uiccSlotInfos).when(mTelephonyManager).getUiccSlotsInfo();
+
+        mSubscriptionControllerUT.setSubscriptionEnabled(false, 1);
+        verify(mHandler).sendMessageAtTime(any(), anyLong());
+        assertFalse(mSubscriptionControllerUT.getActiveSubscriptionInfo(
+                1, mContext.getOpPackageName(), null).areUiccApplicationsEnabled());
+    }
+
+
+    @Test
+    @SmallTest
+    public void testGetAvailableSubscriptionList() throws Exception {
+        // TODO b/123300875 slot index 1 is not expected to be valid
+        mSubscriptionControllerUT.addSubInfoRecord("123", 1);   // sub 1
+        mSubscriptionControllerUT.addSubInfoRecord("456", 0);   // sub 2
+
+        List<SubscriptionInfo> infoList = mSubscriptionControllerUT
+                .getAvailableSubscriptionInfoList(mCallingPackage, mCallingFeature);
+        assertEquals(2, infoList.size());
+        assertEquals("456", infoList.get(0).getIccId());
+        assertEquals("123", infoList.get(1).getIccId());
+
+        // Remove "123" from active sim list but have it inserted.
+        UiccSlot[] uiccSlots = {mUiccSlot};
+        IccCardStatus.CardState cardState = CARDSTATE_PRESENT;
+        doReturn(uiccSlots).when(mUiccController).getUiccSlots();
+        doReturn(cardState).when(mUiccSlot).getCardState();
+        doReturn("123").when(mUiccSlot).getIccId();
+        mSubscriptionControllerUT.clearSubInfoRecord(1);
+
+        // Active sub list should return 1 now.
+        infoList = mSubscriptionControllerUT
+                .getActiveSubscriptionInfoList(mCallingPackage, mCallingFeature);
+        assertEquals(1, infoList.size());
+        assertEquals("456", infoList.get(0).getIccId());
+
+        // Available sub list should still return two.
+        infoList = mSubscriptionControllerUT
+                .getAvailableSubscriptionInfoList(mCallingPackage, mCallingFeature);
+        assertEquals(2, infoList.size());
+        assertEquals("123", infoList.get(0).getIccId());
+        assertEquals("456", infoList.get(1).getIccId());
     }
 }
