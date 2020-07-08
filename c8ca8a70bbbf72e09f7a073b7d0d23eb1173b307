@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "685fe80b_13726cb8",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-08T01:43:01Z",
+      "side": 1,
+      "message": "It is only for SEND_STATUS_RETRY_ON_CARRIER_NETWORK.",
+      "parentUuid": "e6ce388f_c633a518",
+      "revId": "c8ca8a70bbbf72e09f7a073b7d0d23eb1173b307",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9455e4e6_4cec3b2c",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "2b7b3359_58212c7c",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-08T01:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9455e4e6_4cec3b2c",
+      "range": {
+        "startLine": 659,
+        "startChar": 41,
+        "endLine": 659,
+        "endChar": 46
+      },
+      "revId": "c8ca8a70bbbf72e09f7a073b7d0d23eb1173b307",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc9297d2_e47ed770",
         "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "c8ca8a70bbbf72e09f7a073b7d0d23eb1173b307",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "395a79c0_4f3b496b",
+        "filename": "src/java/com/android/internal/telephony/SMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-08T01:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc9297d2_e47ed770",
+      "revId": "c8ca8a70bbbf72e09f7a073b7d0d23eb1173b307",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
