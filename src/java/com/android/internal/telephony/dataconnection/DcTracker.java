@@ -1751,15 +1751,40 @@ public class DcTracker extends Handler {
                 if (dataConnection != null) {
                     if (apnContext.getState() != DctConstants.State.DISCONNECTING) {
                         boolean disconnectAll = false;
-                        if (ApnSetting.TYPE_DUN_STRING.equals(apnContext.getApnType())
-                                && ServiceState.isCdma(getDataRat())) {
-                            if (DBG) {
-                                log("cleanUpConnectionInternal: disconnectAll DUN connection");
+                        ApnSetting apnSetting = dataConnection.getApnSetting();
+                        if (ApnSetting.TYPE_DUN_STRING.equals(apnContext.getApnType())) {
+                            if (ServiceState.isCdma(getDataRat())) {
+                                if (DBG) {
+                                    log("cleanUpConnectionInternal: disconnectAll CDMA DUN"
+                                            + " connection");
+                                }
+                                // For CDMA DUN, we need to tear it down immediately. A new data
+                                // connection will be reestablished with correct profile id.
+                                disconnectAll = true;
+                            } else if (isOnlySingleDcAllowed(getDataRat()) && apnSetting != null
+                                    && !apnSetting.equals(getPreferredApn())) {
+                                if (DBG) {
+                                    log("cleanUpConnectionInternal: disconnectAll single PDN DUN"
+                                            + " connection");
+                                }
+                                // For single PDN DUN, we need to tear it down immediately. A new
+                                // data connection will be reestablished with correct profile id.
+                                disconnectAll = true;
                             }
-                            // For CDMA DUN, we need to tear it down immediately. A new data
-                            // connection will be reestablished with correct profile id.
-                            disconnectAll = true;
                         }
+
+                        if (apnSetting != null) {
+                            int apnSetId = apnSetting.getApnSetId();
+                            if (apnSetId != Telephony.Carriers.MATCH_ALL_APN_SET_ID
+                                    && apnSetId != getPreferredApnSetId()) {
+                                if (DBG) {
+                                    log("cleanUpConnectionInternal: disconnectAll connection not"
+                                            + " associated with APN_SET_ID of preferred APN");
+                                }
+                                disconnectAll = true;
+                            }
+                        }
+
                         final int generation = apnContext.getConnectionGeneration();
                         str = "cleanUpConnectionInternal: tearing down"
                                 + (disconnectAll ? " all" : "") + " using gen#" + generation;
