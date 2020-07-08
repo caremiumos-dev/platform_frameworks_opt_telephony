@@ -34,6 +34,23 @@
       "revId": "c9eacb1c27c665ee1fdee13270fd9fe527df9b34",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc928f86_275d5e65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1608205
+      },
+      "writtenOn": "2020-07-08T23:36:17Z",
+      "side": 1,
+      "message": "The code below may cause problems in Verizon home network.\nhttp://aosp.opersys.com/xref/android-10.0.0_r39/xref/packages/apps/CarrierConfig/assets/carrier_config_carrierid_1839_Verizon-Wireless.xml#107\n\nIt was found while reviewing R OS changes, and it is possible for problems to occur, so it is shared.",
+      "revId": "c9eacb1c27c665ee1fdee13270fd9fe527df9b34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
