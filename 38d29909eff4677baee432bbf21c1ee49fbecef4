@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abb11b8d_8adde766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-09T23:53:04Z",
+      "side": 1,
+      "message": "I don\u0027t think this really makes a difference because this field is a no-op. According to the hal API, the only valid values are the 2 values in SmsAcknowledgeFailCause, and this field is used only in case of success \u003d\u003d false. Let me know if you feel this change is still needed.",
+      "revId": "38d29909eff4677baee432bbf21c1ee49fbecef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
