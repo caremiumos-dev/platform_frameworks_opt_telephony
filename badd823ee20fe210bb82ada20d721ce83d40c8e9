@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b977c05_33817a48",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-09T23:43:51Z",
+      "side": 1,
+      "message": "why not directly use the GSM method? That would be functionally no change.\n\nThis one here is a functional change because it will fallback to 3GPP2 if it fails on 3GPP.",
+      "range": {
+        "startLine": 170,
+        "startChar": 60,
+        "endLine": 170,
+        "endChar": 71
+      },
+      "revId": "badd823ee20fe210bb82ada20d721ce83d40c8e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
