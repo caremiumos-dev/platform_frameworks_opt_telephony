@@ -67,6 +67,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_APPLICA
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
+import static com.android.internal.telephony.SmsConstants.FORMAT_3GPP;
 
 import android.hardware.radio.V1_0.CdmaCallWaiting;
 import android.hardware.radio.V1_0.CdmaInformationRecord;
@@ -166,7 +167,7 @@ public class RadioIndication extends IRadioIndication.Stub {
         byte[] pduArray = RIL.arrayListToPrimitiveArray(pdu);
         if (RIL.RILJ_LOGD) mRil.unsljLog(RIL_UNSOL_RESPONSE_NEW_SMS);
 
-        SmsMessage sms = SmsMessage.newFromCMT(pduArray);
+        SmsMessage sms = SmsMessage.createFromPdu(pduArray, FORMAT_3GPP);
         if (mRil.mGsmSmsRegistrant != null) {
             mRil.mGsmSmsRegistrant.notifyRegistrant(new AsyncResult(null, sms, null));
         }
