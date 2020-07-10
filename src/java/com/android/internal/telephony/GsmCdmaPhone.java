@@ -4348,9 +4348,9 @@ public class GsmCdmaPhone extends Phone {
         return mWakeLock;
     }
 
-    @Override
     public int getLteOnCdmaMode() {
-        int currentConfig = super.getLteOnCdmaMode();
+        int currentConfig = TelephonyProperties.lte_on_cdma_device()
+                .orElse(PhoneConstants.LTE_ON_CDMA_UNKNOWN);
         int lteOnCdmaModeDynamicValue = currentConfig;
 
         UiccCardApplication cdmaApplication =
