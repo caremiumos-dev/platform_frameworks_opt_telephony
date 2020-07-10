@@ -1,0 +1,10 @@
+Verified+1: Nathan Harold <nharold@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Chen Xu <fionaxu@google.com>
+Submitted-by: Nathan Harold <nharold@google.com>
+Submitted-at: Fri, 10 Jul 2020 18:47:50 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1357704
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
