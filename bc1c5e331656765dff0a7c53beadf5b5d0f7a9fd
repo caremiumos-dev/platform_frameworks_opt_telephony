@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "537407bc_27a1fa5b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3289,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-07-10T04:38:14Z",
+      "side": 1,
+      "message": "I think you can just call getNetworkRegistrationInfoListForTransportType(WWAN)",
+      "range": {
+        "startLine": 3289,
+        "startChar": 50,
+        "endLine": 3289,
+        "endChar": 80
+      },
+      "revId": "bc1c5e331656765dff0a7c53beadf5b5d0f7a9fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
