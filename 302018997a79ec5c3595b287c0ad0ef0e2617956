@@ -16,6 +16,29 @@
       "revId": "302018997a79ec5c3595b287c0ad0ef0e2617956",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc966db3_2807cb90",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2020-07-10T05:55:05Z",
+      "side": 1,
+      "message": "nit: update comemnt",
+      "range": {
+        "startLine": 1258,
+        "startChar": 17,
+        "endLine": 1258,
+        "endChar": 74
+      },
+      "revId": "302018997a79ec5c3595b287c0ad0ef0e2617956",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
