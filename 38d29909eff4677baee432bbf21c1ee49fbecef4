@@ -16,6 +16,24 @@
       "revId": "38d29909eff4677baee432bbf21c1ee49fbecef4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8696ba85_c80927b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-10T00:19:54Z",
+      "side": 1,
+      "message": "You are right.\nBut 1 is only used here even success case.\n\nFor Other success case,\nhttps://android.googlesource.com/platform/frameworks/opt/telephony/+/refs/heads/master/src/java/com/android/internal/telephony/gsm/UsimDataDownloadHandler.java#229\n\nAnd acknowledgeLastIncomingSms() was used before.Not acknowledgeLastIncomingGsmSms() for reports.\n\nhttps://android.googlesource.com/platform/frameworks/opt/telephony/+/a66d6d9608e8879883cefdcbc51af7cb897cabc4/src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java#156",
+      "parentUuid": "abb11b8d_8adde766",
+      "revId": "38d29909eff4677baee432bbf21c1ee49fbecef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
