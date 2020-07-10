@@ -22,6 +22,30 @@
       "revId": "badd823ee20fe210bb82ada20d721ce83d40c8e9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c670102e_359cc5fa",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-10T00:34:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b977c05_33817a48",
+      "range": {
+        "startLine": 170,
+        "startChar": 60,
+        "endLine": 170,
+        "endChar": 71
+      },
+      "revId": "badd823ee20fe210bb82ada20d721ce83d40c8e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
