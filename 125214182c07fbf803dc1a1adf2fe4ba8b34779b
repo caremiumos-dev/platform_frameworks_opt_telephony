@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "792eebed_d00a1303",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-10T00:47:42Z",
+      "side": 1,
+      "message": "Actually this won\u0027t work because the registrants don\u0027t expect this object. We should switch back to what you had earlier. Ideally we should call createFromPdu(pdu, SmsConstants.FORMAT_3GPP, false) but that method is private -- we can make it public and @hide. The other option would be to simply do what you had in the last patchset. I would prefer doing it the right way.",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 53
+      },
+      "revId": "125214182c07fbf803dc1a1adf2fe4ba8b34779b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
