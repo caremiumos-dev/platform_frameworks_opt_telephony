@@ -3064,6 +3064,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     if (mPendingMO != null) {
                         mPendingMO.setDisconnectCause(DisconnectCause.ERROR_UNSPECIFIED);
                         sendEmptyMessageDelayed(EVENT_HANGUP_PENDINGMO, TIMEOUT_HANGUP_PENDINGMO);
+
                     }
                     if (imsCall != mCallExpectedToResume) {
                         mCallExpectedToResume = null;
@@ -3785,6 +3786,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private void resetState() {
         mIsInEmergencyCall = false;
         mPhone.setEcmCanceledForEmergency(false);
+        mHoldSwitchingState = HoldSwapState.INACTIVE;
+    }
+
+    @VisibleForTesting
+    public boolean isHoldOrSwapInProgress() {
+        return mHoldSwitchingState != HoldSwapState.INACTIVE;
     }
 
     //****** Overridden from Handler
