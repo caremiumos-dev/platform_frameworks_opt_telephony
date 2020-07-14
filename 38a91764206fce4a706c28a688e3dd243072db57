@@ -16,6 +16,23 @@
       "revId": "38a91764206fce4a706c28a688e3dd243072db57",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e989fe7_6a736a26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-07-14T18:00:20Z",
+      "side": 1,
+      "message": "LGTM from IMS SMS perspective. There are a few @UnsupportedAppUsage tags being removed, however I checked the dashboard and it looks like we are not detecting any runtime usages of the methods (only static links), so it should be fine.",
+      "revId": "38a91764206fce4a706c28a688e3dd243072db57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
