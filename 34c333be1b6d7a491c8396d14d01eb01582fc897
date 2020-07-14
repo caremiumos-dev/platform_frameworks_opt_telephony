@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29ebf574_519b8a0b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-14T06:08:40Z",
+      "side": 1,
+      "message": "This annotation is not needed on new methods.",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 24
+      },
+      "revId": "34c333be1b6d7a491c8396d14d01eb01582fc897",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
