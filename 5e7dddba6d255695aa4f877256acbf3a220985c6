@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82ef38eb_9790b557",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-14T05:52:51Z",
+      "side": 0,
+      "message": "What\u0027s the replacement of this? The remove on SEND_STATUS_OK?",
+      "range": {
+        "startLine": 195,
+        "startChar": 16,
+        "endLine": 195,
+        "endChar": 38
+      },
+      "revId": "5e7dddba6d255695aa4f877256acbf3a220985c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

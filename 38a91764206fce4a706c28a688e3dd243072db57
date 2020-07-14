@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "493f5a35_14156b7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-14T05:52:51Z",
+      "side": 1,
+      "message": "Other than one question that I have, it LGTM. Brad, ptal as well from IMS SMS perspective if you get a chance.",
+      "revId": "38a91764206fce4a706c28a688e3dd243072db57",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
