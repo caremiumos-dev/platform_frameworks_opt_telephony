@@ -22,6 +22,30 @@
       "revId": "7208b75a43474e12c44c0f73b32c9f5523d53770",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec66fb9a_b796178c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-07-14T13:08:33Z",
+      "side": 1,
+      "message": "We still need to listen for ACTION_NETWORK_COUNTRY_CHANGED. Even if we use LocaleTracker.getLastKnownCountryIso here, we can\u0027t fix the issue for the cases of first boot and boot after traveling.\n\nHowever, I agree there are some unnecessary update. So, I will update the following.\n\n1. Use getLastKnownCountryIso instead of getCurrentCountry in ServiceStateTracker#shouldForceDisplayNoService.\n2. Add mLastKnownNetworkCountry which stores return value of getLastKnownCountryIso.\n3. Call updateSpnDisplay only when LastKnownCountryIso which is notified by ACTION_NETWORK_COUNTRY_CHANGED is different from mLastKnownNetworkCountry.",
+      "parentUuid": "46cc0b82_5fe55712",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 13
+      },
+      "revId": "7208b75a43474e12c44c0f73b32c9f5523d53770",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
