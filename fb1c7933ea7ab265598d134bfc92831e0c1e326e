@@ -22,6 +22,30 @@
       "revId": "fb1c7933ea7ab265598d134bfc92831e0c1e326e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbdb5e1e_6795c711",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1265670
+      },
+      "writtenOn": "2020-07-14T03:09:20Z",
+      "side": 1,
+      "message": "I think this API is required. because of backward compatibility.\nThis is called by SubscriptionInfoUpdater class and other class for test.",
+      "parentUuid": "8f77ea6b_9509465f",
+      "range": {
+        "startLine": 300,
+        "startChar": 16,
+        "endLine": 300,
+        "endChar": 45
+      },
+      "revId": "fb1c7933ea7ab265598d134bfc92831e0c1e326e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
