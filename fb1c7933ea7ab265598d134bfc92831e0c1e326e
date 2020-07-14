@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f77ea6b_9509465f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-14T00:24:00Z",
+      "side": 1,
+      "message": "Actually I don\u0027t see any unsupported usages of this API, so you can go ahead and remove it.",
+      "range": {
+        "startLine": 300,
+        "startChar": 16,
+        "endLine": 300,
+        "endChar": 45
+      },
+      "revId": "fb1c7933ea7ab265598d134bfc92831e0c1e326e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
