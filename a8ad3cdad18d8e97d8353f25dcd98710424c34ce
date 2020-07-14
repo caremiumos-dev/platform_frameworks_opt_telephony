@@ -34,6 +34,24 @@
       "revId": "a8ad3cdad18d8e97d8353f25dcd98710424c34ce",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e47486b_0168128c",
+        "filename": "src/java/com/android/internal/telephony/ImsSmsDispatcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-07-14T09:36:05Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d9314d1d_b1151fd9",
+      "revId": "a8ad3cdad18d8e97d8353f25dcd98710424c34ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
