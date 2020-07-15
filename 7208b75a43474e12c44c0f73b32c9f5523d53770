@@ -46,6 +46,30 @@
       "revId": "7208b75a43474e12c44c0f73b32c9f5523d53770",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ddbf481_47019b8a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-07-15T08:44:21Z",
+      "side": 1,
+      "message": "I already updated at patch set 2. Could you please review the latest one?",
+      "parentUuid": "ec66fb9a_b796178c",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 13
+      },
+      "revId": "7208b75a43474e12c44c0f73b32c9f5523d53770",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
