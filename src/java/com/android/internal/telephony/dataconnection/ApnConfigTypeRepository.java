@@ -30,7 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Hard coded configuration of specific network types that the telephony module needs.
+ * The configuration of specific network types with configurable priority through
+ * CarrierConfigManager that the telephony module needs.
  * Formerly stored in network attributes within the resources file.
  */
 public class ApnConfigTypeRepository {
@@ -63,23 +64,15 @@ public class ApnConfigTypeRepository {
     }
 
     private void setup(PersistableBundle carrierConfig) {
-        addApns(getCarrierApnTypeMap(CarrierConfigManager.getDefaultConfig()));
-        addApns(getCarrierApnTypeMap(carrierConfig));
-    }
+        Map<Integer, Integer> apnTypeMap =
+                getCarrierApnTypeMap(CarrierConfigManager.getDefaultConfig());
+        apnTypeMap.putAll(getCarrierApnTypeMap(carrierConfig));
 
-    private void addApns(Map<Integer, Integer> apnTypeMap) {
-        add(ApnSetting.TYPE_DEFAULT, apnTypeMap);
-        add(ApnSetting.TYPE_MMS, apnTypeMap);
-        add(ApnSetting.TYPE_SUPL, apnTypeMap);
-        add(ApnSetting.TYPE_DUN, apnTypeMap);
-        add(ApnSetting.TYPE_HIPRI, apnTypeMap);
-        add(ApnSetting.TYPE_FOTA, apnTypeMap);
-        add(ApnSetting.TYPE_IMS, apnTypeMap);
-        add(ApnSetting.TYPE_CBS, apnTypeMap);
-        add(ApnSetting.TYPE_IA, apnTypeMap);
-        add(ApnSetting.TYPE_EMERGENCY, apnTypeMap);
-        add(ApnSetting.TYPE_MCX, apnTypeMap);
-        add(ApnSetting.TYPE_XCAP, apnTypeMap);
+        for (Map.Entry<Integer, Integer> entry : apnTypeMap.entrySet()) {
+            int type = entry.getKey();
+            int priority = entry.getValue();
+            mConfigTypeMap.put(type, new ApnConfigType(type, priority));
+        }
     }
 
     @NonNull
@@ -117,11 +110,5 @@ public class ApnConfigTypeRepository {
             }
         }
         return apnTypeMap;
-    }
-
-    private void add(@Annotation.ApnType int type, Map<Integer, Integer> apnTypeMap) {
-        if (apnTypeMap.containsKey(type)) {
-            mConfigTypeMap.put(type, new ApnConfigType(type, apnTypeMap.get(type)));
-        }
     }
 }
