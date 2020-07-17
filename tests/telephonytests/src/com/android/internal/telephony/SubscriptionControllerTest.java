@@ -27,6 +27,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
@@ -36,6 +37,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -44,6 +46,7 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.telecom.PhoneAccountHandle;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.UiccSlotInfo;
@@ -90,6 +93,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
     private static final String MAC_ADDRESS_PREFIX = "mac_";
     private static final String DISPLAY_NAME_PREFIX = "my_phone_";
+    private static final PhoneAccountHandle TEST_HANDLE_1 = new PhoneAccountHandle(
+            new ComponentName("com.foo", "Bar"), "baz");
 
     @Before
     public void setUp() throws Exception {
@@ -316,6 +321,34 @@ public class SubscriptionControllerTest extends TelephonyTest {
 
         assertTrue(b.containsKey(PhoneConstants.SUBSCRIPTION_KEY));
         assertEquals(1, b.getInt(PhoneConstants.SUBSCRIPTION_KEY));
+    }
+
+    @Test
+    @SmallTest
+    public void testSetDefaultVoiceSubId() throws Exception {
+        doReturn(1).when(mPhone).getSubId();
+        doReturn(null).when(mContextFixture.getTelecomManager())
+                .getUserSelectedOutgoingPhoneAccount();
+        doReturn(true).when(mTelephonyManager).isVoiceCapable();
+        doReturn(TEST_HANDLE_1).when(mTelephonyManager)
+                .getPhoneAccountHandleForSubscriptionId(anyInt());
+
+        // We need to add a test sub; this has the side effect of also setting the default voice
+        // sub.
+        mSubscriptionControllerUT.addSubInfo("1", "test", 1,
+                SubscriptionManager.SUBSCRIPTION_TYPE_LOCAL_SIM);
+
+        // Do it first time to change it to 1; should succeed.
+        mSubscriptionControllerUT.setDefaultVoiceSubId(1);
+
+        // Do it another time so we can verify that the Telecom outgoing account doesn't get set
+        // when the sub doesn't change.
+        mSubscriptionControllerUT.setDefaultVoiceSubId(1);
+
+        // Even though we set the voice sub twice there should only be 1 invocation to change the
+        // telecom account.
+        verify(mContextFixture.getTelecomManager(), times(1)).setUserSelectedOutgoingPhoneAccount(
+                any(PhoneAccountHandle.class));
     }
 
     @Test
