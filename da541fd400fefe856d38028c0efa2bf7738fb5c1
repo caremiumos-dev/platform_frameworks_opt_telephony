@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e69f456a_24b77334",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SubscriptionControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-07-17T23:54:37Z",
+      "side": 1,
+      "message": "Purposely out of order to avoid merge conflict in master.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "da541fd400fefe856d38028c0efa2bf7738fb5c1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
