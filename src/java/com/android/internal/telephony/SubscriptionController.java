@@ -2333,6 +2333,9 @@ public class SubscriptionController extends ISub.Stub {
         if (DBG) logdl("[setDefaultVoiceSubId] subId=" + subId);
 
         int previousDefaultSub = getDefaultSubId();
+        // getDefaultSubId includes data sub as a fallback if no voice sub is specified; for the
+        // purpose of telecom phone account comparison we need to just use the raw voice sub id.
+        int previousDefaultVoiceSubId = getDefaultVoiceSubId();
 
         Settings.Global.putInt(mContext.getContentResolver(),
                 Settings.Global.MULTI_SIM_VOICE_CALL_SUBSCRIPTION, subId);
@@ -2344,9 +2347,24 @@ public class SubscriptionController extends ISub.Stub {
                         subId);
 
         TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
-        PhoneAccountHandle currentHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
+        PhoneAccountHandle previousHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
+        int subIdFromPreviousHandle = previousHandle == null
+                ? SubscriptionManager.INVALID_SUBSCRIPTION_ID
+                : mTelephonyManager.getSubscriptionId(previousHandle);
 
-        if (!Objects.equals(currentHandle, newHandle)) {
+        // Yuck.  In most cases the Telecom getUserSelectedOutgoingPhoneAccount is going to
+        // represent the same sub id as the default voice sub.
+        // However, if the user has chosen a non-sim phone account as their default outgoing
+        // calling account, even if the default voice sub changes we DO NOT want to override the
+        // telecom user selected outgoing phone account.
+        // Ultimately, we only want to change the user selected default phone account in Telecom if
+        // the sub id associated with the previous user selected default phone account matches the
+        // previous default voice subid.
+        // So, only if the sub ids agree OR there was no previous default selection will we try to
+        // change the Telecom phone account.
+        if ((previousDefaultVoiceSubId == subIdFromPreviousHandle || previousHandle == null)
+                && previousDefaultVoiceSubId != subId
+                && !Objects.equals(previousHandle, newHandle)) {
             telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
             logd("[setDefaultVoiceSubId] change to phoneAccountHandle=" + newHandle);
         } else {

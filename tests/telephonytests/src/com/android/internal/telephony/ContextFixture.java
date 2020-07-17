@@ -768,6 +768,10 @@ public class ContextFixture implements TestFixture<Context> {
         return mLastBroadcastOptions;
     }
 
+    public TelecomManager getTelecomManager() {
+        return mTelecomManager;
+    }
+
     private static void logd(String s) {
         Log.d(TAG, s);
     }
