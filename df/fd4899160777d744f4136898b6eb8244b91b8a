@@ -1,0 +1,10 @@
+Verified+1: Denis Hsu <denis.hsu@mediatek.com>
+Code-Review+2: Nazanin Bakhshi <nazaninb@google.com>
+Autosubmit+1: Nazanin Bakhshi <nazaninb@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Mon, 20 Jul 2020 17:39:20 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1343377
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
