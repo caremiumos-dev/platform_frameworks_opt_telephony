@@ -135,6 +135,7 @@ public class UiccProfile extends IccCard {
     private RegistrantList mNetworkLockedRegistrants = new RegistrantList();
 
     private int mCurrentAppType = UiccController.APP_FAM_3GPP; //default to 3gpp?
+    private int mRadioTech = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
     private UiccCardApplication mUiccApplication = null;
     private IccRecords mIccRecords = null;
     private IccCardConstants.State mExternalState = IccCardConstants.State.UNKNOWN;
@@ -324,6 +325,7 @@ public class UiccProfile extends IccCard {
             }
             mCatService = null;
             mUiccApplications = null;
+            mRadioTech = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
             mCarrierPrivilegeRules = null;
             mContext.getContentResolver().unregisterContentObserver(
                     mProvisionCompleteContentObserver);
@@ -340,6 +342,7 @@ public class UiccProfile extends IccCard {
             if (DBG) {
                 log("Setting radio tech " + ServiceState.rilRadioTechnologyToString(radioTech));
             }
+            mRadioTech = radioTech;
             setCurrentAppType(ServiceState.isGsm(radioTech));
             updateIccAvailability(false);
         }
@@ -1036,6 +1039,10 @@ public class UiccProfile extends IccCard {
                     //Update the rest
                     mUiccApplications[i].update(ics.mApplications[i], mContext, mCi);
                 }
+            }
+
+            if (mRadioTech != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN) {
+                setCurrentAppType(ServiceState.isGsm(mRadioTech));
             }
 
             createAndUpdateCatServiceLocked();
