@@ -1091,6 +1091,19 @@ public class DcTracker extends Handler {
         return result.toArray(new String[0]);
     }
 
+    /**
+     * Get ApnTypes with connected data connections.  This is different than getActiveApnTypes()
+     * which returns apn types that with active apn contexts.
+     * @return apn types
+     */
+    public String[] getConnectedApnTypes() {
+        if (DBG) log("get all connected apn types");
+        return mApnContexts.values().stream()
+                .filter(ac -> ac.getState() == DctConstants.State.CONNECTED)
+                .map(ApnContext::getApnType)
+                .toArray(String[]::new);
+    }
+
     @VisibleForTesting
     public Collection<ApnContext> getApnContexts() {
         return mPrioritySortedApnContexts;
@@ -4383,7 +4396,7 @@ public class DcTracker extends Handler {
         mNetStatPollPeriod = POLL_NETSTAT_MILLIS;
     }
 
-    private void startNetStatPoll() {
+    protected void startNetStatPoll() {
         if (isAnyDataConnected() && !mNetStatPollEnabled) {
             if (DBG) {
                 log("startNetStatPoll");
