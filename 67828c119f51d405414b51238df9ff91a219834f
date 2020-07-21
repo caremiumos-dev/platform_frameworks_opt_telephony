@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b564ca72_a13a1aec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-07-21T23:53:40Z",
+      "side": 1,
+      "message": "Please do not link carrier requirements on AOSP commit and instead use the Bug for more information. Can you remove requirement related information?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "67828c119f51d405414b51238df9ff91a219834f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cccf9aec_3b817b1b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
