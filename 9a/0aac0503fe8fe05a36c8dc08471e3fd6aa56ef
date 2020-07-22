@@ -1,0 +1,9 @@
+Code-Review+2: Shuo Qian <shuoq@google.com>
+Open-Source-Licensing+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Submitted-by: Shuo Qian <shuoq@google.com>
+Submitted-at: Wed, 22 Jul 2020 19:31:37 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1370478
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
