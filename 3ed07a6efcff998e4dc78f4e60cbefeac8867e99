@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2094c23c_f0492c24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-07-23T18:22:19Z",
+      "side": 1,
+      "message": "Not sure if this is different from the original fix, which OEMs tried and didn\u0027t work. But we can ask them to try again and decide what to do from there. The change LGTM.",
+      "revId": "3ed07a6efcff998e4dc78f4e60cbefeac8867e99",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
