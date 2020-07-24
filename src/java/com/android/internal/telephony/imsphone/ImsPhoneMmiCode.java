@@ -35,7 +35,9 @@ import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.ResultReceiver;
+import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ims.ImsCallForwardInfo;
 import android.telephony.ims.ImsReasonInfo;
@@ -1094,11 +1096,18 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
                         sendUssd(mPoundString);
                     }
                 } else {
-                    // USSD codes are not supported over IMS due to modem limitations; send over
-                    // the CS pipe instead.  This should be fixed in the future.
-                    Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
-                            + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe.");
-                    throw new CallStateException(Phone.CS_FALLBACK);
+                    if (getBooleanCarrierConfig(
+                            CarrierConfigManager.KEY_CARRIER_USSI_ENABLED_BOOL)) {
+                        Rlog.i(LOG_TAG, "processCode: USSI is supported, sending ussd string '"
+                                + Rlog.pii(LOG_TAG, mPoundString) + "' over IMS pipe.");
+                        sendUssd(mPoundString);
+                    } else {
+                        // USSD codes are not supported over IMS due to modem limitations; send over
+                        // the CS pipe instead.  This should be fixed in the future.
+                        Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
+                                + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe.");
+                        throw new CallStateException(Phone.CS_FALLBACK);
+                    }
                 }
             } else {
                 Rlog.d(LOG_TAG, "processCode: invalid or unsupported MMI");
@@ -1829,6 +1838,28 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
             return error.getMessage();
         } else {
             return getErrorMessage(ar);
+        }
+    }
+
+    /**
+     * Get the boolean config from carrier config manager.
+     *
+     * @param key config key defined in CarrierConfigManager
+     * @return boolean value of corresponding key.
+     */
+    private boolean getBooleanCarrierConfig(String key) {
+        CarrierConfigManager ConfigManager =
+                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle b = null;
+        if (ConfigManager != null) {
+            // If an invalid subId is used, this bundle will contain default values.
+            b = ConfigManager.getConfigForSubId(mPhone.getSubId());
+        }
+        if (b != null) {
+            return b.getBoolean(key);
+        } else {
+            // Return static default defined in CarrierConfigManager.
+            return CarrierConfigManager.getDefaultConfig().getBoolean(key);
         }
     }
 
