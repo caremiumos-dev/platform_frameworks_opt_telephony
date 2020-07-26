@@ -1,0 +1,31 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004034509",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1371702?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "6f9737e6_a8ea0ebe",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-07-26T05:46:51Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1852,
+        "startChar": 16,
+        "endLine": 1852,
+        "endChar": 65
+      },
+      "revId": "f70894420f1f261e314b38c4f6db0860592079ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
