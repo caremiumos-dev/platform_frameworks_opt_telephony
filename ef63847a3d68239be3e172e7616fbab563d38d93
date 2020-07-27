@@ -16,6 +16,46 @@
       "revId": "ef63847a3d68239be3e172e7616fbab563d38d93",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fdd59d2_0427b90f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-07-27T17:55:10Z",
+      "side": 1,
+      "message": "Hey Jack, the vendor gave the thumbs up for this change, could you review?",
+      "revId": "ef63847a3d68239be3e172e7616fbab563d38d93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "673a449b_2a23d3b4",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-07-27T17:55:10Z",
+      "side": 1,
+      "message": "This is the additional change on top of Jack\u0027s that got the vendor use case to work.",
+      "range": {
+        "startLine": 2506,
+        "startChar": 0,
+        "endLine": 2516,
+        "endChar": 9
+      },
+      "revId": "ef63847a3d68239be3e172e7616fbab563d38d93",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
