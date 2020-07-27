@@ -142,7 +142,7 @@ public class UiccProfile extends IccCard {
     // The number of UiccApplications modem reported. It's different from mUiccApplications.length
     // which is always CARD_MAX_APPS, and only updated when modem sends an update, and NOT updated
     // during SIM refresh. It's currently only used to help identify empty profile.
-    private int mLastReportedNumOfUiccApplications;
+    private volatile int mLastReportedNumOfUiccApplications;
 
     private final ContentObserver mProvisionCompleteContentObserver =
             new ContentObserver(new Handler()) {
@@ -1557,13 +1557,7 @@ public class UiccProfile extends IccCard {
      * Returns number of applications on this card
      */
     public int getNumApplications() {
-        int count = 0;
-        for (UiccCardApplication a : mUiccApplications) {
-            if (a != null) {
-                count++;
-            }
-        }
-        return count;
+        return mLastReportedNumOfUiccApplications;
     }
 
     /**
