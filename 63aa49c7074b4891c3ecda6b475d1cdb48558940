@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "7d266353_30f424ae",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "yes, for security purpose",
+      "parentUuid": "fc3ac1cc_66845f06",
+      "range": {
+        "startLine": 392,
+        "startChar": 26,
+        "endLine": 392,
+        "endChar": 29
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bbf01a7_c6957b30",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 3
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "e1f2f6be_5de56f70",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "3bbf01a7_c6957b30",
+      "range": {
+        "startLine": 403,
+        "startChar": 28,
+        "endLine": 403,
+        "endChar": 32
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3eba82dc_1aeb02df",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 3
@@ -114,6 +162,30 @@
       "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dea3d15_a2ffa4dd",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "3eba82dc_1aeb02df",
+      "range": {
+        "startLine": 430,
+        "startChar": 16,
+        "endLine": 430,
+        "endChar": 22
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "561a6c2c_d8b49630",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "leave this",
+      "parentUuid": "978b6d5a_66bce20a",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 74
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5ad36cc_bbdaa793",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 3
@@ -183,6 +279,30 @@
       "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2293907a_3220410c",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "e5ad36cc_bbdaa793",
+      "range": {
+        "startLine": 889,
+        "startChar": 0,
+        "endLine": 890,
+        "endChar": 75
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +329,30 @@
     },
     {
       "key": {
+        "uuid": "da77ccf6_273ae1ca",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "e50b5372_abaa15e8",
+      "range": {
+        "startLine": 1523,
+        "startChar": 8,
+        "endLine": 1523,
+        "endChar": 20
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06aaa365_ae2cac9b",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
         "patchSetId": 3
@@ -229,6 +373,30 @@
       "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d69006a5_d5212a09",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-27T09:15:23Z",
+      "side": 1,
+      "message": "EfCsimImsimLoaded is visible for test, and incudes the case for decodeImsi",
+      "parentUuid": "06aaa365_ae2cac9b",
+      "range": {
+        "startLine": 20,
+        "startChar": 13,
+        "endLine": 20,
+        "endChar": 28
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
