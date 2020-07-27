@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "226da951_a1a9483c",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "If the SIM is multi-mode, won\u0027t getNumApplications() always be 2 or more? This check only fetches the IMSIM if this is the only app (not sure how the number of apps can be 0)... so the way I read this check is:\n\n\"If my parent app AID is non null\" OR \"if RUIM is the only application on the SIM card, fetch an IMSI-M from RUIM\".\n\nUnder what circumstances *won\u0027t* that be true?",
+      "range": {
+        "startLine": 887,
+        "startChar": 9,
+        "endLine": 887,
+        "endChar": 50
+      },
+      "revId": "25d93571e52415a54c92363d37f900b68ba54005",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

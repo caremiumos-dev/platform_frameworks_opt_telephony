@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ed49511c_267336a0",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5a68a92_c826c33a",
+      "range": {
+        "startLine": 388,
+        "startChar": 46,
+        "endLine": 388,
+        "endChar": 48
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c653535b_ec15222b",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1955cd09_a3ff0c5f",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c653535b_ec15222b",
+      "range": {
+        "startLine": 389,
+        "startChar": 25,
+        "endLine": 389,
+        "endChar": 28
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +131,30 @@
       "side": 1,
       "message": "yes, for security purpose",
       "parentUuid": "fc3ac1cc_66845f06",
+      "range": {
+        "startLine": 392,
+        "startChar": 26,
+        "endLine": 392,
+        "endChar": 29
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "608ace34_fffb1dba",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "What I meant is \"Rlog.pii() doesn\u0027t actually log anything\". It\u0027s a no-op. You\u0027re generating a string and then not logging it.",
+      "parentUuid": "7d266353_30f424ae",
       "range": {
         "startLine": 392,
         "startChar": 26,
@@ -212,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "dd98bdf2_528b02f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "This still either needs to become less complicated or have unit tests that ensure it works the way we think it does. An error here will be almost impossible to detect otherwise.",
+      "parentUuid": "7d425f1d_a00e909c",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 73
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "978b6d5a_66bce20a",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 3
@@ -247,6 +343,30 @@
       "side": 1,
       "message": "leave this",
       "parentUuid": "978b6d5a_66bce20a",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 74
+      },
+      "revId": "63aa49c7074b4891c3ecda6b475d1cdb48558940",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3052678_b843e4ff",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-27T20:31:27Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "561a6c2c_d8b49630",
       "range": {
         "startLine": 449,
         "startChar": 0,
