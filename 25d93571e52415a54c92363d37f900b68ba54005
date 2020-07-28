@@ -22,6 +22,30 @@
       "revId": "25d93571e52415a54c92363d37f900b68ba54005",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56603b03_f47a5b93",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-28T02:58:17Z",
+      "side": 1,
+      "message": "the check of \"mParentApp.getUiccProfile().getNumApplications() \u003c\u003d 1\" is just used to single mode SIM, becuase the API getIMSIForApp is always working",
+      "parentUuid": "226da951_a1a9483c",
+      "range": {
+        "startLine": 887,
+        "startChar": 9,
+        "endLine": 887,
+        "endChar": 50
+      },
+      "revId": "25d93571e52415a54c92363d37f900b68ba54005",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
