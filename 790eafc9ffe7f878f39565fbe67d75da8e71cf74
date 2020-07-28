@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c035528b_813f4446",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-28T05:19:56Z",
+      "side": 1,
+      "message": "nit: Please move this right above updateIccAvailability() on line 1063 since it is directly (and only) related to that.",
+      "revId": "790eafc9ffe7f878f39565fbe67d75da8e71cf74",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
