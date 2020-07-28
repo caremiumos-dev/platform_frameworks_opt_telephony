@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec9db74d_8b3f5eb0",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-28T22:03:54Z",
+      "side": 1,
+      "message": "When would the AID be empty?",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb5c26de_4adfaa55",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-28T22:03:54Z",
+      "side": 1,
+      "message": "You don\u0027t expect this to be \u003c 1, do you? Can you change this to \u003d\u003d 1?\nBtw, what about the case where there\u0027s CSIM + ISIM, is that possible? And if it is, do you expect EF_CSIM_IMSIM to have the correct IMSI?\nCan this be skipped in \u003d\u003d 1 case as well? Won\u0027t EF_CSIM_IMSIM always have the correct IMSI?",
+      "range": {
+        "startLine": 892,
+        "startChar": 68,
+        "endLine": 892,
+        "endChar": 70
+      },
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccc73c98_3e005919",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-28T22:03:54Z",
+      "side": 1,
+      "message": "You can use the existing mLastReportedNumOfUiccApplications. Why does this need to be volatile btw?",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
