@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62a70e0e_a4c66388",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-29T05:50:18Z",
+      "side": 1,
+      "message": "I would prefer for this to not be volatile. From aosp perspective as it is currently there isn\u0027t any reason to have this as volatile, and it can be misleading for anyone looking at this code.",
+      "range": {
+        "startLine": 145,
+        "startChar": 12,
+        "endLine": 145,
+        "endChar": 20
+      },
+      "revId": "cf979d9ddafaf4a919df406220d7025d71ad1b48",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
