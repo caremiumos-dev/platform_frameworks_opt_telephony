@@ -654,6 +654,14 @@ public class SubscriptionInfoUpdater extends Handler {
         }
     }
 
+    boolean isShuttingDown() {
+        for (int i = 0; i < SUPPORTED_MODEM_COUNT; i++) {
+            if (PhoneFactory.getPhone(i) != null &&
+                    PhoneFactory.getPhone(i).isShuttingDown()) return true;
+        }
+        return false;
+    }
+
     /**
      * Clean subscription info when sim state becomes ABSENT. There are 2 scenarios for this:
      * 1. SIM is actually removed
@@ -663,6 +671,10 @@ public class SubscriptionInfoUpdater extends Handler {
      * @param isSimAbsent boolean to indicate if the SIM is actually ABSENT (case 1 above)
      */
     private void cleanSubscriptionInPhone(int phoneId, boolean isSimAbsent) {
+        if (isShuttingDown()) {
+            logd("cleanSubscriptionInPhone: " + phoneId + " device shutting down, ignore request");
+            return;
+        }
         if (sInactiveIccIds[phoneId] != null || (isSimAbsent && sIccId[phoneId] != null
                 && !sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM))) {
             // When a SIM is unplugged, mark uicc applications enabled. This is to make sure when
