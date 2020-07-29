@@ -140,6 +140,24 @@
       "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cc3691f_686f6509",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-29T05:48:20Z",
+      "side": 1,
+      "message": "If it\u0027s used in side-car, I would suggest this change to be made as a patch on QCOM codebase then. This can be incorporated when the side-car is upstreamed, otherwise it is misleading on aosp code. Here let\u0027s reuse mLastReportedNumOfUiccApplications.",
+      "parentUuid": "f9257f0d_161860fb",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
