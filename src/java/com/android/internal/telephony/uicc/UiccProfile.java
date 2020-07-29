@@ -1367,7 +1367,7 @@ public class UiccProfile extends IccCard {
             if (keyValue.length == 2) {
                 map.put(keyValue[0].toUpperCase(), keyValue[1]);
             } else {
-                loge("Incorrect length of key-value pair in carrier app whitelist map.  "
+                loge("Incorrect length of key-value pair in carrier app allow list map.  "
                         + "Length should be exactly 2");
             }
         }
