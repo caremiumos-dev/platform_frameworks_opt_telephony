@@ -158,6 +158,24 @@
       "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97a448a8_d32b5004",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-30T07:06:18Z",
+      "side": 1,
+      "message": "Mengjun, this is a question for you as well.",
+      "parentUuid": "7cc3691f_686f6509",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
