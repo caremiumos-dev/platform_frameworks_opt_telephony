@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "572b3954_0330e398",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-30T17:12:08Z",
+      "side": 1,
+      "message": "Can you be more specific? You can probably tell that both Amit and I have some trepidation about having this check, because on the face of it, it still doesn\u0027t make sense to us.",
+      "parentUuid": "38ee86e4_e9f247cb",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb5c26de_4adfaa55",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 6
@@ -96,6 +114,30 @@
       "side": 1,
       "message": "If EF_CSIM_IMSIM always has the correct IMSI, why do we even need this call? We should always skip this and only rely on that.\n\nNathan, wdyt?",
       "parentUuid": "5503123a_9df5b2d8",
+      "range": {
+        "startLine": 892,
+        "startChar": 68,
+        "endLine": 892,
+        "endChar": 70
+      },
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99198473_7fc9d8ae",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-07-30T17:12:08Z",
+      "side": 1,
+      "message": "Yeah, about 3 patch sets ago, I asked something similar. Same comment as above. We definitely should have checks that aren\u0027t improving something, and it doesn\u0027t sound like any of this check is accomplishing much.\n\nWe\u0027ve got an unspecified \"special SIM cards\" case, and a num-applications check that avoids getting the IMSIM except in the CSIM-only case, but that\u0027s just not saving anything.",
+      "parentUuid": "5640fda6_b4fc559a",
       "range": {
         "startLine": 892,
         "startChar": 68,
