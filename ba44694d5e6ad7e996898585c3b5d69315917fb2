@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "0d771ff7_7ca0333d",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-31T06:27:06Z",
+      "side": 1,
+      "message": "Hi Nathan,\n\nthese SIMs was issued by Chian Telecom (CT) earlier under 3G (the generation of the cdma/evdo ). of course, these SIMs aren\u0027t no longer used basically.",
+      "parentUuid": "572b3954_0330e398",
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb5c26de_4adfaa55",
         "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
         "patchSetId": 6
@@ -147,6 +165,30 @@
       "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60280cac_ea96ab03",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-07-31T06:27:06Z",
+      "side": 1,
+      "message": "yeah, of course, i ever considered if this code block can be removed.\n\nin earlier CDMA (before CDMA2000), MIN should be used only, so in general, IMSI \u003d mcc + mnc + min is used to compatiable with GSM for roaming.\n\nbut in CDMA2000, EF_CSIM_IMSIM shoulb be present always.\n\nin order to keep compatiable and avoid risks, i leave the API usage",
+      "parentUuid": "99198473_7fc9d8ae",
+      "range": {
+        "startLine": 892,
+        "startChar": 68,
+        "endLine": 892,
+        "endChar": 70
+      },
+      "revId": "ba44694d5e6ad7e996898585c3b5d69315917fb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
