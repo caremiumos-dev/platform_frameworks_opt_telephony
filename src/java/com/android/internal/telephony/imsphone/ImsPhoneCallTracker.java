@@ -2021,11 +2021,12 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
 
         if (DBG) {
-            log("updatePhoneState pendingMo = " + (mPendingMO == null ? "null"
-                    : mPendingMO.getState()) + ", fg= " + mForegroundCall.getState() + "("
-                    + mForegroundCall.getConnectionsCount() + "), bg= " + mBackgroundCall
-                    .getState() + "(" + mBackgroundCall.getConnectionsCount() + ")");
-            log("updatePhoneState oldState=" + oldState + ", newState=" + mState);
+            logi("updatePhoneState pendingMo = " + (mPendingMO == null ? "null"
+                    : mPendingMO.getState()) + " "
+                    + mRingingCall + " "
+                    + mForegroundCall + " "
+                    + mBackgroundCall);
+            logi("updatePhoneState oldState=" + oldState + ", newState=" + mState);
         }
 
         if (mState != oldState) {

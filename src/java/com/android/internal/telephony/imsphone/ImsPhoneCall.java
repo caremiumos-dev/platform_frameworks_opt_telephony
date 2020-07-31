@@ -33,6 +33,7 @@ import com.android.telephony.Rlog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@hide}
@@ -136,15 +137,14 @@ public class ImsPhoneCall extends Call {
         sb.append(mCallContext);
         sb.append(" state: ");
         sb.append(mState.toString());
-        sb.append(" ");
+        sb.append(" callids: ");
         if (connections.size() > 1) {
             sb.append(" ERROR_MULTIPLE ");
         }
-        for (Connection conn : connections) {
-            sb.append(conn);
-            sb.append(" ");
-        }
-
+        sb.append(connections
+                .stream()
+                .map(c -> c.getTelecomCallId() == null ? "unset"
+                : c.getTelecomCallId()).collect(Collectors.joining(",")));
         sb.append("]");
         return sb.toString();
     }
