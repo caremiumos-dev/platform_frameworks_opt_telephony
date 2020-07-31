@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25c0f92c_6606c445",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-07-31T18:09:18Z",
+      "side": 1,
+      "message": "can these be on separate lines with labels? this is gonna make for a really long log line",
+      "range": {
+        "startLine": 2026,
+        "startChar": 22,
+        "endLine": 2028,
+        "endChar": 38
+      },
+      "revId": "d68282ddfc73c57e117003d2c93b1092b10d5fa3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
