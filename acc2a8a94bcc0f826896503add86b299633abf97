@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "81a79749_2139c554",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-31T21:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dc80a75_f95c4744",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "acc2a8a94bcc0f826896503add86b299633abf97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c7bc3df_17494128",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "acc2a8a94bcc0f826896503add86b299633abf97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7bce74b_1fbdff1b",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-31T21:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6933f874_657a434e",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 92
+      },
+      "revId": "acc2a8a94bcc0f826896503add86b299633abf97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
