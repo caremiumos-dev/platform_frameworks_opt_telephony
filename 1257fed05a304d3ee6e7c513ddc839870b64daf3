@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3497c8db_e2d781c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-07-31T07:06:01Z",
+      "side": 1,
+      "message": "Looks ok to me but I would rather do it in UiccController. In onGetIccCardStatusDone() and onGetSlotStatusDone(), or rather simply in handleMessage() because I\u0027d guess during shutdown all messages can be ignored.",
+      "revId": "1257fed05a304d3ee6e7c513ddc839870b64daf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
