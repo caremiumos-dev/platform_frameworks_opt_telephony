@@ -348,6 +348,11 @@ public class DcTracker extends Handler {
     /* Used to check whether phone was recently connected to 5G. */
     private boolean m5GWasConnected = false;
 
+    private static final int NR_METERED = 0;
+    private static final int NR_UNMETERED_ALL = 1;
+    private static final int NR_UNMETERED_SUB6 = 2;
+    private static final int NR_UNMETERED_MMWAVE = 3;
+
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver () {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -4093,10 +4098,29 @@ public class DcTracker extends Handler {
 
     private void reevaluateUnmeteredConnections() {
         if (DBG) log("reevaluateUnmeteredConnections");
-        if (isNetworkTypeUnmetered(NETWORK_TYPE_NR) || isFrequencyRangeUnmetered()) {
+        int nrMeteredness = isNrUnmetered();
+        if (nrMeteredness != NR_METERED) {
             if (DBG) log("NR NSA is unmetered");
-            if (mPhone.getServiceState().getNrState()
-                    == NetworkRegistrationInfo.NR_STATE_CONNECTED) {
+            boolean isValidFrequency = false;
+            switch (nrMeteredness) {
+                case NR_UNMETERED_ALL:
+                    isValidFrequency = true;
+                    break;
+                case NR_UNMETERED_SUB6:
+                    // LOW, MID, or HIGH
+                    isValidFrequency = mPhone.getServiceState().getNrFrequencyRange()
+                            != ServiceState.FREQUENCY_RANGE_UNKNOWN
+                            && mPhone.getServiceState().getNrFrequencyRange()
+                            != ServiceState.FREQUENCY_RANGE_MMWAVE;
+                    break;
+                case NR_UNMETERED_MMWAVE:
+                    isValidFrequency = mPhone.getServiceState().getNrFrequencyRange()
+                            == ServiceState.FREQUENCY_RANGE_MMWAVE;
+                    break;
+            }
+            if ((mPhone.getServiceState().getDataNetworkType() == NETWORK_TYPE_NR
+                    || mPhone.getServiceState().getNrState()
+                    == NetworkRegistrationInfo.NR_STATE_CONNECTED) && isValidFrequency) {
                 if (DBG) log("NR State connected");
                 if (!m5GWasConnected) { // 4G -> 5G
                     stopHysteresisAlarm();
@@ -4175,18 +4199,17 @@ public class DcTracker extends Handler {
                 || plan.getDataLimitBehavior() == SubscriptionPlan.LIMIT_BEHAVIOR_THROTTLED);
     }
 
-    private boolean isFrequencyRangeUnmetered() {
-        boolean nrConnected = mPhone.getServiceState().getNrState()
-                == NetworkRegistrationInfo.NR_STATE_CONNECTED;
-        if (mMmwaveUnmetered || mSub6Unmetered) {
-            int frequencyRange = mPhone.getServiceState().getNrFrequencyRange();
-            boolean mmwave = frequencyRange == ServiceState.FREQUENCY_RANGE_MMWAVE;
-            // frequency range LOW, MID, or HIGH
-            boolean sub6 = frequencyRange != ServiceState.FREQUENCY_RANGE_UNKNOWN && !mmwave;
-            return (mMmwaveUnmetered && mmwave || mSub6Unmetered && sub6) && nrConnected;
-        } else {
-            return mAllUnmetered && nrConnected;
+    private int isNrUnmetered() {
+        if (isNetworkTypeUnmetered(NETWORK_TYPE_NR) || mAllUnmetered) {
+            if (mMmwaveUnmetered) {
+                return NR_UNMETERED_MMWAVE;
+            } else if (mSub6Unmetered) {
+                return NR_UNMETERED_SUB6;
+            } else {
+                return NR_UNMETERED_ALL;
+            }
         }
+        return NR_METERED;
     }
 
     private void log(String s) {
