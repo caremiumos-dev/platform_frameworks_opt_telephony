@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0d043b3_2f9b42b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-07-31T00:36:57Z",
+      "side": 1,
+      "message": "rephrase? because we do not actually check voice RAT.",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "acc2a8a94bcc0f826896503add86b299633abf97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c7bc3df_17494128",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-07-31T00:36:57Z",
+      "side": 1,
+      "message": "Does this actually fix the issue? The only behavior you changed is for the case where getApplication(3GPP) \u003d\u003d null \u0026\u0026 getApplication(3GPP2) \u003d\u003d null. Is that even possible?",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 92
+      },
+      "revId": "acc2a8a94bcc0f826896503add86b299633abf97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
