@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13746391_03413d81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1137899
+      },
+      "writtenOn": "2020-08-03T07:17:58Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2:\n\u003e \n\u003e Licensing looks good.\n\u003e \n\u003e \n\u003e Old findings in unchanged code include:\n\u003e     1 first-party declarations\n\n",
+      "revId": "d7803d99acb1e29b3c645812982af17611b36961",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
