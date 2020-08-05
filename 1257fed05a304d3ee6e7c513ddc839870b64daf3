@@ -16,6 +16,24 @@
       "revId": "1257fed05a304d3ee6e7c513ddc839870b64daf3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f7119d69_c20fe290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-08-05T08:01:02Z",
+      "side": 1,
+      "message": "Sure, will make the change in UiccController, test it and upload a new patch.",
+      "parentUuid": "3497c8db_e2d781c9",
+      "revId": "1257fed05a304d3ee6e7c513ddc839870b64daf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
