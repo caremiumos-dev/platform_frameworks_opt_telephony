@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d325cc07_40a37a9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-08-05T20:15:41Z",
+      "side": 1,
+      "message": "Not sure why there are two CLs in this repository framework/opt/telephony for the same topic. \nPlease use a single CL instead of two.",
+      "revId": "c1d6cfc29e1c2c5597e9d2f12b5a3628fd695634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
