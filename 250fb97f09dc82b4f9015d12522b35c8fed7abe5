@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b284540_73aae7be",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-06T06:59:15Z",
+      "side": 1,
+      "message": "CL mostly looks ok to me. But from the description of the issue on the bug, this is the only change that should be needed? Are other changes needed for the same bug?",
+      "revId": "250fb97f09dc82b4f9015d12522b35c8fed7abe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
