@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "99b6915b_096a8d6c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-08-06T00:57:17Z",
+      "side": 1,
+      "message": "see below",
+      "parentUuid": "0b1ec0eb_d6e7ab5f",
+      "range": {
+        "startLine": 323,
+        "startChar": 7,
+        "endLine": 328,
+        "endChar": 23
+      },
+      "revId": "10b3825698264b3d8c194016895695876197f8ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66934845_01446a21",
         "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "10b3825698264b3d8c194016895695876197f8ca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f6d1d04_da8b18b3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2020-08-06T00:57:17Z",
+      "side": 1,
+      "message": "Robert,\n\ndo you mean creating a new class named as \"TransportRecoverer\" and hanlde the logic in this class? right?\n\nso we may have the following call flows\n\nmCurrentTransports \u003d mTransportRecoverer.getTransports();\n......\n\n// call mTransportRecoverer.setTransport() followed by setCurrentTransport\nsetCurrentTransport();\nmTransportRecoverer.setTransport();",
+      "parentUuid": "66934845_01446a21",
+      "range": {
+        "startLine": 442,
+        "startChar": 9,
+        "endLine": 449,
+        "endChar": 29
+      },
+      "revId": "10b3825698264b3d8c194016895695876197f8ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
