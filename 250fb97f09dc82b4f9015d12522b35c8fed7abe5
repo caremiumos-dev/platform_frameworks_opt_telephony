@@ -16,6 +16,24 @@
       "revId": "250fb97f09dc82b4f9015d12522b35c8fed7abe5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fddc8db_a8209f0f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-08-06T07:41:03Z",
+      "side": 1,
+      "message": "This is related to No.2 issue in the commit message. So, we need to fix this in this CL.\n\n2. Remove SIM card from the device which supports hot swap SIM.\n   After removing the SIM, the UiccApplication becomes null.\n   If UiccApplication is null, mIsSimReady is not updated to false.\n   \"No service\" is not shown when mIsSimReady is true,\n   so the problem occur.",
+      "parentUuid": "3b284540_73aae7be",
+      "revId": "250fb97f09dc82b4f9015d12522b35c8fed7abe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
