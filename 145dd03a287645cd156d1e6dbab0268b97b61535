@@ -39,6 +39,24 @@
       "revId": "145dd03a287645cd156d1e6dbab0268b97b61535",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36b919a1_a68e2235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-07T23:59:29Z",
+      "side": 1,
+      "message": "Yes, please remove the call to getIMSIForApp(). volatile I see that you have already removed in the latest patchset.",
+      "parentUuid": "29cc2ecf_174fb6de",
+      "revId": "145dd03a287645cd156d1e6dbab0268b97b61535",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
