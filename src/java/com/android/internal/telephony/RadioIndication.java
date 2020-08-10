@@ -359,6 +359,12 @@ public class RadioIndication extends IRadioIndication.Stub {
         responseDataCallListChanged(indicationType, dcList);
     }
 
+    /** Indicates current data call list with radio HAL 1.6. */
+    public void dataCallListChanged_1_6(int indicationType,
+            ArrayList<android.hardware.radio.V1_6.SetupDataCallResult> dcList) {
+        responseDataCallListChanged(indicationType, dcList);
+    }
+
     public void suppSvcNotify(int indicationType, SuppSvcNotification suppSvcNotification) {
         mRil.processIndication(indicationType);
 
