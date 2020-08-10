@@ -16,6 +16,24 @@
       "revId": "c1d6cfc29e1c2c5597e9d2f12b5a3628fd695634",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d52d94de_b37e7744",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-08-10T06:20:02Z",
+      "side": 1,
+      "message": "This CL was was included in https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1261522/",
+      "parentUuid": "d325cc07_40a37a9f",
+      "revId": "c1d6cfc29e1c2c5597e9d2f12b5a3628fd695634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
