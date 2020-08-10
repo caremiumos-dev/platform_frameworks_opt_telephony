@@ -352,6 +352,7 @@ public class DcController extends StateMachine {
                     } else {
                         // Its active so update the DataConnections link properties
                         UpdateLinkPropertyResult result = dc.updateLinkProperty(newState);
+                        dc.updateQosParameters(newState);
                         if (result.oldLp.equals(result.newLp)) {
                             if (DBG) log("onDataStateChanged: no change");
                         } else {

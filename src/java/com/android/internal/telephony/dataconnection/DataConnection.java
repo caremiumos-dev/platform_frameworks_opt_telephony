@@ -59,6 +59,8 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
+import android.telephony.data.Qos;
+import android.telephony.data.QosSession;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Pair;
@@ -279,6 +281,8 @@ public class DataConnection extends StateMachine {
     private NetworkInfo mNetworkInfo;
     private int mDownlinkBandwidth = 14;
     private int mUplinkBandwidth = 14;
+    private Qos mDefaultQos = null;
+    private List<QosSession> mQosSessions = new ArrayList<>();
 
     /** The corresponding network agent for this data connection. */
     private DcNetworkAgent mNetworkAgent;
@@ -540,6 +544,11 @@ public class DataConnection extends StateMachine {
             }
         }
         return ret;
+    }
+
+    public void updateQosParameters(DataCallResponse response) {
+        mDefaultQos = response.getDefaultQos();
+        mQosSessions = response.getQosSessions();
     }
 
     @VisibleForTesting
@@ -1011,6 +1020,8 @@ public class DataConnection extends StateMachine {
 
             mPcscfAddr = response.getPcscfAddresses().stream()
                     .map(InetAddress::getHostAddress).toArray(String[]::new);
+
+            updateQosParameters(response);
 
             result = updateLinkProperty(response).setupResult;
         }
@@ -3168,6 +3179,8 @@ public class DataConnection extends StateMachine {
         pw.println("mUnmeteredOverride=" + mUnmeteredOverride);
         pw.println("mDownlinkBandwidth" + mDownlinkBandwidth);
         pw.println("mUplinkBandwidth=" + mUplinkBandwidth);
+        pw.println("mDefaultQos=" + mDefaultQos);
+        pw.println("mQosSessions=" + mQosSessions);
         pw.println("disallowedApnTypes="
                 + ApnSetting.getApnTypesStringFromBitmask(getDisallowedApnTypes()));
         pw.println("mInstanceNumber=" + mInstanceNumber);
