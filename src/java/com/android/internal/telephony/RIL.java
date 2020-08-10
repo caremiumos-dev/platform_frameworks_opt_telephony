@@ -102,6 +102,8 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.Qos;
+import android.telephony.data.QosSession;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -6772,7 +6774,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
-     * Convert SetupDataCallResult defined in 1.0, 1.4, or 1.5 types.hal into DataCallResponse
+     * Convert SetupDataCallResult defined in 1.0, 1.4, 1.5 or 1.6 types.hal into DataCallResponse
      * @param dcResult setup data call result
      * @return converted DataCallResponse object
      */
@@ -6787,8 +6789,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
         String[] dnses = null;
         String[] gateways = null;
         String[] pcscfs = null;
+        Qos defaultQos = null;
 
         List<LinkAddress> laList = new ArrayList<>();
+        List<QosSession> qosSessions = new ArrayList<>();
 
         if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
             final android.hardware.radio.V1_0.SetupDataCallResult result =
@@ -6855,6 +6859,32 @@ public class RIL extends BaseCommands implements CommandsInterface {
             mtu = Math.max(result.mtuV4, result.mtuV6);
             mtuV4 = result.mtuV4;
             mtuV6 = result.mtuV6;
+        } else if (dcResult instanceof android.hardware.radio.V1_6.SetupDataCallResult) {
+            final android.hardware.radio.V1_6.SetupDataCallResult result =
+                    (android.hardware.radio.V1_6.SetupDataCallResult) dcResult;
+            cause = result.base.cause;
+            suggestedRetryTime = result.base.suggestedRetryTime;
+            cid = result.base.cid;
+            active = result.base.active;
+            protocolType = result.base.type;
+            ifname = result.base.ifname;
+            laList = result.base.addresses.stream().map(la -> createLinkAddressFromString(
+                    la.address, la.properties, la.deprecationTime, la.expirationTime))
+                    .collect(Collectors.toList());
+
+            dnses = result.base.dnses.stream().toArray(String[]::new);
+            gateways = result.base.gateways.stream().toArray(String[]::new);
+            pcscfs = result.base.pcscf.stream().toArray(String[]::new);
+            mtu = Math.max(result.base.mtuV4, result.base.mtuV6);
+            mtuV4 = result.base.mtuV4;
+            mtuV6 = result.base.mtuV6;
+            defaultQos = Qos.create(result.defaultQos);
+            if (result.qosSessions != null) {
+                for (android.hardware.radio.V1_6.QosSession session
+                        : result.qosSessions) {
+                    qosSessions.add(QosSession.create(session));
+                }
+            }
         } else {
             Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
             return null;
@@ -6919,6 +6949,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .setMtu(mtu)
                 .setMtuV4(mtuV4)
                 .setMtuV6(mtuV6)
+                .setDefaultQos(defaultQos)
+                .setQosSessions(qosSessions)
                 .build();
     }
 
