@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d86f2888_c0339429",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1729451
+      },
+      "writtenOn": "2020-08-12T07:09:14Z",
+      "side": 1,
+      "message": "does the new phone need to call registerForAvailable/registerForOn as what has done in the constructor of PhoneConfigurationManager?\n\n\n          if (!StorageManager.inCryptKeeperBounce()) {\n             for (Phone phone : mPhones) {\n                  phone.mCi.registerForAvailable(mHandler, Phone.EVENT_RADIO_AVAILABLE, phone);\n              }\n          } else {\n              for (Phone phone : mPhones) {\n                  phone.mCi.registerForOn(mHandler, Phone.EVENT_RADIO_ON, phone);\n              }\n          }",
+      "range": {
+        "startLine": 369,
+        "startChar": 12,
+        "endLine": 369,
+        "endChar": 47
+      },
+      "revId": "a80818ecc3d7120f15333025ef8a1e1b4b1d1719",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
