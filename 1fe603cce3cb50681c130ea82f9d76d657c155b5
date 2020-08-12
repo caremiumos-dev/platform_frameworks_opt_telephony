@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10f37ca5_b601323a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-08-12T23:46:08Z",
+      "side": 1,
+      "message": "CP of ag/12162482 to AOSP, already reviewed internally, clean CP. Applying +2",
+      "revId": "1fe603cce3cb50681c130ea82f9d76d657c155b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
