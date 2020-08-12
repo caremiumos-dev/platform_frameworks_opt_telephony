@@ -62,7 +62,7 @@ public class PhoneConfigurationManager {
     private PhoneCapability mStaticCapability;
     private final RadioConfig mRadioConfig;
     private final Handler mHandler;
-    private final Phone[] mPhones;
+    private Phone[] mPhones;
     private final Map<Integer, Boolean> mPhoneStatusMap;
     private MockableInterface mMi = new MockableInterface();
     private TelephonyManager mTelephonyManager;
@@ -356,8 +356,23 @@ public class PhoneConfigurationManager {
             log("onMultiSimConfigChanged: Rebooting is not required.");
             mMi.notifyPhoneFactoryOnMultiSimConfigChanged(mContext, numOfActiveModems);
             broadcastMultiSimConfigChange(numOfActiveModems);
-            // Register to RIL service if needed.
-            for (int i = 0; i < mPhones.length; i++) {
+
+            int oldNumOfActiveModems = mPhones.length;
+            // if numOfActiveModems is decreasing, deregister old RILs
+            // eg if we are going from 2 phones to 1 phone, we need to deregister RIL for the
+            // second phone. This loop does nothing if numOfActiveModems is increasing.
+            for (int i = numOfActiveModems; i < oldNumOfActiveModems; i++) {
+                log("amit: going to single sim; calling for index " + i);
+                Phone phone = mPhones[i];
+                phone.mCi.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(i));
+            }
+            // old phone objects are not needed now; mPhones can be updated
+            mPhones = PhoneFactory.getPhones();
+            // if numOfActiveModems is increasing, register new RILs
+            // eg if we are going from 1 phone to 2 phones, we need to register RIL for the second
+            // phone. This loop does nothing if numOfActiveModems is decreasing.
+            for (int i = oldNumOfActiveModems; i < numOfActiveModems; i++) {
+                log("amit: going to multi sim; calling for index " + i);
                 Phone phone = mPhones[i];
                 phone.mCi.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(i));
             }
