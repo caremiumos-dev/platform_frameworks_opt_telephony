@@ -686,6 +686,10 @@ public class UiccController extends Handler {
             Rlog.e(LOG_TAG,"onGetIccCardStatusDone: invalid index : " + index);
             return;
         }
+        if (isShuttingDown()) {
+            log("onGetIccCardStatusDone: shudown in progress ignore event");
+            return;
+        }
 
         IccCardStatus status = (IccCardStatus)ar.result;
 
@@ -912,6 +916,10 @@ public class UiccController extends Handler {
                         + "mIsSlotStatusSupported to false");
                 mIsSlotStatusSupported = false;
             }
+            return;
+        }
+        if (isShuttingDown()) {
+            log("onGetSlotStatusDone: shudown in progress ignore event");
             return;
         }
 
@@ -1228,6 +1236,16 @@ public class UiccController extends Handler {
 
     private boolean isValidSlotIndex(int index) {
         return (index >= 0 && index < mUiccSlots.length);
+    }
+
+    private boolean isShuttingDown() {
+        for (int i = 0; i < SUPPORTED_MODEM_COUNT; i++) {
+            if (PhoneFactory.getPhone(i) != null &&
+                    PhoneFactory.getPhone(i).isShuttingDown()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @UnsupportedAppUsage
