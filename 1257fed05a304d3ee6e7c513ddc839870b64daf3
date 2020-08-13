@@ -34,6 +34,24 @@
       "revId": "1257fed05a304d3ee6e7c513ddc839870b64daf3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1d111a_cce4e0d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-08-13T12:28:55Z",
+      "side": 1,
+      "message": "@Amit,\n\nUploaded master CL  https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1398930 \n\nCan you please review ?",
+      "parentUuid": "f7119d69_c20fe290",
+      "revId": "1257fed05a304d3ee6e7c513ddc839870b64daf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
