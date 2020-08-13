@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "864b39e7_ac2f9ec3",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-13T08:44:44Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 53
+      },
+      "revId": "ab1816b30154e4fe4f162fe379fba6ca676fe43c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38f5c9ed_150fdc61",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-13T08:44:44Z",
+      "side": 1,
+      "message": "Delete",
+      "range": {
+        "startLine": 664,
+        "startChar": 12,
+        "endLine": 700,
+        "endChar": 12
+      },
+      "revId": "ab1816b30154e4fe4f162fe379fba6ca676fe43c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
