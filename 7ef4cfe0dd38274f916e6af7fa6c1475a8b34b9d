@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d5a2cfb9_0543e06c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-14T08:09:33Z",
+      "side": 1,
+      "message": "Takeshi, any update on this?",
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40eea9c3_ecf418e8",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
