@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6a46045_61937517",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-14T04:07:23Z",
+      "side": 1,
+      "message": "Where is this defined? Does this compile?\n\nThis should be the current active number of modems, not supported count.",
+      "range": {
+        "startLine": 1242,
+        "startChar": 28,
+        "endLine": 1242,
+        "endChar": 49
+      },
+      "revId": "bd7fed048b2f96c535f8e01947997a086e884df1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
