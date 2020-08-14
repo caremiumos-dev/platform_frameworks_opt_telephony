@@ -226,6 +226,7 @@ public class MultiSimSettingController extends Handler {
      * Notify subscription info change.
      */
     public void notifySubscriptionInfoChanged() {
+        log("notifySubscriptionInfoChanged");
         obtainMessage(EVENT_SUBSCRIPTION_INFO_CHANGED).sendToTarget();
     }
 
@@ -326,7 +327,7 @@ public class MultiSimSettingController extends Handler {
      *
      * Make sure non-default non-opportunistic subscriptions has data off.
      */
-    private void onSubscriptionsChanged() {
+    public void onSubscriptionsChanged() {
         if (DBG) log("onSubscriptionsChanged");
         reEvaluateAll();
     }
