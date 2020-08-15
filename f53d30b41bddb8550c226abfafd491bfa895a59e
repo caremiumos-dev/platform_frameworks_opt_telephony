@@ -1,0 +1,31 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000004436351",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1401788?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "60b77615_cc8089f7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1550585
+      },
+      "writtenOn": "2020-08-15T01:29:49Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(AppOpsManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 442,
+        "startChar": 25,
+        "endLine": 442,
+        "endChar": 67
+      },
+      "revId": "f53d30b41bddb8550c226abfafd491bfa895a59e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
