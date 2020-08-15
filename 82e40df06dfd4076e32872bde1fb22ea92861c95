@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2e74159_0e28161e",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2020-08-15T04:59:30Z",
+      "side": 1,
+      "message": "should fallback to 1.5 hal if it fails. You can create a new variable which can be turned off after FC date based on which you will decide whether to fallback or not\n\nThis is as per https://docs.google.com/presentation/d/1SlrIQwYIO6NKxwEI59eI3wopIpjmiogQBIHAnGoWKps/edit#slide\u003did.g905ae561ce_0_18",
+      "range": {
+        "startLine": 1894,
+        "startChar": 24,
+        "endLine": 1895,
+        "endChar": 60
+      },
+      "revId": "82e40df06dfd4076e32872bde1fb22ea92861c95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
