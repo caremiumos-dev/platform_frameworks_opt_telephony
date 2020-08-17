@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d928464_af7ca5b2",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-17T22:42:48Z",
+      "side": 1,
+      "message": "Sorry missed this earlier: can you please add a comment in both places that this is done so that unnecessary ABSENT sim state is not sent to rest of the code which may trigger certain persistent state changes (like updating UICC_APPLICATIONS_ENABLED in subscription db).",
+      "revId": "c4ccfd61273d95201f547979b7c6f94bc30e50ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
