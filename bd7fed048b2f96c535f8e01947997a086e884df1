@@ -22,6 +22,30 @@
       "revId": "bd7fed048b2f96c535f8e01947997a086e884df1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab773be6_e68f908d",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-08-17T12:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6a46045_61937517",
+      "range": {
+        "startLine": 1242,
+        "startChar": 28,
+        "endLine": 1242,
+        "endChar": 49
+      },
+      "revId": "bd7fed048b2f96c535f8e01947997a086e884df1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
