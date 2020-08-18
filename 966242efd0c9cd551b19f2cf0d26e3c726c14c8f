@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a97536c_112f2784",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-18T21:12:53Z",
+      "side": 1,
+      "message": "Sandeep, can we get Qualcomm review +1 on this?",
+      "revId": "966242efd0c9cd551b19f2cf0d26e3c726c14c8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
