@@ -183,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "d95751ee_bf378bd9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-18T06:42:10Z",
+      "side": 1,
+      "message": "I mean remove KEY_DISABLE_DUN_APN_WHILE_ROAMING and replace it with KEY_DISABLE_DUN_APN_WHILE_ROAMING_WITH_PRESET_APN_BOOL.",
+      "parentUuid": "6afce106_4df2b9a6",
+      "range": {
+        "startLine": 1892,
+        "startChar": 17,
+        "endLine": 1892,
+        "endChar": 78
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a4ed3941_dde002db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -218,6 +242,30 @@
       "side": 1,
       "message": "We need this to meet carrier requirement. \n\nIn the CL you have shared, there is possibility to use apn other than user added apn in additional APN connection mode. It\u0027s a spec violation. If device fails to connect data using user added apn, device will try to connect using other apns in DB because SET_ID is not set for user added apn.",
       "parentUuid": "a4ed3941_dde002db",
+      "range": {
+        "startLine": 3275,
+        "startChar": 63,
+        "endLine": 3275,
+        "endChar": 94
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b4668eb_b491c469",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-18T06:42:10Z",
+      "side": 1,
+      "message": "Based on your response to the question below, we can just remove preferredApnSetId \u003d\u003d Telephony.Carriers.NO_APN_SET_ID check from buildWaitingApns. That should have the same effect. Let me know if you disagree.",
+      "parentUuid": "e385ded2_daae6fd0",
       "range": {
         "startLine": 3275,
         "startChar": 63,
@@ -277,6 +325,30 @@
     },
     {
       "key": {
+        "uuid": "da8a392b_e971a85f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3279,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-18T06:42:10Z",
+      "side": 1,
+      "message": "Ack. Please see my comment above.",
+      "parentUuid": "59edd7cd_e72dc1e1",
+      "range": {
+        "startLine": 3279,
+        "startChar": 31,
+        "endLine": 3279,
+        "endChar": 43
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8bcc01c_b95609f6",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -306,6 +378,24 @@
       "side": 1,
       "message": "If we use Sony\u0027s solution, we need this. If we remove this, we can\u0027t add IMS apn if preferred apn is user added apn.",
       "parentUuid": "e8bcc01c_b95609f6",
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23ce3839_ae35ba29",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3308,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-18T06:42:10Z",
+      "side": 1,
+      "message": "So if I understand correctly, the requirement is to use APNs that match the SET_ID of preferred APN *except* for IMS -- in case of IMS the SET_ID check is not required? If that\u0027s correct, this can also be done in buildWaitingApns() by checking if the APN supports IMS.",
+      "parentUuid": "68a8eb49_8c974aa4",
       "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
