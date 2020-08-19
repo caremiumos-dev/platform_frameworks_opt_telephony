@@ -34,6 +34,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.content.Intent;
@@ -349,6 +350,39 @@ public class MultiSimSettingControllerTest extends TelephonyTest {
         assertEquals(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL,
                 intent.getIntExtra(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE, -1));
         assertEquals(2, intent.getIntExtra(EXTRA_SUBSCRIPTION_ID, -1));
+    }
+
+    @Test
+    @SmallTest
+    public void testSimpleDsdsFirstBoot() {
+        // at first boot default is not set
+        doReturn(-1).when(mSubControllerMock).getDefaultDataSubId();
+
+        doReturn(true).when(mPhoneMock1).isUserDataEnabled();
+        doReturn(true).when(mPhoneMock2).isUserDataEnabled();
+        // After initialization, sub 2 should have mobile data off.
+        mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
+        mMultiSimSettingControllerUT.notifyCarrierConfigChanged(0, 1);
+        mMultiSimSettingControllerUT.notifyCarrierConfigChanged(1, 2);
+        processAllMessages();
+        verify(mDataEnabledSettingsMock1).setUserDataEnabled(false);
+        verify(mDataEnabledSettingsMock2).setUserDataEnabled(false);
+
+        // as a result of the above calls, update new values to be returned
+        doReturn(false).when(mPhoneMock1).isUserDataEnabled();
+        doReturn(false).when(mPhoneMock2).isUserDataEnabled();
+
+        Intent intent = captureBroadcastIntent();
+        assertEquals(ACTION_PRIMARY_SUBSCRIPTION_LIST_CHANGED, intent.getAction());
+        assertEquals(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DATA,
+                intent.getIntExtra(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE, -1));
+
+        // Setting default data should not trigger any more setUserDataEnabled().
+        doReturn(2).when(mSubControllerMock).getDefaultDataSubId();
+        mMultiSimSettingControllerUT.notifyDefaultDataSubChanged();
+        processAllMessages();
+        verify(mDataEnabledSettingsMock1, times(1)).setUserDataEnabled(anyBoolean());
+        verify(mDataEnabledSettingsMock2, times(1)).setUserDataEnabled(anyBoolean());
     }
 
     @Test
