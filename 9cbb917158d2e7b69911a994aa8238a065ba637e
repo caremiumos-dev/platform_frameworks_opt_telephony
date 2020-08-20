@@ -70,6 +70,30 @@
       "revId": "9cbb917158d2e7b69911a994aa8238a065ba637e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6043306c_e2690f2a",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1583329
+      },
+      "writtenOn": "2020-08-20T11:18:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "318a1abe_ca21dd65",
+      "range": {
+        "startLine": 324,
+        "startChar": 8,
+        "endLine": 325,
+        "endChar": 50
+      },
+      "revId": "9cbb917158d2e7b69911a994aa8238a065ba637e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
