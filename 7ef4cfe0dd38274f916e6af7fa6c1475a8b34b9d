@@ -207,6 +207,30 @@
     },
     {
       "key": {
+        "uuid": "229cca35_d63752c1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-08-21T02:26:07Z",
+      "side": 1,
+      "message": "I understood. I will do that.",
+      "parentUuid": "d95751ee_bf378bd9",
+      "range": {
+        "startLine": 1892,
+        "startChar": 17,
+        "endLine": 1892,
+        "endChar": 78
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a4ed3941_dde002db",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -266,6 +290,30 @@
       "side": 1,
       "message": "Based on your response to the question below, we can just remove preferredApnSetId \u003d\u003d Telephony.Carriers.NO_APN_SET_ID check from buildWaitingApns. That should have the same effect. Let me know if you disagree.",
       "parentUuid": "e385ded2_daae6fd0",
+      "range": {
+        "startLine": 3275,
+        "startChar": 63,
+        "endLine": 3275,
+        "endChar": 94
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c7bed9a_aa9550a4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-08-21T02:26:07Z",
+      "side": 1,
+      "message": "That will not have the same effect. By removing preferredApnSetId \u003d\u003d Telephony.Carriers.NO_APN_SET_ID check from buildWaitingApns, we can exclude preset apns in additional apn connection mode. But there is still possibility that device turns off the additional APN connection mode automatically even if this connection fails to access network. For example, user may add two apns(APN1 as preferred apn and another is APN2) and their setid will be both NO_APN_SET_ID. In this case, both apns are added apnList in #buildWaitingApns. If the connection for APN1 fails to access network, the device will use APN2. We think it is a spec violation.",
+      "parentUuid": "5b4668eb_b491c469",
       "range": {
         "startLine": 3275,
         "startChar": 63,
@@ -349,6 +397,30 @@
     },
     {
       "key": {
+        "uuid": "3b839fb3_968789a8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3279,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-08-21T02:26:07Z",
+      "side": 1,
+      "message": "Please see answer above.",
+      "parentUuid": "da8a392b_e971a85f",
+      "range": {
+        "startLine": 3279,
+        "startChar": 31,
+        "endLine": 3279,
+        "endChar": 43
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8bcc01c_b95609f6",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
@@ -396,6 +468,24 @@
       "side": 1,
       "message": "So if I understand correctly, the requirement is to use APNs that match the SET_ID of preferred APN *except* for IMS -- in case of IMS the SET_ID check is not required? If that\u0027s correct, this can also be done in buildWaitingApns() by checking if the APN supports IMS.",
       "parentUuid": "68a8eb49_8c974aa4",
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1657bbf6_d0654e0d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3308,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-08-21T02:26:07Z",
+      "side": 1,
+      "message": "Please see answer above. If we can\u0027t use Google\u0027s solution, we can\u0027t adopt your suggestion.",
+      "parentUuid": "23ce3839_ae35ba29",
       "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
