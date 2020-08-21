@@ -225,6 +225,8 @@ public class EmergencyNumberTracker extends Handler {
                     loge("EVENT_UPDATE_DB_COUNTRY_ISO_CHANGED: Result from UpdateCountryIso is"
                             + " null.");
                 } else {
+                    logd("EVENT_UPDATE_DB_COUNTRY_ISO_CHANGED: CountryIso: "
+                            + (String) msg.obj);
                     updateEmergencyNumberListDatabaseAndNotify((String) msg.obj);
                 }
                 break;
@@ -474,6 +476,7 @@ public class EmergencyNumberTracker extends Handler {
             return;
         } else if (assetsDatabaseVersion > otaDatabaseVersion) {
             logd("Using Asset Emergency database. Version: " + assetsDatabaseVersion);
+            logd("Using Asset Emergency database: " + updatedAssetEmergencyNumberList);
             mCurrentDatabaseVersion = assetsDatabaseVersion;
             mEmergencyNumberListFromDatabase = updatedAssetEmergencyNumberList;
         } else {
@@ -503,10 +506,12 @@ public class EmergencyNumberTracker extends Handler {
             inputStream = new BufferedInputStream(fileInputStream);
             allEccMessages = ProtobufEccData.AllInfo.parseFrom(readInputStreamToByteArray(
                     new GZIPInputStream(inputStream)));
-            logd(mCountryIso + " ota emergency database is loaded. Ver: " + otaDatabaseVersion);
             otaDatabaseVersion = allEccMessages.revision;
+            logd("Ota emergency database is loaded. Ver: " + otaDatabaseVersion);
             for (ProtobufEccData.CountryInfo countryEccInfo : allEccMessages.countries) {
                 if (countryEccInfo.isoCode.equals(mCountryIso.toUpperCase())) {
+                    logd("cacheOtaEmergencyNumberDatabase: reading eccInfo: " + countryEccInfo
+                            + "countryIso: " + mCountryIso);
                     for (ProtobufEccData.EccInfo eccInfo : countryEccInfo.eccs) {
                         updatedOtaEmergencyNumberList.add(convertEmergencyNumberFromEccInfo(
                                 eccInfo, mCountryIso));
@@ -538,8 +543,9 @@ public class EmergencyNumberTracker extends Handler {
 
         // Use a valid database that has higher version.
         if (otaDatabaseVersion != INVALID_DATABASE_VERSION
-                && mCurrentDatabaseVersion < otaDatabaseVersion) {
+                && mCurrentDatabaseVersion <= otaDatabaseVersion) {
             mCurrentDatabaseVersion = otaDatabaseVersion;
+            logd("Using Ota Emergency database: " + updatedOtaEmergencyNumberList);
             mEmergencyNumberListFromDatabase = updatedOtaEmergencyNumberList;
         }
         return otaDatabaseVersion;
