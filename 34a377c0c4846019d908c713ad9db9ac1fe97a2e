@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84ee0239_4c59fc1d",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2020-08-24T07:36:32Z",
+      "side": 1,
+      "message": "I have a question.\nDoes this patch fully cover with guarantee SimSelectDialog is pop-up through preventing first intent being broadcast?\nHow about using system property value about system boot reason?\n\nCould you please refer to my contribution patch?\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1388697",
+      "range": {
+        "startLine": 638,
+        "startChar": 16,
+        "endLine": 638,
+        "endChar": 72
+      },
+      "revId": "34a377c0c4846019d908c713ad9db9ac1fe97a2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
