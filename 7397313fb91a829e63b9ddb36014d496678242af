@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db0d5f6a_2ee2292a",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-24T17:31:25Z",
+      "side": 1,
+      "message": "I don\u0027t think this is a good idea. If the property is false, we are not listening to any indication when this changes to true -- in that case when will reEvaluateAll() be called? And why do we need boot_completed to be true? Are we broadcasting an intent that is required by a non-directBootAware module?",
+      "revId": "7397313fb91a829e63b9ddb36014d496678242af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
