@@ -16,6 +16,24 @@
       "revId": "7397313fb91a829e63b9ddb36014d496678242af",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b941b2ee_aa89f384",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2020-08-25T09:10:15Z",
+      "side": 1,
+      "message": "Actually I have met some situation. \n\n[Situation] The popup about selecting data SIM disappeared after device 1st boots up. \nIt only occurs first booting time after fusing AP binary. (or first booting time after deleting userdata.)\n\n[Analysis]\nGetting SubscriptionManager was failed on SimListDialogFragment. It\u0027s because context gotten from system was null.\nI think that both all subscription info and carrier config are loaded before android system fully boots up.\n\n[Solution]\nSo, I added checking sys.boot_completed. This system property will be set as true after device boots up.\nAnd reEvaluateAll() can be called when subscription info is changed also.\nTherefore this popup can be showed although previous result of isReadyToReevaluate() was false.\n\n\nBut, now I cannot reproduce same situation. I agree with you, using system property is improper. I\u0027ll abandon my patch.",
+      "parentUuid": "db0d5f6a_2ee2292a",
+      "revId": "7397313fb91a829e63b9ddb36014d496678242af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
