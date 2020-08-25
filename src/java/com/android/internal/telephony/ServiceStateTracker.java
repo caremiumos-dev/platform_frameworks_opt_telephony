@@ -366,6 +366,8 @@ public class ServiceStateTracker extends Handler {
     private final LocalLog mCdnrLogs = new LocalLog(64);
 
     private Pattern mOperatorNameStringPattern;
+    private static final String ACTION_MANAGED_ROAMING_IND =
+            "com.android.internal.telephony.ACTION_MANAGED_ROAMING_IND";
 
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
 
@@ -2192,6 +2194,24 @@ public class ServiceStateTracker extends Handler {
 
                     if (mRegistrationState == 3) {
                         if (DBG) log("Registration denied, " + mRegistrationDeniedReason);
+                        // Check if rejCode is "Persistent location update reject" and send
+                        // intent for clients to display a required notification/UI.
+                        if (reasonForDenial == 10) {
+                            log(" Posting Managed roaming intent sub = "
+                                    + mPhone.getSubId());
+                            try {
+                                Intent intent =
+                                        new Intent(ACTION_MANAGED_ROAMING_IND);
+                                // component would display Dialog to perform Manual scan
+                                // if current Network selection Mode is Manual.
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(PhoneConstants.SUBSCRIPTION_KEY,
+                                        mPhone.getSubId());
+                                mPhone.getContext().startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                loge("unable to start activity: " + e);
+                            }
+                        }
                     }
                 }
 
