@@ -366,6 +366,8 @@ public class ServiceStateTracker extends Handler {
     private final LocalLog mCdnrLogs = new LocalLog(64);
 
     private Pattern mOperatorNameStringPattern;
+    private static final String ACTION_MANAGED_ROAMING_IND =
+            "android.intent.action.ACTION_MANAGED_ROAMING_IND";
 
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
 
@@ -2148,10 +2150,32 @@ public class ServiceStateTracker extends Handler {
                 //Denial reason if registrationState = 3
                 int reasonForDenial = networkRegState.getRejectCause();
                 mEmergencyOnly = networkRegState.isEmergencyEnabled();
+                mRegistrationState = registrationState;
                 if (mPhone.isPhoneTypeGsm()) {
 
                     mGsmVoiceRoaming = regCodeIsRoaming(registrationState);
                     mNewRejectCode = reasonForDenial;
+
+                    if (mRegistrationState == 3) {
+                        if (DBG) log("Registration denied reason " + reasonForDenial);
+                        // Check if rejCode is "Persistent location update reject"
+                        if (reasonForDenial == 10) {
+                            log(" Posting Managed roaming intent sub = "
+                                    + mPhone.getSubId());
+                            try {
+                                Intent intent =
+                                        new Intent(ACTION_MANAGED_ROAMING_IND);
+                                // component would display Dialog to perform Manual scan
+                                // if current Network selection Mode is Manual.
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(PhoneConstants.SUBSCRIPTION_KEY,
+                                        mPhone.getSubId());
+                                mPhone.getContext().startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                loge("unable to start activity: " + e);
+                            }
+                        }
+                    }
                 } else {
                     int roamingIndicator = voiceSpecificStates.roamingIndicator;
 
@@ -2161,7 +2185,6 @@ public class ServiceStateTracker extends Handler {
                     //Is default roaming indicator from PRL
                     int defaultRoamingIndicator = voiceSpecificStates.defaultRoamingIndicator;
 
-                    mRegistrationState = registrationState;
                     // When registration state is roaming and TSB58
                     // roaming indicator is not in the carrier-specified
                     // list of ERIs for home system, mCdmaRoaming is true.
