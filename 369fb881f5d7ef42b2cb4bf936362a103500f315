@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "8a62ff97_74b18ce9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2020-08-26T22:19:31Z",
+      "side": 1,
+      "message": "Google incorporated this change @ https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1210723",
+      "revId": "369fb881f5d7ef42b2cb4bf936362a103500f315",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "013de911_1d002945",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 1
