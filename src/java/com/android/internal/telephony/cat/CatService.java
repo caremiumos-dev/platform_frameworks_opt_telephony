@@ -37,6 +37,7 @@ import android.os.LocaleList;
 import android.os.Message;
 import android.os.RemoteException;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
@@ -462,6 +463,11 @@ public class CatService extends Handler implements AppInterface {
             case PLAY_TONE:
                 break;
             case SET_UP_CALL:
+                if (isAvailableSetUpCall() == false) {
+                    mCmdIf.handleCallSetupRequestFromSim(false, null);
+                    return;
+                }
+
                 if ((((CallSetupParams) cmdParams).mConfirmMsg.text != null)
                         && (((CallSetupParams) cmdParams).mConfirmMsg.text.equals(STK_DEFAULT))) {
                     message = mContext.getText(com.android.internal.R.string.SetupCallDefault);
@@ -1187,4 +1193,16 @@ public class CatService extends Handler implements AppInterface {
         am.updatePersistentConfiguration(config);
         BackupManager.dataChanged("com.android.providers.settings");
     }
+
+    boolean isAvailableSetUpCall() {
+        final TelephonyManager tm = TelephonyManager.from(mContext);
+        for (int i = 0; i < tm.getPhoneCount(); i++) {
+            if (TelephonyManager.CALL_STATE_IDLE != tm.getCallStateForSlot(i)) {
+                Toast.makeText(mContext, "You cannot connect because you are on a call.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
 }
+
