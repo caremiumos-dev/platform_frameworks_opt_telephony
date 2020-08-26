@@ -36,6 +36,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.RegistrantList;
@@ -66,6 +67,7 @@ import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccSlot;
 import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
@@ -325,6 +327,9 @@ public class SubscriptionController extends ISub.Stub {
             notifyOpportunisticSubscriptionInfoChanged();
         }
         metrics.updateActiveSubscriptionInfoList(subInfos);
+        for (Phone phone : PhoneFactory.getPhones()) {
+            phone.getVoiceCallSessionStats().onActiveSubscriptionInfoChanged(subInfos);
+        }
     }
 
     /**
@@ -572,16 +577,18 @@ public class SubscriptionController extends ISub.Stub {
      * @hide
      */
     public SubscriptionInfo getSubscriptionInfo(int subId) {
-        // check cache for active subscriptions first, before querying db
-        for (SubscriptionInfo subInfo : mCacheActiveSubInfoList) {
-            if (subInfo.getSubscriptionId() == subId) {
-                return subInfo;
+        synchronized (mSubInfoListLock) {
+            // check cache for active subscriptions first, before querying db
+            for (SubscriptionInfo subInfo : mCacheActiveSubInfoList) {
+                if (subInfo.getSubscriptionId() == subId) {
+                    return subInfo;
+                }
             }
-        }
-        // check cache for opportunistic subscriptions too, before querying db
-        for (SubscriptionInfo subInfo : mCacheOpportunisticSubInfoList) {
-            if (subInfo.getSubscriptionId() == subId) {
-                return subInfo;
+            // check cache for opportunistic subscriptions too, before querying db
+            for (SubscriptionInfo subInfo : mCacheOpportunisticSubInfoList) {
+                if (subInfo.getSubscriptionId() == subId) {
+                    return subInfo;
+                }
             }
         }
 
@@ -896,6 +903,17 @@ public class SubscriptionController extends ISub.Stub {
                 selection += " OR " + SubscriptionManager.IS_EMBEDDED + "=1";
             }
 
+            // Available eSIM profiles are reported by EuiccManager. However for physical SIMs if
+            // they are in inactive slot or programmatically disabled, they are still considered
+            // available. In this case we get their iccid from slot info and include their
+            // subscriptionInfos.
+            List<String> iccIds = getIccIdsOfInsertedPhysicalSims();
+
+            if (!iccIds.isEmpty()) {
+                selection += " OR ("  + getSelectionForIccIdList(iccIds.toArray(new String[0]))
+                        + ")";
+            }
+
             List<SubscriptionInfo> subList = getSubInfo(selection, null /* queryKey */);
 
             if (subList != null) {
@@ -910,6 +928,23 @@ public class SubscriptionController extends ISub.Stub {
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
+    }
+
+    private List<String> getIccIdsOfInsertedPhysicalSims() {
+        List<String> ret = new ArrayList<>();
+        UiccSlot[] uiccSlots = UiccController.getInstance().getUiccSlots();
+        if (uiccSlots == null) return ret;
+
+        for (UiccSlot uiccSlot : uiccSlots) {
+            if (uiccSlot != null && uiccSlot.getCardState() != null
+                    && uiccSlot.getCardState().isCardPresent()
+                    && !uiccSlot.isEuicc()
+                    && !TextUtils.isEmpty(uiccSlot.getIccId())) {
+                ret.add(IccUtils.stripTrailingFs(uiccSlot.getIccId()));
+            }
+        }
+
+        return ret;
     }
 
     @Override
@@ -1331,12 +1366,14 @@ public class SubscriptionController extends ISub.Stub {
         // validate the given info - does it exist in the active subscription list
         int subId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
         int slotIndex = SubscriptionManager.INVALID_SIM_SLOT_INDEX;
-        for (SubscriptionInfo info : mCacheActiveSubInfoList) {
-            if ((info.getSubscriptionType() == subscriptionType)
-                    && info.getIccId().equalsIgnoreCase(uniqueId)) {
-                subId = info.getSubscriptionId();
-                slotIndex = info.getSimSlotIndex();
-                break;
+        synchronized (mSubInfoListLock) {
+            for (SubscriptionInfo info : mCacheActiveSubInfoList) {
+                if ((info.getSubscriptionType() == subscriptionType)
+                        && info.getIccId().equalsIgnoreCase(uniqueId)) {
+                    subId = info.getSubscriptionId();
+                    slotIndex = info.getSimSlotIndex();
+                    break;
+                }
             }
         }
         if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
@@ -1928,12 +1965,25 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     /**
+     * Scrub given IMSI on production builds.
+     */
+    private String scrubImsi(String imsi) {
+        if (Build.IS_ENG) {
+            return imsi;
+        } else if (imsi != null) {
+            return imsi.substring(0, Math.min(6, imsi.length())) + "...";
+        } else {
+            return "null";
+        }
+    }
+
+    /**
      * Set IMSI by subscription ID
      * @param imsi IMSI (International Mobile Subscriber Identity)
      * @return the number of records updated
      */
     public int setImsi(String imsi, int subId) {
-        if (DBG) logd("[setImsi]+ imsi:" + imsi + " subId:" + subId);
+        if (DBG) logd("[setImsi]+ imsi:" + scrubImsi(imsi) + " subId:" + subId);
         ContentValues value = new ContentValues(1);
         value.put(SubscriptionManager.IMSI, imsi);
 
@@ -2562,11 +2612,13 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     private boolean isSubscriptionVisible(int subId) {
-        for (SubscriptionInfo info : mCacheOpportunisticSubInfoList) {
-            if (info.getSubscriptionId() == subId) {
-                // If group UUID is null, it's stand alone opportunistic profile. So it's visible.
-                // otherwise, it's bundled opportunistic profile, and is not visible.
-                return info.getGroupUuid() == null;
+        synchronized (mSubInfoListLock) {
+            for (SubscriptionInfo info : mCacheOpportunisticSubInfoList) {
+                if (info.getSubscriptionId() == subId) {
+                    // If group UUID is null, it's stand alone opportunistic profile. So it's
+                    // visible. Otherwise, it's bundled opportunistic profile, and is not visible.
+                    return info.getGroupUuid() == null;
+                }
             }
         }
 
@@ -3372,6 +3424,23 @@ public class SubscriptionController extends ISub.Stub {
     }
 
     /**
+     * Helper function to create selection argument of a list of subId.
+     * The result should be: "in (iccId1, iccId2, ...)".
+     */
+    private String getSelectionForIccIdList(String[] iccIds) {
+        StringBuilder selection = new StringBuilder();
+        selection.append(SubscriptionManager.ICC_ID);
+        selection.append(" IN (");
+        for (int i = 0; i < iccIds.length - 1; i++) {
+            selection.append("\"" + iccIds[i] + "\", ");
+        }
+        selection.append("\"" + iccIds[iccIds.length - 1] + "\"");
+        selection.append(")");
+
+        return selection.toString();
+    }
+
+    /**
      * Get subscriptionInfo list of subscriptions that are in the same group of given subId.
      * See {@link #createSubscriptionGroup(int[], String)} for more details.
      *
@@ -3835,9 +3904,11 @@ public class SubscriptionController extends ISub.Stub {
     private boolean shouldDisableSubGroup(ParcelUuid groupUuid) {
         if (groupUuid == null) return false;
 
-        for (SubscriptionInfo activeInfo : mCacheActiveSubInfoList) {
-            if (!activeInfo.isOpportunistic() && groupUuid.equals(activeInfo.getGroupUuid())) {
-                return false;
+        synchronized (mSubInfoListLock) {
+            for (SubscriptionInfo activeInfo : mCacheActiveSubInfoList) {
+                if (!activeInfo.isOpportunistic() && groupUuid.equals(activeInfo.getGroupUuid())) {
+                    return false;
+                }
             }
         }
 

@@ -126,7 +126,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -369,8 +368,6 @@ public class ServiceStateTracker extends Handler {
     private Pattern mOperatorNameStringPattern;
 
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
-        public final AtomicInteger mPreviousSubId =
-                new AtomicInteger(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
 
         /**
          * Callback invoked when there is any change to any SubscriptionInfo. Typically
@@ -379,70 +376,83 @@ public class ServiceStateTracker extends Handler {
         @Override
         public void onSubscriptionsChanged() {
             if (DBG) log("SubscriptionListener.onSubscriptionInfoChanged");
-            // Set the network type, in case the radio does not restore it.
-            int subId = mPhone.getSubId();
-            ServiceStateTracker.this.mPrevSubId = mPreviousSubId.get();
-            if (mPreviousSubId.getAndSet(subId) != subId) {
-                if (SubscriptionManager.isValidSubscriptionId(subId)) {
-                    Context context = mPhone.getContext();
 
-                    mPhone.notifyPhoneStateChanged();
-                    mPhone.notifyCallForwardingIndicator();
-                    if (!SubscriptionManager.isValidSubscriptionId(
-                            ServiceStateTracker.this.mPrevSubId)) {
-                        // just went from invalid to valid subId, so notify with current service
-                        // state in case our service stat was never broadcasted (we don't notify
-                        // service states when the subId is invalid)
-                        mPhone.notifyServiceStateChanged(mSS);
-                    }
+            final int curSubId = mPhone.getSubId();
 
-                    boolean restoreSelection = !context.getResources().getBoolean(
-                            com.android.internal.R.bool.skip_restoring_network_selection);
-                    mPhone.sendSubscriptionSettings(restoreSelection);
+            // If the sub info changed, but the subId is the same, then we're done.
+            if (mSubId == curSubId) return;
 
-                    setDataNetworkTypeForPhone(mSS.getRilDataRadioTechnology());
+            // If not, then the subId has changed, so we need to remember the old subId,
+            // even if the new subId is invalid (likely).
+            mPrevSubId = mSubId;
+            mSubId = curSubId;
 
-                    if (mSpnUpdatePending) {
-                        mSubscriptionController.setPlmnSpn(mPhone.getPhoneId(), mCurShowPlmn,
-                                mCurPlmn, mCurShowSpn, mCurSpn);
-                        mSpnUpdatePending = false;
-                    }
+            // Update voicemail count and notify message waiting changed regardless of
+            // whether the new subId is valid. This is an exception to the general logic
+            // of only updating things if the new subscription is valid. The result is that
+            // VoiceMail counts (and UI indicators) are cleared when the SIM is removed,
+            // which seems desirable.
+            mPhone.updateVoiceMail();
 
-                    // Remove old network selection sharedPreferences since SP key names are now
-                    // changed to include subId. This will be done only once when upgrading from an
-                    // older build that did not include subId in the names.
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
-                            context);
-                    String oldNetworkSelection = sp.getString(
-                            Phone.NETWORK_SELECTION_KEY, "");
-                    String oldNetworkSelectionName = sp.getString(
-                            Phone.NETWORK_SELECTION_NAME_KEY, "");
-                    String oldNetworkSelectionShort = sp.getString(
-                            Phone.NETWORK_SELECTION_SHORT_KEY, "");
-                    if (!TextUtils.isEmpty(oldNetworkSelection) ||
-                            !TextUtils.isEmpty(oldNetworkSelectionName) ||
-                            !TextUtils.isEmpty(oldNetworkSelectionShort)) {
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putString(Phone.NETWORK_SELECTION_KEY + subId,
-                                oldNetworkSelection);
-                        editor.putString(Phone.NETWORK_SELECTION_NAME_KEY + subId,
-                                oldNetworkSelectionName);
-                        editor.putString(Phone.NETWORK_SELECTION_SHORT_KEY + subId,
-                                oldNetworkSelectionShort);
-                        editor.remove(Phone.NETWORK_SELECTION_KEY);
-                        editor.remove(Phone.NETWORK_SELECTION_NAME_KEY);
-                        editor.remove(Phone.NETWORK_SELECTION_SHORT_KEY);
-                        editor.commit();
-                    }
+            // If the new subscription ID isn't valid, then we don't need to do all the
+            // UI updating, so we're done.
+            if (!SubscriptionManager.isValidSubscriptionId(mSubId)) return;
 
-                    // Once sub id becomes valid, we need to update the service provider name
-                    // displayed on the UI again. The old SPN update intents sent to
-                    // MobileSignalController earlier were actually ignored due to invalid sub id.
-                    updateSpnDisplay();
-                }
-                // update voicemail count and notify message waiting changed
-                mPhone.updateVoiceMail();
+            Context context = mPhone.getContext();
+
+            mPhone.notifyPhoneStateChanged();
+            mPhone.notifyCallForwardingIndicator();
+
+            if (!SubscriptionManager.isValidSubscriptionId(mPrevSubId)) {
+                // just went from invalid to valid subId, so notify with current service
+                // state in case our service state was never broadcasted (we don't notify
+                // service states when the subId is invalid)
+                mPhone.notifyServiceStateChanged(mSS);
             }
+
+            boolean restoreSelection = !context.getResources().getBoolean(
+                    com.android.internal.R.bool.skip_restoring_network_selection);
+            mPhone.sendSubscriptionSettings(restoreSelection);
+
+            setDataNetworkTypeForPhone(mSS.getRilDataRadioTechnology());
+
+            if (mSpnUpdatePending) {
+                mSubscriptionController.setPlmnSpn(mPhone.getPhoneId(), mCurShowPlmn,
+                        mCurPlmn, mCurShowSpn, mCurSpn);
+                mSpnUpdatePending = false;
+            }
+
+            // Remove old network selection sharedPreferences since SP key names are now
+            // changed to include subId. This will be done only once when upgrading from an
+            // older build that did not include subId in the names.
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
+                    context);
+            String oldNetworkSelection = sp.getString(
+                    Phone.NETWORK_SELECTION_KEY, "");
+            String oldNetworkSelectionName = sp.getString(
+                    Phone.NETWORK_SELECTION_NAME_KEY, "");
+            String oldNetworkSelectionShort = sp.getString(
+                    Phone.NETWORK_SELECTION_SHORT_KEY, "");
+            if (!TextUtils.isEmpty(oldNetworkSelection)
+                    || !TextUtils.isEmpty(oldNetworkSelectionName)
+                    || !TextUtils.isEmpty(oldNetworkSelectionShort)) {
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(Phone.NETWORK_SELECTION_KEY + mSubId,
+                        oldNetworkSelection);
+                editor.putString(Phone.NETWORK_SELECTION_NAME_KEY + mSubId,
+                        oldNetworkSelectionName);
+                editor.putString(Phone.NETWORK_SELECTION_SHORT_KEY + mSubId,
+                        oldNetworkSelectionShort);
+                editor.remove(Phone.NETWORK_SELECTION_KEY);
+                editor.remove(Phone.NETWORK_SELECTION_NAME_KEY);
+                editor.remove(Phone.NETWORK_SELECTION_SHORT_KEY);
+                editor.commit();
+            }
+
+            // Once sub id becomes valid, we need to update the service provider name
+            // displayed on the UI again. The old SPN update intents sent to
+            // MobileSignalController earlier were actually ignored due to invalid sub id.
+            updateSpnDisplay();
         }
     };
 
@@ -529,6 +539,8 @@ public class ServiceStateTracker extends Handler {
     /** To identify whether EVENT_SIM_READY is received or not */
     private boolean mIsSimReady = false;
 
+    private String mLastKnownNetworkCountry = "";
+
     @UnsupportedAppUsage
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -554,6 +566,12 @@ public class ServiceStateTracker extends Handler {
             } else if (intent.getAction().equals(ACTION_RADIO_OFF)) {
                 mAlarmSwitch = false;
                 powerOffRadioSafely();
+            } else if (intent.getAction().equals(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED)) {
+                String lastKnownNetworkCountry = intent.getStringExtra(
+                        TelephonyManager.EXTRA_LAST_KNOWN_NETWORK_COUNTRY);
+                if (!mLastKnownNetworkCountry.equals(lastKnownNetworkCountry)) {
+                    updateSpnDisplay();
+                }
             }
         }
     };
@@ -630,8 +648,8 @@ public class ServiceStateTracker extends Handler {
 
         mSubscriptionController = SubscriptionController.getInstance();
         mSubscriptionManager = SubscriptionManager.from(phone.getContext());
-        mSubscriptionManager
-                .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
+        mSubscriptionManager.addOnSubscriptionsChangedListener(
+                new android.os.HandlerExecutor(this), mOnSubscriptionsChangedListener);
         mRestrictedState = new RestrictedState();
 
         mTransportManager = mPhone.getTransportManager();
@@ -674,6 +692,9 @@ public class ServiceStateTracker extends Handler {
         context.registerReceiver(mIntentReceiver, filter);
         filter = new IntentFilter();
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        context.registerReceiver(mIntentReceiver, filter);
+        filter = new IntentFilter();
+        filter.addAction(TelephonyManager.ACTION_NETWORK_COUNTRY_CHANGED);
         context.registerReceiver(mIntentReceiver, filter);
 
         mPhone.notifyOtaspChanged(TelephonyManager.OTASP_UNINITIALIZED);
@@ -1079,29 +1100,32 @@ public class ServiceStateTracker extends Handler {
     private boolean mWantContinuousLocationUpdates;
     private boolean mWantSingleLocationUpdate;
 
-    public void enableSingleLocationUpdate() {
+    /**
+     * Request a single update of the device's current registered cell.
+     */
+    public void enableSingleLocationUpdate(WorkSource workSource) {
         if (mWantSingleLocationUpdate || mWantContinuousLocationUpdates) return;
         mWantSingleLocationUpdate = true;
-        mCi.setLocationUpdates(true, obtainMessage(EVENT_LOCATION_UPDATES_ENABLED));
+        mCi.setLocationUpdates(true, workSource, obtainMessage(EVENT_LOCATION_UPDATES_ENABLED));
     }
 
     public void enableLocationUpdates() {
         if (mWantSingleLocationUpdate || mWantContinuousLocationUpdates) return;
         mWantContinuousLocationUpdates = true;
-        mCi.setLocationUpdates(true, obtainMessage(EVENT_LOCATION_UPDATES_ENABLED));
+        mCi.setLocationUpdates(true, null, obtainMessage(EVENT_LOCATION_UPDATES_ENABLED));
     }
 
     protected void disableSingleLocationUpdate() {
         mWantSingleLocationUpdate = false;
         if (!mWantSingleLocationUpdate && !mWantContinuousLocationUpdates) {
-            mCi.setLocationUpdates(false, null);
+            mCi.setLocationUpdates(false, null, null);
         }
     }
 
     public void disableLocationUpdates() {
         mWantContinuousLocationUpdates = false;
         if (!mWantSingleLocationUpdate && !mWantContinuousLocationUpdates) {
-            mCi.setLocationUpdates(false, null);
+            mCi.setLocationUpdates(false, null, null);
         }
     }
 
@@ -1160,8 +1184,8 @@ public class ServiceStateTracker extends Handler {
                     mCdnr.updateEfFromUsim(null /* Usim */);
                 }
                 onUpdateIccAvailability();
-                if (mUiccApplcation != null
-                        && mUiccApplcation.getState() != AppState.APPSTATE_READY) {
+                if (mUiccApplcation == null
+                        || mUiccApplcation.getState() != AppState.APPSTATE_READY) {
                     mIsSimReady = false;
                     updateSpnDisplay();
                 }
@@ -1248,10 +1272,8 @@ public class ServiceStateTracker extends Handler {
 
             // GSM
             case EVENT_SIM_READY:
-                // Reset the mPreviousSubId so we treat a SIM power bounce
+                // Reset the mPrevSubId so we treat a SIM power bounce
                 // as a first boot.  See b/19194287
-                mOnSubscriptionsChangedListener.mPreviousSubId.set(
-                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
                 mPrevSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
                 mIsSimReady = true;
                 pollStateInternal(false);
@@ -1619,12 +1641,12 @@ public class ServiceStateTracker extends Handler {
                     mPhone.notifyPhysicalChannelConfiguration(list);
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged = false;
-                    if (updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS)) {
-                        mNrFrequencyChangedRegistrants.notifyRegistrants();
-                        hasChanged = true;
-                    }
                     if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
                         mNrStateChangedRegistrants.notifyRegistrants();
+                        hasChanged = true;
+                    }
+                    if (updateNrFrequencyRangeFromPhysicalChannelConfigs(list, mSS)) {
+                        mNrFrequencyChangedRegistrants.notifyRegistrants();
                         hasChanged = true;
                     }
                     hasChanged |= RatRatcheter
@@ -1635,6 +1657,7 @@ public class ServiceStateTracker extends Handler {
                         mPhone.notifyServiceStateChanged(mSS);
                         TelephonyMetrics.getInstance().writeServiceStateChanged(
                                 mPhone.getPhoneId(), mSS);
+                        mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
                     }
                 }
                 break;
@@ -2218,6 +2241,7 @@ public class ServiceStateTracker extends Handler {
                 if (nrHasChanged) {
                     TelephonyMetrics.getInstance().writeServiceStateChanged(
                             mPhone.getPhoneId(), mSS);
+                    mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
                 }
 
                 if (mPhone.isPhoneTypeGsm()) {
@@ -2780,6 +2804,13 @@ public class ServiceStateTracker extends Handler {
             } else if (!TextUtils.isEmpty(plmn) && !TextUtils.isEmpty(wfcVoiceSpnFormat)) {
                 // Show PLMN + Wi-Fi Calling if there is no valid SPN in the above case
                 String originalPlmn = plmn.trim();
+
+                PersistableBundle config = getCarrierConfig();
+                if (mIccRecords != null && config.getBoolean(
+                        CarrierConfigManager.KEY_WFC_CARRIER_NAME_OVERRIDE_BY_PNN_BOOL)) {
+                    originalPlmn = mIccRecords.getPnnHomeName();
+                }
+
                 plmn = String.format(wfcVoiceSpnFormat, originalPlmn);
             } else if (mSS.getState() == ServiceState.STATE_POWER_OFF
                     || (showPlmn && TextUtils.equals(spn, plmn))) {
@@ -2846,9 +2877,9 @@ public class ServiceStateTracker extends Handler {
         if (ArrayUtils.isEmpty(countriesWithNoService)) {
             return false;
         }
-        String currentCountry = mLocaleTracker.getCurrentCountry();
+        mLastKnownNetworkCountry = mLocaleTracker.getLastKnownCountryIso();
         for (String country : countriesWithNoService) {
-            if (country.equalsIgnoreCase(currentCountry)) {
+            if (country.equalsIgnoreCase(mLastKnownNetworkCountry)) {
                 return true;
             }
         }
@@ -3203,6 +3234,10 @@ public class ServiceStateTracker extends Handler {
                 mTransportManager.getAvailableTransports().length);
         boolean anyDataRegChanged = false;
         boolean anyDataRatChanged = false;
+        boolean hasAlphaRawChanged =
+                mSS.getOperatorAlphaLongRaw() != mNewSS.getOperatorAlphaLongRaw()
+                        || mSS.getOperatorAlphaShortRaw() != mNewSS.getOperatorAlphaShortRaw();
+
         for (int transport : mTransportManager.getAvailableTransports()) {
             NetworkRegistrationInfo oldNrs = mSS.getNetworkRegistrationInfo(
                     NetworkRegistrationInfo.DOMAIN_PS, transport);
@@ -3227,12 +3262,13 @@ public class ServiceStateTracker extends Handler {
             int newRAT = newNrs != null ? newNrs.getAccessNetworkTechnology()
                     : TelephonyManager.NETWORK_TYPE_UNKNOWN;
 
-            boolean isOldCA = oldNrs != null ? (oldNrs.getDataSpecificInfo() != null
-                    ? oldNrs.getDataSpecificInfo().isUsingCarrierAggregation() : false) : false;
-            boolean isNewCA = newNrs!= null ? (newNrs. getDataSpecificInfo() != null
-                    ? newNrs. getDataSpecificInfo().isUsingCarrierAggregation() : false) : false;
+            boolean isOldCA = oldNrs != null ? oldNrs.isUsingCarrierAggregation() : false;
+            boolean isNewCA = newNrs != null ? newNrs.isUsingCarrierAggregation() : false;
 
-            hasRilDataRadioTechnologyChanged.put(transport, oldRAT != newRAT || isOldCA != isNewCA);
+            // If the carrier enable KEY_SHOW_CARRIER_DATA_ICON_PATTERN_STRING and the operator name
+            // match this pattern, the data rat display LteAdvanced indicator.
+            hasRilDataRadioTechnologyChanged.put(transport,
+                    oldRAT != newRAT || isOldCA != isNewCA || hasAlphaRawChanged);
             if (oldRAT != newRAT) {
                 anyDataRatChanged = true;
             }
@@ -3268,12 +3304,15 @@ public class ServiceStateTracker extends Handler {
         boolean hasLocationChanged = mCellIdentity == null
                 ? primaryCellIdentity != null : !mCellIdentity.isSameCell(primaryCellIdentity);
 
-        // ratchet the new tech up through its rat family but don't drop back down
-        // until cell change or device is OOS
-        boolean isDataInService = mNewSS.getDataRegistrationState()
-                == ServiceState.STATE_IN_SERVICE;
-        if (isDataInService) {
-            mRatRatcheter.ratchet(mSS, mNewSS, hasLocationChanged);
+        boolean isRegisteredOnWwan = false;
+        for (NetworkRegistrationInfo nri : mNewSS.getNetworkRegistrationInfoListForTransportType(
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN)) {
+            isRegisteredOnWwan |= nri.isRegistered();
+        }
+
+        // Ratchet if the device is in service on the same cell
+        if (isRegisteredOnWwan && !hasLocationChanged) {
+            mRatRatcheter.ratchet(mSS, mNewSS);
         }
 
         boolean hasRilVoiceRadioTechnologyChanged =
@@ -3489,6 +3528,7 @@ public class ServiceStateTracker extends Handler {
 
         if (hasChanged || hasNrStateChanged) {
             TelephonyMetrics.getInstance().writeServiceStateChanged(mPhone.getPhoneId(), mSS);
+            mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
         }
 
         boolean shouldLogAttachedChange = false;
@@ -5039,16 +5079,19 @@ public class ServiceStateTracker extends Handler {
         List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
                 .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
                         null);
-        for (SubscriptionInfo info : subInfoList) {
-            // If we have an active opportunistic subscription whose data is IN_SERVICE, we needs
-            // to get signal strength to decide data switching threshold. In this case, we poll
-            // latest signal strength from modem.
-            if (info.isOpportunistic()) {
-                TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
-                        .createForSubscriptionId(info.getSubscriptionId());
-                ServiceState ss = tm.getServiceState();
-                if (ss != null && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
-                    return true;
+        if (!ArrayUtils.isEmpty(subInfoList)) {
+            for (SubscriptionInfo info : subInfoList) {
+                // If we have an active opportunistic subscription whose data is IN_SERVICE,
+                // we need to get signal strength to decide data switching threshold. In this case,
+                // we poll latest signal strength from modem.
+                if (info.isOpportunistic()) {
+                    TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                            .createForSubscriptionId(info.getSubscriptionId());
+                    ServiceState ss = tm.getServiceState();
+                    if (ss != null
+                            && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                        return true;
+                    }
                 }
             }
         }
@@ -5629,6 +5672,7 @@ public class ServiceStateTracker extends Handler {
             if (networkRegistrationInfos.get(i) != null) {
                 updateOperatorNameForCellIdentity(
                         networkRegistrationInfos.get(i).getCellIdentity());
+                servicestate.addNetworkRegistrationInfo(networkRegistrationInfos.get(i));
             }
         }
     }
@@ -5738,10 +5782,12 @@ public class ServiceStateTracker extends Handler {
     public Set<Integer> getNrContextIds() {
         Set<Integer> idSet = new HashSet<>();
 
-        for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
-            if (isNrPhysicalChannelConfig(config)) {
-                for (int id : config.getContextIds()) {
-                    idSet.add(id);
+        if (!ArrayUtils.isEmpty(mLastPhysicalChannelConfigList)) {
+            for (PhysicalChannelConfig config : mLastPhysicalChannelConfigList) {
+                if (isNrPhysicalChannelConfig(config)) {
+                    for (int id : config.getContextIds()) {
+                        idSet.add(id);
+                    }
                 }
             }
         }

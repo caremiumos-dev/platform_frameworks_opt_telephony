@@ -98,7 +98,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
     public static final String METADATA_MMTEL_FEATURE = "android.telephony.ims.MMTEL_FEATURE";
     @VisibleForTesting
     public static final String METADATA_RCS_FEATURE = "android.telephony.ims.RCS_FEATURE";
-    // Overrides the sanity permission check of android.permission.BIND_IMS_SERVICE for any
+    // Overrides the correctness permission check of android.permission.BIND_IMS_SERVICE for any
     // ImsService that is connecting to the platform.
     // This should ONLY be used for testing and should not be used in production ImsServices.
     private static final String METADATA_OVERRIDE_PERM_CHECK = "override_bind_check";
@@ -765,6 +765,22 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             return controller;
         }
         return null;
+    }
+
+    /**
+     * Unregister a previously registered IImsServiceFeatureCallback through
+     * {@link #getImsServiceControllerAndListen(int, int, IImsServiceFeatureCallback)} .
+     * @param slotId The slot id associated with the ImsFeature.
+     * @param feature The {@link ImsFeature.FeatureType}
+     * @param callback The callback to be unregistered.
+     */
+    public void unregisterImsFeatureCallback(int slotId, int feature,
+            IImsServiceFeatureCallback callback) {
+        ImsServiceController controller = getImsServiceController(slotId, feature);
+
+        if (controller != null) {
+            controller.removeImsServiceFeatureCallback(callback);
+        }
     }
 
     // Used for testing only.

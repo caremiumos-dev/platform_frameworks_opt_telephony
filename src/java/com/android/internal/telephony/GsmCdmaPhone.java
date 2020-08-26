@@ -95,6 +95,7 @@ import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
+import com.android.internal.telephony.metrics.VoiceCallSessionStats;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardStatus;
@@ -166,6 +167,9 @@ public class GsmCdmaPhone extends Phone {
     // string to define how the carrier specifies its own ota sp number
     private String mCarrierOtaSpNumSchema;
     private Boolean mUiccApplicationsEnabled = null;
+    // keeps track of when we have triggered an emergency call due to the ril.test.emergencynumber
+    // param being set and we should generate a simulated exit from the modem upon exit of ECbM.
+    private boolean mIsTestingEmergencyCallbackMode = false;
     @VisibleForTesting
     public static int ENABLE_UICC_APPS_MAX_RETRIES = 3;
     private static final int REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS = 5000;
@@ -252,6 +256,7 @@ public class GsmCdmaPhone extends Phone {
 
         // phone type needs to be set before other initialization as other objects rely on it
         mPrecisePhoneType = precisePhoneType;
+        mVoiceCallSessionStats = new VoiceCallSessionStats(mPhoneId, this);
         initOnce(ci);
         initRatSpecific(precisePhoneType);
         // CarrierSignalAgent uses CarrierActionAgent in construction so it needs to be created
@@ -437,8 +442,19 @@ public class GsmCdmaPhone extends Phone {
                 tm.setSimOperatorNumericForPhone(mPhoneId, operatorNumeric);
 
                 SubscriptionController.getInstance().setMccMnc(operatorNumeric, getSubId());
+
                 // Sets iso country property by retrieving from build-time system property
-                setIsoCountryProperty(operatorNumeric);
+                String iso = "";
+                try {
+                    iso = MccTable.countryCodeForMcc(operatorNumeric.substring(0, 3));
+                } catch (StringIndexOutOfBoundsException ex) {
+                    Rlog.e(LOG_TAG, "init: countryCodeForMcc error", ex);
+                }
+
+                logd("init: set 'gsm.sim.operator.iso-country' to iso=" + iso);
+                tm.setSimCountryIsoForPhone(mPhoneId, iso);
+                SubscriptionController.getInstance().setCountryIso(iso, getSubId());
+
                 // Updates MCC MNC device configuration information
                 logd("update mccmnc=" + operatorNumeric);
                 MccTable.updateMccMncConfiguration(mContext, operatorNumeric);
@@ -446,31 +462,6 @@ public class GsmCdmaPhone extends Phone {
 
             // Sets current entry in the telephony carrier table
             updateCurrentCarrierInProvider(operatorNumeric);
-        }
-    }
-
-    //CDMA
-    /**
-     * Sets PROPERTY_ICC_OPERATOR_ISO_COUNTRY property
-     *
-     */
-    private void setIsoCountryProperty(String operatorNumeric) {
-        TelephonyManager tm = TelephonyManager.from(mContext);
-        if (TextUtils.isEmpty(operatorNumeric)) {
-            logd("setIsoCountryProperty: clear 'gsm.sim.operator.iso-country'");
-            tm.setSimCountryIsoForPhone(mPhoneId, "");
-            SubscriptionController.getInstance().setCountryIso("", getSubId());
-        } else {
-            String iso = "";
-            try {
-                iso = MccTable.countryCodeForMcc(operatorNumeric.substring(0, 3));
-            } catch (StringIndexOutOfBoundsException ex) {
-                Rlog.e(LOG_TAG, "setIsoCountryProperty: countryCodeForMcc error", ex);
-            }
-
-            logd("setIsoCountryProperty: set 'gsm.sim.operator.iso-country' to iso=" + iso);
-            tm.setSimCountryIsoForPhone(mPhoneId, iso);
-            SubscriptionController.getInstance().setCountryIso(iso, getSubId());
         }
     }
 
@@ -1420,6 +1411,7 @@ public class GsmCdmaPhone extends Phone {
         if (isDialedNumberSwapped && isEmergency) {
             // Triggers ECM when CS call ends only for test emergency calls using
             // ril.test.emergencynumber.
+            mIsTestingEmergencyCallbackMode = true;
             mCi.testingEmergencyCall();
         }
         if (isPhoneTypeGsm()) {
@@ -1734,8 +1726,8 @@ public class GsmCdmaPhone extends Phone {
     public String getVoiceMailAlphaTag() {
         String ret = "";
 
-        if (isPhoneTypeGsm()) {
-            IccRecords r = mIccRecords.get();
+        if (isPhoneTypeGsm() || mSimRecords != null) {
+            IccRecords r = isPhoneTypeGsm() ? mIccRecords.get() : mSimRecords;
 
             ret = (r != null) ? r.getVoiceMailAlphaTag() : "";
         }
@@ -2410,8 +2402,8 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void updateServiceLocation() {
-        mSST.enableSingleLocationUpdate();
+    public void updateServiceLocation(WorkSource workSource) {
+        mSST.enableSingleLocationUpdate(workSource);
     }
 
     @Override
@@ -3481,7 +3473,15 @@ public class GsmCdmaPhone extends Phone {
             if (mWakeLock.isHeld()) {
                 mWakeLock.release();
             }
-            mCi.exitEmergencyCallbackMode(null);
+            Message msg = null;
+            if (mIsTestingEmergencyCallbackMode) {
+                // prevent duplicate exit messages from happening due to this message being handled
+                // as well as an UNSOL when the modem exits ECbM. Instead, only register for this
+                // message callback when this is a test and we will not be receiving the UNSOL from
+                // the modem.
+                msg = obtainMessage(EVENT_EXIT_EMERGENCY_CALLBACK_RESPONSE);
+            }
+            mCi.exitEmergencyCallbackMode(msg);
         }
     }
 
@@ -3521,8 +3521,9 @@ public class GsmCdmaPhone extends Phone {
         if (mEcmExitRespRegistrant != null) {
             mEcmExitRespRegistrant.notifyRegistrant(ar);
         }
-        // if exiting ecm success
-        if (ar.exception == null) {
+        // if exiting is successful or we are testing and the modem responded with an error upon
+        // exit, which may occur in some IRadio implementations.
+        if (ar.exception == null || mIsTestingEmergencyCallbackMode) {
             if (isInEcm()) {
                 setIsInEcm(false);
             }
@@ -3538,6 +3539,7 @@ public class GsmCdmaPhone extends Phone {
             mDataEnabledSettings.setInternalDataEnabled(true);
             notifyEmergencyCallRegistrants(false);
         }
+        mIsTestingEmergencyCallbackMode = false;
     }
 
     //CDMA
@@ -3984,7 +3986,7 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public IccCard getIccCard() {
         // This function doesn't return null for backwards compatability purposes.
-        // To differentiate between cases where SIM is absent vs. unknown we return a dummy
+        // To differentiate between cases where SIM is absent vs. unknown we return a placeholder
         // IccCard with the sim state set.
         IccCard card = getUiccProfile();
         if (card != null) {
@@ -4346,9 +4348,9 @@ public class GsmCdmaPhone extends Phone {
         return mWakeLock;
     }
 
-    @Override
     public int getLteOnCdmaMode() {
-        int currentConfig = super.getLteOnCdmaMode();
+        int currentConfig = TelephonyProperties.lte_on_cdma_device()
+                .orElse(PhoneConstants.LTE_ON_CDMA_FALSE);
         int lteOnCdmaModeDynamicValue = currentConfig;
 
         UiccCardApplication cdmaApplication =

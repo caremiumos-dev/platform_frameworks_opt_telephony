@@ -44,6 +44,7 @@ import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioIndicationType;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
+import android.hardware.radio.V1_0.RadioTechnologyFamily;
 import android.hardware.radio.V1_0.ResetNvType;
 import android.hardware.radio.V1_0.SelectUiccSub;
 import android.hardware.radio.V1_0.SimApdu;
@@ -230,7 +231,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     Object[] mLastNITZTimeInfo;
 
-    // When we are testing emergency calls
+    // When we are testing emergency calls using ril.test.emergencynumber, this will trigger test
+    // ECbM when the call is ended.
     @UnsupportedAppUsage
     AtomicBoolean mTestingEmergencyCall = new AtomicBoolean(false);
 
@@ -2833,7 +2835,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         } else {
             // OEM Hook service is disabled for P and later devices.
-            // Deprecated OEM Hook APIs will perform dummy before being removed.
+            // Deprecated OEM Hook APIs will perform no-op before being removed.
             if (RILJ_LOGD) riljLog("Radio Oem Hook Service is disabled for P and later devices. ");
         }
     }
@@ -2862,7 +2864,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         } else {
             // OEM Hook service is disabled for P and later devices.
-            // Deprecated OEM Hook APIs will perform dummy before being removed.
+            // Deprecated OEM Hook APIs will perform no-op before being removed.
             if (RILJ_LOGD) riljLog("Radio Oem Hook Service is disabled for P and later devices. ");
         }
     }
@@ -3278,11 +3280,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setLocationUpdates(boolean enable, Message result) {
+    public void setLocationUpdates(boolean enable, WorkSource workSource, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_SET_LOCATION_UPDATES, result,
-                    mRILDefaultWorkSource);
+                    workSource == null ? mRILDefaultWorkSource : workSource);
 
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "> "
@@ -4068,7 +4070,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
             ImsSmsMessage msg = new ImsSmsMessage();
-            msg.tech = RILConstants.GSM_PHONE;
+            msg.tech = RadioTechnologyFamily.THREE_GPP;
             msg.retry = (byte) retry >= 1 ? true : false;
             msg.messageRef = messageRef;
 
@@ -4095,7 +4097,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
             ImsSmsMessage msg = new ImsSmsMessage();
-            msg.tech = RILConstants.CDMA_PHONE;
+            msg.tech = RadioTechnologyFamily.THREE_GPP2;
             msg.retry = (byte) retry >= 1 ? true : false;
             msg.messageRef = messageRef;
 
@@ -4718,9 +4720,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         workSource = getDeafultWorkSourceIfInvalid(workSource);
 
         IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy == null) {
-            return;
-        }
+        if (radioProxy == null) return;
 
         RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_CARRIERS, result, workSource);
 
@@ -4800,9 +4800,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         workSource = getDeafultWorkSourceIfInvalid(workSource);
 
         IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy == null) {
-            return;
-        }
+        if (radioProxy == null) return;
 
         RILRequest rr = obtainRequest(RIL_REQUEST_GET_ALLOWED_CARRIERS, result,
                 workSource);
@@ -5129,10 +5127,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             int contextId, KeepalivePacketData packetData, int intervalMillis, Message result) {
         checkNotNull(packetData, "KeepaliveRequest cannot be null.");
         IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy == null) {
-            riljLoge("Radio Proxy object is null!");
-            return;
-        }
+        if (radioProxy == null) return;
 
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_1)) {
             if (result != null) {
@@ -5187,10 +5182,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void stopNattKeepalive(int sessionHandle, Message result) {
         IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy == null) {
-            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
-            return;
-        }
+        if (radioProxy == null) return;
 
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_1)) {
             if (result != null) {
@@ -5252,14 +5244,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void enableUiccApplications(boolean enable, Message onCompleteMessage) {
         IRadio radioProxy = getRadioProxy(onCompleteMessage);
-        if (radioProxy == null) {
-            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
-            if (onCompleteMessage != null) {
-                AsyncResult.forMessage(onCompleteMessage, null,
-                        CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
-                onCompleteMessage.sendToTarget();
-            }
-        }
+        if (radioProxy == null) return;
 
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_5)) {
             if (onCompleteMessage != null) {
@@ -5293,14 +5278,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void areUiccApplicationsEnabled(Message onCompleteMessage) {
         IRadio radioProxy = getRadioProxy(onCompleteMessage);
-        if (radioProxy == null) {
-            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
-            if (onCompleteMessage != null) {
-                AsyncResult.forMessage(onCompleteMessage, null,
-                        CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
-                onCompleteMessage.sendToTarget();
-            }
-        }
+        if (radioProxy == null) return;
 
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_5)) {
             if (onCompleteMessage != null) {
@@ -5388,14 +5366,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void getBarringInfo(Message result) {
         IRadio radioProxy = getRadioProxy(result);
-        if (radioProxy == null) {
-            Rlog.e(RIL.RILJ_LOG_TAG, "Radio Proxy object is null!");
-            if (result != null) {
-                AsyncResult.forMessage(result, null,
-                        CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
-                result.sendToTarget();
-            }
-        }
+        if (radioProxy == null) return;
 
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_5)) {
             if (result != null) {
@@ -5944,6 +5915,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     void writeMetricsSrvcc(int state) {
         mMetrics.writeRilSrvcc(mPhoneId, state);
+        PhoneFactory.getPhone(mPhoneId).getVoiceCallSessionStats().onRilSrvccStateChanged(state);
     }
 
     void writeMetricsModemRestartEvent(String reason) {

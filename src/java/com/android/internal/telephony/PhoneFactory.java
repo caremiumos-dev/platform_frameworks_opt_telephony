@@ -44,6 +44,7 @@ import com.android.internal.telephony.euicc.EuiccCardController;
 import com.android.internal.telephony.euicc.EuiccController;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneFactory;
+import com.android.internal.telephony.metrics.MetricsCollector;
 import com.android.internal.telephony.sip.SipPhone;
 import com.android.internal.telephony.sip.SipPhoneFactory;
 import com.android.internal.telephony.uicc.UiccController;
@@ -95,6 +96,7 @@ public class PhoneFactory {
     static private CellularNetworkValidator sCellularNetworkValidator;
 
     static private final HashMap<String, LocalLog>sLocalLogs = new HashMap<String, LocalLog>();
+    private static MetricsCollector sMetricsCollector;
 
     //***** Class Methods
 
@@ -138,6 +140,9 @@ public class PhoneFactory {
                         }
                     }
                 }
+
+                // register statsd pullers.
+                sMetricsCollector = new MetricsCollector(context);
 
                 sPhoneNotifier = new DefaultPhoneNotifier(context);
 
@@ -522,6 +527,11 @@ public class PhoneFactory {
         }
     }
 
+    /** Returns the MetricsCollector instance. */
+    public static MetricsCollector getMetricsCollector() {
+        return sMetricsCollector;
+    }
+
     public static void dump(FileDescriptor fd, PrintWriter printwriter, String[] args) {
         IndentingPrintWriter pw = new IndentingPrintWriter(printwriter, "  ");
         pw.println("PhoneFactory:");
@@ -562,20 +572,6 @@ public class PhoneFactory {
         pw.flush();
         pw.decreaseIndent();
         pw.println("++++++++++++++++++++++++++++++++");
-
-        if (sEuiccController != null) {
-            pw.println("EuiccController:");
-            pw.increaseIndent();
-            try {
-                sEuiccController.dump(fd, pw, args);
-                sEuiccCardController.dump(fd, pw, args);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            pw.flush();
-            pw.decreaseIndent();
-            pw.println("++++++++++++++++++++++++++++++++");
-        }
 
         pw.println("SubscriptionController:");
         pw.increaseIndent();
