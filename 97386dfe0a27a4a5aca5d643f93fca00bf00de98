@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b73ae052_244537cb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1199008
+      },
+      "writtenOn": "2020-08-27T17:15:32Z",
+      "side": 1,
+      "message": "on 1.5 Radio HAL interface mtu is not sent so how is this used?",
+      "range": {
+        "startLine": 1590,
+        "startChar": 35,
+        "endLine": 1590,
+        "endChar": 41
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3505bac2_52ed7ddf",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1199008
+      },
+      "writtenOn": "2020-08-27T17:15:32Z",
+      "side": 1,
+      "message": "1. in a case where v4 is 1200 and v6 is 1300. We cannot set interface MTU to 1200 as it violates the spec for v6. V6 cannot be lower then 1280\n2. in case where v4 is 1500 and v6 is 2000, we need to set interface mtu as 1428, the max AT\u0026T network can handle.",
+      "range": {
+        "startLine": 1592,
+        "startChar": 44,
+        "endLine": 1592,
+        "endChar": 52
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c07d73_e39f911b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1199008
+      },
+      "writtenOn": "2020-08-27T17:15:32Z",
+      "side": 1,
+      "message": "In non AT\u0026T use case, it was agreed upon that the max of v4/v6 mtu will be set as the interface MTU, but it looks like we are always setting v6 mtu as interface mtu. this will cause issues.",
+      "range": {
+        "startLine": 1609,
+        "startChar": 38,
+        "endLine": 1609,
+        "endChar": 41
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
