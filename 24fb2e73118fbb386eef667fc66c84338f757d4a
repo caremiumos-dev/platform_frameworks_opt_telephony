@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af78df6_9d21a1cb",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-27T18:32:06Z",
+      "side": 1,
+      "message": "Is this a user triggered action? If not, we should not show a user visible error, that is we should not show the toast.",
+      "range": {
+        "startLine": 465,
+        "startChar": 17,
+        "endLine": 465,
+        "endChar": 28
+      },
+      "revId": "24fb2e73118fbb386eef667fc66c84338f757d4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b5bb32b_532f6a25",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-27T18:32:06Z",
+      "side": 1,
+      "message": "If toast does need to be shown, this String should not be hardcoded here. It should be in strings.xml under frameworks/base/res/res so that it can be translated depending on the language of the device.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 42,
+        "endLine": 1201,
+        "endChar": 87
+      },
+      "revId": "24fb2e73118fbb386eef667fc66c84338f757d4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
