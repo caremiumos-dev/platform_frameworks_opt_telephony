@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0520f253_21bf076f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1199008
+      },
+      "writtenOn": "2020-08-27T17:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b73ae052_244537cb",
+      "range": {
+        "startLine": 1590,
+        "startChar": 35,
+        "endLine": 1590,
+        "endChar": 41
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3505bac2_52ed7ddf",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
