@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9d0732f9_44e638ea",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2020-08-28T21:28:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3505bac2_52ed7ddf",
+      "range": {
+        "startLine": 1592,
+        "startChar": 44,
+        "endLine": 1592,
+        "endChar": 52
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41c07d73_e39f911b",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
@@ -92,6 +116,30 @@
       "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa35fcfd_76a0fa23",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2020-08-28T21:28:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41c07d73_e39f911b",
+      "range": {
+        "startLine": 1609,
+        "startChar": 38,
+        "endLine": 1609,
+        "endChar": 41
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
