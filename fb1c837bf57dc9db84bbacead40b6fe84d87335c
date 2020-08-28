@@ -16,6 +16,29 @@
       "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb006829_74251389",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-08-28T22:55:31Z",
+      "side": 1,
+      "message": "many patch sets ago, I pointed out that this does nothing. It still does nothing.\n\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1173984/3..11/src/java/com/android/internal/telephony/uicc/RuimRecords.java#b392\n\nhttps://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/telephony/Rlog.java#129",
+      "range": {
+        "startLine": 391,
+        "startChar": 26,
+        "endLine": 391,
+        "endChar": 29
+      },
+      "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
