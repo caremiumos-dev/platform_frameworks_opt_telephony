@@ -39,6 +39,30 @@
       "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56acf4ab_319b15f7",
+        "filename": "src/java/com/android/internal/telephony/uicc/RuimRecords.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-28T23:06:47Z",
+      "side": 1,
+      "message": "Please fix this. pii() returns a String, it doesn\u0027t print anything.",
+      "parentUuid": "bb006829_74251389",
+      "range": {
+        "startLine": 391,
+        "startChar": 26,
+        "endLine": 391,
+        "endChar": 29
+      },
+      "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
