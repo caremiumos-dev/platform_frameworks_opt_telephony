@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fd81e5c_a1dd2de3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-28T21:00:36Z",
+      "side": 1,
+      "message": "Please see comment#5 on the bug. It is still applicable; have you considered the scenarios?\n\nOne specific one that I know of is in UiccProfile for example. It listens to CARRIER_CONFIG_CHANGED and assumes that sim records are loaded at that time, and queries SPN which comes from EF_SPN.\n\nMost places (at least within telephony) where we listen to CARRIER_CONFIG_CHANGED we need to check for sim records loaded as well. And for code external to telephony, there\u0027s no way to know. Has qualcomm thought about those cases?",
+      "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
