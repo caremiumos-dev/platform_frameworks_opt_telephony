@@ -52,6 +52,7 @@ import android.util.LocalLog;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.android.ims.ImsServiceConnectionRepository;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.os.SomeArgs;
@@ -1661,6 +1662,10 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             c.dump(pw);
             pw.decreaseIndent();
         }
+        pw.decreaseIndent();
+        pw.println("Connection Repository Log:");
+        pw.increaseIndent();
+        ImsServiceConnectionRepository.getInstance().dump(pw);
         pw.decreaseIndent();
         pw.println("Event Log:");
         pw.increaseIndent();

@@ -39,6 +39,7 @@ import android.telephony.ims.stub.ImsFeatureConfiguration;
 import android.util.LocalLog;
 import android.util.Log;
 
+import com.android.ims.ImsServiceConnectionRepository;
 import com.android.ims.internal.IImsFeatureStatusCallback;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 import com.android.internal.annotations.VisibleForTesting;
@@ -212,6 +213,7 @@ public class ImsServiceController {
     private final ComponentName mComponentName;
     private final HandlerThread mHandlerThread = new HandlerThread("ImsServiceControllerHandler");
     private final IPackageManager mPackageManager;
+    private final ImsServiceConnectionRepository mRepo;
     private ImsServiceControllerCallbacks mCallbacks;
     private ExponentialBackoff mBackoff;
 
@@ -347,13 +349,15 @@ public class ImsServiceController {
                 mHandlerThread.getLooper(),
                 mRestartImsServiceRunnable);
         mPackageManager = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
+        mRepo = ImsServiceConnectionRepository.getInstance();
     }
 
     @VisibleForTesting
     // Creating a new HandlerThread and background handler for each test causes a segfault, so for
     // testing, use a handler supplied by the testing system.
     public ImsServiceController(Context context, ComponentName componentName,
-            ImsServiceControllerCallbacks callbacks, Handler handler, RebindRetry rebindRetry) {
+            ImsServiceControllerCallbacks callbacks, Handler handler, RebindRetry rebindRetry,
+            ImsServiceConnectionRepository repo) {
         mContext = context;
         mComponentName = componentName;
         mCallbacks = callbacks;
@@ -364,6 +368,7 @@ public class ImsServiceController {
                 handler,
                 mRestartImsServiceRunnable);
         mPackageManager = null;
+        mRepo = repo;
     }
 
     /**
@@ -807,11 +812,14 @@ public class ImsServiceController {
     protected void removeImsFeature(int slotId, int featureType, IImsFeatureStatusCallback c)
             throws RemoteException {
         mIImsServiceController.removeImsFeature(slotId, featureType, c);
+        updateImsFeatureContainer(slotId, featureType, null);
     }
 
     // This method should only be called when synchronized on mLock
-    private void addImsFeatureBinder(int slotId, int featureType, IInterface b) {
+    private void addImsFeatureBinder(int slotId, int featureType, IInterface b)
+            throws RemoteException {
         mImsFeatureBinders.add(new ImsFeatureContainer(slotId, featureType, b));
+        updateImsFeatureContainer(slotId, featureType, b);
     }
 
     // This method should only be called when synchronized on mLock
@@ -822,6 +830,43 @@ public class ImsServiceController {
         if (container != null) {
             mImsFeatureBinders.remove(container);
         }
+    }
+
+    // This method should only be called when synchronized on mLock
+    private void updateImsFeatureContainer(int slotId, int featureType, IInterface b)
+            throws RemoteException {
+        switch (featureType) {
+            case ImsFeature.FEATURE_MMTEL: {
+                ImsServiceConnectionRepository.FeatureContainer<IImsMmTelFeature> fc =
+                        (b == null) ? null : createFeatureContainer(
+                                slotId, IImsMmTelFeature.class, b);
+                mRepo.updateConnection(slotId, IImsMmTelFeature.class, fc);
+                break;
+            }
+            case ImsFeature.FEATURE_RCS: {
+                ImsServiceConnectionRepository.FeatureContainer<IImsRcsFeature> fc =
+                        (b == null) ? null : createFeatureContainer(
+                                slotId, IImsRcsFeature.class, b);
+                mRepo.updateConnection(slotId, IImsRcsFeature.class, fc);
+                break;
+            }
+        }
+    }
+
+    private <T extends IInterface> ImsServiceConnectionRepository.FeatureContainer<T>
+    createFeatureContainer(int slotId, Class<T> type, IInterface b) throws RemoteException {
+        IImsConfig config = getConfig(slotId);
+        IImsRegistration reg = getRegistration(slotId);
+        // When either is null, this is an unexpected condition. Do not report the ImsService as
+        // being available.
+        if (config == null || reg == null) {
+            Log.w(LOG_TAG, "createFeatureContainer: invalid state. Reporting as not "
+                    + "available. componentName= " +getComponentName());
+            mLocalLog.log("createFeatureContainer: invalid state. Reporting as not "
+                    + "available.");
+            return null;
+        }
+        return new ImsServiceConnectionRepository.FeatureContainer<>(type.cast(b), config, reg);
     }
 
     private ImsFeatureContainer getImsFeatureContainer(int slotId, int featureType) {
