@@ -63,6 +63,23 @@
       "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "314d8576_c88fafb9",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-08-31T06:37:53Z",
+      "side": 1,
+      "message": "This test is failing in presubmit. Can you please fix it?\n\norg.junit.ComparisonFailure: expected:\u003c3100[]8\u003e but was:\u003c3100[0]8\u003e\n\tat org.junit.Assert.assertEquals(Assert.java:115)\n\tat org.junit.Assert.assertEquals(Assert.java:144)\n\tat com.android.internal.telephony.uicc.RuimRecordsTest.testCsimImsiLoaded(RuimRecordsTest.java:61)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:52)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:148)\n\tat org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:142)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.lang.Thread.run(Thread.java:922)",
+      "revId": "fb1c837bf57dc9db84bbacead40b6fe84d87335c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
