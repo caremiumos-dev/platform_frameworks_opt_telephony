@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2d8c66f_5a4829bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-02T18:40:12Z",
+      "side": 1,
+      "message": "Jordan, can you ptal at this since it\u0027s Stk related?",
+      "revId": "38f8e89d07784a8f2b48d9c7b182222900f50e16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "096c2c8b_7d2a3298",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-02T18:40:12Z",
+      "side": 1,
+      "message": "I don\u0027t think an isAvailable method should show toast. You should do that here after it returns false.",
+      "revId": "38f8e89d07784a8f2b48d9c7b182222900f50e16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
