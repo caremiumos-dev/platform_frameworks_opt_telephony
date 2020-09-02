@@ -374,6 +374,30 @@
     },
     {
       "key": {
+        "uuid": "a8827aa6_48f7c4bd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-02T18:43:04Z",
+      "side": 1,
+      "message": "My interpretation of the spec is that we should not go from user APN to one of the APNs with apn set id, but going to another user APN should be ok.",
+      "parentUuid": "22f90a0b_5cfb9188",
+      "range": {
+        "startLine": 3275,
+        "startChar": 63,
+        "endLine": 3275,
+        "endChar": 94
+      },
+      "revId": "7ef4cfe0dd38274f916e6af7fa6c1475a8b34b9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "755d6cb0_4f913c08",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 2
