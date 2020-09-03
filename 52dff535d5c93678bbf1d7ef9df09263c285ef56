@@ -16,6 +16,24 @@
       "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e7a8eb1_e1072328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-09-03T17:26:49Z",
+      "side": 1,
+      "message": "Please see comment#5 on the bug. It is still applicable; have you considered the scenarios?\n\n - Yes, the existing event ordering can cause issues to some clients if we add subId early.\nWe need to clarify/inform to wait for records loading if any client needs SIM related information in specific, exposing Simapplication state SDK level helps here for third party apps I feel.\n\n\nOne specific one that I know of is in UiccProfile for example. It listens to CARRIER_CONFIG_CHANGED and assumes that sim records are loaded at that time, and queries SPN which comes from EF_SPN.\n - CARRIER_CONFIG_CHANGES can be modified to broadcast once SIM is LOADED. i.e we can include the subId while broadcast this from CarrierConfigLoader.java only after SIM is LOADED(or SIM PIN Locked).\nNew event flow would be like, SIM Present--\u003esubId availability--\u003eSIM LOADED-\u003eCARRIER_CONFIG Intent.\n\nMost places (at least within telephony) where we listen to CARRIER_CONFIG_CHANGED we need to check for sim records loaded as well. And for code external to telephony, there\u0027s no way to know. Has qualcomm thought about those cases?\n - I got your point about external clients but as of now we did not hear any issue about external clients from customers though the proposed behavior is there on QC targets from long time.\nOne solution for this issue is to expose SimApplication state at SDK level ?\nFor few SystemApps, we faced couple of issues with the subId addition and that we handled by adding SIM LOADED state checks.",
+      "parentUuid": "3fd81e5c_a1dd2de3",
+      "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
