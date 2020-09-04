@@ -33,6 +33,24 @@
       "revId": "38f8e89d07784a8f2b48d9c7b182222900f50e16",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "630e9f53_e680e5ef",
+        "filename": "src/java/com/android/internal/telephony/cat/CatService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1265670
+      },
+      "writtenOn": "2020-09-04T07:58:31Z",
+      "side": 1,
+      "message": "Right.\nif isAvaiableSetupCall returns true. then proactive command of set_up_call is sent to STK app and popup windows to user.\n\nif isAvaiableSetupCall returns false, sends RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM to Modem with false and show toast for block call.",
+      "parentUuid": "096c2c8b_7d2a3298",
+      "revId": "38f8e89d07784a8f2b48d9c7b182222900f50e16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
