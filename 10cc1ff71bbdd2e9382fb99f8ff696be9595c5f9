@@ -16,6 +16,23 @@
       "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f82771d1_4e8a18fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-08T19:58:08Z",
+      "side": 1,
+      "message": "Unfortunately, ImsResolver can not use this API anymore. Can you please file a bug and we can look into supporting this with the correct API?",
+      "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
