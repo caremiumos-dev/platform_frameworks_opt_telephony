@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b2c2033_81f88646",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-09-08T21:42:58Z",
+      "side": 1,
+      "message": "This caused a regression in IMS conference calling use-cases.",
+      "revId": "d904cc46da1a00d4e58998647e7fbe33b918e0e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
