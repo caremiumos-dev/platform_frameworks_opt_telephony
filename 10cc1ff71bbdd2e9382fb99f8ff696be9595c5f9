@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32ff75ab_7bdc6e1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1092759
+      },
+      "writtenOn": "2020-09-08T12:09:39Z",
+      "side": 1,
+      "message": "Hi Brad,\nI found your CL which created the special context for registering receivers for all users using UserHandle.All, but it make Ims cann\u0027t work in primary user if we uninstall it in secondary user.\n\nLooking forward to your reply, Thanks.\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003e\ncommit 3e8910e9481a2ce5b5446ff14443e5b98af7ed16\nAuthor: Brad Ebinger \u003cbreadley@google.com\u003e\nDate:   Fri Nov 22 16:38:29 2019 -0800\n\n    Use Context#createPackageContextAsUser alternative\n    \n    Remove usages of @hide API for registering a receiver with\n    UserHandle.ALL.\n    \n    Bug: 141323834\n    Test: atest FrameworksTelephonyTests; atest CtsTelephonyTestCases\n    Change-Id: I02f54eed7ba0e41ac877ced5a2ce3b7954b69d3c",
+      "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
