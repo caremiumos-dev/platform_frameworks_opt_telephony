@@ -542,7 +542,7 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         appChangedFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         appChangedFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         appChangedFilter.addDataScheme("package");
-        mReceiverContext.registerReceiver(mAppChangedReceiver, appChangedFilter);
+        mContext.registerReceiver(mAppChangedReceiver, appChangedFilter);
         mReceiverContext.registerReceiver(mConfigChangedReceiver, new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
 
