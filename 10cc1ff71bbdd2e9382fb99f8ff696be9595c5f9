@@ -33,6 +33,24 @@
       "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2bb3f40_45f2b305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1092759
+      },
+      "writtenOn": "2020-09-09T11:50:23Z",
+      "side": 1,
+      "message": "Thanks for reply.\n\nBug issue: https://issuetracker.google.com/issues/168091529\n\nCould you make me know the reason of can not use this API?\nIn my opinion the main reason is ImsService registered the broadcast for UserHandle.ALL, then ImsService in primary user could be implicated by broadcast for other user.\n\nMaybe we should add an explicit check for current user, like PackageManager.getPackageInfoAsUser() to identify if the package removed from current user.\n\nThanks.",
+      "parentUuid": "f82771d1_4e8a18fc",
+      "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
