@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e07d8cec_4caff2f1",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-09T07:57:19Z",
+      "side": 1,
+      "message": "move this outside the loop",
+      "range": {
+        "startLine": 1908,
+        "startChar": 16,
+        "endLine": 1908,
+        "endChar": 63
+      },
+      "revId": "ce2936ba5128aded0efb8c520809278be16db6df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "734f5fe4_6b429e59",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-09T07:57:19Z",
+      "side": 1,
+      "message": "move this outside the loop",
+      "range": {
+        "startLine": 2133,
+        "startChar": 16,
+        "endLine": 2133,
+        "endChar": 63
+      },
+      "revId": "ce2936ba5128aded0efb8c520809278be16db6df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb2b7a3_1106224b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 3459,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-09T07:57:19Z",
+      "side": 1,
+      "message": "same here; move this outside the loop",
+      "range": {
+        "startLine": 3459,
+        "startChar": 20,
+        "endLine": 3459,
+        "endChar": 67
+      },
+      "revId": "ce2936ba5128aded0efb8c520809278be16db6df",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
