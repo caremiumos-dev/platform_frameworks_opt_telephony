@@ -51,6 +51,24 @@
       "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49a02823_0dab0d15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T17:48:56Z",
+      "side": 1,
+      "message": "Sorry, i misread the API you were recommending and thought it was a move back to the registerReceiverAsUser API... this looks like it would work, however this looks like it has always been an issue and not a regression due to my fix in commit 3e8910e9481a2ce5b5446ff14443e5b98af7ed16. I will take another look and see if there are any potential issues with using registerReceiver.",
+      "parentUuid": "c2bb3f40_45f2b305",
+      "revId": "10cc1ff71bbdd2e9382fb99f8ff696be9595c5f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
