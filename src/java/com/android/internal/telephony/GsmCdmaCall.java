@@ -147,6 +147,9 @@ public class GsmCdmaCall extends Call {
      * but no response has yet been received so update() has not yet been called
      */
     void onHangupLocal() {
+        if (!mState.isAlive()) {
+            return;
+        }
         for (Connection conn : getConnections()) {
             ((GsmCdmaConnection) conn).onHangupLocal();
         }
