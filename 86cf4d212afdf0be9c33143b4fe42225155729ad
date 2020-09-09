@@ -1,0 +1,274 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4c77e77_72910470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Completed first pass at review. Can changes also be made into the telephony tests to incorporate these changes, since this touches a critical path?",
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7da751cc_04ef88f8",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Can we keep the previous functionality and call this something like \"overrideCallInfoForEmergency\", which is only called in the special redial case?",
+      "range": {
+        "startLine": 554,
+        "startChar": 16,
+        "endLine": 554,
+        "endChar": 36
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08fdd8d0_2579c595",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Is this needed?",
+      "range": {
+        "startLine": 538,
+        "startChar": 22,
+        "endLine": 538,
+        "endChar": 26
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62a6446_ab423342",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Does this also require setClirMode(CommandsInterface.CLIR_DEFAULT?)",
+      "range": {
+        "startLine": 539,
+        "startChar": 53,
+        "endLine": 539,
+        "endChar": 82
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c9a2924_9a2ec2a2",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Lets keep this the way it was before",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 9
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "381b27b8_49eb4d36",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Can we keep this as it was and create a new constructor for the redial case specifically?",
+      "range": {
+        "startLine": 162,
+        "startChar": 11,
+        "endLine": 162,
+        "endChar": 28
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c54d05a_3e9a53a1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Why are we using IMS dialargs here if this only conveys emergency info?",
+      "range": {
+        "startLine": 1306,
+        "startChar": 8,
+        "endLine": 1306,
+        "endChar": 36
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c8276e5_13d12466",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "can we condense this to setEmergency(int category), which internally sets mIsEmergency\u003dtrue and eccCategory, since they are related?",
+      "range": {
+        "startLine": 102,
+        "startChar": 21,
+        "endLine": 102,
+        "endChar": 35
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af3c29c_a5c99212",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Should this also pass in clir mode?",
+      "range": {
+        "startLine": 170,
+        "startChar": 39,
+        "endLine": 170,
+        "endChar": 46
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8244905c_ebd5fd34",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Instead of requiring all callers now call this,can we instead keep initiateSilentRedial for non emergency and then create a new method called \u0027initiateSilentRedialForEmergency(int eccCategory)\u0027?",
+      "range": {
+        "startLine": 1528,
+        "startChar": 4,
+        "endLine": 1528,
+        "endChar": 24
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f70bcc09_ba74bddc",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Instead of naming this result, can it just be mLastDialString?",
+      "range": {
+        "startLine": 1535,
+        "startChar": 63,
+        "endLine": 1535,
+        "endChar": 69
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f783033_4e25d370",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-09T23:00:07Z",
+      "side": 1,
+      "message": "Where is this set?",
+      "range": {
+        "startLine": 1202,
+        "startChar": 36,
+        "endLine": 1202,
+        "endChar": 56
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
