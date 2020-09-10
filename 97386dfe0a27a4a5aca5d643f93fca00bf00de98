@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "f00c8457_46c4d704",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2020-09-10T04:52:43Z",
+      "side": 1,
+      "message": "... and if AT\u0026T wants to ensure the IPv4 MTU is never above 1428, then they can simply never configure an IPv4 MTU above 1428, right?\n\nAm I missing something?",
+      "parentUuid": "5fea8ab1_85834229",
+      "range": {
+        "startLine": 1592,
+        "startChar": 44,
+        "endLine": 1592,
+        "endChar": 52
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41c07d73_e39f911b",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
