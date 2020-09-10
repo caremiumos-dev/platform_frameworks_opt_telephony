@@ -138,7 +138,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     @Override
     public void notifyCellLocation(Phone sender, CellIdentity cellIdentity) {
         int subId = sender.getSubId();
-        mTelephonyRegistryMgr.notifyCellLocation(subId, cellIdentity);
+        mTelephonyRegistryMgr.notifyCellIdentity(subId, cellIdentity);
     }
 
     @Override
