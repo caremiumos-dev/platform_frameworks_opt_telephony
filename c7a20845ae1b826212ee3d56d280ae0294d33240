@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bce4fa6_dd2e2941",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2020-09-10T16:51:50Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 1948,
+        "startChar": 37,
+        "endLine": 1948,
+        "endChar": 38
+      },
+      "revId": "c7a20845ae1b826212ee3d56d280ae0294d33240",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
