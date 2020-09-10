@@ -16,6 +16,23 @@
       "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "858cffd3_66d4ccd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-10T18:36:55Z",
+      "side": 1,
+      "message": "One thing that I am a little concerned about is that we don\u0027t cache the result of getPreferredApnSetId() -- it does a db look up each time. Other than that it LGTM.\n\nWe should look into optimizing that in S.",
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
