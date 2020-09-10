@@ -50,6 +50,75 @@
       "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6600507_9dca870c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-09-10T19:26:23Z",
+      "side": 1,
+      "message": "defaultPreferredApn",
+      "range": {
+        "startLine": 1809,
+        "startChar": 19,
+        "endLine": 1809,
+        "endChar": 38
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "714b2334_3936b506",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-09-10T19:26:23Z",
+      "side": 1,
+      "message": "Amit do you know why IMS is always allowed here in addition to emergency?",
+      "range": {
+        "startLine": 3245,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 64
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "206b51d3_d7634d49",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3471,
+      "author": {
+        "id": 1121198
+      },
+      "writtenOn": "2020-09-10T19:26:23Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 3471,
+        "startChar": 0,
+        "endLine": 3471,
+        "endChar": 69
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
