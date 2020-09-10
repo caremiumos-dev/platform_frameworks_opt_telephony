@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5fea8ab1_85834229",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2020-09-10T04:51:29Z",
+      "side": 1,
+      "message": "Sunny, where did you get this 1428 from? It was not requested by AT\u0026T in https://issuetracker.google.com/162285224 . The requirement only says that if different MTU sizes are received for IPv4 and IPv6, then the device should use the lower value.",
+      "parentUuid": "9d0732f9_44e638ea",
+      "range": {
+        "startLine": 1592,
+        "startChar": 44,
+        "endLine": 1592,
+        "endChar": 52
+      },
+      "revId": "97386dfe0a27a4a5aca5d643f93fca00bf00de98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41c07d73_e39f911b",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 1
