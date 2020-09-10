@@ -33,6 +33,23 @@
       "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ff69ee6_2f3ae4bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-10T18:44:10Z",
+      "side": 1,
+      "message": "+Jordan, can you ptal at these CLs as well since you worked on the APN_SET_ID support. Let me know if you see any issues with these changes or if you think they are not needed/already implemented some other way.",
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
