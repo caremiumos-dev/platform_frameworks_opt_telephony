@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9d02ae8_d7ad5bff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-11T19:17:34Z",
+      "side": 1,
+      "message": "Looks like there is a test failure there due to accesibility issues of the method you are calling.",
+      "revId": "bfe16cf09ceb12362d07ef68df80ce567f5f84f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33302093_0f96d030",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-11T19:17:34Z",
+      "side": 1,
+      "message": "Looks like tests are failing due to this line. Can you please modify the method to \"public\" and add a @VisibleForTesting annotation in GsmCdmaCall?",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 39
+      },
+      "revId": "bfe16cf09ceb12362d07ef68df80ce567f5f84f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
