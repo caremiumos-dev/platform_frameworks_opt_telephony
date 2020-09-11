@@ -407,21 +407,6 @@ public class VendorSubscriptionController extends SubscriptionController {
         return false;
     }
 
-    protected PhoneAccountHandle subscriptionIdToPhoneAccountHandle(final int subId) {
-        final Iterator<PhoneAccountHandle> phoneAccounts =
-                mTelecomManager.getCallCapablePhoneAccounts().listIterator();
-
-        while (phoneAccounts.hasNext()) {
-            final PhoneAccountHandle phoneAccountHandle = phoneAccounts.next();
-            final PhoneAccount phoneAccount = mTelecomManager.getPhoneAccount(phoneAccountHandle);
-            if (subId == mTelephonyManager.getSubIdForPhoneAccount(phoneAccount)) {
-                return phoneAccountHandle;
-            }
-        }
-
-        return null;
-    }
-
     protected int getUserPrefDataSubIdFromDB() {
         return android.provider.Settings.Global.getInt(mContext.getContentResolver(),
                 SETTING_USER_PREF_DATA_SUB, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
