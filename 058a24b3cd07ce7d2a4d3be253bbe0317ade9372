@@ -76,6 +76,30 @@
     },
     {
       "key": {
+        "uuid": "729c82eb_116d18d5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-09-11T13:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6600507_9dca870c",
+      "range": {
+        "startLine": 1809,
+        "startChar": 19,
+        "endLine": 1809,
+        "endChar": 38
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "714b2334_3936b506",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
@@ -111,6 +135,30 @@
       "side": 1,
       "message": "Takeshi, can you answer that?",
       "parentUuid": "714b2334_3936b506",
+      "range": {
+        "startLine": 3245,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 64
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0617cda5_e6bc0fcb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-09-11T13:40:38Z",
+      "side": 1,
+      "message": "If there are several preferred apn candidates in the APN DB like APN1(setid\u003d1) and APN2(setid\u003d2), and they use with the same IMS apn, we have to define the same IMS apn with different setid in the DB if we don\u0027t add IMS apn here. It is redundant to define the same IMS apn with different setid.",
+      "parentUuid": "aa77b851_92ec8b05",
       "range": {
         "startLine": 3245,
         "startChar": 16,
