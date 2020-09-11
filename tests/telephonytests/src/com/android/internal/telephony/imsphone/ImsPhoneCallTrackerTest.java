@@ -228,8 +228,6 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
 
         doReturn(mImsConfig).when(mImsManager).getConfigInterface();
 
-        doNothing().when(mImsManager).addNotifyStatusChangedCallbackIfAvailable(any());
-
         mCTUT = new ImsPhoneCallTracker(mImsPhone, Runnable::run);
         mCTUT.addReasonCodeRemapping(null, "Wifi signal lost.", ImsReasonInfo.CODE_WIFI_LOST);
         mCTUT.addReasonCodeRemapping(501, "Call answered elsewhere.",

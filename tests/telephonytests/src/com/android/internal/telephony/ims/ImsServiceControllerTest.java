@@ -50,7 +50,8 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import androidx.test.runner.AndroidJUnit4;
 
-import com.android.ims.ImsServiceConnectionRepository;
+import com.android.ims.FeatureConnectionRepository;
+import com.android.ims.FeatureConnector;
 import com.android.ims.internal.IImsServiceFeatureCallback;
 
 import org.junit.After;
@@ -97,13 +98,13 @@ public class ImsServiceControllerTest extends ImsTestBase {
             "ImsServiceControllerTest");
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private ImsServiceController mTestImsServiceController;
-    private ImsServiceConnectionRepository mRepo;
+    private FeatureConnectionRepository mRepo;
 
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        mRepo = new ImsServiceConnectionRepository();
+        mRepo = new FeatureConnectionRepository();
         mTestImsServiceController = new ImsServiceController(mMockContext, mTestComponentName,
                 mMockCallbacks, mHandler, REBIND_RETRY, mRepo);
         mTestImsServiceController.addImsServiceFeatureCallback(mMockProxyCallbacks);
@@ -270,7 +271,6 @@ public class ImsServiceControllerTest extends ImsTestBase {
                 ImsFeature.FEATURE_EMERGENCY_MMTEL));
         testFeatures.add(new ImsFeatureConfiguration.FeatureSlotPair(SLOT_0,
                 ImsFeature.FEATURE_MMTEL));
-        mTestImsServiceController.removeImsServiceFeatureCallbacks();
 
         bindAndConnectService(testFeatures);
         // add the callback after bind
@@ -302,8 +302,10 @@ public class ImsServiceControllerTest extends ImsTestBase {
                 eq(mTestImsServiceController));
         verify(mMockCallbacks).imsServiceFeatureRemoved(eq(SLOT_0), eq(ImsFeature.FEATURE_RCS),
                 eq(mTestImsServiceController));
-        verify(mMockProxyCallbacks).imsFeatureRemoved(eq(SLOT_0), eq(ImsFeature.FEATURE_MMTEL));
-        verify(mMockProxyCallbacks).imsFeatureRemoved(eq(SLOT_0), eq(ImsFeature.FEATURE_RCS));
+        verify(mMockProxyCallbacks).imsFeatureRemoved(
+                FeatureConnector.UNAVAILABLE_REASON_DISCONNECTED);
+        verify(mMockProxyCallbacks).imsFeatureRemoved(
+                FeatureConnector.UNAVAILABLE_REASON_DISCONNECTED);
     }
 
     /**
@@ -734,7 +736,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     }
 
     private void validateMmTelFeatureContainerExists(int slotId) {
-        ImsServiceConnectionRepository.FeatureContainer<IImsMmTelFeature> fc =
+        FeatureConnectionRepository.Container<IImsMmTelFeature> fc =
                 mRepo.getIfExists(slotId, IImsMmTelFeature.class).orElse(null);
         assertNotNull("MMTEL FeatureContainer should not be null", fc);
         assertEquals("ImsServiceController did not report MmTelFeature to service repo correctly",
@@ -742,7 +744,7 @@ public class ImsServiceControllerTest extends ImsTestBase {
     }
 
     private void validateRcsFeatureContainerExists(int slotId) {
-        ImsServiceConnectionRepository.FeatureContainer<IImsRcsFeature> fc =
+        FeatureConnectionRepository.Container<IImsRcsFeature> fc =
                 mRepo.getIfExists(slotId, IImsRcsFeature.class).orElse(null);
         assertNotNull("RCS FeatureContainer should not be null", fc);
         assertEquals("ImsServiceController did not report RcsFeature to service repo correctly",
@@ -750,13 +752,13 @@ public class ImsServiceControllerTest extends ImsTestBase {
     }
 
     private void validateMmTelFeatureContainerDoesntExist(int slotId) {
-        ImsServiceConnectionRepository.FeatureContainer<IImsMmTelFeature> fc =
+        FeatureConnectionRepository.Container<IImsMmTelFeature> fc =
                 mRepo.getIfExists(slotId, IImsMmTelFeature.class).orElse(null);
         assertNull("FeatureContainer should be null", fc);
     }
 
     private void validateRcsFeatureContainerDoesntExist(int slotId) {
-        ImsServiceConnectionRepository.FeatureContainer<IImsRcsFeature> fc =
+        FeatureConnectionRepository.Container<IImsRcsFeature> fc =
                 mRepo.getIfExists(slotId, IImsRcsFeature.class).orElse(null);
         assertNull("FeatureContainer should be null", fc);
     }

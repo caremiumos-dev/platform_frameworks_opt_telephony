@@ -66,6 +66,7 @@ import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsStreamMediaProfile;
 import android.telephony.ims.ImsSuppServiceNotification;
 import android.telephony.ims.ProvisioningManager;
+import android.telephony.ims.aidl.IImsMmTelFeature;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -809,7 +810,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     /**
      * TODO: Remove this code; it is a workaround.
-     * When {@code true}, forces {@link ImsManager#updateImsServiceConfig(boolean)} to
+     * When {@code true}, forces {@link ImsManager#updateImsServiceConfig} to
      * be called when an ongoing video call is disconnected.  In some cases, where video pause is
      * supported by the carrier, when {@link #onDataEnabledChanged(boolean, int)} reports that data
      * has been disabled we will pause the video rather than disconnecting the call.  When this
@@ -833,7 +834,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         return PhoneNumberUtils.isEmergencyNumber(string);
     };
 
-    private final FeatureConnector<ImsManager> mImsManagerConnector;
+    private final FeatureConnector<IImsMmTelFeature, ImsManager> mImsManagerConnector;
 
     // Used exclusively for IMS Registration related events for logging.
     private final LocalLog mRegLocalLog = new LocalLog(100);
@@ -877,25 +878,21 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         statsManager.registerNetworkStatsProvider(LOG_TAG, mVtDataUsageProvider);
 
         // Allow the executor to be specified for testing.
-        mImsManagerConnector = new FeatureConnector<>(
-                phone.getContext(), phone.getPhoneId(),
-                new FeatureConnector.Listener<ImsManager>() {
-                    @Override
-                    public ImsManager getFeatureManager() {
-                        return ImsManager.getInstance(phone.getContext(), phone.getPhoneId());
-                    }
-
-                    @Override
+        mImsManagerConnector = ImsManager.getConnector(mPhone.getContext(), mPhone.getPhoneId(),
+                LOG_TAG, new FeatureConnector.Listener<ImsManager>() {
                     public void connectionReady(ImsManager manager) throws ImsException {
                         mImsManager = manager;
                         startListeningForCalls();
                     }
 
                     @Override
-                    public void connectionUnavailable() {
+                    public void connectionUnavailable(int reason) {
+                        if (reason == FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE) {
+                            loge("connectionUnavailable: unexpected, received server error");
+                        }
                         stopListeningForCalls();
                     }
-                }, executor, "ImsPhoneCallTracker");
+                }, this::post);
         mImsManagerConnector.connect();
     }
 
@@ -979,7 +976,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
 
         if (mCarrierConfigLoaded) {
-            mImsManager.updateImsServiceConfig(true);
+            mImsManager.updateImsServiceConfig();
         }
         // For compatibility with apps that still use deprecated intent
         sendImsServiceStateIntent(ImsManager.ACTION_IMS_SERVICE_UP);
@@ -2993,7 +2990,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // Ensure we update the IMS config when the call is disconnected; we delayed this
                 // because a video call was paused.
                 if (mImsManager != null) {
-                    mImsManager.updateImsServiceConfig(true);
+                    mImsManager.updateImsServiceConfig();
                 }
                 mShouldUpdateImsConfigOnDisconnect = false;
             }
@@ -3695,7 +3692,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     || item == ImsConfig.ConfigConstants.LVC_SETTING_ENABLED)) {
                 // Update Ims Service state to make sure updated provisioning values take effect
                 // immediately.
-                mImsManager.updateImsServiceConfig(true);
+                mImsManager.updateImsServiceConfig();
             }
         }
 
@@ -4548,7 +4545,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             // This will call into updateVideoCallFeatureValue and eventually all clients will be
             // asynchronously notified that the availability of VT over LTE has changed.
             if (mImsManager != null) {
-                mImsManager.updateImsServiceConfig(true);
+                mImsManager.updateImsServiceConfig();
             }
         }
     }

@@ -26,6 +26,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
+import android.telephony.ims.aidl.IImsMmTelFeature;
 import android.telephony.ims.aidl.IImsSmsListener;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
@@ -64,7 +65,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private volatile boolean mIsSmsCapable;
     private volatile boolean mIsImsServiceUp;
     private volatile boolean mIsRegistered;
-    private final FeatureConnector<ImsManager> mImsManagerConnector;
+    private final FeatureConnector<IImsMmTelFeature, ImsManager> mImsManagerConnector;
     /** Telephony metrics instance for logging metrics event */
     private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
 
@@ -236,14 +237,8 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     public ImsSmsDispatcher(Phone phone, SmsDispatchersController smsDispatchersController) {
         super(phone, smsDispatchersController);
 
-        mImsManagerConnector = new FeatureConnector<>(mContext, mPhone.getPhoneId(),
+        mImsManagerConnector = ImsManager.getConnector(mContext, mPhone.getPhoneId(), TAG,
                 new FeatureConnector.Listener<ImsManager>() {
-                    @Override
-                    public ImsManager getFeatureManager() {
-                        return ImsManager.getInstance(mContext, phone.getPhoneId());
-                    }
-
-                    @Override
                     public void connectionReady(ImsManager manager) throws ImsException {
                         logd("ImsManager: connection ready.");
                         synchronized (mLock) {
@@ -253,13 +248,16 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     }
 
                     @Override
-                    public void connectionUnavailable() {
-                        logd("ImsManager: connection unavailable.");
+                    public void connectionUnavailable(int reason) {
+                        logd("ImsManager: connection unavailable, reason=" + reason);
+                        if (reason == FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE) {
+                            loge("connectionUnavailable: unexpected, received server error");
+                        }
                         synchronized (mLock) {
                             mIsImsServiceUp = false;
                         }
                     }
-                }, "ImsSmsDispatcher");
+                }, this::post);
         mImsManagerConnector.connect();
     }
 
