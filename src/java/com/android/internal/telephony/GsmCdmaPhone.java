@@ -560,13 +560,23 @@ public class GsmCdmaPhone extends Phone {
         }
     }
 
+    // When OOS occurs, IMS registration may be still available so that IMS service
+    // state is also in-service, then reports in-service to upper layer.
+    // Add a precondition to merge IMS service so that notifies proper service state
+    // after IMS changes RAT.
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @Override
     @NonNull
     public ServiceState getServiceState() {
         if (mSST == null || mSST.mSS.getState() != ServiceState.STATE_IN_SERVICE) {
-            if (mImsPhone != null) {
-                return mergeServiceStates((mSST == null) ? new ServiceState() : mSST.mSS,
+            // Ensure UE has IMS service capability, then merge IMS service state.
+            // Video enabled includes WIFI video
+            final boolean isImsEnabled = mImsPhone != null && (mImsPhone.isVolteEnabled()
+                    || mImsPhone.isVideoEnabled()
+                    || mImsPhone.isWifiCallingEnabled());
+            if (isImsEnabled) {
+                return ServiceState.mergeServiceStates(
+                        ((mSST == null) ? new ServiceState() : mSST.mSS),
                         mImsPhone.getServiceState());
             }
         }
