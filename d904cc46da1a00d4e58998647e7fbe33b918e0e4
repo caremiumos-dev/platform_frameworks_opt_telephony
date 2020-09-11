@@ -34,6 +34,24 @@
       "revId": "d904cc46da1a00d4e58998647e7fbe33b918e0e4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8147f42e_5efe281a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-09-11T20:34:58Z",
+      "side": 1,
+      "message": "When calls merged into an IMS conference are disconnected, the disconnect cause reason is being used to specify IMS_MERGED_SUCCESSFULLY which is used to do some special case logging of calls in the call log.  As a result of the appended vendor cause message, that logic broke.\n\nI\u0027m going to revisit this in S to decouple the two so this CL can be re-applied.",
+      "parentUuid": "3ea976cc_a25116c7",
+      "revId": "d904cc46da1a00d4e58998647e7fbe33b918e0e4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
