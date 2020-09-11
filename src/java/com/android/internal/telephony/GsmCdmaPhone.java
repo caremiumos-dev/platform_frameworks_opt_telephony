@@ -520,13 +520,23 @@ public class GsmCdmaPhone extends Phone {
         }
     }
 
+    // When OOS occurs, IMS registration may be still available so that IMS service
+    // state is also in-service, then reports in-service to upper layer.
+    // Add a precondition to merge IMS service so that notifies proper service state
+    // after IMS changes RAT.
     @UnsupportedAppUsage
     @Override
     @NonNull
     public ServiceState getServiceState() {
         if (mSST == null || mSST.mSS.getState() != ServiceState.STATE_IN_SERVICE) {
-            if (mImsPhone != null) {
-                return mergeServiceStates((mSST == null) ? new ServiceState() : mSST.mSS,
+            // Ensure UE has IMS service capability, then merge IMS service state.
+            // Video enabled includes WIFI video
+            final boolean isImsEnabled = mImsPhone != null && (mImsPhone.isVolteEnabled()
+                    || mImsPhone.isVideoEnabled()
+                    || mImsPhone.isWifiCallingEnabled());
+            if (isImsEnabled) {
+                return ServiceState.mergeServiceStates(
+                        ((mSST == null) ? new ServiceState() : mSST.mSS),
                         mImsPhone.getServiceState());
             }
         }
@@ -3060,7 +3070,7 @@ public class GsmCdmaPhone extends Phone {
                     Rlog.d(LOG_TAG, "get phone radio capability fail, no need to change " +
                             "mRadioCapability");
                 } else {
-                    radioCapabilityUpdated(rc);
+                    radioCapabilityUpdated(rc, false);
                 }
                 Rlog.d(LOG_TAG, "EVENT_GET_RADIO_CAPABILITY: phone rc: " + rc);
                 break;

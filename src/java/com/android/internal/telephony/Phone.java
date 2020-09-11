@@ -4030,7 +4030,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      *  @param rc the phone radio capability currently in effect for this phone.
      */
-    public void radioCapabilityUpdated(RadioCapability rc) {
+    public void radioCapabilityUpdated(RadioCapability rc, boolean capabilitySwitched) {
         // Called when radios first become available or after a capability switch
         // Update the cached value
         mRadioCapability.set(rc);
@@ -4039,6 +4039,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             boolean restoreSelection = !mContext.getResources().getBoolean(
                     com.android.internal.R.bool.skip_restoring_network_selection);
             sendSubscriptionSettings(restoreSelection);
+        }
+
+        if (capabilitySwitched) {
+            mCi.getDeviceIdentity(obtainMessage(EVENT_GET_DEVICE_IDENTITY_DONE));
         }
     }
 
