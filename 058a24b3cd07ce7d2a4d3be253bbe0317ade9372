@@ -219,6 +219,30 @@
     },
     {
       "key": {
+        "uuid": "edb34cb2_457c38cd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-12T00:31:23Z",
+      "side": 1,
+      "message": "Takeshi, here are 2 options I can think of. Let me know what you think.\n\n1. Add multiple versions of these (IMS, FOTA, etc) APNs, one with no set id, and one for each of the set ids.\n2. Add a wild-card apn-set-id that matches all set ids (-1 or INT_MAX or something).\n\nIt may be simpler doing 1 for R/QPR timeframe, and we can do 2 for S. But if you think 2 is\u0027t too complex we can directly do that too.\n\nJordan, thoughts?",
+      "parentUuid": "c624f998_11163e8b",
+      "range": {
+        "startLine": 3245,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 64
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "206b51d3_d7634d49",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
