@@ -39,6 +39,30 @@
       "revId": "bfe16cf09ceb12362d07ef68df80ce567f5f84f1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ce37fd1_d252d191",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1137899
+      },
+      "writtenOn": "2020-09-13T22:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33302093_0f96d030",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 39
+      },
+      "revId": "bfe16cf09ceb12362d07ef68df80ce567f5f84f1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
