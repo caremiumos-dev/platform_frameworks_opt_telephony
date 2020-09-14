@@ -541,7 +541,22 @@ public class MultiSimSettingController extends Handler {
                 mSubController.getDefaultSmsSubId(),
                 (newValue -> mSubController.setDefaultSmsSubId(newValue)));
 
-        sendSubChangeNotificationIfNeeded(change, dataSelected, voiceSelected, smsSelected);
+        // When this config is set to TRUE, voice/data/sms preferences would be
+        // auto selected without any user confirmation,
+        // 1. When device powered-up with only one SIM Inserted or while two SIM cards
+        // present if one SIM is removed(or turned OFF) the reaiming SIM would be
+        // selected as preferred voice/data/sms SIM.
+        // 2. When device powered-up with two SIM cards or if two SIM cards
+        // present on device with new SIM insert(or SIM turn ON) the first inserted SIM
+        // would be selected as preferred voice/data/sms SIM.
+        int autoFallbackEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_voice_data_sms_auto_fallback);
+
+        if (!autoFallbackEnabled) {
+            sendSubChangeNotificationIfNeeded(change, dataSelected, voiceSelected, smsSelected);
+        } else {
+            updateUserPreferences(mPrimarySubList);
+        }
     }
 
     @PrimarySubChangeType
@@ -825,6 +840,113 @@ public class MultiSimSettingController extends Handler {
                     PendingIntent.getService(
                             mContext, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE));
         }
+    }
+
+    public void updateUserPreferences(List<Integer> primarySubList) {
+        SubscriptionInfo mNextActivatedSub = null;
+        int activeCount = 0;
+        if (!isRadioAvailableOnAllSubs()) {
+            logd("Radio is in Invalid state, Ignore Updating User Preference!!!");
+            return;
+        }
+        List<SubscriptionInfo> activeSubInfos = mSubController
+                .getActiveSubscriptionInfoList(mContext.getOpPackageName(),
+                        mContext.getAttributionTag());
+
+        final int defaultVoiceSubId = mSubController.getDefaultVoiceSubId();
+        final int defaultDataSubId = mSubController.getDefaultDataSubId();
+        final int defaultSmsSubId = mSubController.getDefaultSmsSubId();
+
+        //Get num of activated Subs and next available activated sub info.
+        for (SubscriptionInfo subInfo : activeSubInfos) {
+            if (isUiccProvisioned(subInfo.getSimSlotIndex())) {
+                activeCount++;
+                if (mNextActivatedSub == null) mNextActivatedSub = subInfo;
+            }
+        }
+        logd("updateUserPreferences:: active sub count = " + activeCount + " dds = "
+                 + defaultDataSubId + " voice = " + defaultVoiceSubId +
+                 " sms = " + defaultSmsSubId);
+
+        // If active SUB count is 1, Always Ask Prompt to be disabled and
+        // preference fallback to the next available SUB.
+        if (activeCount == 1) {
+            setSmsPromptEnabled(false);
+        }
+
+        // TODO Set all prompt options to false ?
+
+        // in Single SIM case or if there are no activated subs available, no need to update. EXIT.
+        if ((mNextActivatedSub == null) || (getActiveSubInfoCountMax() == 1)) return;
+
+        handleDataPreference(mNextActivatedSub.getSubscriptionId());
+
+        if ((defaultSmsSubId != SubscriptionManager.INVALID_SUBSCRIPTION_ID || activeCount == 1)
+                && !SubscriptionManager.isValidSubscriptionId(defaultSmsSubId)) {
+            setDefaultSmsSubId(mNextActivatedSub.getSubscriptionId());
+        }
+
+        // voice preference is handled in such a way that
+        // 1. Whenever current Sub is deactivated or removed It fall backs to
+        //    next available Sub.
+        // 2. When device is flashed for the first time, initial voice preference
+        //    would be set to always ask.
+        if ((defaultVoiceSubId != SubscriptionManager.INVALID_SUBSCRIPTION_ID || activeCount == 1)
+                && !SubscriptionManager.isValidSubscriptionId(defaultVoiceSubId)) {
+            setDefaultVoiceSubId(mNextActivatedSub.getSubscriptionId());
+        }
+
+        if (!SubscriptionManager.isValidSubscriptionId(mDefaultFallbackSubId)) {
+            setDefaultFallbackSubId(mNextActivatedSub.getSubscriptionId(),
+                SubscriptionManager.SUBSCRIPTION_TYPE_LOCAL_SIM);
+        }
+
+        logd("updateUserPreferences: after currentDds = " + getDefaultDataSubId() + " voice = " +
+                 getDefaultVoiceSubId() + " sms = " + getDefaultSmsSubId());
+    }
+
+    private void handleDataPreference(int nextActiveSubId) {
+        int userPrefDataSubId = getUserPrefDataSubIdFromDB();
+        int currentDataSubId = getDefaultDataSubId();
+
+        List<SubscriptionInfo> subInfoList =
+                getActiveSubscriptionInfoList(mContext.getOpPackageName());
+        if (subInfoList == null) {
+            return;
+        }
+        boolean userPrefSubValid = false;
+        for (SubscriptionInfo subInfo : subInfoList) {
+            if (subInfo.getSubscriptionId() == userPrefDataSubId) {
+                userPrefSubValid = true;
+            }
+        }
+        logd("havePrefSub = " + userPrefSubValid + " user pref subId = "
+                 + userPrefDataSubId + " current dds " + currentDataSubId
+                 + " next active subId " + nextActiveSubId);
+
+        // If earlier user selected DDS is now available, set that as DDS subId.
+        if (userPrefSubValid && SubscriptionManager.isValidSubscriptionId(userPrefDataSubId) &&
+                 (currentDataSubId != userPrefDataSubId)) {
+            setDefaultDataSubId(userPrefDataSubId);
+        } else if (!SubscriptionManager.isValidSubscriptionId(currentDataSubId)) {
+            setDefaultDataSubId(nextActiveSubId);
+        }
+
+    }
+
+    protected int getUserPrefDataSubIdFromDB() {
+        return android.provider.Settings.Global.getInt(mContext.getContentResolver(),
+                SETTING_USER_PREF_DATA_SUB, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+    }
+
+    private boolean isRadioAvailableOnAllSubs() {
+        for (Phone phone : PhoneFactory.getPhones()) {
+            if (phone.mCi != null &&
+                    phone.mCi.getRadioState() == TelephonyManager.RADIO_POWER_UNAVAILABLE) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void log(String msg) {
