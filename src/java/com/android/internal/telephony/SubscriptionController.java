@@ -120,6 +120,13 @@ public class SubscriptionController extends ISub.Stub {
     private static final int NO_ENTRY_FOR_SLOT_INDEX = -1;
     private static final int SUB_ID_NOT_IN_SLOT = -2;
 
+    /**
+     * This intent would be broadcasted when a subId/slotId pair added to the
+     * sSlotIdxToSubId hashmap.
+     */
+    private static final String ACTION_SUBSCRIPTION_RECORD_ADDED =
+            "android.intent.action.SUBSCRIPTION_INFO_RECORD_ADDED";
+
     // Lock that both mCacheActiveSubInfoList and mCacheOpportunisticSubInfoList use.
     private Object mSubInfoListLock = new Object();
 
@@ -1415,6 +1422,11 @@ public class SubscriptionController extends ISub.Stub {
                             } else {
                                 updateDefaultSubIdsIfNeeded(subId, subscriptionType);
                             }
+
+                            Intent intent = new Intent(ACTION_SUBSCRIPTION_RECORD_ADDED);
+                            SubscriptionManager.putPhoneIdAndSubIdExtra(intent, slotIndex, subId);
+                            mContext.sendBroadcast(intent,
+                                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
                         } else {
                             if (DBG) {
                                 logdl("[addSubInfoRecord] current SubId is already known, "
