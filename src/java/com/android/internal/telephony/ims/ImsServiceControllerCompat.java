@@ -133,23 +133,43 @@ public class ImsServiceControllerCompat extends ImsServiceController {
     }
 
     @Override
-    protected final IInterface createImsFeature(int slotId, int featureType,
-            IImsFeatureStatusCallback c)
+    protected final IInterface createImsFeature(int slotId, int featureType)
             throws RemoteException {
         switch (featureType) {
             case ImsFeature.MMTEL: {
-                return createMMTelCompat(slotId, c);
+                return createMMTelCompat(slotId);
             }
             case ImsFeature.RCS: {
-                return createRcsFeature(slotId, c);
+
+                return createRcsFeature(slotId);
             }
             default:
                 return null;
         }
     }
 
+    // This method should only be called when already synchronized on mLock.
+    // overridden by compat layer to register feature status callbacks
     @Override
-    protected final void removeImsFeature(int slotId, int featureType, IImsFeatureStatusCallback c)
+    protected void registerImsFeatureStatusCallback(int slotId, int featureType,
+            IImsFeatureStatusCallback c) throws RemoteException {
+        mServiceController.addFeatureStatusCallback(slotId, featureType, c);
+    }
+
+    // This method should only be called when already synchronized on mLock.
+    // overridden by compat layer to deregister feature status callbacks
+    @Override
+    protected void unregisterImsFeatureStatusCallback(int slotId, int featureType,
+            IImsFeatureStatusCallback c) {
+        try {
+            mServiceController.removeFeatureStatusCallback(slotId, featureType, c);
+        } catch (RemoteException e) {
+            Log.w(TAG, "compat - unregisterImsFeatureStatusCallback - couldn't remove " + c);
+        }
+    }
+
+    @Override
+    protected final void removeImsFeature(int slotId, int featureType)
             throws RemoteException {
         if (featureType == ImsFeature.MMTEL) {
             mMmTelCompatAdapters.remove(slotId);
@@ -157,7 +177,7 @@ public class ImsServiceControllerCompat extends ImsServiceController {
             mConfigCompatAdapters.remove(slotId);
         }
         if (mServiceController != null) {
-            mServiceController.removeImsFeature(slotId, featureType, c);
+            mServiceController.removeImsFeature(slotId, featureType);
         }
     }
 
@@ -171,9 +191,9 @@ public class ImsServiceControllerCompat extends ImsServiceController {
         return mServiceController != null;
     }
 
-    private MmTelInterfaceAdapter getInterface(int slotId, IImsFeatureStatusCallback c)
+    private MmTelInterfaceAdapter getInterface(int slotId)
             throws RemoteException {
-        IImsMMTelFeature feature = mServiceController.createMMTelFeature(slotId, c);
+        IImsMMTelFeature feature = mServiceController.createMMTelFeature(slotId);
         if (feature == null) {
             Log.w(TAG, "createMMTelCompat: createMMTelFeature returned null.");
             return null;
@@ -181,9 +201,9 @@ public class ImsServiceControllerCompat extends ImsServiceController {
         return new MmTelInterfaceAdapter(slotId, feature.asBinder());
     }
 
-    private IImsMmTelFeature createMMTelCompat(int slotId, IImsFeatureStatusCallback c)
+    private IImsMmTelFeature createMMTelCompat(int slotId)
             throws RemoteException {
-        MmTelInterfaceAdapter interfaceAdapter = getInterface(slotId, c);
+        MmTelInterfaceAdapter interfaceAdapter = getInterface(slotId);
         MmTelFeatureCompatAdapter mmTelAdapter = new MmTelFeatureCompatAdapter(mContext, slotId,
                 interfaceAdapter);
         mMmTelCompatAdapters.put(slotId, mmTelAdapter);
@@ -195,7 +215,7 @@ public class ImsServiceControllerCompat extends ImsServiceController {
         return mmTelAdapter.getBinder();
     }
 
-    private IImsRcsFeature createRcsFeature(int slotId, IImsFeatureStatusCallback c) {
+    private IImsRcsFeature createRcsFeature(int slotId) {
         // Return non-null if there is a custom RCS implementation that needs a compatability layer.
         return null;
     }
