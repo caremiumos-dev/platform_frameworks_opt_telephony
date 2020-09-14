@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "265447c2_3128765b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCall.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-14T23:17:41Z",
+      "side": 1,
+      "message": "Looks like the import is also missing",
+      "range": {
+        "startLine": 149,
+        "startChar": 4,
+        "endLine": 149,
+        "endChar": 22
+      },
+      "revId": "387c94d14028d54dd9c0818eb01464b64ad26b0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
