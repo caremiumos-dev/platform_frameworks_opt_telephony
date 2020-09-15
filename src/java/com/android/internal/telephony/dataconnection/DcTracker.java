@@ -4420,6 +4420,25 @@ public class DcTracker extends Handler {
                         }
                         apnContext.setReason(reason);
                         cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, apnContext);
+                    } else {
+                        if (!PhoneConstants.APN_TYPE_DEFAULT.equals(apnContext.getApnType())) {
+                            continue;
+                        }
+                        if (apnContext.getState() != DctConstants.State.CONNECTED) {
+                            continue;
+                        }
+                        if (getPreferredApn() == null) {
+                            for (ApnSetting apn : mAllApnSettings) {
+                                if (apn.equalsExceptID(apnContext.getApnSetting())) {
+                                    log("cleanUpConnectionsOnUpdatedApns: apnSetting=" + apn);
+                                    setPreferredApn(apn.getId());
+                                    mPreferredApn = getPreferredApn();
+                                    log("cleanUpConnectionsOnUpdatedApns: getPreferredApn="
+                                            + mPreferredApn);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
