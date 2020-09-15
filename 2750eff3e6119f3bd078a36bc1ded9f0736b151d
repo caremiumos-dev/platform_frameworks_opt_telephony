@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6daca9d_8f34cf45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1714489
+      },
+      "writtenOn": "2020-09-15T02:01:12Z",
+      "side": 1,
+      "message": "As we mentioned in \"partner issuetracker\", I would like to ask you to review the bug related that the preferred APN is not maintained when APN is \"reset to default\".\n\nhttps://partnerissuetracker.corp.google.com/u/1/issues/167637565",
+      "revId": "2750eff3e6119f3bd078a36bc1ded9f0736b151d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
