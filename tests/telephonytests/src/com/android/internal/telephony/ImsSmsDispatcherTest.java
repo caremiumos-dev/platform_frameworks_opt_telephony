@@ -65,9 +65,9 @@ public class ImsSmsDispatcherTest extends TelephonyTest {
 
         doAnswer((Answer<FeatureConnector<ImsManager>>) invocation -> {
             mImsManagerListener =
-                    (FeatureConnector.Listener<ImsManager>) invocation.getArguments()[2];
+                    (FeatureConnector.Listener<ImsManager>) invocation.getArguments()[3];
             return mMockConnector;
-        }).when(mConnectorFactory).create(any(), anyInt(), any(), anyString());
+        }).when(mConnectorFactory).create(any(), anyInt(), anyString(), any(), any());
         mImsSmsDispatcher = new ImsSmsDispatcher(mPhone, mSmsDispatchersController,
                 mConnectorFactory);
         // set the ImsManager instance
