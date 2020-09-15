@@ -243,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "bb3bc780_dc47d060",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 3247,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-09-15T12:28:08Z",
+      "side": 1,
+      "message": "It is good idea to add a wild-card apn-set-id. I updated the commit.\n\nRegarding your first question(What if the user adds an APN...), we expect such carriers set read_only_apn_types_string_array to \"ims\" to avoid adding ims apn by user.",
+      "parentUuid": "edb34cb2_457c38cd",
+      "range": {
+        "startLine": 3245,
+        "startChar": 16,
+        "endLine": 3247,
+        "endChar": 64
+      },
+      "revId": "058a24b3cd07ce7d2a4d3be253bbe0317ade9372",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "206b51d3_d7634d49",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 5
