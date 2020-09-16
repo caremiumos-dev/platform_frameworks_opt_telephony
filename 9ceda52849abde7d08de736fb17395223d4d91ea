@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d5cbeca_0a8be4e2",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:14:49Z",
+      "side": 1,
+      "message": "can you use a HandlerExecutor?",
+      "range": {
+        "startLine": 143,
+        "startChar": 21,
+        "endLine": 143,
+        "endChar": 38
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb735362_b17c9d0a",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:14:49Z",
+      "side": 1,
+      "message": "callIfExists?",
+      "range": {
+        "startLine": 783,
+        "startChar": 16,
+        "endLine": 783,
+        "endChar": 30
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac0d27de_f2b6610d",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-16T19:14:49Z",
+      "side": 1,
+      "message": "it looks like ImsFeatureRepository already has an internal lock -- is synchronizing on mLock still needed here?",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 816,
+        "endChar": 67
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
