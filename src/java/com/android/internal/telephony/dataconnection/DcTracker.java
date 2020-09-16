@@ -33,6 +33,7 @@ import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -347,6 +348,25 @@ public class DcTracker extends Handler {
 
     /* List of SubscriptionPlans, updated when initialized and when plans are changed. */
     private List<SubscriptionPlan> mSubscriptionPlans = null;
+
+    // Maximum data reject count
+    public static final int MAX_PDP_REJECT_COUNT = 3;
+
+    // Data reset event tracker to know reset events.
+    private DataResetEventTracker mDataResetEventTracker = null;
+
+    // data reject dialog, made static because only one dialog object can be
+    // used between multiple dataconnection objects.
+    protected static AlertDialog mDataRejectDialog = null;
+
+    //Store data reject cause for comparison
+    private String mDataRejectReason = "NONE";
+
+    //Store data reject count
+    private int mDataRejectCount = 0;
+
+    //Store data reject cause code
+    private int mPdpRejectCauseCode = 0;
 
     @SimState
     private int mSimState = TelephonyManager.SIM_STATE_UNKNOWN;
@@ -1464,6 +1484,14 @@ public class DcTracker extends Handler {
             RetryFailures retryFailures) {
         if (VDBG) log("setupDataOnAllConnectableApns: apnContext " + apnContext);
 
+        if (mPhone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_pdp_reject_enable_retry) &&
+                mDataRejectCount > 0 &&
+                TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
+            log("setupDataOnConnectableApn: data retry in progress, skip processing");
+            return;
+        }
+
         if (apnContext.getState() == DctConstants.State.FAILED
                 || apnContext.getState() == DctConstants.State.RETRYING) {
             if (retryFailures == RetryFailures.ALWAYS) {
@@ -1688,6 +1716,14 @@ public class DcTracker extends Handler {
                                            ApnContext apnContext) {
         if (apnContext == null) {
             if (DBG) log("cleanUpConnectionInternal: apn context is null");
+            return;
+        }
+
+        if (mPhone.getContext().getResources().getBoolean(
+                 com.android.internal.R.bool.config_pdp_reject_enable_retry) &&
+                 mDataRejectCount > 0 &&
+                 TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
+            log("cleanUpConnectionInternal: data retry in progress, skip cleanup");
             return;
         }
 
@@ -2287,7 +2323,13 @@ public class DcTracker extends Handler {
         boolean retry = true;
         String reason = apnContext.getReason();
 
-        if (Phone.REASON_RADIO_TURNED_OFF.equals(reason) || (isOnlySingleDcAllowed(getDataRat())
+        if (mPhone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_pdp_reject_enable_retry) &&
+                mDataRejectCount > 0 &&
+                TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
+            log("retryAfterDisconnected: data retry in progress, skip this retry");
+            retry = false;
+        } else if (Phone.REASON_RADIO_TURNED_OFF.equals(reason) || (isOnlySingleDcAllowed(getDataRat())
                 && isHigherPriorityApnContextActive(apnContext))) {
             retry = false;
         }
@@ -2929,6 +2971,12 @@ public class DcTracker extends Handler {
         }
 
         if (success) {
+            if (mPhone.getContext().getResources().getBoolean(
+                    com.android.internal.R.bool.config_pdp_reject_enable_retry) &&
+                    TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
+                handlePdpRejectCauseSuccess();
+            }
+
             DataConnection dataConnection = apnContext.getDataConnection();
 
             if (RADIO_TESTS) {
@@ -3045,6 +3093,7 @@ public class DcTracker extends Handler {
                         + DataFailCause.toString(cause) + ", requestType="
                         + requestTypeToString(requestType));
             }
+            mPdpRejectCauseCode = cause;
             if (DataFailCause.isEventLoggable(cause)) {
                 // Log this failure to the Event Logs.
                 int cid = getCellLocationId();
@@ -3084,6 +3133,45 @@ public class DcTracker extends Handler {
 
 
 
+    private long getDelayForThrottlePdnRetry(ApnContext apnContext) {
+        String reason = DataFailCause.toString(mPdpRejectCauseCode);
+        long delay = -1;
+        //Reset apn permanent failure to allow retry
+        ApnSetting apn = apnContext.getApnSetting();
+        if (apn != null) {
+            if (DBG) log("getDelayForThrottlePdnRetry: reset permanent failure on apn");
+            apn.setPermanentFailed(false);
+        }
+
+        if (isMatchingPdpRejectCause(reason)) {
+            if (mDataResetEventTracker == null) {
+                mDataResetEventTracker = new DataResetEventTracker(mTransportType,
+                        mPhone, mResetEventListener);
+            }
+            if (mDataRejectCount == 0) {
+                mDataResetEventTracker.startResetEventTracker();
+            }
+            boolean isHandled = handlePdpRejectCauseFailure(reason);
+
+            /* If MAX Reject count reached, display pop-up to user */
+            if (MAX_PDP_REJECT_COUNT <= mDataRejectCount) {
+                if (DBG) log("getDelayForThrottlePdnRetry: reached max retry count");
+                displayPopup(mDataRejectReason);
+                delay = -1;
+            } else if (isHandled) {
+                delay = mPhone.getContext().getResources().getInteger(
+                        com.android.internal.R.integer.config_pdp_reject_retry_delay_ms);
+                if (DBG) log("getDelayForThrottlePdnRetry: delay from config: " + delay);
+            }
+        } else {
+            if (DBG) log("getDelayForThrottlePdnRetry: reset reject count");
+            resetDataRejectCounter();
+            delay = apnContext.getDelayForNextApn(mFailFast);
+        }
+
+        return delay;
+    }
+
     /**
      * Error has occurred during the SETUP {aka bringUP} request and the DCT
      * should either try the next waiting APN or start over from the
@@ -3093,6 +3181,13 @@ public class DcTracker extends Handler {
     protected void onDataSetupCompleteError(ApnContext apnContext,
             @RequestNetworkType int requestType, boolean fallbackOnFailedHandover) {
         long delay = apnContext.getDelayForNextApn(mFailFast);
+
+        if (mPhone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_pdp_reject_enable_retry) &&
+                TextUtils.equals(apnContext.getApnType(), PhoneConstants.APN_TYPE_DEFAULT)) {
+            delay = getDelayForThrottlePdnRetry(apnContext);
+        }
+
         // Check if we need to retry or not.
         if (delay >= 0 && delay != RetryManager.NO_RETRY && !fallbackOnFailedHandover) {
             if (DBG) {
@@ -5298,4 +5393,149 @@ public class DcTracker extends Handler {
     public @NonNull DataThrottler getDataThrottler() {
         return mDataThrottler;
     }
+
+    /*
+     * Reset data reject params on data call success
+     */
+    private void handlePdpRejectCauseSuccess() {
+        if (mDataRejectCount > 0) {
+            if (DBG) log("handlePdpRejectCauseSuccess: reset reject count");
+            resetDataRejectCounter();
+        }
+    }
+
+    /*
+     * Process data failure if RAT is WCDMA
+     * And if the failure cause matches one of the following cause codes:
+     * 1. USER_AUTHENTICATION
+     * 2. SERVICE_OPTION_NOT_SUBSCRIBED
+     * 3. MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED
+     */
+    private boolean handlePdpRejectCauseFailure(String reason) {
+        boolean handleFailure = false;
+
+        // Check if data rat is WCDMA
+        if (isWCDMA(getDataRat())) {
+            if (DBG) log("handlePdpRejectCauseFailure: reason=" + reason +
+                    ", mDataRejectReason=" + mDataRejectReason);
+            /*
+             * If previously rejected code is not same as current data reject reason,
+             * then reset the count and reset the reject reason
+             */
+            if (!reason.equalsIgnoreCase(mDataRejectReason)) {
+                resetDataRejectCounter();
+            }
+
+            /*
+             * If failure reason is USER_AUTHENTICATION or
+             * SERVICE_OPTION_NOT_SUBSCRIBED or MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED,
+             * increment counter and store reject cause
+             */
+            if (isMatchingPdpRejectCause(reason)) {
+                mDataRejectCount++;
+                mDataRejectReason = reason;
+                if (DBG) log ("handlePdpRejectCauseFailure: DataRejectCount = " +
+                        mDataRejectCount);
+                handleFailure = true;
+            }
+        } else {
+            if (DBG) log("isPdpRejectCauseFailureHandled: DataConnection not on wcdma");
+            resetDataRejectCounter();
+        }
+
+        return handleFailure;
+    }
+
+    /*
+     * Data reset event listener. Dc will get get onResetEvent
+     * whenever any data reset event occurs
+     */
+    private DataResetEventTracker.ResetEventListener mResetEventListener =
+           new DataResetEventTracker.ResetEventListener() {
+        @Override
+        public void onResetEvent(boolean retry) {
+            if (DBG) log("onResetEvent: retry=" + retry);
+
+            //Dismiss dialog
+            if (mDataRejectDialog != null && mDataRejectDialog.isShowing()) {
+                if (DBG) log("onResetEvent: Dismiss dialog");
+                mDataRejectDialog.dismiss();
+            }
+            mDataResetEventTracker.stopResetEventTracker();
+
+            for (ApnContext apnContext : mApnContexts.values()) {
+                if (mDataRejectCount > 0) {
+                    if (DBG) log("onResetEvent: reset reject count=" + mDataRejectCount);
+                    resetDataRejectCounter();
+                    cancelReconnect(apnContext);
+                    if (retry) {
+                        if (DBG) log("onResetEvent: retry data call on apnContext=" + apnContext);
+                        sendMessage(obtainMessage(DctConstants.EVENT_TRY_SETUP_DATA, apnContext));
+                    }
+                }
+            }
+        }
+    };
+
+    /*
+     * This function will display the pdp reject message
+     */
+    private void displayPopup(String pdpRejectCause) {
+        if (DBG) log("displayPopup : " + pdpRejectCause);
+        String title = mPhone.getContext().getResources().
+                getString(com.android.internal.R.string.config_pdp_reject_dialog_title);
+        String message = null;
+        if (pdpRejectCause.equalsIgnoreCase("USER_AUTHENTICATION")) {
+            message = mPhone.getContext().getResources().
+                    getString(com.android.internal.R.string.config_pdp_reject_user_authentication_failed);
+        } else if (pdpRejectCause.equalsIgnoreCase("SERVICE_OPTION_NOT_SUBSCRIBED")) {
+            message = mPhone.getContext().getResources().getString(
+                    com.android.internal.R.string.config_pdp_reject_service_not_subscribed);
+        } else if (pdpRejectCause.equalsIgnoreCase("MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED")) {
+            message = mPhone.getContext().getResources().getString(
+                    com.android.internal.R.string.config_pdp_reject_multi_conn_to_same_pdn_not_allowed);
+        }
+        if (mDataRejectDialog == null || !mDataRejectDialog.isShowing()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    mPhone.getContext());
+            builder.setPositiveButton(android.R.string.ok, null);
+            mDataRejectDialog = builder.create();
+        }
+        mDataRejectDialog.setMessage(message);
+        mDataRejectDialog.setCanceledOnTouchOutside(false);
+        mDataRejectDialog.setTitle(title);
+        mDataRejectDialog.getWindow().setType(
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        mDataRejectDialog.show();
+    }
+
+    /*
+     * returns true if data reject cause matches errors listed
+     */
+    private boolean isMatchingPdpRejectCause(String reason) {
+        return reason.equalsIgnoreCase("USER_AUTHENTICATION") ||
+               reason.equalsIgnoreCase("SERVICE_OPTION_NOT_SUBSCRIBED") ||
+               reason.equalsIgnoreCase("MULTI_CONN_TO_SAME_PDN_NOT_ALLOWED");
+    }
+
+    /*
+     * returns true if radioTechnology is WCDMA rat, else false
+     */
+    private boolean isWCDMA(int radioTechnology) {
+        return radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_UMTS
+            || radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSDPA
+            || radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSUPA
+            || radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSPA
+            || radioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP;
+
+    }
+
+    /*
+     * Reset data reject count and reason
+     */
+    private void resetDataRejectCounter() {
+        mDataRejectCount = 0;
+        mDataRejectReason = "NONE";
+    }
 }
+
