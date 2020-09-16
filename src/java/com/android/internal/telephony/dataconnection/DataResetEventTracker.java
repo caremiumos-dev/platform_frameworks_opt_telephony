@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.internal.telephony.vendor.dataconnection;
+package com.android.internal.telephony.dataconnection;
 
 import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.IccCardConstants;
@@ -45,7 +45,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 
-public class VendorDataResetEventTracker {
+public class DataResetEventTracker {
 
     public static interface ResetEventListener {
         public void onResetEvent(boolean retry);
@@ -104,9 +104,9 @@ public class VendorDataResetEventTracker {
         }
     };
 
-    public VendorDataResetEventTracker(int transportType, Phone phone,
+    public DataResetEventTracker(int transportType, Phone phone,
             ResetEventListener listener) {
-        if (DBG) log("VendorDataResetEventTracker constructor: " + this);
+        if (DBG) log("DataResetEventTracker constructor: " + this);
         mPhone = phone;
         mContext = mPhone.getContext();
         this.mListener = listener;
@@ -204,6 +204,6 @@ public class VendorDataResetEventTracker {
     }
 
     private void log(String log) {
-        Rlog.d("VendorDataResetEventTracker", log);
+        Rlog.d("DataResetEventTracker", log);
     }
 }
