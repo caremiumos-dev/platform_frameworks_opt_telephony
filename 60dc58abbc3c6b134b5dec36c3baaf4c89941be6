@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c705c9f_74085156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-16T20:06:56Z",
+      "side": 1,
+      "message": "We\u0027re still waiting for Qualcomm-review +1",
+      "revId": "60dc58abbc3c6b134b5dec36c3baaf4c89941be6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e55c74cd_fac8c3be",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-16T20:06:56Z",
+      "side": 1,
+      "message": "Please use the same copyright comment as other aosp files.",
+      "revId": "60dc58abbc3c6b134b5dec36c3baaf4c89941be6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
