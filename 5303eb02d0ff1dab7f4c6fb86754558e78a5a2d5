@@ -16,6 +16,23 @@
       "revId": "5303eb02d0ff1dab7f4c6fb86754558e78a5a2d5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95e239b0_571ab92d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-16T19:39:09Z",
+      "side": 1,
+      "message": "Hi Takeshi, sorry for the back and forth on this. I am trying to resolve the merge conflicts and make aosp and qpr in sync. Can you please rebase this on top of aosp/1428974? Alternatively you can wait until that is merged and then rebase this to the tip of tree.",
+      "revId": "5303eb02d0ff1dab7f4c6fb86754558e78a5a2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
