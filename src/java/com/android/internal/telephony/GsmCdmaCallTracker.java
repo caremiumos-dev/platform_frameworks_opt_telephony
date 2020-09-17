@@ -937,19 +937,21 @@ public class GsmCdmaCallTracker extends CallTracker {
                     // Loop through foreground call connections as
                     // it contains the known logical connections.
                     ArrayList<Connection> connections = mForegroundCall.getConnections();
-                    int count = connections.size();
-                    for (int n = 0; n < count; n++) {
-                        if (Phone.DEBUG_PHONE) log("adding fgCall cn " + n + " to droppedDuringPoll");
-                        GsmCdmaConnection cn = (GsmCdmaConnection) connections.get(n);
-                        mDroppedDuringPoll.add(cn);
+                    for (Connection cn : connections) {
+                        if (Phone.DEBUG_PHONE) {
+                            log("adding fgCall cn " + cn + "to droppedDuringPoll");
+                        }
+                        mDroppedDuringPoll.add((GsmCdmaConnection) cn);
                     }
-                    count = mRingingCall.getConnectionsCount();
+
+                    connections = mRingingCall.getConnections();
                     // Loop through ringing call connections as
                     // it may contain the known logical connections.
-                    for (int n = 0; n < count; n++) {
-                        if (Phone.DEBUG_PHONE) log("adding rgCall cn " + n + " to droppedDuringPoll");
-                        GsmCdmaConnection cn = (GsmCdmaConnection) connections.get(n);
-                        mDroppedDuringPoll.add(cn);
+                    for (Connection cn : connections) {
+                        if (Phone.DEBUG_PHONE) {
+                            log("adding rgCall cn " + cn + "to droppedDuringPoll");
+                        }
+                        mDroppedDuringPoll.add((GsmCdmaConnection) cn);
                     }
 
                     // Re-start Ecm timer when the connected emergency call ends
@@ -1544,7 +1546,7 @@ public class GsmCdmaCallTracker extends CallTracker {
                     causeCode == CallFailCause.BEARER_NOT_AVAIL ||
                     causeCode == CallFailCause.ERROR_UNSPECIFIED) {
 
-                    CellLocation loc = mPhone.getCellIdentity().asCellLocation();
+                    CellLocation loc = mPhone.getCurrentCellIdentity().asCellLocation();
                     int cid = -1;
                     if (loc != null) {
                         if (loc instanceof GsmCellLocation) {

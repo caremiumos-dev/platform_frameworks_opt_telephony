@@ -58,7 +58,6 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.RegistrantList;
-import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.preference.PreferenceManager;
@@ -81,6 +80,7 @@ import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionPlan;
 import android.telephony.TelephonyDisplayInfo;
+import android.telephony.TelephonyFrameworkInitializer;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyManager.SimState;
 import android.telephony.cdma.CdmaCellLocation;
@@ -122,7 +122,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -909,7 +908,11 @@ public class DcTracker extends Handler {
 
     // Turn telephony radio on or off.
     private void setRadio(boolean on) {
-        final ITelephony phone = ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
+        final ITelephony phone = ITelephony.Stub.asInterface(
+                TelephonyFrameworkInitializer
+                        .getTelephonyServiceManager()
+                        .getTelephonyServiceRegisterer()
+                        .get());
         try {
             phone.setRadio(on);
         } catch (Exception e) {
@@ -1035,7 +1038,7 @@ public class DcTracker extends Handler {
         final Collection<ApnConfigType> types =
                 new ApnConfigTypeRepository(carrierConfig).getTypes();
         for (ApnConfigType apnConfigType : types) {
-            if (mApnContextsByType.get(apnConfigType.getType()) != null) {
+            if (mApnContextsByType.contains(apnConfigType.getType())) {
                 ApnContext apnContext = mApnContextsByType.get(apnConfigType.getType());
                 apnContext.setPriority(apnConfigType.getPriority());
             }
@@ -1824,11 +1827,14 @@ public class DcTracker extends Handler {
         }
 
         for (ApnSetting dunSetting : dunCandidates) {
-            if (!dunSetting.canSupportNetworkType(
+            if (dunSetting.canSupportNetworkType(
                     ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
-                continue;
+                int preferredApnSetId = getPreferredApnSetId();
+                if (preferredApnSetId == Telephony.Carriers.NO_APN_SET_ID
+                        || preferredApnSetId == dunSetting.getApnSetId()) {
+                    retDunSettings.add(dunSetting);
+                }
             }
-            retDunSettings.add(dunSetting);
         }
 
         if (VDBG) log("fetchDunApns: dunSettings=" + retDunSettings);
@@ -2351,7 +2357,7 @@ public class DcTracker extends Handler {
         ArrayList<ApnSetting> dunSettings = null;
 
         if (ApnSetting.TYPE_DUN == apnType) {
-            dunSettings = sortApnListByPreferred(fetchDunApns());
+            dunSettings = fetchDunApns();
         }
         if (DBG) {
             log("checkForCompatibleDataConnection: apnContext=" + apnContext);
@@ -3312,7 +3318,7 @@ public class DcTracker extends Handler {
                     apnList.add(dun);
                     if (DBG) log("buildWaitingApns: X added APN_TYPE_DUN apnList=" + apnList);
                 }
-                return sortApnListByPreferred(apnList);
+                return apnList;
             }
         }
 
@@ -3325,8 +3331,8 @@ public class DcTracker extends Handler {
         // to say they don't want to use preferred at all.
         boolean usePreferred = true;
         try {
-            usePreferred = ! mPhone.getContext().getResources().getBoolean(com.android.
-                    internal.R.bool.config_dontPreferApn);
+            usePreferred = !mPhone.getContext().getResources().getBoolean(com.android
+                    .internal.R.bool.config_dontPreferApn);
         } catch (Resources.NotFoundException e) {
             if (DBG) log("buildWaitingApns: usePreferred NotFoundException set to true");
             usePreferred = true;
@@ -3351,7 +3357,6 @@ public class DcTracker extends Handler {
                 if (mPreferredApn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     apnList.add(mPreferredApn);
-                    apnList = sortApnListByPreferred(apnList);
                     if (DBG) log("buildWaitingApns: X added preferred apnList=" + apnList);
                     return apnList;
                 }
@@ -3366,8 +3371,16 @@ public class DcTracker extends Handler {
             if (apn.canHandleType(requestedApnTypeBitmask)) {
                 if (apn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
-                    if (VDBG) log("buildWaitingApns: adding apn=" + apn);
-                    apnList.add(apn);
+                    int preferredApnSetId = getPreferredApnSetId();
+                    if (apn.isEmergencyApn()
+                            || preferredApnSetId == Telephony.Carriers.NO_APN_SET_ID
+                            || preferredApnSetId == apn.getApnSetId()) {
+                        if (VDBG) log("buildWaitingApns: adding apn=" + apn);
+                        apnList.add(apn);
+                    } else {
+                        log("buildWaitingApns: APN set id " + apn.getApnSetId()
+                                + " does not match the preferred set id " + preferredApnSetId);
+                    }
                 } else {
                     if (DBG) {
                         log("buildWaitingApns: networkTypeBitmask:"
@@ -3382,42 +3395,8 @@ public class DcTracker extends Handler {
             }
         }
 
-        apnList = sortApnListByPreferred(apnList);
         if (DBG) log("buildWaitingApns: " + apnList.size() + " APNs in the list: " + apnList);
         return apnList;
-    }
-
-    /**
-     * Sort a list of ApnSetting objects, with the preferred APNs at the front of the list
-     *
-     * e.g. if the preferred APN set = 2 and we have
-     *   1. APN with apn_set_id = 0 = Carriers.NO_SET_SET (no set is set)
-     *   2. APN with apn_set_id = 1 (not preferred set)
-     *   3. APN with apn_set_id = 2 (preferred set)
-     * Then the return order should be (3, 1, 2) or (3, 2, 1)
-     *
-     * e.g. if the preferred APN set = Carriers.NO_SET_SET (no preferred set) then the
-     * return order can be anything
-     */
-    @VisibleForTesting
-    public ArrayList<ApnSetting> sortApnListByPreferred(ArrayList<ApnSetting> list) {
-        if (list == null || list.size() <= 1) return list;
-        int preferredApnSetId = getPreferredApnSetId();
-        if (preferredApnSetId != Telephony.Carriers.NO_APN_SET_ID) {
-            list.sort(new Comparator<ApnSetting>() {
-                @Override
-                public int compare(ApnSetting apn1, ApnSetting apn2) {
-                    if (apn1.getApnSetId() == preferredApnSetId) {
-                        return -1;
-                    }
-                    if (apn2.getApnSetId() == preferredApnSetId) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            });
-        }
-        return list;
     }
 
     private String apnListToString (ArrayList<ApnSetting> apns) {
@@ -3883,7 +3862,7 @@ public class DcTracker extends Handler {
 
     private int getCellLocationId() {
         int cid = -1;
-        CellLocation loc = mPhone.getCellIdentity().asCellLocation();
+        CellLocation loc = mPhone.getCurrentCellIdentity().asCellLocation();
 
         if (loc != null) {
             if (loc instanceof GsmCellLocation) {
@@ -4909,7 +4888,7 @@ public class DcTracker extends Handler {
             intent.putExtra(INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE, mTransportType);
             SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
             mDataStallAlarmIntent = PendingIntent.getBroadcast(mPhone.getContext(), 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             mAlarmManager.set(AlarmManager.ELAPSED_REALTIME,
                     SystemClock.elapsedRealtime() + delayInMs, mDataStallAlarmIntent);
         } else {
@@ -4977,7 +4956,7 @@ public class DcTracker extends Handler {
         Intent intent = new Intent(INTENT_PROVISIONING_APN_ALARM);
         intent.putExtra(PROVISIONING_APN_ALARM_TAG_EXTRA, mProvisioningApnAlarmTag);
         mProvisioningApnAlarmIntent = PendingIntent.getBroadcast(mPhone.getContext(), 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + delayInMs, mProvisioningApnAlarmIntent);
     }
