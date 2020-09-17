@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f95c8c42_f4f2b4ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1137899
+      },
+      "writtenOn": "2020-09-17T04:13:31Z",
+      "side": 1,
+      "message": "Dear Brad,\nWould you review the updated patchset?",
+      "revId": "e6b1c5b478ad7f66a9bd928918aa9046c3d95d19",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
