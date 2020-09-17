@@ -33,6 +33,24 @@
       "revId": "5303eb02d0ff1dab7f4c6fb86754558e78a5a2d5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57d8054d_5e9f4eca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-09-17T00:34:20Z",
+      "side": 1,
+      "message": "Ignore that comment; I have rebased and resolved merge conflicts.",
+      "parentUuid": "95e239b0_571ab92d",
+      "revId": "5303eb02d0ff1dab7f4c6fb86754558e78a5a2d5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
