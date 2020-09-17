@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26692864_e582a9ef",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/RuimRecordsTest.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1047993
+      },
+      "writtenOn": "2020-09-17T17:52:00Z",
+      "side": 1,
+      "message": "We are not supposed to remove Linux Foundation license.",
+      "revId": "7c3008aafe10c82622b5a7421889b6fbf3d1aaf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
