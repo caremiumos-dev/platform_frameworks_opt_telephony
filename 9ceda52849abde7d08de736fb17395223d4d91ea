@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a11a30fd_e9682db5",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d5cbeca_0a8be4e2",
+      "range": {
+        "startLine": 143,
+        "startChar": 21,
+        "endLine": 143,
+        "endChar": 38
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb735362_b17c9d0a",
         "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0e34dfcf_448df3ff",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:32Z",
+      "side": 1,
+      "message": "Changed to callBackIfExists",
+      "parentUuid": "cb735362_b17c9d0a",
+      "range": {
+        "startLine": 783,
+        "startChar": 16,
+        "endLine": 783,
+        "endChar": 30
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac0d27de_f2b6610d",
         "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a18d4cfd_bfc93f67",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsServiceController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T02:46:32Z",
+      "side": 1,
+      "message": "removed comment",
+      "parentUuid": "ac0d27de_f2b6610d",
+      "range": {
+        "startLine": 816,
+        "startChar": 0,
+        "endLine": 816,
+        "endChar": 67
+      },
+      "revId": "9ceda52849abde7d08de736fb17395223d4d91ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
