@@ -330,6 +330,9 @@ public class DcTracker extends Handler {
     /* List of SubscriptionPlans, updated on SubscriptionManager.setSubscriptionPlans */
     private List<SubscriptionPlan> mSubscriptionPlans = null;
 
+    /* List of iccid's */
+    private HashSet<String> mIccidSet = new HashSet<String>();
+
     // Maximum data reject count
     public static final int MAX_PDP_REJECT_COUNT = 3;
 
@@ -754,6 +757,7 @@ public class DcTracker extends Handler {
 
         mSettingsObserver = new SettingsObserver(mPhone.getContext(), this);
         registerSettingsObserver();
+        fillIccIdSet();
     }
 
     @VisibleForTesting
@@ -2204,7 +2208,32 @@ public class DcTracker extends Handler {
     }
 
     protected boolean allowInitialAttachForOperator() {
+        String iccId = mPhone.getIccSerialNumber();
+        if (iccId != null) {
+            Iterator<String> itr = mIccidSet.iterator();
+            while (itr.hasNext()) {
+                if (iccId.contains(itr.next())) {
+                    return false;
+                }
+            }
+        }
         return true;
+    }
+
+    private void fillIccIdSet() {
+        mIccidSet.add("8991840");
+        mIccidSet.add("8991854");
+        mIccidSet.add("8991855");
+        mIccidSet.add("8991856");
+        mIccidSet.add("8991857");
+        mIccidSet.add("8991858");
+        mIccidSet.add("8991859");
+        mIccidSet.add("899186");
+        mIccidSet.add("8991870");
+        mIccidSet.add("8991871");
+        mIccidSet.add("8991872");
+        mIccidSet.add("8991873");
+        mIccidSet.add("8991874");
     }
 
     /**
