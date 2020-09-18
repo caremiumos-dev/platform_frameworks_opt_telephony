@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae94877_18f12b75",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "nit: No need to set @hide here.",
+      "range": {
+        "startLine": 574,
+        "startChar": 7,
+        "endLine": 574,
+        "endChar": 12
+      },
+      "revId": "c9522dc5f0cc1dda599535036b088c1dd1819f34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf496224_6dece266",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Can this be refactored out?",
+      "range": {
+        "startLine": 546,
+        "startChar": 22,
+        "endLine": 546,
+        "endChar": 26
+      },
+      "revId": "c9522dc5f0cc1dda599535036b088c1dd1819f34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66a30710_f185aa69",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "nit: \u003e 100 characters, can you split to 2 lines?",
+      "range": {
+        "startLine": 167,
+        "startChar": 29,
+        "endLine": 167,
+        "endChar": 108
+      },
+      "revId": "c9522dc5f0cc1dda599535036b088c1dd1819f34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c06ff75a_d1fc81ed",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "This shouldnt be set if isEmergency \u003d false.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 41,
+        "endLine": 1518,
+        "endChar": 55
+      },
+      "revId": "c9522dc5f0cc1dda599535036b088c1dd1819f34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}

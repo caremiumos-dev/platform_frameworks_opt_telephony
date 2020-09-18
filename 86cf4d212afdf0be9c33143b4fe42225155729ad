@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "3b80b7d7_c5f0047c",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e79e9e8e_54bb4095",
+      "range": {
+        "startLine": 554,
+        "startChar": 16,
+        "endLine": 554,
+        "endChar": 36
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08fdd8d0_2579c595",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
         "patchSetId": 8
@@ -101,6 +125,30 @@
       "side": 1,
       "message": "For GsmCdmaCallTrackerTest, I didn\u0027t remove it. Should I modify test?",
       "parentUuid": "08fdd8d0_2579c595",
+      "range": {
+        "startLine": 538,
+        "startChar": 22,
+        "endLine": 538,
+        "endChar": 26
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f1c14c5_161ae2be",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Yes please update the tests",
+      "parentUuid": "98a7408b_3ea80ee1",
       "range": {
         "startLine": 538,
         "startChar": 22,
@@ -160,6 +208,30 @@
     },
     {
       "key": {
+        "uuid": "c76ccef4_0f147864",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acad849a_cc3bb365",
+      "range": {
+        "startLine": 539,
+        "startChar": 53,
+        "endLine": 539,
+        "endChar": 82
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c9a2924_9a2ec2a2",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
         "patchSetId": 8
@@ -204,6 +276,30 @@
       "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b687c7_7fd7a684",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84cd8c3f_12234750",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 9
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -254,6 +350,30 @@
     },
     {
       "key": {
+        "uuid": "e59e9788_4ea0b6c2",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb8cff4d_7c1b0ecd",
+      "range": {
+        "startLine": 162,
+        "startChar": 11,
+        "endLine": 162,
+        "endChar": 28
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c54d05a_3e9a53a1",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 8
@@ -301,6 +421,30 @@
     },
     {
       "key": {
+        "uuid": "3608c115_632763fd",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "817aac88_f19614df",
+      "range": {
+        "startLine": 1306,
+        "startChar": 8,
+        "endLine": 1306,
+        "endChar": 36
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c8276e5_13d12466",
         "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
         "patchSetId": 8
@@ -336,6 +480,30 @@
       "side": 1,
       "message": "It needs to be used alone.\nInstead of it, setEccCategory sets  mIsEmergency\u003dtrue.",
       "parentUuid": "3c8276e5_13d12466",
+      "range": {
+        "startLine": 102,
+        "startChar": 21,
+        "endLine": 102,
+        "endChar": 35
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7888db5a_9bde2b4e",
+        "filename": "src/java/com/android/internal/telephony/PhoneInternalInterface.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Sorry, if we need isEmergency separate from setEccCategory, then it makes sense to separate them entirely. Can you roll back this change and not set mIsEmergency if setEccCategory is called? It makes sense to call setIsEmergency and setEccCategory separately.",
+      "parentUuid": "7021a961_1ba74948",
       "range": {
         "startLine": 102,
         "startChar": 21,
@@ -395,6 +563,30 @@
     },
     {
       "key": {
+        "uuid": "9de4e0cc_01d04e32",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec356b01_0aea2ee8",
+      "range": {
+        "startLine": 170,
+        "startChar": 39,
+        "endLine": 170,
+        "endChar": 46
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8244905c_ebd5fd34",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
         "patchSetId": 8
@@ -439,6 +631,30 @@
       "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a79866_7cf7c036",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "It removes the need for passing in isEmergency into initateSilentRedial, since it will always be false in the case that initiateSilentRedial() is called. By splitting it into two methods initiateSilentRedial and initiateSilentRedialForEmergency, you do not need to track the isEmergency boolean and pass in a unspecified service category.\n\nSplitting into two increases readability, but I am fine with the current structure.",
+      "parentUuid": "e6b5dbc9_01c5aafc",
+      "range": {
+        "startLine": 1528,
+        "startChar": 4,
+        "endLine": 1528,
+        "endChar": 24
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -489,6 +705,30 @@
     },
     {
       "key": {
+        "uuid": "7b38fa1b_52b6a132",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6b205b9_8b0659cb",
+      "range": {
+        "startLine": 1535,
+        "startChar": 63,
+        "endLine": 1535,
+        "endChar": 69
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f783033_4e25d370",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
         "patchSetId": 8
@@ -524,6 +764,30 @@
       "side": 1,
       "message": "It is set from dial method of GsmCdmaPhone.\n\nimsDialArgsBuilder \u003d ImsPhone.ImsDialArgs.Builder.from(dialArgs).setIsEmergency(isEmergency)",
       "parentUuid": "9f783033_4e25d370",
+      "range": {
+        "startLine": 1202,
+        "startChar": 36,
+        "endLine": 1202,
+        "endChar": 56
+      },
+      "revId": "86cf4d212afdf0be9c33143b4fe42225155729ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff885313_4f4f1805",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-18T17:39:29Z",
+      "side": 1,
+      "message": "Okay, please verify that isEmergency is being set correctly in all callers. This dial method is called from many places and I do not want to miss a call being treated as emergency due to dialArgs not being set properly somewhere.",
+      "parentUuid": "80f607cc_ba84fa0f",
       "range": {
         "startLine": 1202,
         "startChar": 36,
