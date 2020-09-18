@@ -2166,7 +2166,20 @@ public class DcTracker extends Handler {
     }
 
     protected boolean allowInitialAttachForOperator() {
-        return true;
+        PersistableBundle carrierConfig;
+        CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager == null) {
+            loge("CarrierConfigManager is null");
+            return false;
+        }
+        carrierConfig = configManager.getConfigForSubId(mPhone.getSubId());
+        if (carrierConfig == null) {
+            loge("Carrier Config info is null");
+            return false;
+        }
+        return carrierConfig.getBoolean(CarrierConfigManager.
+                KEY_CONDITIONAL_INITIAL_ATTACH);
     }
 
     /**
