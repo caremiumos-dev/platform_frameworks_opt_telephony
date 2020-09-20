@@ -4043,6 +4043,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         if (capabilitySwitched) {
             mCi.getDeviceIdentity(obtainMessage(EVENT_GET_DEVICE_IDENTITY_DONE));
+            ProxyController.getInstance().initNormalMappingRequestIfRequired();
         }
     }
 

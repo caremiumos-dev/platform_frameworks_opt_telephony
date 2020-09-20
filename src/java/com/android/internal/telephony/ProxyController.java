@@ -106,6 +106,7 @@ public class ProxyController {
     private int[] mNewRadioAccessFamily;
     @UnsupportedAppUsage
     private int[] mOldRadioAccessFamily;
+    private boolean mBothLogicalModemsMappedToSamePhone = false;
 
 
     //***** Class Methods
@@ -227,7 +228,7 @@ public class ProxyController {
                 same = false;
             }
         }
-        if (same) {
+        if (same && !mBothLogicalModemsMappedToSamePhone) {
             // All phones are already set to the requested raf
             logd("setRadioCapability: Already in requested configuration, nothing to do.");
             // It isn't really an error, so return true - everything is OK.
@@ -275,9 +276,13 @@ public class ProxyController {
                 mNewRadioAccessFamily[phoneId] = requestedRaf;
 
                 mCurrentLogicalModemIds[phoneId] = mPhones[phoneId].getModemUuId();
-                // get the logical mode corresponds to new raf requested and pass the
-                // same as part of SET_RADIO_CAP APPLY phase
-                mNewLogicalModemIds[phoneId] = getLogicalModemIdFromRaf(requestedRaf);
+                if (!mBothLogicalModemsMappedToSamePhone) {
+                    // get the logical mode corresponds to new raf requested and pass the
+                    // same as part of SET_RADIO_CAP APPLY phase
+                    mNewLogicalModemIds[phoneId] = getLogicalModemIdFromRaf(requestedRaf);
+                } else {
+                    mNewLogicalModemIds[phoneId] = phoneId;
+                }
                 logd("setRadioCapability: mOldRadioAccessFamily[" + phoneId + "]="
                         + mOldRadioAccessFamily[phoneId]);
                 logd("setRadioCapability: mNewRadioAccessFamily[" + phoneId + "]="
@@ -683,6 +688,49 @@ public class ProxyController {
             }
         }
         return modemUuid;
+    }
+
+    // This method would be called to check whether whether both Phone objects mapped
+    // to single logical modem-Id(i.e both Phones mapped to '0' or '1'), if in case they
+    // are mapped to same Modem-Id, it initiates the request to do normal mapping.
+    // To normal map, it would first set the both Phones RadioCapability in 5+7
+    // configuration and then calls setRadioCapability() with 7+5 combination request.
+    void initNormalMappingRequestIfRequired() {
+        int maxRaf = getMaxRafSupported();
+        int minRaf = RadioAccessFamily.getRafFromNetworkType(RILConstants.NETWORK_MODE_GSM_ONLY);
+
+
+        for (int i = 0; i < mPhones.length; i++) {
+            if (mPhones[i].getRadioCapability == null) {
+                logd("radiocaapability not aavale return, phoneId " + i);
+                return;
+            }
+        }
+
+        // Check whether both phone objects not mapped to same logical Modem Ids
+        if (!isBothPhonesMappedToSameLogicalModemIds()) {
+            return;
+        }
+
+        RadioAccessFamily[] rafs = new RadioAccessFamily[mPhones.length];
+        for (int phoneId = 0; phoneId < mPhones.length; phoneId++) {
+            rafs[phoneId] = new RadioAccessFamily(phoneId, (phoneId == 0) ? maxRaf : minRaf);
+        }
+        setRadioCapability(rafs);
+    }
+
+    boolean isBothPhonesMappedToSameLogicalModemIds() {
+        boolean retVal = false;
+
+        // If logical modemId's of both phones same return true
+        if (Integer.valueOf(mPhone[0].getModemUuId()) ==
+                Integer.valueOf(mPhone[1].getModemUuId())) {
+            loge("Error: both Phones mapped same stackId: " + mPhone[0].getModemUuId() +
+                    " raf = " + mPhone[0].getRadioAccessFamily());
+            mBothLogicalModemsMappedToSamePhone = true;
+            retVal = true;
+        }
+        return retVal;
     }
 
     @UnsupportedAppUsage
