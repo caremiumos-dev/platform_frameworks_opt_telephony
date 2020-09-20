@@ -4035,6 +4035,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         // Update the cached value
         mRadioCapability.set(rc);
 
+        ProxyController.getInstance().initNormalMappingRequestIfRequired();
         if (SubscriptionManager.isValidSubscriptionId(getSubId())) {
             boolean restoreSelection = !mContext.getResources().getBoolean(
                     com.android.internal.R.bool.skip_restoring_network_selection);
