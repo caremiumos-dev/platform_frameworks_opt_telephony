@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fd038e5_a2714ca7",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-21T18:49:17Z",
+      "side": 1,
+      "message": "A couple of things:\n1) It is not obvious that this will only set mEmergencyNumberInfo here if mIsEmergencyCall was false due to it being set in the constructor of GsmCdmaConnection.\n2) It is not obvious that isEmergencyCall will only be true when the number is not detected as an emergency number in the case where it was tried in IMS and then failed with \"retry as emergency CS call\" reason.\n\nI think I did not realize 2) before, which is why i said to split setEmergencyCallInfo into two methods for this case, setEmergencyCallInfo and setNonDetectableEmergencyCallInfo.\n\nCan this method be moved into the constructor of GsmCdmaConnection like so, so it is more obvious what is happening and removes code duplication:\n\n...\nif (isEmergencyNumber) {\n   setEmergencyCallInfo(owner)\n   // There was no emergency number info found for this call, however it is still marked as\n   // an emergency number. This may happen if it was a redialed non-detectable emergency call\n   // from IMS.\n   if (mEmergencyCallInfo \u003d\u003d null) {\n     setNonDetectableEmergencyCallInfo(..)\n   }\n}",
+      "range": {
+        "startLine": 327,
+        "startChar": 8,
+        "endLine": 330,
+        "endChar": 0
+      },
+      "revId": "8793d97ca839c8f89e6aabbebc8a8919a276f6e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
