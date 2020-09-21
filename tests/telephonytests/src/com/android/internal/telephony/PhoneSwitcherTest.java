@@ -20,6 +20,9 @@ import static android.telephony.CarrierConfigManager.KEY_DATA_SWITCH_VALIDATION_
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_SUCCESS;
 import static android.telephony.TelephonyManager.SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED;
+import static android.telephony.TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED;
+import static android.telephony.TelephonyManager.EXTRA_SIM_STATE;
+import static android.telephony.TelephonyManager.SIM_STATE_LOADED;
 
 import static com.android.internal.telephony.PhoneSwitcher.ECBM_DEFAULT_DATA_SWITCH_BASE_TIME_MS;
 import static com.android.internal.telephony.PhoneSwitcher.EVENT_DATA_ENABLED_CHANGED;
@@ -55,11 +58,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.telephony.PhoneCapability;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 
 import org.junit.After;
@@ -76,6 +81,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @TestableLooper.RunWithLooper
 public class PhoneSwitcherTest extends TelephonyTest {
     private static final int ACTIVE_PHONE_SWITCH = 1;
+    private static final int EVENT_MODEM_COMMAND_DONE = 2;
 
     @Mock
     private CommandsInterface mCommandsInterface0;
@@ -99,6 +105,8 @@ public class PhoneSwitcherTest extends TelephonyTest {
     private ISetOpportunisticDataCallback mSetOpptDataCallback2;
     @Mock
     CompletableFuture<Boolean> mFuturePhone;
+    @Mock
+    private SubscriptionInfo mSubscriptionInfo;
 
     private PhoneSwitcher mPhoneSwitcher;
     private SubscriptionManager.OnSubscriptionsChangedListener mSubChangedListener;
@@ -994,6 +1002,57 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mPhoneSwitcher.mValidationCallback.onValidationDone(false, 2);
         processAllMessages();
         verify(mMockRadioConfig).setPreferredDataModem(eq(1), any());
+    }
+
+    @Test
+    public void testRetry_DDS_switch_Failure() throws Exception {
+        doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
+        mActiveModemCount = 2;
+        initialize();
+        setSlotIndexToSubId(0, 1);
+        setDefaultDataSubId(1);
+
+        clearInvocations(mMockRadioConfig);
+        // for exceptions OP_NOT_ALLOWED_DURING_VOICE_CALL and INVALID_SIM_STATE,
+        // modem retry not invoked.
+        AsyncResult res1 = new AsyncResult(0, null,  new CommandException(CommandException.Error.INVALID_SIM_STATE));
+        Message.obtain(mPhoneSwitcher, EVENT_MODEM_COMMAND_DONE, res1).sendToTarget();
+        processAllMessages();
+        moveTimeForward(5000);
+        processAllMessages();
+        verify(mMockRadioConfig, times(0)).setPreferredDataModem(eq(0), any());
+
+        doReturn(0).when(mSubscriptionController).getPhoneId(anyInt());
+        AsyncResult res2 = new AsyncResult(0, null,  new CommandException(CommandException.Error.NETWORK_NOT_READY));
+        Message.obtain(mPhoneSwitcher, EVENT_MODEM_COMMAND_DONE, res2).sendToTarget();
+        processAllMessages();
+        moveTimeForward(5000);
+        processAllMessages();
+
+        verify(mMockRadioConfig, times(1)).setPreferredDataModem(eq(0), any());
+
+        clearInvocations(mMockRadioConfig);
+        doReturn(mSubscriptionInfo).when(mSubscriptionController)
+            .getActiveSubscriptionInfoForSimSlotIndex(eq(0), any(), any());
+        doReturn(true).when(mSubscriptionInfo).areUiccApplicationsEnabled();
+        doReturn(mIccCard).when(mPhone).getIccCard();
+        doReturn(true).when(mIccCard).isEmptyProfile();
+        final Intent intent1 = new Intent(ACTION_SIM_APPLICATION_STATE_CHANGED);
+        intent1.putExtra(EXTRA_SIM_STATE, SIM_STATE_LOADED);
+        intent1.putExtra(SubscriptionManager.EXTRA_SLOT_INDEX, 0);
+        mContext.sendBroadcast(intent1);
+        processAllMessages();
+
+        verify(mMockRadioConfig, times(0)).setPreferredDataModem(eq(0), any());
+
+        doReturn(false).when(mIccCard).isEmptyProfile();
+        final Intent intent2 = new Intent(ACTION_SIM_APPLICATION_STATE_CHANGED);
+        intent2.putExtra(EXTRA_SIM_STATE, SIM_STATE_LOADED);
+        intent2.putExtra(SubscriptionManager.EXTRA_SLOT_INDEX, 0);
+        mContext.sendBroadcast(intent2);
+        processAllMessages();
+
+        verify(mMockRadioConfig, times(1)).setPreferredDataModem(eq(0), any());
     }
 
     /* Private utility methods start here */
