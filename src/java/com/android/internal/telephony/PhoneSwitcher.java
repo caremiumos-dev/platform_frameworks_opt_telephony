@@ -52,6 +52,7 @@ import android.os.RemoteException;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyRegistryManager;
@@ -59,6 +60,7 @@ import android.telephony.data.ApnSetting;
 import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.SubscriptionController.WatchedInt;
 import com.android.internal.telephony.dataconnection.ApnConfigTypeRepository;
 import com.android.internal.telephony.dataconnection.DcRequest;
@@ -66,6 +68,9 @@ import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.DataSwitch;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.OnDemandDataSwitch;
+import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccSlot;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
 
@@ -267,6 +272,7 @@ public class PhoneSwitcher extends Handler {
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED        = 117;
     private static final int EVENT_NETWORK_AVAILABLE              = 118;
+    private static final int EVENT_PROCESS_SIM_STATE_CHANGE       = 119;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -286,6 +292,9 @@ public class PhoneSwitcher extends Handler {
     private Boolean mHasRegisteredDefaultNetworkChangeCallback = false;
 
     private ConnectivityManager mConnectivityManager;
+
+    private int[] mSimStates;
+    private boolean[] mDdsFailure;
 
     private class DefaultNetworkCallback extends ConnectivityManager.NetworkCallback {
         public int mExpectedSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -363,6 +372,12 @@ public class PhoneSwitcher extends Handler {
         mRadioConfig = RadioConfig.getInstance();
         mValidator = CellularNetworkValidator.getInstance();
 
+        mDdsFailure = new boolean[mActiveModemCount];
+        mSimStates = new int[mActiveModemCount];
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
+        mContext.registerReceiver(mSimStateIntentReceiver, filter);
+
         mActivePhoneRegistrants = new RegistrantList();
         for (int i = 0; i < mActiveModemCount; i++) {
             mPhoneStates[i] = new PhoneState();
@@ -379,6 +394,7 @@ public class PhoneSwitcher extends Handler {
                 PhoneFactory.getPhone(i).getDataEnabledSettings().registerForDataEnabledChanged(
                         this, EVENT_DATA_ENABLED_CHANGED, null);
             }
+            mDdsFailure[i] = false;
         }
 
         if (mActiveModemCount > 0) {
@@ -434,6 +450,51 @@ public class PhoneSwitcher extends Handler {
         }
     };
 
+    private BroadcastReceiver mSimStateIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED)) {
+                int state = intent.getIntExtra(TelephonyManager.EXTRA_SIM_STATE,
+                        TelephonyManager.SIM_STATE_UNKNOWN);
+                int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY,
+                        SubscriptionManager.INVALID_PHONE_INDEX);
+                log("mSimStateIntentReceiver: phoneId = " + phoneId + " state = " + state);
+                if (SubscriptionManager.isValidPhoneId(phoneId)) {
+                    mSimStates[phoneId] = state;
+                }
+
+                Message msg = PhoneSwitcher.this.obtainMessage(
+                        EVENT_PROCESS_SIM_STATE_CHANGE, phoneId);
+                msg.sendToTarget();
+
+            }
+        }
+    };
+
+    private boolean isSimNotReady(int phoneId) {
+        if (phoneId == SubscriptionManager.INVALID_PHONE_INDEX) {
+            return true;
+        }
+
+        UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
+        if (slot == null) {
+            return true;
+        }
+        SubscriptionInfo info = SubscriptionController.getInstance()
+                .getSubInfoForIccId(IccUtils.stripTrailingFs(slot.getIccId()));
+        boolean uiccAppsDisabled = info != null && !info.areUiccApplicationsEnabled();
+
+        IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
+        if (TelephonyManager.SIM_STATE_NOT_READY == mSimStates[phoneId] ||
+                iccCard.isEmptyProfile() || uiccAppsDisabled) {
+            log("isSimNotReady: SIM is not ready for phoneId: " + phoneId);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private final SubscriptionManager.OnSubscriptionsChangedListener mSubscriptionsChangedListener =
             new SubscriptionManager.OnSubscriptionsChangedListener() {
         @Override
@@ -447,6 +508,9 @@ public class PhoneSwitcher extends Handler {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case EVENT_SUBSCRIPTION_CHANGED: {
+                if (mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
+                    updateHalCommandToUse();
+                }
                 onEvaluate(REQUESTS_UNCHANGED, "subChanged");
                 break;
             }
@@ -504,6 +568,17 @@ public class PhoneSwitcher extends Handler {
                 break;
             }
             case EVENT_PRECISE_CALL_STATE_CHANGED: {
+                 log("EVENT_PRECISE_CALL_STATE_CHANGED");
+                 if (!isAnyVoiceCallActiveOnDevice()) {
+                    for (int i = 0; i < mActiveModemCount; i++) {
+                        if (mDdsFailure[i] &&
+                                isPhoneIdValidForRetry(i)) {
+                            sendRilCommands(i);
+                            break;
+                        }
+                    }
+                }
+
                 // If the phoneId in voice call didn't change, do nothing.
                 if (!isPhoneInVoiceCallChanged()) break;
 
@@ -557,18 +632,21 @@ public class PhoneSwitcher extends Handler {
                     mEmergencyOverride.sendOverrideCompleteCallbackResultAndClear(commandSuccess);
                     // Do not retry , as we do not allow changes in onEvaluate during an emergency
                     // call. When the call ends, we will start the countdown to remove the override.
-                } else if (!commandSuccess) {
+                } else {
                     int phoneId = (int) ar.userObj;
-                    log("Modem command failed. with exception " + ar.exception);
-                    sendMessageDelayed(Message.obtain(this, EVENT_MODEM_COMMAND_RETRY,
-                            phoneId), MODEM_COMMAND_RETRY_PERIOD_MS);
+                    onDdsSwitchResponse(ar, phoneId);
                 }
                 break;
             }
             case EVENT_MODEM_COMMAND_RETRY: {
                 int phoneId = (int) msg.obj;
-                log("Resend modem command on phone " + phoneId);
-                sendRilCommands(phoneId);
+                if (isPhoneIdValidForRetry(phoneId)) {
+                    log("Resend modem command on phone " + phoneId);
+                    sendRilCommands(phoneId);
+                } else {
+                    log("Abandon DDS switch retry");
+                    mDdsFailure[phoneId] = false;
+                }
                 break;
             }
             case EVENT_OVERRIDE_DDS_FOR_EMERGENCY: {
@@ -626,6 +704,12 @@ public class PhoneSwitcher extends Handler {
                 onMultiSimConfigChanged(activeModemCount);
                 break;
             }
+            case EVENT_PROCESS_SIM_STATE_CHANGE: {
+                int phoneId = (int)msg.arg1;
+                if (!isSimNotReady(phoneId) && mDdsFailure[phoneId]) {
+                    sendRilCommands(phoneId);
+                }
+            }
         }
     }
 
@@ -637,6 +721,9 @@ public class PhoneSwitcher extends Handler {
 
         mPhoneSubscriptions = copyOf(mPhoneSubscriptions, mActiveModemCount);
         mPhoneStates = copyOf(mPhoneStates, mActiveModemCount);
+
+        mDdsFailure = copyOf(mDdsFailure, mActiveModemCount);
+        mSimStates = copyOf(mSimStates, mActiveModemCount);
 
         // Single SIM -> dual SIM switch.
         for (int phoneId = oldActiveModemCount; phoneId < mActiveModemCount; phoneId++) {
@@ -903,17 +990,7 @@ public class PhoneSwitcher extends Handler {
                         deactivate(phoneId);
                     }
                 }
-
-                // only activate phones up to the limit
-                for (int phoneId : newActivePhones) {
-                    activate(phoneId);
-                }
             }
-
-            notifyPreferredDataSubIdChanged();
-
-            // Notify all registrants.
-            mActivePhoneRegistrants.notifyRegistrants();
         }
         return diffDetected;
     }
@@ -983,7 +1060,10 @@ public class PhoneSwitcher extends Handler {
     }
 
     protected void sendRilCommands(int phoneId) {
-        if (!SubscriptionManager.isValidPhoneId(phoneId)) return;
+        if (!SubscriptionManager.isValidPhoneId(phoneId)) {
+            log("sendRilCommands: skip dds switch due to invalid phoneid=" + phoneId);
+            return;
+        }
 
         Message message = Message.obtain(this, EVENT_MODEM_COMMAND_DONE, phoneId);
         if (mHalCommandToUse == HAL_COMMAND_ALLOW_DATA || mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
@@ -1416,5 +1496,63 @@ public class PhoneSwitcher extends Handler {
         pw.increaseIndent();
         mLocalLog.dump(fd, pw, args);
         pw.decreaseIndent();
+    }
+
+    private boolean isAnyVoiceCallActiveOnDevice() {
+        boolean ret = mPhoneIdInVoiceCall != SubscriptionManager.INVALID_PHONE_INDEX;
+        log("isAnyVoiceCallActiveOnDevice: " + ret);
+        return ret;
+    }
+
+    private void onDdsSwitchResponse(AsyncResult ar, int phoneId) {
+        if (ar.exception != null) {
+            log("onDdsSwitchResponse: DDS switch failed. with exception " + ar.exception);
+            mDdsFailure[phoneId] = true;
+            if (ar.exception instanceof CommandException) {
+                CommandException.Error error = ((CommandException) (ar.exception)).getCommandError();
+                if (error == CommandException.Error.OP_NOT_ALLOWED_DURING_VOICE_CALL) {
+                    log("onDdsSwitchResponse: Wait for call end indication");
+                    return;
+                } else if (error == CommandException.Error.INVALID_SIM_STATE) {
+                    /* If there is a attach failure due to sim not ready then
+                    hold the retry until sim gets ready */
+                    log("onDdsSwitchResponse: Wait for SIM to get READY");
+                    return;
+                }
+            }
+
+            log("onDdsSwitchResponse: Scheduling DDS switch retry");
+            sendMessageDelayed(Message.obtain(this, EVENT_MODEM_COMMAND_RETRY,
+                        phoneId), MODEM_COMMAND_RETRY_PERIOD_MS);
+        } else {
+            log("onDdsSwitchResponse: DDS switch success on phoneId = " + phoneId);
+            mDdsFailure[phoneId] = false;
+            // Notify all registrants
+            mActivePhoneRegistrants.notifyRegistrants();
+            notifyPreferredDataSubIdChanged();
+        }
+    }
+
+    private boolean isPhoneIdValidForRetry(int phoneId) {
+        int phoneIdForRequest = INVALID_PHONE_INDEX;
+        int ddsPhoneId = mSubscriptionController.getPhoneId(
+                mSubscriptionController.getDefaultDataSubId());
+        if (ddsPhoneId != INVALID_PHONE_INDEX && ddsPhoneId == phoneId) {
+            return true;
+        } else {
+            if (mPrioritizedDcRequests.size() == 0) {
+                return false;
+            }
+            for (int i = 0; i < mMaxDataAttachModemCount; i++) {
+                DcRequest dcRequest = mPrioritizedDcRequests.get(i);
+                if (dcRequest != null) {
+                    phoneIdForRequest = phoneIdForRequest(dcRequest.networkRequest);
+                    if (phoneIdForRequest == phoneId) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
