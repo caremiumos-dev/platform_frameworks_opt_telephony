@@ -1428,9 +1428,21 @@ public class PhoneSwitcher extends Handler {
         // acknowledged by the users. For incoming call, we don't switch until answered
         // (RINGING -> ACTIVE), for outgoing call we don't switch until call is connected
         // in network (DIALING -> ALERTING).
-        return (phone.getForegroundCall().getState() == Call.State.ACTIVE
-                || phone.getForegroundCall().getState() == Call.State.ALERTING
-                || phone.getBackgroundCall().getState() == Call.State.HOLDING);
+        boolean isEmergencyCall = phone.isInEmergencyCall();
+        return (isCallStarted(phone.getForegroundCall(), isEmergencyCall)
+                || isCallStarted(phone.getBackgroundCall(), isEmergencyCall)
+                || isCallStarted(phone.getRingingCall(), isEmergencyCall));
+    }
+
+    private boolean isCallStarted(Call call, boolean isEmergencyCall) {
+        if (call == null) {
+            return false;
+        } else {
+            Call.State state = call.getState();
+            log("isCallActive: callstate=" + state + ", isEmergencyCall=" + isEmergencyCall);
+            return !(isEmergencyCall && state == Call.State.DIALING)
+                    && !(state == Call.State.IDLE || state == Call.State.DISCONNECTED);
+        }
     }
 
     private void updateHalCommandToUse() {
@@ -1513,7 +1525,22 @@ public class PhoneSwitcher extends Handler {
                         (ar.exception)).getCommandError();
                 mCurrentDdsSwitchFailure.get(phoneId).add(error);
                 if (error == CommandException.Error.OP_NOT_ALLOWED_DURING_VOICE_CALL) {
-                    log("onDdsSwitchResponse: Wait for call end indication");
+                    int ddsPhoneId = mSubscriptionController.getPhoneId(
+                            mSubscriptionController.getDefaultDataSubId());
+                    /*
+                     * ddsPhoneId is the phone id corresponding to permanent DDS
+                     * And phoneId is the phone id corresponding to the sub for which the last DDS 
+                     * request was sent
+                     * If they are different then it is a temporary DDS switch, else permanent switch
+                     */
+                    if (phoneId != ddsPhoneId) {
+                        // Retry temporary DDS switch immediately in case of failure
+                        log("onDdsSwitchResponse: Retry Temporary DDS switch on phoneId:" + phoneId);
+                        mCurrentDdsSwitchFailure.get(phoneId).remove(error);
+                        sendRilCommands(phoneId);
+                    } else {
+                        log("onDdsSwitchResponse: Wait for call end indication");
+                    }
                     return;
                 } else if (error == CommandException.Error.INVALID_SIM_STATE) {
                     /* If there is a attach failure due to sim not ready then
@@ -1522,7 +1549,6 @@ public class PhoneSwitcher extends Handler {
                     return;
                 }
             }
-
             log("onDdsSwitchResponse: Scheduling DDS switch retry");
             sendMessageDelayed(Message.obtain(this, EVENT_MODEM_COMMAND_RETRY,
                         phoneId), MODEM_COMMAND_RETRY_PERIOD_MS);
