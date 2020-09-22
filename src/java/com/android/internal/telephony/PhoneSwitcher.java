@@ -62,6 +62,8 @@ import com.android.internal.telephony.SubscriptionController.WatchedInt;
 import com.android.internal.telephony.dataconnection.ApnConfigTypeRepository;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcRequest;
+import com.android.internal.telephony.imsphone.ImsPhone;
+import com.android.internal.telephony.imsphone.ImsPhoneCall;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent;
 import com.android.internal.telephony.nano.TelephonyProto.TelephonyEvent.DataSwitch;
@@ -298,6 +300,14 @@ public class PhoneSwitcher extends Handler {
     private boolean mWaitForDetachResponse = false;
     private List<Integer> mNewActivePhones;
 
+    protected final GsmCdmaCall[] mFgCsCalls;
+    protected final GsmCdmaCall[] mBgCsCalls;
+    protected final GsmCdmaCall[] mRiCsCalls;
+    protected final ImsPhone[] mImsPhones;
+    protected final ImsPhoneCall[] mFgImsCalls;
+    protected final ImsPhoneCall[] mBgImsCalls;
+    protected final ImsPhoneCall[] mRiImsCalls;
+
     private enum DdsSwitchState {
         NONE, REQUIRED, DONE
     }
@@ -385,6 +395,14 @@ public class PhoneSwitcher extends Handler {
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         mContext.registerReceiver(mSimStateIntentReceiver, filter);
 
+        mImsPhones = new ImsPhone[mActiveModemCount];
+        mFgCsCalls = new GsmCdmaCall[mActiveModemCount];
+        mBgCsCalls = new GsmCdmaCall[mActiveModemCount];
+        mRiCsCalls = new GsmCdmaCall[mActiveModemCount];
+        mFgImsCalls = new ImsPhoneCall[mActiveModemCount];
+        mBgImsCalls = new ImsPhoneCall[mActiveModemCount];
+        mRiImsCalls = new ImsPhoneCall[mActiveModemCount];
+
         mActivePhoneRegistrants = new RegistrantList();
         for (int i = 0; i < mActiveModemCount; i++) {
             mPhoneStates[i] = new PhoneState();
@@ -394,9 +412,15 @@ public class PhoneSwitcher extends Handler {
                 // TODO (b/135566422): combine register for both GsmCdmaPhone and ImsPhone.
                 PhoneFactory.getPhone(i).registerForPreciseCallStateChanged(
                         this, EVENT_PRECISE_CALL_STATE_CHANGED, null);
+                mFgCsCalls[i] = (GsmCdmaCall) PhoneFactory.getPhone(i).getForegroundCall();
+                mBgCsCalls[i] = (GsmCdmaCall) PhoneFactory.getPhone(i).getBackgroundCall();
+                mRiCsCalls[i] = (GsmCdmaCall) PhoneFactory.getPhone(i).getRingingCall();
                 if (PhoneFactory.getPhone(i).getImsPhone() != null) {
                     PhoneFactory.getPhone(i).getImsPhone().registerForPreciseCallStateChanged(
                             this, EVENT_PRECISE_CALL_STATE_CHANGED, null);
+                    mFgImsCalls[i] = mImsPhones[i].getForegroundCall();
+                    mBgImsCalls[i] = mImsPhones[i].getBackgroundCall();
+                    mRiImsCalls[i] = mImsPhones[i].getRingingCall();
                 }
                 PhoneFactory.getPhone(i).getDataEnabledSettings().registerForDataEnabledChanged(
                         this, EVENT_DATA_ENABLED_CHANGED, null);
@@ -1512,9 +1536,34 @@ public class PhoneSwitcher extends Handler {
         // acknowledged by the users. For incoming call, we don't switch until answered
         // (RINGING -> ACTIVE), for outgoing call we don't switch until call is connected
         // in network (DIALING -> ALERTING).
-        return (phone.getForegroundCall().getState() == Call.State.ACTIVE
-                || phone.getForegroundCall().getState() == Call.State.ALERTING
-                || phone.getBackgroundCall().getState() == Call.State.HOLDING);
+        boolean dataDuringCallsEnabled = false;
+        DataEnabledSettings dataEnabledSettings = phone.getDataEnabledSettings();
+        if (dataEnabledSettings != null) {
+            dataDuringCallsEnabled = dataEnabledSettings.isDataAllowedInVoiceCall();
+        }
+        if (!dataDuringCallsEnabled) {
+            log("isPhoneInVoiceCall: dataDuringCallsEnabled=" + dataDuringCallsEnabled);
+            return false;
+        }
+        int phoneId = phone.getPhoneId();
+        boolean isEmergencyCall = mImsPhones[phoneId].isInEmergencyCall() ||
+                phone.isInEmergencyCall();
+        return (isCallAlive(mFgCsCalls[phoneId], isEmergencyCall)
+                || isCallAlive(mBgCsCalls[phoneId], isEmergencyCall)
+                || isCallAlive(mRiCsCalls[phoneId], isEmergencyCall)
+                || isCallAlive(mFgImsCalls[phoneId], isEmergencyCall)
+                || isCallAlive(mBgImsCalls[phoneId], isEmergencyCall)
+                || isCallAlive(mRiImsCalls[phoneId], isEmergencyCall));
+    }
+
+    private boolean isCallAlive(Call call, boolean isEmergencyCall) {
+        if (call != null) {
+            Call.State state = call.getState();
+            log("isCallActive: callstate=" + state + ", isEmergencyCall=" + isEmergencyCall);
+            return !(isEmergencyCall && state == Call.State.DIALING)
+                    && !(state == Call.State.IDLE || state == Call.State.DISCONNECTED);
+        }
+        return false;
     }
 
     private void updateHalCommandToUse() {
@@ -1595,7 +1644,27 @@ public class PhoneSwitcher extends Handler {
             setDdsSwitchFailureFlag(phoneId, true);
             mDdsRequestSent[phoneId] = false;
             if (isAnyVoiceCallActiveOnDevice()) {
-                log("onDdsSwitchResponse: Wait for call end indication");
+                int ddsPhoneId = mSubscriptionController.getPhoneId(
+                        mSubscriptionController.getDefaultDataSubId());
+                boolean dataDuringCallsEnabled = false;
+                Phone phone = PhoneFactory.getPhone(phoneId);
+                DataEnabledSettings dataEnabledSettings = phone.getDataEnabledSettings();
+                if (dataEnabledSettings != null) {
+                    dataDuringCallsEnabled = dataEnabledSettings.isDataAllowedInVoiceCall();
+                }
+                log("onDdsSwitchResponse: dataDuringCallsEnabled=" + dataDuringCallsEnabled +
+                        ", ddsPhoneId=" + ddsPhoneId + ", mPreferredDataPhoneId=" +
+                        mPreferredDataPhoneId);
+                if (dataDuringCallsEnabled &&
+                        (phoneId != ddsPhoneId) &&
+                        getDdsSwitchFailureFlag(phoneId)) {
+                    log("onDdsSwitchResponse: Retry Temporary DDS switch on phoneId:" + phoneId);
+                    sendRilCommands(phoneId);
+                } else {
+                    /* Any DDS retry while voice call is active is in vain
+                       Wait for call to get disconnected */
+                    log("onDdsSwitchResponse: Wait for call end indication");
+                }
                 return;
             }
 
