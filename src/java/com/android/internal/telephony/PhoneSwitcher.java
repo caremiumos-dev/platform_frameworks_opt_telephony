@@ -1421,9 +1421,21 @@ public class PhoneSwitcher extends Handler {
         // acknowledged by the users. For incoming call, we don't switch until answered
         // (RINGING -> ACTIVE), for outgoing call we don't switch until call is connected
         // in network (DIALING -> ALERTING).
-        return (phone.getForegroundCall().getState() == Call.State.ACTIVE
-                || phone.getForegroundCall().getState() == Call.State.ALERTING
-                || phone.getBackgroundCall().getState() == Call.State.HOLDING);
+        boolean isEmergencyCall = phone.isInEmergencyCall();
+        return (isCallStarted(phone.getForegroundCall(), isEmergencyCall)
+                || isCallStarted(phone.getBackgroundCall(), isEmergencyCall)
+                || isCallStarted(phone.getRingingCall(), isEmergencyCall));
+    }
+
+    private boolean isCallStarted(Call call, boolean isEmergencyCall) {
+        if (call == null) {
+            return false;
+        } else {
+            Call.State state = call.getState();
+            log("isCallActive: callstate=" + state + ", isEmergencyCall=" + isEmergencyCall);
+            return !(isEmergencyCall && state == Call.State.DIALING)
+                    && !(state == Call.State.IDLE || state == Call.State.DISCONNECTED);
+        }
     }
 
     private void updateHalCommandToUse() {
@@ -1503,7 +1515,21 @@ public class PhoneSwitcher extends Handler {
             log("onDdsSwitchResponse: DDS switch failed. with exception " + ar.exception);
             setDdsSwitchFailureFlag(phoneId, true);
             if (isAnyVoiceCallActiveOnDevice()) {
-                log("onDdsSwitchResponse: Wait for call end indication");
+                int ddsPhoneId = mSubscriptionController.getPhoneId(
+                        mSubscriptionController.getDefaultDataSubId());
+                Phone phone = PhoneFactory.getPhone(phoneId);
+                log("onDdsSwitchResponse: ddsPhoneId=" + ddsPhoneId + ", mPreferredDataPhoneId=" +
+                        mPreferredDataPhoneId);
+                if (phoneId != ddsPhoneId &&
+                        getDdsSwitchFailureFlag(phoneId)) {
+                    // Schedule retry immediately for failed Temporary DDS switch
+                    log("onDdsSwitchResponse: Retry Temporary DDS switch on phoneId:" + phoneId);
+                    sendRilCommands(phoneId);
+                } else {
+                    /* Permanent DDS switch is rejected during active call.
+                       Wait for call end to trigger retry */
+                    log("onDdsSwitchResponse: Wait for call end indication");
+                }
                 return;
             }
 
