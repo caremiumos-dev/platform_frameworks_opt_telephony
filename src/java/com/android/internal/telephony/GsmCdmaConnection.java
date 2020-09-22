@@ -472,14 +472,6 @@ public class GsmCdmaConnection extends Connection {
             case CallFailCause.USER_BUSY:
                 return DisconnectCause.BUSY;
 
-            case CallFailCause.NO_CIRCUIT_AVAIL:
-            case CallFailCause.TEMPORARY_FAILURE:
-            case CallFailCause.SWITCHING_CONGESTION:
-            case CallFailCause.CHANNEL_NOT_AVAIL:
-            case CallFailCause.QOS_NOT_AVAIL:
-            case CallFailCause.BEARER_NOT_AVAIL:
-                return DisconnectCause.CONGESTION;
-
             case CallFailCause.EMERGENCY_TEMP_FAILURE:
                 return DisconnectCause.EMERGENCY_TEMP_FAILURE;
             case CallFailCause.EMERGENCY_PERM_FAILURE:
@@ -545,6 +537,135 @@ public class GsmCdmaConnection extends Connection {
 
             case CallFailCause.USER_ALERTING_NO_ANSWER:
                 return DisconnectCause.TIMED_OUT;
+
+            case CallFailCause.NO_ROUTE_TO_DEST:
+                return DisconnectCause.NO_ROUTE_TO_DEST;
+
+            case CallFailCause.CHANNEL_UNACCEPTABLE:
+                return DisconnectCause.CHANNEL_UNACCEPTABLE;
+
+            case CallFailCause.OPERATOR_DETERMINED_BARRING:
+                return DisconnectCause.OPERATOR_DETERMINED_BARRING;
+
+            case CallFailCause.NO_USER_RESPONDING:
+                return DisconnectCause.NO_USER_RESPONDING;
+
+            case CallFailCause.CALL_REJECTED:
+                return DisconnectCause.CALL_REJECTED;
+
+            case CallFailCause.NUMBER_CHANGED:
+                return DisconnectCause.NUMBER_CHANGED;
+
+            case CallFailCause.PRE_EMPTION:
+                return DisconnectCause.PRE_EMPTION;
+
+            case CallFailCause.NON_SELECTED_USER_CLEARING:
+                return DisconnectCause.NON_SELECTED_USER_CLEARING;
+
+            case CallFailCause.DESTINATION_OUT_OF_ORDER:
+                return DisconnectCause.DESTINATION_OUT_OF_ORDER;
+
+            case CallFailCause.INVALID_NUMBER_FORMAT:
+                return DisconnectCause.INVALID_NUMBER;
+
+            case CallFailCause.FACILITY_REJECTED:
+                return DisconnectCause.FACILITY_REJECTED;
+
+            case CallFailCause.STATUS_ENQUIRY:
+                return DisconnectCause.RESPONSE_TO_STATUS_ENQUIRY;
+
+            case CallFailCause.NO_CIRCUIT_AVAIL:
+                return DisconnectCause.NO_CIRCUIT_AVAIL;
+
+            case CallFailCause.NETWORK_OUT_OF_ORDER:
+                return DisconnectCause.NETWORK_OUT_OF_ORDER;
+
+            case CallFailCause.TEMPORARY_FAILURE:
+                return DisconnectCause.TEMPORARY_FAILURE;
+
+            case CallFailCause.SWITCHING_CONGESTION:
+                return DisconnectCause.SWITCHING_CONGESTION;
+
+            case CallFailCause.ACCESS_INFORMATION_DISCARDED:
+                return DisconnectCause.ACCESS_INFORMATION_DISCARDED;
+
+            case CallFailCause.CHANNEL_NOT_AVAIL:
+                return DisconnectCause.REQUESTED_CIRCUIT_OR_CHANNEL_NOT_AVAILABLE;
+
+            case CallFailCause.RESOURCES_UNAVAILABLE_UNSPECIFIED:
+                return DisconnectCause.RESOURCES_UNAVAILABLE_UNSPECIFIED;
+
+            case CallFailCause.QOS_NOT_AVAIL:
+                return DisconnectCause.QOS_NOT_AVAIL;
+
+            case CallFailCause.REQUESTED_FACILITY_NOT_SUBSCRIBED:
+                return DisconnectCause.REQUESTED_FACILITY_NOT_SUBSCRIBED;
+
+            case CallFailCause.INCOMING_CALL_BARRED_WITHIN_CUG:
+                return DisconnectCause.INCOMING_CALL_BARRED_WITHIN_CUG;
+
+            case CallFailCause.BEARER_CAPABILITY_NOT_AUTHORISED:
+                return DisconnectCause.BEARER_CAPABILITY_NOT_AUTHORIZED;
+
+            case CallFailCause.BEARER_NOT_AVAIL:
+                return DisconnectCause.BEARER_CAPABILITY_NOT_PRESENTLY_AVAILABLE;
+
+            case CallFailCause.SERVICE_OR_OPTION_NOT_AVAILABLE:
+                return DisconnectCause.SERVICE_OR_OPTION_NOT_AVAILABLE;
+
+            case CallFailCause.BEARER_SERVICE_NOT_IMPLEMENTED:
+                return DisconnectCause.BEARER_SERVICE_NOT_IMPLEMENTED;
+
+            case CallFailCause.REQUESTED_FACILITY_NOT_IMPLEMENTED:
+                return DisconnectCause.REQUESTED_FACILITY_NOT_IMPLEMENTED;
+
+            case CallFailCause.ONLY_RESTRICTED_DIGITAL_INFO_BC_AVAILABLE:
+                return DisconnectCause.ONLY_RESTRICTED_DIGITAL_INFO_BC_AVAILABLE;
+
+            case CallFailCause.SERVICE_OR_OPTION_NOT_IMPLEMENTED:
+                return DisconnectCause.SERVICE_OR_OPTION_NOT_IMPLEMENTED;
+
+            case CallFailCause.INVALID_TRANSACTION_ID_VALUE:
+                return DisconnectCause.INVALID_TRANSACTION_ID_VALUE;
+
+            case CallFailCause.USER_NOT_MEMBER_OF_CUG:
+                return DisconnectCause.USER_NOT_MEMBER_OF_CUG;
+
+            case CallFailCause.INCOMPATIBLE_DESTINATION:
+                return DisconnectCause.INCOMPATIBLE_DESTINATION;
+
+            case CallFailCause.INVALID_TRANSIT_NETWORK_SELECTION:
+                return DisconnectCause.INVALID_TRANSIT_NETWORK_SELECTION;
+
+            case CallFailCause.SEMANTICALLY_INCORRECT_MESSAGE:
+                return DisconnectCause.SEMANTICALLY_INCORRECT_MESSAGE;
+
+            case CallFailCause.INVALID_MANDATORY_INFORMATION:
+                return DisconnectCause.INVALID_MANDATORY_INFORMATION;
+
+            case CallFailCause.MESSAGE_TYPE_NON_EXISTENT:
+                return DisconnectCause.MESSAGE_TYPE_NON_EXISTENT;
+
+            case CallFailCause.MESSAGE_TYPE_NOT_COMPATIBLE_WITH_PROT_STATE:
+                return DisconnectCause.MESSAGE_TYPE_NOT_COMPATIBLE_WITH_PROT_STATE;
+
+            case CallFailCause.IE_NON_EXISTENT_OR_NOT_IMPLEMENTED:
+                return DisconnectCause.IE_NON_EXISTENT_OR_NOT_IMPLEMENTED;
+
+            case CallFailCause.CONDITIONAL_IE_ERROR:
+                return DisconnectCause.CONDITIONAL_IE_ERROR;
+
+            case CallFailCause.MESSAGE_NOT_COMPATIBLE_WITH_PROTOCOL_STATE:
+                return DisconnectCause.MESSAGE_NOT_COMPATIBLE_WITH_PROTOCOL_STATE;
+
+            case CallFailCause.RECOVERY_ON_TIMER_EXPIRY:
+                return DisconnectCause.RECOVER_ON_TIMER_EXPIRY;
+
+            case CallFailCause.PROTOCOL_ERROR_UNSPECIFIED:
+                return DisconnectCause.PROTOCOL_ERROR_UNSPECIFIED;
+
+            case CallFailCause.INTERWORKING_UNSPECIFIED:
+                return DisconnectCause.INTERWORKING_UNSPECIFIED;
 
             case CallFailCause.ACCESS_CLASS_BLOCKED:
             case CallFailCause.ERROR_UNSPECIFIED:
