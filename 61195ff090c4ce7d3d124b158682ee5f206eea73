@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad3001e_d965535e",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-22T21:48:48Z",
+      "side": 1,
+      "message": "After looking at where this is called from, are you sure you want this sort of \"silent failure\" behavior? If the feature doesn\u0027t exist, it looks like ImsManager#connect will just silently no-op. Is it better to throw an error instead?",
+      "range": {
+        "startLine": 723,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 32
+      },
+      "revId": "61195ff090c4ce7d3d124b158682ee5f206eea73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
