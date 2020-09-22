@@ -46,6 +46,30 @@
       "revId": "8793d97ca839c8f89e6aabbebc8a8919a276f6e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86933795_c0d9437d",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-22T17:37:46Z",
+      "side": 1,
+      "message": "Perhaps the signature of this constructor could move to pass in dialargs instead of only isEmergencyCall, since that info is in dialArgs anyway",
+      "parentUuid": "df93616d_9f9f3f10",
+      "range": {
+        "startLine": 327,
+        "startChar": 8,
+        "endLine": 330,
+        "endChar": 0
+      },
+      "revId": "8793d97ca839c8f89e6aabbebc8a8919a276f6e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
