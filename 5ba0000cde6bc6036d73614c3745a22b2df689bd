@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da32029c_ac939269",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-23T19:08:03Z",
+      "side": 1,
+      "message": "It looks like the tests can not find DialArgs in GsmCdmaCallTrackerTest and GsmCdmaConnectionTest. Can you please add the dependency in the tests and run \"atest -b FrameworksTelephonyTests\" to ensure it builds?",
+      "revId": "5ba0000cde6bc6036d73614c3745a22b2df689bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
