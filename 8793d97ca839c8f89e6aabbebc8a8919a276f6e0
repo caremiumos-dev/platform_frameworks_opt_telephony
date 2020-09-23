@@ -70,6 +70,30 @@
       "revId": "8793d97ca839c8f89e6aabbebc8a8919a276f6e0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f5b9807_286d2344",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaCallTracker.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-23T17:27:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86933795_c0d9437d",
+      "range": {
+        "startLine": 327,
+        "startChar": 8,
+        "endLine": 330,
+        "endChar": 0
+      },
+      "revId": "8793d97ca839c8f89e6aabbebc8a8919a276f6e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
