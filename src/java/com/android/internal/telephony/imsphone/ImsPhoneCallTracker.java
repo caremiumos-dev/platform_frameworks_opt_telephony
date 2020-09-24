@@ -3571,6 +3571,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             mPhone.notifySuppServiceFailed(Phone.SuppService.TRANSFER);
         }
 
+        @Override
+        public void onCallSessionDtmfReceived(ImsCall imsCall, char digit) {
+            log("onCallSessionDtmfReceived digit=" + digit);
+            ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null) {
+                conn.receivedDtmfDigit(digit);
+            }
+        }
+
         /**
          * Handles a change to the multiparty state for an {@code ImsCall}.  Notifies the associated
          * {@link ImsPhoneConnection} of the change.
@@ -3604,6 +3613,22 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
             cqm.saveCallQuality(callQuality);
             mCallQualityMetrics.put(callId, cqm);
+        }
+
+        /**
+         * Handles reception of RTP header extension data from the network.
+         * @param imsCall The ImsCall the data was received on.
+         * @param rtpHeaderExtensionData The RTP extension data received.
+         */
+        @Override
+        public void onCallSessionRtpHeaderExtensionReceived(ImsCall imsCall,
+                @NonNull byte[] rtpHeaderExtensionData) {
+            log("onCallSessionRtpHeaderExtensionReceived rtpHeaderExtensionData="
+                    + rtpHeaderExtensionData);
+            ImsPhoneConnection conn = findConnection(imsCall);
+            if (conn != null) {
+                conn.receivedRtpHeaderExtension(rtpHeaderExtensionData);
+            }
         }
     };
 

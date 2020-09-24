@@ -16,7 +16,10 @@
 
 package android.telephony.ims;
 
+import static junit.framework.Assert.fail;
+
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.telephony.ServiceState;
@@ -75,4 +78,39 @@ public class ImsCallSessionListenerTests {
                 eq(TelephonyManager.NETWORK_TYPE_IWLAN), eq(imsReasonInfo));
     }
 
+    @Test
+    public void testCallSessionDtmfReceived() throws Exception {
+        ImsCallSessionListener mTestListener = new ImsCallSessionListener(mMockListener);
+        mTestListener.callSessionDtmfReceived('A');
+        mTestListener.callSessionDtmfReceived('a');
+        verify(mMockListener, times(2)).callSessionDtmfReceived(eq('A'));
+
+        mTestListener.callSessionDtmfReceived('B');
+        mTestListener.callSessionDtmfReceived('b');
+        verify(mMockListener, times(2)).callSessionDtmfReceived(eq('B'));
+
+        mTestListener.callSessionDtmfReceived('0');
+        verify(mMockListener, times(1)).callSessionDtmfReceived(eq('0'));
+
+        try {
+            mTestListener.callSessionDtmfReceived('P');
+            fail("expected exception");
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testCallSessionRtpExtensionHeaderReceived() throws Exception {
+        ImsCallSessionListener mTestListener = new ImsCallSessionListener(mMockListener);
+        mTestListener.callSessionRtpHeaderExtensionReceived(new byte[1]);
+        verify(mMockListener).callSessionRtpHeaderExtensionReceived(eq(new byte[1]));
+
+        try {
+            mTestListener.callSessionRtpHeaderExtensionReceived(null);
+            fail("expected exception");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+    }
 }
