@@ -22,6 +22,30 @@
       "revId": "61195ff090c4ce7d3d124b158682ee5f206eea73",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3fe614e_bdc00f40",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-24T00:35:16Z",
+      "side": 1,
+      "message": "ImsManager#connectForOneShot will complete and if the feature doesnt exist, it will return null and callback#imsFeatureRemoved with reason FeatureConnector.UNAVAILABLE_REASON_DISCONNECTED will be called. It shouldnt end up as a no op.",
+      "parentUuid": "7ad3001e_d965535e",
+      "range": {
+        "startLine": 723,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 32
+      },
+      "revId": "61195ff090c4ce7d3d124b158682ee5f206eea73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
