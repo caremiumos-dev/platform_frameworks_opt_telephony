@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.net.Uri;
 import android.os.Bundle;
@@ -118,6 +119,18 @@ public abstract class Connection {
         public void onRttTerminated();
         public void onOriginalConnectionReplaced(Connection newConnection);
         public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall);
+
+        /**
+         * Indicates a DTMF digit has been received from the network.
+         * @param digit The DTMF digit.
+         */
+        public void onReceivedDtmfDigit(char digit);
+
+        /**
+         * Indicates data from an RTP header extension has been received from the network.
+         * @param extensionData The extension data.
+         */
+        public void onReceivedRtpHeaderExtension(@NonNull byte[] extensionData);
     }
 
     /**
@@ -167,6 +180,10 @@ public abstract class Connection {
         public void onOriginalConnectionReplaced(Connection newConnection) {}
         @Override
         public void onIsNetworkEmergencyCallChanged(boolean isEmergencyCall) {}
+        @Override
+        public void onReceivedDtmfDigit(char digit) {}
+        @Override
+        public void onReceivedRtpHeaderExtension(@NonNull byte[] extensionData) {}
     }
 
     public static final int AUDIO_QUALITY_STANDARD = 1;
@@ -1425,5 +1442,25 @@ public abstract class Connection {
     public void setNumberVerificationStatus(
             @android.telecom.Connection.VerificationStatus int verificationStatus) {
         mNumberVerificationStatus = verificationStatus;
+    }
+
+    /**
+     * Called by IMS service when a DTMF digit is received from the network.
+     * @param digit the received digit.
+     */
+    public void receivedDtmfDigit(char digit) {
+        for (Listener l : mListeners) {
+            l.onReceivedDtmfDigit(digit);
+        }
+    }
+
+    /**
+     * Called by IMS service when an RTP header extension is received from the newtork.
+     * @param extensionData the received extension data.
+     */
+    public void receivedRtpHeaderExtension(@NonNull byte[] extensionData) {
+        for (Listener l : mListeners) {
+            l.onReceivedRtpHeaderExtension(extensionData);
+        }
     }
 }
