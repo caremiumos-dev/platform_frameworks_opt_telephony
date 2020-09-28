@@ -46,6 +46,30 @@
       "revId": "61195ff090c4ce7d3d124b158682ee5f206eea73",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bcb2a23_988f35d8",
+        "filename": "src/java/com/android/internal/telephony/ims/ImsResolver.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2020-09-28T17:40:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3fe614e_bdc00f40",
+      "range": {
+        "startLine": 723,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 32
+      },
+      "revId": "61195ff090c4ce7d3d124b158682ee5f206eea73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
