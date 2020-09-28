@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd7ce1ba_533009fc",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2907,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-28T18:45:18Z",
+      "side": 1,
+      "message": "Can you also include a null check for version? It looks like it could be null in some scenarios.",
+      "range": {
+        "startLine": 2907,
+        "startChar": 23,
+        "endLine": 2907,
+        "endChar": 30
+      },
+      "revId": "ace75c8deb47469db969673da253b5c8352692d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
