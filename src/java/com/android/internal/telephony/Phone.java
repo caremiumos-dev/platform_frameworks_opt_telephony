@@ -94,6 +94,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -4391,6 +4392,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     public boolean useSsOverIms(Message onComplete) {
         return false;
+    }
+
+    /**
+     * Returns an array of the equivalent home PLMNs (EF_EHPLMN) from the USIM app.
+     * Returns null if the query fails.
+     *
+     * @return an array of equivalent home PLMNs or null if not available.
+     */
+    public @NonNull List<String> getEhplmns() {
+        return Collections.emptyList();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
