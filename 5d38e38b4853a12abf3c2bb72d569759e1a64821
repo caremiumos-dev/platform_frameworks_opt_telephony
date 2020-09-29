@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bdf1bc4_52fbfe5f",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2884,
+      "author": {
+        "id": 1156808
+      },
+      "writtenOn": "2020-09-29T09:39:53Z",
+      "side": 1,
+      "message": "This must come before the if statement.",
+      "range": {
+        "startLine": 2883,
+        "startChar": 22,
+        "endLine": 2884,
+        "endChar": 20
+      },
+      "revId": "5d38e38b4853a12abf3c2bb72d569759e1a64821",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
