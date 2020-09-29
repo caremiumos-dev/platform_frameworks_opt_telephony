@@ -25,7 +25,6 @@ import static android.service.carrier.CarrierMessagingService.RECEIVE_OPTIONS_SK
 import static android.telephony.TelephonyManager.PHONE_TYPE_CDMA;
 
 import android.annotation.IntDef;
-import android.annotation.Nullable;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.BroadcastOptions;

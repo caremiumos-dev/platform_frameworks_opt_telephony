@@ -20,6 +20,8 @@ import android.annotation.Nullable;
 import android.content.Context;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.nano.PersistAtomsProto.CarrierIdMismatch;
+import com.android.internal.telephony.nano.PersistAtomsProto.DataCallSession;
 import com.android.internal.telephony.nano.PersistAtomsProto.IncomingSms;
 import com.android.internal.telephony.nano.PersistAtomsProto.PersistAtoms;
 import com.android.internal.telephony.nano.PersistAtomsProto.RawVoiceCallRatUsage;
@@ -52,6 +54,14 @@ public class PersistAtomsStorage {
      * counted separately.
      */
     private static final int MAX_NUM_SMS = 25;
+
+    /**
+     * Maximum number of carrier ID mismatch events stored on the device to avoid sending
+     * duplicated metrics.
+     */
+    private static final int MAX_CARRIER_ID_MISMATCH = 40;
+    /** Maximum number of data call sessions to store during pulls. */
+    private static final int MAX_NUM_DATA_CALL_SESSIONS = 15;
 
     /** Stores persist atoms and persist states of the puller. */
     @VisibleForTesting protected final PersistAtoms mAtoms;
@@ -110,6 +120,46 @@ public class PersistAtomsStorage {
             // MAX_NUM_SMS is reached (call at the last index is evicted).
             insertAt = sRandom.nextInt(newLength);
             mAtoms.incomingSms[newLength - 1] = mAtoms.incomingSms[insertAt];
+            result[newLength - 1] = result[insertAt];
+        }
+        result[insertAt] = instance;
+        return result;
+    }
+
+    /** Adds a data call session to the storage. */
+    public synchronized void addDataCallSession(DataCallSession dataCall) {
+        mAtoms.dataCallSession =
+                insertAtRandomPlace(mAtoms.dataCallSession, dataCall, MAX_NUM_DATA_CALL_SESSIONS);
+        saveAtomsToFile();
+    }
+
+    /**
+     * Adds a new carrier ID mismatch event to the storage.
+     *
+     * @return true if the item was not present and was added to the persistent storage, false
+     * otherwise.
+     */
+    public synchronized boolean addCarrierIdMismatch(CarrierIdMismatch carrierIdMismatch) {
+        // Check if the details of the SIM cards are already present and in case return.
+        for (int i = 0; i < mAtoms.carrierIdMismatch.length; i++) {
+            if (mAtoms.carrierIdMismatch[i].mccMnc.equals(carrierIdMismatch.mccMnc)
+                    && mAtoms.carrierIdMismatch[i].gid1.equals(carrierIdMismatch.gid1)
+                    && mAtoms.carrierIdMismatch[i].spn.equals(carrierIdMismatch.spn)) {
+                return false;
+            }
+        }
+        // Add the new CarrierIdMismatch at the end of the array, so that the same atom will not be
+        // sent again in future.
+        if (mAtoms.carrierIdMismatch.length == MAX_CARRIER_ID_MISMATCH) {
+            System.arraycopy(
+                    mAtoms.carrierIdMismatch, 1,
+                    mAtoms.carrierIdMismatch, 0,
+                    MAX_CARRIER_ID_MISMATCH - 1);
+            mAtoms.carrierIdMismatch[MAX_CARRIER_ID_MISMATCH - 1] = carrierIdMismatch;
+        } else {
+            int newLength = mAtoms.carrierIdMismatch.length + 1;
+            mAtoms.carrierIdMismatch = Arrays.copyOf(mAtoms.carrierIdMismatch, newLength);
+            mAtoms.carrierIdMismatch[newLength - 1] = carrierIdMismatch;
         }
         mAtoms.incomingSms[insertAt] = sms;
         saveAtomsToFile();
@@ -171,6 +221,40 @@ public class PersistAtomsStorage {
         }
     }
 
+    /**
+     * Returns and clears the outgoing SMS if last pulled longer than {@code
+     * minIntervalMillis} ago, otherwise returns {@code null}.
+     */
+    @Nullable
+    public synchronized OutgoingSms[] getOutgoingSms(long minIntervalMillis) {
+        if (getWallTimeMillis() - mAtoms.outgoingSmsPullTimestampMillis > minIntervalMillis) {
+            mAtoms.outgoingSmsPullTimestampMillis = getWallTimeMillis();
+            OutgoingSms[] previousOutgoingSms = mAtoms.outgoingSms;
+            mAtoms.outgoingSms = new OutgoingSms[0];
+            saveAtomsToFile();
+            return previousOutgoingSms;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns and clears the data call session if last pulled longer than {@code
+     * minIntervalMillis} ago, otherwise returns {@code null}.
+     */
+    @Nullable
+    public synchronized DataCallSession[] getDataCallSessions(long minIntervalMillis) {
+        if (getWallTimeMillis() - mAtoms.dataCallSessionPullTimestampMillis > minIntervalMillis) {
+            mAtoms.dataCallSessionPullTimestampMillis = getWallTimeMillis();
+            DataCallSession[] previousDataCallSession = mAtoms.dataCallSession;
+            mAtoms.dataCallSession = new DataCallSession[0];
+            saveAtomsToFile();
+            return previousDataCallSession;
+        } else {
+            return null;
+        }
+    }
+
     /** Loads {@link PersistAtoms} from a file in private storage. */
     private PersistAtoms loadAtomsFromFile() {
         try {
@@ -195,6 +279,27 @@ public class PersistAtomsStorage {
                 atomsFromFile.incomingSms =
                         Arrays.copyOf(atomsFromFile.incomingSms, MAX_NUM_SMS);
             }
+            if (atomsFromFile.outgoingSms == null) {
+                atomsFromFile.outgoingSms = new OutgoingSms[0];
+            }
+            if (atomsFromFile.outgoingSms.length > MAX_NUM_SMS) {
+                atomsFromFile.outgoingSms =
+                        Arrays.copyOf(atomsFromFile.outgoingSms, MAX_NUM_SMS);
+            }
+            if (atomsFromFile.carrierIdMismatch == null) {
+                atomsFromFile.carrierIdMismatch = new CarrierIdMismatch[0];
+            }
+            if (atomsFromFile.carrierIdMismatch.length > MAX_CARRIER_ID_MISMATCH) {
+                atomsFromFile.carrierIdMismatch =
+                        Arrays.copyOf(atomsFromFile.carrierIdMismatch, MAX_CARRIER_ID_MISMATCH);
+            }
+            if (atomsFromFile.dataCallSession == null) {
+                atomsFromFile.dataCallSession = new DataCallSession[0];
+            }
+            if (atomsFromFile.dataCallSession.length > MAX_NUM_DATA_CALL_SESSIONS) {
+                atomsFromFile.dataCallSession =
+                        Arrays.copyOf(atomsFromFile.dataCallSession, MAX_NUM_DATA_CALL_SESSIONS);
+            }
             // out of caution, set timestamps to now if they are missing
             if (atomsFromFile.rawVoiceCallRatUsagePullTimestampMillis == 0L) {
                 atomsFromFile.rawVoiceCallRatUsagePullTimestampMillis = getWallTimeMillis();
@@ -204,6 +309,12 @@ public class PersistAtomsStorage {
             }
             if (atomsFromFile.incomingSmsPullTimestampMillis == 0L) {
                 atomsFromFile.incomingSmsPullTimestampMillis = getWallTimeMillis();
+            }
+            if (atomsFromFile.outgoingSmsPullTimestampMillis == 0L) {
+                atomsFromFile.outgoingSmsPullTimestampMillis = getWallTimeMillis();
+            }
+            if (atomsFromFile.dataCallSessionPullTimestampMillis == 0L) {
+                atomsFromFile.dataCallSessionPullTimestampMillis = getWallTimeMillis();
             }
             return atomsFromFile;
         } catch (IOException | NullPointerException e) {
@@ -229,6 +340,9 @@ public class PersistAtomsStorage {
         atoms.rawVoiceCallRatUsagePullTimestampMillis = currentTime;
         atoms.voiceCallSessionPullTimestampMillis = currentTime;
         atoms.incomingSmsPullTimestampMillis = currentTime;
+        atoms.outgoingSmsPullTimestampMillis = currentTime;
+        atoms.carrierIdTableVersion = TelephonyManager.UNKNOWN_CARRIER_ID_LIST_VERSION;
+        atoms.dataCallSessionPullTimestampMillis = currentTime;
         Rlog.d(TAG, "created new PersistAtoms");
         return atoms;
     }
