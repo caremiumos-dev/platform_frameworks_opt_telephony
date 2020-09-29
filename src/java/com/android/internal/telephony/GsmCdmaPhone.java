@@ -4454,4 +4454,16 @@ public class GsmCdmaPhone extends Phone {
     public boolean canDisablePhysicalSubscription() {
         return mCi.canToggleUiccApplicationsEnablement();
     }
+
+    @Override
+    public @Nullable String[] getEhplmns() {
+        if (isPhoneTypeGsm()) {
+            IccRecords r = mIccRecords.get();
+            return (r != null) ? r.getEhplmns() : null;
+        } else if (isPhoneTypeCdma()) {
+            loge("EHPLMN is not available in CDMA");
+            return null;
+        }
+        return null;
+    }
 }

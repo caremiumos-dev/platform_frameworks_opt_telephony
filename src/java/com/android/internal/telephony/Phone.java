@@ -4393,6 +4393,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return false;
     }
 
+    /**
+     * Returns an array of the equivalent home PLMNs (EF_EHPLMN) from the USIM app.
+     * Returns null if the query fails.
+     *
+     * @return an array of equivalent home PLMNs or null if not available.
+     */
+    public @Nullable String[] getEhplmns() {
+        return null;
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
