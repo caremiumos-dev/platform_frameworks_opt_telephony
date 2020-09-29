@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66ec9f67_7ddae5f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-09-29T19:00:53Z",
+      "side": 1,
+      "message": "I am still seeing some test failures here in GsmCdmaPhoneTest and ImsPhoneCallTrackerTest, for example GsmCdmaPhoneTest#testDial failing with:\n\n\nArgument(s) are different! Wanted:\nmCT.dialGsm(\n    \"1234567890\",\n    null,\n    null\n);\n-\u003e at com.android.internal.telephony.GsmCdmaPhoneTest.testDial(GsmCdmaPhoneTest.java:489)\nActual invocation has different arguments:\nmCT.dialGsm(\n    \"1234567890\",\n    com.android.internal.telephony.imsphone.ImsPhone$ImsDialArgs@7893dd2\n);\n-\u003e at com.android.internal.telephony.GsmCdmaPhone.dialInternal(GsmCdmaPhone.java:1488)\n\n\tat com.android.internal.telephony.GsmCdmaPhoneTest.testDial(GsmCdmaPhoneTest.java:489)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:52)\n\tat ...\n\nWould it be possible to fix tests and run \"atest FrameworksTelephonyTests:GsmCdmaPhoneTest FrameworksTelephonyTests:ImsPhoneCallTrackerTest\" to verify tests work? Presubmit is required to pass before we can submit... ",
+      "revId": "217062a21493d4eaec63bb78d58d34ca18122685",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
