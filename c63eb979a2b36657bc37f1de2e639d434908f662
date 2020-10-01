@@ -22,6 +22,30 @@
       "revId": "c63eb979a2b36657bc37f1de2e639d434908f662",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a64ccd1_01c35100",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2419,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2020-10-01T17:40:16Z",
+      "side": 1,
+      "message": "please ignore that. Just found that the issue should have been fixed by I39abe0bde114593c2a8cf19d27ae077815c42af3, fix of b/168529378. now getNetworkCapabilities does not call isSuspended any more.",
+      "parentUuid": "3a16e819_12508d6e",
+      "range": {
+        "startLine": 2419,
+        "startChar": 20,
+        "endLine": 2419,
+        "endChar": 38
+      },
+      "revId": "c63eb979a2b36657bc37f1de2e639d434908f662",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
