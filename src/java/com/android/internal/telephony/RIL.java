@@ -44,6 +44,7 @@ import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioIndicationType;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
+import android.hardware.radio.V1_0.RadioTechnologyFamily;
 import android.hardware.radio.V1_0.ResetNvType;
 import android.hardware.radio.V1_0.SelectUiccSub;
 import android.hardware.radio.V1_0.SimApdu;
@@ -2834,7 +2835,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         } else {
             // OEM Hook service is disabled for P and later devices.
-            // Deprecated OEM Hook APIs will perform dummy before being removed.
+            // Deprecated OEM Hook APIs will perform no-op before being removed.
             if (RILJ_LOGD) riljLog("Radio Oem Hook Service is disabled for P and later devices. ");
         }
     }
@@ -2863,7 +2864,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         } else {
             // OEM Hook service is disabled for P and later devices.
-            // Deprecated OEM Hook APIs will perform dummy before being removed.
+            // Deprecated OEM Hook APIs will perform no-op before being removed.
             if (RILJ_LOGD) riljLog("Radio Oem Hook Service is disabled for P and later devices. ");
         }
     }
@@ -4069,7 +4070,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
             ImsSmsMessage msg = new ImsSmsMessage();
-            msg.tech = RILConstants.GSM_PHONE;
+            msg.tech = RadioTechnologyFamily.THREE_GPP;
             msg.retry = (byte) retry >= 1 ? true : false;
             msg.messageRef = messageRef;
 
@@ -4096,7 +4097,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
             ImsSmsMessage msg = new ImsSmsMessage();
-            msg.tech = RILConstants.CDMA_PHONE;
+            msg.tech = RadioTechnologyFamily.THREE_GPP2;
             msg.retry = (byte) retry >= 1 ? true : false;
             msg.messageRef = messageRef;
 
@@ -6294,10 +6295,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_ENABLE_UICC_APPLICATIONS";
             case RIL_REQUEST_GET_UICC_APPLICATIONS_ENABLEMENT:
                 return "RIL_REQUEST_GET_UICC_APPLICATIONS_ENABLEMENT";
-            case RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE:
-                return "RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE";
             case RIL_REQUEST_SET_SYSTEM_SELECTION_CHANNELS:
                 return "RIL_REQUEST_SET_SYSTEM_SELECTION_CHANNELS";
+            case RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE:
+                return "RIL_REQUEST_CDMA_SEND_SMS_EXPECT_MORE";
             case RIL_REQUEST_GET_BARRING_INFO:
                 return "RIL_REQUEST_GET_BARRING_INFO";
             case RIL_REQUEST_ENTER_SIM_DEPERSONALIZATION:

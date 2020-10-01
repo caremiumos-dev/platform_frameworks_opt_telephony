@@ -65,6 +65,9 @@ import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
+import android.telephony.CellIdentityNr;
+import android.telephony.CellIdentityTdscdma;
+import android.telephony.CellIdentityWcdma;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellSignalStrength;
@@ -107,6 +110,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -151,7 +155,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     private static final int PHONE_ID = 0;
 
-    private static final String CARRIER_NAME_DISPLAY_NO_SERVICE = "no service";
+    private static final String CARRIER_NAME_DISPLAY_NO_SERVICE = "No service";
     private static final String CARRIER_NAME_DISPLAY_EMERGENCY_CALL = "emergency call";
     private static final String WIFI_CALLING_VOICE_FORMAT = "%s wifi calling";
     private static final String WIFI_CALLING_DATA_FORMAT = "%s wifi data";
@@ -229,7 +233,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         doReturn(mIwlanNetworkServiceStub).when(mIwlanNetworkServiceStub).asBinder();
         addNetworkService();
 
-        doReturn(true).when(mDcTracker).isDisconnected();
+        doReturn(true).when(mDcTracker).areAllDataDisconnected();
 
         doReturn(new ServiceState()).when(mPhone).getServiceState();
 
@@ -485,29 +489,29 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mContextFixture.getTestDouble(), times(3))
                 .sendStickyBroadcastAsUser(intentArgumentCaptor.capture(), eq(UserHandle.ALL));
 
-        // We only want to verify the intent SPN_STRINGS_UPDATED_ACTION.
+        // We only want to verify the intent SERVICE_PROVIDERS_UPDATED.
         List<Intent> intents = intentArgumentCaptor.getAllValues();
         logd("Total " + intents.size() + " intents");
         for (Intent intent : intents) {
             logd("  " + intent.getAction());
         }
         Intent intent = intents.get(2);
-        assertEquals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION, intent.getAction());
+        assertEquals(TelephonyManager.ACTION_SERVICE_PROVIDERS_UPDATED, intent.getAction());
 
         Bundle b = intent.getExtras();
 
         // For boolean we need to make sure the key exists first
-        assertTrue(b.containsKey(TelephonyIntents.EXTRA_SHOW_SPN));
-        assertFalse(b.getBoolean(TelephonyIntents.EXTRA_SHOW_SPN));
+        assertTrue(b.containsKey(TelephonyManager.EXTRA_SHOW_SPN));
+        assertFalse(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN));
 
-        assertEquals(null, b.getString(TelephonyIntents.EXTRA_SPN));
-        assertEquals(null, b.getString(TelephonyIntents.EXTRA_DATA_SPN));
+        assertEquals(null, b.getString(TelephonyManager.EXTRA_SPN));
+        assertEquals(null, b.getString(TelephonyManager.EXTRA_DATA_SPN));
 
         // For boolean we need to make sure the key exists first
-        assertTrue(b.containsKey(TelephonyIntents.EXTRA_SHOW_PLMN));
-        assertTrue(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN));
+        assertTrue(b.containsKey(TelephonyManager.EXTRA_SHOW_PLMN));
+        assertTrue(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN));
 
-        assertEquals(SimulatedCommands.FAKE_LONG_NAME, b.getString(TelephonyIntents.EXTRA_PLMN));
+        assertEquals(SimulatedCommands.FAKE_LONG_NAME, b.getString(TelephonyManager.EXTRA_PLMN));
 
         ArgumentCaptor<Integer> intArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
         verify(mTelephonyManager).setDataNetworkTypeForPhone(anyInt(), intArgumentCaptor.capture());
@@ -2370,16 +2374,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         verify(mEriManager, times(1)).loadEriFile();
     }
 
-    private void enableCdnr() {
-        mBundle.putBoolean(
-                CarrierConfigManager.KEY_ENABLE_CARRIER_DISPLAY_NAME_RESOLVER_BOOL, true);
-        sendCarrierConfigUpdate();
-    }
-
     @Test
     public void testUpdateSpnDisplay_noService_displayEmergencyCallOnly() {
-        enableCdnr();
-
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2395,15 +2391,13 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Plmn should be shown, and the string is "Emergency call only"
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_PLMN))
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
                 .isEqualTo(CARRIER_NAME_DISPLAY_EMERGENCY_CALL);
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 
     @Test
     public void testUpdateSpnDisplay_noServiceAndEmergencyCallNotAvailable_displayOOS() {
-        enableCdnr();
-
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2419,15 +2413,13 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Plmn should be shown, and the string is "No service"
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_PLMN))
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
                 .isEqualTo(CARRIER_NAME_DISPLAY_NO_SERVICE);
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 
     @Test
     public void testUpdateSpnDisplay_flightMode_displayOOS() {
-        enableCdnr();
-
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2442,15 +2434,41 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         // Plmn should be shown, and the string is "No service"
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_PLMN))
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
                 .isEqualTo(CARRIER_NAME_DISPLAY_NO_SERVICE);
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
+    }
+
+    @Test
+    public void testUpdateSpnDisplay_flightModeNoWifiCalling_showSpnAndPlmn() {
+        // GSM phone
+        doReturn(true).when(mPhone).isPhoneTypeGsm();
+
+        // Flight mode and connected to WiFI
+        doReturn(ServiceState.STATE_POWER_OFF).when(mServiceState).getVoiceRegState();
+        doReturn(ServiceState.STATE_POWER_OFF).when(mServiceState).getDataRegState();
+        doReturn(TelephonyManager.NETWORK_TYPE_IWLAN).when(mServiceState).getDataNetworkType();
+        doReturn(mServiceState).when(mSST).getServiceState();
+
+        // wifi-calling is disable
+        doReturn(false).when(mPhone).isWifiCallingEnabled();
+
+        // update the spn
+        sst.updateSpnDisplay();
+
+        // Show both spn & plmn
+        String spn = mBundle.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
+        String plmn = mBundle.getStringArray(CarrierConfigManager.KEY_PNN_OVERRIDE_STRING_ARRAY)[0];
+        plmn = plmn.split("\\s*,\\s*")[0];
+        Bundle b = getExtrasFromLastSpnUpdateIntent();
+        assertThat(b.getString(TelephonyManager.EXTRA_SPN)).isEqualTo(spn);
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN)).isTrue();
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN)).isEqualTo(plmn);
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 
     @Test
     public void testUpdateSpnDisplay_spnNotEmptyAndWifiCallingEnabled_showSpnOnly() {
-        enableCdnr();
-
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2469,20 +2487,19 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Only spn should be shown
         String spn = mBundle.getString(CarrierConfigManager.KEY_CARRIER_NAME_STRING);
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_SPN))
+        assertThat(b.getString(TelephonyManager.EXTRA_SPN))
                 .isEqualTo(String.format(WIFI_CALLING_VOICE_FORMAT, spn));
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_SPN)).isTrue();
-        assertThat(b.getString(TelephonyIntents.EXTRA_DATA_SPN))
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN)).isTrue();
+        assertThat(b.getString(TelephonyManager.EXTRA_DATA_SPN))
                 .isEqualTo(String.format(WIFI_CALLING_DATA_FORMAT, spn));
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isFalse();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isFalse();
     }
 
     @Test
     public void testUpdateSpnDisplay_spnEmptyAndWifiCallingEnabled_showPlmnOnly() {
         // set empty service provider name
         mBundle.putString(CarrierConfigManager.KEY_CARRIER_NAME_STRING, "");
-
-        enableCdnr();
+        sendCarrierConfigUpdate();
 
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
@@ -2503,16 +2520,14 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         String plmn = mBundle.getStringArray(CarrierConfigManager.KEY_PNN_OVERRIDE_STRING_ARRAY)[0];
         plmn = plmn.split("\\s*,\\s*")[0];
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_PLMN))
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
                 .isEqualTo(String.format(WIFI_CALLING_VOICE_FORMAT, plmn));
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_SPN)).isFalse();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN)).isFalse();
     }
 
     @Test
     public void testUpdateSpnDisplay_inServiceNoWifiCalling_showSpnAndPlmn() {
-        enableCdnr();
-
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2532,16 +2547,16 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         String plmn = mBundle.getStringArray(CarrierConfigManager.KEY_PNN_OVERRIDE_STRING_ARRAY)[0];
         plmn = plmn.split("\\s*,\\s*")[0];
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyIntents.EXTRA_SPN)).isEqualTo(spn);
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_SPN)).isTrue();
-        assertThat(b.getString(TelephonyIntents.EXTRA_PLMN)).isEqualTo(plmn);
-        assertThat(b.getBoolean(TelephonyIntents.EXTRA_SHOW_PLMN)).isTrue();
+        assertThat(b.getString(TelephonyManager.EXTRA_SPN)).isEqualTo(spn);
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN)).isTrue();
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN)).isEqualTo(plmn);
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 
     @Test
     public void testShouldForceDisplayNoService_forceBasedOnLocale() {
         // set up unaffected locale (US) and clear the resource
-        doReturn("us").when(mLocaleTracker).getCurrentCountry();
+        doReturn("us").when(mLocaleTracker).getLastKnownCountryIso();
         mContextFixture.putStringArrayResource(
                 com.android.internal.R.array.config_display_no_service_when_sim_unready,
                 new String[0]);
@@ -2551,12 +2566,40 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mContextFixture.putStringArrayResource(
                 com.android.internal.R.array.config_display_no_service_when_sim_unready,
                 new String[]{"de"});
-        doReturn("us").when(mLocaleTracker).getCurrentCountry();
+        doReturn("us").when(mLocaleTracker).getLastKnownCountryIso();
         assertFalse(sst.shouldForceDisplayNoService());
 
         // mock the locale to Germany
-        doReturn("de").when(mLocaleTracker).getCurrentCountry();
+        doReturn("de").when(mLocaleTracker).getLastKnownCountryIso();
         assertTrue(sst.shouldForceDisplayNoService());
+    }
+
+    @Test
+    public void testUpdateSpnDisplayLegacy_WlanServiceNoWifiCalling_displayOOS() {
+        mBundle.putBoolean(
+                CarrierConfigManager.KEY_ENABLE_CARRIER_DISPLAY_NAME_RESOLVER_BOOL, false);
+        sendCarrierConfigUpdate();
+
+        // GSM phone
+        doReturn(true).when(mPhone).isPhoneTypeGsm();
+
+        // voice out of service but data in service (connected to IWLAN)
+        doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mServiceState).getState();
+        doReturn(ServiceState.STATE_IN_SERVICE).when(mServiceState).getDataRegistrationState();
+        doReturn(TelephonyManager.NETWORK_TYPE_IWLAN).when(mServiceState).getDataNetworkType();
+        sst.mSS = mServiceState;
+
+        // wifi-calling is disable
+        doReturn(false).when(mPhone).isWifiCallingEnabled();
+
+        // update the spn
+        sst.updateSpnDisplay();
+
+        // Plmn should be shown, and the string is "No service"
+        Bundle b = getExtrasFromLastSpnUpdateIntent();
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
+                .isEqualTo(CARRIER_NAME_DISPLAY_NO_SERVICE);
+        assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 
     private Bundle getExtrasFromLastSpnUpdateIntent() {
@@ -2640,5 +2683,27 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(cids.size(), 2);
         assertEquals(cids.get(0), cellIdentityLte);
         assertEquals(cids.get(1), cellIdentityGsm);
+    }
+
+    @Test
+    public void testGetCidFromCellIdentity() throws Exception {
+        CellIdentity gsmCi = new CellIdentityGsm(
+                0, 1, 0, 0, "", "", "", "", Collections.emptyList());
+        CellIdentity wcdmaCi = new CellIdentityWcdma(
+                0, 2, 0, 0, "", "", "", "", Collections.emptyList(), null);
+        CellIdentity tdscdmaCi = new CellIdentityTdscdma(
+                "", "", 0, 3, 0, 0, "", "", Collections.emptyList(), null);
+        CellIdentity lteCi = new CellIdentityLte(0, 0, 4, 0, 0);
+        CellIdentity nrCi = new CellIdentityNr(
+                0, 0, 0, new int[] {}, "", "", 5, "", "", Collections.emptyList());
+
+        Method method = ServiceStateTracker.class.getDeclaredMethod(
+                "getCidFromCellIdentity", CellIdentity.class);
+        method.setAccessible(true);
+        assertEquals(1, (long) method.invoke(mSST, gsmCi));
+        assertEquals(2, (long) method.invoke(mSST, wcdmaCi));
+        assertEquals(3, (long) method.invoke(mSST, tdscdmaCi));
+        assertEquals(4, (long) method.invoke(mSST, lteCi));
+        assertEquals(5, (long) method.invoke(mSST, nrCi));
     }
 }

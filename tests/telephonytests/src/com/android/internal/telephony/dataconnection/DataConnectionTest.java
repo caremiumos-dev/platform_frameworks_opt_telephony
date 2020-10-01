@@ -32,10 +32,10 @@ import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_P
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -47,7 +47,6 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -72,7 +71,6 @@ import com.android.internal.telephony.dataconnection.DataConnection.DisconnectPa
 import com.android.internal.telephony.dataconnection.DataConnection.SetupResult;
 import com.android.internal.util.IState;
 import com.android.internal.util.StateMachine;
-import com.android.server.pm.PackageManagerService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -96,8 +94,6 @@ public class DataConnectionTest extends TelephonyTest {
     ApnContext mApnContext;
     @Mock
     DcFailBringUp mDcFailBringUp;
-    @Mock
-    PackageManagerService mMockPackageManagerInternal;
 
     private DataConnection mDc;
     private DataConnectionTestHandler mDataConnectionTestHandler;
@@ -257,8 +253,7 @@ public class DataConnectionTest extends TelephonyTest {
 
             DataServiceManager manager = new DataServiceManager(mPhone,
                     AccessNetworkConstants.TRANSPORT_TYPE_WWAN, "");
-            mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h, "");
-            mDcc.start();
+            mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h.getLooper(), "");
             mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, manager,
                     mDcTesterFailBringUpAll, mDcc);
         }
@@ -282,9 +277,8 @@ public class DataConnectionTest extends TelephonyTest {
 
     @Before
     public void setUp() throws Exception {
-        logd("+Setup!");
         super.setUp(getClass().getSimpleName());
-        mServiceManagerMockedServices.put("package", mMockPackageManagerInternal);
+        logd("+Setup!");
         doReturn("fake.action_detached").when(mPhone).getActionDetached();
         replaceInstance(ConnectionParams.class, "mApnContext", mCp, mApnContext);
         replaceInstance(ConnectionParams.class, "mRilRat", mCp,
@@ -295,8 +289,8 @@ public class DataConnectionTest extends TelephonyTest {
         mDcFailBringUp.saveParameters(0, 0, -2);
         doReturn(mDcFailBringUp).when(mDcTesterFailBringUpAll).getDcFailBringUp();
 
-        mContextFixture.putStringArrayResource(com.android.internal.R.array.
-                config_mobile_tcp_buffers, new String[]{
+        mContextFixture.putStringArrayResource(com.android.internal.R.array
+                .config_mobile_tcp_buffers, new String[]{
                 "umts:131072,262144,1452032,4096,16384,399360",
                 "hspa:131072,262144,2441216,4096,16384,399360",
                 "hsupa:131072,262144,2441216,4096,16384,399360",
@@ -312,7 +306,6 @@ public class DataConnectionTest extends TelephonyTest {
                 "com.android.phone");
 
         mDcp.mApnContext = mApnContext;
-
         addDataService();
 
         mDataConnectionTestHandler = new DataConnectionTestHandler(getClass().getSimpleName());
@@ -328,6 +321,7 @@ public class DataConnectionTest extends TelephonyTest {
         mDc = null;
         mDcc = null;
         mDataConnectionTestHandler.quit();
+        mDataConnectionTestHandler.join();
         mCellularDataService.onDestroy();
         super.tearDown();
     }
@@ -556,12 +550,6 @@ public class DataConnectionTest extends TelephonyTest {
                 .setMtuV6(1440)
                 .build();
         assertEquals(RetryManager.NO_RETRY, getSuggestedRetryDelay(response));
-    }
-
-    private NetworkInfo getNetworkInfo() throws Exception {
-        Field f = DataConnection.class.getDeclaredField("mNetworkInfo");
-        f.setAccessible(true);
-        return (NetworkInfo) f.get(mDc);
     }
 
     private NetworkCapabilities getNetworkCapabilities() throws Exception {

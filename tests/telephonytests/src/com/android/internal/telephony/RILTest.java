@@ -110,6 +110,7 @@ import android.hardware.radio.V1_0.NvWriteItem;
 import android.hardware.radio.V1_0.RadioError;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
+import android.hardware.radio.V1_0.RadioTechnologyFamily;
 import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.V1_5.IRadio;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
@@ -118,6 +119,7 @@ import android.net.InetAddresses;
 import android.net.LinkAddress;
 import android.os.Handler;
 import android.os.IPowerManager;
+import android.os.IThermalService;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
@@ -293,7 +295,7 @@ public class RILTest extends TelephonyTest {
                 .getSystemService(Context.TELEPHONY_SERVICE);
         doReturn(true).when(mTelephonyManager).isDataCapable();
         PowerManager powerManager = new PowerManager(context, mock(IPowerManager.class),
-                new Handler(Looper.myLooper()));
+                mock(IThermalService.class), new Handler(Looper.myLooper()));
         doReturn(powerManager).when(context).getSystemService(Context.POWER_SERVICE);
         doReturn(new ApplicationInfo()).when(context).getApplicationInfo();
 
@@ -927,13 +929,13 @@ public class RILTest extends TelephonyTest {
         gsmMsg.pdu = pdu;
 
         ImsSmsMessage firstMsg = new ImsSmsMessage();
-        firstMsg.tech = RILConstants.GSM_PHONE;
+        firstMsg.tech = RadioTechnologyFamily.THREE_GPP;
         firstMsg.retry = false;
         firstMsg.messageRef = 0;
         firstMsg.gsmMessage.add(gsmMsg);
 
         ImsSmsMessage retryMsg = new ImsSmsMessage();
-        retryMsg.tech = RILConstants.GSM_PHONE;
+        retryMsg.tech = RadioTechnologyFamily.THREE_GPP;
         retryMsg.retry = true;
         retryMsg.messageRef = 0;
         retryMsg.gsmMessage.add(gsmMsg);
@@ -962,13 +964,13 @@ public class RILTest extends TelephonyTest {
         CdmaSmsMessage cdmaMsg = new CdmaSmsMessage();
 
         ImsSmsMessage firstMsg = new ImsSmsMessage();
-        firstMsg.tech = RILConstants.CDMA_PHONE;
+        firstMsg.tech = RadioTechnologyFamily.THREE_GPP2;
         firstMsg.retry = false;
         firstMsg.messageRef = 0;
         firstMsg.cdmaMessage.add(cdmaMsg);
 
         ImsSmsMessage retryMsg = new ImsSmsMessage();
-        retryMsg.tech = RILConstants.CDMA_PHONE;
+        retryMsg.tech = RadioTechnologyFamily.THREE_GPP2;
         retryMsg.retry = true;
         retryMsg.messageRef = 0;
         retryMsg.cdmaMessage.add(cdmaMsg);

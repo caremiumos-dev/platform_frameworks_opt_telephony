@@ -41,7 +41,6 @@ import android.sysprop.TelephonyProperties;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation.ApnType;
-import android.telephony.Annotation.DataFailureCause;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellIdentity;
@@ -95,6 +94,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -253,7 +253,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * if we are looking for automatic selection. operatorAlphaLong is the
      * corresponding operator name.
      */
-    private static class NetworkSelectMessage {
+    protected static class NetworkSelectMessage {
         public Message message;
         public String operatorNumeric;
         public String operatorAlphaLong;
@@ -404,6 +404,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private final RegistrantList mPhysicalChannelConfigRegistrants = new RegistrantList();
 
     private final RegistrantList mOtaspRegistrants = new RegistrantList();
+
+    private final RegistrantList mPreferredNetworkTypeRegistrants = new RegistrantList();
 
     protected Registrant mPostDialHandler;
 
@@ -1429,6 +1431,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             updateSavedNetworkOperator(nsm);
         } else {
             clearSavedNetworkSelection();
+            updateManualNetworkSelection(nsm);
         }
     }
 
@@ -1471,6 +1474,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Update non-perisited manual network selection.
+     *
+     * @param nsm PLMN info of the selected network
+     */
+    protected void updateManualNetworkSelection(NetworkSelectMessage nsm)  {
+        Rlog.e(LOG_TAG, "updateManualNetworkSelection() should be overridden");
+    }
+
+    /**
      * Used to track the settings upon completion of the network change.
      */
     private void handleSetSelectNetwork(AsyncResult ar) {
@@ -1494,7 +1506,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Method to retrieve the saved operator from the Shared Preferences
      */
-    private OperatorInfo getSavedNetworkSelection() {
+    @NonNull
+    public OperatorInfo getSavedNetworkSelection() {
         // open the shared preferences and search with our key.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         String numeric = sp.getString(NETWORK_SELECTION_KEY + getSubId(), "");
@@ -1945,9 +1958,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * @return the current cell location if known
+     * Returns the current CellIdentity if known
      */
-    public CellIdentity getCellIdentity() {
+    public CellIdentity getCurrentCellIdentity() {
         return getServiceStateTracker().getCellIdentity();
     }
 
@@ -1983,6 +1996,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public boolean getMessageWaitingIndicator() {
         return mVmCount != 0;
     }
+
+    /**
+     *  Retrieves manually selected network info.
+     */
+    public String getManualNetworkSelectionPlmn() {
+        return "";
+    }
+
 
     private int getCallForwardingIndicatorFromSharedPref() {
         int status = IccRecords.CALL_FORWARDING_STATUS_DISABLED;
@@ -2249,6 +2270,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 + " filteredType = " + filteredType);
 
         mCi.setPreferredNetworkType(filteredType, response);
+        mPreferredNetworkTypeRegistrants.notifyRegistrants();
     }
 
     /**
@@ -2258,6 +2280,27 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void getPreferredNetworkType(Message response) {
         mCi.getPreferredNetworkType(response);
+    }
+
+    /**
+     * Register for preferred network type changes
+     *
+     * @param h Handler that receives the notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    public void registerForPreferredNetworkTypeChanged(Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+        mPreferredNetworkTypeRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for preferred network type changes.
+     *
+     * @param h Handler that should be unregistered.
+     */
+    public void unregisterForPreferredNetworkTypeChanged(Handler h) {
+        mPreferredNetworkTypeRegistrants.remove(h);
     }
 
     /**
@@ -2497,16 +2540,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /** Send notification with an updated PreciseDataConnectionState to a single data connection */
-    public void notifyDataConnection(String apnType) {
-        mNotifier.notifyDataConnection(this, apnType, getPreciseDataConnectionState(apnType));
-    }
-
-    /** Send notification with an updated PreciseDataConnectionState to all data connections */
-    public void notifyAllActiveDataConnections() {
-        String types[] = getActiveApnTypes();
-        for (String apnType : types) {
-            mNotifier.notifyDataConnection(this, apnType, getPreciseDataConnectionState(apnType));
-        }
+    public void notifyDataConnection(PreciseDataConnectionState state) {
+        mNotifier.notifyDataConnection(this, state);
     }
 
     @UnsupportedAppUsage
@@ -2856,6 +2891,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public String getCdmaPrlVersion(){
         return null;
+    }
+
+    /**
+     * @return {@code true} if data is suspended.
+     */
+    public boolean isDataSuspended() {
+        return false;
     }
 
     /**
@@ -3520,12 +3562,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void notifyCallForwardingIndicator() {
     }
 
-    /** Send a notification that a particular data connection has failed with specified cause. */
-    public void notifyDataConnectionFailed(
-            String apnType, String apn, @DataFailureCause int failCause) {
-        mNotifier.notifyDataConnectionFailed(this, apnType, apn, failCause);
-    }
-
     /**
      * Sets the SIM voice message waiting indicator records.
      * @param line GSM Subscriber Profile Number, one-based. Only '1' is supported
@@ -4142,7 +4178,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public boolean areAllDataDisconnected() {
         if (mTransportManager != null) {
             for (int transport : mTransportManager.getAvailableTransports()) {
-                if (getDcTracker(transport) != null && !getDcTracker(transport).isDisconnected()) {
+                if (getDcTracker(transport) != null
+                        && !getDcTracker(transport).areAllDataDisconnected()) {
                     return false;
                 }
             }
@@ -4154,7 +4191,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mAllDataDisconnectedRegistrants.addUnique(h, what, null);
         if (mTransportManager != null) {
             for (int transport : mTransportManager.getAvailableTransports()) {
-                if (getDcTracker(transport) != null && !getDcTracker(transport).isDisconnected()) {
+                if (getDcTracker(transport) != null
+                        && !getDcTracker(transport).areAllDataDisconnected()) {
                     getDcTracker(transport).registerForAllDataDisconnected(
                             this, EVENT_ALL_DATA_DISCONNECTED);
                 }
@@ -4326,15 +4364,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return RIL.RADIO_HAL_VERSION_UNKNOWN;
     }
 
-    /** @hide */
-    public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
-        return mCarrierPrivilegesTracker;
-    }
-
-    public boolean useSsOverIms(Message onComplete) {
-        return false;
-    }
-
     /**
      * Get the SIM's MCC/MNC
      *
@@ -4354,6 +4383,25 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     @VisibleForTesting
     public void setVoiceCallSessionStats(VoiceCallSessionStats voiceCallSessionStats) {
         mVoiceCallSessionStats = voiceCallSessionStats;
+    }
+
+    /** @hide */
+    public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
+        return mCarrierPrivilegesTracker;
+    }
+
+    public boolean useSsOverIms(Message onComplete) {
+        return false;
+    }
+
+    /**
+     * Returns a list of the equivalent home PLMNs (EF_EHPLMN) from the USIM app.
+     *
+     * @return A list of equivalent home PLMNs. Returns an empty list if EF_EHPLMN is empty or
+     * does not exist on the SIM card.
+     */
+    public @NonNull List<String> getEquivalentHomePlmns() {
+        return Collections.emptyList();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

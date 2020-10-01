@@ -44,13 +44,9 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import android.app.Activity;
-import android.app.IApplicationThread;
-import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncResult;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -384,7 +380,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         WorkSource workSource = new WorkSource(Process.myUid(),
             mContext.getPackageName());
         doReturn(cellLocation).when(mSST).getCellIdentity();
-        assertEquals(cellLocation, mPhoneUT.getCellIdentity());
+        assertEquals(cellLocation, mPhoneUT.getCurrentCellIdentity());
 
         // Switch to CDMA
         switchToCdma();
@@ -393,7 +389,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         doReturn(cdmaCellLocation).when(mSST).getCellIdentity();
 
         CellIdentityCdma actualCellLocation =
-                (CellIdentityCdma) mPhoneUT.getCellIdentity();
+                (CellIdentityCdma) mPhoneUT.getCurrentCellIdentity();
 
         assertEquals(actualCellLocation, cdmaCellLocation);
     }
@@ -918,20 +914,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
     private void verifyEcbmIntentSent(int times, boolean isInEcm) throws Exception {
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
-        verify(mIActivityManager, atLeast(times)).broadcastIntent(eq((IApplicationThread) null),
-                intentArgumentCaptor.capture(),
-                eq((String) null),
-                eq((IIntentReceiver) null),
-                eq(Activity.RESULT_OK),
-                eq((String) null),
-                eq((Bundle) null),
-                eq((String[]) null),
-                anyInt(),
-                eq((Bundle) null),
-                eq(false),
-                eq(true),
-                anyInt());
-
+        verify(mContext, atLeast(times)).sendStickyBroadcastAsUser(intentArgumentCaptor.capture(),
+                any());
         Intent intent = intentArgumentCaptor.getValue();
         assertEquals(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED, intent.getAction());
         assertEquals(isInEcm, intent.getBooleanExtra(
@@ -976,19 +960,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass(Intent.class);
         try {
-            verify(mIActivityManager, atLeast(1)).broadcastIntent(eq((IApplicationThread) null),
-                    intentArgumentCaptor.capture(),
-                    eq((String) null),
-                    eq((IIntentReceiver) null),
-                    eq(Activity.RESULT_OK),
-                    eq((String) null),
-                    eq((Bundle) null),
-                    eq((String[]) null),
-                    anyInt(),
-                    eq((Bundle) null),
-                    eq(false),
-                    eq(true),
-                    anyInt());
+            verify(mContext, atLeast(1)).sendStickyBroadcastAsUser(intentArgumentCaptor.capture(),
+                    any());
         } catch (Exception e) {
             fail("Unexpected exception: " + e.getStackTrace());
         }
@@ -1011,19 +984,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         // verify ACTION_EMERGENCY_CALLBACK_MODE_CHANGED
         try {
-            verify(mIActivityManager, atLeast(2)).broadcastIntent(eq((IApplicationThread) null),
-                    intentArgumentCaptor.capture(),
-                    eq((String) null),
-                    eq((IIntentReceiver) null),
-                    eq(Activity.RESULT_OK),
-                    eq((String) null),
-                    eq((Bundle) null),
-                    eq((String[]) null),
-                    anyInt(),
-                    eq((Bundle) null),
-                    eq(false),
-                    eq(true),
-                    anyInt());
+            verify(mContext, atLeast(2)).sendStickyBroadcastAsUser(intentArgumentCaptor.capture(),
+                    any());
         } catch (Exception e) {
             fail("Unexpected exception: " + e.getStackTrace());
         }
@@ -1107,7 +1069,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testGetIccCardUnknownAndAbsent() {
-        // If UiccSlot.isStateUnknown is true, we should return a dummy IccCard with the state
+        // If UiccSlot.isStateUnknown is true, we should return a placeholder IccCard with the state
         // set to UNKNOWN
         doReturn(null).when(mUiccController).getUiccProfileForPhone(anyInt());
         UiccSlot mockSlot = mock(UiccSlot.class);
@@ -1117,7 +1079,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         IccCard iccCard = mPhoneUT.getIccCard();
         assertEquals(IccCardConstants.State.UNKNOWN, iccCard.getState());
 
-        // if isStateUnknown is false, we should return a dummy IccCard with the state set to
+        // if isStateUnknown is false, we should return a placeholder IccCard with the state set to
         // ABSENT
         doReturn(false).when(mockSlot).isStateUnknown();
         iccCard = mPhoneUT.getIccCard();
@@ -1131,7 +1093,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         IccCard iccCard = mPhoneUT.getIccCard();
 
-        // The iccCard should be a dummy object, not null.
+        // The iccCard should be a placeholder object, not null.
         assertTrue(!(iccCard instanceof UiccProfile));
 
         assertTrue(iccCard != null);

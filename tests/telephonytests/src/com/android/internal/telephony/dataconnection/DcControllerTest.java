@@ -22,7 +22,6 @@ import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_G
 import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_IFNAME;
 import static com.android.internal.telephony.dataconnection.DcTrackerTest.FAKE_PCSCF_ADDRESS;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
@@ -34,8 +33,8 @@ import android.net.InetAddresses;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.os.AsyncResult;
-import android.os.Handler;
 import android.os.Looper;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -99,10 +98,11 @@ public class DcControllerTest extends TelephonyTest {
         LinkProperties lp = new LinkProperties();
         mResult = new UpdateLinkPropertyResult(lp);
         doReturn(mResult).when(mDc).updateLinkProperty(any(DataCallResponse.class));
+        doReturn(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+                .when(mDataServiceManager).getTransportType();
 
-        mDcc = DcController.makeDcc(mPhone, mDcTracker, mDataServiceManager,
-                new Handler(Looper.myLooper()), "");
-        mDcc.start();
+        mDcc = DcController.makeDcc(mPhone, mDcTracker, mDataServiceManager, Looper.myLooper(),
+                "");
         processAllMessages();
     }
 
@@ -114,7 +114,6 @@ public class DcControllerTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testDataDormant() throws Exception {
-        assertEquals("DccDefaultState", getCurrentState().getName());
         ArrayList<DataCallResponse> l = new ArrayList<>();
         DataCallResponse dcResponse = new DataCallResponse.Builder()
                 .setCause(0)
@@ -137,7 +136,8 @@ public class DcControllerTest extends TelephonyTest {
         mDc.mCid = 1;
         mDcc.addActiveDcByCid(mDc);
 
-        mDcc.sendMessage(EVENT_DATA_STATE_CHANGED, new AsyncResult(null, l, null));
+        mDcc.sendMessage(mDcc.obtainMessage(EVENT_DATA_STATE_CHANGED,
+                new AsyncResult(null, l, null)));
         processAllMessages();
 
         verify(mDcTracker, times(1)).sendStopNetStatPoll(eq(DctConstants.Activity.DORMANT));

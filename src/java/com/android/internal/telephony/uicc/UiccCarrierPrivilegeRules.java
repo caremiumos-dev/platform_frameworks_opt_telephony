@@ -32,6 +32,7 @@ import android.telephony.UiccAccessRule;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
+import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
 import com.android.telephony.Rlog;
 
@@ -111,9 +112,9 @@ public class UiccCarrierPrivilegeRules extends Handler {
     private static final int STATE_LOADED   = 1;
     private static final int STATE_ERROR    = 2;
 
-    // Max number of retries for open logical channel, interval is 10s.
-    private static final int MAX_RETRY = 1;
-    private static final int RETRY_INTERVAL_MS = 10000;
+    // Max number of retries for open logical channel, interval is 5s.
+    private static final int MAX_RETRY = 2;
+    private static final int RETRY_INTERVAL_MS = 5000;
     private static final int STATUS_CODE_CONDITION_NOT_SATISFIED = 0x6985;
     private static final int STATUS_CODE_APPLET_SELECT_FAILED = 0x6999;
 
@@ -226,6 +227,14 @@ public class UiccCarrierPrivilegeRules extends Handler {
         // Open logical channel with ARA_D.
         mAIDInUse = ARAD;
         openChannel(mAIDInUse);
+    }
+
+    @VisibleForTesting
+    public UiccCarrierPrivilegeRules(List<UiccAccessRule> rules) {
+        mAccessRules = rules;
+        mState = new AtomicInteger(STATE_LOADED);
+        mRules = "";
+        mStatusMessage.log("Loaded from test rules.");
     }
 
     /**

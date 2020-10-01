@@ -149,6 +149,8 @@ public class SimulatedCommands extends BaseCommands
     public int mDefaultRoamingIndicator;
     public int mReasonForDenial;
     public int mMaxDataCalls;
+    public boolean mSendSetGsmBroadcastConfigResponse = true;
+    public boolean mSendGetSmscAddressResponse = true;
 
     private SignalStrength mSignalStrength;
     private List<CellInfo> mCellInfoList = null;
@@ -194,9 +196,10 @@ public class SimulatedCommands extends BaseCommands
         mAuthenticationMode = ICC_AUTHENTICATION_MODE_DEFAULT;
     }
 
-    public void dispose() {
+    public void dispose() throws Exception {
         if (mHandlerThread != null) {
             mHandlerThread.quit();
+            mHandlerThread.join();
         }
     }
 
@@ -1245,7 +1248,10 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void getSmscAddress(Message result) {
-        unimplemented(result);
+        SimulatedCommandsVerifier.getInstance().getSmscAddress(result);
+        if (mSendGetSmscAddressResponse) {
+            unimplemented(result);
+        }
     }
 
     @Override
@@ -1866,7 +1872,10 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void setGsmBroadcastConfig(SmsBroadcastConfigInfo[] config, Message response) {
-        unimplemented(response);
+        SimulatedCommandsVerifier.getInstance().setGsmBroadcastConfig(config, response);
+        if (mSendSetGsmBroadcastConfigResponse) {
+            unimplemented(response);
+        }
     }
 
     @Override

@@ -17,21 +17,25 @@
 package com.android.internal.telephony.dataconnection;
 
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
 import android.net.NetworkAgent;
 import android.net.NetworkAgentConfig;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkProvider;
 import android.net.SocketKeepalive;
 import android.net.Uri;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
+import android.telephony.Annotation.NetworkType;
 import android.telephony.AnomalyReporter;
+import android.telephony.NetworkRegistrationInfo;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.util.ArrayMap;
 import android.util.LocalLog;
 import android.util.SparseArray;
 
@@ -45,8 +49,8 @@ import com.android.telephony.Rlog;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -62,6 +66,8 @@ import java.util.UUID;
 public class DcNetworkAgent extends NetworkAgent {
     private final String mTag;
 
+    private final int mId;
+
     private Phone mPhone;
 
     private int mTransportType;
@@ -74,49 +80,61 @@ public class DcNetworkAgent extends NetworkAgent {
 
     private final LocalLog mNetCapsLocalLog = new LocalLog(50);
 
-    private NetworkInfo mNetworkInfo;
+    // For interface duplicate detection. Key is the net id, value is the interface name in string.
+    private static Map<Integer, String> sInterfaceNames = new ArrayMap<>();
 
-    // For debugging IMS redundant network agent issue.
-    private static List<DcNetworkAgent> sNetworkAgents = new ArrayList<>();
-
-    private static int sRedundantTimes = 0;
-
-    DcNetworkAgent(DataConnection dc, Phone phone, NetworkInfo ni, int score,
-            NetworkAgentConfig config, NetworkProvider networkProvider, int transportType) {
+    DcNetworkAgent(DataConnection dc, Phone phone, int score, NetworkAgentConfig config,
+            NetworkProvider networkProvider, int transportType) {
         super(phone.getContext(), dc.getHandler().getLooper(), "DcNetworkAgent",
                 dc.getNetworkCapabilities(), dc.getLinkProperties(), score, config,
                 networkProvider);
         register();
-        mTag = "DcNetworkAgent" + "-" + getNetwork().netId;
+        mId = getNetwork().netId;
+        mTag = "DcNetworkAgent" + "-" + mId;
         mPhone = phone;
         mNetworkCapabilities = dc.getNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
-        mNetworkInfo = new NetworkInfo(ni);
-        setLegacyExtraInfo(ni.getExtraInfo());
-        // TODO: Remove after b/151487565 is fixed.
-        sNetworkAgents.add(this);
-        checkRedundantIms();
-        logd(mTag + " created for data connection " + dc.getName());
+        int networkType = getNetworkType();
+        setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
+        setLegacyExtraInfo(dc.getApnSetting().getApnName());
+        if (dc.getLinkProperties() != null) {
+            checkDuplicateInterface(mId, dc.getLinkProperties().getInterfaceName());
+            logd("created for data connection " + dc.getName() + ", "
+                    + dc.getLinkProperties().getInterfaceName());
+        } else {
+            loge("The connection does not have a valid link properties.");
+        }
     }
 
-    // This is a temp code to catch the multiple IMS network agents issue.
-    // TODO: Remove after b/151487565 is fixed.
-    private void checkRedundantIms() {
-        if (sNetworkAgents.stream()
-                .filter(n -> n.mNetworkCapabilities.hasCapability(
-                        NetworkCapabilities.NET_CAPABILITY_IMS))
-                .count() > 1) {
-            sRedundantTimes++;
-            if (sRedundantTimes == 5) { // When it occurs 5 times.
-                String message = "Multiple IMS network agents detected.";
-                log(message);
+    private @NetworkType int getNetworkType() {
+        ServiceState ss = mPhone.getServiceState();
+        int networkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+
+        NetworkRegistrationInfo nri = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, mTransportType);
+        if (nri != null) {
+            networkType = nri.getAccessNetworkTechnology();
+        }
+
+        return networkType;
+    }
+
+    private void checkDuplicateInterface(int netId, @Nullable String interfaceName) {
+        for (Map.Entry<Integer, String> entry: sInterfaceNames.entrySet()) {
+            if (Objects.equals(interfaceName, entry.getValue())) {
+                String message = "Duplicate interface " + interfaceName
+                        + " is detected. DcNetworkAgent-" + entry.getKey()
+                        + " already used this interface name.";
+                loge(message);
                 // Using fixed UUID to avoid duplicate bugreport notification
                 AnomalyReporter.reportAnomaly(
-                        UUID.fromString("a5cf4881-75ae-4129-a25d-71bc4293f493"),
+                        UUID.fromString("02f3d3f6-4613-4415-b6cb-8d92c8a938a6"),
                         message);
+                return;
             }
         }
+        sInterfaceNames.put(netId, interfaceName);
     }
 
     /**
@@ -147,7 +165,7 @@ public class DcNetworkAgent extends NetworkAgent {
             loge("releaseOwnership called on no-owner DcNetworkAgent!");
             return;
         } else if (mDataConnection != dc) {
-            log("releaseOwnership: This agent belongs to "
+            loge("releaseOwnership: This agent belongs to "
                     + mDataConnection.getName() + ", ignored the request from " + dc.getName());
             return;
         }
@@ -218,6 +236,18 @@ public class DcNetworkAgent extends NetworkAgent {
     }
 
     /**
+     * Update the legacy sub type (i.e. data network type).
+     *
+     * @param dc The data connection that invokes this method.
+     */
+    public synchronized void updateLegacySubtype(DataConnection dc) {
+        if (!isOwned(dc, "updateLegacySubtype")) return;
+
+        int networkType = getNetworkType();
+        setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
+    }
+
+    /**
      * Set the network capabilities.
      *
      * @param networkCapabilities The network capabilities.
@@ -256,9 +286,11 @@ public class DcNetworkAgent extends NetworkAgent {
      * @param linkProperties The link properties
      * @param dc The data connection that invokes this method.
      */
-    public synchronized void sendLinkProperties(LinkProperties linkProperties,
+    public synchronized void sendLinkProperties(@NonNull LinkProperties linkProperties,
                                                 DataConnection dc) {
         if (!isOwned(dc, "sendLinkProperties")) return;
+
+        sInterfaceNames.put(mId, dc.getLinkProperties().getInterfaceName());
         sendLinkProperties(linkProperties);
     }
 
@@ -274,38 +306,16 @@ public class DcNetworkAgent extends NetworkAgent {
     }
 
     /**
-     * Set the network info.
+     * Unregister the network agent from connectivity service.
      *
-     * @param networkInfo The network info.
      * @param dc The data connection that invokes this method.
      */
-    public synchronized void sendNetworkInfo(NetworkInfo networkInfo, DataConnection dc) {
-        if (!isOwned(dc, "sendNetworkInfo")) return;
-        final NetworkInfo.State oldState = mNetworkInfo.getState();
-        final NetworkInfo.State state = networkInfo.getState();
-        if (mNetworkInfo.getExtraInfo() != networkInfo.getExtraInfo()) {
-            setLegacyExtraInfo(networkInfo.getExtraInfo());
-        }
-        int subType = networkInfo.getSubtype();
-        if (mNetworkInfo.getSubtype() != subType) {
-            setLegacySubtype(subType, TelephonyManager.getNetworkTypeName(subType));
-        }
-        if ((oldState == NetworkInfo.State.SUSPENDED || oldState == NetworkInfo.State.CONNECTED)
-                && state == NetworkInfo.State.DISCONNECTED) {
-            logd("Unregister from connectivity service");
-            sNetworkAgents.remove(this);
-            unregister();
-        }
-        mNetworkInfo = new NetworkInfo(networkInfo);
-    }
+    public synchronized void unregister(DataConnection dc) {
+        if (!isOwned(dc, "unregister")) return;
 
-    /**
-     * Get the latest sent network info.
-     *
-     * @return network info
-     */
-    public synchronized NetworkInfo getNetworkInfo() {
-        return mNetworkInfo;
+        logd("Unregister from connectivity service. " + sInterfaceNames.get(mId) + " removed.");
+        sInterfaceNames.remove(mId);
+        super.unregister();
     }
 
     @Override
@@ -337,11 +347,13 @@ public class DcNetworkAgent extends NetworkAgent {
 
     @Override
     public String toString() {
-        return "DcNetworkAgent:"
+        return "DcNetworkAgent-"
+                + mId
                 + " mDataConnection="
                 + ((mDataConnection != null) ? mDataConnection.getName() : null)
                 + " mTransportType="
                 + AccessNetworkConstants.transportTypeToString(mTransportType)
+                + " " + ((mDataConnection != null) ? mDataConnection.getLinkProperties() : null)
                 + " mNetworkCapabilities=" + mNetworkCapabilities;
     }
 
