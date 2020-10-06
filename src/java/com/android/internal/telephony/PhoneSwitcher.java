@@ -1124,10 +1124,10 @@ public class PhoneSwitcher extends Handler {
             NetworkRequest networkRequest, int phoneId) {
         if (!SubscriptionManager.isValidPhoneId(phoneId)) return false;
 
-        // In any case, if phone state is inactive, don't apply the network request.
-        if (!isPhoneActive(phoneId) || (
-                mSubscriptionController.getSubIdUsingPhoneId(phoneId) == INVALID_SUBSCRIPTION_ID
-                && !isEmergencyNetworkRequest(networkRequest))) {
+        // If phone state is inactive, don't apply the network request
+        // unless it's an emergency network request.
+        if ((!isPhoneActive(phoneId) || mSubscriptionController.getSubIdUsingPhoneId(phoneId)
+                == INVALID_SUBSCRIPTION_ID) && !isEmergencyNetworkRequest(networkRequest)) {
             return false;
         }
 
