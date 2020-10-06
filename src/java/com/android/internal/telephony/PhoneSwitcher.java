@@ -1124,10 +1124,16 @@ public class PhoneSwitcher extends Handler {
             NetworkRequest networkRequest, int phoneId) {
         if (!SubscriptionManager.isValidPhoneId(phoneId)) return false;
 
-        // In any case, if phone state is inactive, don't apply the network request.
-        if (!isPhoneActive(phoneId) || (
-                mSubscriptionController.getSubIdUsingPhoneId(phoneId) == INVALID_SUBSCRIPTION_ID
-                && !isEmergencyNetworkRequest(networkRequest))) {
+        // If slot is disabled, don't apply the network request.
+        if (!isPhoneActive(phoneId)) return false;
+
+        int subId = mSubscriptionController.getSubIdUsingPhoneId(phoneId);
+
+        // Emergency PDN should be enabled on the DDS always.
+        if (isEmergencyNetworkRequest(networkRequest) && subId == getActiveDataSubId()) return true;
+
+        // If SIM is absent, don't apply the network request.
+        if (subId == INVALID_SUBSCRIPTION_ID) {
             return false;
         }
 
