@@ -18,6 +18,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51abca61_b90963f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T21:02:46Z",
+      "side": 1,
+      "message": "I am also seeing some failures in GsmCdmaPhoneTest#testSendUssd*, example:\n\nWanted but not invoked:\nmMockCi.sendUSSD(\"*135#\", \u003cany\u003e);\n-\u003e at com.android.internal.telephony.GsmCdmaPhoneTest.testSendUssdInAirplaneMode(GsmCdmaPhoneTest.java:1354)\nActually, there were zero interactions with this mock.\n...\n\nCan you please run \"atest FrameworksTelephonyTests:GsmCdmaPhoneTest\" and verify they are passing?",
+      "revId": "0640aecaefd1ea1283646d3a8f330b3429928804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2891754_1efe092b",
