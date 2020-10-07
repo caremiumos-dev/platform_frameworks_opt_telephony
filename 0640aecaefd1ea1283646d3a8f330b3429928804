@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49975d5f_6a21c5c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T18:25:44Z",
+      "side": 1,
+      "message": "Just a few small comments, awaiting presubmit",
+      "revId": "0640aecaefd1ea1283646d3a8f330b3429928804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2891754_1efe092b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/GsmCdmaCallTrackerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T18:25:44Z",
+      "side": 1,
+      "message": "Is this required?",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 70
+      },
+      "revId": "0640aecaefd1ea1283646d3a8f330b3429928804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "396e379d_095c4729",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-07T18:25:44Z",
+      "side": 1,
+      "message": "Over 100 chars, can you please split into two lines?",
+      "range": {
+        "startLine": 598,
+        "startChar": 39,
+        "endLine": 598,
+        "endChar": 104
+      },
+      "revId": "0640aecaefd1ea1283646d3a8f330b3429928804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
