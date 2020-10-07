@@ -33,6 +33,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkFactory;
 import android.net.NetworkProvider;
 import android.net.NetworkRequest;
+import android.net.NetworkScore;
 import android.net.ProxyInfo;
 import android.net.RouteInfo;
 import android.net.SocketKeepalive;
@@ -2264,8 +2265,8 @@ public class DataConnection extends StateMachine {
 
                 mDisabledApnTypeBitMask |= getDisallowedApnTypes();
                 updateLinkPropertiesHttpProxy();
-                mNetworkAgent = new DcNetworkAgent(DataConnection.this, mPhone, mScore,
-                        configBuilder.build(), provider, mTransportType);
+                mNetworkAgent = new DcNetworkAgent(DataConnection.this, mPhone,
+                        new NetworkScore(mScore), configBuilder.build(), provider, mTransportType);
                 // All network agents start out in CONNECTING mode, but DcNetworkAgents are
                 // created when the network is already connected. Hence, send the connected
                 // notification immediately.

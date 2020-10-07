@@ -21,6 +21,7 @@ import static android.telephony.SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 import android.net.NetworkCapabilities;
 import android.net.NetworkFactory;
 import android.net.NetworkRequest;
+import android.net.NetworkScore;
 import android.net.TelephonyNetworkSpecifier;
 import android.os.AsyncResult;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     private static final int ACTION_REQUEST = 1;
     private static final int ACTION_RELEASE = 2;
 
-    private static final int TELEPHONY_NETWORK_SCORE = 50;
+    private static final NetworkScore TELEPHONY_NETWORK_SCORE = new NetworkScore(50);
 
     @VisibleForTesting
     public static final int EVENT_ACTIVE_PHONE_SWITCH               = 1;
@@ -91,7 +92,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     public TelephonyNetworkFactory(Looper looper, Phone phone) {
         super(looper, phone.getContext(), "TelephonyNetworkFactory[" + phone.getPhoneId()
-                + "]", null);
+                + "]", new NetworkCapabilities());
         mPhone = phone;
         mTransportManager = mPhone.getTransportManager();
         mInternalHandler = new InternalHandler(looper);
@@ -280,7 +281,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     }
 
     @Override
-    public void needNetworkFor(NetworkRequest networkRequest, int score) {
+    public void needNetworkFor(NetworkRequest networkRequest) {
         Message msg = mInternalHandler.obtainMessage(EVENT_NETWORK_REQUEST);
         msg.obj = networkRequest;
         msg.sendToTarget();

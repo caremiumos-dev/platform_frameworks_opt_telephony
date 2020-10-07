@@ -25,6 +25,7 @@ import android.net.NetworkAgent;
 import android.net.NetworkAgentConfig;
 import android.net.NetworkCapabilities;
 import android.net.NetworkProvider;
+import android.net.NetworkScore;
 import android.net.SocketKeepalive;
 import android.net.Uri;
 import android.os.Message;
@@ -83,7 +84,7 @@ public class DcNetworkAgent extends NetworkAgent {
     // For interface duplicate detection. Key is the net id, value is the interface name in string.
     private static Map<Integer, String> sInterfaceNames = new ArrayMap<>();
 
-    DcNetworkAgent(DataConnection dc, Phone phone, int score, NetworkAgentConfig config,
+    DcNetworkAgent(DataConnection dc, Phone phone, NetworkScore score, NetworkAgentConfig config,
             NetworkProvider networkProvider, int transportType) {
         super(phone.getContext(), dc.getHandler().getLooper(), "DcNetworkAgent",
                 dc.getNetworkCapabilities(), dc.getLinkProperties(), score, config,

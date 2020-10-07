@@ -418,8 +418,7 @@ public class PhoneSwitcher extends Handler {
         NetworkFactory networkFactory = new PhoneSwitcherNetworkRequestListener(looper, context,
                 netCap, this);
         // we want to see all requests
-        networkFactory.setScoreFilter(101);
-        networkFactory.register();
+        networkFactory.registerForAllRequests();
 
         log("PhoneSwitcher started");
     }
@@ -675,8 +674,8 @@ public class PhoneSwitcher extends Handler {
         }
 
         @Override
-        protected void needNetworkFor(NetworkRequest networkRequest, int score) {
-            if (VDBG) log("needNetworkFor " + networkRequest + ", " + score);
+        protected void needNetworkFor(NetworkRequest networkRequest) {
+            if (VDBG) log("needNetworkFor " + networkRequest);
             Message msg = mPhoneSwitcher.obtainMessage(EVENT_REQUEST_NETWORK);
             msg.obj = networkRequest;
             msg.sendToTarget();
