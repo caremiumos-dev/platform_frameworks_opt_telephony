@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4dcc0c2_82ff9ebf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-10-08T16:17:28Z",
+      "side": 1,
+      "message": "This has been communicated with QC many times. Please do not introduce new logic for the retry. Please use the existing carrier config carrier_data_call_permanent_failure_strings to control retry behavior. If 29,33,55 is not one of the permanent failure code, DcTracker will retry setup data connection again.",
+      "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
