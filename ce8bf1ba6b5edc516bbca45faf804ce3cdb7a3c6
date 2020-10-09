@@ -16,6 +16,24 @@
       "message": "This has been communicated with QC many times. Please do not introduce new logic for the retry. Please use the existing carrier config carrier_data_call_permanent_failure_strings to control retry behavior. If 29,33,55 is not one of the permanent failure code, DcTracker will retry setup data connection again.",
       "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c80ad26_f40a1779",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-10-09T07:45:56Z",
+      "side": 1,
+      "message": "Hi Jack,\n\nTelcel operator requirement is to retry default data call for 3 times with time interval of 45 secs for error codes: 29, 33, 55, when pdn throttle is done at modem. We already used this carrier config \"carrier_data_call_permanent_failure_strings\" for telcel operator (carrierid 1913) to remove 29, 33, 55 from permanent failures list.\n\nThis operator requirement is discussed when uploading Vendor files: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1195415\n\nCould you check above gerrit, we addressed review comments there",
+      "parentUuid": "f4dcc0c2_82ff9ebf",
+      "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
