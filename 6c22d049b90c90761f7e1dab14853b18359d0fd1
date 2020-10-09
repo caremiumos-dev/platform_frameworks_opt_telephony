@@ -22,6 +22,30 @@
       },
       "revId": "6c22d049b90c90761f7e1dab14853b18359d0fd1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d84b4b_59d72852",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-10-09T07:46:51Z",
+      "side": 1,
+      "message": "This requirement is for Reliance Jio Opeartor",
+      "parentUuid": "062bea45_771229fd",
+      "range": {
+        "startLine": 2224,
+        "startChar": 0,
+        "endLine": 2236,
+        "endChar": 33
+      },
+      "revId": "6c22d049b90c90761f7e1dab14853b18359d0fd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
