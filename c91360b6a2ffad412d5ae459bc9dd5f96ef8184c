@@ -1,0 +1,82 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005484368",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1454676?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "7d07b2f6_389142b1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-12T23:23:47Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1275,
+        "startChar": 16,
+        "endLine": 1275,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005484368",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1454676?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c18db55d_6f90297b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-12T23:23:47Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1420,
+        "startChar": 16,
+        "endLine": 1420,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005484368",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1454676?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "01906485_69adfb9a",
+        "filename": "src/java/com/android/internal/telephony/SmsUsageMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-12T23:23:47Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 390,
+        "startChar": 20,
+        "endLine": 390,
+        "endChar": 65
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
