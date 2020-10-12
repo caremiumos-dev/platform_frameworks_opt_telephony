@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82c5a1e1_b8420e70",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-12T21:45:41Z",
+      "side": 1,
+      "message": "I think mIsAskEverytimeSupportedForSms may be a slightly better name. And since the name isn\u0027t very obvious, please add a comment that this field indicates if \"Ask everytime\" option for default SMS sub is supported by the device.",
+      "range": {
+        "startLine": 141,
+        "startChar": 26,
+        "endLine": 141,
+        "endChar": 56
+      },
+      "revId": "698254a5edb1d41cff32ea921304d603389cbab0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
