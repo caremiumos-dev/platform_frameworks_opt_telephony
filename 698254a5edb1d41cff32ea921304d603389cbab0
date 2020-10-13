@@ -22,6 +22,30 @@
       },
       "revId": "698254a5edb1d41cff32ea921304d603389cbab0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e9ac06d_0ad69f15",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-13T01:18:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82c5a1e1_b8420e70",
+      "range": {
+        "startLine": 141,
+        "startChar": 26,
+        "endLine": 141,
+        "endChar": 56
+      },
+      "revId": "698254a5edb1d41cff32ea921304d603389cbab0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
