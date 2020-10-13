@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0e707f8_df4b6606",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-13T17:09:03Z",
+      "side": 1,
+      "message": "isPhoneActive is independent of SIM presence AFAICT. As long as DSDS is enabled for example, both phones should be treated as active. And if DSDS is disabled, one of the phones will be treated as inactive even if SIM is present for that phone.",
+      "parentUuid": "7009b5a0_85c09b4a",
+      "range": {
+        "startLine": 1128,
+        "startChar": 13,
+        "endLine": 1128,
+        "endChar": 26
+      },
+      "revId": "e271403abacec99107a26feb3028233dd681149a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e99998be_31fa8647",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 1
