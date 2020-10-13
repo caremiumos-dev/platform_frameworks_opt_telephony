@@ -1,0 +1,76 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c674c0_c9a1bb8c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-10-13T00:07:54Z",
+      "side": 1,
+      "message": "\u003e Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.\n\nPlease fix.",
+      "parentUuid": "7d07b2f6_389142b1",
+      "range": {
+        "startLine": 1275,
+        "startChar": 16,
+        "endLine": 1275,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7b916c_bebda333",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-10-13T00:07:54Z",
+      "side": 1,
+      "message": "\u003e Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.\n\nPlease fix.",
+      "parentUuid": "c18db55d_6f90297b",
+      "range": {
+        "startLine": 1420,
+        "startChar": 16,
+        "endLine": 1420,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4479552c_2cfebfab",
+        "filename": "src/java/com/android/internal/telephony/SmsUsageMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2020-10-13T00:07:54Z",
+      "side": 1,
+      "message": "\u003e Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.\n\nPlease fix.",
+      "parentUuid": "01906485_69adfb9a",
+      "range": {
+        "startLine": 390,
+        "startChar": 20,
+        "endLine": 390,
+        "endChar": 65
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
