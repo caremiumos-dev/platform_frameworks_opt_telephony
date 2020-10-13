@@ -25,6 +25,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f618c5d_037c7da9",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-13T02:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46c674c0_c9a1bb8c",
+      "range": {
+        "startLine": 1275,
+        "startChar": 16,
+        "endLine": 1275,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad7b916c_bebda333",
@@ -49,6 +73,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a24fe410_7cbb0496",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-13T02:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad7b916c_bebda333",
+      "range": {
+        "startLine": 1420,
+        "startChar": 16,
+        "endLine": 1420,
+        "endChar": 61
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4479552c_2cfebfab",
@@ -63,6 +111,30 @@
       "side": 1,
       "message": "\u003e Prefer to use mContext.getSystemService(TelephonyManager.class) instead to avoid the cast.\n\nPlease fix.",
       "parentUuid": "01906485_69adfb9a",
+      "range": {
+        "startLine": 390,
+        "startChar": 20,
+        "endLine": 390,
+        "endChar": 65
+      },
+      "revId": "c91360b6a2ffad412d5ae459bc9dd5f96ef8184c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0e6c2eb_a17834b3",
+        "filename": "src/java/com/android/internal/telephony/SmsUsageMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-13T02:49:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4479552c_2cfebfab",
       "range": {
         "startLine": 390,
         "startChar": 20,
