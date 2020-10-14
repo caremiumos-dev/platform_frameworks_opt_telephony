@@ -2469,6 +2469,22 @@ public class DcTracker extends Handler {
         }
     }
 
+    private boolean shouldFallback(@RequestNetworkType int requestType,
+            @HandoverFailureMode int handoverFailureMode, @DataFailureCause int cause) {
+        if (requestType == REQUEST_TYPE_NORMAL) {
+            return false;
+        }
+
+        if (handoverFailureMode == DataCallResponse.HANDOVER_FAILURE_MODE_DO_FALLBACK) {
+            return true;
+        }
+
+        if (handoverFailureMode == DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY
+                && cause == DataFailCause.HANDOFF_PREFERENCE_CHANGED) {
+            return true;
+        }
+    }
+
     private void sendRequestNetworkCompleteMsg(Message message, boolean success,
                                                @TransportType int transport,
                                                @RequestNetworkType int requestType,
@@ -2481,10 +2497,7 @@ public class DcTracker extends Handler {
         b.putInt(DATA_COMPLETE_MSG_EXTRA_REQUEST_TYPE, requestType);
         b.putInt(DATA_COMPLETE_MSG_EXTRA_TRANSPORT_TYPE, transport);
         b.putBoolean(DATA_COMPLETE_MSG_EXTRA_HANDOVER_FAILURE_FALLBACK,
-                (handoverFailureMode == DataCallResponse.HANDOVER_FAILURE_MODE_DO_FALLBACK
-                        || (handoverFailureMode
-                        == DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY
-                        && cause == DataFailCause.HANDOFF_PREFERENCE_CHANGED)));
+                shouldFallback(requestType, handoverFailureMode, cause));
         message.sendToTarget();
     }
 
@@ -2840,16 +2853,20 @@ public class DcTracker extends Handler {
      * A SETUP (aka bringUp) has completed, possibly with an error. If
      * there is an error this method will call {@link #onDataSetupCompleteError}.
      */
-    protected void onDataSetupComplete(ApnContext apnContext, boolean success, int cause,
-            @RequestNetworkType int requestType, @HandoverFailureMode int handoverFailureMode) {
-        int apnType = ApnSetting.getApnTypesBitmaskFromString(apnContext.getApnType());
-        List<Message> messageList = mRequestNetworkCompletionMsgs.get(apnType);
-        if (messageList != null) {
-            for (Message msg : messageList) {
-                sendRequestNetworkCompleteMsg(msg, success, mTransportType, requestType,
-                        handoverFailureMode, cause);
+    protected void onDataSetupComplete(ApnContext apnContext, boolean success,
+            @DataFailureCause int cause, @RequestNetworkType int requestType,
+            @HandoverFailureMode int handoverFailureMode) {
+        if (handoverFailureMode
+                != DataCallResponse.HANDOVER_FAILURE_MODE_NO_FALLBACK_RETRY_HANDOVER) {
+            int apnType = ApnSetting.getApnTypesBitmaskFromString(apnContext.getApnType());
+            List<Message> messageList = mRequestNetworkCompletionMsgs.get(apnType);
+            if (messageList != null) {
+                for (Message msg : messageList) {
+                    sendRequestNetworkCompleteMsg(msg, success, mTransportType, requestType,
+                            handoverFailureMode, cause);
+                }
+                messageList.clear();
             }
-            messageList.clear();
         }
 
         if (success) {
@@ -2997,7 +3014,12 @@ public class DcTracker extends Handler {
                 log("cause = " + cause + ", mark apn as permanent failed. apn = " + apn);
                 apnContext.markApnPermanentFailed(apn);
             }
-            onDataSetupCompleteError(apnContext, requestType);
+
+            requestType = (handoverFailureMode
+                    == DataCallResponse.HANDOVER_FAILURE_MODE_NO_FALLBACK_RETRY_HANDOVER)
+                    ? REQUEST_TYPE_HANDOVER : REQUEST_TYPE_NORMAL;
+            onDataSetupCompleteError(apnContext, requestType,
+                    shouldFallback(requestType, handoverFailureMode, cause));
         }
     }
 
@@ -3008,13 +3030,16 @@ public class DcTracker extends Handler {
      * be a delay defined by {@link ApnContext#getDelayForNextApn(boolean)}.
      */
     protected void onDataSetupCompleteError(ApnContext apnContext,
-                                          @RequestNetworkType int requestType) {
+            @RequestNetworkType int requestType, boolean fallback) {
         long delay = apnContext.getDelayForNextApn(mFailFast);
 
         // Check if we need to retry or not.
-        // TODO: We should support handover retry in the future.
-        if (delay >= 0) {
-            if (DBG) log("onDataSetupCompleteError: Try next APN. delay = " + delay);
+        if (delay >= 0 && !fallback) {
+            if (DBG) {
+                log("onDataSetupCompleteError: APN type=" + apnContext.getApnType()
+                        + ". Request type=" + requestTypeToString(requestType) + ", Retry in "
+                        + delay + "ms.");
+            }
             apnContext.setState(DctConstants.State.RETRYING);
             // Wait a bit before trying the next APN, so that
             // we're not tying up the RIL command channel
