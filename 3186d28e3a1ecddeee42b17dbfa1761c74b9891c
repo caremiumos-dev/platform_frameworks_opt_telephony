@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": false,
       "key": {
         "uuid": "cc77bb5d_67275741",
         "filename": "/PATCHSET_LEVEL",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "@Tyler, can you re-run pre-submit?",
       "revId": "3186d28e3a1ecddeee42b17dbfa1761c74b9891c",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "26f6e1c2_e54574f7",
         "filename": "/PATCHSET_LEVEL",
@@ -31,8 +32,24 @@
       "side": 1,
       "message": "bump",
       "revId": "3186d28e3a1ecddeee42b17dbfa1761c74b9891c",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c73915_c3348854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1319385
+      },
+      "writtenOn": "2020-10-14T02:09:09Z",
+      "side": 1,
+      "message": "bump",
+      "revId": "3186d28e3a1ecddeee42b17dbfa1761c74b9891c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
