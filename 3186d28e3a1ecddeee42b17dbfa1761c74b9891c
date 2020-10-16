@@ -67,6 +67,23 @@
       "message": "merge?",
       "revId": "3186d28e3a1ecddeee42b17dbfa1761c74b9891c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05801571_04ffd44f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-10-16T16:29:43Z",
+      "side": 1,
+      "message": "We require a QC +1",
+      "revId": "3186d28e3a1ecddeee42b17dbfa1761c74b9891c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
