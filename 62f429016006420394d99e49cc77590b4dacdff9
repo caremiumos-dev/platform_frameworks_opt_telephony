@@ -16,6 +16,24 @@
       "message": "@Amit,\nCould you merge it?",
       "revId": "62f429016006420394d99e49cc77590b4dacdff9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b18c9cb_09ade499",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-16T06:23:11Z",
+      "side": 1,
+      "message": "I submitted it and then realized that it doesn\u0027t have a bug. It will be good to have bugs for tracking all changes; only minor cosmetic changes should be the exception.",
+      "parentUuid": "a0b3f98d_fed7ef30",
+      "revId": "62f429016006420394d99e49cc77590b4dacdff9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
