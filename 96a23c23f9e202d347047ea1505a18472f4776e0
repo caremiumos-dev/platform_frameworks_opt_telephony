@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "203ae466_a40c9d6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1601882
+      },
+      "writtenOn": "2020-10-19T06:11:10Z",
+      "side": 1,
+      "message": "This change is not required, taken care with https://keystone-qcom-review.googlesource.com/c/platform/frameworks/opt/telephony/+/226871",
+      "revId": "96a23c23f9e202d347047ea1505a18472f4776e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
