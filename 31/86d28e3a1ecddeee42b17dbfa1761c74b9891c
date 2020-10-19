@@ -1,0 +1,15 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Verified+1: Yujing Gu <quic_yujingg@quicinc.com>
+Code-Review+1: Bruno Martins <bgcngm@gmail.com>
+Code-Review+1: Wang Han <wanghan1995315@gmail.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Code-Review+1: Luca Stefani <luca.stefani.ge1@gmail.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Qualcomm-Review+1: Ajay Nambi <anambi@quicinc.com>
+Autosubmit+1: Brad Ebinger <breadley@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Mon, 19 Oct 2020 21:56:20 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1440472
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
