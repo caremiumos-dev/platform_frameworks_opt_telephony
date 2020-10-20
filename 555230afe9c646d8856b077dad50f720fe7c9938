@@ -22,6 +22,30 @@
       },
       "revId": "555230afe9c646d8856b077dad50f720fe7c9938",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63941fe4_163ef536",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2020-10-20T23:53:19Z",
+      "side": 1,
+      "message": "From the bug, if the emergency request was made on a slot with no SIM, it seems like the behavior should be to let the request go through. CCing Malcolm who has more context on how this should work to clarify.",
+      "parentUuid": "3a4fea7d_048c5ce6",
+      "range": {
+        "startLine": 1136,
+        "startChar": 12,
+        "endLine": 1136,
+        "endChar": 44
+      },
+      "revId": "555230afe9c646d8856b077dad50f720fe7c9938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
