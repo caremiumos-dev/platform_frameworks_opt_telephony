@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a4fea7d_048c5ce6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-20T23:41:13Z",
+      "side": 1,
+      "message": "I don\u0027t know the full background here, but is it correct to return false if isEmergencyNetworkRequest(networkRequest) \u0026\u0026 subId \u003d\u003d INVALID_SUBSCRIPTION_ID? That\u0027s what will happen with this code as long as getActiveDataSubId() !\u003d INVALID_SUBSCRIPTION_ID.",
+      "range": {
+        "startLine": 1136,
+        "startChar": 12,
+        "endLine": 1136,
+        "endChar": 44
+      },
+      "revId": "555230afe9c646d8856b077dad50f720fe7c9938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
