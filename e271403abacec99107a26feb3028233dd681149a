@@ -96,6 +96,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6798e670_841842de",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2020-10-20T22:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bacfa28c_0831be0e",
+      "range": {
+        "startLine": 1128,
+        "startChar": 13,
+        "endLine": 1128,
+        "endChar": 26
+      },
+      "revId": "e271403abacec99107a26feb3028233dd681149a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e99998be_31fa8647",
@@ -109,6 +133,30 @@
       "writtenOn": "2020-10-07T07:11:35Z",
       "side": 1,
       "message": "With this check, emergency pdn will be setup on the slot which receives the request first irrespective of the DDS",
+      "range": {
+        "startLine": 1131,
+        "startChar": 55,
+        "endLine": 1131,
+        "endChar": 62
+      },
+      "revId": "e271403abacec99107a26feb3028233dd681149a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef5f187_91c735e6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2020-10-20T22:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e99998be_31fa8647",
       "range": {
         "startLine": 1131,
         "startChar": 55,
