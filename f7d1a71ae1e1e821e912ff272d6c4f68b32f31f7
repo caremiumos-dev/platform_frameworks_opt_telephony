@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005632582",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1467337?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "75fbde5d_4652fcaa",
+          "description": "Change to \"src/java/com/android/internal/telephony/Connection.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/Connection.java",
+              "range": {
+                "startLine": 1458,
+                "startChar": 79,
+                "endLine": 1458,
+                "endChar": 86
+              },
+              "replacement": "network"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "128d78c9_e5969bc9",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-20T16:41:45Z",
+      "side": 1,
+      "message": "Common typo found: \"newtork\" -- should it be \"network\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 1458,
+        "startChar": 79,
+        "endLine": 1458,
+        "endChar": 86
+      },
+      "revId": "f7d1a71ae1e1e821e912ff272d6c4f68b32f31f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005632582",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1467337?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "43d91402_fdc0a8b0",
+          "description": "Change to \"src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+              "range": {
+                "startLine": 3619,
+                "startChar": 67,
+                "endLine": 3619,
+                "endChar": 74
+              },
+              "replacement": "network"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "c32133c5_50bcf067",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3619,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-20T16:41:45Z",
+      "side": 1,
+      "message": "Common typo found: \"newtork\" -- should it be \"network\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027NO_TYPO_CHECK\u003d\u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 3619,
+        "startChar": 67,
+        "endLine": 3619,
+        "endChar": 74
+      },
+      "revId": "f7d1a71ae1e1e821e912ff272d6c4f68b32f31f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
