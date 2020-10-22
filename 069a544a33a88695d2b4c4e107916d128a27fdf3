@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005680070",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1371702?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9f697d7b_ef197e1d",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmMmiCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-22T11:47:33Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1775,
+        "startChar": 16,
+        "endLine": 1775,
+        "endChar": 65
+      },
+      "revId": "069a544a33a88695d2b4c4e107916d128a27fdf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005680070",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1371702?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "67c8ad54_9a4887c1",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-22T11:47:33Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1855,
+        "startChar": 16,
+        "endLine": 1855,
+        "endChar": 65
+      },
+      "revId": "069a544a33a88695d2b4c4e107916d128a27fdf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
