@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f34152_0eb9f998",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-10-22T23:40:02Z",
+      "side": 1,
+      "message": "this comment is better to describe the \"updateUserPreferences\" method",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 61
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f655737_2bff6313",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-10-22T23:40:02Z",
+      "side": 1,
+      "message": "this method can be much simplified.\nthe primarySubList already giving you list of active primary subscriptions. You can use the \ndataSelected, voiceSelected, smsSelected above, then do:\n\nif (primarySubList.isEmpty()) return;\nint autoDefaultSub \u003d primarySubList.get(0);\nif (!dataSelected) mSubController.setDefaultDataSubId(autoDefaultSub);\nif (!voiceSelected) mSubController.setDefaultVoideSubId(autoDefaultSub);\nif (!smsSelected) mSubController.setDefaultSmsSubId(autoDefaultSub);\n\nWouldn\u0027t above be all we needed?",
+      "range": {
+        "startLine": 847,
+        "startChar": 16,
+        "endLine": 847,
+        "endChar": 37
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3579d54b_9555ccce",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-10-22T23:40:02Z",
+      "side": 1,
+      "message": "who will listen to this broadcast?",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 67
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
