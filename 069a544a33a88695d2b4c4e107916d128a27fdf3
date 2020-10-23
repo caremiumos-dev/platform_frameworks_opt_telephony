@@ -16,6 +16,24 @@
       "message": "Please specify \"Merged-In\" tag for each change in this topic. If this is a clean cherry-pick, the Merged-In tag should be the same as the Change-Id.",
       "revId": "069a544a33a88695d2b4c4e107916d128a27fdf3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "704c919b_0aeaeec0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1732041
+      },
+      "writtenOn": "2020-10-23T15:17:40Z",
+      "side": 1,
+      "message": "Brad, Sorry for missing \"Merged-In\" tag. I have added them, but Change-Id and Merged-In are different since I update a new patch into this CL which was created in July. However, the code changes are the same as the internal master branch.\nPlease kindly let me know if you have any concerns. Thank you.",
+      "parentUuid": "435d2b5f_a7300082",
+      "revId": "069a544a33a88695d2b4c4e107916d128a27fdf3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
