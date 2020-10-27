@@ -480,6 +480,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setRadioPowerResponse(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
+        mRil.mLastRadioPowerResult = responseInfo.error;
     }
 
     /**
@@ -2657,6 +2658,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setRadioPowerResponse_1_5(RadioResponseInfo info) {
         responseVoid(info);
+        mRil.mLastRadioPowerResult = info.error;
     }
 
     /**
@@ -2664,6 +2666,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setRadioPowerResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo info) {
         responseVoid_1_6(info);
+        mRil.mLastRadioPowerResult = info.error;
     }
 
     /**
