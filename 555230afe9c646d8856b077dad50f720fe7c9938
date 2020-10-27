@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37a07be0_86c753d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-10-27T21:00:09Z",
+      "side": 1,
+      "message": "can we have more description of what and why we are updating here?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "555230afe9c646d8856b077dad50f720fe7c9938",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d1ad498_09729207",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2

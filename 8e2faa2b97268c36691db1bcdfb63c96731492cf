@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2f403de_e9f600d4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-10-27T21:00:09Z",
+      "side": 0,
+      "message": "if my understanding is correct in the bug, we only need to change this to:\n\n        if (!isPhoneActive(phoneId) || \n                mSubscriptionController.getSubIdUsingPhoneId(phoneId) \u003d\u003d INVALID_SUBSCRIPTION_ID)\n                \u0026\u0026 !isEmergencyNetworkRequest(networkRequest)) {\n   return false;\n}\n\nso that as long as isEmergencyNetworkRequest is true, we will keep processing.\n\nTHe question I have is, isPhoneActive \u003d\u003d false only happens with older modems which needs on-demand PS attach command. being false means we disallow modem to attach to PS network. So even if we try to setup e911 on this modem, will it go through? or we actually need to explicitly call allow PS attach? if yes we need more more complicated changes.",
+      "range": {
+        "startLine": 1128,
+        "startChar": 0,
+        "endLine": 1130,
+        "endChar": 65
+      },
+      "revId": "8e2faa2b97268c36691db1bcdfb63c96731492cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
