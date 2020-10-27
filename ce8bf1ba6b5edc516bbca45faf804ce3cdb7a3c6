@@ -34,6 +34,24 @@
       "parentUuid": "f4dcc0c2_82ff9ebf",
       "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93989299_fe70d2e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-10-27T14:11:13Z",
+      "side": 1,
+      "message": "Hi Jack,\n\nCould you review this.\nThese code changes have already been reviewed in vendor files uploaded earlier",
+      "parentUuid": "1c80ad26_f40a1779",
+      "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
