@@ -235,6 +235,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     Object[] mLastNITZTimeInfo;
 
+    int mLastRadioPowerResult = RadioError.NONE;
+
     // When we are testing emergency calls using ril.test.emergencynumber, this will trigger test
     // ECbM when the call is ended.
     @UnsupportedAppUsage
@@ -6594,6 +6596,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        CommandException ex;
+        ex = CommandException.fromRilErrno(mLastRadioPowerResult);
+
         pw.println("RIL: " + this);
         pw.println(" mWakeLock=" + mWakeLock);
         pw.println(" mWakeLockTimeout=" + mWakeLockTimeout);
@@ -6609,6 +6614,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
         }
         pw.println(" mLastNITZTimeInfo=" + Arrays.toString(mLastNITZTimeInfo));
+        pw.println(" mLastRadioPowerResult=" + mLastRadioPowerResult + "(" + ex + ")");
         pw.println(" mTestingEmergencyCall=" + mTestingEmergencyCall.get());
         mClientWakelockTracker.dumpClientRequestTracker(pw);
     }
