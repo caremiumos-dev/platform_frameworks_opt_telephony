@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5cfd85_c3621717",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6600,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-27T23:01:53Z",
+      "side": 1,
+      "message": "What\u0027s the reason to create CommandException instead of directly logging mLastRadioPowerResult?",
+      "range": {
+        "startLine": 6600,
+        "startChar": 13,
+        "endLine": 6600,
+        "endChar": 42
+      },
+      "revId": "9897d004e8f89a5e2b63ab71388d686b71fde703",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
