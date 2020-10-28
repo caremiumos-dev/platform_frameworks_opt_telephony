@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f6612f_f92e29e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-28T05:04:40Z",
+      "side": 1,
+      "message": "Please add unit tests and remove @VisibleForTesting annotations if those methods are not used in tests. Otherwise this LGTM.",
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c80d464f_e72407b5",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5505,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-28T05:04:40Z",
+      "side": 1,
+      "message": "This method is not being used in any test yet, and speaking of that please do add unit tests.",
+      "range": {
+        "startLine": 5505,
+        "startChar": 5,
+        "endLine": 5505,
+        "endChar": 22
+      },
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55063245_4dd43d5b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5627,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-28T05:04:40Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 5627,
+        "startChar": 5,
+        "endLine": 5627,
+        "endChar": 22
+      },
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
