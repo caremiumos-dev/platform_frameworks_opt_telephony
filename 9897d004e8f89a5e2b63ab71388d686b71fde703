@@ -22,6 +22,30 @@
       },
       "revId": "9897d004e8f89a5e2b63ab71388d686b71fde703",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49080f47_b0b665ea",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6600,
+      "author": {
+        "id": 1434543
+      },
+      "writtenOn": "2020-10-28T03:57:22Z",
+      "side": 1,
+      "message": "I was going to print readable text by using CommandException.\n\nThis is removed to dump mLastRadioPowerResult only.",
+      "parentUuid": "4c5cfd85_c3621717",
+      "range": {
+        "startLine": 6600,
+        "startChar": 13,
+        "endLine": 6600,
+        "endChar": 42
+      },
+      "revId": "9897d004e8f89a5e2b63ab71388d686b71fde703",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
