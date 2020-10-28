@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "952848b6_38fff3e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1434543
+      },
+      "writtenOn": "2020-10-28T14:22:06Z",
+      "side": 1,
+      "message": "add unit test by aosp/1478616",
+      "parentUuid": "d2f6612f_f92e29e6",
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c80d464f_e72407b5",
@@ -41,6 +59,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66606b48_e7f80610",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5505,
+      "author": {
+        "id": 1434543
+      },
+      "writtenOn": "2020-10-28T14:22:06Z",
+      "side": 1,
+      "message": "function used in aosp/1478616",
+      "parentUuid": "c80d464f_e72407b5",
+      "range": {
+        "startLine": 5505,
+        "startChar": 5,
+        "endLine": 5505,
+        "endChar": 22
+      },
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55063245_4dd43d5b",
@@ -54,6 +96,30 @@
       "writtenOn": "2020-10-28T05:04:40Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 5627,
+        "startChar": 5,
+        "endLine": 5627,
+        "endChar": 22
+      },
+      "revId": "c79120f3ab0385548c670081bee80ef03acae09d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3afe0fbe_94e3340c",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5627,
+      "author": {
+        "id": 1434543
+      },
+      "writtenOn": "2020-10-28T14:22:06Z",
+      "side": 1,
+      "message": "function used in aosp/1478616",
+      "parentUuid": "55063245_4dd43d5b",
       "range": {
         "startLine": 5627,
         "startChar": 5,
