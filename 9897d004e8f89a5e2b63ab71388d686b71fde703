@@ -46,6 +46,30 @@
       },
       "revId": "9897d004e8f89a5e2b63ab71388d686b71fde703",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa8cebc7_ce6546b4",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6600,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-10-28T05:00:49Z",
+      "side": 1,
+      "message": "It would be great if you can add readable text toString() to CommandException, but otherwise this LGTM.",
+      "parentUuid": "49080f47_b0b665ea",
+      "range": {
+        "startLine": 6600,
+        "startChar": 13,
+        "endLine": 6600,
+        "endChar": 42
+      },
+      "revId": "9897d004e8f89a5e2b63ab71388d686b71fde703",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
