@@ -53,6 +53,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d5c4fc9_8011122a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-10-29T01:55:55Z",
+      "side": 1,
+      "message": "Can you review this patch again?",
+      "parentUuid": "f137ebf8_e5c8b4ad",
+      "revId": "0640aecaefd1ea1283646d3a8f330b3429928804",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2891754_1efe092b",
