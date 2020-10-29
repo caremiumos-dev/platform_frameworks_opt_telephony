@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db451e7a_7e02fa4e",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-10-29T15:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2f34152_0eb9f998",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 61
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f655737_2bff6313",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1149fabf_6c3b373d",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-10-29T15:23:00Z",
+      "side": 1,
+      "message": "I think your are right, will cross-check and make the required code changes.",
+      "parentUuid": "8f655737_2bff6313",
+      "range": {
+        "startLine": 847,
+        "startChar": 16,
+        "endLine": 847,
+        "endChar": 37
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3579d54b_9555ccce",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 4
@@ -60,6 +108,30 @@
       "writtenOn": "2020-10-22T23:40:02Z",
       "side": 1,
       "message": "who will listen to this broadcast?",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 67
+      },
+      "revId": "927b76f96918d9f1d53f291e76ecd09a2fcd1e22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73295e6e_9d768b49",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-10-29T15:23:00Z",
+      "side": 1,
+      "message": "This is added as per customer/OEM request and OEM apps are listening this intent.",
+      "parentUuid": "3579d54b_9555ccce",
       "range": {
         "startLine": 127,
         "startChar": 0,
