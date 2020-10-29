@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "608d0d42_87e1bb7a",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-29T05:57:37Z",
+      "side": 1,
+      "message": "Need dependency CL maybe.",
+      "range": {
+        "startLine": 282,
+        "startChar": 17,
+        "endLine": 282,
+        "endChar": 26
+      },
+      "revId": "60d04e261e92e3a0329d1d0f28ce00a357bd823b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a346526_a74a0c5c",
+        "filename": "src/java/com/android/internal/telephony/metrics/SmsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-10-29T05:57:37Z",
+      "side": 1,
+      "message": "SMS",
+      "range": {
+        "startLine": 58,
+        "startChar": 13,
+        "endLine": 58,
+        "endChar": 23
+      },
+      "revId": "60d04e261e92e3a0329d1d0f28ce00a357bd823b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
