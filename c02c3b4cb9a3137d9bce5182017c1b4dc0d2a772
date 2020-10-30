@@ -16,6 +16,24 @@
       "message": "Please add Bug # and \"Merged-in:\" id.",
       "revId": "c02c3b4cb9a3137d9bce5182017c1b4dc0d2a772",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83a87eb_0fd9cd9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003618
+      },
+      "writtenOn": "2020-10-30T15:19:13Z",
+      "side": 1,
+      "message": "I\u0027ve added the merged-in id. However, there was no original bug id. I made the change in response to a comment in the review of the \"SMS Metrics Changes in Telephony\" proposal.",
+      "parentUuid": "b14bb8f6_7c3f665f",
+      "revId": "c02c3b4cb9a3137d9bce5182017c1b4dc0d2a772",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
