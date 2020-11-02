@@ -499,12 +499,33 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * @param responseInfo Response info struct containing response type, serial no. and error which
+     *                     is defined in 1.6/types.hal
+     * @param sms Response to sms sent as defined by SendSmsResult in types.hal
+     */
+    public void sendSmsResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            SendSmsResult sms) {
+        responseSms_1_6(responseInfo, sms);
+    }
+
+    /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param sms Response to sms sent as defined by SendSmsResult in types.hal
      */
     public void sendSMSExpectMoreResponse(RadioResponseInfo responseInfo,
                                           SendSmsResult sms) {
         responseSms(responseInfo, sms);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error which
+     *                     is defined in 1.6/types.hal
+     * @param sms Response to sms sent as defined by SendSmsResult in 1.6/types.hal
+     */
+    public void sendSMSExpectMoreResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            SendSmsResult sms) {
+        responseSms_1_6(responseInfo, sms);
     }
 
     /**
@@ -1039,11 +1060,33 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      *
+     * @param responseInfo Response info struct containing response type, serial no. and error which
+     *                     is defined in 1.6/types.hal
+     * @param sms Sms result struct as defined by SendSmsResult in types.hal
+     */
+    public void sendCdmaSmsResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            SendSmsResult sms) {
+        responseSms_1_6(responseInfo, sms);
+    }
+
+    /**
+     *
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param sms Sms result struct as defined by SendSmsResult in types.hal
      */
     public void sendCdmaSMSExpectMoreResponse(RadioResponseInfo responseInfo, SendSmsResult sms) {
         responseSms(responseInfo, sms);
+    }
+
+    /**
+     *
+     * @param responseInfo Response info struct containing response type, serial no. and error which
+     *                     is defined in 1.6/types.hal
+     * @param sms Sms result struct as defined by SendSmsResult in types.hal
+     */
+    public void sendCdmaSMSExpectMoreResponse_1_6(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo, SendSmsResult sms) {
+        responseSms_1_6(responseInfo, sms);
     }
 
     /**
