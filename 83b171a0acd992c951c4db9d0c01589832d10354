@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005868550",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1459983?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d18809b0_41948d3a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-11-02T09:09:11Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(CarrierConfigManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 1238,
+        "startChar": 16,
+        "endLine": 1238,
+        "endChar": 65
+      },
+      "revId": "83b171a0acd992c951c4db9d0c01589832d10354",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
