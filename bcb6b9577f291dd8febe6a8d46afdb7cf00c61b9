@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0adbba6b_67278578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010681
+      },
+      "writtenOn": "2020-11-02T10:45:01Z",
+      "side": 1,
+      "message": "CP to qpr-dev-plus-aosp is in now, retrying TH",
+      "revId": "bcb6b9577f291dd8febe6a8d46afdb7cf00c61b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
