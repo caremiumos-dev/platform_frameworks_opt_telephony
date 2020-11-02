@@ -1,0 +1,28 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7e7e153_23a3baa0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1508966
+      },
+      "writtenOn": "2020-11-02T09:12:48Z",
+      "side": 1,
+      "message": "AOSP uses it like this on this GsmCdmaPhone class.",
+      "parentUuid": "d18809b0_41948d3a",
+      "range": {
+        "startLine": 1238,
+        "startChar": 16,
+        "endLine": 1238,
+        "endChar": 65
+      },
+      "revId": "83b171a0acd992c951c4db9d0c01589832d10354",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
