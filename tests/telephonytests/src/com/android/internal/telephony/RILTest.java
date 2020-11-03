@@ -754,6 +754,24 @@ public class RILTest extends TelephonyTest {
 
     @FlakyTest
     @Test
+    public void testSendSMS_1_6() throws Exception {
+        // Use Radio HAL v1.6
+        try {
+            replaceInstance(RIL.class, "mRadioVersion", mRILUnderTest, mRadioVersionV16);
+        } catch (Exception e) {
+        }
+        String smscPdu = "smscPdu";
+        String pdu = "pdu";
+        GsmSmsMessage msg = new GsmSmsMessage();
+        msg.smscPdu = smscPdu;
+        msg.pdu = pdu;
+        mRILUnderTest.sendSMS(smscPdu, pdu, obtainMessage());
+        verify(mRadioProxy).sendSms_1_6(mSerialNumberCaptor.capture(), eq(msg));
+        verifyRILResponse(mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_SEND_SMS);
+    }
+
+    @FlakyTest
+    @Test
     public void testSendSMSExpectMore() throws Exception {
         String smscPdu = "smscPdu";
         String pdu = "pdu";
@@ -762,6 +780,25 @@ public class RILTest extends TelephonyTest {
         msg.pdu = pdu;
         mRILUnderTest.sendSMSExpectMore(smscPdu, pdu, obtainMessage());
         verify(mRadioProxy).sendSMSExpectMore(mSerialNumberCaptor.capture(), eq(msg));
+        verifyRILResponse(
+                mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_SEND_SMS_EXPECT_MORE);
+    }
+
+    @FlakyTest
+    @Test
+    public void testSendSMSExpectMore_1_6() throws Exception {
+        // Use Radio HAL v1.6
+        try {
+            replaceInstance(RIL.class, "mRadioVersion", mRILUnderTest, mRadioVersionV16);
+        } catch (Exception e) {
+        }
+        String smscPdu = "smscPdu";
+        String pdu = "pdu";
+        GsmSmsMessage msg = new GsmSmsMessage();
+        msg.smscPdu = smscPdu;
+        msg.pdu = pdu;
+        mRILUnderTest.sendSMSExpectMore(smscPdu, pdu, obtainMessage());
+        verify(mRadioProxy).sendSMSExpectMore_1_6(mSerialNumberCaptor.capture(), eq(msg));
         verifyRILResponse(
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_SEND_SMS_EXPECT_MORE);
     }
