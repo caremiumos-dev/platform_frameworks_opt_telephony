@@ -27,6 +27,7 @@ import com.android.internal.telephony.gsm.UsimPhoneBookManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * {@hide}
@@ -124,7 +125,9 @@ public class AdnRecordCache extends Handler implements IccConstants {
             case EF_FDN: return EF_EXT2;
             case EF_MSISDN: return EF_EXT1;
             case EF_PBR: return 0; // The EF PBR doesn't have an extension record
-            default: return -1;
+            default:
+                // See TS 131.102 4.4.2.1 '4FXX' are entity files from EF PBR
+                return (0x4FFF & efid) == efid ? 0 : -1;
         }
     }
 
@@ -164,6 +167,18 @@ public class AdnRecordCache extends Handler implements IccConstants {
                     Integer.toHexString(efid).toUpperCase());
             return;
         }
+
+//        if (efid == IccConstants.EF_PBR) {
+//            List<AdnRecord> oldAdnList = mUsimPhoneBookManager.loadEfFilesFromUsim();
+//            AdnRecord record = oldAdnList.get(recordIndex - 1);
+//            // The Entity file for records under DF_PHONEBOOK is defined in the EF_PBR reference
+//            // file and is not a constant so we need to use the efid of the record that is being
+//            // updated.
+//            efid = record.getEfid();
+//
+//            adn.mEfid = record.getEfid();
+//            adn.mExtRecord = record.mExtRecord;
+//        }
 
         mUserWriteResponse.put(efid, response);
 
