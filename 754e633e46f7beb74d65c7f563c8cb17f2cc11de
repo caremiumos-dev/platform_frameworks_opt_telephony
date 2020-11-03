@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ede5577a_af3ab495",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-11-03T13:05:49Z",
+      "side": 1,
+      "message": "Agree for non-Qualcomm modems but in QC case we have logical Modem-ids are like 0/1/2 so this logic works in QC case.\n\nActually in issue scenario(if both Phones map to same logical Modem-Id) there is no way to know the static Radio capabilities from below layers since both Phone objects linked to single logical Modem-Id.\nI dont see any better solution than this with existing HIDL interfaces to query the Modem capabilities.",
+      "parentUuid": "dc49c0c1_244ea381",
+      "range": {
+        "startLine": 284,
+        "startChar": 68,
+        "endLine": 284,
+        "endChar": 77
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dca019b_7cb8d09a",
         "filename": "src/java/com/android/internal/telephony/ProxyController.java",
         "patchSetId": 3
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff47c7b0_0f3f6559",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-11-03T13:05:49Z",
+      "side": 1,
+      "message": "Considering the majority of targets with DSDS configuration we have made this code fix.",
+      "parentUuid": "4dca019b_7cb8d09a",
+      "range": {
+        "startLine": 726,
+        "startChar": 28,
+        "endLine": 727,
+        "endChar": 42
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96bca8aa_a72408cd",
         "filename": "src/java/com/android/internal/telephony/ProxyController.java",
         "patchSetId": 3
@@ -60,6 +108,30 @@
       "writtenOn": "2020-11-03T07:16:03Z",
       "side": 1,
       "message": "You never set this to false.",
+      "range": {
+        "startLine": 730,
+        "startChar": 12,
+        "endLine": 730,
+        "endChar": 47
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd46695_fa93fb70",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-11-03T13:05:49Z",
+      "side": 1,
+      "message": "this has to be re-set once after successful radio-capability transaction, will make that change.",
+      "parentUuid": "96bca8aa_a72408cd",
       "range": {
         "startLine": 730,
         "startChar": 12,
