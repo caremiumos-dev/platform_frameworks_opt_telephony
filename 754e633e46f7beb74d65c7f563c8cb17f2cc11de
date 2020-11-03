@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc49c0c1_244ea381",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-03T07:16:03Z",
+      "side": 1,
+      "message": "How can you assume uuid to be \"0\" or \"1\"? Even if it is true for QC, this is not ok for aosp.",
+      "range": {
+        "startLine": 284,
+        "startChar": 68,
+        "endLine": 284,
+        "endChar": 77
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dca019b_7cb8d09a",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-03T07:16:03Z",
+      "side": 1,
+      "message": "You are assuming phone count to be 2. Most of the platform code does not have such assumptions, and I would rather not add it here.",
+      "range": {
+        "startLine": 726,
+        "startChar": 28,
+        "endLine": 727,
+        "endChar": 42
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96bca8aa_a72408cd",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-03T07:16:03Z",
+      "side": 1,
+      "message": "You never set this to false.",
+      "range": {
+        "startLine": 730,
+        "startChar": 12,
+        "endLine": 730,
+        "endChar": 47
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
