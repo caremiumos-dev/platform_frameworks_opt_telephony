@@ -52,6 +52,24 @@
       "parentUuid": "3e7a8eb1_e1072328",
       "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74db2255_bce881b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-11-03T17:05:44Z",
+      "side": 1,
+      "message": "I see with this change we can add subId at least 10 to 15seconds early compared current code.\nNot all client really need the SIM records loading completion and for such clients and I think we should have this optimization.\n\nExample: display of signal strength on UI can be made faster.\n\nWill check and get back on CARRIER_CONFIG_CHANGED implementation.",
+      "parentUuid": "909370cd_4834b489",
+      "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
