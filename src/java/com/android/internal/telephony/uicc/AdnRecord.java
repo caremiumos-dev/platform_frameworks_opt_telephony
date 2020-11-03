@@ -104,6 +104,15 @@ public class AdnRecord implements Parcelable {
         }
     };
 
+    public static int getMaxAlphaTagBytes(int maxRecordLength) {
+        return maxRecordLength - FOOTER_SIZE_BYTES;
+    }
+
+    public static int getMaxNumberSizeBytes(int maxRecordLength) {
+        // Currently the implementation does not write extension records otherwise this could be
+        // longer
+        return MAX_NUMBER_SIZE_BYTES;
+    }
 
     //***** Constructor
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
