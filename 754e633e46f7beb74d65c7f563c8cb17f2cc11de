@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21ad2363_600e4773",
+        "filename": "src/java/com/android/internal/telephony/ProxyController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-03T17:16:01Z",
+      "side": 1,
+      "message": "We still have time to make a HAL change for this if needed for S, but this CL as it is today is not ok to merge to aosp.\n\nAlso, please see my comment on the bug. I think this should be fixed on the modem side.",
+      "parentUuid": "ede5577a_af3ab495",
+      "range": {
+        "startLine": 284,
+        "startChar": 68,
+        "endLine": 284,
+        "endChar": 77
+      },
+      "revId": "754e633e46f7beb74d65c7f563c8cb17f2cc11de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dca019b_7cb8d09a",
         "filename": "src/java/com/android/internal/telephony/ProxyController.java",
         "patchSetId": 3
