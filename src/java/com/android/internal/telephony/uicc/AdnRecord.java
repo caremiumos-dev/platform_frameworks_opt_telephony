@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
+import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.os.Build;
 import android.os.Parcel;
@@ -104,6 +105,21 @@ public class AdnRecord implements Parcelable {
         }
     };
 
+    public static int getMaxAlphaTagBytes(int maxRecordLength) {
+        return maxRecordLength - FOOTER_SIZE_BYTES;
+    }
+
+    /**
+     * Returns the maximum number of digits (or other dialable characters) that can be stored in
+     * the phone number.
+     *
+     * <p>Additional length is supported via the ext1 entity file but the current implementation
+     * doesn't support writing of that file so it is not included in this calculation.
+     */
+    public static int getMaxPhoneNumberDigits() {
+        // Multiply by 2 because it is packed BCD encoded (2 digits per byte).
+        return (ADN_DIALING_NUMBER_END - ADN_DIALING_NUMBER_START + 1) * 2;
+    }
 
     //***** Constructor
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
