@@ -413,13 +413,42 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         boolean isRetry = tracker.mRetryCount > 0;
         String format = getFormat();
 
-        if (SmsConstants.FORMAT_3GPP.equals(format) && tracker.mRetryCount > 0) {
-            // per TS 23.040 Section 9.2.3.6:  If TP-MTI SMS-SUBMIT (0x01) type
-            //   TP-RD (bit 2) is 1 for retry
-            //   and TP-MR is set to previously failed sms TP-MR
-            if (((0x01 & pdu[0]) == 0x01)) {
-                pdu[0] |= 0x04; // TP-RD
-                pdu[1] = (byte) tracker.mMessageRef; // TP-MR
+        if (isRetry) {
+            if (SmsConstants.FORMAT_3GPP2.equals(format)) {
+                // fixed 3 bytes Message Identifier subparameter data
+                // MESSAGE_TYPE(4) + MESSAGE_ID(16) + HEADER_IND(1) + RESERVED(3)
+                byte[] messageId = new byte[3];
+                int indexOfMessageId = 4 * 3 + 4; // jump to numberPlan of addr
+                indexOfMessageId += 1 + pdu[indexOfMessageId]; // jump to origBytes of addr
+                indexOfMessageId += 2; // jump to odd of subaddr
+                indexOfMessageId += 1 + pdu[indexOfMessageId]; // jump to origBytes of subaddr
+                indexOfMessageId += 3; // jump to length of message identifier subparameter
+                System.arraycopy(pdu, indexOfMessageId, messageId, 0, messageId.length);
+
+                int currMessageId = messageId[0] & 0x0F;
+                currMessageId = (currMessageId << 8) | messageId[1];
+                currMessageId = (currMessageId << 4) | ((messageId[2] >> 4) & 0x0F);
+
+                // replace a message id in pdu for a retry case if it is different from
+                // tracker.mMessageRef since some vendors may generate the message id instead.
+                if (currMessageId != tracker.mMessageRef) {
+                    logd("replace message id in PDU: "
+                            + currMessageId + " ==> " + tracker.mMessageRef);
+                    messageId[0] =
+                            (byte) (messageId[0] & 0xF0 | ((tracker.mMessageRef & 0xF000) >> 12));
+                    messageId[1] = (byte) ((tracker.mMessageRef & 0x0FF0) >> 4);
+                    messageId[2] =
+                            (byte) (messageId[2] & 0x0F | ((tracker.mMessageRef & 0x000F) << 4));
+                    System.arraycopy(messageId, 0, pdu, indexOfMessageId, messageId.length);
+                }
+            } else {
+                // per TS 23.040 Section 9.2.3.6:  If TP-MTI SMS-SUBMIT (0x01) type
+                //   TP-RD (bit 2) is 1 for retry
+                //   and TP-MR is set to previously failed sms TP-MR
+                if (((0x01 & pdu[0]) == 0x01)) {
+                    pdu[0] |= 0x04; // TP-RD
+                    pdu[1] = (byte) tracker.mMessageRef; // TP-MR
+                }
             }
         }
 
