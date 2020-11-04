@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77520cb3_29a5374f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-04T23:31:00Z",
+      "side": 1,
+      "message": "Is this independent from the first part? If yes, can you please upload a separate CL for it and add me and breadley@ as reviewers?\n\nFor the other part let\u0027s first decide what needs to be done on the other CL for RAF.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "a38667104ec6c18584e72584904889c196ede0a6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
