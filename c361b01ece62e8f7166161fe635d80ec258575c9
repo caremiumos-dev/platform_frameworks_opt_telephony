@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aa3d064_0319c5f9",
+        "filename": "src/java/com/android/internal/telephony/Connection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-11-04T19:10:55Z",
+      "side": 1,
+      "message": "This will be sent to Telecom in a later CL?",
+      "range": {
+        "startLine": 128,
+        "startChar": 20,
+        "endLine": 128,
+        "endChar": 39
+      },
+      "revId": "c361b01ece62e8f7166161fe635d80ec258575c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
