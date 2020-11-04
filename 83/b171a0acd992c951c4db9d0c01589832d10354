@@ -1,0 +1,13 @@
+Verified+1: Sungjae Kim <donkey87000@gmail.com>
+Code-Review+1: Sungjae Kim <donkey87000@gmail.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Open-Source-Licensing+1: Sungjae Kim <donkey87000@gmail.com>
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Lint+2: Sungjae Kim <donkey87000@gmail.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Brad Ebinger <breadley@google.com>
+Submitted-at: Wed, 04 Nov 2020 00:32:13 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1459983
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
