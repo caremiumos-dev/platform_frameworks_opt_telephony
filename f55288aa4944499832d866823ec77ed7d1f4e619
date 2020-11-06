@@ -22,6 +22,30 @@
       },
       "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc3b78c0_b0a7e85b",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-11-06T03:48:06Z",
+      "side": 1,
+      "message": "Yes adding mMessageRef is enough But It needs HAL changes as we know.\nThere is an alternative approach for those modems instead of updating HAL APIs.",
+      "parentUuid": "1bee25bf_8c318471",
+      "range": {
+        "startLine": 150,
+        "startChar": 41,
+        "endLine": 150,
+        "endChar": 52
+      },
+      "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
