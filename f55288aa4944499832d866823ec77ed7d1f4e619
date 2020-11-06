@@ -46,6 +46,30 @@
       },
       "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2fbf6de_708787a9",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-06T06:13:28Z",
+      "side": 1,
+      "message": "We have to add isRetry flag for those modems so HAL API needs to be updated anyway. Modems that use the messageRef value included in the pdu from the platform can always ignore the new messageRef parameter that we add to the HAL.",
+      "parentUuid": "bc3b78c0_b0a7e85b",
+      "range": {
+        "startLine": 150,
+        "startChar": 41,
+        "endLine": 150,
+        "endChar": 52
+      },
+      "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
