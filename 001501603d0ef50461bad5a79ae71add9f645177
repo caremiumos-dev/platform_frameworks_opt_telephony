@@ -16,6 +16,24 @@
       "message": "no tests for the CDMA APIs?",
       "revId": "001501603d0ef50461bad5a79ae71add9f645177",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bfe47f_50b06175",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1373692
+      },
+      "writtenOn": "2020-11-06T03:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2da66dfd_08270326",
+      "revId": "001501603d0ef50461bad5a79ae71add9f645177",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
