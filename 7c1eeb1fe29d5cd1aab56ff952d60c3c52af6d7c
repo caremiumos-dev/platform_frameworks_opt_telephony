@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e3d759d_741cc9cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1612418
+      },
+      "writtenOn": "2020-11-06T17:02:38Z",
+      "side": 1,
+      "message": "Hi Takeshi, Qiong, can you resolve the merge conflict and resubmit? Thanks.",
+      "revId": "7c1eeb1fe29d5cd1aab56ff952d60c3c52af6d7c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
