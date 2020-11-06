@@ -118,6 +118,30 @@
       },
       "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4f558e_4e610366",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-06T07:50:17Z",
+      "side": 1,
+      "message": "I don\u0027t know. Let me see if I can find out. It would be ideal if all modem implementations actually use it.\n\nBtw you mentioned that you have both implementations -- in the case where you don\u0027t use the messageRef from pdu, do you know the reason why?",
+      "parentUuid": "ce4118ed_4f4c3def",
+      "range": {
+        "startLine": 150,
+        "startChar": 41,
+        "endLine": 150,
+        "endChar": 52
+      },
+      "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
