@@ -142,6 +142,30 @@
       },
       "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f3a8b89_169a7372",
+        "filename": "src/java/com/android/internal/telephony/cdma/CdmaSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-11-06T08:04:38Z",
+      "side": 1,
+      "message": "We had applied CP based solution similar with this CL.(It is to work same as GSM)\n \u003d\u003e Modem assigns a new message Id if a message id in PDU in \u00270\u0027.(For first sending)\n \u003d\u003e AP replaces with the message Id came from modem for retry. Then modem do not any thing for message id since the message id is not \u00270\u0027.(For retry cases)\n\nBut it requires some platform changes, so currently we are using AP based solution. it is simple more than CP based.",
+      "parentUuid": "fa4f558e_4e610366",
+      "range": {
+        "startLine": 150,
+        "startChar": 41,
+        "endLine": 150,
+        "endChar": 52
+      },
+      "revId": "f55288aa4944499832d866823ec77ed7d1f4e619",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
