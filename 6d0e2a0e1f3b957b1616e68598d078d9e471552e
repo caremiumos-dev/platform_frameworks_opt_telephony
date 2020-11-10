@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3004079d_642c17b4",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "why are we getting these? we already have \"dataSelected\", \"voiceSelected\", \"smsSelected\", which tells you whether you\u0027ll get INVALID subIds here.",
+      "range": {
+        "startLine": 869,
+        "startChar": 0,
+        "endLine": 871,
+        "endChar": 72
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7053b57f_2c09e5c7",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "this is exactly \"!smsSelected\". so it\u0027s redundant.",
+      "range": {
+        "startLine": 881,
+        "startChar": 12,
+        "endLine": 881,
+        "endChar": 74
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "837e7e27_9f181852",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "what if the size of 2, according to the purpose of CL shouldn\u0027t we also set it to the autoDefaultSubId? so why are we checking it?",
+      "range": {
+        "startLine": 882,
+        "startChar": 17,
+        "endLine": 882,
+        "endChar": 43
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7931ad66_5cd94fff",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "\u003d primarySubList.contains(userPrefDataSubId)",
+      "range": {
+        "startLine": 893,
+        "startChar": 32,
+        "endLine": 898,
+        "endChar": 9
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc91783_798b7e88",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "if (!dataSelected) {\n    mSubController.setDefaultDataSubId(userPrefSubValid ? userPrefDataSubId : autoDefaultSubId);\n}",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 0
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27d31ec_62b9d017",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "who will write this?",
+      "range": {
+        "startLine": 919,
+        "startChar": 16,
+        "endLine": 919,
+        "endChar": 42
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "114da09b_b3fd314e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-10T23:21:42Z",
+      "side": 1,
+      "message": "this should be in a separate CL, as it\u0027s off the topic of selecting default sms / voice / data sub.",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 67
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
