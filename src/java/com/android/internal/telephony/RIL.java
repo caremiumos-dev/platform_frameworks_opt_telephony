@@ -4823,6 +4823,50 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
+     * Control the data throttling at modem.
+     *
+     * @param result Message that will be sent back to the requester
+     * @param workSource calling Worksource
+     * @param dataThrottlingAction the DataThrottlingAction that is being requested. Defined in
+     *      android.hardware.radio@1.6.types.
+     * @param completionWindowMillis milliseconds in which full throttling has to be achieved.
+     */
+    @Override
+    public void setDataThrottling(Message result, WorkSource workSource, int dataThrottlingAction,
+            long completionWindowMillis) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+                return;
+            }
+
+            android.hardware.radio.V1_6.IRadio radioProxy16 =
+                    (android.hardware.radio.V1_6.IRadio) radioProxy;
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_DATA_THROTTLING, result,
+                    workSource == null ? mRILDefaultWorkSource : workSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> "
+                        + requestToString(rr.mRequest)
+                        + " dataThrottlingAction = " + dataThrottlingAction
+                        + " completionWindowMillis " + completionWindowMillis);
+            }
+
+            try {
+                radioProxy16.setDataThrottling(rr.mSerial, dataThrottlingAction,
+                        completionWindowMillis);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "setDataThrottling", e);
+            }
+        }
+    }
+
+    /**
      * This will only be called if the LCE service is started in PULL mode, which is
      * only enabled when using Radio HAL versions 1.1 and earlier.
      *
