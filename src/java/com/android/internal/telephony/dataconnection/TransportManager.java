@@ -412,6 +412,9 @@ public class TransportManager extends Handler {
         // AP-assisted mode, for 1.3 or below, it's legacy mode. For IRadio 1.3 or below, no matter
         // what the configuration is, it will always be legacy mode.
         String mode = SystemProperties.get(SYSTEM_PROPERTIES_IWLAN_OPERATION_MODE);
+        if (mode.equals(IWLAN_OPERATION_MODE_AP_ASSISTED)) {
+            return false;
+        }
 
         return mode.equals(IWLAN_OPERATION_MODE_LEGACY)
                 || mPhone.getHalVersion().less(RIL.RADIO_HAL_VERSION_1_4);
