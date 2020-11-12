@@ -31,6 +31,7 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.DownloadManager;
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
@@ -260,6 +261,8 @@ public class ContextFixture implements TestFixture<Context> {
                     return mTelephonyRegistryManager;
                 case Context.SYSTEM_CONFIG_SERVICE:
                     return mSystemConfigManager;
+                case Context.KEYGUARD_SERVICE:
+                    return mKeyguardManager;
                 case Context.BATTERY_STATS_SERVICE:
                 case Context.DISPLAY_SERVICE:
                 case Context.POWER_SERVICE:
@@ -296,6 +299,8 @@ public class ContextFixture implements TestFixture<Context> {
                 return Context.ACTIVITY_SERVICE;
             } else if (serviceClass == TelephonyManager.class) {
                 return Context.TELEPHONY_SERVICE;
+            } else if (serviceClass == KeyguardManager.class) {
+                return Context.KEYGUARD_SERVICE;
             }
             return super.getSystemServiceName(serviceClass);
         }
@@ -637,6 +642,7 @@ public class ContextFixture implements TestFixture<Context> {
         mock(TelephonyRegistryManager.class);
     private final SystemConfigManager mSystemConfigManager = mock(SystemConfigManager.class);
     private final PowerWhitelistManager mPowerWhitelistManager = mock(PowerWhitelistManager.class);
+    private final KeyguardManager mKeyguardManager = mock(KeyguardManager.class);
 
     private final ContentProvider mContentProvider = spy(new FakeContentProvider());
 

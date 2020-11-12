@@ -31,6 +31,7 @@ import static org.mockito.Mockito.eq;
 import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.usage.NetworkStatsManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -98,6 +99,7 @@ import com.android.internal.telephony.test.SimulatedCommandsVerifier;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IsimUiccRecords;
+import com.android.internal.telephony.uicc.PinStorage;
 import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -313,6 +315,8 @@ public abstract class TelephonyTest {
     protected WifiInfo mWifiInfo;
     @Mock
     protected ImsStats mImsStats;
+    @Mock
+    protected PinStorage mPinStorage;
 
     protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
@@ -325,6 +329,7 @@ public abstract class TelephonyTest {
     protected AppOpsManager mAppOpsManager;
     protected CarrierConfigManager mCarrierConfigManager;
     protected UserManager mUserManager;
+    protected KeyguardManager mKeyguardManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -465,6 +470,7 @@ public abstract class TelephonyTest {
         mCarrierConfigManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
 
         //mTelephonyComponentFactory
         doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
@@ -572,6 +578,7 @@ public abstract class TelephonyTest {
             }
         }).when(mUiccController).getIccRecords(anyInt(), anyInt());
         doReturn(new UiccSlot[] {}).when(mUiccController).getUiccSlots();
+        doReturn(mPinStorage).when(mUiccController).getPinStorage();
 
         //UiccCardApplication
         doReturn(mSimRecords).when(mUiccCardApplication3gpp).getIccRecords();
