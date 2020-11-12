@@ -294,6 +294,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private int mCallRingDelay;
     private boolean mIsVoiceCapable = true;
     private final AppSmsManager mAppSmsManager;
+    private boolean mIsEmergencyCallPending;
     private SimActivationTracker mSimActivationTracker;
     // Keep track of whether or not the phone is in Emergency Callback Mode for Phone and
     // subclasses
@@ -2677,6 +2678,20 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyOutgoingEmergencySms(this, emergencyNumber);
     }
 
+    /** Set to true when there is an emergency call pending which will potential trigger a dial.
+     * This must be set to false when the call is dialed. */
+    public void setIsEmergencyCallPending(boolean isPending) {
+        mIsEmergencyCallPending = isPending;
+    }
+
+    /**
+     * @return whether radio has recently been turned on for emergency call but hasn't actually
+     * dialed the call yet.
+     */
+    public boolean isEmergencyCallPending() {
+        return mIsEmergencyCallPending;
+    }
+
     /**
      * @return true if a mobile originating emergency call is active
      */
@@ -4471,6 +4486,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" getMessageWaitingIndicator()=" + getMessageWaitingIndicator());
         pw.println(" getCallForwardingIndicator()=" + getCallForwardingIndicator());
         pw.println(" isInEmergencyCall()=" + isInEmergencyCall());
+        pw.println(" isEmergencyCallPending()=" + isEmergencyCallPending());
         pw.flush();
         pw.println(" isInEcm()=" + isInEcm());
         pw.println(" getPhoneName()=" + getPhoneName());
