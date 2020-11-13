@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9083b071_59c087ae",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-13T22:36:28Z",
+      "side": 1,
+      "message": "Intentionally changed? Do we not want to getStaticPhoneCapability any more?",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 52
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0623214_e23e47f5",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-13T22:36:28Z",
+      "side": 1,
+      "message": "Is this if statement needed?",
+      "range": {
+        "startLine": 316,
+        "startChar": 7,
+        "endLine": 316,
+        "endChar": 50
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a33249_66d04814",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-13T22:36:28Z",
+      "side": 1,
+      "message": "Do you really want to block waiting for capabilities here?  This would block the thread would it not??",
+      "range": {
+        "startLine": 323,
+        "startChar": 24,
+        "endLine": 323,
+        "endChar": 67
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b152d2_27dde7e2",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-13T22:36:28Z",
+      "side": 1,
+      "message": "Double if mRadioInterfaceCapabilities \u003d\u003d null check again?",
+      "range": {
+        "startLine": 334,
+        "startChar": 8,
+        "endLine": 334,
+        "endChar": 50
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "203b6ba7_02dadd84",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2020-11-13T22:36:28Z",
+      "side": 1,
+      "message": "When would it be expected to get null?  It seems like this could be a bad experience as the developer would think everything is supported when it is not.",
+      "range": {
+        "startLine": 350,
+        "startChar": 20,
+        "endLine": 351,
+        "endChar": 54
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
