@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c6c856da_7c1ff10f",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T18:57:51Z",
+      "side": 1,
+      "message": "Moved it back to where it was previously.",
+      "parentUuid": "29b36955_ff51e791",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 52
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0623214_e23e47f5",
         "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
         "patchSetId": 3
