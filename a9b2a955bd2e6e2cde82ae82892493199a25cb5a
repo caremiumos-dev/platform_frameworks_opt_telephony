@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e260dd8_271e8bc1",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T18:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6c856da_7c1ff10f",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 52
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0623214_e23e47f5",
@@ -250,6 +274,30 @@
       "side": 1,
       "message": "That should never happen and so I went with having it in a fully available state.  But I agree with you, if there is an error or if it isn\u0027t ready yet, we should return a fully unavailable object.  Take a look at changes in getRadioInterfaceCapabilities.",
       "parentUuid": "203b6ba7_02dadd84",
+      "range": {
+        "startLine": 350,
+        "startChar": 20,
+        "endLine": 351,
+        "endChar": 54
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c00d2f39_7570ab6d",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T18:59:46Z",
+      "side": 1,
+      "message": "Now, if ar.result is incorrectly null, it will stay null and be handled in #getRadioInterfaceCapabilities.",
+      "parentUuid": "498a156d_24173d37",
       "range": {
         "startLine": 350,
         "startChar": 20,
