@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29b36955_ff51e791",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T00:04:37Z",
+      "side": 1,
+      "message": "Yeah, it was on purpose.  I call getStaticPhoneCapability after the hal device capabilities are loaded.",
+      "parentUuid": "9083b071_59c087ae",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 52
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0623214_e23e47f5",
         "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2020-11-13T22:36:28Z",
       "side": 1,
       "message": "Is this if statement needed?",
+      "range": {
+        "startLine": 316,
+        "startChar": 7,
+        "endLine": 316,
+        "endChar": 50
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168c7320_d44a7a5f",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T00:04:37Z",
+      "side": 1,
+      "message": "It\u0027s called a double check lock (just looked up it had a name.)  The idea is that you don\u0027t need to incur the cost of entering the synchronization block if it\u0027s already set.",
+      "parentUuid": "d0623214_e23e47f5",
       "range": {
         "startLine": 316,
         "startChar": 7,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5254b9fb_f60286db",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T00:04:37Z",
+      "side": 1,
+      "message": "I did mean to do this since #setupRadioInterfaceCapabilities releases the wait().\n\nBut... I should have checked that the loopers aren\u0027t the same so it doesn\u0027t result in a dead lock which it obviously does right now.",
+      "parentUuid": "e3a33249_66d04814",
+      "range": {
+        "startLine": 323,
+        "startChar": 24,
+        "endLine": 323,
+        "endChar": 67
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72b152d2_27dde7e2",
         "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
         "patchSetId": 3
@@ -83,6 +155,30 @@
       "writtenOn": "2020-11-13T22:36:28Z",
       "side": 1,
       "message": "Double if mRadioInterfaceCapabilities \u003d\u003d null check again?",
+      "range": {
+        "startLine": 334,
+        "startChar": 8,
+        "endLine": 334,
+        "endChar": 50
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0200aaa3_2d01fdf2",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T00:04:37Z",
+      "side": 1,
+      "message": "Save as above.  Will resolve this so we can keep comments on the pattern in one thread.",
+      "parentUuid": "72b152d2_27dde7e2",
       "range": {
         "startLine": 334,
         "startChar": 8,
@@ -106,6 +202,30 @@
       "writtenOn": "2020-11-13T22:36:28Z",
       "side": 1,
       "message": "When would it be expected to get null?  It seems like this could be a bad experience as the developer would think everything is supported when it is not.",
+      "range": {
+        "startLine": 350,
+        "startChar": 20,
+        "endLine": 351,
+        "endChar": 54
+      },
+      "revId": "a9b2a955bd2e6e2cde82ae82892493199a25cb5a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "498a156d_24173d37",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-11-16T00:04:37Z",
+      "side": 1,
+      "message": "That should never happen and so I went with having it in a fully available state.  But I agree with you, if there is an error or if it isn\u0027t ready yet, we should return a fully unavailable object.  Take a look at changes in getRadioInterfaceCapabilities.",
+      "parentUuid": "203b6ba7_02dadd84",
       "range": {
         "startLine": 350,
         "startChar": 20,
