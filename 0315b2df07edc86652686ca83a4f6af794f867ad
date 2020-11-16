@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e17f0353_acfadaa4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-16T22:55:33Z",
+      "side": 1,
+      "message": "why do we want to keep extra references here instead of getting them from phone object each time? it creates extra complication and the array needs re-sized upon single sim \u003c-\u003e dual sim config change. so i don\u0027t think this is necessary.",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 47
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47eaec9a_46bb3ddd",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-16T22:55:33Z",
+      "side": 1,
+      "message": "This API should simply reflect if it\u0027s in voice call, not mixed with other logic like this. i don\u0027t follow why dataDuringCallsEnabled is affecting anything here. Please move this logic to a proper place, and explain in both the CL commit message and above this code how dataDuringCallsEnabled case should be handled differently.",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1547,
+        "endChar": 9
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0953984a_c8a393e6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-16T22:55:33Z",
+      "side": 1,
+      "message": "if (call \u003d\u003d null) return false;\n...",
+      "range": {
+        "startLine": 1560,
+        "startChar": 0,
+        "endLine": 1560,
+        "endChar": 27
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde68f32_a71ed0f6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-11-16T22:55:33Z",
+      "side": 1,
+      "message": "this is really hard to read... i think it\u0027s better translated to:\nif (state \u003d\u003d Call.State.IDLE || state \u003d\u003d Call.State.DISCONNECTED) return false;\nelse if (isEmergencyCall \u0026\u0026 state \u003d\u003d Call.State.DIALING) return false;\nelse return true;\n\nbut \"if (isEmergencyCall \u0026\u0026 state \u003d\u003d Call.State.DIALING) return false\" why is this?\nAlso:\n1) from the method name isCallActive and isPhoneInVoiceCall they sound like the same thing.\n2) They should simply reflect if it\u0027s in voice call, not mixed with other emergency specific logic.",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 87
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
