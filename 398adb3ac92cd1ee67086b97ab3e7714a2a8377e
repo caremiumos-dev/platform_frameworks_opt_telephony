@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d2f2549_69b77f41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2020-11-17T18:31:03Z",
+      "side": 1,
+      "message": "this change is just basic implementation for the hal change to avoid build error. telephony change for this feature will push later",
+      "revId": "398adb3ac92cd1ee67086b97ab3e7714a2a8377e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
