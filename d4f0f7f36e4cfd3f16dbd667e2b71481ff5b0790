@@ -16,6 +16,24 @@
       "message": "Please rebase this CL.",
       "revId": "d4f0f7f36e4cfd3f16dbd667e2b71481ff5b0790",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "663e7550_0b47f8d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1236374
+      },
+      "writtenOn": "2020-11-18T02:45:35Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c8c5b7c8_6d8d39a1",
+      "revId": "d4f0f7f36e4cfd3f16dbd667e2b71481ff5b0790",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
