@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "628fd712_a1363b11",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-20T07:39:09Z",
+      "side": 1,
+      "message": "This is a String, not an array. Is this intended? Should forwardedNumber in DriverCall be an array?",
+      "range": {
+        "startLine": 143,
+        "startChar": 63,
+        "endLine": 143,
+        "endChar": 81
+      },
+      "revId": "7f337e12f0c32cd4c70f571d456716ec5028bdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd0639a3_bba5b3f6",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-11-20T07:39:09Z",
+      "side": 1,
+      "message": "Is this the only difference compared to the earlier version? If yes, can you try to combine the 2 methods by creating a helper function that takes in calls.get(i).base.base as a parameter?",
+      "range": {
+        "startLine": 2278,
+        "startChar": 16,
+        "endLine": 2278,
+        "endChar": 66
+      },
+      "revId": "7f337e12f0c32cd4c70f571d456716ec5028bdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
