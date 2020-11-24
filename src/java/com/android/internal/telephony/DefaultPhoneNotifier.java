@@ -232,6 +232,13 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                 barringInfo);
     }
 
+    @Override
+    public void notifyPhysicalChannelConfig(Phone sender,
+                                                   List<PhysicalChannelConfig> configs) {
+        int subId = sender.getSubId();
+        mTelephonyRegistryMgr.notifyPhysicalChannelConfigForSubscriber(subId, configs);
+    }
+
     /**
      * Convert the {@link DataActivityState} enum into the TelephonyManager.DATA_* constants for the
      * public API.
