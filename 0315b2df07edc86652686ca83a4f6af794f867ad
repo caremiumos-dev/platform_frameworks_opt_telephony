@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "837a6522_65c76438",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-11-24T10:53:59Z",
+      "side": 1,
+      "message": "Instead of getting call objects from phone whenever there is a call, its better to store all the call objects during power up. In case of back to back calls, it will add overhead to read call object always from phone. \n\nAs these are dynamic arrays and initialized in constructor based on activemodemcount, there should not be any issue when switching between single and dual sim config change.",
+      "parentUuid": "e17f0353_acfadaa4",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 47
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "47eaec9a_46bb3ddd",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2020-11-16T22:55:33Z",
       "side": 1,
       "message": "This API should simply reflect if it\u0027s in voice call, not mixed with other logic like this. i don\u0027t follow why dataDuringCallsEnabled is affecting anything here. Please move this logic to a proper place, and explain in both the CL commit message and above this code how dataDuringCallsEnabled case should be handled differently.",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1547,
+        "endChar": 9
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9dbf9d5_fc5e9e4a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-11-24T10:53:59Z",
+      "side": 1,
+      "message": "\"Data during calls\" UI option will allow default pdn setup on non DDS sub when mobile data is off. Without this option, default pdn cannot be setup on non DDS sub when there is a call. There will be no use of DDS switch if default pdn cannot be setup during call (no data switch).\nHence added a dependency on the UI option \"Data during calls\" so that DDS switch can be allowed during calls only if this option is set",
+      "parentUuid": "47eaec9a_46bb3ddd",
       "range": {
         "startLine": 1539,
         "startChar": 0,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f69a43f_fdd2eae4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-11-24T10:53:59Z",
+      "side": 1,
+      "message": "Sure, i will update the checks as suggested for call state idle and disconnected.\n\nFor emergency call, dialing state update is received even before EMERGENCY_DIAL request is sent to modem which is causing discrepancy. Submitted following Google bug: https://partnerissuetracker.corp.google.com/u/2/issues/163010040\n\nBrad agreed to share a fix. We can discard emergency call related change here once we get a fix from Brad for above Google bug",
+      "parentUuid": "bde68f32_a71ed0f6",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 87
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9304470_916a5164",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -106,6 +178,30 @@
       "writtenOn": "2020-11-16T22:57:37Z",
       "side": 1,
       "message": "again why is this?",
+      "range": {
+        "startLine": 1658,
+        "startChar": 0,
+        "endLine": 1660,
+        "endChar": 59
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf29301_deb74f43",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-11-24T10:53:59Z",
+      "side": 1,
+      "message": "For MO calls on non DDS sub, sometimes DDS switch request gets failed from Modem side. This piece of code will retry DDS switch in case of failure",
+      "parentUuid": "d9304470_916a5164",
       "range": {
         "startLine": 1658,
         "startChar": 0,
