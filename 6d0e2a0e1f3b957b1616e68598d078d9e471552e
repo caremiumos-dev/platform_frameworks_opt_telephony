@@ -304,6 +304,30 @@
       },
       "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f319f6_f947201b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-11-24T15:05:43Z",
+      "side": 1,
+      "message": "Here is the separate CL to handle this functionality https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1509749",
+      "parentUuid": "646355e7_42f04c8a",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 67
+      },
+      "revId": "6d0e2a0e1f3b957b1616e68598d078d9e471552e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
