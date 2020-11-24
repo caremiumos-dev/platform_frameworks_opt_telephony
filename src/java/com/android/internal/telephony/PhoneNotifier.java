@@ -25,6 +25,7 @@ import android.telephony.CallQuality;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
 import android.telephony.PhoneCapability;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseDataConnectionState;
 import android.telephony.TelephonyDisplayInfo;
 import android.telephony.emergency.EmergencyNumber;
@@ -104,4 +105,7 @@ public interface PhoneNotifier {
 
     /** Notify barring info has changed */
     void notifyBarringInfoChanged(Phone sender, @NonNull BarringInfo barringInfo);
+
+    /** Notify of change to PhysicalChannelConfig. */
+    void notifyPhysicalChannelConfig(Phone sender, List<PhysicalChannelConfig> configs);
 }
