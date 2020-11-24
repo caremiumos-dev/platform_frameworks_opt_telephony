@@ -224,14 +224,6 @@ public class IccSmsInterfaceManager {
     }
 
     /**
-     * Enforce the permission for access messages on ICC
-     */
-    private void enforceAccessMessageOnICC(String message) {
-        mContext.enforceCallingOrSelfPermission(
-                Manifest.permission.ACCESS_MESSAGES_ON_ICC, message);
-    }
-
-    /**
      * Update the specified message on the Icc.
      *
      * @param index record index of message to update
@@ -250,7 +242,6 @@ public class IccSmsInterfaceManager {
                 " status=" + status + " ==> " +
                 "("+ Arrays.toString(pdu) + ")");
         enforceReceiveAndSend("Updating message on Icc");
-        enforceAccessMessageOnICC("Updating message on Icc");
         enforceNotOnHandlerThread("updateMessageOnIccEf");
         if (mAppOps.noteOp(AppOpsManager.OPSTR_WRITE_ICC_SMS, Binder.getCallingUid(),
                 callingPackage) != AppOpsManager.MODE_ALLOWED) {
@@ -342,7 +333,6 @@ public class IccSmsInterfaceManager {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.RECEIVE_SMS,
                 "Reading messages from Icc");
-        enforceAccessMessageOnICC("Reading messages from Icc");
         enforceNotOnHandlerThread("getAllMessagesFromIccEf");
         if (mAppOps.noteOp(AppOpsManager.OPSTR_READ_ICC_SMS, Binder.getCallingUid(),
                 callingPackage) != AppOpsManager.MODE_ALLOWED) {
