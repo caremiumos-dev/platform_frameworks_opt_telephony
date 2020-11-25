@@ -7107,6 +7107,23 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
+    /**
+     * Convert CellInfo defined in 1.6/types.hal to CellInfo type.
+     * @param records List of CellInfo defined in 1.6/types.hal.
+     * @return List of converted CellInfo object.
+     */
+    @VisibleForTesting
+    public static ArrayList<CellInfo> convertHalCellInfoList_1_6(
+            ArrayList<android.hardware.radio.V1_6.CellInfo> records) {
+        ArrayList<CellInfo> response = new ArrayList<>(records.size());
+
+        final long nanotime = SystemClock.elapsedRealtimeNanos();
+        for (android.hardware.radio.V1_6.CellInfo record : records) {
+            response.add(CellInfo.create(record, nanotime));
+        }
+        return response;
+    }
+
     private static LinkAddress createLinkAddressFromString(String addressString) {
         return createLinkAddressFromString(addressString, 0, LinkAddress.LIFETIME_UNKNOWN,
                 LinkAddress.LIFETIME_UNKNOWN);
