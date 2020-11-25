@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd790bc5_b6ec8fdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-11-25T17:45:00Z",
+      "side": 1,
+      "message": "LGTM. Adding Hall Liu as a telephony reviewer with context for time / time zone detection.",
+      "revId": "6c3df43f5b6781f8c27bf437ab4fbe376b81b994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2195eeff_1f6b1eb5",
+        "filename": "src/java/com/android/internal/telephony/NitzData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-11-25T17:45:00Z",
+      "side": 1,
+      "message": "FTR - The only thing to think about here is that I\u0027ll bet LocalDateTime isn\u0027t as lenient about out-of-range values as Calendar. Probably not an issue if we reject rather than roll/wrap calendar fields, and any exceptions that occur will be handled by the NitzData.",
+      "range": {
+        "startLine": 96,
+        "startChar": 31,
+        "endLine": 96,
+        "endChar": 44
+      },
+      "revId": "6c3df43f5b6781f8c27bf437ab4fbe376b81b994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
