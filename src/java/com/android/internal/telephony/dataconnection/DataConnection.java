@@ -1607,7 +1607,7 @@ public class DataConnection extends StateMachine {
             result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED,
                     !ApnSettingUtils.isMetered(mApnSetting, mPhone));
 
-            if (result.deduceRestrictedCapability()) {
+            if (result.containsRestrictedCapability()) {
                 result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
             }
         }
