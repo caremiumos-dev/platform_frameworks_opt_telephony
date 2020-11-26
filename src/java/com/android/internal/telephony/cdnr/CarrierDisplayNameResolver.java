@@ -29,6 +29,7 @@ import static com.android.internal.telephony.cdnr.EfData.EF_SOURCE_VOICE_OPERATO
 
 import android.annotation.NonNull;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
@@ -340,8 +341,17 @@ public class CarrierDisplayNameResolver {
             CarrierDisplayNameData rawCarrierDisplayNameData) {
         PersistableBundle config = getCarrierConfig();
         boolean useRootLocale = config.getBoolean(CarrierConfigManager.KEY_WFC_SPN_USE_ROOT_LOCALE);
-        Resources r = mContext.getResources();
-        if (useRootLocale) r.getConfiguration().setLocale(Locale.ROOT);
+        Configuration displayNameConfig;
+        Context displayNameContext;
+        if (useRootLocale) {
+            // Create a new Configuration and Context for this temporary change
+            displayNameConfig = new Configuration();
+            displayNameConfig.setLocale(Locale.ROOT);
+            displayNameContext = mContext.createConfigurationContext(displayNameConfig);
+        } else {
+            displayNameContext = mContext;
+        }
+        Resources r = displayNameContext.getResources();
         String[] wfcSpnFormats = r.getStringArray(com.android.internal.R.array.wfcSpnFormats);
         WfcCarrierNameFormatter wfcFormatter = new WfcCarrierNameFormatter(config, wfcSpnFormats,
                 getServiceState().getState() == ServiceState.STATE_POWER_OFF);
