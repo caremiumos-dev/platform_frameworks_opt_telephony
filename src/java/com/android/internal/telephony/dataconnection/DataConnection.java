@@ -210,9 +210,9 @@ public class DataConnection extends StateMachine {
         final boolean mIsPreferredApn;
 
         ConnectionParams(ApnContext apnContext, int profileId, int rilRadioTechnology,
-                         Message onCompletedMsg, int connectionGeneration,
-                         @RequestNetworkType int requestType, int subId,
-                         boolean isPreferredApn) {
+                Message onCompletedMsg, int connectionGeneration,
+                @RequestNetworkType int requestType, int subId,
+                boolean isPreferredApn) {
             mApnContext = apnContext;
             mProfileId = profileId;
             mRilRat = rilRadioTechnology;
@@ -248,7 +248,7 @@ public class DataConnection extends StateMachine {
         Message mOnCompletedMsg;
 
         DisconnectParams(ApnContext apnContext, String reason, @ReleaseNetworkType int releaseType,
-                         Message onCompletedMsg) {
+                Message onCompletedMsg) {
             mApnContext = apnContext;
             mReason = reason;
             mReleaseType = releaseType;
@@ -422,9 +422,9 @@ public class DataConnection extends StateMachine {
      * @return DataConnection that was created.
      */
     public static DataConnection makeDataConnection(Phone phone, int id, DcTracker dct,
-                                                    DataServiceManager dataServiceManager,
-                                                    DcTesterFailBringUpAll failBringUpAll,
-                                                    DcController dcc) {
+            DataServiceManager dataServiceManager,
+            DcTesterFailBringUpAll failBringUpAll,
+            DcController dcc) {
         String transportType = (dataServiceManager.getTransportType()
                 == AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
                 ? "C"   // Cellular
@@ -663,8 +663,8 @@ public class DataConnection extends StateMachine {
 
     //***** Constructor (NOTE: uses dcc.getHandler() as its Handler)
     private DataConnection(Phone phone, String tagSuffix, int id,
-                           DcTracker dct, DataServiceManager dataServiceManager,
-                           DcTesterFailBringUpAll failBringUpAll, DcController dcc) {
+            DcTracker dct, DataServiceManager dataServiceManager,
+            DcTesterFailBringUpAll failBringUpAll, DcController dcc) {
         super("DC-" + tagSuffix, dcc);
         mTagSuffix = tagSuffix;
         setLogRecSize(300);
@@ -687,11 +687,11 @@ public class DataConnection extends StateMachine {
         updateLinkBandwidthsFromCarrierConfig(mRilRat);
 
         addState(mDefaultState);
-            addState(mInactiveState, mDefaultState);
-            addState(mActivatingState, mDefaultState);
-            addState(mActiveState, mDefaultState);
-            addState(mDisconnectingState, mDefaultState);
-            addState(mDisconnectingErrorCreatingConnection, mDefaultState);
+        addState(mInactiveState, mDefaultState);
+        addState(mActivatingState, mDefaultState);
+        addState(mActiveState, mDefaultState);
+        addState(mDisconnectingState, mDefaultState);
+        addState(mDisconnectingErrorCreatingConnection, mDefaultState);
         setInitialState(mInactiveState);
     }
 
@@ -830,9 +830,9 @@ public class DataConnection extends StateMachine {
                        be called on the current (which is the targetDc) handler which is why we
                        call sendRunnableMessage. */
                     sendRunnableMessage(EVENT_START_HANDOVER_ON_TARGET,
-                        (inCorrectState) -> requestHandover(inCorrectState, srcDc,
-                            dataServiceCallbackResultCode,
-                            cp, msg, dp, isModemRoaming, allowRoaming));
+                            (inCorrectState) -> requestHandover(inCorrectState, srcDc,
+                                    dataServiceCallbackResultCode,
+                                    cp, msg, dp, isModemRoaming, allowRoaming));
             srcDc.startHandover(onCompleted);
             return DataFailCause.NONE;
         }
@@ -1090,7 +1090,7 @@ public class DataConnection extends StateMachine {
             reason = dp.mReason;
             if (VDBG) {
                 log(String.format("msg=%s msg.obj=%s", msg.toString(),
-                    ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>")));
+                        ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>")));
             }
             AsyncResult.forMessage(msg);
             msg.sendToTarget();
@@ -1172,8 +1172,8 @@ public class DataConnection extends StateMachine {
      * @return Setup result
      */
     private SetupResult onSetupConnectionCompleted(@DataServiceCallback.ResultCode int resultCode,
-                                                   DataCallResponse response,
-                                                   ConnectionParams cp) {
+            DataCallResponse response,
+            ConnectionParams cp) {
         SetupResult result;
 
         log("onSetupConnectionCompleted: resultCode=" + resultCode + ", response=" + response);
@@ -1533,11 +1533,11 @@ public class DataConnection extends StateMachine {
 
         if (mApnSetting != null) {
             final String[] types = ApnSetting.getApnTypesStringFromBitmask(
-                mApnSetting.getApnTypeBitmask() & ~mDisabledApnTypeBitMask).split(",");
+                    mApnSetting.getApnTypeBitmask() & ~mDisabledApnTypeBitMask).split(",");
             for (String type : types) {
                 if (!mRestrictedNetworkOverride && mUnmeteredUseOnly
                         && ApnSettingUtils.isMeteredApnType(
-                                ApnSetting.getApnTypesBitmaskFromString(type), mPhone)) {
+                        ApnSetting.getApnTypesBitmaskFromString(type), mPhone)) {
                     log("Dropped the metered " + type + " for the unmetered data call.");
                     continue;
                 }
@@ -2069,7 +2069,7 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                            ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
             if (mHandoverState == HANDOVER_STATE_BEING_TRANSFERRED) {
                 // This is from source data connection to set itself's state
                 setHandoverState(HANDOVER_STATE_COMPLETED);
@@ -2210,7 +2210,7 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                            ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
             setHandoverState(HANDOVER_STATE_IDLE);
             // restricted evaluation depends on network requests from apnContext. The evaluation
             // should happen once entering connecting state rather than active state because it's
@@ -2359,7 +2359,7 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                            ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
             // If we were retrying there maybe more than one, otherwise they'll only be one.
             notifyAllWithEvent(null, DctConstants.EVENT_DATA_SETUP_COMPLETE,
                     Phone.REASON_CONNECTED);
@@ -2387,10 +2387,8 @@ public class DataConnection extends StateMachine {
                 configBuilder.disableProvisioningNotification();
             }
 
-            final String subscriberId = mPhone.getSubscriberId();
-            if (!TextUtils.isEmpty(subscriberId)) {
-                configBuilder.setSubscriberId(subscriberId);
-            }
+            // set subscription Id, if not valid then SubscriptionManager.INVALID_SUBSCRIPTION_ID
+            configBuilder.setSubscriptionId(mPhone.getSubId());
 
             // set skip464xlat if it is not default otherwise
             if (shouldSkip464Xlat()) {
@@ -2871,7 +2869,7 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                            ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
             notifyDataConnectionState();
         }
         @Override
@@ -2931,7 +2929,7 @@ public class DataConnection extends StateMachine {
                     mPhone.getPhoneId(), mId,
                     mApnSetting != null ? (long) mApnSetting.getApnTypeBitmask() : 0L,
                     mApnSetting != null
-                        ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
+                            ? mApnSetting.canHandleType(ApnSetting.TYPE_DEFAULT) : false);
             notifyDataConnectionState();
         }
         @Override
@@ -2974,7 +2972,7 @@ public class DataConnection extends StateMachine {
         }
     }
     private DcDisconnectionErrorCreatingConnection mDisconnectingErrorCreatingConnection =
-                new DcDisconnectionErrorCreatingConnection();
+            new DcDisconnectionErrorCreatingConnection();
 
     /**
      * Bring up a connection to the apn and return an AsyncResult in onCompletedMsg.
@@ -2994,8 +2992,8 @@ public class DataConnection extends StateMachine {
      * @param isApnPreferred whether or not the apn is preferred.
      */
     public void bringUp(ApnContext apnContext, int profileId, int rilRadioTechnology,
-                        Message onCompletedMsg, int connectionGeneration,
-                        @RequestNetworkType int requestType, int subId, boolean isApnPreferred) {
+            Message onCompletedMsg, int connectionGeneration,
+            @RequestNetworkType int requestType, int subId, boolean isApnPreferred) {
         if (DBG) {
             log("bringUp: apnContext=" + apnContext + " onCompletedMsg=" + onCompletedMsg);
         }
@@ -3041,7 +3039,7 @@ public class DataConnection extends StateMachine {
      *        With AsyncResult.userObj set to the original msg.obj.
      */
     public void tearDownAll(String reason, @ReleaseNetworkType int releaseType,
-                            Message onCompletedMsg) {
+            Message onCompletedMsg) {
         if (DBG) log("tearDownAll: reason=" + reason + ", releaseType=" + releaseType);
         sendMessage(DataConnection.EVENT_DISCONNECT_ALL,
                 new DisconnectParams(null, reason, releaseType, onCompletedMsg));
