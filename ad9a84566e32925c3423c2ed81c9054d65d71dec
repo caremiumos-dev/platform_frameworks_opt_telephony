@@ -16,6 +16,23 @@
       "message": "Yujing, Ajay, please help review the CL. It\u0027s just a CP for android11-gsi.",
       "revId": "ad9a84566e32925c3423c2ed81c9054d65d71dec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba9b56c_2921c44d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1061057
+      },
+      "writtenOn": "2020-11-27T02:09:08Z",
+      "side": 1,
+      "message": "Yujing, Ajay, the CL needs your \"Qualcomm-Review\"+1.",
+      "revId": "ad9a84566e32925c3423c2ed81c9054d65d71dec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
