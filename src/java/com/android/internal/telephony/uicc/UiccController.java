@@ -1287,6 +1287,7 @@ public class UiccController extends Handler {
         pw.println(" mHasActiveBuiltInEuicc=" + mHasActiveBuiltInEuicc);
         pw.println(" mUiccSlots: size=" + mUiccSlots.length);
         pw.println(" mCardStrings=" + mCardStrings);
+        pw.println(" mPhoneIdToSlotId=" + Arrays.toString(mPhoneIdToSlotId));
         pw.println(" mDefaultEuiccCardId=" + mDefaultEuiccCardId);
         for (int i = 0; i < mUiccSlots.length; i++) {
             if (mUiccSlots[i] == null) {
