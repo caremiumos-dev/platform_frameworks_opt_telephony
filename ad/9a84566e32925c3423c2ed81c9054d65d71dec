@@ -1,0 +1,12 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Autosubmit+1: Hung-ying Tyan <tyanh@google.com>
+DrNo-Review+1: Hung-ying Tyan <tyanh@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Brad Ebinger <breadley@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Qualcomm-Review+1: Ajay Nambi <anambi@quicinc.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Mon, 30 Nov 2020 20:07:11 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1504412
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/android11-gsi
