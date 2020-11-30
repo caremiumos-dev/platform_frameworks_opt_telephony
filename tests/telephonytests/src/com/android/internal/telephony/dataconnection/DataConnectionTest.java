@@ -47,7 +47,6 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -254,8 +253,7 @@ public class DataConnectionTest extends TelephonyTest {
 
             DataServiceManager manager = new DataServiceManager(mPhone,
                     AccessNetworkConstants.TRANSPORT_TYPE_WWAN, "");
-            mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h, "");
-            mDcc.start();
+            mDcc = DcController.makeDcc(mPhone, mDcTracker, manager, h.getLooper(), "");
             mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, manager,
                     mDcTesterFailBringUpAll, mDcc);
         }
@@ -387,7 +385,8 @@ public class DataConnectionTest extends TelephonyTest {
         ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
         verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
                 eq(AccessNetworkType.UTRAN), dpCaptor.capture(), eq(false),
-                eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(), any(Message.class));
+                eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                anyInt(), any(Message.class));
 
         assertEquals("spmode.ne.jp", dpCaptor.getValue().getApn());
 
@@ -421,7 +420,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(0)
+                .setRetryIntervalMillis(0)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -439,7 +438,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(1000)
+                .setRetryIntervalMillis(1000)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -457,7 +456,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(9999)
+                .setRetryIntervalMillis(9999)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -479,7 +478,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemNotSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(-1)
+                .setRetryIntervalMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -497,7 +496,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(-5)
+                .setRetryIntervalMillis(-5)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -515,7 +514,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(Integer.MIN_VALUE)
+                .setRetryIntervalMillis(Long.MIN_VALUE)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -537,7 +536,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemSuggestNoRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(Integer.MAX_VALUE)
+                .setRetryIntervalMillis(Long.MAX_VALUE)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -552,12 +551,6 @@ public class DataConnectionTest extends TelephonyTest {
                 .setMtuV6(1440)
                 .build();
         assertEquals(RetryManager.NO_RETRY, getSuggestedRetryDelay(response));
-    }
-
-    private NetworkInfo getNetworkInfo() throws Exception {
-        Field f = DataConnection.class.getDeclaredField("mNetworkInfo");
-        f.setAccessible(true);
-        return (NetworkInfo) f.get(mDc);
     }
 
     private NetworkCapabilities getNetworkCapabilities() throws Exception {
@@ -733,7 +726,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testSetLinkProperties() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(-1)
+                .setRetryIntervalMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -789,7 +782,7 @@ public class DataConnectionTest extends TelephonyTest {
         // 224.224.224.224 is an invalid address.
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(-1)
+                .setRetryIntervalMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -812,7 +805,7 @@ public class DataConnectionTest extends TelephonyTest {
         // Empty dns entry.
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setSuggestedRetryTime(-1)
+                .setRetryIntervalMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)

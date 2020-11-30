@@ -20,6 +20,7 @@ import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -108,6 +109,16 @@ public class DataServiceManager extends Handler {
 
     private CellularDataServiceConnection mServiceConnection;
 
+    /**
+     * Helpful for logging
+     * @return the tag name
+     *
+     * @hide
+     */
+    public String getTag() {
+        return mTag;
+    }
+
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -148,7 +159,9 @@ public class DataServiceManager extends Handler {
                     });
             TelephonyUtils.waitUntilReady(latch, CHANGE_PERMISSION_TIMEOUT_MS);
             mAppOps.setMode(AppOpsManager.OPSTR_MANAGE_IPSEC_TUNNELS,
-                UserHandle.myUserId(), pkgToGrant[0], AppOpsManager.MODE_ALLOWED);
+                    UserHandle.myUserId(), pkgToGrant[0], AppOpsManager.MODE_ALLOWED);
+            mAppOps.setMode(AppOpsManager.OPSTR_FINE_LOCATION,
+                    UserHandle.myUserId(), pkgToGrant[0], AppOpsManager.MODE_ALLOWED);
         } catch (RuntimeException e) {
             loge("Binder to package manager died, permission grant for DataService failed.");
             throw e;
@@ -182,6 +195,8 @@ public class DataServiceManager extends Handler {
             TelephonyUtils.waitUntilReady(latch, CHANGE_PERMISSION_TIMEOUT_MS);
             for (String pkg : dataServices) {
                 mAppOps.setMode(AppOpsManager.OPSTR_MANAGE_IPSEC_TUNNELS, UserHandle.myUserId(),
+                        pkg, AppOpsManager.MODE_ERRORED);
+                mAppOps.setMode(AppOpsManager.OPSTR_FINE_LOCATION, UserHandle.myUserId(),
                         pkg, AppOpsManager.MODE_ERRORED);
             }
         } catch (RuntimeException e) {
@@ -285,6 +300,22 @@ public class DataServiceManager extends Handler {
         public void onDataCallListChanged(List<DataCallResponse> dataCallList) {
             mDataCallListChangedRegistrants.notifyRegistrants(
                     new AsyncResult(null, dataCallList, null));
+        }
+
+        @Override
+        public void onHandoverStarted(@DataServiceCallback.ResultCode int resultCode) {
+            if (DBG) log("onHandoverStarted. resultCode = " + resultCode);
+            removeMessages(EVENT_WATCHDOG_TIMEOUT, CellularDataServiceCallback.this);
+            Message msg = mMessageMap.remove(asBinder());
+            sendCompleteMessage(msg, resultCode);
+        }
+
+        @Override
+        public void onHandoverCancelled(@DataServiceCallback.ResultCode int resultCode) {
+            if (DBG) log("onHandoverCancelled. resultCode = " + resultCode);
+            removeMessages(EVENT_WATCHDOG_TIMEOUT, CellularDataServiceCallback.this);
+            Message msg = mMessageMap.remove(asBinder());
+            sendCompleteMessage(msg, resultCode);
         }
     }
 
@@ -547,7 +578,7 @@ public class DataServiceManager extends Handler {
         return className;
     }
 
-    private void sendCompleteMessage(Message msg, int code) {
+    private void sendCompleteMessage(Message msg, @DataServiceCallback.ResultCode int code) {
         if (msg != null) {
             msg.arg1 = code;
             msg.sendToTarget();
@@ -568,15 +599,18 @@ public class DataServiceManager extends Handler {
      *        {@link DataService#REQUEST_REASON_HANDOVER}.
      * @param linkProperties If {@code reason} is {@link DataService#REQUEST_REASON_HANDOVER}, this
      *        is the link properties of the existing data connection, otherwise null.
+     * @param pduSessionId The pdu session id to be used for this data call.  A value of -1 means
+     *                     no pdu session id was attached to this call.
+     *                     Reference: 3GPP TS 24.007 section 11.2.3.1b
      * @param onCompleteMessage The result message for this request. Null if the client does not
      *        care about the result.
      */
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              Message onCompleteMessage) {
+                              int pduSessionId, Message onCompleteMessage) {
         if (DBG) log("setupDataCall");
         if (!mBound) {
-            loge("Data service not bound.");
+            loge("setupDataCall: Data service not bound.");
             sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
             return;
         }
@@ -589,9 +623,9 @@ public class DataServiceManager extends Handler {
             sendMessageDelayed(obtainMessage(EVENT_WATCHDOG_TIMEOUT, callback),
                     REQUEST_UNRESPONDED_TIMEOUT);
             mIDataService.setupDataCall(mPhone.getPhoneId(), accessNetworkType, dataProfile,
-                    isRoaming, allowRoaming, reason, linkProperties, callback);
+                    isRoaming, allowRoaming, reason, linkProperties, pduSessionId, callback);
         } catch (RemoteException e) {
-            loge("Cannot invoke setupDataCall on data service.");
+            loge("setupDataCall: Cannot invoke setupDataCall on data service.");
             mMessageMap.remove(callback.asBinder());
             sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
         }
@@ -632,6 +666,91 @@ public class DataServiceManager extends Handler {
             mMessageMap.remove(callback.asBinder());
             sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
         }
+    }
+
+    /**
+     * Indicates that a handover has begun.  This is called on the source transport.
+     *
+     * Any resources being transferred cannot be released while a
+     * handover is underway.
+     *
+     * If a handover was unsuccessful, then the framework calls DataServiceManager#cancelHandover.
+     * The target transport retains ownership over any of the resources being transferred.
+     *
+     * If a handover was successful, the framework calls DataServiceManager#deactivateDataCall with
+     * reason HANDOVER. The target transport now owns the transferred resources and is
+     * responsible for releasing them.
+     *
+     * @param cid The identifier of the data call which is provided in DataCallResponse
+     * @param onCompleteMessage The result callback for this request.
+     */
+    public void startHandover(int cid, @NonNull Message onCompleteMessage) {
+        CellularDataServiceCallback callback =
+                setupCallbackHelper("startHandover", onCompleteMessage);
+        if (callback == null) {
+            loge("startHandover: callback == null");
+            sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
+            return;
+        }
+
+        try {
+            sendMessageDelayed(obtainMessage(EVENT_WATCHDOG_TIMEOUT, callback),
+                    REQUEST_UNRESPONDED_TIMEOUT);
+            mIDataService.startHandover(mPhone.getPhoneId(), cid, callback);
+        } catch (RemoteException e) {
+            loge("Cannot invoke startHandover on data service.");
+            mMessageMap.remove(callback.asBinder());
+            sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
+        }
+    }
+
+    /**
+     * Indicates that a handover was cancelled after a call to DataServiceManager#startHandover.
+     * This is called on the source transport.
+     *
+     * Since the handover was unsuccessful, the source transport retains ownership over any of
+     * the resources being transferred and is still responsible for releasing them.
+     *
+     * @param cid The identifier of the data call which is provided in DataCallResponse
+     * @param onCompleteMessage The result callback for this request.
+     */
+    public void cancelHandover(int cid, @NonNull Message onCompleteMessage) {
+        CellularDataServiceCallback callback =
+                setupCallbackHelper("cancelHandover", onCompleteMessage);
+        if (callback == null) {
+            sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
+            return;
+        }
+
+        try {
+            sendMessageDelayed(obtainMessage(EVENT_WATCHDOG_TIMEOUT, callback),
+                    REQUEST_UNRESPONDED_TIMEOUT);
+            mIDataService.cancelHandover(mPhone.getPhoneId(), cid, callback);
+        } catch (RemoteException e) {
+            loge("Cannot invoke cancelHandover on data service.");
+            mMessageMap.remove(callback.asBinder());
+            sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
+        }
+    }
+
+    @Nullable
+    private CellularDataServiceCallback setupCallbackHelper(
+            @NonNull final String operationName, @NonNull final Message onCompleteMessage) {
+        if (DBG) log(operationName);
+        if (!mBound) {
+            sendCompleteMessage(onCompleteMessage, DataServiceCallback.RESULT_ERROR_ILLEGAL_STATE);
+            return null;
+        }
+
+        CellularDataServiceCallback callback =
+                new CellularDataServiceCallback(operationName);
+        if (onCompleteMessage != null) {
+            if (DBG) log(operationName + ": onCompleteMessage set");
+            mMessageMap.put(callback.asBinder(), onCompleteMessage);
+        } else {
+            if (DBG) log(operationName + ": onCompleteMessage not set");
+        }
+        return callback;
     }
 
     /**

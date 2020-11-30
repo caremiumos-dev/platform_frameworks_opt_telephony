@@ -290,6 +290,10 @@ public class ContextFixture implements TestFixture<Context> {
                 return Context.POWER_WHITELIST_MANAGER;
             } else if (serviceClass == SystemConfigManager.class) {
                 return Context.SYSTEM_CONFIG_SERVICE;
+            } else if (serviceClass == ActivityManager.class) {
+                return Context.ACTIVITY_SERVICE;
+            } else if (serviceClass == TelephonyManager.class) {
+                return Context.TELEPHONY_SERVICE;
             }
             return super.getSystemServiceName(serviceClass);
         }
@@ -532,6 +536,11 @@ public class ContextFixture implements TestFixture<Context> {
 
         @Override
         public void enforcePermission(String permission, int pid, int uid, String message) {
+            enforceCallingOrSelfPermission(permission, message);
+        }
+
+        @Override
+        public void enforceCallingPermission(String permission, String message) {
             enforceCallingOrSelfPermission(permission, message);
         }
 

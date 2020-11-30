@@ -78,6 +78,7 @@ import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
 import com.android.internal.telephony.dataconnection.DataEnabledOverride;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
+import com.android.internal.telephony.dataconnection.DataThrottler;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
@@ -294,6 +295,8 @@ public abstract class TelephonyTest {
     protected PersistAtomsStorage mPersistAtomsStorage;
     @Mock
     protected MetricsCollector mMetricsCollector;
+    @Mock
+    protected DataThrottler mDataThrottler;
 
     protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
@@ -317,7 +320,6 @@ public abstract class TelephonyTest {
     protected List<TestableLooper> mTestableLoopers = new ArrayList<>();
     protected TestableLooper mTestableLooper;
 
-    protected HashMap<Integer, ImsManager> mImsManagerInstances = new HashMap<>();
     private HashMap<InstanceKey, Object> mOldInstances = new HashMap<InstanceKey, Object>();
 
     private LinkedList<InstanceKey> mInstanceKeys = new LinkedList<InstanceKey>();
@@ -416,6 +418,7 @@ public abstract class TelephonyTest {
         MockitoAnnotations.initMocks(this);
         TelephonyManager.disableServiceHandleCaching();
         SubscriptionController.disableCaching();
+
 
         mPhones = new Phone[] {mPhone};
         mImsCallProfile = new ImsCallProfile();
@@ -582,7 +585,6 @@ public abstract class TelephonyTest {
         doReturn(ServiceState.RIL_RADIO_TECHNOLOGY_UMTS).when(mServiceState).
                 getRilDataRadioTechnology();
         doReturn(mPhone).when(mCT).getPhone();
-        mImsManagerInstances.put(mPhone.getPhoneId(), mImsManager);
         doReturn(mImsEcbm).when(mImsManager).getEcbmInterface();
         doReturn(mPhone).when(mInboundSmsHandler).getPhone();
         doReturn(mImsCallProfile).when(mImsCall).getCallProfile();
@@ -631,6 +633,8 @@ public abstract class TelephonyTest {
         Settings.Global.putInt(resolver, Settings.Global.DEVICE_PROVISIONED, 1);
         Settings.Global.putInt(resolver,
                 Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED, 1);
+        doReturn(mDataThrottler).when(mDcTracker).getDataThrottler();
+        doReturn(-1L).when(mDataThrottler).getRetryTime(anyInt());
 
         // CellularNetworkValidator
         doReturn(SubscriptionManager.INVALID_PHONE_INDEX)
@@ -647,7 +651,6 @@ public abstract class TelephonyTest {
                 mTelephonyComponentFactory);
         replaceInstance(UiccController.class, "mInstance", null, mUiccController);
         replaceInstance(CdmaSubscriptionSourceManager.class, "sInstance", null, mCdmaSSM);
-        replaceInstance(ImsManager.class, "sImsManagerInstances", null, mImsManagerInstances);
         replaceInstance(SubscriptionController.class, "sInstance", null, mSubscriptionController);
         replaceInstance(ProxyController.class, "sProxyController", null, mProxyController);
         replaceInstance(ActivityManager.class, "IActivityManagerSingleton", null,
