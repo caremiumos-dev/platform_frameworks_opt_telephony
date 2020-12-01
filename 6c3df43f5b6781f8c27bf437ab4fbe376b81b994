@@ -18,6 +18,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d80ba1b_fbe6f503",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1793992
+      },
+      "writtenOn": "2020-12-01T17:09:31Z",
+      "side": 1,
+      "message": "Hi Hall,\nJust a friendly ping.",
+      "revId": "6c3df43f5b6781f8c27bf437ab4fbe376b81b994",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2195eeff_1f6b1eb5",
