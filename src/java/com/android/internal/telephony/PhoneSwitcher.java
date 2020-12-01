@@ -275,6 +275,7 @@ public class PhoneSwitcher extends Handler {
     private static final int EVENT_PROCESS_SIM_STATE_CHANGE       = 119;
     private final int EVENT_ALLOW_DATA_FALSE_RESPONSE             = 120;
     private final int EVENT_ALLOW_DATA_TRUE_RESPONSE              = 121;
+    private final int EVENT_PREFERRED_SUB_VALID                   = 122;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -298,7 +299,7 @@ public class PhoneSwitcher extends Handler {
     private List<Set<CommandException.Error>> mCurrentDdsSwitchFailure;
     private boolean mWaitForDetachResponse = false;
     private List<Integer> mNewActivePhones;
-
+    private boolean[] mDdsRequestSent;
 
     private class DefaultNetworkCallback extends ConnectivityManager.NetworkCallback {
         public int mExpectedSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -377,6 +378,7 @@ public class PhoneSwitcher extends Handler {
         mValidator = CellularNetworkValidator.getInstance();
 
         mCurrentDdsSwitchFailure = new ArrayList<Set<CommandException.Error>>();
+        mDdsRequestSent = new boolean[mActiveModemCount];
         IntentFilter filter = new IntentFilter();
         filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
         mContext.registerReceiver(mSimStateIntentReceiver, filter);
@@ -399,6 +401,7 @@ public class PhoneSwitcher extends Handler {
             }
             Set<CommandException.Error> ddsFailure = new HashSet<CommandException.Error>();
             mCurrentDdsSwitchFailure.add(ddsFailure);
+            mDdsRequestSent[i] = false;
         }
 
         if (mActiveModemCount > 0) {
@@ -467,7 +470,6 @@ public class PhoneSwitcher extends Handler {
                         SubscriptionManager.INVALID_SIM_SLOT_INDEX );
                 log("mSimStateIntentReceiver: slotIndex = " + slotIndex + " state = " + state);
                 obtainMessage(EVENT_PROCESS_SIM_STATE_CHANGE, slotIndex, state).sendToTarget();
-
             }
         }
     };
@@ -729,6 +731,12 @@ public class PhoneSwitcher extends Handler {
                 } else {
                     log("mNewActivePhones is NULL");
                 }
+            }
+            case EVENT_PREFERRED_SUB_VALID: {
+                log("EVENT_PREFERRED_SUB_VALID");
+                // Notify all registrants
+                mActivePhoneRegistrants.notifyRegistrants();
+                notifyPreferredDataSubIdChanged();
                 break;
             }
         }
@@ -912,6 +920,7 @@ public class PhoneSwitcher extends Handler {
 
         // Check to see if there is any active subscription on any phone
         boolean hasAnyActiveSubscription = false;
+        boolean hasSubRefreshedOnThePreferredPhone = false;
 
         // Check if phoneId to subId mapping is changed.
         for (int i = 0; i < mActiveModemCount; i++) {
@@ -924,6 +933,11 @@ public class PhoneSwitcher extends Handler {
                 sb.append("->").append(sub);
                 mPhoneSubscriptions[i] = sub;
                 diffDetected = true;
+                if (SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get())
+                        && mPhoneSubscriptions[i] == mPreferredDataSubId.get()) {
+                    sb.append("sub refreshed");
+                    hasSubRefreshedOnThePreferredPhone = true;
+                }
             }
         }
 
@@ -933,6 +947,8 @@ public class PhoneSwitcher extends Handler {
             if (VDBG) log("Found an active subscription");
         }
 
+        final boolean isOldPreferredDataSubValid =
+                SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get());
         // Check if phoneId for preferred data is changed.
         int oldPreferredDataPhoneId = mPreferredDataPhoneId;
 
@@ -943,10 +959,25 @@ public class PhoneSwitcher extends Handler {
         // this logic in the no-SIM case.
         if (hasAnyActiveSubscription) updatePreferredDataPhoneId();
 
+        final boolean isPreferredDataSubValid =
+                SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get());
+        if (!isOldPreferredDataSubValid && isPreferredDataSubValid) {
+            // To avoid race condition, send a msg in OnEvaluate
+            // This is used to ensure informing active phones again after the preferred
+            // SUB is valid
+            sendEmptyMessage(EVENT_PREFERRED_SUB_VALID);
+        }
+
         if (oldPreferredDataPhoneId != mPreferredDataPhoneId) {
             sb.append(" preferred phoneId ").append(oldPreferredDataPhoneId)
                     .append("->").append(mPreferredDataPhoneId);
+            if (SubscriptionManager.isValidPhoneId(oldPreferredDataPhoneId)) {
+                mDdsRequestSent[oldPreferredDataPhoneId] = false;
+            }
             diffDetected = true;
+        } else if (hasSubRefreshedOnThePreferredPhone) {
+            // Tell connectivity the real active data phone
+            notifyPreferredDataSubIdChanged();
         }
 
         if (diffDetected) {
@@ -1116,8 +1147,15 @@ public class PhoneSwitcher extends Handler {
                     obtainMessage(isPhoneActive(phoneId) ? EVENT_ALLOW_DATA_TRUE_RESPONSE
                     : EVENT_ALLOW_DATA_FALSE_RESPONSE, phoneId, 0));
         } else if (phoneId == mPreferredDataPhoneId) {
-            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId.
-            mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
+            if (!mDdsRequestSent[phoneId]) {
+                // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId
+                log("sendRilCommands: setPreferredDataModem - phoneId: " + phoneId);
+                mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
+                mDdsRequestSent[phoneId] = true;
+            } else {
+                log("sendRilCommands: setPreferredDataModem request already sent on phoneId: " +
+                        phoneId);
+            }
         }
     }
 
@@ -1551,6 +1589,7 @@ public class PhoneSwitcher extends Handler {
     private void onDdsSwitchResponse(AsyncResult ar, int phoneId) {
         if (ar.exception != null) {
             log("onDdsSwitchResponse: DDS switch failed. with exception " + ar.exception);
+            mDdsRequestSent[phoneId] = false;
             if (ar.exception instanceof CommandException) {
                 CommandException.Error error = ((CommandException)
                         (ar.exception)).getCommandError();
@@ -1565,7 +1604,6 @@ public class PhoneSwitcher extends Handler {
                     return;
                 }
             }
-
             log("onDdsSwitchResponse: Scheduling DDS switch retry");
             sendMessageDelayed(Message.obtain(this, EVENT_MODEM_COMMAND_RETRY,
                         phoneId), MODEM_COMMAND_RETRY_PERIOD_MS);
