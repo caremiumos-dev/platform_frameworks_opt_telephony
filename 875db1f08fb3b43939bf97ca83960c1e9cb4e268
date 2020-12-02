@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "699f6fb2_21f3042a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-02T19:14:49Z",
+      "side": 1,
+      "message": "I am seeing the following presubmit failure:\n\nframeworks/opt/telephony/tests/telephonytests/src/com/android/internal/telephony/GsmCdmaPhoneTest.java:527: error: no suitable method found for dialGsm(String,int,\u003cnull\u003e,\u003cnull\u003e)\n            verify(mCT).dialGsm(\"*27216505551212\", CommandsInterface.CLIR_SUPPRESSION, null, null);\n                       ^\n    method GsmCdmaCallTracker.dialGsm(String,DialArgs) is not applicable\n      (actual and formal argument lists differ in length)\n    method GsmCdmaCallTracker.dialGsm(String,UUSInfo,Bundle) is not applicable\n      (actual and formal argument lists differ in length)\n\n\nI see that the dialGsm method was changed, but it looks like the tests are still using the other version.",
+      "revId": "875db1f08fb3b43939bf97ca83960c1e9cb4e268",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
