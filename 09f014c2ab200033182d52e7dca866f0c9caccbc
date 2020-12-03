@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c8d1152_3bd25543",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-03T06:13:51Z",
+      "side": 1,
+      "message": "LGTM. Brad, can you ptal as well at the changes in Connection related classes?",
+      "revId": "09f014c2ab200033182d52e7dca866f0c9caccbc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
