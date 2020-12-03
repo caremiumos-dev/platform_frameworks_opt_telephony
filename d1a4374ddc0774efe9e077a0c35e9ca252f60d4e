@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e389d37_de3a6938",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-03T17:52:59Z",
+      "side": 1,
+      "message": "You should ideally CP individual CLs instead of combining them while CP\u0027ing. You missed the change in RIL#requestToString() from ag/12702993",
+      "revId": "d1a4374ddc0774efe9e077a0c35e9ca252f60d4e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
