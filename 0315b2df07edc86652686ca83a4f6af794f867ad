@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15a67be3_61bc916c",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-03T23:04:55Z",
+      "side": 1,
+      "message": "mActiveModemCount will change upon ss\u003c-\u003edsds switch, so you will end up with array of wrong size and lead to crashes.\nthe \"overhead\" you mentioned are really light-weighted calls. they also simply get array addresses simply from a different classes, yet it\u0027s very error prone. that\u0027s definitely not an optimization worth doing.",
+      "parentUuid": "837a6522_65c76438",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 47
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "47eaec9a_46bb3ddd",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -97,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69d49b08_03d640f8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-03T23:04:55Z",
+      "side": 1,
+      "message": "\"\"Data during calls\" UI option will allow default pdn setup on non DDS sub when mobile data is off. Without this option, default pdn cannot be setup on non DDS sub when there is a call.\"\ni am aware of this, but\n1) this method is called isPhoneInVoiceCall(), So it should only return information about whether there\u0027s a voice call on going, not mixed with other logic to return \"whether to switch DDS\". That should be handled in different places.\n2) that logic is already handled in updatePreferredDataPhoneId():\n} else if (voicePhone !\u003d null \u0026\u0026 voicePhone.getDataEnabledSettings().isDataEnabled(\n                ApnSetting.TYPE_DEFAULT)) {\n            // If a phone is in call and user enabled its mobile data, we\n            // should switch internet connection to it. Because the other modem\n            // will lose data connection anyway.\n            // TODO: validate network first.\n            mPreferredDataPhoneId \u003d mPhoneIdInVoiceCall;\n        }\nwhich means we won\u0027t switch DDS to voice phone unless data is enabled. so why we still need this?",
+      "parentUuid": "b9dbf9d5_fc5e9e4a",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1547,
+        "endChar": 9
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0953984a_c8a393e6",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
@@ -108,6 +156,30 @@
       "writtenOn": "2020-11-16T22:55:33Z",
       "side": 1,
       "message": "if (call \u003d\u003d null) return false;\n...",
+      "range": {
+        "startLine": 1560,
+        "startChar": 0,
+        "endLine": 1560,
+        "endChar": 27
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf69d3b8_fc5605c3",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-03T23:04:55Z",
+      "side": 1,
+      "message": "please fix thsi and get rid of the {\n...// everything\n}",
+      "parentUuid": "0953984a_c8a393e6",
       "range": {
         "startLine": 1560,
         "startChar": 0,
