@@ -441,7 +441,7 @@ public class ImsServiceController {
                         new HashSet<>(mImsFeatures);
                 newFeatures.removeAll(oldImsFeatures);
                 for (ImsFeatureConfiguration.FeatureSlotPair i : newFeatures) {
-                    long caps = modifyCapabiltiesForSlot(mImsFeatures, i.slotId,
+                    long caps = modifyCapabiltiesForSlot(newFeatures, i.slotId,
                             mServiceCapabilities);
                     addImsServiceFeature(i, caps);
                 }
@@ -458,7 +458,7 @@ public class ImsServiceController {
                 unchangedFeatures.removeAll(oldFeatures);
                 unchangedFeatures.removeAll(newFeatures);
                 for (ImsFeatureConfiguration.FeatureSlotPair p : unchangedFeatures) {
-                    long caps = modifyCapabiltiesForSlot(mImsFeatures, p.slotId,
+                    long caps = modifyCapabiltiesForSlot(unchangedFeatures, p.slotId,
                             mServiceCapabilities);
                     mRepo.notifyFeatureCapabilitiesChanged(p.slotId, p.featureType, caps);
                 }
