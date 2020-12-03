@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c779b120_e71337e1",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-03T06:20:49Z",
+      "side": 1,
+      "message": "The comment is not clear. Do you mean merge IMS service only if IMS has some service enabled?",
+      "range": {
+        "startLine": 565,
+        "startChar": 47,
+        "endLine": 566,
+        "endChar": 29
+      },
+      "revId": "0e702e9c394f4e6bf8661a5026476129cdc211ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c061688_0fb63c33",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-03T06:20:49Z",
+      "side": 1,
+      "message": "Brad, any thoughts on this?",
+      "range": {
+        "startLine": 574,
+        "startChar": 12,
+        "endLine": 576,
+        "endChar": 57
+      },
+      "revId": "0e702e9c394f4e6bf8661a5026476129cdc211ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
