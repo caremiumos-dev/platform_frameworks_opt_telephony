@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bb2f138_5fa47199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1612418
+      },
+      "writtenOn": "2020-12-03T06:16:48Z",
+      "side": 1,
+      "message": "Modify unit test CellSignalStrengthNrTest and SignalStrengthTest for Hal 1.6 LteSignalStrength and NrSignalStrength",
+      "revId": "cfb0d600189b3b2aa6cee48bc1b7a3b2d0f153ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
