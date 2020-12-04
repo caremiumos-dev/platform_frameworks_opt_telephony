@@ -592,9 +592,24 @@ public class DataConnection extends StateMachine {
         return mPduSessionId;
     }
 
-    public void updateQosParameters(DataCallResponse response) {
+    public void updateQosParameters(@Nullable DataCallResponse response) {
+        if (mQosSessions == null) {
+            mDefaultQos = null;
+            mQosSessions = null;
+            return;
+        }
         mDefaultQos = response.getDefaultQos();
         mQosSessions = response.getQosSessions();
+    }
+
+    private void syncQosToNetworkAgent() {
+        final DcNetworkAgent networkAgent = mNetworkAgent;
+        final List<QosSession> qosSessions = mQosSessions;
+        if (qosSessions == null) {
+            networkAgent.updateQosSessions(new ArrayList<>());
+            return;
+        }
+        networkAgent.updateQosSessions(qosSessions);
     }
 
     @VisibleForTesting
@@ -2476,6 +2491,9 @@ public class DataConnection extends StateMachine {
                 sendMessage(obtainMessage(EVENT_UPDATE_SUSPENDED_STATE));
             }
 
+            // The qos parameters are set when the call is connected
+            syncQosToNetworkAgent();
+
             if (mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 mPhone.mCi.registerForNattKeepaliveStatus(
                         getHandler(), DataConnection.EVENT_KEEPALIVE_STATUS, null);
@@ -2503,6 +2521,7 @@ public class DataConnection extends StateMachine {
             // which is when IWLAN handover is ongoing. Instead of unregistering, the agent will
             // be transferred to the new data connection on the other transport.
             if (mNetworkAgent != null) {
+                syncQosToNetworkAgent();
                 if (mHandoverState == HANDOVER_STATE_IDLE) {
                     mNetworkAgent.unregister(DataConnection.this);
                 }
@@ -2902,6 +2921,9 @@ public class DataConnection extends StateMachine {
                             + mApnContexts.size();
                     if (DBG) log(str);
                     if (dp.mApnContext != null) dp.mApnContext.requestLog(str);
+
+                    // Clear out existing qos sessions
+                    updateQosParameters(null);
 
                     if (dp.mTag == mTag) {
                         // Transition to inactive but send notifications after
