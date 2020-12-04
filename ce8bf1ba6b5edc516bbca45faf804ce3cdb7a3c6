@@ -52,6 +52,24 @@
       "parentUuid": "1c80ad26_f40a1779",
       "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d166a43b_f70cd3b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-12-04T08:51:14Z",
+      "side": 1,
+      "message": "I approved that change because I don\u0027t care whatever merged into /vendor. Now if you are merging this into DcTracker, it\u0027s a different story.\n\nIf you want to do special retry, you should properly implement the support in RetryManager, not here. We do not want to separate the retry logic in two different places.",
+      "parentUuid": "93989299_fe70d2e6",
+      "revId": "ce8bf1ba6b5edc516bbca45faf804ce3cdb7a3c6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
