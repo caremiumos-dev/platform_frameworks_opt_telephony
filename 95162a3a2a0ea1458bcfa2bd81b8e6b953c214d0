@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adc43f78_2641149c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-04T19:48:18Z",
+      "side": 0,
+      "message": "This shouldn\u0027t be deleted",
+      "range": {
+        "startLine": 1055,
+        "startChar": 22,
+        "endLine": 1055,
+        "endChar": 35
+      },
+      "revId": "95162a3a2a0ea1458bcfa2bd81b8e6b953c214d0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
