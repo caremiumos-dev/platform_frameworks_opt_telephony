@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05ad0fb9_74811ff3",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T01:35:51Z",
+      "side": 1,
+      "message": "can we add a comment here to explain waht we are doing and why?",
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c372ee70_752f2cda",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T01:35:51Z",
+      "side": 1,
+      "message": "nit: move to beginning of method?",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 99
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cbc3cfe_faa93d3c",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T01:35:51Z",
+      "side": 1,
+      "message": "again this exactly voiceSelected",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
