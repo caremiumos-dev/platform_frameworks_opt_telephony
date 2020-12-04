@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdd6917_4959b6ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "is there a bug number?",
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c6775f5_49fa98bf",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "updateHalCommandToUse();\ndo we need this? is there a case that we don\u0027t know the version even after EVENT_RADIO_AVAILABLE?",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 17
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2430033e_fd333d10",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "is this used anywhere? if not please remove",
+      "range": {
+        "startLine": 868,
+        "startChar": 18,
+        "endLine": 868,
+        "endChar": 28
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a8f3ab_a41d4595",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "why do this? this will send DDS switch command to each modem, which is not expected.",
+      "range": {
+        "startLine": 921,
+        "startChar": 20,
+        "endLine": 921,
+        "endChar": 38
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963da06b_f9c28e06",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "first i feel dds switch failure and sim not ready shouldn\u0027t conflict, maybe it\u0027s vendor implementation details. But I would suggest that the failure reason being reflected from modem response, so that framework doesnt need to guess it.\nalso, i would suggest here we add \nint failureReason[] // as bitmask\nso that we know why it failed, then once those conditions change and flags are cleared, e.g. if it failed due to sim not ready and now it\u0027s ready, we try again.",
+      "range": {
+        "startLine": 1497,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 13
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2105fda_309476c2",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 1,
+      "message": "let\u0027s not do this. why do you need an intent?",
+      "range": {
+        "startLine": 1532,
+        "startChar": 0,
+        "endLine": 1541,
+        "endChar": 9
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

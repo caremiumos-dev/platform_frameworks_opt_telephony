@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c129bd_e0a29f91",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-04T00:30:07Z",
+      "side": 0,
+      "message": "why removing?",
+      "range": {
+        "startLine": 904,
+        "startChar": 0,
+        "endLine": 914,
+        "endChar": 56
+      },
+      "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
