@@ -16,6 +16,24 @@
       "message": "nit: leave a line after this same as the internal CL",
       "revId": "304bda66636c8f664060e7e182dd431316ab00fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6656a276_e0f92f3c",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4194,
+      "author": {
+        "id": 1707895
+      },
+      "writtenOn": "2020-12-04T20:11:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51babe14_fbb146f9",
+      "revId": "304bda66636c8f664060e7e182dd431316ab00fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
