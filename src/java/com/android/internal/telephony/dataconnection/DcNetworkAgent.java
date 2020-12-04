@@ -35,6 +35,7 @@ import android.telephony.AnomalyReporter;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.telephony.data.QosSession;
 import android.util.ArrayMap;
 import android.util.LocalLog;
 import android.util.SparseArray;
@@ -49,9 +50,12 @@ import com.android.telephony.Rlog;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * This class represents a network agent which is communication channel between
@@ -68,13 +72,17 @@ public class DcNetworkAgent extends NetworkAgent {
 
     private final int mId;
 
-    private Phone mPhone;
+    private final Phone mPhone;
 
     private int mTransportType;
 
     private NetworkCapabilities mNetworkCapabilities;
 
     public final DcKeepaliveTracker keepaliveTracker = new DcKeepaliveTracker();
+
+    private final QosCallbackTracker mQosCallbackTracker = new QosCallbackTracker(this);
+
+    private final Executor mQosCallbackExecutor = Executors.newSingleThreadExecutor();
 
     private DataConnection mDataConnection;
 
@@ -343,6 +351,10 @@ public class DcNetworkAgent extends NetworkAgent {
 
         mDataConnection.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slot)
                 .sendToTarget();
+    }
+
+    void updateQosSessions(final List<QosSession> qosSessions) {
+        mQosCallbackExecutor.execute(() -> mQosCallbackTracker.updateSessions(qosSessions));
     }
 
     @Override
