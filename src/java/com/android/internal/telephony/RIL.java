@@ -104,6 +104,8 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataCallResponse.HandoverFailureMode;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.Qos;
+import android.telephony.data.QosSession;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1220,6 +1222,39 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
+    public void getSystemSelectionChannels(Message onComplete) {
+        IRadio radioProxy = getRadioProxy(onComplete);
+        if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
+            if (RILJ_LOGV) riljLog("getSystemSelectionChannels: not supported.");
+            if (onComplete != null) {
+                AsyncResult.forMessage(onComplete, null,
+                        CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                onComplete.sendToTarget();
+            }
+            return;
+        }
+
+        RILRequest rr = obtainRequest(RIL_REQUEST_SET_SYSTEM_SELECTION_CHANNELS, onComplete,
+                mRILDefaultWorkSource);
+
+        android.hardware.radio.V1_6.IRadio radioProxy16 =
+                (android.hardware.radio.V1_6.IRadio) radioProxy;
+
+        if (radioProxy16 != null) {
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                        + " getSystemSelectionChannels");
+            }
+
+            try {
+                radioProxy16.getSystemSelectionChannels(rr.mSerial);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "getSystemSelectionChannels", e);
+            }
+        }
+    }
+
+    @Override
     public void getModemStatus(Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (mRadioVersion.less(RADIO_HAL_VERSION_1_3)) {
@@ -1979,7 +2014,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     }
 
                     radioProxy15.setupDataCall_1_5(rr.mSerial, accessNetworkType, dpi, allowRoaming,
-                            reason, addresses15, dnses);
+                             reason, addresses15, dnses);
                 } else if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_4)) {
                     // IRadio V1.4
                     android.hardware.radio.V1_4.IRadio radioProxy14 =
@@ -2911,7 +2946,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
             try {
-                radioProxy.getDataCallList(rr.mSerial);
+                if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                    android.hardware.radio.V1_6.IRadio radioProxy16 =
+                            (android.hardware.radio.V1_6.IRadio) radioProxy;
+                    radioProxy16.getDataCallList_1_6(rr.mSerial);
+                } else {
+                    radioProxy.getDataCallList(rr.mSerial);
+                }
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getDataCallList", e);
             }
@@ -4177,7 +4218,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
 
             try {
-                radioProxy.getCellInfoList(rr.mSerial);
+                if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                    android.hardware.radio.V1_6.IRadio radioProxy16 =
+                            (android.hardware.radio.V1_6.IRadio) radioProxy;
+                    radioProxy16.getCellInfoList_1_6(rr.mSerial);
+
+                } else {
+                    radioProxy.getCellInfoList(rr.mSerial);
+                }
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getCellInfoList", e);
             }
@@ -4818,6 +4866,50 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 radioProxy.stopLceService(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "stopLceService", e);
+            }
+        }
+    }
+
+    /**
+     * Control the data throttling at modem.
+     *
+     * @param result Message that will be sent back to the requester
+     * @param workSource calling Worksource
+     * @param dataThrottlingAction the DataThrottlingAction that is being requested. Defined in
+     *      android.hardware.radio@1.6.types.
+     * @param completionWindowMillis milliseconds in which full throttling has to be achieved.
+     */
+    @Override
+    public void setDataThrottling(Message result, WorkSource workSource, int dataThrottlingAction,
+            long completionWindowMillis) {
+        IRadio radioProxy = getRadioProxy(result);
+        if (radioProxy != null) {
+            if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
+                if (result != null) {
+                    AsyncResult.forMessage(result, null,
+                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                    result.sendToTarget();
+                }
+                return;
+            }
+
+            android.hardware.radio.V1_6.IRadio radioProxy16 =
+                    (android.hardware.radio.V1_6.IRadio) radioProxy;
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_DATA_THROTTLING, result,
+                    workSource == null ? mRILDefaultWorkSource : workSource);
+
+            if (RILJ_LOGD) {
+                riljLog(rr.serialString() + "> "
+                        + requestToString(rr.mRequest)
+                        + " dataThrottlingAction = " + dataThrottlingAction
+                        + " completionWindowMillis " + completionWindowMillis);
+            }
+
+            try {
+                radioProxy16.setDataThrottling(rr.mSerial, dataThrottlingAction,
+                        completionWindowMillis);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "setDataThrottling", e);
             }
         }
     }
@@ -6660,6 +6752,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_START_HANDOVER";
             case RIL_REQUEST_CANCEL_HANDOVER:
                 return "RIL_REQUEST_CANCEL_HANDOVER";
+            case RIL_REQUEST_SET_DATA_THROTTLING:
+                return "RIL_REQUEST_SET_DATA_THROTTLING";
             default: return "<unknown request>";
         }
     }
@@ -7107,6 +7201,23 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
+    /**
+     * Convert CellInfo defined in 1.6/types.hal to CellInfo type.
+     * @param records List of CellInfo defined in 1.6/types.hal.
+     * @return List of converted CellInfo object.
+     */
+    @VisibleForTesting
+    public static ArrayList<CellInfo> convertHalCellInfoList_1_6(
+            ArrayList<android.hardware.radio.V1_6.CellInfo> records) {
+        ArrayList<CellInfo> response = new ArrayList<>(records.size());
+
+        final long nanotime = SystemClock.elapsedRealtimeNanos();
+        for (android.hardware.radio.V1_6.CellInfo record : records) {
+            response.add(CellInfo.create(record, nanotime));
+        }
+        return response;
+    }
+
     private static LinkAddress createLinkAddressFromString(String addressString) {
         return createLinkAddressFromString(addressString, 0, LinkAddress.LIFETIME_UNKNOWN,
                 LinkAddress.LIFETIME_UNKNOWN);
@@ -7140,7 +7251,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
-     * Convert SetupDataCallResult defined in 1.0, 1.4, or 1.5 types.hal into DataCallResponse
+     * Convert SetupDataCallResult defined in 1.0, 1.4, 1.5 or 1.6 types.hal into DataCallResponse
      * @param dcResult setup data call result
      * @return converted DataCallResponse object
      */
@@ -7156,6 +7267,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         String[] dnses = null;
         String[] gateways = null;
         String[] pcscfs = null;
+        Qos defaultQos = null;
 
         @HandoverFailureMode
         int handoverFailureMode = DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY;
@@ -7163,6 +7275,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         int pduSessionId = DataCallResponse.PDU_SESSION_ID_NOT_SET;
 
         List<LinkAddress> laList = new ArrayList<>();
+        List<QosSession> qosSessions = new ArrayList<>();
 
         if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
             final android.hardware.radio.V1_0.SetupDataCallResult result =
@@ -7250,6 +7363,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
             mtuV6 = result.mtuV6;
             handoverFailureMode = result.handoverFailureMode;
             pduSessionId = result.pduSessionId;
+            defaultQos = Qos.create(result.defaultQos);
+            qosSessions = result.qosSessions.stream().map(session ->
+                    QosSession.create(session)).collect(Collectors.toList());
         } else {
             Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
             return null;
@@ -7316,6 +7432,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .setMtuV6(mtuV6)
                 .setHandoverFailureMode(handoverFailureMode)
                 .setPduSessionId(pduSessionId)
+                .setDefaultQos(defaultQos)
+                .setQosSessions(qosSessions)
                 .build();
     }
 

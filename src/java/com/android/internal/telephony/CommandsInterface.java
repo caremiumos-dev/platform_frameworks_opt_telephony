@@ -2502,6 +2502,13 @@ public interface CommandsInterface {
             Message onComplete) {}
 
     /**
+     * Get which bands the modem's background scan is acting on.
+     *
+     * @param onComplete a message to send when complete.
+     */
+    default void getSystemSelectionChannels(Message onComplete) {}
+
+    /**
      * Whether uicc applications are enabled or not.
      *
      * @param onCompleteMessage a Message to return to the requester
@@ -2578,4 +2585,18 @@ public interface CommandsInterface {
      * @param callId Identifier associated with the data call
      */
     default void cancelHandover(Message result, int callId) {};
+
+
+    /**
+     * Control the data throttling at modem.
+     *
+     * @param result Message that will be sent back to the requester
+     * @param workSource calling Worksource
+     * @param dataThrottlingAction the DataThrottlingAction that is being requested.
+     *      Defined in android.hardware.radio@1.6.types.
+     * @param completionWindowMillis milliseconds in which data throttling action has to be
+     *      achieved.
+     */
+    default void setDataThrottling(Message result, WorkSource workSource,
+            int dataThrottlingAction, long completionWindowMillis) {};
 }
