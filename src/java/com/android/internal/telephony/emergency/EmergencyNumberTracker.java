@@ -819,6 +819,7 @@ public class EmergencyNumberTracker extends Handler {
 
     private synchronized void updateEmergencyCountryIso(String countryIso) {
         mCountryIso = countryIso;
+        mCurrentDatabaseVersion = INVALID_DATABASE_VERSION;
     }
 
     /**
