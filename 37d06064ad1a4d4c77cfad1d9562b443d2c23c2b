@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6a4b95_cce68c79",
+        "filename": "src/java/com/android/internal/telephony/cdnr/CarrierDisplayNameResolver.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-12-07T12:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24019217_8ad2c41b",
+      "range": {
+        "startLine": 344,
+        "startChar": 8,
+        "endLine": 344,
+        "endChar": 34
+      },
+      "revId": "37d06064ad1a4d4c77cfad1d9562b443d2c23c2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56d84784_a950cbad",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-12-04T21:02:36Z",
       "side": 1,
       "message": "Configuration should be from mContext.getResources().getConfiguration(), which can save other parameters in the original configuration.",
+      "range": {
+        "startLine": 347,
+        "startChar": 50,
+        "endLine": 347,
+        "endChar": 63
+      },
+      "revId": "37d06064ad1a4d4c77cfad1d9562b443d2c23c2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b8a51ff_7231b662",
+        "filename": "src/java/com/android/internal/telephony/cdnr/CarrierDisplayNameResolver.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2020-12-07T12:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56d84784_a950cbad",
       "range": {
         "startLine": 347,
         "startChar": 50,
