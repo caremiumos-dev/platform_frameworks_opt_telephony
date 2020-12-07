@@ -2774,6 +2774,16 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private ImsCall.Listener mImsCallListener = new ImsCall.Listener() {
         @Override
+        public void onCallInitiating(ImsCall imsCall) {
+            if (DBG) log("onCallInitiating");
+
+            mPendingMO = findConnection(imsCall);
+            processCallStateChange(imsCall, ImsPhoneCall.State.DIALING,
+                    DisconnectCause.NOT_DISCONNECTED);
+            mMetrics.writeOnImsCallInitiating(mPhone.getPhoneId(), imsCall.getCallSession());
+        }
+
+        @Override
         public void onCallProgressing(ImsCall imsCall) {
             if (DBG) log("onCallProgressing");
 
