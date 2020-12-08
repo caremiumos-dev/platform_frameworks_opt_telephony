@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7969a3_a8445aaa",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-08T17:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05ad0fb9_74811ff3",
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c372ee70_752f2cda",
@@ -41,6 +59,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ab54ca6_d9af5a97",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-08T17:20:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c372ee70_752f2cda",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 99
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cbc3cfe_faa93d3c",
@@ -54,6 +96,30 @@
       "writtenOn": "2020-12-04T01:35:51Z",
       "side": 1,
       "message": "again this exactly voiceSelected",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a681a5cc_a6a149e3",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-08T17:20:46Z",
+      "side": 1,
+      "message": "- voiceSelected holds TRUE when valid subId is present in preferred voice DB.\n- voiceSelected holds FALSE in two cases, 1) when user selected \"Always ask\" from UI,  2) When previously selected voice preferred subId becomes invalid.\n\nAbove in case #1, we do not want to disturb preferred voice DB, in case #2 we would set the preferred voice subId with autoDefaultSubId.",
+      "parentUuid": "9cbc3cfe_faa93d3c",
       "range": {
         "startLine": 888,
         "startChar": 13,
