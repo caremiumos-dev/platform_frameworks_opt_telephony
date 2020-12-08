@@ -22,6 +22,30 @@
       },
       "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2237e096_269990ec",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 0,
+      "message": "We moved this block of code to \"onDdsSwitchResponse\" method",
+      "parentUuid": "81c129bd_e0a29f91",
+      "range": {
+        "startLine": 904,
+        "startChar": 0,
+        "endLine": 914,
+        "endChar": 56
+      },
+      "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

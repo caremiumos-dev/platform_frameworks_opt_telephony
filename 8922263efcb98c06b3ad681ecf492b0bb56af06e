@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c29e8ab4_06188a52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 1,
+      "message": "Yes, i will add this bug id: 169649103",
+      "parentUuid": "3cdd6917_4959b6ec",
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c6775f5_49fa98bf",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e25e0301_aa501117",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 1,
+      "message": "Yes, sometimes RADIO_AVAILABLE event is received after subid change, due to which HAL command for DDS switch request is not updated and DDS request is not sent. As a result internet request is not processed blocking data call request",
+      "parentUuid": "4c6775f5_49fa98bf",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 17
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2430033e_fd333d10",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 4
@@ -54,6 +96,30 @@
       "writtenOn": "2020-12-04T00:30:07Z",
       "side": 1,
       "message": "is this used anywhere? if not please remove",
+      "range": {
+        "startLine": 868,
+        "startChar": 18,
+        "endLine": 868,
+        "endChar": 28
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7683a0b0_3f1fc4c3",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 1,
+      "message": "Not used in this change, will remove it",
+      "parentUuid": "2430033e_fd333d10",
       "range": {
         "startLine": 868,
         "startChar": 18,
@@ -112,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f01d333_b1709003",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 1,
+      "message": "We came across a case where DDS was tried when SIM is not in Ready state and Modem rejects such DDS request. Sim Ready check here will block retry for DDS failure, such that DDS can be tried once SIM moves to Ready state later.\nI did not understand the comment for bitmask",
+      "parentUuid": "963da06b_f9c28e06",
+      "range": {
+        "startLine": 1497,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 13
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2105fda_309476c2",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 4
@@ -123,6 +213,30 @@
       "writtenOn": "2020-12-04T00:30:07Z",
       "side": 1,
       "message": "let\u0027s not do this. why do you need an intent?",
+      "range": {
+        "startLine": 1532,
+        "startChar": 0,
+        "endLine": 1541,
+        "endChar": 9
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeabd21f_74133b09",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-08T13:55:00Z",
+      "side": 1,
+      "message": "This was added to broadcast DDS change to clients. Now that we have phonestatelistener support added in R, intent is no longer required, clients can register to phonestatelistener for dds subid changes. Will remove this",
+      "parentUuid": "e2105fda_309476c2",
       "range": {
         "startLine": 1532,
         "startChar": 0,
