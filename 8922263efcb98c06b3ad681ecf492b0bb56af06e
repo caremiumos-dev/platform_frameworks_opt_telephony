@@ -83,6 +83,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aea08b1_212842bd",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-09T01:31:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e25e0301_aa501117",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 17
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2430033e_fd333d10",
@@ -261,6 +285,30 @@
       "side": 1,
       "message": "This was added to broadcast DDS change to clients. Now that we have phonestatelistener support added in R, intent is no longer required, clients can register to phonestatelistener for dds subid changes. Will remove this",
       "parentUuid": "e2105fda_309476c2",
+      "range": {
+        "startLine": 1532,
+        "startChar": 0,
+        "endLine": 1541,
+        "endChar": 9
+      },
+      "revId": "8922263efcb98c06b3ad681ecf492b0bb56af06e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6eefb80_62d7cada",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-09T01:31:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eeabd21f_74133b09",
       "range": {
         "startLine": 1532,
         "startChar": 0,
