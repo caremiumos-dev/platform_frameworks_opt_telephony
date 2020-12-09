@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8d94b6_711fb7fc",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-09T06:00:56Z",
+      "side": 0,
+      "message": "After checking the latest AOSP vanilla code the scenario we are trying to handle seems taken care by existing code logic so we do not this QC modification, abandoning it.",
+      "range": {
+        "startLine": 569,
+        "startChar": 23,
+        "endLine": 569,
+        "endChar": 41
+      },
+      "revId": "8c0f64d67aaf68b059a9a40bba12bf6d9ab54861",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
