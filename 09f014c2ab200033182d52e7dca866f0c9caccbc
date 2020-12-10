@@ -16,6 +16,23 @@
       "message": "LGTM. Brad, can you ptal as well at the changes in Connection related classes?",
       "revId": "09f014c2ab200033182d52e7dca866f0c9caccbc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7ed2cf_2518f6b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-10T21:52:16Z",
+      "side": 1,
+      "message": "Seeing this failure now:\n\nframeworks/opt/telephony/tests/telephonytests/src/com/android/internal/telephony/GsmCdmaConnectionTest.java:267: error: incompatible types: boolean cannot be converted to DialArgs\n        connection \u003d new GsmCdmaConnection(mPhone, \"12345\", mCT, null, false);\n                                                                       ^\nNote: Some messages have been simplified; recompile with -Xdiags:verbose to get full output\n1 error\n\nCan you please fix it and rebase the CLs?",
+      "revId": "09f014c2ab200033182d52e7dca866f0c9caccbc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
