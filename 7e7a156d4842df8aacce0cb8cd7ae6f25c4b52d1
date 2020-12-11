@@ -128,6 +128,30 @@
       },
       "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24deae14_e81c17d4",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-11T19:28:48Z",
+      "side": 1,
+      "message": "am i missing sth obvious?\n\n- voiceSelected holds TRUE when valid subId is present in preferred voice DB.\nThis is equivalently: defaultVoiceSub !\u003d INVALID_SUB\n\nvoiceSelected holds FALSE in two cases, 1) when user selected \"Always ask\" from UI,  2) When previously selected voice preferred subId becomes invalid.\nThis is equivalently: defaultVoiceSub \u003d\u003d INVALID_SUB\n\nthat\u0027s why i\u0027m saying:\nvoiceSelected \u003d (defaultVoiceSubId !\u003d SubscriptionManager.INVALID_SUBSCRIPTION_ID )\n check updateDefaultValue for more details.",
+      "parentUuid": "a681a5cc_a6a149e3",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
