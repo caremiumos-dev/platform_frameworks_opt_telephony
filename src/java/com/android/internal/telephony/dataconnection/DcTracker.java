@@ -3458,6 +3458,21 @@ public class DcTracker extends Handler {
         }
 
         if (DBG) log("buildWaitingApns: " + apnList.size() + " APNs in the list: " + apnList);
+
+        if (apnList.isEmpty() && requestedApnType.equals(PhoneConstants.APN_TYPE_IMS)) {
+            if (mPhone.getContext().getResources().getBoolean(
+                    com.android.internal.R.bool.config_default_ims_apn_enabled)) {
+                apnList.add(new ApnSetting.Builder()
+                        .setEntryName("Default IMS")
+                        .setProtocol(ApnSetting.PROTOCOL_IPV4V6)
+                        .setRoamingProtocol(ApnSetting.PROTOCOL_IPV4V6)
+                        .setApnName("ims")
+                        .setCarrierEnabled(true)
+                        .setApnSetId(Telephony.Carriers.MATCH_ALL_APN_SET_ID)
+                        .build());
+            }
+        }
+
         return apnList;
     }
 
