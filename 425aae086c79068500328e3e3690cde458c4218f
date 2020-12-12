@@ -16,6 +16,23 @@
       "message": "Please rebase",
       "revId": "425aae086c79068500328e3e3690cde458c4218f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a959b6_df8ba7ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-12-12T04:39:40Z",
+      "side": 1,
+      "message": "Please set a topic",
+      "revId": "425aae086c79068500328e3e3690cde458c4218f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
