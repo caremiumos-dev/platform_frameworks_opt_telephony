@@ -176,6 +176,30 @@
       },
       "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd50c8c_a9805b0e",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-14T20:21:56Z",
+      "side": 1,
+      "message": "i\u0027m not questioning about \"primarySuList.size() \u003d\u003d 1\", i\u0027m saying we should remove:\ndefaultVoiceSubId !\u003d SubscriptionManager.INVALID_SUBSCRIPTION_ID, as it\u0027s the same with voiceSelected",
+      "parentUuid": "a741e786_4a2bd829",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
