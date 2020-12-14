@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec90051_03b59da4",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaConnection.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-14T07:48:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "209a3d74_dc3661a2",
+      "range": {
+        "startLine": 143,
+        "startChar": 63,
+        "endLine": 143,
+        "endChar": 81
+      },
+      "revId": "7f337e12f0c32cd4c70f571d456716ec5028bdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd0639a3_bba5b3f6",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Thank you, I understand that your suggestion is creating helper method like as convertToDriverCall() and commonalize the setting logic for dc.\nIs my understanding correct?",
       "parentUuid": "dd0639a3_bba5b3f6",
+      "range": {
+        "startLine": 2278,
+        "startChar": 16,
+        "endLine": 2278,
+        "endChar": 66
+      },
+      "revId": "7f337e12f0c32cd4c70f571d456716ec5028bdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc3d6394_c083ba64",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-14T07:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0708b7e1_bb2c1c38",
       "range": {
         "startLine": 2278,
         "startChar": 16,
