@@ -152,6 +152,30 @@
       },
       "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a741e786_4a2bd829",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-14T15:58:18Z",
+      "side": 1,
+      "message": "1. With voiceSelected as FALSE, if voice preference holds \"Always ask\" with two active SubId\u0027s we dont want to disturb the preferred voice subId.\n2. With voiceSelected as FALSE, if voice preference holds \"Always ask\" with only one active SIM we would set the preferred voice subId with remaining subId.\n3. With voiceSelected as FALSE, if voice preference holds in-active SIM, we would set the preferred voice subId with leftover subId.\n\nSo checking (!voiceSelcted) alone does not help to handle above three cases hence added exxtra condition of (primarySuList.size() \u003d\u003d 1) as well.",
+      "parentUuid": "24deae14_e81c17d4",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
