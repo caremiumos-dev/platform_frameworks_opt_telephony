@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af5c928e_1236b6e6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3474,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-12-15T02:15:13Z",
+      "side": 1,
+      "message": "You should make addEmergencyApnSetting and initEmergencyApnSetting generic by renaming them into addDefaultApnSettings and initDefaultApnSettings.",
+      "range": {
+        "startLine": 3462,
+        "startChar": 0,
+        "endLine": 3474,
+        "endChar": 9
+      },
+      "revId": "a5c88f3b3a9849ca04d3b24f188904dd0ff1da9f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
