@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000006761860",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1527075?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "894ee710_d2702fcf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-12-15T00:08:08Z",
+      "side": 1,
+      "message": "Found ambiguous Merge keyword in commit message. Did you mean \"Merged-In\"?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 52
+      },
+      "revId": "9b7835c0042470b6e92f634548378678d565b1a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
