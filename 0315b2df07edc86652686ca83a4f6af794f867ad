@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35605558_ec67df29",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-15T14:42:06Z",
+      "side": 1,
+      "message": "Done, removed all these variables",
+      "parentUuid": "15a67be3_61bc916c",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 47
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47eaec9a_46bb3ddd",
@@ -143,6 +167,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f6cf01_f199b4a1",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-15T14:42:06Z",
+      "side": 1,
+      "message": "Agree, will remove this check",
+      "parentUuid": "69d49b08_03d640f8",
+      "range": {
+        "startLine": 1539,
+        "startChar": 0,
+        "endLine": 1547,
+        "endChar": 9
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0953984a_c8a393e6",
@@ -180,6 +228,30 @@
       "side": 1,
       "message": "please fix thsi and get rid of the {\n...// everything\n}",
       "parentUuid": "0953984a_c8a393e6",
+      "range": {
+        "startLine": 1560,
+        "startChar": 0,
+        "endLine": 1560,
+        "endChar": 27
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a27742b_654829d7",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-15T14:42:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf69d3b8_fc5605c3",
       "range": {
         "startLine": 1560,
         "startChar": 0,
@@ -274,6 +346,30 @@
       "side": 1,
       "message": "For MO calls on non DDS sub, sometimes DDS switch request gets failed from Modem side. This piece of code will retry DDS switch in case of failure",
       "parentUuid": "d9304470_916a5164",
+      "range": {
+        "startLine": 1658,
+        "startChar": 0,
+        "endLine": 1660,
+        "endChar": 59
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "698b1eb5_6be40111",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-15T14:42:06Z",
+      "side": 1,
+      "message": "This is to retry temp DDS switch in case of failures during call",
+      "parentUuid": "8bf29301_deb74f43",
       "range": {
         "startLine": 1658,
         "startChar": 0,
