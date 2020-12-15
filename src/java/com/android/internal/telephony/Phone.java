@@ -1740,7 +1740,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
     }
 
-    private @TelephonyManager.NetworkTypeBitMask long getAllowedNetworkTypes() {
+    private @TelephonyManager.NetworkTypeBitMask long getAllowedNetworkTypesFromSubscription() {
         long allowedNetworkTypes = TelephonyManager.getAllNetworkTypesBitmask();
         if (SubscriptionController.getInstance() != null) {
             String result = SubscriptionController.getInstance().getSubscriptionProperty(
@@ -2212,7 +2212,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @return effective network type
      */
     public @TelephonyManager.NetworkTypeBitMask long getEffectiveAllowedNetworkTypes() {
-        long allowedNetworkTypes = getAllowedNetworkTypes();
+        long allowedNetworkTypes = getAllowedNetworkTypesFromSubscription();
         return allowedNetworkTypes & getAllowedNetworkTypesForAllReasons();
     }
 
@@ -2300,7 +2300,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         int modemRaf = getRadioAccessFamily();
         int rafFromType = RadioAccessFamily.getRafFromNetworkType(networkType);
 
-        long allowedNetworkTypes = getAllowedNetworkTypes();
         if (modemRaf == RadioAccessFamily.RAF_UNKNOWN
                 || rafFromType == RadioAccessFamily.RAF_UNKNOWN) {
             Rlog.d(LOG_TAG, "setPreferredNetworkType: Abort, unknown RAF: "
@@ -2315,7 +2314,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             return;
         }
 
-        int filteredRaf = (int) (rafFromType & modemRaf & allowedNetworkTypes
+        long allowedNetworkTypesFromSubscription = getAllowedNetworkTypesFromSubscription();
+        int filteredRaf = (int) (rafFromType & modemRaf & allowedNetworkTypesFromSubscription
                 & getAllowedNetworkTypesForAllReasons());
         int filteredType = RadioAccessFamily.getNetworkTypeFromRaf(filteredRaf);
         long powerAllowedNetworkTypes = getAllowedNetworkTypes(
@@ -2323,7 +2323,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         Rlog.d(LOG_TAG, "setPreferredNetworkType: networkType = " + networkType
                 + " modemRaf = " + modemRaf
                 + " rafFromType = " + rafFromType
-                + " allowedNetworkTypes = " + allowedNetworkTypes
+                + " allowedNetworkTypes = " + allowedNetworkTypesFromSubscription
                 + " power allowedNetworkTypes = " + powerAllowedNetworkTypes
                 + " filteredType = " + filteredType);
 
