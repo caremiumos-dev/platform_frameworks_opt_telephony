@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e93d769_0d7a80bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2020-12-15T18:46:31Z",
+      "side": 1,
+      "message": "Hi Michele, I have cherry-picked and squashed all relevant changes together. Let me know if this is too big for review.",
+      "revId": "b002dc8329d28ea823ca07910fa98af54cbaa138",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
