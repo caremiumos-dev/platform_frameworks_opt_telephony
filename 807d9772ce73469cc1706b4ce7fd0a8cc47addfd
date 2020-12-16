@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b611378_89325edd",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2020-12-16T07:31:41Z",
+      "side": 1,
+      "message": "my understanding is we will use getAllowedNetworkTypeForReasons going forward.\nis this renaming really needed? and fromSubscription is a little bit weird because it is either from power, carriers or settings but not from SIM card",
+      "range": {
+        "startLine": 1743,
+        "startChar": 54,
+        "endLine": 1743,
+        "endChar": 92
+      },
+      "revId": "807d9772ce73469cc1706b4ce7fd0a8cc47addfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
