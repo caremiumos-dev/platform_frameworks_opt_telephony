@@ -16,6 +16,23 @@
       "message": "Hi Michele, I have cherry-picked and squashed all relevant changes together. Let me know if this is too big for review.",
       "revId": "b002dc8329d28ea823ca07910fa98af54cbaa138",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec16de1_f89c1410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2020-12-16T21:13:54Z",
+      "side": 1,
+      "message": "Hi Jack, we are cherry-picking metrics changes from internal. The only modification done is in MetricsCollector, where we had to revert to older APIs since the statsd feature it depends on could not be safely cherry-picked to AOSP.\n\nLet me know if the change is too large and you prefer to keep the individual changes, or break them down by topics.",
+      "revId": "b002dc8329d28ea823ca07910fa98af54cbaa138",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
