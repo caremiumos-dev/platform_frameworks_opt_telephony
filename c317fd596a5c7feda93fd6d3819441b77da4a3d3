@@ -16,6 +16,24 @@
       "message": "Seems a pretty straight forward change, but has it been tested? Can you add some info for the tests performed under \"Test: \" tag?",
       "revId": "c317fd596a5c7feda93fd6d3819441b77da4a3d3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df97617_e85fa4d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-16T12:37:32Z",
+      "side": 1,
+      "message": "Yes, tested the impacted setRadioCapability() related cases.\n\nWill update the commit text.",
+      "parentUuid": "5ff2b919_63078fe8",
+      "revId": "c317fd596a5c7feda93fd6d3819441b77da4a3d3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
