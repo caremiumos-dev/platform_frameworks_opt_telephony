@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78fc0472_b4e20ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T19:56:57Z",
+      "side": 1,
+      "message": "Hey Hall, can you also take a look at this? We are adding a new API to notify the framework if a call fails before mPendingMO is set to null. I think i have looked through the code and it looks okay, but there was one question about the RTT redial case (see comment)",
+      "revId": "985d4b3e4f37b3081c3a9cad66c45a925d567647",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb4bfce_5ae504a5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3014,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2020-12-16T19:56:57Z",
+      "side": 1,
+      "message": "I am a little worried because there are paths like this that were moved from onCallStartFailed to onCallTerminated because QC was calling onCallTerminated, but now they could technically call onCallStartFailed and expect the same thing (see aosp/725323).\n\nCan we pull this reasonInfo parsing into a common helper method and call them in both onCallTerminated and onCallStartFailed?",
+      "range": {
+        "startLine": 3013,
+        "startChar": 20,
+        "endLine": 3014,
+        "endChar": 59
+      },
+      "revId": "985d4b3e4f37b3081c3a9cad66c45a925d567647",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
