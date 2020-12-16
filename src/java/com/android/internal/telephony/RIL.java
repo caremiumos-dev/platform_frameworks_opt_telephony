@@ -245,7 +245,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     AtomicBoolean mTestingEmergencyCall = new AtomicBoolean(false);
 
-    final Integer mPhoneId;
+    final int mPhoneId;
 
     /**
      * A set that records if radio service is disabled in hal for
@@ -649,27 +649,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return mOemHookProxy;
     }
 
-    //***** Constructors
-
     @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType, int cdmaSubscription) {
-        this(context, preferredNetworkType, cdmaSubscription, null);
-    }
-
-    @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType,
-            int cdmaSubscription, Integer instanceId) {
+    public RIL(Context context, int preferredNetworkType, int cdmaSubscription, int phoneId) {
         super(context);
-        if (RILJ_LOGD) {
-            riljLog("RIL: init preferredNetworkType=" + preferredNetworkType
-                    + " cdmaSubscription=" + cdmaSubscription + ")");
-        }
 
         mContext = context;
         mCdmaSubscription  = cdmaSubscription;
         mPreferredNetworkType = preferredNetworkType;
         mPhoneType = RILConstants.NO_PHONE;
-        mPhoneId = instanceId == null ? 0 : instanceId;
+        mPhoneId = phoneId;
+
+        if (RILJ_LOGD) {
+            riljLog("RIL: init preferredNetworkType=" + preferredNetworkType
+                    + " cdmaSubscription=" + cdmaSubscription + ")");
+        }
+
         if (isRadioBugDetectionEnabled()) {
             mRadioBugDetector = new RadioBugDetector(context, mPhoneId);
         }
@@ -6274,8 +6268,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
         if (!TextUtils.isEmpty(rafString)) {
             raf = RadioAccessFamily.rafTypeFromString(rafString);
         }
-        RadioCapability rc = new RadioCapability(mPhoneId.intValue(), 0, 0, raf,
-                "", RadioCapability.RC_STATUS_SUCCESS);
+        RadioCapability rc =
+                new RadioCapability(mPhoneId, 0, 0, raf, "", RadioCapability.RC_STATUS_SUCCESS);
         if (RILJ_LOGD) riljLog("Faking RIL_REQUEST_GET_RADIO_CAPABILITY response using " + raf);
         return rc;
     }
