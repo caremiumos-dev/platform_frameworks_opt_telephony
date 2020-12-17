@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "f4bfe042_84014fbe",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Sorry for cutting in.\n\nBut as my understanding, it seems that below fields can\u0027t be updated via updateOperatorNameForServiceState:\nServiceState#mNetworkRegistrationInfos#CellIdentity#mAlphaLong\nServiceState#mNetworkRegistrationInfos#CellIdentity#mAlphaShort\n\nPlease allow me to explain it step by step:\nStep 1:\nupdateOperatorNameForServiceState is triggered.\ne.g. line#1801 updateOperatorNameForServiceState(mNewSS);",
       "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "0d8f74c5_dd2f40d7",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
@@ -37,10 +38,10 @@
         "endChar": 51
       },
       "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b6750ded_a69aba4c",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
@@ -60,10 +61,10 @@
         "endChar": 0
       },
       "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "9c3ffc2c_1f9b06f4",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
@@ -83,8 +84,31 @@
         "endChar": 75
       },
       "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13e5ca11_b3d620fb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5338,
+      "author": {
+        "id": 1140984
+      },
+      "writtenOn": "2020-12-17T16:31:18Z",
+      "side": 1,
+      "message": "This issue has been fixed by below patch:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1347347/1/src/java/com/android/internal/telephony/ServiceStateTracker.java#5645",
+      "parentUuid": "9c3ffc2c_1f9b06f4",
+      "range": {
+        "startLine": 5337,
+        "startChar": 16,
+        "endLine": 5338,
+        "endChar": 75
+      },
+      "revId": "ab7bc158fe98c02017d21350ca452725ac7d145b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
