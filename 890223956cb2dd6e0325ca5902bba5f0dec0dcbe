@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ef96e8_9b3ac2aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-12-17T01:23:43Z",
+      "side": 1,
+      "message": "Will be rebase on CL:1527075",
+      "revId": "890223956cb2dd6e0325ca5902bba5f0dec0dcbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
