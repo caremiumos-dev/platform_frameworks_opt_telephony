@@ -2255,16 +2255,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public @TelephonyManager.NetworkTypeBitMask long getAllowedNetworkTypes(
             @TelephonyManager.AllowedNetworkTypesReason int reason) {
+        if (!TelephonyManager.isValidAllowedNetworkTypesReason(reason)) {
+            Rlog.e(LOG_TAG, "Invalid allowed network type reason: " + reason);
+            return TelephonyManager.getAllNetworkTypesBitmask();
+        }
         synchronized (mAllowedNetworkTypesForReasons) {
-            switch (reason) {
-                case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER:
-                    return mAllowedNetworkTypesForReasons.getOrDefault(
-                            TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER,
-                            TelephonyManager.getAllNetworkTypesBitmask());
-                default:
-                    Rlog.e(LOG_TAG, "Invalid allowed network type reason: " + reason);
-                    return TelephonyManager.getAllNetworkTypesBitmask();
-            }
+            return mAllowedNetworkTypesForReasons.getOrDefault(reason,
+                  TelephonyManager.getAllNetworkTypesBitmask());
         }
     }
 
@@ -2274,18 +2271,17 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @param networkTypes one of the network types
      */
     public void setAllowedNetworkTypes(@TelephonyManager.AllowedNetworkTypesReason int reason,
-            @TelephonyManager.NetworkTypeBitMask long networkTypes) {
-        synchronized (mAllowedNetworkTypesForReasons) {
-            switch (reason) {
-                case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER:
-                    mAllowedNetworkTypesForReasons.put(
-                            TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER, networkTypes);
-                    break;
-                default:
-                    Rlog.e(LOG_TAG, "Invalid allowed network type reason: " + reason);
-                    break;
-            }
+            @TelephonyManager.NetworkTypeBitMask long networkTypes, Message response) {
+        if (!TelephonyManager.isValidAllowedNetworkTypesReason(reason)) {
+            Rlog.e(LOG_TAG, "Invalid allowed network type reason: " + reason);
+            return;
         }
+        synchronized (mAllowedNetworkTypesForReasons) {
+            mAllowedNetworkTypesForReasons.put(reason, networkTypes);
+        }
+        long allowedNetworkTypes = getAllowedNetworkTypes();
+        int filteredRaf = (int) (allowedNetworkTypes & getAllowedNetworkTypesForAllReasons());
+        mCi.setAllowedNetworkTypeBitmask(filteredRaf, response);
     }
 
     /**
