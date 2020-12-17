@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f2c22cc_a4317e1a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-17T13:53:11Z",
+      "side": 1,
+      "message": "We are checking for sim ready state from multiple places and there is a dedicated method isSimReady(phoneId) to check for ready state, hence defined this as member variable",
+      "parentUuid": "1a0b1873_87d5bd3f",
+      "range": {
+        "startLine": 289,
+        "startChar": 22,
+        "endLine": 289,
+        "endChar": 32
+      },
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3277449a_048db9cb",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-12-09T01:31:39Z",
       "side": 1,
       "message": "so what i was suggesting with bitmask of failure reason is sth like this:\n\nint mDisableDdsRetryReasons;\nfinal static int DISABLE_DDS_RETRY_REASON_IN_VOICE_CALL \u003d 0x1;\nfinal static int DISABLE_DDS_RETRY_REASON_SIM_NOT_READY \u003d 0x2;\n\nwhen SIM becomes not ready, set flag DISABLE_DDS_RETRY_REASON_SIM_NOT_READY:\nmDisableDdsRetryReasons |\u003d DISABLE_DDS_RETRY_REASON_SIM_NOT_READY\nwhen SIM becoems ready, un set it:\nmDisableDdsRetryReasons \u0026\u003d ~DISABLE_DDS_RETRY_REASON_SIM_NOT_READY;\nif (mDisableDdsRetryReasons \u003d\u003d 0) doRetry\n\nSame for DISABLE_DDS_RETRY_REASON_IN_VOICE_CALL.",
+      "range": {
+        "startLine": 290,
+        "startChar": 22,
+        "endLine": 290,
+        "endChar": 33
+      },
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d074202d_283868a8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-17T13:53:11Z",
+      "side": 1,
+      "message": "Sim not ready is checked only when there is DDS failure, and retry is scheduled once sim becomes ready (similarly for voice call). mDdsFailure is used to track retry. Dont see a value add with this bitmask logic to retry",
+      "parentUuid": "3277449a_048db9cb",
       "range": {
         "startLine": 290,
         "startChar": 22,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b68643_95813c92",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-17T13:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "565586f6_1c7558aa",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 51
+      },
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ca772d0_edbda66b",
@@ -89,6 +161,23 @@
         "endLine": 477,
         "endChar": 85
       },
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2dbab0_31447898",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-17T13:53:11Z",
+      "side": 1,
+      "message": "1. We can stick to LOADED event, will remove other two\n2. If SIM is ABSENT, we dont send DDS to that in first place. If SIM is removed after DDS is sent, we block retry\n3. Should be same behavior as physical sim\n4. If DDS change is rejected, we wait for SIM loaded indication to retry",
       "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
