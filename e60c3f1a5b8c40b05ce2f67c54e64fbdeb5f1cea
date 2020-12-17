@@ -180,6 +180,24 @@
       "message": "1. We can stick to LOADED event, will remove other two\n2. If SIM is ABSENT, we dont send DDS to that in first place. If SIM is removed after DDS is sent, we block retry\n3. Should be same behavior as physical sim\n4. If DDS change is rejected, we wait for SIM loaded indication to retry",
       "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f7faec8_10b52230",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-17T22:46:24Z",
+      "side": 1,
+      "message": "2. If SIM is ABSENT, we dont send DDS to that in first place. If SIM is removed after DDS is sent, we block retry\n3. Should be same behavior as physical sim\n\"we don\u0027t do DDS switch in ABSENT case\" I don\u0027t think it\u0027s a good assumption. it means in DSDS mode with no SIM, we cant say which one is DDS, and brings uncertainty to things like emergency call. Same for eSIM other than it will be PRESENT + apps not ready state.\n4. If DDS change is rejected, we wait for SIM loaded indication to retry\n\nIn my opinion, DDS switch shouldn\u0027t rely on SIM state. It\u0027s (probably) ok to say don\u0027t switch DDS in one particular state, but only do DDS switch in LOADED will definitely bring a lot of issues.",
+      "parentUuid": "ab2dbab0_31447898",
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
