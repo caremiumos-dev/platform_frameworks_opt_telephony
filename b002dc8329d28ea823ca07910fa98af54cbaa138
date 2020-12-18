@@ -33,6 +33,24 @@
       "message": "Hi Jack, we are cherry-picking metrics changes from internal. The only modification done is in MetricsCollector, where we had to revert to older APIs since the statsd feature it depends on could not be safely cherry-picked to AOSP.\n\nLet me know if the change is too large and you prefer to keep the individual changes, or break them down by topics.",
       "revId": "b002dc8329d28ea823ca07910fa98af54cbaa138",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534367f9_cea31c45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2020-12-18T09:04:15Z",
+      "side": 1,
+      "message": "6K lines is definitely too huge. Squash into 1 CL is not really a good practice. We should cherry pick one by one and kept the original commit message. You can use the tool https://docs.google.com/document/d/1xWm__R_Clk7ZMoo9LFyp6BW7fwSvB31HDq6ws_oCgCM/edit# to help cherry pick to AOSP.",
+      "parentUuid": "bec16de1_f89c1410",
+      "revId": "b002dc8329d28ea823ca07910fa98af54cbaa138",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
