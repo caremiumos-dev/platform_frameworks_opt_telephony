@@ -198,6 +198,24 @@
       "parentUuid": "ab2dbab0_31447898",
       "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eab01b01_6e159aa9",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-18T15:33:59Z",
+      "side": 1,
+      "message": "In no SIM case, preferred phoneid is set to 0 by default at PhoneSwitcher and is notified to clients, and any incoming network requests will be processed on Sub0. There will be no DDS request to Modem i think.\n\nOnly in case of DDS failures, we check the reason from Apps side like active voice call or SIM not ready. And if SIM is not ready, wait for SIM LOADED to trigger DDS retry",
+      "parentUuid": "8f7faec8_10b52230",
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
