@@ -1057,4 +1057,9 @@ public interface PhoneInternalInterface {
      * Resets the Carrier Keys, by deleting them from the database and sending a download intent.
      */
     public void resetCarrierKeysForImsiEncryption();
+
+    /**
+     *  Return the mobile provisioning url.
+     */
+    String getMobileProvisioningUrl();
 }
