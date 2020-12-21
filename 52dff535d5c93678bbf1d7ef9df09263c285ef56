@@ -70,6 +70,24 @@
       "parentUuid": "909370cd_4834b489",
       "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1776e8d9_899f81c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-21T13:26:11Z",
+      "side": 1,
+      "message": "I see latest vanilla source is adding subId extra to CARRIER_CONFIG_CHANGED only when SIM records are LOADED @ https://cs.android.com/android/platform/superproject/+/master:packages/services/Telephony/src/com/android/phone/CarrierConfigLoader.java;drc\u003d572909e1cb0606262a0e77d4adb1949e6b7f7c00;l\u003d775\n\nSo above code in place, we dont need to add extra modification w.r.t CARRIER_CONFIG_CHANGED intent.\n\nVerified on devices and I see CARRIER_CONFIG intent broadcasted only after SIM records are loaded even if we add subID when SIM is READY.",
+      "parentUuid": "74db2255_bce881b8",
+      "revId": "52dff535d5c93678bbf1d7ef9df09263c285ef56",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
