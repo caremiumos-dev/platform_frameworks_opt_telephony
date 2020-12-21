@@ -46,6 +46,30 @@
       },
       "revId": "b76d1afa0d858dda3d9a99dcf602e020f1abcdbe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea6ee7ac_f47a177c",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-21T18:43:13Z",
+      "side": 1,
+      "message": "I meant that as a suggestion to update the comment.",
+      "parentUuid": "24872a18_ed6243f2",
+      "range": {
+        "startLine": 98,
+        "startChar": 52,
+        "endLine": 98,
+        "endChar": 56
+      },
+      "revId": "b76d1afa0d858dda3d9a99dcf602e020f1abcdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
