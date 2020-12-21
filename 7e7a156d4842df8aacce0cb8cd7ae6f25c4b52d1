@@ -200,6 +200,30 @@
       },
       "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "154c808b_46af329b",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2020-12-21T10:34:30Z",
+      "side": 1,
+      "message": "Got it, you are right.\n\nUploaded new patch, please review it.",
+      "parentUuid": "fdd50c8c_a9805b0e",
+      "range": {
+        "startLine": 888,
+        "startChar": 13,
+        "endLine": 888,
+        "endChar": 77
+      },
+      "revId": "7e7a156d4842df8aacce0cb8cd7ae6f25c4b52d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
