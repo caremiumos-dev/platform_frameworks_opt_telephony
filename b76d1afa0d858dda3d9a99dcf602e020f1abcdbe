@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4737a41d_a3bc6bdb",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-21T06:49:24Z",
+      "side": 1,
+      "message": "modem which in turn acknowledges it to the SMSC?",
+      "range": {
+        "startLine": 98,
+        "startChar": 52,
+        "endLine": 98,
+        "endChar": 56
+      },
+      "revId": "b76d1afa0d858dda3d9a99dcf602e020f1abcdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

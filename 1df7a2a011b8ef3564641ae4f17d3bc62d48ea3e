@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e85db5_8fa91bd1",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-21T06:49:24Z",
+      "side": 0,
+      "message": "This part was correct, no?",
+      "range": {
+        "startLine": 97,
+        "startChar": 27,
+        "endLine": 98,
+        "endChar": 45
+      },
+      "revId": "1df7a2a011b8ef3564641ae4f17d3bc62d48ea3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
