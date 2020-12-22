@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a82850e8_5aac863d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3426,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2020-12-22T23:20:29Z",
+      "side": 1,
+      "message": "Did you check that the process has access to read that file?  More importantly, did you test that the API surface works on the device?  Will +2, please check before submitting.",
+      "range": {
+        "startLine": 3426,
+        "startChar": 8,
+        "endLine": 3426,
+        "endChar": 74
+      },
+      "revId": "19397dad9c3ed53f309fe6517e8999ede4ee86ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
