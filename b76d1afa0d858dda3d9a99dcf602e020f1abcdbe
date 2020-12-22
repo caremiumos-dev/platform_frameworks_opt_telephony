@@ -70,6 +70,30 @@
       },
       "revId": "b76d1afa0d858dda3d9a99dcf602e020f1abcdbe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9590f021_19957994",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-12-22T00:57:48Z",
+      "side": 1,
+      "message": "Opps. I will update it.",
+      "parentUuid": "ea6ee7ac_f47a177c",
+      "range": {
+        "startLine": 98,
+        "startChar": 52,
+        "endLine": 98,
+        "endChar": 56
+      },
+      "revId": "b76d1afa0d858dda3d9a99dcf602e020f1abcdbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
