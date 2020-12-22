@@ -216,6 +216,24 @@
       "parentUuid": "8f7faec8_10b52230",
       "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c28d3a_d9b12e61",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-22T20:53:59Z",
+      "side": 1,
+      "message": "i see. the simReady only applies for retry logic. which is better... but still it might lead weird behavior.\nimagine two SIM cards exists, and DDS is SIM2. THen both SIM cards are taken, and by default we try dds to SIM1, which might fail and we\u0027ll never retry as it\u0027s not LOADED. But the framework believes SIM 1 is the dds (again we shouldn\u0027t wait until modem confirmation. framework should control the state, not modem), then for emergency call or whatever reason there might be problems.",
+      "parentUuid": "eab01b01_6e159aa9",
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

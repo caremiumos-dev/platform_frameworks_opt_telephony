@@ -46,6 +46,29 @@
       },
       "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "633ffd5e_606fc3de",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1170206
+      },
+      "writtenOn": "2020-12-22T20:53:59Z",
+      "side": 0,
+      "message": "we shouldn\u0027t move this to ddsSwitchDone. This is for internal operations and it should be the source of truth instead of current modem status.\nImagine this scenario: user switches DDS to SIM2 manually, yet modem has some issue that the dds switch failed. At this point, framework should still notify all other components that SIM2 is the new data SIM, despite it should correct modem state later. Otherwise it will conflict with user\u0027s selection and will have more weird behavior.\nSo we should leave them here.",
+      "range": {
+        "startLine": 905,
+        "startChar": 0,
+        "endLine": 914,
+        "endChar": 56
+      },
+      "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
