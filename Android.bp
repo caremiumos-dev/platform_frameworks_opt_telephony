@@ -59,7 +59,6 @@ java_library {
     srcs: [
         ":opt-telephony-common-srcs",
         ":framework-telephony-common-shared-srcs",
-        ":net-utils-telephony-common-srcs",
         ":statslog-telephony-java-gen",
         ":statslog-cellbroadcast-java-gen",
         "src/java/**/I*.aidl",
@@ -88,6 +87,7 @@ java_library {
         "ecc-protos-lite",
         "libphonenumber-nogeocoder",
         "PlatformProperties",
+        "net-utils-device-common",
         "net-utils-framework-common",
         "telephony-protos",
     ],
