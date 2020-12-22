@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "897e7031_0b75553f",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2020-12-22T08:48:19Z",
+      "side": 1,
+      "message": "It seems that allowInvalidSubId \u003d false is enough for both voice and sms.\n\n\nprivate boolean updateDefaultValue(List\u003cInteger\u003e primarySubList, int oldValue, UpdateDefaultAction action, boolean allowInvalidSubId) {\n...\n                // 2) If the old subId is INVALID_SUBSCRIPTION_ID and allowInvalidSubId is false, \n                // first active subscription is used for new default always.\n...\n}",
+      "parentUuid": "2d355198_9518b095",
+      "range": {
+        "startLine": 861,
+        "startChar": 0,
+        "endLine": 868,
+        "endChar": 57
+      },
+      "revId": "9f792e9599675d7159fa6cf9f3cf640aa1da0f62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a51d0e60_3c5e13ae",
         "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
         "patchSetId": 10
