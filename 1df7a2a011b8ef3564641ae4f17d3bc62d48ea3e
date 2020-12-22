@@ -94,6 +94,30 @@
       },
       "revId": "1df7a2a011b8ef3564641ae4f17d3bc62d48ea3e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab07f998_e76815a8",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-22T01:04:05Z",
+      "side": 0,
+      "message": "Either way is fine.",
+      "parentUuid": "1acb8f96_931fdd79",
+      "range": {
+        "startLine": 97,
+        "startChar": 27,
+        "endLine": 98,
+        "endChar": 45
+      },
+      "revId": "1df7a2a011b8ef3564641ae4f17d3bc62d48ea3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
