@@ -22,6 +22,30 @@
       },
       "revId": "19397dad9c3ed53f309fe6517e8999ede4ee86ff",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fb22226_81c1e5be",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3426,
+      "author": {
+        "id": 1304263
+      },
+      "writtenOn": "2020-12-23T02:13:00Z",
+      "side": 1,
+      "message": "Thanks for remind. Yes, I verified that but I found I miss one local commit to set the sepolicy for radio process. Setting could get the url from telephony successfully and telephony could get from both resource and file correctly. I update the commit message to note this part.",
+      "parentUuid": "a82850e8_5aac863d",
+      "range": {
+        "startLine": 3426,
+        "startChar": 8,
+        "endLine": 3426,
+        "endChar": 74
+      },
+      "revId": "19397dad9c3ed53f309fe6517e8999ede4ee86ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
