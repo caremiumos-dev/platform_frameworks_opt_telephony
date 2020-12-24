@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9500bee4_e013514a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-24T10:06:05Z",
+      "side": 1,
+      "message": "Sure, will change it to NOT_READY and append other checks as suggested",
+      "parentUuid": "a3f5bda3_567f7a7a",
+      "range": {
+        "startLine": 475,
+        "startChar": 8,
+        "endLine": 480,
+        "endChar": 9
+      },
+      "revId": "1fbd31c9343dc9a6c107bb2d570a65a91fa38dc6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1abca83_c6ef8487",
@@ -37,6 +61,30 @@
       "writtenOn": "2020-12-22T20:53:59Z",
       "side": 1,
       "message": "actually.. what are we trying to check and prevent here?",
+      "range": {
+        "startLine": 1533,
+        "startChar": 20,
+        "endLine": 1533,
+        "endChar": 42
+      },
+      "revId": "1fbd31c9343dc9a6c107bb2d570a65a91fa38dc6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34829e88_73d109fa",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1533,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-24T10:06:05Z",
+      "side": 1,
+      "message": "When dds switch is triggered manually, mPrioritizedDcRequests list might not have the top request related to switched subscription. If dds request fails due to MT call or SMS, dds is not retried when phoneid does not match to the top request from mPrioritizedDcRequests list.\n\nThis method checks DcRequests list based on active subscriptions and allows dds request retry when phoneid matches.",
+      "parentUuid": "a1abca83_c6ef8487",
       "range": {
         "startLine": 1533,
         "startChar": 20,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4637bf3_d580ab4d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-24T10:06:05Z",
+      "side": 1,
+      "message": "Instead of multiple return statements in this method, we added a variable to store possible return values and return it at the end of method.\n\nWill change it as suggested below",
+      "parentUuid": "e6f4e308_24da2951",
+      "range": {
+        "startLine": 1534,
+        "startChar": 8,
+        "endLine": 1534,
+        "endChar": 32
+      },
+      "revId": "1fbd31c9343dc9a6c107bb2d570a65a91fa38dc6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c9496b9_37c0f552",
@@ -83,6 +155,30 @@
       "writtenOn": "2020-12-22T20:53:59Z",
       "side": 1,
       "message": "if (...) return true;\nif (mPrioritizedDcRequests.size() \u003d\u003d 0) return true;\n\nfor (DcRequest dcRequest : mPrioritizedDcRequests) {\n  if (...) return true;\n}\n\nreturn false;\n\nthis way we don\u0027t need all the brackets.",
+      "range": {
+        "startLine": 1538,
+        "startChar": 8,
+        "endLine": 1539,
+        "endChar": 27
+      },
+      "revId": "1fbd31c9343dc9a6c107bb2d570a65a91fa38dc6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8431fdaf_8a924d20",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1539,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-24T10:06:05Z",
+      "side": 1,
+      "message": "Done, changed it as suggested",
+      "parentUuid": "4c9496b9_37c0f552",
       "range": {
         "startLine": 1538,
         "startChar": 8,

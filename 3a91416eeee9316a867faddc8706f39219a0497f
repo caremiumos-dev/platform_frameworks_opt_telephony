@@ -69,6 +69,30 @@
       },
       "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a23abd94_bfcd2b79",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2020-12-24T10:06:05Z",
+      "side": 0,
+      "message": "In case of DDS switch failures, clients listening for DDS change will switch to the new DDS sub which can lead to data continuity issues, like data not being available due to DDS failure.\n\nWe had this implementation from past few android releases, no customer has reported any issues with this logic. I think it is safe",
+      "parentUuid": "633ffd5e_606fc3de",
+      "range": {
+        "startLine": 905,
+        "startChar": 0,
+        "endLine": 914,
+        "endChar": 56
+      },
+      "revId": "3a91416eeee9316a867faddc8706f39219a0497f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
