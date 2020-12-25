@@ -16,6 +16,24 @@
       "message": "Can you please fix this error:\n\nframeworks/opt/telephony/tests/telephonytests/src/com/android/internal/telephony/dataconnection/DcTrackerTest.java:1580: error: method setupDataCall in class SimulatedCommandsVerifier cannot be applied to given types;\n        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(\n                                                    ^\n  required: int,DataProfile,boolean,boolean,int,LinkProperties,int,SliceInfo,Message\n  found: int,DataProfile,boolean,boolean,int,Object,int,Message\n  reason: actual and formal argument lists differ in length\n1 error",
       "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0e80ca_2e49ae60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2020-12-25T06:06:07Z",
+      "side": 1,
+      "message": "This error seems to be caused by the lack of SliceInfo in the argument of setupDataCall(), but, wthere is no the argument of SliceInfo in SimulatedCommandsVerifier#setupDataCall() in latest oss-master.\nAnd, we have confirmed that the tests passed in our environment which is synced the latest oss-master in fact.\n\nSimulatedCommandsVerifier#setupDataCall()\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n    @Override\n    public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,\n                              boolean allowRoaming, int reason, LinkProperties linkProperties,\n                              int pduSessionId, Message result) {\n    }\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nTherefore, I guess that there is any difference between our environment and yours.\nDoes SimulatedCommandsVerifier#setupDataCall () has SliceInfo argument in your environment?\nIf yes, could you tell us the gerrit to change it?",
+      "parentUuid": "9468516e_82aa17a6",
+      "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
