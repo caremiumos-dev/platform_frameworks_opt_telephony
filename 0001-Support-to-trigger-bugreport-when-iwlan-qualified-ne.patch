@@ -1,0 +1,103 @@
+From 771ad36338a35f79f6cd25910af4a8ec5c36699c Mon Sep 17 00:00:00 2001
+From: Willy Hu <willycwhu@google.com>
+Date: Fri, 25 Dec 2020 15:05:31 +0800
+Subject: [PATCH 1/1] Support to trigger bugreport when iwlan/qualified network
+ service crash
+
+- trigger bugreport when iwlan service crash
+- trigger bugreport when qualified network service crash
+
+Bug: 171789041
+Test: atest FrameworksTelephonyTests
+Change-Id: I425c0aa8c9605d4ef6bd5283f5a9d9db6d4d7537
+---
+ .../dataconnection/AccessNetworksManager.java          | 10 +++++++++-
+ .../telephony/dataconnection/DataServiceManager.java   |  8 +++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java b/src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java
+index 932e9eb949..1c019376b9 100644
+--- a/src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java
++++ b/src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java
+@@ -34,6 +34,7 @@ import android.os.RemoteException;
+ import android.os.UserHandle;
+ import android.telephony.AccessNetworkConstants.AccessNetworkType;
+ import android.telephony.Annotation.ApnType;
++import android.telephony.AnomalyReporter;
+ import android.telephony.CarrierConfigManager;
+ import android.telephony.data.ApnSetting;
+ import android.telephony.data.IQualifiedNetworksService;
+@@ -50,6 +51,8 @@ import java.io.FileDescriptor;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
++import java.util.Set;
++import java.util.UUID;
+ import java.util.stream.Collectors;
+ 
+ /**
+@@ -60,6 +63,8 @@ import java.util.stream.Collectors;
+ public class AccessNetworksManager extends Handler {
+     private static final String TAG = AccessNetworksManager.class.getSimpleName();
+     private static final boolean DBG = false;
++    private final UUID mAnomalyUUID = UUID.fromString("c2d1a639-00e2-4561-9619-6acf37d90590");
++    private String mLastBoundPackageName;
+ 
+     private static final int[] SUPPORTED_APN_TYPES = {
+             ApnSetting.TYPE_DEFAULT,
+@@ -139,7 +144,9 @@ public class AccessNetworksManager extends Handler {
+         @Override
+         public void binderDied() {
+             // TODO: try to rebind the service.
+-            loge("QualifiedNetworksService(" + mTargetBindingPackageName + ") died.");
++            loge("QualifiedNetworksService(" + mLastBoundPackageName + ") died.");
++            String message = "Qualified Network Service Crashed," + mLastBoundPackageName;
++            AnomalyReporter.reportAnomaly(mAnomalyUUID, message);
+         }
+     }
+ 
+@@ -149,6 +156,7 @@ public class AccessNetworksManager extends Handler {
+             if (DBG) log("onServiceConnected " + name);
+             mIQualifiedNetworksService = IQualifiedNetworksService.Stub.asInterface(service);
+             mDeathRecipient = new AccessNetworksManagerDeathRecipient();
++            mLastBoundPackageName = name.getPackageName();
+ 
+             try {
+                 service.linkToDeath(mDeathRecipient, 0 /* flags */);
+diff --git a/src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java b/src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java
+index 98dd4db6a1..07002d06fe 100644
+--- a/src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java
++++ b/src/java/com/android/internal/telephony/dataconnection/DataServiceManager.java
+@@ -109,6 +109,9 @@ public class DataServiceManager extends Handler {
+ 
+     private CellularDataServiceConnection mServiceConnection;
+ 
++    private final UUID mAnomalyUUID = UUID.fromString("fc1956de-c080-45de-8431-a1faab687110");
++    private String mLastBoundPackageName;
++
+     /**
+      * Helpful for logging
+      * @return the tag name
+@@ -139,8 +142,10 @@ public class DataServiceManager extends Handler {
+         @Override
+         public void binderDied() {
+             // TODO: try to rebind the service.
+-            loge("DataService " + mTargetBindingPackageName +  ", transport type " + mTransportType
++            loge("DataService " + mLastBoundPackageName +  ", transport type " + mTransportType
+                     + " died.");
++            String message = "Iwlan Data Service Crashed," + mLastBoundPackageName;
++            AnomalyReporter.reportAnomaly(mAnomalyUUID, message);
+         }
+     }
+ 
+@@ -212,6 +217,7 @@ public class DataServiceManager extends Handler {
+             mIDataService = IDataService.Stub.asInterface(service);
+             mDeathRecipient = new DataServiceManagerDeathRecipient();
+             mBound = true;
++            mLastBoundPackageName = name.getPackageName();
+ 
+             try {
+                 service.linkToDeath(mDeathRecipient, 0);
+-- 
+2.29.2.729.g45daf8777d-goog
+
