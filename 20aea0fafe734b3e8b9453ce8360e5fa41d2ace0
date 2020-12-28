@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08c6f993_ad193526",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2020-12-28T19:24:30Z",
+      "side": 1,
+      "message": "1. I would suggest using similar code as handleSimLoaded for consistency:\n\n        IccCard iccCard \u003d PhoneFactory.getPhone(phoneId).getIccCard();\n        if (iccCard \u003d\u003d null) {\n            logd(\"handleSimLocked: IccCard null\");\n            return;\n        }\n        IccRecords records \u003d iccCard.getIccRecords();\n        if (records \u003d\u003d null) {\n            logd(\"handleSimLocked: IccRecords null\");\n            return;\n        }\n        if (IccUtils.stripTrailingFs(records.getFullIccId()) \u003d\u003d null) {\n            logd(\"handleSimLocked: IccID null\");\n            return;\n        }\n        sIccId[phoneId] \u003d IccUtils.stripTrailingFs(records.getFullIccId());\n\n2. Do not return from these if checks, instead just make sure that updateSubscriptionInfoByIccId() is called only if those checks pass -- rest of the function should execute normally even if those checks fail.",
+      "range": {
+        "startLine": 419,
+        "startChar": 8,
+        "endLine": 430,
+        "endChar": 58
+      },
+      "revId": "20aea0fafe734b3e8b9453ce8360e5fa41d2ace0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
