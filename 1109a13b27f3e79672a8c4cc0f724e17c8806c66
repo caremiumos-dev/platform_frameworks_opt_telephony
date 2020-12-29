@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000006982202",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1285363?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2a12b5b9_fff819be",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-12-29T11:45:53Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 102
+      },
+      "revId": "1109a13b27f3e79672a8c4cc0f724e17c8806c66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
