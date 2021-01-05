@@ -41,6 +41,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.LinkProperties;
+import android.net.NetworkCapabilities;
+import android.net.vcn.VcnManager;
+import android.net.vcn.VcnUnderlyingNetworkPolicy;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -309,6 +313,7 @@ public abstract class TelephonyTest {
     protected AppOpsManager mAppOpsManager;
     protected CarrierConfigManager mCarrierConfigManager;
     protected UserManager mUserManager;
+    protected VcnManager mVcnManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -449,6 +454,7 @@ public abstract class TelephonyTest {
         mCarrierConfigManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        mVcnManager = (VcnManager) mContext.getSystemService(Context.VCN_MANAGEMENT_SERVICE);
 
         //mTelephonyComponentFactory
         doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
@@ -615,6 +621,15 @@ public abstract class TelephonyTest {
         doReturn(mNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
                 anyInt(), anyInt());
         doReturn(new HalVersion(1, 4)).when(mPhone).getHalVersion();
+
+        doAnswer(invocation -> {
+            NetworkCapabilities nc = invocation.getArgument(0);
+            return new VcnUnderlyingNetworkPolicy(
+                    false /* isTearDownRequested */, nc);
+        })
+                .when(mVcnManager)
+                .getUnderlyingNetworkPolicy(
+                        any(NetworkCapabilities.class), any(LinkProperties.class));
 
         //SIM
         doReturn(1).when(mTelephonyManager).getSimCount();
