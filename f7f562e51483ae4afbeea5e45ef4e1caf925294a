@@ -1,0 +1,238 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "53da90bd_0761904d",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 106
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ef3d47ea_7cb33514",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 399,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 103
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "fb0803a7_0d172661",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 102
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c407b154_112d4b8b",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1083,
+        "startChar": 0,
+        "endLine": 1083,
+        "endChar": 102
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "8b5de2e4_01e4c1e1",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1101,
+        "startChar": 0,
+        "endLine": 1101,
+        "endChar": 110
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "5d9212a1_8eb1441b",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 2003,
+        "startChar": 0,
+        "endLine": 2003,
+        "endChar": 103
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "559b8c11_c75f338c",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 2025,
+        "startChar": 0,
+        "endLine": 2025,
+        "endChar": 105
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "1660e6ea_ac0724d6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 103
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007030775",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d4",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d4d65e3b_70e4e9a3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-05T05:53:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 101
+      },
+      "revId": "f7f562e51483ae4afbeea5e45ef4e1caf925294a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
