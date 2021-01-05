@@ -74,7 +74,12 @@ public class DcNetworkAgent extends NetworkAgent {
 
     private NetworkCapabilities mNetworkCapabilities;
 
+    private VcnManager mVcnManager;
+
     public final DcKeepaliveTracker keepaliveTracker = new DcKeepaliveTracker();
+
+    private final DcVcnUnderlyingNetworkPolicyListener mVcnPolicyListener =
+            new DcVcnUnderlyingNetworkPolicyListener();
 
     private DataConnection mDataConnection;
 
@@ -95,6 +100,7 @@ public class DcNetworkAgent extends NetworkAgent {
         mNetworkCapabilities = dc.getNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
+        mVcnManager = mPhone.getContext().getSystemService(VcnManager.class);
         int networkType = getNetworkType();
         setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
         setLegacyExtraInfo(dc.getApnSetting().getApnName());
@@ -314,6 +320,7 @@ public class DcNetworkAgent extends NetworkAgent {
         if (!isOwned(dc, "unregister")) return;
 
         logd("Unregister from connectivity service. " + sInterfaceNames.get(mId) + " removed.");
+        mVcnManager.unregisterVcnUnderlyingNetworkPolicyListener(mVcnPolicyListener);
         sInterfaceNames.remove(mId);
         super.unregister();
     }
@@ -343,6 +350,38 @@ public class DcNetworkAgent extends NetworkAgent {
 
         mDataConnection.obtainMessage(DataConnection.EVENT_KEEPALIVE_STOP_REQUEST, slot)
                 .sendToTarget();
+    }
+
+    @Override
+    public synchronized void markConnected() {
+        mVcnManager.registerVcnUnderlyingNetworkPolicyListener(mVcnPolicyListener);
+
+        if (updateUnderlyingNetworkPolicyAndGetTeardownRequested()) {
+            return;
+        }
+
+        super.markConnected();
+    }
+
+    /** Update the underlying Network policy for this DcNetworkAgent.
+     *
+     * <p>Based on the Network policy, either tear down this Network or update ConnectivityService
+     * with the VCN-provided NetworkCapabilities.
+     *
+     * @return whether this DcNetworkAgent must be torn down (as indicated by the updated Network
+     * policy)
+     */
+    private boolean updateUnderlyingNetworkPolicyAndGetTeardownRequested() {
+        VcnUnderlyingNetworkPolicy networkPolicy =
+                mVcnManager.getUnderlyingNetworkPolicy(
+                        mNetworkCapabilities, mDataConnection.getLinkProperties());
+        if (networkPolicy.isTeardownRequested()) {
+            tearDown();
+            return true;
+        }
+
+        sendNetworkCapabilities(networkPolicy.getMergedNetworkCapabilities(), mDataConnection);
+        return false;
     }
 
     @Override
@@ -509,6 +548,14 @@ public class DcNetworkAgent extends NetworkAgent {
                 default:
                     loge("Invalid Keepalive Status received, " + kr.currentStatus);
             }
+        }
+    }
+
+    /** Class used to track VCN-defined Network policies for this DcNetworkAgent. */
+    class DcVcnUnderlyingNetworkPolicyListener implements VcnUnderlyingNetworkPolicyListener {
+        @Override
+        public void onPolicyChanged() {
+            updateUnderlyingNetworkPolicyAndGetTeardownRequested();
         }
     }
 }
