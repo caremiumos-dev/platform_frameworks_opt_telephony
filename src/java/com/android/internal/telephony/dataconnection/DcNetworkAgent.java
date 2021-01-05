@@ -88,6 +88,7 @@ public class DcNetworkAgent extends NetworkAgent {
         super(phone.getContext(), dc.getHandler().getLooper(), "DcNetworkAgent",
                 dc.getNetworkCapabilities(), dc.getLinkProperties(), score, config,
                 networkProvider);
+
         register();
         mId = getNetwork().netId;
         mTag = "DcNetworkAgent" + "-" + mId;
