@@ -34,6 +34,23 @@
       "parentUuid": "9468516e_82aa17a6",
       "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef66246f_d99477dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-05T17:58:21Z",
+      "side": 1,
+      "message": "Daniel, can you ptal? The failure here is related to addition of the new SliceInfo parameter.",
+      "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
