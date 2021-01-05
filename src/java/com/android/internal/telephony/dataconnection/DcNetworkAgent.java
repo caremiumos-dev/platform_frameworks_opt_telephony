@@ -18,6 +18,7 @@ package com.android.internal.telephony.dataconnection;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.content.Context;
 import android.net.KeepalivePacketData;
 import android.net.LinkProperties;
 import android.net.NattKeepalivePacketData;
@@ -27,6 +28,9 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkProvider;
 import android.net.SocketKeepalive;
 import android.net.Uri;
+import android.net.vcn.VcnManager;
+import android.net.vcn.VcnManager.VcnUnderlyingNetworkPolicyListener;
+import android.net.vcn.VcnUnderlyingNetworkPolicy;
 import android.os.Message;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
@@ -52,6 +56,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 /**
  * This class represents a network agent which is communication channel between
@@ -74,7 +79,12 @@ public class DcNetworkAgent extends NetworkAgent {
 
     private NetworkCapabilities mNetworkCapabilities;
 
+    private VcnManager mVcnManager;
+
     public final DcKeepaliveTracker keepaliveTracker = new DcKeepaliveTracker();
+
+    private final DcVcnUnderlyingNetworkPolicyListener mVcnPolicyListener =
+            new DcVcnUnderlyingNetworkPolicyListener();
 
     private DataConnection mDataConnection;
 
@@ -86,15 +96,21 @@ public class DcNetworkAgent extends NetworkAgent {
     DcNetworkAgent(DataConnection dc, Phone phone, int score, NetworkAgentConfig config,
             NetworkProvider networkProvider, int transportType) {
         super(phone.getContext(), dc.getHandler().getLooper(), "DcNetworkAgent",
-                dc.getNetworkCapabilities(), dc.getLinkProperties(), score, config,
-                networkProvider);
+                getMergedNetworkCapabilitiesOnStart(phone.getContext(), dc), dc.getLinkProperties(),
+                score, config, networkProvider);
         register();
         mId = getNetwork().netId;
         mTag = "DcNetworkAgent" + "-" + mId;
         mPhone = phone;
-        mNetworkCapabilities = dc.getNetworkCapabilities();
+
+        VcnUnderlyingNetworkPolicy networkPolicy =
+                getUnderlyingNetworkPolicy(mPhone.getContext(), dc);
+        mNetworkCapabilities = networkPolicy.getMergedNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
+        mVcnManager = mPhone.getContext().getSystemService(VcnManager.class);
+        mVcnManager.addVcnUnderlyingNetworkPolicyListener(
+                Executors.newSingleThreadExecutor(), mVcnPolicyListener);
         int networkType = getNetworkType();
         setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
         setLegacyExtraInfo(dc.getApnSetting().getApnName());
@@ -105,6 +121,21 @@ public class DcNetworkAgent extends NetworkAgent {
         } else {
             loge("The connection does not have a valid link properties.");
         }
+
+        if (networkPolicy.isTeardownRequested()) {
+            tearDownForVcn();
+        }
+    }
+
+    private static VcnUnderlyingNetworkPolicy getUnderlyingNetworkPolicy(
+            Context context, DataConnection dc) {
+        return context.getSystemService(VcnManager.class)
+                .getUnderlyingNetworkPolicy(dc.getNetworkCapabilities(), dc.getLinkProperties());
+    }
+
+    private static NetworkCapabilities getMergedNetworkCapabilitiesOnStart(
+            Context context, DataConnection dc) {
+        return getUnderlyingNetworkPolicy(context, dc).getMergedNetworkCapabilities();
     }
 
     private @NetworkType int getNetworkType() {
@@ -182,15 +213,21 @@ public class DcNetworkAgent extends NetworkAgent {
 
     @Override
     public synchronized void onNetworkUnwanted() {
+        tearDown("onNetworkUnwanted", Phone.REASON_RELEASED_BY_CONNECTIVITY_SERVICE);
+    }
+
+    private void tearDown(String source, String reason) {
         if (mDataConnection == null) {
-            loge("onNetworkUnwanted found called on no-owner DcNetworkAgent!");
+            loge(source + " found called on no-owner DcNetworkAgent!");
             return;
         }
 
-        logd("onNetworkUnwanted called. Now tear down the data connection "
-                + mDataConnection.getName());
-        mDataConnection.tearDownAll(Phone.REASON_RELEASED_BY_CONNECTIVITY_SERVICE,
-                DcTracker.RELEASE_TYPE_DETACH, null);
+        logd(source + " called. Now tear down the data connection " + mDataConnection.getName());
+        mDataConnection.tearDownAll(reason, DcTracker.RELEASE_TYPE_DETACH, null);
+    }
+
+    private synchronized void tearDownForVcn() {
+        tearDown("tearDownForVcn", Phone.REASON_VCN_REQUIRED_TEARDOWN);
     }
 
     @Override
@@ -257,6 +294,16 @@ public class DcNetworkAgent extends NetworkAgent {
                                                      DataConnection dc) {
         if (!isOwned(dc, "sendNetworkCapabilities")) return;
 
+        // Check for VCN-specified Network policy before logging and sending updated
+        // NetworkCapabilities.
+        VcnUnderlyingNetworkPolicy networkPolicy =
+                mVcnManager.getUnderlyingNetworkPolicy(networkCapabilities, dc.getLinkProperties());
+        if (networkPolicy.isTeardownRequested()) {
+            tearDownForVcn();
+            return;
+        }
+        networkCapabilities = networkPolicy.getMergedNetworkCapabilities();
+
         if (!networkCapabilities.equals(mNetworkCapabilities)) {
             String logStr = "Changed from " + mNetworkCapabilities + " to "
                     + networkCapabilities + ", Data RAT="
@@ -314,6 +361,7 @@ public class DcNetworkAgent extends NetworkAgent {
         if (!isOwned(dc, "unregister")) return;
 
         logd("Unregister from connectivity service. " + sInterfaceNames.get(mId) + " removed.");
+        mVcnManager.removeVcnUnderlyingNetworkPolicyListener(mVcnPolicyListener);
         sInterfaceNames.remove(mId);
         super.unregister();
     }
@@ -508,6 +556,18 @@ public class DcNetworkAgent extends NetworkAgent {
                     break;
                 default:
                     loge("Invalid Keepalive Status received, " + kr.currentStatus);
+            }
+        }
+    }
+
+    /** Class used to track VCN-defined Network policies for this DcNetworkAgent. */
+    class DcVcnUnderlyingNetworkPolicyListener implements VcnUnderlyingNetworkPolicyListener {
+        @Override
+        public void onPolicyChanged() {
+            synchronized (DcNetworkAgent.this) {
+                // Send the current NetworkCapabilities from the current DataConnection, which will
+                // get the merged NetworkCapabilities before sending them to ConnectivityService.
+                sendNetworkCapabilities(mNetworkCapabilities, mDataConnection);
             }
         }
     }
