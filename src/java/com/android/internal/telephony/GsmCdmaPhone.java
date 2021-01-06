@@ -4046,7 +4046,7 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(
             int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
-        mCi.setSignalStrengthReportingCriteria(new SignalThresholdInfo(signalStrengthMeasure,
+        mCi.setSignalStrengthReportingCriteria(new SignalThresholdInfo(ran, signalStrengthMeasure,
                 REPORTING_HYSTERESIS_MILLIS, REPORTING_HYSTERESIS_DB, thresholds, isEnabled),
                 ran, null);
     }
