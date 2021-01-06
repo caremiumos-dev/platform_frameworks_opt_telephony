@@ -65,6 +65,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6153dc70_b99c7f0c",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-06T22:18:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf874a39_f4a25c03",
+      "range": {
+        "startLine": 423,
+        "startChar": 12,
+        "endLine": 424,
+        "endChar": 53
+      },
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e32f8c50_dfb2c19b",
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "Generally handleSimLocked would be called very first when SIM is PIN locked, there is no chance of adding subId before handleSimLocked() method call so i think we do not need this extra check.",
       "parentUuid": "e32f8c50_dfb2c19b",
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cadf2d1_fcc6c795",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-06T22:18:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eaa3b524_3219779a",
       "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -137,6 +179,30 @@
       "side": 1,
       "message": "These we cannot move to handleSimReady().\n\nMost of these code logic depends on SIM records information which not available by the time handleSimReady() called so we have to have this here in handleSimLoaded() only.",
       "parentUuid": "a5e30467_6c4431ee",
+      "range": {
+        "startLine": 517,
+        "startChar": 10,
+        "endLine": 517,
+        "endChar": 14
+      },
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da10cd2_d2c979ee",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-06T22:18:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5ddef295_3af1534e",
       "range": {
         "startLine": 517,
         "startChar": 10,
