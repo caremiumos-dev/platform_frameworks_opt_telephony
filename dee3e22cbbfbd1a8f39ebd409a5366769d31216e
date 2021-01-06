@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05721475_c8cfaf01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-01-06T17:58:07Z",
+      "side": 1,
+      "message": "Jack, can you take a look at this while Chen is out?",
+      "revId": "dee3e22cbbfbd1a8f39ebd409a5366769d31216e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
