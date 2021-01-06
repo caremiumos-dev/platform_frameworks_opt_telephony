@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.os.Parcel;
+import android.telephony.AccessNetworkConstants;
 import android.telephony.SignalThresholdInfo;
 
 import androidx.test.filters.SmallTest;
@@ -33,24 +34,81 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(JUnit4.class)
 public class SignalThresholdInfoTest extends TestCase {
     private static final int HYSTERESIS_DB = 2;
     private static final int HYSTERESIS_MS = 30;
-    private static final int[] SSRSRP_THRESHOLDS = new int[] {-30, 10, 45, 130};
+    private static final int[] SSRSRP_THRESHOLDS = new int[]{-30, 10, 45, 130};
 
-    private final int[] mRssiThresholds = new int[] {-109, -103, -97, -89};
-    private final int[] mRscpThresholds = new int[] {-115, -105, -95, -85};
-    private final int[] mRsrpThresholds = new int[] {-128, -118, -108, -98};
-    private final int[] mRsrqThresholds = new int[] {-19, -17, -14, -12};
-    private final int[] mRssnrThresholds = new int[] {-30, 10, 45, 130};
-    private final int[][] mThresholds = new int[5][];
+    // Map of SignalMeasurementType to invalid thresholds edge values.
+    // Each invalid value will be constructed with a thresholds array to test separately.
+    private static final Map<Integer, List<Integer>> INVALID_THRESHOLDS_MAP = Map.of(
+            SignalThresholdInfo.SIGNAL_RSSI,
+            List.of(SignalThresholdInfo.SIGNAL_RSSI_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSSI_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSCP,
+            List.of(SignalThresholdInfo.SIGNAL_RSCP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSCP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSRP,
+            List.of(SignalThresholdInfo.SIGNAL_RSRP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSRP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSRQ,
+            List.of(SignalThresholdInfo.SIGNAL_RSRQ_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSRQ_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSSNR,
+            List.of(SignalThresholdInfo.SIGNAL_RSSNR_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSSNR_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSRSRP,
+            List.of(SignalThresholdInfo.SIGNAL_SSRSRP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSRSRP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSRSRQ,
+            List.of(SignalThresholdInfo.SIGNAL_SSRSRQ_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSRSRQ_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSSINR,
+            List.of(SignalThresholdInfo.SIGNAL_SSSINR_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSSINR_MAX_VALUE + 1)
+    );
+
+    // Map of RAN to allowed SignalMeasurementType set.
+    // RAN/TYPE pair will be used to verify the validation of the combo
+    private static final Map<Integer, Set<Integer>> VALID_RAN_TO_MEASUREMENT_TYPE_MAP = Map.of(
+            AccessNetworkConstants.AccessNetworkType.GERAN,
+                Set.of(SignalThresholdInfo.SIGNAL_RSSI),
+            AccessNetworkConstants.AccessNetworkType.CDMA2000,
+                Set.of(SignalThresholdInfo.SIGNAL_RSSI),
+            AccessNetworkConstants.AccessNetworkType.UTRAN,
+                Set.of(SignalThresholdInfo.SIGNAL_RSCP),
+            AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                Set.of(SignalThresholdInfo.SIGNAL_RSRP,
+                        SignalThresholdInfo.SIGNAL_RSRQ, SignalThresholdInfo.SIGNAL_RSSNR),
+            AccessNetworkConstants.AccessNetworkType.NGRAN,
+                Set.of(SignalThresholdInfo.SIGNAL_SSRSRP, SignalThresholdInfo.SIGNAL_SSRSRQ,
+                        SignalThresholdInfo.SIGNAL_SSSINR)
+    );
+
+    // Deliberately picking up the max/min value in each range to test the edge cases
+    private final int[] mRssiThresholds = new int[]{-113, -103, -97, -51};
+    private final int[] mRscpThresholds = new int[]{-120, -105, -95, -25};
+    private final int[] mRsrpThresholds = new int[]{-140, -118, -108, -44};
+    private final int[] mRsrqThresholds = new int[]{-34, -17, -14, 3};
+    private final int[] mRssnrThresholds = new int[]{-20, 10, 20, 30};
+    private final int[] mSsrsrpThresholds = new int[]{-140, -118, -98, -44};
+    private final int[] mSsrsrqThresholds = new int[]{-43, -17, -14, 20};
+    private final int[] mSssinrThresholds = new int[]{-23, -16, -10, 40};
+
+    private final int[][] mThresholds = {mRssiThresholds, mRscpThresholds, mRsrpThresholds,
+            mRsrqThresholds, mRssnrThresholds, mSsrsrpThresholds, mSsrsrqThresholds,
+            mSssinrThresholds};
 
     @Test
     @SmallTest
     public void testSignalThresholdInfo() throws Exception {
         SignalThresholdInfo signalThresholdInfo = new SignalThresholdInfo(
+                AccessNetworkConstants.AccessNetworkType.NGRAN,
                 SignalThresholdInfo.SIGNAL_SSRSRP,
                 HYSTERESIS_MS,
                 HYSTERESIS_DB,
@@ -69,7 +127,6 @@ public class SignalThresholdInfoTest extends TestCase {
     @Test
     @SmallTest
     public void testDefaultThresholdsConstruction() {
-        setThresholds();
         ArrayList<SignalThresholdInfo> stList = setSignalThresholdInfoConstructor();
 
         int count = 0;
@@ -98,8 +155,9 @@ public class SignalThresholdInfoTest extends TestCase {
     @SmallTest
     public void testGetSignalThresholdInfo() {
         ArrayList<SignalThresholdInfo> stList = new ArrayList<>();
-        stList.add(new SignalThresholdInfo(0, 0, 0, null, false));
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI, HYSTERESIS_MS,
+        stList.add(new SignalThresholdInfo(1, 0, 0, 0, null, false));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.GERAN,
+                SignalThresholdInfo.SIGNAL_RSSI, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRssiThresholds, false));
 
         assertThat(stList.get(0).getThresholds()).isEqualTo(null);
@@ -110,46 +168,167 @@ public class SignalThresholdInfoTest extends TestCase {
     @Test
     @SmallTest
     public void testEqualsSignalThresholdInfo() {
-        final int[] dummyThresholds = new int[] {-100, -1, 1, 100};
-        SignalThresholdInfo st1 = new SignalThresholdInfo(1, HYSTERESIS_MS, HYSTERESIS_DB,
+        final int[] dummyThresholds = new int[]{-100, -1, 1, 100};
+        final int[] dummyThreholdsDisordered = new int[]{100, -1, -100, 1};
+        SignalThresholdInfo st1 = new SignalThresholdInfo(1, 1, HYSTERESIS_MS, HYSTERESIS_DB,
                 mRssiThresholds, false);
-        SignalThresholdInfo st2 = new SignalThresholdInfo(2, HYSTERESIS_MS, HYSTERESIS_DB,
+        SignalThresholdInfo st2 = new SignalThresholdInfo(2, 2, HYSTERESIS_MS, HYSTERESIS_DB,
                 mRssiThresholds, false);
-        SignalThresholdInfo st3 = new SignalThresholdInfo(1, HYSTERESIS_MS, HYSTERESIS_DB,
+        SignalThresholdInfo st3 = new SignalThresholdInfo(1, 1, HYSTERESIS_MS, HYSTERESIS_DB,
                 dummyThresholds, false);
-        SignalThresholdInfo st4 = new SignalThresholdInfo(1, HYSTERESIS_MS, HYSTERESIS_DB,
+        SignalThresholdInfo st4 = new SignalThresholdInfo(1, 1, HYSTERESIS_MS, HYSTERESIS_DB,
                 mRssiThresholds, false);
+        SignalThresholdInfo st5 = new SignalThresholdInfo(1, 1, HYSTERESIS_MS, HYSTERESIS_DB,
+                dummyThreholdsDisordered, false);
 
         //Return true if all SignalThresholdInfo values match.
         assertTrue(st1.equals(st1));
         assertFalse(st1.equals(st2));
         assertFalse(st1.equals(st3));
         assertTrue(st1.equals(st4));
+        //Threshold values ordering doesn't matter
+        assertTrue(st3.equals(st5));
         //Return false if the object of argument is other than SignalThresholdInfo.
         assertFalse(st1.equals(new String("test")));
     }
 
-    private void setThresholds() {
-        mThresholds[0] = mRssiThresholds;
-        mThresholds[1] = mRscpThresholds;
-        mThresholds[2] = mRsrpThresholds;
-        mThresholds[3] = mRsrqThresholds;
-        mThresholds[4] = mRssnrThresholds;
+    @Test
+    @SmallTest
+    public void testPublicConstructorWithValidParameters() {
+        ArrayList<SignalThresholdInfo> stList = setSignalThresholdInfoFromPublicConstructor();
+
+        for (int i = 0; i < stList.size(); i++) {
+            SignalThresholdInfo st = stList.get(i);
+            assertThat(st.getThresholds()).isEqualTo(mThresholds[i]);
+            assertThat(st.getHysteresisMs()).isEqualTo(SignalThresholdInfo.HYSTERESIS_MS_UNUSED);
+            assertThat(st.getHysteresisDb()).isEqualTo(SignalThresholdInfo.HYSTERESIS_DB_UNUSED);
+            assertThat(st.isEnabled()).isEqualTo(SignalThresholdInfo.IS_ENABLED_UNUSED);
+        }
+    }
+
+    @Test
+    @SmallTest
+    public void testPublicConstructorWithInvalidParameter() {
+        // Invalid signal measurement type
+        int[] invalidSignalMeasurementTypes = new int[]{-1, 0, 9};
+        for (int signalMeasurementType : invalidSignalMeasurementTypes) {
+            constructWithInvalidParameterThrowException(
+                    AccessNetworkConstants.AccessNetworkType.GERAN, signalMeasurementType,
+                    new int[]{-1});
+        }
+
+        // Empty thresholds array
+        List<int[]> emptyThresholds = Arrays.asList(null, new int[]{});
+        for (int[] thresholds : emptyThresholds) {
+            constructWithInvalidParameterThrowException(
+                    AccessNetworkConstants.AccessNetworkType.GERAN, SignalThresholdInfo.SIGNAL_RSSI,
+                    thresholds);
+        }
+
+        // Thresholds value out of range
+        for (int signalMeasurementType : INVALID_THRESHOLDS_MAP.keySet()) {
+            List<Integer> invalidThresholds = INVALID_THRESHOLDS_MAP.get(signalMeasurementType);
+            for (int threshold : invalidThresholds) {
+                constructWithInvalidParameterThrowException(getValidRan(signalMeasurementType),
+                        signalMeasurementType, new int[]{threshold});
+            }
+        }
+
+        // Invalid RAN/Measurement type combos
+        for (int ran : VALID_RAN_TO_MEASUREMENT_TYPE_MAP.keySet()) {
+            Set validTypes = VALID_RAN_TO_MEASUREMENT_TYPE_MAP.get(ran);
+            for (int type = SignalThresholdInfo.SIGNAL_RSSI;
+                    type <= SignalThresholdInfo.SIGNAL_SSSINR; type++) {
+                if (!validTypes.contains(type)) {
+                    constructWithInvalidParameterThrowException(ran, type, new int[]{-1});
+                }
+            }
+        }
+    }
+
+    private void constructWithInvalidParameterThrowException(int ran, int signalMeasurementType,
+            int[] thresholds) {
+        try {
+            new SignalThresholdInfo(ran, signalMeasurementType, thresholds);
+            fail("exception expected");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     private ArrayList<SignalThresholdInfo> setSignalThresholdInfoConstructor() {
         ArrayList<SignalThresholdInfo> stList = new ArrayList<>();
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI, HYSTERESIS_MS,
+
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.GERAN,
+                SignalThresholdInfo.SIGNAL_RSSI, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRssiThresholds, false));
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSCP, HYSTERESIS_MS,
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.UTRAN,
+                SignalThresholdInfo.SIGNAL_RSCP, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRscpThresholds, false));
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRP, HYSTERESIS_MS,
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSRP, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRsrpThresholds, false));
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRQ, HYSTERESIS_MS,
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSRQ, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRsrqThresholds, false));
-        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSNR, HYSTERESIS_MS,
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSSNR, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRssnrThresholds, false));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSRSRP, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSsrsrpThresholds, false));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSRSRQ, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSsrsrqThresholds, false));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSSINR, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSssinrThresholds, false));
 
         return stList;
+    }
+
+    private ArrayList<SignalThresholdInfo> setSignalThresholdInfoFromPublicConstructor() {
+        ArrayList<SignalThresholdInfo> stList = new ArrayList<>();
+
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.GERAN,
+                SignalThresholdInfo.SIGNAL_RSSI, mRssiThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.UTRAN,
+                SignalThresholdInfo.SIGNAL_RSCP, mRscpThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSRP, mRsrpThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSRQ, mRsrqThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.EUTRAN,
+                SignalThresholdInfo.SIGNAL_RSSNR, mRssnrThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSRSRP, mSsrsrpThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSRSRQ, mSsrsrqThresholds));
+        stList.add(new SignalThresholdInfo(AccessNetworkConstants.AccessNetworkType.NGRAN,
+                SignalThresholdInfo.SIGNAL_SSSINR, mSssinrThresholds));
+
+        return stList;
+    }
+
+    /**
+     * Return a possible valid RAN value for the measurement type. This is used to prevent the
+     * invalid ran/type causing IllegalArgumentException when testing other invalid input cases.
+     */
+    private static int getValidRan(@SignalThresholdInfo.SignalMeasurementType int type) {
+        switch (type) {
+            case SignalThresholdInfo.SIGNAL_RSSI:
+                return AccessNetworkConstants.AccessNetworkType.GERAN;
+            case SignalThresholdInfo.SIGNAL_RSCP:
+                return AccessNetworkConstants.AccessNetworkType.UTRAN;
+            case SignalThresholdInfo.SIGNAL_RSRP:
+            case SignalThresholdInfo.SIGNAL_RSRQ:
+            case SignalThresholdInfo.SIGNAL_RSSNR:
+                return AccessNetworkConstants.AccessNetworkType.EUTRAN;
+            case SignalThresholdInfo.SIGNAL_SSRSRP:
+            case SignalThresholdInfo.SIGNAL_SSRSRQ:
+            case SignalThresholdInfo.SIGNAL_SSSINR:
+                return AccessNetworkConstants.AccessNetworkType.NGRAN;
+            default:
+                return AccessNetworkConstants.AccessNetworkType.UNKNOWN;
+        }
     }
 }
