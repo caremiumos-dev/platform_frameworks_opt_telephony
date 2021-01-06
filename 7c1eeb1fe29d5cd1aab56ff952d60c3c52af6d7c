@@ -16,6 +16,24 @@
       "message": "Hi Takeshi, Qiong, can you resolve the merge conflict and resubmit? Thanks.",
       "revId": "7c1eeb1fe29d5cd1aab56ff952d60c3c52af6d7c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25b5e4f_b7c6e45b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-01-06T09:25:17Z",
+      "side": 1,
+      "message": "Hi Mingming,\n\nI\u0027m sorry for late response. I update the patch.",
+      "parentUuid": "6e3d759d_741cc9cc",
+      "revId": "7c1eeb1fe29d5cd1aab56ff952d60c3c52af6d7c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
