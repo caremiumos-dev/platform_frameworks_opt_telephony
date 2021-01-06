@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df5b297d_a2252d99",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "136c0091_0fdce298",
+      "range": {
+        "startLine": 50,
+        "startChar": 48,
+        "endLine": 50,
+        "endChar": 49
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ae7a77f_46000054",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-01-06T19:23:22Z",
       "side": 1,
       "message": "Nit: these seem small enough that they could just be inlined",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 0
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59f7555_1f3e0488",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ae7a77f_46000054",
       "range": {
         "startLine": 52,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "990fc1fa_7d941ef8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa98c3a_006e79a3",
+      "range": {
+        "startLine": 60,
+        "startChar": 45,
+        "endLine": 60,
+        "endChar": 67
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e813f35_a3ba5215",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-01-06T19:23:22Z",
       "side": 1,
       "message": "Nit: these should be two separate arrays for each measurement since there are two different boundary conditions",
+      "range": {
+        "startLine": 61,
+        "startChar": 45,
+        "endLine": 63,
+        "endChar": 66
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f191304_5d191fc0",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "yes, change to list of invalid values and construct thresholds array with each invalid value during test. This can make the data structure a bit simpler.\nThanks",
+      "parentUuid": "1e813f35_a3ba5215",
       "range": {
         "startLine": 61,
         "startChar": 45,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d989f99f_bd03fff4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4cbbeb1_7948ecc4",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 170,
+        "endChar": 47
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10213d93_cc7d8035",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-01-06T19:23:22Z",
       "side": 1,
       "message": "This seems a bit odd. I\u0027m pretty sure replacing this with a static { ... } block should work?",
+      "range": {
+        "startLine": 206,
+        "startChar": 17,
+        "endLine": 206,
+        "endChar": 30
+      },
+      "revId": "7de8abf2adb35ad8c18e0b6f059b03050b9f41e1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c125b7a_1e56ffa2",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalThresholdInfoTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-06T23:57:12Z",
+      "side": 1,
+      "message": "Yes. An array literal just works.",
+      "parentUuid": "10213d93_cc7d8035",
       "range": {
         "startLine": 206,
         "startChar": 17,
