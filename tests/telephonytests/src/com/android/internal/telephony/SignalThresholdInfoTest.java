@@ -33,6 +33,8 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(JUnit4.class)
 public class SignalThresholdInfoTest extends TestCase {
@@ -40,12 +42,47 @@ public class SignalThresholdInfoTest extends TestCase {
     private static final int HYSTERESIS_MS = 30;
     private static final int[] SSRSRP_THRESHOLDS = new int[] {-30, 10, 45, 130};
 
-    private final int[] mRssiThresholds = new int[] {-109, -103, -97, -89};
-    private final int[] mRscpThresholds = new int[] {-115, -105, -95, -85};
-    private final int[] mRsrpThresholds = new int[] {-128, -118, -108, -98};
-    private final int[] mRsrqThresholds = new int[] {-19, -17, -14, -12};
-    private final int[] mRssnrThresholds = new int[] {-30, 10, 45, 130};
-    private final int[][] mThresholds = new int[5][];
+    // Deliberately picking up the max/min value in each range to test the edge cases
+    private final int[] mRssiThresholds = new int[] {-113, -103, -97, -51};
+    private final int[] mRscpThresholds = new int[] {-120, -105, -95, -25};
+    private final int[] mRsrpThresholds = new int[] {-140, -118, -108, -44};
+    private final int[] mRsrqThresholds = new int[] {-34, -17, -14, 3};
+    private final int[] mRssnrThresholds = new int[] {-20, 10, 20, 30};
+    private final int[] mSsrsrpThresholds = new int[] {-140, -118, -98, -44};
+    private final int[] mSsrsrqThresholds = new int[] {-43, -17, -14, 20};
+    private final int[] mSssinrThresholds = new int[] {-23, -16, -10, 40};
+    private final int[][] mThresholds = {mRssiThresholds, mRscpThresholds, mRsrpThresholds,
+            mRsrqThresholds, mRssnrThresholds, mSsrsrpThresholds, mSsrsrqThresholds,
+            mSssinrThresholds};
+
+    // Map of SignalMeasurementType to invalid thresholds edge values.
+    // Each invalid value will be constructed with a thresholds array to test separately.
+    private static final Map<Integer, List<Integer>> INVALID_THRESHOLDS_MAP = Map.of(
+            SignalThresholdInfo.SIGNAL_RSSI,
+            List.of(SignalThresholdInfo.SIGNAL_RSSI_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSSI_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSCP,
+            List.of(SignalThresholdInfo.SIGNAL_RSCP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSCP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSRP,
+            List.of(SignalThresholdInfo.SIGNAL_RSRP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSRP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSRQ,
+            List.of(SignalThresholdInfo.SIGNAL_RSRQ_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSRQ_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_RSSNR,
+            List.of(SignalThresholdInfo.SIGNAL_RSSNR_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_RSSNR_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSRSRP,
+            List.of(SignalThresholdInfo.SIGNAL_SSRSRP_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSRSRP_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSRSRQ,
+            List.of(SignalThresholdInfo.SIGNAL_SSRSRQ_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSRSRQ_MAX_VALUE + 1),
+            SignalThresholdInfo.SIGNAL_SSSINR,
+            List.of(SignalThresholdInfo.SIGNAL_SSSINR_MIN_VALUE - 1,
+                    SignalThresholdInfo.SIGNAL_SSSINR_MAX_VALUE + 1)
+    );
 
     @Test
     @SmallTest
@@ -69,7 +106,6 @@ public class SignalThresholdInfoTest extends TestCase {
     @Test
     @SmallTest
     public void testDefaultThresholdsConstruction() {
-        setThresholds();
         ArrayList<SignalThresholdInfo> stList = setSignalThresholdInfoConstructor();
 
         int count = 0;
@@ -129,12 +165,50 @@ public class SignalThresholdInfoTest extends TestCase {
         assertFalse(st1.equals(new String("test")));
     }
 
-    private void setThresholds() {
-        mThresholds[0] = mRssiThresholds;
-        mThresholds[1] = mRscpThresholds;
-        mThresholds[2] = mRsrpThresholds;
-        mThresholds[3] = mRsrqThresholds;
-        mThresholds[4] = mRssnrThresholds;
+    @Test
+    @SmallTest
+    public void testPublicConstructorWithValidParameters() {
+        ArrayList<SignalThresholdInfo> stList = setSignalThresholdInfoFromPublicConstructor();
+
+        for (int i = 0; i < stList.size(); i++) {
+            SignalThresholdInfo st = stList.get(i);
+            assertThat(st.getThresholds()).isEqualTo(mThresholds[i]);
+            assertThat(st.getHysteresisMs()).isEqualTo(SignalThresholdInfo.HYSTERESIS_MS_UNUSED);
+            assertThat(st.getHysteresisDb()).isEqualTo(SignalThresholdInfo.HYSTERESIS_DB_UNUSED);
+            assertThat(st.isEnabled()).isEqualTo(SignalThresholdInfo.IS_ENABLED_UNUSED);
+        }
+    }
+
+    @Test
+    @SmallTest
+    public void testPublicConstructorWithInvalidParameter() {
+        int[] invalidSignalMeasurementTypes = new int[]{-1, 0, 9};
+        for (int signalMeasurementType : invalidSignalMeasurementTypes) {
+            constructWithInvalidParameterThrowException(signalMeasurementType, new int[]{-1});
+        }
+
+        List<int[]> emptyThresholds = Arrays.asList(null, new int[]{});
+        for (int[] thresholds : emptyThresholds) {
+            constructWithInvalidParameterThrowException(SignalThresholdInfo.SIGNAL_RSSI,
+                    thresholds);
+        }
+
+        for (int signalMeasurementType : INVALID_THRESHOLDS_MAP.keySet()) {
+            List<Integer> invalidThresholds = INVALID_THRESHOLDS_MAP.get(signalMeasurementType);
+            for (int threshold : invalidThresholds) {
+                constructWithInvalidParameterThrowException(signalMeasurementType,
+                        new int[]{threshold});
+            }
+        }
+    }
+
+    private void constructWithInvalidParameterThrowException(int signalMeasurementType,
+            int[] thresholds) {
+        try {
+            new SignalThresholdInfo(signalMeasurementType, thresholds);
+            fail("expected exception");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     private ArrayList<SignalThresholdInfo> setSignalThresholdInfoConstructor() {
@@ -149,6 +223,27 @@ public class SignalThresholdInfoTest extends TestCase {
                 HYSTERESIS_DB, mRsrqThresholds, false));
         stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSNR, HYSTERESIS_MS,
                 HYSTERESIS_DB, mRssnrThresholds, false));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSRSRP, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSsrsrpThresholds, false));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSRSRQ, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSsrsrqThresholds, false));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSSINR, HYSTERESIS_MS,
+                HYSTERESIS_DB, mSssinrThresholds, false));
+
+        return stList;
+    }
+
+    private ArrayList<SignalThresholdInfo> setSignalThresholdInfoFromPublicConstructor() {
+        ArrayList<SignalThresholdInfo> stList = new ArrayList<>();
+
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSI, mRssiThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSCP, mRscpThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRP, mRsrpThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSRQ, mRsrqThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_RSSNR, mRssnrThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSRSRP, mSsrsrpThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSRSRQ, mSsrsrqThresholds));
+        stList.add(new SignalThresholdInfo(SignalThresholdInfo.SIGNAL_SSSINR, mSssinrThresholds));
 
         return stList;
     }
