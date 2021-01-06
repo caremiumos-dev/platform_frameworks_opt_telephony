@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf874a39_f4a25c03",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2021-01-06T09:11:37Z",
+      "side": 1,
+      "message": "No.\n\nIn normal scenarios the event order is like NOT_READY --\u003e READY --\u003e LOADED.\n\nIn SIM PIN lock scenario, the event order is like NOT_READY --\u003e LOCKED --\u003e(when user input PIN from UI) READY --\u003e LOADED",
+      "parentUuid": "ee74c5f0_eaef23f4",
+      "range": {
+        "startLine": 423,
+        "startChar": 12,
+        "endLine": 424,
+        "endChar": 53
+      },
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e32f8c50_dfb2c19b",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 7
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eaa3b524_3219779a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2021-01-06T09:11:37Z",
+      "side": 1,
+      "message": "Generally handleSimLocked would be called very first when SIM is PIN locked, there is no chance of adding subId before handleSimLocked() method call so i think we do not need this extra check.",
+      "parentUuid": "e32f8c50_dfb2c19b",
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5e30467_6c4431ee",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 7
@@ -71,6 +113,30 @@
       "writtenOn": "2021-01-05T17:36:23Z",
       "side": 1,
       "message": "What about the code in this block? Ideally I would think this should be done when subId is generated.",
+      "range": {
+        "startLine": 517,
+        "startChar": 10,
+        "endLine": 517,
+        "endChar": 14
+      },
+      "revId": "85cc8ba16edc8d0c0d1fc58fddf93bfed94baffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ddef295_3af1534e",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2021-01-06T09:11:37Z",
+      "side": 1,
+      "message": "These we cannot move to handleSimReady().\n\nMost of these code logic depends on SIM records information which not available by the time handleSimReady() called so we have to have this here in handleSimLoaded() only.",
+      "parentUuid": "a5e30467_6c4431ee",
       "range": {
         "startLine": 517,
         "startChar": 10,
