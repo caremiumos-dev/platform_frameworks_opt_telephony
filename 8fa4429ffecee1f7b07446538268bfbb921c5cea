@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc70ed3_c2d2c1ed",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-01-06T09:27:09Z",
+      "side": 1,
+      "message": "We need to call #pollState instead of #updateSpnDisplay. Because Modem returns PLMN with Unicode based on language setting but Telephony doesn\u0027t still get it at the timing of ACTION_LOCALE_CHANGED event. So, Telephony needs to call #pollTeate to get PLMN with Unicode from Modem.",
+      "range": {
+        "startLine": 582,
+        "startChar": 16,
+        "endLine": 582,
+        "endChar": 25
+      },
+      "revId": "8fa4429ffecee1f7b07446538268bfbb921c5cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
