@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b998837_bfc32cd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-07T23:12:15Z",
+      "side": 1,
+      "message": "Please add \"Test: \" line and unit tests for these changes.",
+      "revId": "8c1f03cd668c36377933eb47f31223242e2923be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8abaa5b_009c156d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1600,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-07T23:12:15Z",
+      "side": 1,
+      "message": "Can you please add some comments here to indicate what you\u0027re trying to do? Also some comments about what the phoneId is will be good. I am not familiar with this code and it isn\u0027t clear which phoneId is passed in. Is it the phoneId which we tried to switch DDS to? The code doesn\u0027t seem to match what you mentioned in your earlier response: \"For MO calls on non DDS sub, sometimes DDS switch request gets failed from Modem side. This piece of code will retry DDS switch in case of failure. This is to retry temp DDS switch in case of failures during call\". If it matches, please explain it in comments.",
+      "revId": "8c1f03cd668c36377933eb47f31223242e2923be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de58aac1_147853d2",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-07T23:12:15Z",
+      "side": 1,
+      "message": "Is this comment in the correct place? It doesn\u0027t seem to match the if check above.",
+      "range": {
+        "startLine": 1605,
+        "startChar": 20,
+        "endLine": 1606,
+        "endChar": 59
+      },
+      "revId": "8c1f03cd668c36377933eb47f31223242e2923be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

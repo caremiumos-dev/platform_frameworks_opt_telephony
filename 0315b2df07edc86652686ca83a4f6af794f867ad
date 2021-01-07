@@ -311,6 +311,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f330763a_ae45e029",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-07T23:12:15Z",
+      "side": 1,
+      "message": "Can you update the code here? Or do you need to wait till the other fix is available?",
+      "parentUuid": "8f69a43f_fdd2eae4",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 87
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9304470_916a5164",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 2
