@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa15f605_90f54346",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-07T21:48:02Z",
+      "side": 1,
+      "message": "LG, but will +1 once we get the RAN added to SigThreshInfo as well, we\u0027ll want to test that too.",
+      "revId": "6419df72f589d4fb42ab3c928a3c2ce07ec6e9c7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
