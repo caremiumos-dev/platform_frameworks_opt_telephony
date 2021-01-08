@@ -1656,6 +1656,8 @@ public class DataConnection extends StateMachine {
 
         result.setAdministratorUids(mAdministratorUids);
 
+        result.setSubscriberId(mPhone.getSubscriberId());
+
         return result;
     }
 
@@ -2395,11 +2397,6 @@ public class DataConnection extends StateMachine {
                     .ACTION_CARRIER_SIGNAL_REDIRECTED)) {
                 // carrierSignal Receivers will place the carrier-specific provisioning notification
                 configBuilder.disableProvisioningNotification();
-            }
-
-            final String subscriberId = mPhone.getSubscriberId();
-            if (!TextUtils.isEmpty(subscriberId)) {
-                configBuilder.setSubscriberId(subscriberId);
             }
 
             // set skip464xlat if it is not default otherwise
