@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007155620",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1540585?revision\u003d5",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "af1e9ec8_df726b42",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-08T23:35:03Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(VcnManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 456,
+        "startChar": 22,
+        "endLine": 456,
+        "endChar": 61
+      },
+      "revId": "861f5d1a3872fd6f646d9d2d2d4e54233a941701",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
