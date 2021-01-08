@@ -16,6 +16,24 @@
       "message": "Same on this CL; this is different from internal build.",
       "revId": "d3e0df8492c9388d961b1cc6bd35904bf8b4da0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2640338a_79b5b8e6",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-01-08T22:28:47Z",
+      "side": 1,
+      "message": "It is for the same reason (a change of statsd cannot be safely cherry-picked so I had to revert this part to the old API.)",
+      "parentUuid": "fa2f5824_6e829415",
+      "revId": "d3e0df8492c9388d961b1cc6bd35904bf8b4da0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
