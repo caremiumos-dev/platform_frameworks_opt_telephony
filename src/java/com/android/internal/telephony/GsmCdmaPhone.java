@@ -4046,13 +4046,16 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(
             int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
+        int[] consolidatedThresholds = mSST.updateThresholdsIfNeeded(ran, signalStrengthMeasure,
+                mSST.shouldHonorSystemThreshold() ? thresholds : new int[]{},
+                REPORTING_HYSTERESIS_DB);
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
                         .setRadioAccessNetworkType(ran)
                         .setSignalMeasurementType(signalStrengthMeasure)
                         .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
                         .setHysteresisDb(REPORTING_HYSTERESIS_DB)
-                        .setThresholds(thresholds)
+                        .setThresholds(consolidatedThresholds)
                         .setIsEnabled(isEnabled)
                         .build(),
                 ran, null);

@@ -4779,4 +4779,20 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.println("++++++++++++++++++++++++++++++++");
         }
     }
+
+    public boolean isDeviceIdle() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm != null) {
+            return !dsm.shouldEnableHighPowerConsumptionIndications();
+        }
+        // assume device is (re)booting, the correct idle state will report later even this is wrong
+        return false;
+    }
+
+    public void notifyDeviceIdleStateChanged(boolean isIdle) {
+        ServiceStateTracker sst = getServiceStateTracker();
+        if (sst != null) {
+            sst.notifyDeviceIdleStateChanged(isIdle);
+        }
+    }
 }

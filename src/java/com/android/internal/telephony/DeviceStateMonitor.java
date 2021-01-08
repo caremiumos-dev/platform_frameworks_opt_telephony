@@ -398,7 +398,7 @@ public class DeviceStateMonitor extends Handler {
      *
      * @return True if the response update should be enabled.
      */
-    private boolean shouldEnableHighPowerConsumptionIndications() {
+    public boolean shouldEnableHighPowerConsumptionIndications() {
         // We should enable indications reports if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
@@ -477,6 +477,7 @@ public class DeviceStateMonitor extends Handler {
      */
     private void onUpdateDeviceState(int eventType, boolean state) {
         final boolean shouldEnableBarringInfoReportsOld = shouldEnableBarringInfoReports();
+        final boolean oldIdleState = shouldEnableHighPowerConsumptionIndications();
         switch (eventType) {
             case EVENT_SCREEN_STATE_CHANGED:
                 if (mIsScreenOn == state) return;
@@ -510,6 +511,11 @@ public class DeviceStateMonitor extends Handler {
                 break;
             default:
                 return;
+        }
+
+        final boolean newIdleState = shouldEnableHighPowerConsumptionIndications();
+        if (oldIdleState != newIdleState) {
+            mPhone.notifyDeviceIdleStateChanged(!newIdleState);
         }
 
         final int newCellInfoMinInterval = computeCellInfoMinInterval();
@@ -701,7 +707,7 @@ public class DeviceStateMonitor extends Handler {
      * @return True if one the device's screen (e.g. main screen, wifi display, HDMI display etc...)
      * is on.
      */
-    private boolean isScreenOn() {
+    public boolean isScreenOn() {
         // Note that we don't listen to Intent.SCREEN_ON and Intent.SCREEN_OFF because they are no
         // longer adequate for monitoring the screen state since they are not sent in cases where
         // the screen is turned off transiently such as due to the proximity sensor.
