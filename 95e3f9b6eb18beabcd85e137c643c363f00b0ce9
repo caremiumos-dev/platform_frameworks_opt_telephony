@@ -16,6 +16,24 @@
       "message": "UTs for invalid RAN*measurement combos?",
       "revId": "95e3f9b6eb18beabcd85e137c643c363f00b0ce9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ab80454_c1db62e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-08T02:58:46Z",
+      "side": 1,
+      "message": "(unresolving)",
+      "parentUuid": "7446a845_97c77f2c",
+      "revId": "95e3f9b6eb18beabcd85e137c643c363f00b0ce9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
