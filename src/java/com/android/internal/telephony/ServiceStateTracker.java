@@ -42,6 +42,7 @@ import android.hardware.radio.V1_0.CellInfoType;
 import android.net.NetworkCapabilities;
 import android.os.AsyncResult;
 import android.os.BaseBundle;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -77,6 +78,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
+import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -126,6 +128,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -639,6 +642,9 @@ public class ServiceStateTracker extends Handler {
                                    // while calculating signal strength level.
     private final Object mLteRsrpBoostLock = new Object();
     private static final int INVALID_LTE_EARFCN = -1;
+
+    // GuardedBy("mSignalRequestRecords")
+    private List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
     public ServiceStateTracker(GsmCdmaPhone phone, CommandsInterface ci) {
         mNitzState = TelephonyComponentFactory.getInstance()
@@ -5916,5 +5922,119 @@ public class ServiceStateTracker extends Handler {
         // written into a persistent storage. ServiceStateProvider keeps values in the memory.
         values.put(SERVICE_STATE, p.marshall());
         return values;
+    }
+
+    //TODO: Move to public methods zone
+    private static class SignalRequestRecord {
+        Context context;
+        String callingPackage;
+        int callerUid;
+        int subId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+        SignalStrengthUpdateRequest request;
+
+        SignalRequestRecord(String pkg, int uid, int subId, SignalStrengthUpdateRequest request) {
+            this.callingPackage = pkg;
+            this.callerUid = uid;
+            this.subId = subId;
+            this.request = request;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof  SignalRequestRecord)) return false;
+
+            SignalRequestRecord other = (SignalRequestRecord)  o;
+            // deliberately ignore callerUid
+            return callingPackage == other.callingPackage
+                    && subId == other.subId
+                    && request == other.request;
+        }
+
+        @Override
+        public int hashCode() {
+            // deliberately ignore callerUid
+            return Objects.hash(callingPackage, subId, request);
+        }
+
+    }
+
+    public void addSignalStrengthUpdateRequest(int subId, String callingPkg,
+            SignalStrengthUpdateRequest request) {
+        int callingUi = Binder.getCallingUid();
+        SignalRequestRecord record = new SignalRequestRecord(callingPkg, callingUi, subId, request);
+        synchronized (mSignalRequestRecords) {
+            mSignalRequestRecords.add(record);
+        }
+    }
+
+    public void removeSignalStrengthUpdateRequest(int subId, String callingPkg,
+            SignalStrengthUpdateRequest request) {
+        int callingUid = Binder.getCallingUid();
+        SignalRequestRecord record = new SignalRequestRecord(callingPkg, callingUid, subId, request);
+        synchronized (mSignalRequestRecords) {
+            // callingUid is not used for comparison
+            mSignalRequestRecords.remove(record);
+        }
+    }
+
+    public int[] updateThresholdsIfNeeded(int ran, int measurement, int[] base, int hysteresis) {
+        int[] target = base.clone();
+        synchronized (mSignalRequestRecords) {
+            for (SignalRequestRecord record : mSignalRequestRecords) {
+                SignalStrengthUpdateRequest request = record.request;
+                for (SignalThresholdInfo info : request.getSignalThresholdInfos()) {
+                    if (ran == info.getRadioAccessNetworkType()
+                            && measurement == info.getSignalMeasurementType()) {
+                        target = alignSignalThresholds(target, info.getThresholds(), hysteresis);
+                    }
+                }
+            }
+        }
+        return target;
+    }
+
+    // Align all the thresholds in original array to the value in base, with hysteresis
+    @VisibleForTesting
+    public static @NonNull int[] alignSignalThresholds(@NonNull int[] base, @NonNull int[] original,
+            int hysteresis) {
+        if (ArrayUtils.isEmpty(base)
+                && ArrayUtils.isEmpty(original)) {
+            return new int[]{};
+        }
+        if (ArrayUtils.isEmpty(base)) return original;
+        if (ArrayUtils.isEmpty(original)) return base;
+
+        Arrays.sort(base);
+        Arrays.sort(original);
+
+        List<Integer> target = new ArrayList<>();
+        // Check if any value in original should align to any value in base
+        for (int i = 0; i < base.length; i++) {
+            target.add(base[i]);
+            int left = base[i] - hysteresis;
+            int right = base[i] + hysteresis;
+            for (int j = 0; j < original.length; j++) {
+                if (original[j] >= left && original[j] <= right) {
+                    original[j] = Integer.MAX_VALUE; // align to base[i]
+                }
+            }
+        }
+
+        // Check if any remain value in original need to align to others
+        // Keep as many remain as possible
+        for (int j = 0; j < original.length; j++) {
+            if (original[j] == Integer.MAX_VALUE) continue;
+            target.add(original[j]);
+            int left = original[j] - hysteresis;
+            int right = original[j] + hysteresis;
+            for (int k = j + 1; k < original.length; k++) {
+                if (original[k] == Integer.MAX_VALUE) continue;
+                if (original[k] >= left && original[k] <= right) {
+                    original[k] = Integer.MAX_VALUE; // align to orignal[j]
+                }
+            }
+        }
+        return target.stream().mapToInt(i -> i).sorted().toArray();
     }
 }
