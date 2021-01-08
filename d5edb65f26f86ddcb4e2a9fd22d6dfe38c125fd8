@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c92025_abfc9aac",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-08T05:39:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45778fab_0ef7131e",
+      "range": {
+        "startLine": 41,
+        "startChar": 45,
+        "endLine": 41,
+        "endChar": 49
+      },
+      "revId": "d5edb65f26f86ddcb4e2a9fd22d6dfe38c125fd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e7797d4_b0425b69",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dee86c26_14239c1b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-08T05:39:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e7797d4_b0425b69",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "d5edb65f26f86ddcb4e2a9fd22d6dfe38c125fd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7977ac9d_ab2c9e74",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-01-07T21:55:44Z",
       "side": 1,
       "message": "This is different than what the API is saying when it uses Collection\u003c*\u003e (instead of List\u003c*\u003e). Order shouldn\u0027t matter in this case, since the RSSI and RSCP thresholds are the same. Internally, equals should really be checking in a map-like way.",
+      "range": {
+        "startLine": 92,
+        "startChar": 11,
+        "endLine": 92,
+        "endChar": 23
+      },
+      "revId": "d5edb65f26f86ddcb4e2a9fd22d6dfe38c125fd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c293dc7_947835ae",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-08T05:39:19Z",
+      "side": 1,
+      "message": "Yes, agree. With implementation updated, the test case is updated accordingly.\nThanks",
+      "parentUuid": "7977ac9d_ab2c9e74",
       "range": {
         "startLine": 92,
         "startChar": 11,
