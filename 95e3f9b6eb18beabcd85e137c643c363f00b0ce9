@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7446a845_97c77f2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-08T02:58:34Z",
+      "side": 1,
+      "message": "UTs for invalid RAN*measurement combos?",
+      "revId": "95e3f9b6eb18beabcd85e137c643c363f00b0ce9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
