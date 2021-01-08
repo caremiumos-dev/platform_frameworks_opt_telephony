@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2f5824_6e829415",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-08T22:12:18Z",
+      "side": 1,
+      "message": "Same on this CL; this is different from internal build.",
+      "revId": "d3e0df8492c9388d961b1cc6bd35904bf8b4da0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
