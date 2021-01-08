@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd4010a_b56e24ff",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-08T20:01:35Z",
+      "side": 1,
+      "message": "Nit: RAN",
+      "range": {
+        "startLine": 57,
+        "startChar": 26,
+        "endLine": 57,
+        "endChar": 47
+      },
+      "revId": "031f211975e99b7d469cedc31bc911c4451d897d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
