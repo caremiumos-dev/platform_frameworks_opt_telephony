@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.ServiceStateTracker.alignThresholds;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertEquals;
@@ -117,6 +119,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 
 public class ServiceStateTrackerTest extends TelephonyTest {
@@ -2745,5 +2748,33 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(3, (long) method.invoke(mSST, tdscdmaCi));
         assertEquals(4, (long) method.invoke(mSST, lteCi));
         assertEquals(5, (long) method.invoke(mSST, nrCi));
+    }
+
+    @Test
+    @SmallTest
+    public void testAlignSignalThresholds() {
+        final int[] nulArray = null;
+        final int[] emptyArray = new int[]{};
+        final int hysteresis = 2;
+        final int[] base = new int[]{10, 20, 30, 40};
+
+        assertThat(alignThresholds(nulArray, nulArray, hysteresis)).isEqualTo(emptyArray);
+        assertThat(alignThresholds(nulArray, emptyArray, hysteresis)).isEqualTo(emptyArray);
+        assertThat(alignThresholds(emptyArray, null, hysteresis)).isEqualTo(emptyArray);
+        assertThat(alignThresholds(emptyArray, emptyArray, hysteresis)).isEqualTo(emptyArray);
+
+        // map of candidate => target thresholds array
+        Map<int[], int[]> cases = Map.of(
+                new int[]{3, 6}, new int[]{3, 6, 10, 20, 30, 40},
+                new int[]{44, 49}, new int[]{10, 20, 30, 40, 44, 49},
+                new int[]{4, 13, 23, 33, 43}, new int[]{4, 10, 13, 20, 23, 30, 33, 40, 43},
+                new int[]{9, 10, 11, 12}, new int[]{10, 20, 30, 40},
+                new int[]{1, 3, 5, 7, 8}, new int[]{1, 5, 10, 20, 30, 40},
+                new int[]{12, 14, 16, 17}, new int[]{10, 14, 17, 20, 30, 40}
+        );
+        for (int[] candidate : cases.keySet()) {
+            int[] target = cases.get(candidate);
+            assertThat(alignThresholds(base, candidate, hysteresis)).isEqualTo(target);
+        }
     }
 }
