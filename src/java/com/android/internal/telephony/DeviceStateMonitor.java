@@ -398,7 +398,7 @@ public class DeviceStateMonitor extends Handler {
      *
      * @return True if the response update should be enabled.
      */
-    private boolean shouldEnableHighPowerConsumptionIndications() {
+    public boolean shouldEnableHighPowerConsumptionIndications() {
         // We should enable indications reports if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
@@ -441,6 +441,21 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
+     * Check if device is idle.
+     *
+     * Device is considered idle when NONE of the following condition is true:
+     * 1. The device is charging.
+     * 2. The screen is on.
+     * 3. The tethering is on.
+     * 4. Car mode (Android Auto) is on.
+     *
+     * @return return true if device is idle
+     */
+    public boolean isIdle() {
+        return !shouldEnableHighPowerConsumptionIndications();
+    }
+
+    /**
      * Message handler
      *
      * @param msg The message
@@ -477,6 +492,7 @@ public class DeviceStateMonitor extends Handler {
      */
     private void onUpdateDeviceState(int eventType, boolean state) {
         final boolean shouldEnableBarringInfoReportsOld = shouldEnableBarringInfoReports();
+        final boolean oldIdleState = isIdle();
         switch (eventType) {
             case EVENT_SCREEN_STATE_CHANGED:
                 if (mIsScreenOn == state) return;
@@ -510,6 +526,11 @@ public class DeviceStateMonitor extends Handler {
                 break;
             default:
                 return;
+        }
+
+        final boolean newIdleState = isIdle();
+        if (oldIdleState != newIdleState) {
+            mPhone.notifyDeviceIdleStateChanged(newIdleState);
         }
 
         final int newCellInfoMinInterval = computeCellInfoMinInterval();
