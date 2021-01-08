@@ -34,6 +34,24 @@
       "parentUuid": "7446a845_97c77f2c",
       "revId": "95e3f9b6eb18beabcd85e137c643c363f00b0ce9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6046740_18e51502",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-08T04:04:54Z",
+      "side": 1,
+      "message": "Done. New case added to cover all invalid RAN/MeasurementType combos will throw IAE.\nThanks for the reminder.",
+      "parentUuid": "0ab80454_c1db62e4",
+      "revId": "95e3f9b6eb18beabcd85e137c643c363f00b0ce9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
