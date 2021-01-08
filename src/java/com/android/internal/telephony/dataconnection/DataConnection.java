@@ -1656,6 +1656,8 @@ public class DataConnection extends StateMachine {
 
         result.setAdministratorUids(mAdministratorUids);
 
+        result.setSubscriberId(mPhone.getSubscriberId());
+
         return result;
     }
 
@@ -2397,6 +2399,8 @@ public class DataConnection extends StateMachine {
                 configBuilder.disableProvisioningNotification();
             }
 
+            // TODO: Remove this when {@code NetworkIdentity} get subscriber Id from
+            //  {@code NetworkCapabilities}.
             final String subscriberId = mPhone.getSubscriberId();
             if (!TextUtils.isEmpty(subscriberId)) {
                 configBuilder.setSubscriberId(subscriberId);

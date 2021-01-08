@@ -568,10 +568,12 @@ public class DataConnectionTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testNetworkCapability() throws Exception {
+        final String testImsi = "TEST_IMSI";
         mContextFixture.getCarrierConfigBundle().putStringArray(
                 CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
                 new String[] { "default" });
         doReturn(mApn2).when(mApnContext).getApnSetting();
+        doReturn(testImsi).when(mPhone).getSubscriberId();
         testConnectEvent();
 
         assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
@@ -580,6 +582,8 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
         assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_MMS));
+        assertEquals("capabilities: " + getNetworkCapabilities(), testImsi,
+                getNetworkCapabilities().getSubscriberId());
 
         mContextFixture.getCarrierConfigBundle().putStringArray(
                 CarrierConfigManager.KEY_CARRIER_WWAN_DISALLOWED_APN_TYPES_STRING_ARRAY,
@@ -597,6 +601,8 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
         assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_SUPL));
+        assertEquals("capabilities: " + getNetworkCapabilities(), testImsi,
+                getNetworkCapabilities().getSubscriberId());
     }
 
     @Test
