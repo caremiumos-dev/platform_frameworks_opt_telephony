@@ -4779,4 +4779,34 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.println("++++++++++++++++++++++++++++++++");
         }
     }
+
+    /**
+     * Check if device is idle.
+     *
+     * @see DeviceStateMonitor#isIdle()
+     *
+     * @return true if device is idle
+     */
+    public boolean isIdle() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm == null) {
+            Rlog.e(LOG_TAG, "isDeviceIdle: DeviceStateMonitor is null");
+            return false;
+        }
+        return dsm.isIdle();
+    }
+
+    /**
+     * Get notified when device idle state has changed
+     *
+     * @param isIdle true if the new state is idle
+     */
+    public void notifyDeviceIdleStateChanged(boolean isIdle) {
+        ServiceStateTracker sst = getServiceStateTracker();
+        if (sst == null) {
+            Rlog.e(LOG_TAG, "notifyDeviceIdleStateChanged: SST is null");
+            return;
+        }
+        sst.onDeviceIdleStateChanged(isIdle);
+    }
 }
