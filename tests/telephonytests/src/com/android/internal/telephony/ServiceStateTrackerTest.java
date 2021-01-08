@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static com.android.internal.telephony.ServiceStateTracker.alignThresholds;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertEquals;
@@ -2740,5 +2742,23 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertEquals(3, (long) method.invoke(mSST, tdscdmaCi));
         assertEquals(4, (long) method.invoke(mSST, lteCi));
         assertEquals(5, (long) method.invoke(mSST, nrCi));
+    }
+
+    @Test
+    @SmallTest
+    public void testAlignSignalThreshold() {
+        final int[] NUL = null;
+        final int[] EMPTY = new int[]{};
+        assertThat(alignThresholds(NUL, NUL, 2).equals(EMPTY));
+        assertThat(alignThresholds(NUL, EMPTY, 2).equals(EMPTY));
+        assertThat(alignThresholds(EMPTY, null, 2).equals(EMPTY));
+        assertThat(alignThresholds(EMPTY, EMPTY, 2).equals(EMPTY));
+
+        final int[] base = new int[]{10, 20, 30, 40};
+        assertThat(alignThresholds(base, new int[]{4, 13, 23, 33, 43}, 2).equals(
+                new int[]{4, 10, 13, 20, 23, 30, 33, 40, 43}));
+        assertThat(alignThresholds(base, new int[]{9, 10, 11, 12}, 2).equals(base));
+        assertThat(alignThresholds(base, new int[]{1, 3, 5, 7}, 2).equals(
+                new int[]{1, 5, 10, 20, 30, 40}));
     }
 }
