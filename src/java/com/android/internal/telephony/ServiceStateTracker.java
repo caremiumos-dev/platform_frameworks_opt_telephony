@@ -44,11 +44,13 @@ import android.os.AsyncResult;
 import android.os.BaseBundle;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.TimestampedValue;
@@ -77,6 +79,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
+import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -90,6 +93,7 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriInfo;
@@ -125,6 +129,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -293,6 +298,9 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_CELL_LOCATION_RESPONSE            = 56;
     protected static final int EVENT_CARRIER_CONFIG_CHANGED            = 57;
     private static final int EVENT_POLL_STATE_REQUEST                  = 58;
+    private static final int EVENT_ADD_SIGNAL_STRENGTH_UPDATE_REQUEST  = 59;
+    private static final int EVENT_REMOVE_SIGNAL_STRENGTH_UPDATE_REQUEST = 60;
+    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED = 61;
 
     /**
      * The current service state.
@@ -642,6 +650,9 @@ public class ServiceStateTracker extends Handler {
                                    // while calculating signal strength level.
     private final Object mLteRsrpBoostLock = new Object();
     private static final int INVALID_LTE_EARFCN = -1;
+
+    @GuardedBy("mSignalRequestRecords")
+    private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
     public ServiceStateTracker(GsmCdmaPhone phone, CommandsInterface ci) {
         mNitzState = TelephonyComponentFactory.getInstance()
@@ -1749,6 +1760,77 @@ public class ServiceStateTracker extends Handler {
             case EVENT_POLL_STATE_REQUEST:
                 pollStateInternal(false);
                 break;
+
+            case EVENT_ADD_SIGNAL_STRENGTH_UPDATE_REQUEST: {
+                Pair<SignalRequestRecord, Message> pair =
+                        (Pair<SignalRequestRecord, Message> ) msg.obj;
+                SignalRequestRecord record = pair.first;
+                Message onCompleted = pair.second;
+                AsyncResult ret = AsyncResult.forMessage(onCompleted);
+
+                boolean dupRequest = mSignalRequestRecords.stream().anyMatch(
+                        srr -> srr.mRequest.getLiveToken().equals(record.mRequest.getLiveToken()));
+                if (dupRequest) {
+                    ret.exception = new IllegalStateException(
+                            "setSignalStrengthUpdateRequest called with same request");
+                    onCompleted.sendToTarget();
+                    break;
+                }
+
+                try {
+                    record.mRequest.getLiveToken().linkToDeath(record, 0);
+                } catch (RemoteException | NullPointerException ex) {
+                    ret.exception = new IllegalStateException(
+                            "Signal request client is already dead.");
+                    onCompleted.sendToTarget();
+                    break;
+                }
+
+                synchronized (mSignalRequestRecords) {
+                    mSignalRequestRecords.add(record);
+                }
+
+                updateAlwaysReportSignalStrength();
+                updateReportingCriteria(getCarrierConfig());
+
+                ret.exception = null;
+                onCompleted.sendToTarget();
+                break;
+            }
+
+            case EVENT_REMOVE_SIGNAL_STRENGTH_UPDATE_REQUEST: {
+                Pair<SignalRequestRecord, Message> pair =
+                        (Pair<SignalRequestRecord, Message> ) msg.obj;
+                SignalRequestRecord record = pair.first;
+                Message onCompleted = pair.second;
+
+
+                synchronized (mSignalRequestRecords) {
+                    Iterator<SignalRequestRecord> it = mSignalRequestRecords.iterator();
+                    while (it.hasNext()) {
+                        SignalRequestRecord srr = it.next();
+                        if (srr.mRequest.getLiveToken() == record.mRequest.getLiveToken()) {
+                            it.remove();
+                        }
+                    }
+                    // TODO: system/phone/shell should be able to remove the record
+                }
+
+                updateAlwaysReportSignalStrength();
+                updateReportingCriteria(getCarrierConfig());
+
+                if (onCompleted != null) {
+                    AsyncResult ret = AsyncResult.forMessage(onCompleted);
+                    ret.exception = null;
+                    onCompleted.sendToTarget();
+                }
+                break;
+            }
+
+            case EVENT_ON_DEVICE_IDLE_STATE_CHANGED: {
+                updateReportingCriteria(getCarrierConfig());
+                break;
+            }
 
             default:
                 log("Unhandled message with number: " + msg.what);
@@ -5940,5 +6022,145 @@ public class ServiceStateTracker extends Handler {
         // written into a persistent storage. ServiceStateProvider keeps values in the memory.
         values.put(SERVICE_STATE, p.marshall());
         return values;
+    }
+
+    /**
+     * Set a new request to update the signal strength thresholds.
+     */
+    public void setSignalStrengthUpdateRequest(int subId, int callingUid,
+            SignalStrengthUpdateRequest request, @NonNull Message onCompleted) {
+        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        sendMessage(obtainMessage(EVENT_ADD_SIGNAL_STRENGTH_UPDATE_REQUEST,
+                new Pair<SignalRequestRecord, Message>(record, onCompleted)));
+    }
+
+    /**
+     * Clear the previously set request.
+     */
+    public void clearSignalStrengthUpdateRequest(int subId, int callingUid,
+            SignalStrengthUpdateRequest request, @Nullable Message onCompleted) {
+        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        sendMessage(obtainMessage(EVENT_REMOVE_SIGNAL_STRENGTH_UPDATE_REQUEST,
+                new Pair<SignalRequestRecord, Message>(record, onCompleted)));
+    }
+
+    int[] getConsolidatedSignalThresholds(int ran, int measurement,
+            int[] systemThresholds, int hysteresis) {
+        int[] target = systemThresholds.clone();
+        final boolean isDeviceIdle = mPhone.isDeviceIdle();
+        final int curSubId = mPhone.getSubId();
+        synchronized (mSignalRequestRecords) {
+            for (SignalRequestRecord record : mSignalRequestRecords) {
+                if (curSubId != record.mSubId
+                        || (isDeviceIdle && !record.mRequest.isReportingRequestedWhileIdle())) {
+                    continue;
+                }
+                for (SignalThresholdInfo info : record.mRequest.getSignalThresholdInfos()) {
+                    if (ran == info.getRadioAccessNetworkType()
+                            && measurement == info.getSignalMeasurementType()) {
+                        target = alignThresholds(target, info.getThresholds(), hysteresis);
+                    }
+                }
+            }
+        }
+        return target;
+    }
+
+    boolean shouldHonorSystemThresholds() {
+        if (!mPhone.isDeviceIdle()) {
+            return true;
+        }
+
+        final int curSubId = mPhone.getSubId();
+        return mSignalRequestRecords.stream().anyMatch(
+                srr -> curSubId == srr.mSubId
+                        && srr.mRequest.isSystemThresholdReportingRequestedWhileIdle());
+    }
+
+    void onDeviceIdleStateChanged(boolean isDeviceIdle) {
+        sendMessage(obtainMessage(EVENT_ON_DEVICE_IDLE_STATE_CHANGED, isDeviceIdle));
+    }
+
+    private class SignalRequestRecord implements IBinder.DeathRecipient {
+        final int mSubId; // subId the request originally applied to
+        final int mCallingUid;
+        final SignalStrengthUpdateRequest mRequest;
+
+        SignalRequestRecord(int subId, int uid, SignalStrengthUpdateRequest request) {
+            this.mCallingUid = uid;
+            this.mSubId = subId;
+            this.mRequest = request;
+        }
+
+        @Override
+        public void binderDied() {
+            ServiceStateTracker.this.handleSignalRequestBinderDied(mSubId, mCallingUid, mRequest);
+        }
+    }
+
+    private void handleSignalRequestBinderDied(int subId, int callingUid,
+            SignalStrengthUpdateRequest request) {
+        clearSignalStrengthUpdateRequest(subId, callingUid, request, null /*onCompleted*/);
+    }
+
+    private void updateAlwaysReportSignalStrength() {
+        final int curSubId = mPhone.getSubId();
+        boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
+                srr -> srr.mSubId == curSubId && (srr.mRequest.isReportingRequestedWhileIdle()
+                        || srr.mRequest.isSystemThresholdReportingRequestedWhileIdle()));
+
+        // Eventually, TM#setAlwaysReportSignalStrength will be removed and we will not
+        // worry about unset flag which was set by other client. If this is a concern, we can
+        // set a separate flag in DSM
+        mPhone.setAlwaysReportSignalStrength(alwaysReport);
+    }
+
+    /**
+     * Align (merge) all the thresholds in {@code candidate} array to the thresholds in {@code base}
+     * and consolidate a new thresholds array, follow rules below:
+     * 1. All threshold values in {@code base} will keep as it.
+     * 2. Any threshold in {@code candidate} that has delta less than hysteresis from any thresholds
+     *    in {@code base}  or other thresholds in {@code candidate} will be removed.
+     * 3. The target thresholds will be {@code base} + all remaining in {@code candidate}, sorted in
+     *    ascending order.
+     */
+    @VisibleForTesting public static @NonNull int[] alignThresholds(@NonNull int[] base,
+            @NonNull int[] candidate, int hysteresis) {
+        if (ArrayUtils.isEmpty(base) && ArrayUtils.isEmpty(candidate)) return new int[]{};
+        if (ArrayUtils.isEmpty(base)) return candidate;
+        if (ArrayUtils.isEmpty(candidate)) return base;
+
+        // Both base/candidate thresholds should be sorted, but just in case
+        Arrays.sort(base);
+        Arrays.sort(candidate);
+
+        int[] target = new int[base.length + candidate.length];
+        int i = 0, j = 0, t = 0; // index of base, candidate and target array
+        while (i < base.length && j < candidate.length) {
+            final int left = base[i] - hysteresis;
+            final int right = base[i] + hysteresis;
+            if (candidate[j] < left) {
+                // make sure candidate[j] has enough interval from target[t - 1]
+                if (j == 0 || (t != 0 && candidate[j] > target[t - 1] + hysteresis)) {
+                    target[t++] = candidate[j];
+                }
+                j++;
+            } else if (candidate[j] >= left && candidate[j] <= right) {
+                j++; // candidate[j] should align to base[i], ignore it
+            } else { // candidate[j] > right
+                target[t++] = base[i++];
+            }
+        }
+        // add thresholds from base if remain
+        for (; i < base.length; i++) {
+            target[t++] = base[i];
+        }
+        // add thresholds from candidate if remain
+        for (; j < candidate.length; j++) {
+            if (j == 0 || candidate[j] > candidate[j - 1] + hysteresis) {
+                target[t++] = candidate[j];
+            }
+        }
+        return Arrays.copyOf(target, t);
     }
 }
