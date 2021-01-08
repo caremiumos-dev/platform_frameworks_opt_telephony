@@ -4609,6 +4609,36 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return Collections.emptyList();
     }
 
+    /**
+     * Check if device is idle. Device is idle when it is not in high power consumption mode.
+     *
+     * @see DeviceStateMonitor#shouldEnableHighPowerConsumptionIndications()
+     *
+     * @return true if device is idle
+     */
+    public boolean isDeviceIdle() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm == null) {
+            Rlog.e(LOG_TAG, "isDeviceIdle: DeviceStateMonitor is null");
+            return false;
+        }
+        return !dsm.shouldEnableHighPowerConsumptionIndications();
+    }
+
+    /**
+     * Get notified when device idleness state has changed
+     *
+     * @param isIdle true if the new state is idle
+     */
+    public void notifyDeviceIdleStateChanged(boolean isIdle) {
+        ServiceStateTracker sst = getServiceStateTracker();
+        if (sst == null) {
+            Rlog.e(LOG_TAG, "notifyDeviceIdleStateChanged: SST is null");
+            return;
+        }
+        sst.onDeviceIdleStateChanged(isIdle);
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
