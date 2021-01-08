@@ -279,6 +279,7 @@ public class DeviceStateMonitor extends Handler {
         mIsPowerSaveOn = isPowerSaveModeOn();
         mIsCharging = isDeviceCharging();
         mIsScreenOn = isScreenOn();
+        mPhone.onScreenStateChanged(mIsScreenOn);
         mIsCarModeOn = isCarModeOn();
         // Assuming tethering is always off after boot up.
         mIsTetheringOn = false;
@@ -481,6 +482,7 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_SCREEN_STATE_CHANGED:
                 if (mIsScreenOn == state) return;
                 mIsScreenOn = state;
+                mPhone.onScreenStateChanged(mIsScreenOn);
                 break;
             case EVENT_CHARGING_STATE_CHANGED:
                 if (mIsCharging == state) return;
@@ -701,7 +703,7 @@ public class DeviceStateMonitor extends Handler {
      * @return True if one the device's screen (e.g. main screen, wifi display, HDMI display etc...)
      * is on.
      */
-    private boolean isScreenOn() {
+    public boolean isScreenOn() {
         // Note that we don't listen to Intent.SCREEN_ON and Intent.SCREEN_OFF because they are no
         // longer adequate for monitoring the screen state since they are not sent in cases where
         // the screen is turned off transiently such as due to the proximity sensor.

@@ -42,13 +42,16 @@ import android.hardware.radio.V1_0.CellInfoType;
 import android.net.NetworkCapabilities;
 import android.os.AsyncResult;
 import android.os.BaseBundle;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.TimestampedValue;
@@ -77,6 +80,7 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
+import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -124,8 +128,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -639,6 +645,9 @@ public class ServiceStateTracker extends Handler {
                                    // while calculating signal strength level.
     private final Object mLteRsrpBoostLock = new Object();
     private static final int INVALID_LTE_EARFCN = -1;
+
+    // GuardedBy("mSignalRequestRecords")
+    private List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
     public ServiceStateTracker(GsmCdmaPhone phone, CommandsInterface ci) {
         mNitzState = TelephonyComponentFactory.getInstance()
@@ -5916,5 +5925,141 @@ public class ServiceStateTracker extends Handler {
         // written into a persistent storage. ServiceStateProvider keeps values in the memory.
         values.put(SERVICE_STATE, p.marshall());
         return values;
+    }
+
+    //TODO: Move to public methods zone
+    private class SignalRequestRecord implements IBinder.DeathRecipient {
+        IBinder token;
+        int callerUid;
+        int subId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+        SignalStrengthUpdateRequest request;
+
+        SignalRequestRecord(IBinder token, int uid, int subId,
+                SignalStrengthUpdateRequest request) {
+            this.token = token;
+            this.callerUid = uid;
+            this.subId = subId;
+            this.request = request;
+        }
+
+        @Override
+        public void binderDied() {
+            ServiceStateTracker.this.handleSignalRequestBinderDied(this.token, this.subId);
+        }
+    }
+
+    private void handleSignalRequestBinderDied(IBinder token, int subId) {
+        removeSignalStrengthUpdateRequest(token, subId);
+    }
+
+    public void addSignalStrengthUpdateRequest(IBinder token, int subId,
+            SignalStrengthUpdateRequest request) {
+        int callingUi = Binder.getCallingUid();
+        SignalRequestRecord record = new SignalRequestRecord(token, callingUi, subId, request);
+        try {
+            token.linkToDeath(record, 0);
+        } catch (RemoteException ex) {
+            throw new IllegalArgumentException("Signal request client is already dead.");
+        }
+        synchronized (mSignalRequestRecords) {
+            mSignalRequestRecords.add(record);
+        }
+        mPhone.setAlwaysReportSignalStrength(true);
+        updateReportingCriteria(getCarrierConfig());
+    }
+
+    public void removeSignalStrengthUpdateRequest(IBinder token, int subId) {
+        synchronized (mSignalRequestRecords) {
+            Iterator<SignalRequestRecord> it = mSignalRequestRecords.iterator();
+            while (it.hasNext()) {
+                SignalRequestRecord record = it.next();
+                if (record.token == token) {
+                    it.remove();
+                }
+            }
+
+            if (mSignalRequestRecords.isEmpty()) {
+                // TODO: how to make sure this will not clear the flag set by other apps!
+                mPhone.setAlwaysReportSignalStrength(false);
+            }
+        }
+        updateReportingCriteria(getCarrierConfig());
+    }
+
+    public int[] updateThresholdsIfNeeded(int ran, int measurement, int[] base, int hysteresis) {
+        int[] target = base;
+        synchronized (mSignalRequestRecords) {
+            for (SignalRequestRecord record : mSignalRequestRecords) {
+                SignalStrengthUpdateRequest request = record.request;
+                for (SignalThresholdInfo info : request.getSignalThresholdInfos()) {
+                    if (ran == info.getRadioAccessNetworkType()
+                            && measurement == info.getSignalMeasurementType()) {
+                        target = alignSignalThresholds(target, info.getThresholds(), hysteresis);
+                    }
+                }
+            }
+        }
+        return target;
+    }
+
+    public boolean shouldHonorSystemThreshold() {
+        // Check if any client ask to honorSystemThresholdWhenScreenOff
+        boolean honorSystemThresholdOnScreenOff = false;
+        synchronized (mSignalRequestRecords) {
+            for (SignalRequestRecord record : mSignalRequestRecords) {
+                if (record.request.getHonorSystemThresholdWhenScreenOff()) {
+                    honorSystemThresholdOnScreenOff = true;
+                }
+            }
+        }
+        return mPhone.isScreenOn() || honorSystemThresholdOnScreenOff;
+    }
+
+    public void onScreenStateChanged(boolean on) {
+        updateReportingCriteria(getCarrierConfig());
+    }
+
+    // Align all the thresholds in original array to the value in base, with hysteresis
+    @VisibleForTesting
+    public static @NonNull int[] alignSignalThresholds(@NonNull int[] base, @NonNull int[] original,
+            int hysteresis) {
+        if (ArrayUtils.isEmpty(base)
+                && ArrayUtils.isEmpty(original)) {
+            return new int[]{};
+        }
+        if (ArrayUtils.isEmpty(base)) return original;
+        if (ArrayUtils.isEmpty(original)) return base;
+
+        Arrays.sort(base);
+        Arrays.sort(original);
+
+        List<Integer> target = new ArrayList<>();
+        // Check if any value in original should align to any value in base
+        for (int i = 0; i < base.length; i++) {
+            target.add(base[i]);
+            int left = base[i] - hysteresis;
+            int right = base[i] + hysteresis;
+            for (int j = 0; j < original.length; j++) {
+                if (original[j] >= left && original[j] <= right) {
+                    original[j] = Integer.MAX_VALUE; // align to base[i]
+                }
+            }
+        }
+
+        // Check if any remain value in original need to align to others
+        // Keep as many remain as possible
+        for (int j = 0; j < original.length; j++) {
+            if (original[j] == Integer.MAX_VALUE) continue;
+            target.add(original[j]);
+            int left = original[j] - hysteresis;
+            int right = original[j] + hysteresis;
+            for (int k = j + 1; k < original.length; k++) {
+                if (original[k] == Integer.MAX_VALUE) continue;
+                if (original[k] >= left && original[k] <= right) {
+                    original[k] = Integer.MAX_VALUE; // align to original[j]
+                }
+            }
+        }
+        return target.stream().mapToInt(i -> i).sorted().toArray();
     }
 }

@@ -4779,4 +4779,19 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.println("++++++++++++++++++++++++++++++++");
         }
     }
+
+    public boolean isScreenOn() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm != null) {
+            return dsm.isScreenOn();
+        }
+        return true;
+    }
+
+    public void onScreenStateChanged(boolean isScreenOn) {
+        ServiceStateTracker sst = getServiceStateTracker();
+        if (sst != null) {
+            sst.onScreenStateChanged(isScreenOn);
+        }
+    }
 }
