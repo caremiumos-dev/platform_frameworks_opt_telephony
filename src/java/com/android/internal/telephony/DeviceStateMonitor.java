@@ -184,6 +184,11 @@ public class DeviceStateMonitor extends Handler {
      */
     private boolean mIsAlwaysSignalStrengthReportingEnabled;
 
+    /**
+     * True indicates onReset() is on going.
+     */
+    private boolean mIsResetOngoing;
+
     @VisibleForTesting
     static final int CELL_INFO_INTERVAL_SHORT_MS = 2000;
     @VisibleForTesting
@@ -398,13 +403,21 @@ public class DeviceStateMonitor extends Handler {
      *
      * @return True if the response update should be enabled.
      */
-    private boolean shouldEnableHighPowerConsumptionIndications() {
+    public boolean shouldEnableHighPowerConsumptionIndications() {
         // We should enable indications reports if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. When the tethering is on.
         // 4. When car mode (Android Auto) is on.
         return mIsCharging || mIsScreenOn || mIsTetheringOn || mIsCarModeOn;
+    }
+
+    /**
+     * @return True indicates onReset() is on going when RIL is connected during boot up or radio
+     * becomes available after modem restart.
+     */
+    public boolean isRadioResetOngoing() {
+        return mIsResetOngoing;
     }
 
     /**
@@ -477,6 +490,7 @@ public class DeviceStateMonitor extends Handler {
      */
     private void onUpdateDeviceState(int eventType, boolean state) {
         final boolean shouldEnableBarringInfoReportsOld = shouldEnableBarringInfoReports();
+        final boolean wasHighPowerEnabled = shouldEnableHighPowerConsumptionIndications();
         switch (eventType) {
             case EVENT_SCREEN_STATE_CHANGED:
                 if (mIsScreenOn == state) return;
@@ -510,6 +524,11 @@ public class DeviceStateMonitor extends Handler {
                 break;
             default:
                 return;
+        }
+
+        final boolean isHighPowerEnabled = shouldEnableHighPowerConsumptionIndications();
+        if (wasHighPowerEnabled != isHighPowerEnabled) {
+            mPhone.notifyDeviceIdleStateChanged(!isHighPowerEnabled /*isIdle*/);
         }
 
         final int newCellInfoMinInterval = computeCellInfoMinInterval();
@@ -578,6 +597,7 @@ public class DeviceStateMonitor extends Handler {
      */
     private void onReset() {
         log("onReset.", true);
+        mIsResetOngoing = true;
         sendDeviceState(CHARGING_STATE, mIsCharging);
         sendDeviceState(LOW_DATA_EXPECTED, mIsLowDataExpected);
         sendDeviceState(POWER_SAVE_MODE, mIsPowerSaveOn);
@@ -585,6 +605,7 @@ public class DeviceStateMonitor extends Handler {
         setSignalStrengthReportingCriteria();
         setLinkCapacityReportingCriteria();
         setCellInfoMinInterval(mCellInfoMinInterval);
+        mIsResetOngoing = false;
     }
 
     /**

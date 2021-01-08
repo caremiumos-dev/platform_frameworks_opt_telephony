@@ -4600,6 +4600,51 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Check if device is idle. Device is idle when it is not in high power consumption mode.
+     *
+     * @see DeviceStateMonitor#shouldEnableHighPowerConsumptionIndications()
+     *
+     * @return true if device is idle
+     */
+    public boolean isDeviceIdle() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm == null) {
+            Rlog.e(LOG_TAG, "isDeviceIdle: DeviceStateMonitor is null");
+            return false;
+        }
+        return !dsm.shouldEnableHighPowerConsumptionIndications();
+    }
+
+    /**
+     * Check if radio is on resetting. This happens when RIL is connected during boot up or radio
+     * becomes available after modem restart.
+     *
+     * @return True indicates radio is on resetting
+     */
+    public boolean isRadioResetOngoing() {
+        DeviceStateMonitor dsm = getDeviceStateMonitor();
+        if (dsm == null) {
+            Rlog.e(LOG_TAG, "isRadioOnResetting: DeviceStateMonitor is null");
+            return false;
+        }
+        return dsm.isRadioResetOngoing();
+    }
+
+    /**
+     * Get notified when device idleness state has changed
+     *
+     * @param isIdle true if the new state is idle
+     */
+    public void notifyDeviceIdleStateChanged(boolean isIdle) {
+        ServiceStateTracker sst = getServiceStateTracker();
+        if (sst == null) {
+            Rlog.e(LOG_TAG, "notifyDeviceIdleStateChanged: SST is null");
+            return;
+        }
+        sst.onDeviceIdleStateChanged(isIdle);
+    }
+
+    /**
      * Returns a list of the equivalent home PLMNs (EF_EHPLMN) from the USIM app.
      *
      * @return A list of equivalent home PLMNs. Returns an empty list if EF_EHPLMN is empty or
