@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743d95cc_ad7cff27",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-09T04:54:43Z",
+      "side": 1,
+      "message": "This is not carrier config. This is resource overlay.",
+      "range": {
+        "startLine": 754,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 9
+      },
+      "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5649437_8153d9aa",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-09T04:54:43Z",
+      "side": 1,
+      "message": "Please completely remove this terrible codes.",
+      "range": {
+        "startLine": 2186,
+        "startChar": 0,
+        "endLine": 2201,
+        "endChar": 0
+      },
+      "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
