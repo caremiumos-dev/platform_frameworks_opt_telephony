@@ -1,0 +1,151 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007164087",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "56bab234_bdc1b47c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4049,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-09T18:20:40Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 4049,
+        "startChar": 0,
+        "endLine": 4049,
+        "endChar": 103
+      },
+      "revId": "84ef4f3558c53bb0e23b977dd2af61013086cd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007164087",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "cbbc2bc0_e12e0287",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5974,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-09T18:20:40Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 5974,
+        "startChar": 0,
+        "endLine": 5974,
+        "endChar": 101
+      },
+      "revId": "84ef4f3558c53bb0e23b977dd2af61013086cd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007164086",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "1b2e5d86_60b5a8ce",
+          "description": "Change to \"src/java/com/android/internal/telephony/ServiceStateTracker.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+              "range": {
+                "startLine": 6034,
+                "startChar": 65,
+                "endLine": 6034,
+                "endChar": 72
+              },
+              "replacement": "original"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "894c7a50_363df2f9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6034,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-09T18:20:40Z",
+      "side": 1,
+      "message": "Common typo found: \"orignal\" -- should it be \"original\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 6034,
+        "startChar": 65,
+        "endLine": 6034,
+        "endChar": 72
+      },
+      "revId": "84ef4f3558c53bb0e23b977dd2af61013086cd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007164087",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "b1e9fa4a_a0f33c5d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2758,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-09T18:20:40Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 2758,
+        "startChar": 0,
+        "endLine": 2758,
+        "endChar": 135
+      },
+      "revId": "84ef4f3558c53bb0e23b977dd2af61013086cd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007164087",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "89be1e0e_81ad9270",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2760,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-09T18:20:40Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 2760,
+        "startChar": 0,
+        "endLine": 2760,
+        "endChar": 114
+      },
+      "revId": "84ef4f3558c53bb0e23b977dd2af61013086cd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
