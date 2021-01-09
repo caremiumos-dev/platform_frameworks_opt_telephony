@@ -45,6 +45,30 @@
       },
       "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c688a47c_57e849e7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-09T05:00:15Z",
+      "side": 1,
+      "message": "What I mean by carrier config is don\u0027t allow initial attach on a particular carrier. We won\u0027t use SIM ICCID to distinguish the behaviors.",
+      "parentUuid": "a5649437_8153d9aa",
+      "range": {
+        "startLine": 2186,
+        "startChar": 0,
+        "endLine": 2201,
+        "endChar": 0
+      },
+      "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
