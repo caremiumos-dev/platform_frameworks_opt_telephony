@@ -366,12 +366,16 @@ public class SubscriptionController extends ISub.Stub {
      * Should only be triggered once.
      */
     public void notifySubInfoReady() {
+        PhoneSwitcher phoneSwitcher = PhoneSwitcher.getInstance();
+        if (phoneSwitcher != null) {
+            phoneSwitcher.notifySubInfoReady();
+        }
         // broadcast default subId.
         sendDefaultChangedBroadcast(SubscriptionManager.getDefaultSubscriptionId());
     }
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
-    private boolean isSubInfoReady() {
+    public boolean isSubInfoReady() {
         return SubscriptionInfoUpdater.isSubInfoInitialized();
     }
 

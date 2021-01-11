@@ -267,6 +267,7 @@ public class PhoneSwitcher extends Handler {
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED        = 117;
     private static final int EVENT_NETWORK_AVAILABLE              = 118;
+    protected static final int EVENT_SUB_INFO_READY               = 119;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -625,6 +626,11 @@ public class PhoneSwitcher extends Handler {
                 onMultiSimConfigChanged(activeModemCount);
                 break;
             }
+            case EVENT_SUB_INFO_READY: {
+                log("Sub info is ready");
+                onEvaluate(REQUESTS_UNCHANGED, "sub_info_ready");
+                break;
+            }
         }
     }
 
@@ -790,6 +796,10 @@ public class PhoneSwitcher extends Handler {
      * @return {@code True} if the default data subscription need to be changed.
      */
     protected boolean onEvaluate(boolean requestsChanged, String reason) {
+        if (!mSubscriptionController.isSubInfoReady()) {
+            log("subscription info isn't initialized yet");
+            return false;
+        }
         StringBuilder sb = new StringBuilder(reason);
 
         // If we use HAL_COMMAND_PREFERRED_DATA,
@@ -1333,6 +1343,10 @@ public class PhoneSwitcher extends Handler {
                 + (needValidation ? " with " : " without ") + "validation");
         PhoneSwitcher.this.obtainMessage(EVENT_OPPT_DATA_SUB_CHANGED,
                 subId, needValidation ? 1 : 0, callback).sendToTarget();
+    }
+
+    public void notifySubInfoReady() {
+        PhoneSwitcher.this.obtainMessage(EVENT_SUB_INFO_READY).sendToTarget();
     }
 
     protected boolean isPhoneInVoiceCall(Phone phone) {
