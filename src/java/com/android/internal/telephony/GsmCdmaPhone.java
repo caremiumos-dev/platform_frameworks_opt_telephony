@@ -278,6 +278,10 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierSignalAgent(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
+        // SST depends on SSC, need to instant SSC firstly
+        mSignalStrengthController = mTelephonyComponentFactory.inject(
+                SignalStrengthController.class.getName()).makeSignalStrengthController(this,
+                this.mCi);
         mSST = mTelephonyComponentFactory.inject(ServiceStateTracker.class.getName())
                 .makeServiceStateTracker(this, this.mCi);
         mEmergencyNumberTracker = mTelephonyComponentFactory
@@ -639,6 +643,11 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public DisplayInfoController getDisplayInfoController() {
         return mDisplayInfoController;
+    }
+
+    @Override
+    public SignalStrengthController getSignalStrengthController() {
+        return mSignalStrengthController;
     }
 
     @Override
@@ -4064,10 +4073,10 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(
             int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
-        int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
+        int[] consolidatedThresholds = mSignalStrengthController.getConsolidatedSignalThresholds(
                 ran,
                 signalStrengthMeasure,
-                mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
+                mSignalStrengthController.shouldHonorSystemThresholds() ? thresholds : new int[]{},
                 REPORTING_HYSTERESIS_DB);
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
