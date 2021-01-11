@@ -244,7 +244,14 @@ public class RILRequest {
         }
 
         if (result != null && result.getTarget() != null) {
-            AsyncResult.forMessage(result, ret, ex);
+            // Copy the message so that Message#sendToTarget isn't called more than once which
+            // causes an IllegalStateException("This message is already in use").
+            // The underlying issue on why this can occur is because the methods in RIL calls
+            // Message#sendToTarget directly.  Instead, the call to Message#sendToTarget should go
+            // through this class.  This can be done at a future time if necessary.
+            final Message copiedResult = Message.obtain(result);
+
+            AsyncResult.forMessage(copiedResult, ret, ex);
             result.sendToTarget();
         }
     }
