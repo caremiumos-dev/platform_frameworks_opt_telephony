@@ -278,6 +278,10 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierSignalAgent(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
+        // SST/DSM depends on SSC, so SSC is instanced before SST/DSM
+        mSignalStrengthController = mTelephonyComponentFactory.inject(
+                SignalStrengthController.class.getName()).makeSignalStrengthController(this,
+                this.mCi);
         mSST = mTelephonyComponentFactory.inject(ServiceStateTracker.class.getName())
                 .makeServiceStateTracker(this, this.mCi);
         mEmergencyNumberTracker = mTelephonyComponentFactory
@@ -639,6 +643,11 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public DisplayInfoController getDisplayInfoController() {
         return mDisplayInfoController;
+    }
+
+    @Override
+    public SignalStrengthController getSignalStrengthController() {
+        return mSignalStrengthController;
     }
 
     @Override
@@ -4064,10 +4073,10 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(
             int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
-        int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
+        int[] consolidatedThresholds = mSignalStrengthController.getConsolidatedSignalThresholds(
                 ran,
                 signalStrengthMeasure,
-                mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
+                mSignalStrengthController.shouldHonorSystemThresholds() ? thresholds : new int[]{},
                 REPORTING_HYSTERESIS_DB);
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
@@ -4601,5 +4610,26 @@ public class GsmCdmaPhone extends Phone {
             loge("EHPLMN is not available in CDMA");
         }
         return Collections.emptyList();
+    }
+
+    /**
+     * Gets the carrier configuration values for a particular subscription.
+     *
+     * @return A {@link PersistableBundle} containing the config for the given subId,
+     *         or default values for an invalid subId.
+     */
+    @NonNull
+    PersistableBundle getCarrierConfig() {
+        CarrierConfigManager configManager = (CarrierConfigManager) getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            // If an invalid subId is used, this bundle will contain default values.
+            PersistableBundle config = configManager.getConfigForSubId(getSubId());
+            if (config != null) {
+                return config;
+            }
+        }
+        // Return static default defined in CarrierConfigManager.
+        return CarrierConfigManager.getDefaultConfig();
     }
 }
