@@ -44,13 +44,11 @@ import android.os.AsyncResult;
 import android.os.BaseBundle;
 import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.TimestampedValue;
@@ -71,16 +69,12 @@ import android.telephony.CellIdentityNr;
 import android.telephony.CellIdentityTdscdma;
 import android.telephony.CellIdentityWcdma;
 import android.telephony.CellInfo;
-import android.telephony.CellSignalStrengthLte;
-import android.telephony.CellSignalStrengthNr;
 import android.telephony.DataSpecificRegistrationInfo;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SignalStrength;
-import android.telephony.SignalStrengthUpdateRequest;
-import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
@@ -128,11 +122,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -650,9 +642,6 @@ public class ServiceStateTracker extends Handler {
                                    // while calculating signal strength level.
     private final Object mLteRsrpBoostLock = new Object();
     private static final int INVALID_LTE_EARFCN = -1;
-
-    // @GuardedBy("mSignalRequestRecords")
-    private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
     public ServiceStateTracker(GsmCdmaPhone phone, CommandsInterface ci) {
         mNitzState = TelephonyComponentFactory.getInstance()
@@ -1762,76 +1751,6 @@ public class ServiceStateTracker extends Handler {
             case EVENT_POLL_STATE_REQUEST:
                 pollStateInternal(false);
                 break;
-
-            case EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST: {
-                Pair<SignalRequestRecord, Message> pair =
-                        (Pair<SignalRequestRecord, Message>) msg.obj;
-                SignalRequestRecord record = pair.first;
-                Message onCompleted = pair.second;
-                AsyncResult ret = AsyncResult.forMessage(onCompleted);
-
-                // TODO(b/177956310): Check subId to filter out old request until a better solution
-                boolean dupRequest = mSignalRequestRecords.stream().anyMatch(
-                        srr -> srr.mCallingUid == record.mCallingUid
-                                && srr.mSubId == record.mSubId);
-                if (dupRequest) {
-                    ret.exception = new IllegalStateException(
-                            "setSignalStrengthUpdateRequest called again with same subId");
-                    onCompleted.sendToTarget();
-                    break;
-                }
-
-                try {
-                    record.mRequest.getLiveToken().linkToDeath(record, 0);
-                } catch (RemoteException | NullPointerException ex) {
-                    ret.exception = new IllegalStateException(
-                            "Signal request client is already dead.");
-                    onCompleted.sendToTarget();
-                    break;
-                }
-
-                synchronized (mSignalRequestRecords) {
-                    mSignalRequestRecords.add(record);
-                }
-
-                updateAlwaysReportSignalStrength();
-                updateReportingCriteria(getCarrierConfig());
-
-                onCompleted.sendToTarget();
-                break;
-            }
-
-            case EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST: {
-                Pair<SignalRequestRecord, Message> pair =
-                        (Pair<SignalRequestRecord, Message>) msg.obj;
-                SignalRequestRecord record = pair.first;
-                Message onCompleted = pair.second;
-
-                synchronized (mSignalRequestRecords) {
-                    // for loop with removal may cause ConcurrentModificationException
-                    Iterator<SignalRequestRecord> it = mSignalRequestRecords.iterator();
-                    while (it.hasNext()) {
-                        SignalRequestRecord srr = it.next();
-                        if (srr.mRequest.getLiveToken().equals(record.mRequest.getLiveToken())) {
-                            it.remove();
-                        }
-                    }
-                }
-
-                updateAlwaysReportSignalStrength();
-                updateReportingCriteria(getCarrierConfig());
-
-                if (onCompleted != null) {
-                    AsyncResult ret = AsyncResult.forMessage(onCompleted);
-                    onCompleted.sendToTarget();
-                }
-                break;
-            }
-
-            case EVENT_ON_DEVICE_IDLE_STATE_CHANGED: {
-                updateReportingCriteria(getCarrierConfig());
-                break;
-            }
 
             default:
                 log("Unhandled message with number: " + msg.what);
@@ -5002,7 +4921,7 @@ public class ServiceStateTracker extends Handler {
         mCdnr.updateEfForEri(getOperatorNameFromEri());
 
         updateLteEarfcnLists(config);
-        updateReportingCriteria(config);
+        mPhone.getSignalStrengthController().updateReportingCriteria(config);
         updateOperatorNamePattern(config);
         mCdnr.updateEfFromCarrierConfig(config);
 
@@ -5019,52 +4938,6 @@ public class ServiceStateTracker extends Handler {
                     CarrierConfigManager.KEY_BOOSTED_LTE_EARFCNS_STRING_ARRAY);
             mEarfcnPairListForRsrpBoost = convertEarfcnStringArrayToPairList(
                     earfcnsStringArrayForRsrpBoost);
-        }
-    }
-
-    private void updateReportingCriteria(PersistableBundle config) {
-        int lteMeasurementEnabled = config.getInt(CarrierConfigManager
-                .KEY_PARAMETERS_USED_FOR_LTE_SIGNAL_BAR_INT, CellSignalStrengthLte.USE_RSRP);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP,
-                config.getIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY),
-                AccessNetworkType.EUTRAN,
-                (lteMeasurementEnabled & CellSignalStrengthLte.USE_RSRP) != 0);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSCP,
-                config.getIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY),
-                AccessNetworkType.UTRAN, true);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
-                config.getIntArray(CarrierConfigManager.KEY_GSM_RSSI_THRESHOLDS_INT_ARRAY),
-                AccessNetworkType.GERAN, true);
-
-        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
-            mPhone.setSignalStrengthReportingCriteria(
-                    SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRQ,
-                    config.getIntArray(CarrierConfigManager.KEY_LTE_RSRQ_THRESHOLDS_INT_ARRAY),
-                    AccessNetworkType.EUTRAN,
-                    (lteMeasurementEnabled & CellSignalStrengthLte.USE_RSRQ) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
-                    SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSNR,
-                    config.getIntArray(CarrierConfigManager.KEY_LTE_RSSNR_THRESHOLDS_INT_ARRAY),
-                    AccessNetworkType.EUTRAN,
-                    (lteMeasurementEnabled & CellSignalStrengthLte.USE_RSSNR) != 0);
-
-            int measurementEnabled = config.getInt(CarrierConfigManager
-                    .KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT, CellSignalStrengthNr.USE_SSRSRP);
-            mPhone.setSignalStrengthReportingCriteria(
-                    SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRP,
-                    config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY),
-                    AccessNetworkType.NGRAN,
-                    (measurementEnabled & CellSignalStrengthNr.USE_SSRSRP) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
-                    SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRQ,
-                    config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY),
-                    AccessNetworkType.NGRAN,
-                    (measurementEnabled & CellSignalStrengthNr.USE_SSRSRQ) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
-                    SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSSINR,
-                    config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY),
-                    AccessNetworkType.NGRAN,
-                    (measurementEnabled & CellSignalStrengthNr.USE_SSSINR) != 0);
         }
     }
 
@@ -6033,124 +5906,5 @@ public class ServiceStateTracker extends Handler {
         // written into a persistent storage. ServiceStateProvider keeps values in the memory.
         values.put(SERVICE_STATE, p.marshall());
         return values;
-    }
-
-    /**
-     * Set a new request to update the signal strength thresholds.
-     */
-    public void setSignalStrengthUpdateRequest(int subId, int callingUid,
-            SignalStrengthUpdateRequest request, @NonNull Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
-        sendMessage(obtainMessage(EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST,
-                new Pair<SignalRequestRecord, Message>(record, onCompleted)));
-    }
-
-    /**
-     * Clear the previously set request.
-     */
-    public void clearSignalStrengthUpdateRequest(int subId, int callingUid,
-            SignalStrengthUpdateRequest request, @Nullable Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
-        sendMessage(obtainMessage(EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST,
-                new Pair<SignalRequestRecord, Message>(record, onCompleted)));
-    }
-
-    /**
-     * Align all the qualified thresholds set from applications to the {@code systemThresholds}
-     * and consolidate a new thresholds array, follow rules below:
-     * 1. All threshold values (whose interval is guaranteed to be larger than hysteresis) in
-     *    {@code systemThresholds} will keep as it.
-     * 2. Any threshold from apps that has interval less than hysteresis from any threshold in
-     *    {@code systemThresholds} will be removed.
-     * 3. The target thresholds will be {@code systemThresholds} + all qualified thresholds from
-     *    apps, sorted in ascending order.
-     */
-    int[] getConsolidatedSignalThresholds(int ran, int measurement,
-            int[] systemThresholds, int hysteresis) {
-
-        // TreeSet with comparator that will filter element with interval less than hysteresis
-        // from any current element
-        Set<Integer> target = new TreeSet<>((x, y) -> {
-            if (y >= x - hysteresis && y <= x + hysteresis) {
-                return 0;
-            }
-            return Integer.compare(x, y);
-        });
-
-        for (int systemThreshold : systemThresholds) {
-            target.add(systemThreshold);
-        }
-
-        final boolean isDeviceIdle = mPhone.isDeviceIdle();
-        final int curSubId = mPhone.getSubId();
-        synchronized (mSignalRequestRecords) {
-            // The total number of record is small (10~15 tops). With each request has at most 5
-            // SignalThresholdInfo which has at most 8 thresholds arrays. So the nested loop should
-            // not be a concern here.
-            for (SignalRequestRecord record : mSignalRequestRecords) {
-                if (curSubId != record.mSubId
-                        || (isDeviceIdle && !record.mRequest.isReportingRequestedWhileIdle())) {
-                    continue;
-                }
-                for (SignalThresholdInfo info : record.mRequest.getSignalThresholdInfos()) {
-                    if (ran == info.getRadioAccessNetworkType()
-                            && measurement == info.getSignalMeasurementType()) {
-                        for (int appThreshold : info.getThresholds()) {
-                            target.add(appThreshold);
-                        }
-                    }
-                }
-            }
-        }
-
-        int[] targetArray = new int[target.size()];
-        int i = 0;
-        for (int element : target) {
-            targetArray[i++] = element;
-        }
-        return targetArray;
-    }
-
-    boolean shouldHonorSystemThresholds() {
-        if (!mPhone.isDeviceIdle()) {
-            return true;
-        }
-
-        final int curSubId = mPhone.getSubId();
-        return mSignalRequestRecords.stream().anyMatch(
-                srr -> curSubId == srr.mSubId
-                        && srr.mRequest.isSystemThresholdReportingRequestedWhileIdle());
-    }
-
-    void onDeviceIdleStateChanged(boolean isDeviceIdle) {
-        sendMessage(obtainMessage(EVENT_ON_DEVICE_IDLE_STATE_CHANGED, isDeviceIdle));
-    }
-
-    private class SignalRequestRecord implements IBinder.DeathRecipient {
-        final int mSubId; // subId the request originally applied to
-        final int mCallingUid;
-        final SignalStrengthUpdateRequest mRequest;
-
-        SignalRequestRecord(int subId, int uid, SignalStrengthUpdateRequest request) {
-            this.mCallingUid = uid;
-            this.mSubId = subId;
-            this.mRequest = request;
-        }
-
-        @Override
-        public void binderDied() {
-            clearSignalStrengthUpdateRequest(mSubId, mCallingUid, mRequest, null /*onCompleted*/);
-        }
-    }
-
-    private void updateAlwaysReportSignalStrength() {
-        final int curSubId = mPhone.getSubId();
-        boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
-                srr -> srr.mSubId == curSubId && (srr.mRequest.isReportingRequestedWhileIdle()
-                        || srr.mRequest.isSystemThresholdReportingRequestedWhileIdle()));
-
-        // TODO(b/177924721): TM#setAlwaysReportSignalStrength will be removed and we will not
-        // worry about unset flag which was set by other client.
-        mPhone.setAlwaysReportSignalStrength(alwaysReport);
     }
 }

@@ -41,7 +41,6 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.provider.Settings;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
-import android.telephony.CarrierConfigManager;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.SignalThresholdInfo;
 import android.util.LocalLog;
@@ -823,10 +822,10 @@ public class DeviceStateMonitor extends Handler {
          * Calculated from GSM asu level thresholds - TS 27.007 Sec 8.5
          */
         public static final int[] GERAN = new int[] {
-            -109,
-            -103,
-            -97,
-            -89,
+                -109,
+                -103,
+                -97,
+                -89,
         };
 
         /**
@@ -836,10 +835,10 @@ public class DeviceStateMonitor extends Handler {
          * See TS 27.007 Sec 8.69.
          */
         public static final int[] UTRAN = new int[] {
-            -114, /* SIGNAL_STRENGTH_POOR */
-            -104, /* SIGNAL_STRENGTH_MODERATE */
-            -94,  /* SIGNAL_STRENGTH_GOOD */
-            -84   /* SIGNAL_STRENGTH_GREAT */
+                -114, /* SIGNAL_STRENGTH_POOR */
+                -104, /* SIGNAL_STRENGTH_MODERATE */
+                -94,  /* SIGNAL_STRENGTH_GOOD */
+                -84   /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -848,10 +847,10 @@ public class DeviceStateMonitor extends Handler {
          * These thresholds are taken from the LTE RSRP defaults in {@link CarrierConfigManager}.
          */
         public static final int[] EUTRAN_RSRP = new int[] {
-            -128, /* SIGNAL_STRENGTH_POOR */
-            -118, /* SIGNAL_STRENGTH_MODERATE */
-            -108, /* SIGNAL_STRENGTH_GOOD */
-            -98,  /* SIGNAL_STRENGTH_GREAT */
+                -128, /* SIGNAL_STRENGTH_POOR */
+                -118, /* SIGNAL_STRENGTH_MODERATE */
+                -108, /* SIGNAL_STRENGTH_GOOD */
+                -98,  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -860,10 +859,10 @@ public class DeviceStateMonitor extends Handler {
          * These thresholds are taken from the LTE RSRQ defaults in {@link CarrierConfigManager}.
          */
         public static final int[] EUTRAN_RSRQ = new int[] {
-            -20,  /* SIGNAL_STRENGTH_POOR */
-            -17,  /* SIGNAL_STRENGTH_MODERATE */
-            -14,  /* SIGNAL_STRENGTH_GOOD */
-            -11   /* SIGNAL_STRENGTH_GREAT */
+                -20,  /* SIGNAL_STRENGTH_POOR */
+                -17,  /* SIGNAL_STRENGTH_MODERATE */
+                -14,  /* SIGNAL_STRENGTH_GOOD */
+                -11   /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -872,10 +871,10 @@ public class DeviceStateMonitor extends Handler {
          * These thresholds are taken from the LTE RSSNR defaults in {@link CarrierConfigManager}.
          */
         public static final int[] EUTRAN_RSSNR = new int[] {
-            -3,  /* SIGNAL_STRENGTH_POOR */
-            1,   /* SIGNAL_STRENGTH_MODERATE */
-            5,   /* SIGNAL_STRENGTH_GOOD */
-            13   /* SIGNAL_STRENGTH_GREAT */
+                -3,  /* SIGNAL_STRENGTH_POOR */
+                1,   /* SIGNAL_STRENGTH_MODERATE */
+                5,   /* SIGNAL_STRENGTH_GOOD */
+                13   /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
@@ -884,40 +883,40 @@ public class DeviceStateMonitor extends Handler {
          * These correspond to EVDO level thresholds.
          */
         public static final int[] CDMA2000 = new int[] {
-            -105,
-            -90,
-            -75,
-            -65
+                -105,
+                -90,
+                -75,
+                -65
         };
 
         /**
          * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
          */
         public static final int[] NGRAN_RSRSRP = new int[] {
-            -110, /* SIGNAL_STRENGTH_POOR */
-            -90, /* SIGNAL_STRENGTH_MODERATE */
-            -80, /* SIGNAL_STRENGTH_GOOD */
-            -65,  /* SIGNAL_STRENGTH_GREAT */
+                -110, /* SIGNAL_STRENGTH_POOR */
+                -90, /* SIGNAL_STRENGTH_MODERATE */
+                -80, /* SIGNAL_STRENGTH_GOOD */
+                -65,  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
          * List of dB thresholds for NGRAN {@link AccessNetworkType} RSRSRP
          */
         public static final int[] NGRAN_RSRSRQ = new int[] {
-            -31, /* SIGNAL_STRENGTH_POOR */
-            -19, /* SIGNAL_STRENGTH_MODERATE */
-            -7, /* SIGNAL_STRENGTH_GOOD */
-            6  /* SIGNAL_STRENGTH_GREAT */
+                -31, /* SIGNAL_STRENGTH_POOR */
+                -19, /* SIGNAL_STRENGTH_MODERATE */
+                -7, /* SIGNAL_STRENGTH_GOOD */
+                6  /* SIGNAL_STRENGTH_GREAT */
         };
 
         /**
          * List of dB thresholds for NGRAN {@link AccessNetworkType} SSSINR
          */
         public static final int[] NGRAN_SSSINR = new int[] {
-            -5, /* SIGNAL_STRENGTH_POOR */
-            5, /* SIGNAL_STRENGTH_MODERATE */
-            15, /* SIGNAL_STRENGTH_GOOD */
-            30  /* SIGNAL_STRENGTH_GREAT */
+                -5, /* SIGNAL_STRENGTH_POOR */
+                5, /* SIGNAL_STRENGTH_MODERATE */
+                15, /* SIGNAL_STRENGTH_GOOD */
+                30  /* SIGNAL_STRENGTH_GREAT */
         };
     }
 
