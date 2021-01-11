@@ -447,4 +447,12 @@ public class TelephonyComponentFactory {
             SubscriptionController sc) {
         return new SubscriptionInfoUpdater(looper, context, sc);
     }
+
+    /**
+     * Create a new SignalStrengthController instance.
+     */
+    public SignalStrengthController makeSignalStrengthController(GsmCdmaPhone phone,
+            CommandsInterface ci) {
+        return new SignalStrengthController(phone, ci);
+    }
 }
