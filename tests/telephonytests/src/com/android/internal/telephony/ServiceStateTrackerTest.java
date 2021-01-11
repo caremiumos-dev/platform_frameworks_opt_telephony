@@ -139,6 +139,10 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Mock
     private ServiceStateStats mServiceStateStats;
 
+    // SST now delegates all signal strength operation to SSC
+    @Mock
+    private SignalStrengthController mSignalStrengthController;
+
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
     private PersistableBundle mBundle;
@@ -187,6 +191,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         @Override
         public void onLooperPrepared() {
+            mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
+            doReturn(mSignalStrengthController).when(mPhone).getSignalStrengthController();
+
             sst = new ServiceStateTracker(mPhone, mSimulatedCommands);
             sst.setServiceStateStats(mServiceStateStats);
             doReturn(sst).when(mPhone).getServiceStateTracker();
