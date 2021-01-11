@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007171535",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "8265041a_ed01932e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5937,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-11T04:07:52Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 5937,
+        "startChar": 0,
+        "endLine": 5937,
+        "endChar": 101
+      },
+      "revId": "44eb73aa4315d47711c22aa5ad29962b378e0dcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
