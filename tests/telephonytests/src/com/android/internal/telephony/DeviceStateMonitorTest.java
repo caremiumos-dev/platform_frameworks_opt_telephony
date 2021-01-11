@@ -21,6 +21,7 @@ import static android.hardware.radio.V1_0.DeviceStateType.POWER_SAVE_MODE;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
@@ -305,6 +306,8 @@ public class DeviceStateMonitorTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier).sendDeviceState(eq(POWER_SAVE_MODE),
                 anyBoolean(), nullable(Message.class));
         verify(mSimulatedCommandsVerifier).setUnsolResponseFilter(anyInt(),
+                nullable(Message.class));
+        verify(mSimulatedCommandsVerifier).setSignalStrengthReportingCriteria(any(), anyInt(),
                 nullable(Message.class));
     }
 

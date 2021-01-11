@@ -337,6 +337,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected DataEnabledSettings mDataEnabledSettings;
     // Used for identify the carrier of current subscription
     protected CarrierResolver mCarrierResolver;
+    protected SignalStrengthController mSignalStrengthController;
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected int mPhoneId;
@@ -1884,6 +1885,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * Retrieves the DisplayInfoController of the phone instance.
      */
     public DisplayInfoController getDisplayInfoController() {
+        return null;
+    }
+
+    /**
+     * Retrieves the SignalStrengthController of the phone instance.
+     */
+    public SignalStrengthController getSignalStrengthController() {
         return null;
     }
 
