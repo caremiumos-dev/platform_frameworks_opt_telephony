@@ -235,6 +235,11 @@ public class RILRequest {
     void onError(final int error, final Object ret) {
         final CommandException ex = CommandException.fromRilErrno(error);
 
+        // Copy the message so that Msg#sendToTarget isn't called more than once which causes
+        // an IllegalStateException because the Msg is marked as already in use.
+        // The underlying issue here is that each method in the RIL class calls sendToTarget
+        // directly on the Msg class.  Instead, calling Msg#sendToTarget should be coordinated
+        // between RIL and RILRequest class so that it's only called once.
         final Message result = mResult;
         if (RIL.RILJ_LOGD) {
             Rlog.d(LOG_TAG, serialString() + "< "
@@ -244,7 +249,7 @@ public class RILRequest {
         }
 
         if (result != null && result.getTarget() != null) {
-            AsyncResult.forMessage(result, ret, ex);
+            AsyncResult.forMessage(Message.obtain(mResult), ret, ex);
             result.sendToTarget();
         }
     }
