@@ -305,6 +305,10 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierSignalAgent(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
+        // SST/DSM depends on SSC, so SSC is instanced before SST/DSM
+        mSignalStrengthController = mTelephonyComponentFactory.inject(
+                SignalStrengthController.class.getName()).makeSignalStrengthController(this,
+                this.mCi);
         mSST = mTelephonyComponentFactory.inject(ServiceStateTracker.class.getName())
                 .makeServiceStateTracker(this, this.mCi);
         mEmergencyNumberTracker = mTelephonyComponentFactory
@@ -648,6 +652,11 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public DisplayInfoController getDisplayInfoController() {
         return mDisplayInfoController;
+    }
+
+    @Override
+    public SignalStrengthController getSignalStrengthController() {
+        return mSignalStrengthController;
     }
 
     @Override
@@ -4053,17 +4062,19 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(int signalStrengthMeasure,
             int[] systemThresholds, int ran, boolean isEnabledForSystem) {
-        int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
+        int[] consolidatedThresholds = mSignalStrengthController.getConsolidatedSignalThresholds(
                 ran,
                 signalStrengthMeasure,
-                isEnabledForSystem && mSST.shouldHonorSystemThresholds() ? systemThresholds
+                isEnabledForSystem && mSignalStrengthController.shouldHonorSystemThresholds()
+                        ? systemThresholds
                         : new int[]{},
                 REPORTING_HYSTERESIS_DB);
-        boolean isEnabledForAppRequest = mSST.shouldEnableSignalThresholdForAppRequest(
-                ran,
-                signalStrengthMeasure,
-                getSubId(),
-                isDeviceIdle());
+        boolean isEnabledForAppRequest =
+                mSignalStrengthController.shouldEnableSignalThresholdForAppRequest(
+                        ran,
+                        signalStrengthMeasure,
+                        getSubId(),
+                        isDeviceIdle());
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
                         .setRadioAccessNetworkType(ran)
@@ -4583,6 +4594,27 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public boolean canDisablePhysicalSubscription() {
         return mCi.canToggleUiccApplicationsEnablement();
+    }
+
+    /**
+     * Gets the carrier configuration values for a particular subscription.
+     *
+     * @return A {@link PersistableBundle} containing the config for the given subId,
+     *         or default values for an invalid subId.
+     */
+    @NonNull
+    public PersistableBundle getCarrierConfig() {
+        CarrierConfigManager configManager = (CarrierConfigManager) getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager != null) {
+            // If an invalid subId is used, this bundle will contain default values.
+            PersistableBundle config = configManager.getConfigForSubId(getSubId());
+            if (config != null) {
+                return config;
+            }
+        }
+        // Return static default defined in CarrierConfigManager.
+        return CarrierConfigManager.getDefaultConfig();
     }
 
     @Override

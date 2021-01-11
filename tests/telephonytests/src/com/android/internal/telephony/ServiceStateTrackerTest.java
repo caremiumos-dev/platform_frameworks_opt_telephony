@@ -142,6 +142,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private ServiceStateTrackerTestHandler mSSTTestHandler;
     private PersistableBundle mBundle;
 
+    @Mock
+    private SignalStrengthController mSignalStrengthController;
+
     private static final int EVENT_REGISTERED_TO_NETWORK = 1;
     private static final int EVENT_SUBSCRIPTION_INFO_READY = 2;
     private static final int EVENT_DATA_ROAMING_ON = 3;
@@ -186,6 +189,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         @Override
         public void onLooperPrepared() {
+            mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
+            doReturn(mSignalStrengthController).when(mPhone).getSignalStrengthController();
+
             sst = new ServiceStateTracker(mPhone, mSimulatedCommands);
             sst.setServiceStateStats(mServiceStateStats);
             doReturn(sst).when(mPhone).getServiceStateTracker();
