@@ -35,6 +35,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3760f96e_2ec69286",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1600,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-01-12T10:12:26Z",
+      "side": 1,
+      "message": "phoneid input here indicates the current DDS. For temporary DDS switch done during calls on non DDS sub, phoneid points to non DDS. This logic here would detect failure for temporary DDS switch (phoneid !\u003d ddsphoneid) and schedules a retry. If the phoneid passed is same as DDS phoneid, then the DDS retry is scheduled on call end.",
+      "parentUuid": "e8abaa5b_009c156d",
+      "revId": "8c1f03cd668c36377933eb47f31223242e2923be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de58aac1_147853d2",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-01-07T23:12:15Z",
       "side": 1,
       "message": "Is this comment in the correct place? It doesn\u0027t seem to match the if check above.",
+      "range": {
+        "startLine": 1605,
+        "startChar": 20,
+        "endLine": 1606,
+        "endChar": 59
+      },
+      "revId": "8c1f03cd668c36377933eb47f31223242e2923be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab912d6_ce1451a7",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-01-12T10:12:26Z",
+      "side": 1,
+      "message": "Should add switch type in this comment, will update.\nAny permanent DDS switch would fail during active call.\nWhereas temporary DDS switch is allowed from Modem.",
+      "parentUuid": "de58aac1_147853d2",
       "range": {
         "startLine": 1605,
         "startChar": 20,
