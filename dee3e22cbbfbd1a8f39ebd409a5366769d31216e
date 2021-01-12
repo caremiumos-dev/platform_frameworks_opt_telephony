@@ -16,6 +16,23 @@
       "message": "Jack, can you take a look at this while Chen is out?",
       "revId": "dee3e22cbbfbd1a8f39ebd409a5366769d31216e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a66061d_fb69cd56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-12T03:27:37Z",
+      "side": 1,
+      "message": "I think this code collide with the CLs that Songferng is actively working on. Please coordinate.\nhttps://googleplex-android-review.git.corp.google.com/q/topic:%22AllowedNetworkTypesReason%22+(status:open%20OR%20status:merged)",
+      "revId": "dee3e22cbbfbd1a8f39ebd409a5366769d31216e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
