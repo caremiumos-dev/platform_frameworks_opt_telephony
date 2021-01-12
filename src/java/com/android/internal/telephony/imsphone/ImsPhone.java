@@ -83,6 +83,7 @@ import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.stub.ImsUtImplBase;
 import android.text.TextUtils;
 import android.util.LocalLog;
+import android.util.Log;
 
 import com.android.ims.ImsEcbm;
 import com.android.ims.ImsEcbmStateListener;
@@ -2090,15 +2091,25 @@ public class ImsPhone extends ImsPhoneBase {
 
     // Not used, but not removed due to UnsupportedAppUsage tag.
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
-    public void setImsRegistered(boolean isRegistered) {
-        mImsMmTelRegistrationHelper.updateRegistrationState(
+    public void setImsRegistered(final boolean isRegistered) {
+        setImsRegistrationState(
                 isRegistered ? RegistrationManager.REGISTRATION_STATE_REGISTERED :
                         RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
     }
 
-    public void setImsRegistrationState(@RegistrationManager.ImsRegistrationState int value) {
-        if (DBG) logd("setImsRegistrationState: " + value);
+    public void setImsRegistrationState(final @RegistrationManager.ImsRegistrationState int value) {
+        if (DBG) {
+            logd("setImsRegistrationState: "
+                    + RegistrationManager.registrationStateToString(value));
+        }
         mImsMmTelRegistrationHelper.updateRegistrationState(value);
+        if (getServiceStateTracker() != null) {
+            getServiceStateTracker().setImsRegistrationState(
+                    value == RegistrationManager.REGISTRATION_STATE_REGISTERED);
+        } else {
+            loge("setImsRegistrationState: service state tracker is null, "
+                    + "#setImsRegistrationState not called.");
+        }
     }
 
     @Override
@@ -2383,34 +2394,41 @@ public class ImsPhone extends ImsPhoneBase {
         @Override
         public void handleImsRegistered(int imsRadioTech) {
             if (DBG) {
-                logd("onImsMmTelConnected imsRadioTech="
+                logd("handleImsRegistered: onImsMmTelConnected imsRadioTech="
                         + AccessNetworkConstants.transportTypeToString(imsRadioTech));
             }
-            mRegLocalLog.log("onImsMmTelConnected imsRadioTech="
+            mRegLocalLog.log("handleImsRegistered: onImsMmTelConnected imsRadioTech="
                     + AccessNetworkConstants.transportTypeToString(imsRadioTech));
             setServiceState(ServiceState.STATE_IN_SERVICE);
+            setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERED);
             mMetrics.writeOnImsConnectionState(mPhoneId, ImsConnectionState.State.CONNECTED, null);
         }
 
         @Override
         public void handleImsRegistering(int imsRadioTech) {
             if (DBG) {
-                logd("onImsMmTelProgressing imsRadioTech="
+                logd("handleImsRegistering: onImsMmTelProgressing imsRadioTech="
                         + AccessNetworkConstants.transportTypeToString(imsRadioTech));
             }
-            mRegLocalLog.log("onImsMmTelProgressing imsRadioTech="
+            mRegLocalLog.log("handleImsRegistering: onImsMmTelProgressing imsRadioTech="
                     + AccessNetworkConstants.transportTypeToString(imsRadioTech));
             setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
+            setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERING);
             mMetrics.writeOnImsConnectionState(mPhoneId, ImsConnectionState.State.PROGRESSING,
                     null);
         }
 
         @Override
         public void handleImsUnregistered(ImsReasonInfo imsReasonInfo) {
-            if (DBG) logd("onImsMmTelDisconnected imsReasonInfo=" + imsReasonInfo);
-            mRegLocalLog.log("onImsMmTelDisconnected imsRadioTech=" + imsReasonInfo);
+            if (DBG) {
+                logd("handleImsRegistering: onImsMmTelDisconnected imsReasonInfo="
+                        + imsReasonInfo);
+            }
+            mRegLocalLog.log("handleImsRegistering: onImsMmTelDisconnected imsRadioTech="
+                    + imsReasonInfo);
             setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
             processDisconnectReason(imsReasonInfo);
+            setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
             mMetrics.writeOnImsConnectionState(mPhoneId, ImsConnectionState.State.DISCONNECTED,
                     imsReasonInfo);
         }
@@ -2499,6 +2517,11 @@ public class ImsPhone extends ImsPhoneBase {
     }
 
     private void loge(String s) {
+        Rlog.e(LOG_TAG, "[" + mPhoneId + "] " + s);
+    }
+
+    private void logwtf(String s) {
+        Log.wtf(LOG_TAG, "[" + mPhoneId + "] " + s);
         Rlog.e(LOG_TAG, "[" + mPhoneId + "] " + s);
     }
 }

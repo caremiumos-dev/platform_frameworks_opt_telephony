@@ -1313,8 +1313,10 @@ public class ServiceStateTracker extends Handler {
             case EVENT_IMS_STATE_DONE:
                 ar = (AsyncResult) msg.obj;
                 if (ar.exception == null) {
-                    int[] responseArray = (int[])ar.result;
-                    mImsRegistered = (responseArray[0] == 1) ? true : false;
+                    final int[] responseArray = (int[]) ar.result;
+                    final boolean imsRegistered = responseArray[0] == 1;
+                    mPhone.setImsRegistrationState(imsRegistered);
+                    mImsRegistered = imsRegistered;
                 }
                 break;
 
@@ -2963,7 +2965,7 @@ public class ServiceStateTracker extends Handler {
             mRadioPowerLog.log(tmpLog);
         }
 
-        if (mPhone.isPhoneTypeGsm() && mAlarmSwitch) {
+        if (mAlarmSwitch) {
             if(DBG) log("mAlarmSwitch == true");
             Context context = mPhone.getContext();
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -3115,15 +3117,19 @@ public class ServiceStateTracker extends Handler {
         sendMessage(obtainMessage(EVENT_IMS_SERVICE_STATE_CHANGED));
     }
 
-    public void setImsRegistrationState(boolean registered) {
-        log("ImsRegistrationState - registered : " + registered);
+    public void setImsRegistrationState(final boolean registered) {
+        log("setImsRegistrationState: {registered=" + registered
+                + " mImsRegistrationOnOff=" + mImsRegistrationOnOff
+                + " mAlarmSwitch=" + mAlarmSwitch
+                + "}");
 
         if (mImsRegistrationOnOff && !registered) {
             if (mAlarmSwitch) {
                 mImsRegistrationOnOff = registered;
 
-                Context context = mPhone.getContext();
-                AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                final Context context = mPhone.getContext();
+                final AlarmManager am =
+                        (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 am.cancel(mRadioOffIntent);
                 mAlarmSwitch = false;
 
