@@ -1852,11 +1852,6 @@ public class DataConnection extends StateMachine {
      */
     private boolean initConnection(ConnectionParams cp) {
         ApnContext apnContext = cp.mApnContext;
-        if (mApnSetting == null) {
-            // Only change apn setting if it isn't set, it will
-            // only NOT be set only if we're in DcInactiveState.
-            mApnSetting = apnContext.getApnSetting();
-        }
         if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnTypeBitmask())) {
             if (DBG) {
                 log("initConnection: incompatible apnSetting in ConnectionParams cp=" + cp
@@ -3023,6 +3018,13 @@ public class DataConnection extends StateMachine {
         if (DBG) {
             log("bringUp: apnContext=" + apnContext + " onCompletedMsg=" + onCompletedMsg);
         }
+
+        if (mApnSetting == null) {
+            // Only change apn setting if it isn't set, it will
+            // only NOT be set only if we're in DcInactiveState.
+            mApnSetting = apnContext.getApnSetting();
+        }
+
         sendMessage(DataConnection.EVENT_CONNECT,
                 new ConnectionParams(apnContext, profileId, rilRadioTechnology, onCompletedMsg,
                         connectionGeneration, requestType, subId, isApnPreferred));
