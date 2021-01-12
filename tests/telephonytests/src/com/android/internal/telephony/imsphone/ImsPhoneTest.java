@@ -668,7 +668,7 @@ public class ImsPhoneTest extends TelephonyTest {
     @SmallTest
     public void testImsRegistered() throws Exception {
         mImsPhoneUT.setServiceState(ServiceState.STATE_IN_SERVICE);
-        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERED);
+        mImsPhoneUT.setImsRegistrationState(true);
         assertTrue(mImsPhoneUT.isImsRegistered());
 
         LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
@@ -682,7 +682,7 @@ public class ImsPhoneTest extends TelephonyTest {
     @SmallTest
     public void testImsRegistering() throws Exception {
         mImsPhoneUT.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
-        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_REGISTERING);
+        mImsPhoneUT.setImsRegistrationState(false);
         assertFalse(mImsPhoneUT.isImsRegistered());
 
         LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
@@ -690,20 +690,6 @@ public class ImsPhoneTest extends TelephonyTest {
         Integer regResult = result.poll(1000, TimeUnit.MILLISECONDS);
         assertNotNull(regResult);
         assertEquals(RegistrationManager.REGISTRATION_STATE_REGISTERING, regResult.intValue());
-    }
-
-    @Test
-    @SmallTest
-    public void testImsDeregistered() throws Exception {
-        mImsPhoneUT.setServiceState(ServiceState.STATE_OUT_OF_SERVICE);
-        mImsPhoneUT.setImsRegistrationState(RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED);
-        assertFalse(mImsPhoneUT.isImsRegistered());
-
-        LinkedBlockingQueue<Integer> result = new LinkedBlockingQueue<>(1);
-        mImsPhoneUT.getImsRegistrationState(result::offer);
-        Integer regResult = result.poll(1000, TimeUnit.MILLISECONDS);
-        assertNotNull(regResult);
-        assertEquals(RegistrationManager.REGISTRATION_STATE_NOT_REGISTERED, regResult.intValue());
     }
 
     @Test
