@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007264951",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545186?revision\u003d7",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "7efa1c39_9163639c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4049,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-13T18:19:12Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 4049,
+        "startChar": 0,
+        "endLine": 4049,
+        "endChar": 111
+      },
+      "revId": "51320e4206f20b10a76b8569db1edd5c5b234ecd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
