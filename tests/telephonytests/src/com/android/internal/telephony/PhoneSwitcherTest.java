@@ -897,6 +897,36 @@ public class PhoneSwitcherTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testSetPreferredDataUpdateConfigs() throws Exception {
+        //doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
+        initialize();
+        String mccMnc1 = "123456";
+        String mccMnc2 = "987654";
+        doReturn(mccMnc1).when(mTelephonyManager).getSimOperatorNumeric(1);
+        doReturn(mccMnc2).when(mTelephonyManager).getSimOperatorNumeric(2);
+
+        // Phone 0 has sub 1, phone 1 has sub 2. Sub 1 is default data sub.
+        // Both are active subscriptions, as they are both in active slots.
+        setSlotIndexToSubId(0, 1);
+        setSlotIndexToSubId(1, 2);
+        setDefaultDataSubId(1);
+
+        // setMccMnc should be called with values for Phone 0 (sub 1) as it has default data sub.
+        verify(mSubscriptionController).setMccMnc(mccMnc1, 1);
+
+        // Set sub 2 as default data sub
+        setDefaultDataSubId(2);
+        // setMccMnc should be called with values for Phone 1 (sub 2) as it now has DDS.
+        verify(mSubscriptionController).setMccMnc(mccMnc2, 2);
+
+        // Set sub 1 as default data sub again
+        setDefaultDataSubId(1);
+        // setMccMnc should be called with values for Phone 0 (sub 1) as it has DDS again.
+        verify(mSubscriptionController, times(2)).setMccMnc(mccMnc1, 1);
+    }
+
+    @Test
+    @SmallTest
     public void testMultiSimConfigChange() throws Exception {
         doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
         mActiveModemCount = 1;

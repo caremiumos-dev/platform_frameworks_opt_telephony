@@ -56,6 +56,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyRegistryManager;
 import android.telephony.data.ApnSetting;
+import android.text.TextUtils;
 import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -907,6 +908,15 @@ public class PhoneSwitcher extends Handler {
                 for (int phoneId : newActivePhones) {
                     activate(phoneId);
                 }
+            }
+
+            String operator = getTm().getSimOperatorNumeric(mPrimaryDataSubId);
+            log("Updating MCC/MNC for operator: " + operator);
+            if (!TextUtils.isEmpty(operator)) {
+                MccTable.updateMccMncConfiguration(mContext, operator);
+                mSubscriptionController.setMccMnc(operator, mPrimaryDataSubId);
+            } else {
+                log("Unable to update MCC/MNC -- operator is null");
             }
 
             notifyPreferredDataSubIdChanged();
