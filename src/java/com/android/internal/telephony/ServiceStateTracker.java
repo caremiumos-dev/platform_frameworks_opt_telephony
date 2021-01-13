@@ -1262,7 +1262,11 @@ public class ServiceStateTracker extends Handler {
                     } else if (ar.result == null) {
                         loge("Invalid CellInfo result");
                     } else {
-                        cellInfo = (List<CellInfo>) ar.result;
+                        try {
+                            cellInfo = (List<CellInfo>) ar.result;
+                        } catch (Exception e) {
+                            loge("Invalid CellInfo result casting to List<CellInfo>" + e);
+                        }
                         updateOperatorNameForCellInfo(cellInfo);
                         mLastCellInfoList = cellInfo;
                         mPhone.notifyCellInfo(cellInfo);
