@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adbd95c7_db9da434",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "I\u0027d recommend just calling shouldEnableHighPowerConsumptionIndications directly where needed - it seems a bit counterintuitive to just make a method that does ! on another. Is this just to make naming clearer? If so, perhaps we should consider directly renaming shouldEnableHighPowerConsumptionIndications.",
+      "range": {
+        "startLine": 454,
+        "startChar": 19,
+        "endLine": 454,
+        "endChar": 25
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbdb83e5_1a0c63ab",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "Nit: keep these above dump()",
+      "range": {
+        "startLine": 4783,
+        "startChar": 4,
+        "endLine": 4811,
+        "endChar": 5
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e57e8181_1dbd6adb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6054,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "How about \"remain unmodified\"?",
+      "range": {
+        "startLine": 6054,
+        "startChar": 37,
+        "endLine": 6054,
+        "endChar": 47
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9e73d1_88e18166",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6054,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "{@code base} etc. throughout this javadoc to make it a bit more obvious that you\u0027re talking about the exact params",
+      "range": {
+        "startLine": 6054,
+        "startChar": 27,
+        "endLine": 6054,
+        "endChar": 31
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdd29fd5_e55f9175",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6057,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "Nit: remaining",
+      "range": {
+        "startLine": 6057,
+        "startChar": 50,
+        "endLine": 6057,
+        "endChar": 56
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf64c1f0_7fd2b3a3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "So in the case where base \u003d [-100], original \u003d [-101] and hysteresis \u003d 2, it looks like this code will return [-100] (as opposed to [-102, -100]) - can you document this somewhere in the code with a bit of background why?",
+      "range": {
+        "startLine": 6059,
+        "startChar": 45,
+        "endLine": 6059,
+        "endChar": 60
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c71f3fc_30696c1c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "Nit: I think the formatter will have an opinion on this",
+      "range": {
+        "startLine": 6059,
+        "startChar": 4,
+        "endLine": 6059,
+        "endChar": 44
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c3a151_68e5a72e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6060,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "\"original\" means almost the same thing as \"base\", consider renaming this param",
+      "range": {
+        "startLine": 6060,
+        "startChar": 27,
+        "endLine": 6060,
+        "endChar": 35
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2075c69_23c3e4a2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6075,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "We can use the fact that both of the arrays are sorted to collapse this down to a single loop\n\nJust do ++i when original[j] \u003e right and ++j when original[j] \u003c left",
+      "range": {
+        "startLine": 6075,
+        "startChar": 12,
+        "endLine": 6075,
+        "endChar": 55
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f44240c7_d4665cc2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6083,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-13T23:45:53Z",
+      "side": 1,
+      "message": "Pretty sure this can also be handled in the loop above with sortedness",
+      "range": {
+        "startLine": 6082,
+        "startChar": 8,
+        "endLine": 6083,
+        "endChar": 42
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
