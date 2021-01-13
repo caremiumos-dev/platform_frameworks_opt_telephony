@@ -221,6 +221,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8c4a151_82543159",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-13T19:02:28Z",
+      "side": 1,
+      "message": "AFAICT it should be ok. The main user is Contacts and they do not seem to rely on the order. It might still be safer to not change the index.",
+      "parentUuid": "937a54df_cc12c0c6",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7230bd3_b57c0bda",
         "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
         "patchSetId": 4
@@ -324,6 +348,30 @@
       "writtenOn": "2021-01-13T06:02:09Z",
       "side": 1,
       "message": "Amit, can you review this?\nNot familiar with the history of this notation and I see it in many places in this file.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 87
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4972c375_b55c5746",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-13T19:02:28Z",
+      "side": 1,
+      "message": "This should be removed. Please make sure you don\u0027t add @UnsupportedAppUsage annotation to any new fields.",
+      "parentUuid": "8ce20410_0f62ec21",
       "range": {
         "startLine": 49,
         "startChar": 4,
