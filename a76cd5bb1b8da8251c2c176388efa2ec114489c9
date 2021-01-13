@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "515a833a_96b4ff5c",
+        "filename": "src/java/com/android/internal/telephony/BiMap.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "I tried doing that; is it valid to use Guava in frameworks/opt/telephony?  It doesn\u0027t compile properly.",
+      "parentUuid": "cf1baf33_5331b63b",
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35d1be1e_0f964129",
         "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2021-01-13T02:03:14Z",
       "side": 1,
       "message": "battery",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 35
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef408ba4_67efab28",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35d1be1e_0f964129",
       "range": {
         "startLine": 40,
         "startChar": 28,
@@ -54,6 +96,30 @@
       "writtenOn": "2021-01-13T02:03:14Z",
       "side": 1,
       "message": "having",
+      "range": {
+        "startLine": 229,
+        "startChar": 19,
+        "endLine": 229,
+        "endChar": 25
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3606b8a_761f57ec",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b05bc1c_7d68a057",
       "range": {
         "startLine": 229,
         "startChar": 19,
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37156c67_f4920d4a",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Yes, good catch; apparently my tests sucked enough I didn\u0027t catch this with them.",
+      "parentUuid": "efeea29f_ff7f9820",
+      "range": {
+        "startLine": 409,
+        "startChar": 35,
+        "endLine": 409,
+        "endChar": 66
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63bdb9b2_9e01457e",
         "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
         "patchSetId": 2
@@ -100,6 +190,30 @@
       "writtenOn": "2021-01-13T02:03:14Z",
       "side": 1,
       "message": "wrong map?",
+      "range": {
+        "startLine": 448,
+        "startChar": 35,
+        "endLine": 448,
+        "endChar": 58
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d20f4789_4ad56551",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63bdb9b2_9e01457e",
       "range": {
         "startLine": 448,
         "startChar": 35,
@@ -135,6 +249,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7c5b1c9_c2fd3cd6",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "The ID and length are not actually being populated here; the IMS stack does this.  I\u0027ll update the docs to make this more clear.",
+      "parentUuid": "fa2b1db6_a760c5fb",
+      "range": {
+        "startLine": 482,
+        "startChar": 13,
+        "endLine": 482,
+        "endChar": 17
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8a7905d_5680a0c0",
         "filename": "src/java/com/android/internal/telephony/d2d/TransportProtocol.java",
         "patchSetId": 2
@@ -146,6 +284,24 @@
       "writtenOn": "2021-01-13T02:03:14Z",
       "side": 1,
       "message": "extraneous",
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a689db9_34814c51",
+        "filename": "src/java/com/android/internal/telephony/d2d/TransportProtocol.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Presume you mean my bracket issues. :)",
+      "parentUuid": "b8a7905d_5680a0c0",
       "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -197,6 +353,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d55d6f85_79c6f7d3",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Yeah, I ended up making the adapter later.",
+      "parentUuid": "7ae68863_d2e70ac3",
+      "range": {
+        "startLine": 66,
+        "startChar": 51,
+        "endLine": 66,
+        "endChar": 61
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61026c0f_65029796",
@@ -210,6 +390,30 @@
       "writtenOn": "2021-01-13T02:03:14Z",
       "side": 1,
       "message": "it might be good to run this as a @Parametrized test that tests each of the values/params individually -- as is it\u0027s possible that you\u0027ve got the wires crossed on some of the codecs (which I think is actually the case on this patchset) and still pass this test.",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 32
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d08944e_7f4dec6c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/RtpTransportTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T21:56:19Z",
+      "side": 1,
+      "message": "Good catch, thanks.  I\u0027ll split this out into a parameterized test; it cleans things up a lot.",
+      "parentUuid": "61026c0f_65029796",
       "range": {
         "startLine": 107,
         "startChar": 16,
