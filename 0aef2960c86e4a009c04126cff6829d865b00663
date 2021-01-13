@@ -221,6 +221,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebb8d27a_e61b5a8c",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-13T19:06:01Z",
+      "side": 1,
+      "message": "else log that capacity isn\u0027t available?",
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dcf2142_5b9393a5",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 5
@@ -238,6 +255,23 @@
         "endLine": 492,
         "endChar": 71
       },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85f5da3_bea2eb23",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-13T19:06:01Z",
+      "side": 1,
+      "message": "print this log only if capacity[] is being populated",
       "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -393,6 +427,30 @@
       "writtenOn": "2021-01-13T03:44:53Z",
       "side": 1,
       "message": "Amit, can you review if this is ok?\n(sorry, not familiar with what intents is ok to generate from telephony)",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38fb4536_bd2db556",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-13T19:06:01Z",
+      "side": 1,
+      "message": "I don\u0027t think an intent should be added like this. Either it needs to be exposed (if there are external users of it), or if the users of this are internal then intent should not be used.\n\nWho is the user/receiver of this intent?",
+      "parentUuid": "c0746d82_0184c071",
       "range": {
         "startLine": 72,
         "startChar": 51,
