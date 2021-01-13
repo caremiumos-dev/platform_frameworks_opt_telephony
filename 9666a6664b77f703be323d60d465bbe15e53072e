@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c937c81_1e240bee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-13T00:29:07Z",
+      "side": 1,
+      "message": "? This looks like a functional change that migrates GsmCdmaPhone to use a builder for SS config",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "9666a6664b77f703be323d60d465bbe15e53072e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
