@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3b64ec_5c815763",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-13T19:56:06Z",
+      "side": 1,
+      "message": "Why is this cast failing?  This is just covering up the real issue.",
+      "range": {
+        "startLine": 1267,
+        "startChar": 26,
+        "endLine": 1267,
+        "endChar": 47
+      },
+      "revId": "5b44ffa5418c2c386c886f4811c1d88c33e9f63a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
