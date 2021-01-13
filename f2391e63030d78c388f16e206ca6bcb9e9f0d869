@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8c4471a_b1a9b568",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2021-01-13T23:14:36Z",
+      "side": 1,
+      "message": "missing the other change in the topic in frameworks/base/telephony.\nI don\u0027t think presubmit will run without that",
+      "revId": "f2391e63030d78c388f16e206ca6bcb9e9f0d869",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
