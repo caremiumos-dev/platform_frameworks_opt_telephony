@@ -33,6 +33,351 @@
       "message": "+ Michele, I believe you reviewed these changes last year. Can you please take another look and +1?",
       "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96fb21c5_43cfe9d9",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "This comment seems to imply that there are an oldAdn and a newAdn variables in the parameters... but that is not the case.\n\nPlease, update documentation.",
+      "range": {
+        "startLine": 100,
+        "startChar": 15,
+        "endLine": 100,
+        "endChar": 33
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7adc952_64b32629",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "These parameters are not present. Update documentation.",
+      "range": {
+        "startLine": 214,
+        "startChar": 1,
+        "endLine": 219,
+        "endChar": 84
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd4f6d2_8d47b89f",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "The check on mAdnCache can be moved above, before allocating objects oldAdn and newAdn.",
+      "range": {
+        "startLine": 257,
+        "startChar": 16,
+        "endLine": 257,
+        "endChar": 25
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b33154_63a8ae42",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Does it need to be protected? Could this be private?",
+      "range": {
+        "startLine": 414,
+        "startChar": 4,
+        "endLine": 414,
+        "endChar": 13
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2d76130_be1af642",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Minor. Combine in a single expression:\nreturn str !\u003d null ? str.split(\",\") : null;",
+      "range": {
+        "startLine": 415,
+        "startChar": 8,
+        "endLine": 418,
+        "endChar": 20
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edbf486f_329086a1",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 421,
+        "startChar": 4,
+        "endLine": 421,
+        "endChar": 13
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce17bf04_3f54b87c",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 422,
+        "startChar": 8,
+        "endLine": 425,
+        "endChar": 20
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "937a54df_cc12c0c6",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Amit, are you aware of any possible issue while upgrading from R to S, if the id is moved from index 3 to index 4?\nWould it make sense to keep the id in contact[3] for backward compatibility?",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7230bd3_b57c0bda",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Why do we have this +?",
+      "range": {
+        "startLine": 145,
+        "startChar": 61,
+        "endLine": 145,
+        "endChar": 66
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e43f4367_225e59a4",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Space before and after",
+      "range": {
+        "startLine": 145,
+        "startChar": 90,
+        "endLine": 145,
+        "endChar": 91
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9990cb0_bcdf8a2b",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "4 extra spaces",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 8
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "974ee0b1_69575f15",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "4 extra spaces",
+      "range": {
+        "startLine": 159,
+        "startChar": 1,
+        "endLine": 161,
+        "endChar": 1
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce20410_0f62ec21",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Amit, can you review this?\nNot familiar with the history of this notation and I see it in many places in this file.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 87
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8c71f8_d0743ba6",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Can you use ArrayUtils.emptyIfNull().",
+      "range": {
+        "startLine": 258,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 9
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06818641_0d928e0d",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-13T06:02:09Z",
+      "side": 1,
+      "message": "Suggestion. This can be much more compact using fluent expression:\n\nif (Arrays.asList(s1).stream().filter(s -\u003e !s.isEmpty \u0026\u0026 !Arrays.asList(s2).contains(s)).findAny().isPresent()) {\n  return false\n}\n\nSame for the for loop below.",
+      "range": {
+        "startLine": 266,
+        "startChar": 8,
+        "endLine": 276,
+        "endChar": 9
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
