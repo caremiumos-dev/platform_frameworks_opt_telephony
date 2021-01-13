@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1baf33_5331b63b",
+        "filename": "src/java/com/android/internal/telephony/BiMap.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "Use the guava bimap instead?",
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d1be1e_0f964129",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "battery",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 35
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b05bc1c_7d68a057",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "having",
+      "range": {
+        "startLine": 229,
+        "startChar": 19,
+        "endLine": 229,
+        "endChar": 25
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efeea29f_ff7f9820",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "should this be NETWORK_COVERAGE_VALUE_TO_RTP_BITS?",
+      "range": {
+        "startLine": 409,
+        "startChar": 35,
+        "endLine": 409,
+        "endChar": 66
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63bdb9b2_9e01457e",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "wrong map?",
+      "range": {
+        "startLine": 448,
+        "startChar": 35,
+        "endLine": 448,
+        "endChar": 58
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2b1db6_a760c5fb",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "I\u0027m not seeing this being set anywhere here -- is this taken care of by something lower down in the stack?",
+      "range": {
+        "startLine": 482,
+        "startChar": 13,
+        "endLine": 482,
+        "endChar": 17
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8a7905d_5680a0c0",
+        "filename": "src/java/com/android/internal/telephony/d2d/TransportProtocol.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "extraneous",
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf60c137_270845a2",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "also implements RtpAdapter? or is that a TODO?",
+      "range": {
+        "startLine": 66,
+        "startChar": 51,
+        "endLine": 66,
+        "endChar": 61
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61026c0f_65029796",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/RtpTransportTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T02:03:14Z",
+      "side": 1,
+      "message": "it might be good to run this as a @Parametrized test that tests each of the values/params individually -- as is it\u0027s possible that you\u0027ve got the wires crossed on some of the codecs (which I think is actually the case on this patchset) and still pass this test.",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 32
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
