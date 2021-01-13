@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad81ea71_0963b7e7",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-13T21:23:07Z",
+      "side": 1,
+      "message": "are these static final? If so, please make them static final. If not, strongly suggest not to have them in class scope.\n\nIf something breaks when they are static or final, then that feels like a bug we should fix.",
+      "range": {
+        "startLine": 38,
+        "startChar": 32,
+        "endLine": 38,
+        "endChar": 41
+      },
+      "revId": "d0b959f541279173ecbfd22da86c41eed4397fcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
