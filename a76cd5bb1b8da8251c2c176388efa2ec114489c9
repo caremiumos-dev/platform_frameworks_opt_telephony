@@ -36,6 +36,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "251b1cbf_aaee6402",
+        "filename": "src/java/com/android/internal/telephony/BiMap.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T22:35:46Z",
+      "side": 1,
+      "message": "Will investigate next time I need to change f/o/t.",
+      "parentUuid": "515a833a_96b4ff5c",
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35d1be1e_0f964129",
@@ -177,6 +195,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99059155_c5de11a1",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T22:35:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37156c67_f4920d4a",
+      "range": {
+        "startLine": 409,
+        "startChar": 35,
+        "endLine": 409,
+        "endChar": 66
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63bdb9b2_9e01457e",
@@ -261,6 +303,30 @@
       "side": 1,
       "message": "The ID and length are not actually being populated here; the IMS stack does this.  I\u0027ll update the docs to make this more clear.",
       "parentUuid": "fa2b1db6_a760c5fb",
+      "range": {
+        "startLine": 482,
+        "startChar": 13,
+        "endLine": 482,
+        "endChar": 17
+      },
+      "revId": "a76cd5bb1b8da8251c2c176388efa2ec114489c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0393c571_33381219",
+        "filename": "src/java/com/android/internal/telephony/d2d/RtpTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-13T22:35:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b7c5b1c9_c2fd3cd6",
       "range": {
         "startLine": 482,
         "startChar": 13,
