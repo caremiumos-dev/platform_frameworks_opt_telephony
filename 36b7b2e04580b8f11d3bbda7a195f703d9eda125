@@ -49,6 +49,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62ecb87f_7025fa12",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "I think this can be a Map\u003cUID, SignalStrengthRequest\u003e. That will limit the number of requests to 1 per phone per caller, which is fine. It will also make lookups easy for unregister() since the call can just check if the IBinder object matches the one in the record.",
+      "range": {
+        "startLine": 650,
+        "startChar": 12,
+        "endLine": 650,
+        "endChar": 16
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e2fa86_727387f5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5937,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "The subId plays an important role here. You definitely need to do something with it. What happens when the subId for a phone changes? There are a few choices.",
+      "range": {
+        "startLine": 5937,
+        "startChar": 18,
+        "endLine": 5937,
+        "endChar": 24
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5949253_e961c99a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5960,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "The calling UID here will be PHONE_UID. If you need the calling UID, you need to get it in the PhoneInterfaceManager and then stash it/pass it down.",
+      "range": {
+        "startLine": 5960,
+        "startChar": 8,
+        "endLine": 5960,
+        "endChar": 47
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7548c109_4bc7c6ff",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5968,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "not necessary if this is done on the Phone thread in the SST Handler (it should be).",
+      "range": {
+        "startLine": 5968,
+        "startChar": 8,
+        "endLine": 5968,
+        "endChar": 20
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dce431d2_a7cef5f8",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 10
@@ -65,6 +157,29 @@
         "startChar": 27,
         "endLine": 5985,
         "endChar": 59
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df7b4feb_4f755d03",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5987,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "Why not a for() loop?\n\nMeanwhile, this will be simpler if you go with the Map\u003cuid, Record\u003e.",
+      "range": {
+        "startLine": 5981,
+        "startChar": 0,
+        "endLine": 5987,
+        "endChar": 17
       },
       "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
@@ -118,6 +233,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cd4bbb4_6b0cec6b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6016,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "how about getConsolidatedThresholds()? The fact that it will merge is kind of an implementation detail the caller doesn\u0027t need to worry about.",
+      "range": {
+        "startLine": 6016,
+        "startChar": 10,
+        "endLine": 6016,
+        "endChar": 49
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6c3fe8_9839ffe6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6016,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "private?",
+      "range": {
+        "startLine": 6016,
+        "startChar": 4,
+        "endLine": 6016,
+        "endChar": 7
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe6e4c4e_1f908e43",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 10
@@ -134,6 +295,29 @@
         "startChar": 27,
         "endLine": 6021,
         "endChar": 39
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae03a315_0398bfb2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6035,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "not clear why we have a shouldHonor() function here? I think updateAlwaysReportSignalStrengthIfNeeded() takes care of it.",
+      "range": {
+        "startLine": 6035,
+        "startChar": 12,
+        "endLine": 6035,
+        "endChar": 38
       },
       "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
@@ -180,6 +364,29 @@
         "startChar": 15,
         "endLine": 6044,
         "endChar": 37
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488e25be_0bb0ee3e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6056,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T23:15:45Z",
+      "side": 1,
+      "message": "If your plan is to simply remove thresholds that are too close to the system thresholds, you can actually cheat a little bit and use a SortedSet\u003c\u003e.\n\noverride the comparator so that \u003d\u003d returns true if abs(candidate - current) \u003c  hysteresis. :-) The whole thing collapses down to a few lines!",
+      "range": {
+        "startLine": 6055,
+        "startChar": 9,
+        "endLine": 6056,
+        "endChar": 81
       },
       "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
