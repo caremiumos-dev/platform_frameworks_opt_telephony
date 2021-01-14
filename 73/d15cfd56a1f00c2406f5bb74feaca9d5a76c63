@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+1: Michele Berionne <mberionne@google.com>
+Code-Review+2: Nazanin Bakhshi <nazaninb@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Presubmit-Verified-Together+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Nazanin Bakhshi <nazaninb@google.com>
+Submitted-at: Thu, 14 Jan 2021 18:29:38 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1544676
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
