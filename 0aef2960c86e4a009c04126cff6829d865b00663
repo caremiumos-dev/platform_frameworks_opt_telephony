@@ -35,6 +35,42 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "048c2581_8651e78e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-14T09:07:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2857b2f_c41185ff",
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17fd23df_c23afcb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-14T09:07:25Z",
+      "side": 1,
+      "message": "test case is in https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1440474/4/tests/telephonytests/src/com/android/internal/telephony/uicc/IccPhoneBookInterfaceManagerTest.java\n\nand IccPhoneBookInterfaceManagerTest already have the load pb test case.",
+      "parentUuid": "c366ef0e_2c03ce67",
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2c76266_57d4acf3",
