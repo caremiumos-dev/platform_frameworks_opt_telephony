@@ -16,6 +16,24 @@
       "message": "missing the other change in the topic in frameworks/base/telephony.\nI don\u0027t think presubmit will run without that",
       "revId": "f2391e63030d78c388f16e206ca6bcb9e9f0d869",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "843185ff_6d4c3669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-01-14T00:14:15Z",
+      "side": 1,
+      "message": "The change for atoms.proto and enums has already been cherry-picked and merged. As a result, PV before aosp/1544674 probably won\u0027t work. Sorry for the confusion.",
+      "parentUuid": "b8c4471a_b1a9b568",
+      "revId": "f2391e63030d78c388f16e206ca6bcb9e9f0d869",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
