@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "709f80a1_e3885652",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Before patch7, shouldEnableHighPowerConsumptionIndications is used directly. I thought increase a method may increase the readability since all our feature APIs talks about idleness condition instead of the opposite high power condition.\n\nBut indeed, I also feel it is a bit useless to introduce new method just for readability. So current change is that, we don\u0027t introduce isIdle here, but translate the concept in Phone.java.",
+      "parentUuid": "adbd95c7_db9da434",
+      "range": {
+        "startLine": 454,
+        "startChar": 19,
+        "endLine": 454,
+        "endChar": 25
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbdb83e5_1a0c63ab",
@@ -61,6 +85,30 @@
       "writtenOn": "2021-01-13T23:45:53Z",
       "side": 1,
       "message": "Nit: keep these above dump()",
+      "range": {
+        "startLine": 4783,
+        "startChar": 4,
+        "endLine": 4811,
+        "endChar": 5
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fbb3d0_47b11241",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbdb83e5_1a0c63ab",
       "range": {
         "startLine": 4783,
         "startChar": 4,
@@ -117,6 +165,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7dee08a_471b1868",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6054,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "base thresholds start from system thresholds and the *value* will keep as it.\nOnly the candidate array threshold align to base, never vise versa. In this way, we make sure system thresholds will never be touched.",
+      "parentUuid": "e57e8181_1dbd6adb",
+      "range": {
+        "startLine": 6054,
+        "startChar": 37,
+        "endLine": 6054,
+        "endChar": 47
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e8c724_90831ad3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6054,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Good idea. Make it much more readable.",
+      "parentUuid": "eb9e73d1_88e18166",
+      "range": {
+        "startLine": 6054,
+        "startChar": 27,
+        "endLine": 6054,
+        "endChar": 31
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdd29fd5_e55f9175",
@@ -130,6 +226,30 @@
       "writtenOn": "2021-01-13T23:45:53Z",
       "side": 1,
       "message": "Nit: remaining",
+      "range": {
+        "startLine": 6057,
+        "startChar": 50,
+        "endLine": 6057,
+        "endChar": 56
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fddefa0b_ed2c292a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6057,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdd29fd5_e55f9175",
       "range": {
         "startLine": 6057,
         "startChar": 50,
@@ -186,6 +306,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a9e175_5b379a7e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Put into the \"rules\" above that, if the orignal[j] is too close in base[i], then it will be removed (instead of updated to new threshold to be far away).",
+      "parentUuid": "bf64c1f0_7fd2b3a3",
+      "range": {
+        "startLine": 6059,
+        "startChar": 45,
+        "endLine": 6059,
+        "endChar": 60
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e639793d_bf52a358",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "On the opposite. I was putting @VisibleForTest in one line above. But get complain that \"static\" is not in the right indentation. And when switch this weird, it stop complaining.  I will try again.",
+      "parentUuid": "6c71f3fc_30696c1c",
+      "range": {
+        "startLine": 6059,
+        "startChar": 4,
+        "endLine": 6059,
+        "endChar": 44
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11c3a151_68e5a72e",
@@ -199,6 +367,30 @@
       "writtenOn": "2021-01-13T23:45:53Z",
       "side": 1,
       "message": "\"original\" means almost the same thing as \"base\", consider renaming this param",
+      "range": {
+        "startLine": 6060,
+        "startChar": 27,
+        "endLine": 6060,
+        "endChar": 35
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ae8bb8_cde7aad4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6060,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Yeah. now rename \"original\" to \"candidate\". seems a bit better.",
+      "parentUuid": "11c3a151_68e5a72e",
       "range": {
         "startLine": 6060,
         "startChar": 27,
@@ -232,6 +424,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b12b3d3d_77f00fd1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6075,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Right. Use two pointer i/j and move to only right direction. This is a typical interview question :-)",
+      "parentUuid": "d2075c69_23c3e4a2",
+      "range": {
+        "startLine": 6075,
+        "startChar": 12,
+        "endLine": 6075,
+        "endChar": 55
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f44240c7_d4665cc2",
@@ -245,6 +461,30 @@
       "writtenOn": "2021-01-13T23:45:53Z",
       "side": 1,
       "message": "Pretty sure this can also be handled in the loop above with sortedness",
+      "range": {
+        "startLine": 6082,
+        "startChar": 8,
+        "endLine": 6083,
+        "endChar": 42
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21599a06_b75d87d1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 6083,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-14T19:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44240c7_d4665cc2",
       "range": {
         "startLine": 6082,
         "startChar": 8,
