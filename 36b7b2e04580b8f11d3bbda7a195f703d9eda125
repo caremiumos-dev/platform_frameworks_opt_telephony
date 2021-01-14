@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dce431d2_a7cef5f8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5985,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T23:13:22Z",
+      "side": 1,
+      "message": "We\u0027ll also need to allow the system/phone UID here (not sure which one, we\u0027ll need to test; or not bother checking the calling UID at all for removal purposes), otherwise I think we\u0027ll hit a similar issue that Cody recently found in ConnDiags (b/159912975, fixed by aosp/1515688).",
+      "range": {
+        "startLine": 5985,
+        "startChar": 27,
+        "endLine": 5985,
+        "endChar": 59
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72918966_c99009d3",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 10
