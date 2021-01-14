@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51eb2df_6dc4850a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1308163
+      },
+      "writtenOn": "2021-01-14T01:48:28Z",
+      "side": 0,
+      "message": "Will you deprecate subscriber id of NetworkAgentConfig?\nIf not, why did you remove this?\n\n---\n\nAh, I saw you remove subscriber id of NetworkAgentConfig in aosp/1542747.",
+      "range": {
+        "startLine": 2400,
+        "startChar": 12,
+        "endLine": 2403,
+        "endChar": 13
+      },
+      "revId": "2037f906fc6e375142dee96cc33d0fb5c3ab9def",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
