@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35b957fb_f75d7669",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 4618,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "I\u0027m thinking we should probably keep the naming and meaning the same as the actual DSM method.",
+      "range": {
+        "startLine": 4618,
+        "startChar": 19,
+        "endLine": 4618,
+        "endChar": 31
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2079a3e3_be0c6624",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "final",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 11
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72918966_c99009d3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6004,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Nit: does Stream#anyMatch make this any more readable? That still short-circuits as soon as it finds a true value.",
+      "range": {
+        "startLine": 5998,
+        "startChar": 12,
+        "endLine": 6004,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d43a9a9a_58ea3260",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6007,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Any particular reason we\u0027re passing literals here vs. just doing mPhone.setAlwaysReportSS(alwaysReport)?",
+      "range": {
+        "startLine": 6007,
+        "startChar": 49,
+        "endLine": 6007,
+        "endChar": 53
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe6e4c4e_1f908e43",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6021,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Nit: this could be a race condition, consider pulling this out of the loop to only call 1x/RAN value rather than 1x/SignalRequestRecord.",
+      "range": {
+        "startLine": 6021,
+        "startChar": 27,
+        "endLine": 6021,
+        "endChar": 39
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fabecd85_c5510d11",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "return mSignalRequestRecords.stream().anyMatch(...)?",
+      "range": {
+        "startLine": 6038,
+        "startChar": 12,
+        "endLine": 6042,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12b6c8ae_8dd988b0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Make this an early return, we don\u0027t need to loop if this method returns false.",
+      "range": {
+        "startLine": 6044,
+        "startChar": 15,
+        "endLine": 6044,
+        "endChar": 37
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3af701e0_4d6ed681",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Putting Nathan\u0027s suggestion into a comment: use a TreeSet with a custom Comparator, where it returns 0 (equal) when lhs - hysteresis \u003c\u003d rhs \u003c\u003d lhs + hysteresis, otherwise just return Integer#compare. Add values from base first, then from candidate.",
+      "range": {
+        "startLine": 6070,
+        "startChar": 35,
+        "endLine": 6070,
+        "endChar": 44
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5763570b_52f9a6e3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6090,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Nit: might be a bit more expressive as a for loop\n\nfor (; i \u003c base.length; ++i) { ... }",
+      "range": {
+        "startLine": 6090,
+        "startChar": 8,
+        "endLine": 6090,
+        "endChar": 33
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0207515d_bc24345a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6095,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-14T22:56:40Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 6095,
+        "startChar": 8,
+        "endLine": 6095,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
