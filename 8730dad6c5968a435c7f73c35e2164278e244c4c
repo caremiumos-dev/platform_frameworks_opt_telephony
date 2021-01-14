@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d1e00e8_124ecc30",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-14T18:31:51Z",
+      "side": 1,
+      "message": "Yes, let\u0027s please not have a positive and negative version of the same function.",
+      "parentUuid": "adbd95c7_db9da434",
+      "range": {
+        "startLine": 454,
+        "startChar": 19,
+        "endLine": 454,
+        "endChar": 25
+      },
+      "revId": "8730dad6c5968a435c7f73c35e2164278e244c4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbdb83e5_1a0c63ab",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 9
