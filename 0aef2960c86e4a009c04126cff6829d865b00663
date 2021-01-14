@@ -707,6 +707,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18079e58_2c44cce7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "Amit, is there any preferred approach for keeping logs enabled or not?",
+      "parentUuid": "ba25b53d_51708441",
+      "range": {
+        "startLine": 32,
+        "startChar": 39,
+        "endLine": 32,
+        "endChar": 43
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2dc8baab_c1bd17c0",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5
@@ -907,6 +931,30 @@
       "side": 1,
       "message": "would like to notify contact app by this broadcast.",
       "parentUuid": "38fb4536_bd2db556",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f65c7189_d3d86567",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "So, I guess this falls under the first case \"it needs to be exposed\"?",
+      "parentUuid": "27115181_808994a8",
       "range": {
         "startLine": 72,
         "startChar": 51,
@@ -1624,6 +1672,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2e74980_e2fac04f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "Sure. Re-opening the comment only to track pending items.",
+      "parentUuid": "14d28992_a677d54d",
+      "range": {
+        "startLine": 273,
+        "startChar": 20,
+        "endLine": 277,
+        "endChar": 79
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5887c4e0_fd1e4165",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5
@@ -1706,6 +1778,30 @@
       "side": 1,
       "message": "If the indication received before the response, this case EVENT_QUERY_ADN_RECORD_DONE will be notified after case EVENT_LOAD_ADN_RECORD_DONE, and in case EVENT_LOAD_ADN_RECORD_DONE, the condition(if (mSimPbRecords.size() \u003d\u003d mAdnUsed)） is not true. \nThis is why I just add mAdnUsed \u003d\u003d 0  in case EVENT_QUERY_ADN_RECORD_DONE, but not in EVENT_LOAD_ADN_RECORD_DONE.",
       "parentUuid": "a847ae43_1016485a",
+      "range": {
+        "startLine": 317,
+        "startChar": 37,
+        "endLine": 317,
+        "endChar": 69
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c2d7f8_c028e0f0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "Back to my previous comment. Can you add a comment that explains it? It might make it easier for future reader of the code.",
+      "parentUuid": "ea294289_18c923fa",
       "range": {
         "startLine": 317,
         "startChar": 37,
@@ -1847,6 +1943,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "79e80d52_979d4bb2",
+      "range": {
+        "startLine": 411,
+        "startChar": 68,
+        "endLine": 411,
+        "endChar": 77
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8f7f84_45e23794",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "Where?",
+      "parentUuid": "edcc40d3_83b00e5b",
       "range": {
         "startLine": 411,
         "startChar": 68,
@@ -2035,6 +2155,30 @@
       "side": 1,
       "message": "How to check the phonebook efid here？the efid started with the 0x4fxx？",
       "parentUuid": "25145a43_aa039d7b",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 97
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7137e2_fc7c2998",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-14T19:16:30Z",
+      "side": 1,
+      "message": "If the file is in the phonebook DF is certainly one option. But not sure if that is sufficient for you (sorry, I have not worked with Phonebook for a long time...).\n\nThe important thing is that we avoid refreshing the cache for each and every refresh, as that is not necessary and would lead to much higher traffic between Android and modem, especially for large phonebooks.",
+      "parentUuid": "c601106f_d7abafb9",
       "range": {
         "startLine": 461,
         "startChar": 24,
