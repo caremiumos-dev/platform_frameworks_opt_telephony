@@ -22,6 +22,30 @@
       },
       "revId": "b40c2ecaaf8e77cf2da7f1c0c6a4ea09a090ca65",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fb8a281_8511d264",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72fc45d9_6e72c3ae",
+      "range": {
+        "startLine": 62,
+        "startChar": 20,
+        "endLine": 62,
+        "endChar": 34
+      },
+      "revId": "b40c2ecaaf8e77cf2da7f1c0c6a4ea09a090ca65",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

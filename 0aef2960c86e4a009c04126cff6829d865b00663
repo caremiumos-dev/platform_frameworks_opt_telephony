@@ -1013,6 +1013,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf4d9d3f_c4356c77",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Removed this broadcast？",
+      "parentUuid": "37fefb16_73bbfc79",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846282cc_89a2d3f1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "37fefb16_73bbfc79",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d8ff40_0707fcbf",
@@ -1483,6 +1531,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "438a6e9c_bc3c742c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Before the updated result was sent to the caller IccPhoneBookInterfaceManager, it will keep waiting even though the function has already returned.",
+      "parentUuid": "1017e40e_3f5e0ece",
+      "range": {
+        "startLine": 194,
+        "startChar": 16,
+        "endLine": 194,
+        "endChar": 38
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ce2ec29_91149062",
@@ -1860,6 +1932,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e8e981_4a0c7801",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57c2d7f8_c028e0f0",
+      "range": {
+        "startLine": 317,
+        "startChar": 37,
+        "endLine": 317,
+        "endChar": 69
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f463048_75d2ddd4",
@@ -2025,6 +2121,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ddd2a1b_e1b5b9ea",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Done in the new patch",
+      "parentUuid": "7f8f7f84_45e23794",
+      "range": {
+        "startLine": 411,
+        "startChar": 68,
+        "endLine": 411,
+        "endChar": 77
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b09f597f_dd6127d4",
@@ -2166,6 +2286,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd6e2227_c71f2053",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f883e82a_57edf8f2",
+      "range": {
+        "startLine": 361,
+        "startChar": 1,
+        "endLine": 449,
+        "endChar": 0
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25145a43_aa039d7b",
@@ -2227,6 +2371,30 @@
       "side": 1,
       "message": "If the file is in the phonebook DF is certainly one option. But not sure if that is sufficient for you (sorry, I have not worked with Phonebook for a long time...).\n\nThe important thing is that we avoid refreshing the cache for each and every refresh, as that is not necessary and would lead to much higher traffic between Android and modem, especially for large phonebooks.",
       "parentUuid": "c601106f_d7abafb9",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 97
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c787b934_2d5c568e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T03:56:45Z",
+      "side": 1,
+      "message": "Since I see in the handleFileUpdate() function of SIMRecords.java and RuimRecords.java， the adn record cache will be reset in the default case, seems we also follow this logic is better?\nIf need to avoid unnecessary refreshing for PB, I think we could check the efid started with the 0x4fxx.\n3GPP TS 31.102 V9.11.0:\nCertain kinds of EFs can occur more than once in the phonebook, e.g. there may be two entities of Abbreviated Dialling Numbers, EFADN and EFADN1. For these kinds of EFs, no fixed FID values are specified. Instead, the value \u00274FXX\u0027 indicates that the value is to be assigned by the card issuer. These assigned values are then indicated in the associated TLV object in EFPBR.",
+      "parentUuid": "4e7137e2_fc7c2998",
       "range": {
         "startLine": 461,
         "startChar": 24,
