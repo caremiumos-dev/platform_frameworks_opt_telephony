@@ -16,6 +16,29 @@
       "message": "Not all issue has been resolve in this patch. Anyhow I upload a new patch to fix most obvious issues. Will continue to improve it.",
       "revId": "40de0a4922c320a3af142617270754b135289b96",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a847fe36_35696b07",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:07:17Z",
+      "side": 1,
+      "message": "Use a SparseArray (actually a Map\u003cUID, SignalRequestRecord) is incorrect choice. It actually limit one request per client. Will fix it soon.",
+      "range": {
+        "startLine": 651,
+        "startChar": 30,
+        "endLine": 651,
+        "endChar": 49
+      },
+      "revId": "40de0a4922c320a3af142617270754b135289b96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
