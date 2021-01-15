@@ -70,6 +70,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16068d4e_d97d2a4e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Tried SparseArray\u003cSignalStrengthRequest\u003e which is a map from UID\u003d\u003e SignalStrengthRequest. But this will make one request per caller for all subIds. This need Map\u003cUID, Set/List\u003cSignalStrengthRequest\u003e\u003e which is too complicated for the record management. Maybe a List\u003cSRR\u003e is simple enough.",
+      "parentUuid": "62ecb87f_7025fa12",
+      "range": {
+        "startLine": 650,
+        "startChar": 12,
+        "endLine": 650,
+        "endChar": 16
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff366691_b44c834b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2079a3e3_be0c6624",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 11
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86e2fa86_727387f5",
@@ -116,6 +164,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f827c3d_552c1f6f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5960,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5949253_e961c99a",
+      "range": {
+        "startLine": 5960,
+        "startChar": 8,
+        "endLine": 5960,
+        "endChar": 47
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7548c109_4bc7c6ff",
@@ -129,6 +201,30 @@
       "writtenOn": "2021-01-14T23:15:45Z",
       "side": 1,
       "message": "not necessary if this is done on the Phone thread in the SST Handler (it should be).",
+      "range": {
+        "startLine": 5968,
+        "startChar": 8,
+        "endLine": 5968,
+        "endChar": 20
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8b84ab_e300e8d1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5968,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Now, the add/remove method is handled in handler thread. But synchronization is kept (just to stand on the safe side) before all operation on mSignalRequestRecords is 100% sure all in same handler thread.",
+      "parentUuid": "7548c109_4bc7c6ff",
       "range": {
         "startLine": 5968,
         "startChar": 8,
@@ -162,6 +258,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df2580ce_23064ed0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5985,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "In the new patch, when SST detects the death of client, the record is removed with original subId/callingUid/request (although only callingUid and request#liveToken is used to identify the caller).  But still, it may be good idea to leave the door open for system/phone/shell to be able to remove the record.\nThanks for the reminder.",
+      "parentUuid": "dce431d2_a7cef5f8",
+      "range": {
+        "startLine": 5985,
+        "startChar": 27,
+        "endLine": 5985,
+        "endChar": 59
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df7b4feb_4f755d03",
@@ -175,6 +295,30 @@
       "writtenOn": "2021-01-14T23:15:45Z",
       "side": 1,
       "message": "Why not a for() loop?\n\nMeanwhile, this will be simpler if you go with the Map\u003cuid, Record\u003e.",
+      "range": {
+        "startLine": 5981,
+        "startChar": 0,
+        "endLine": 5987,
+        "endChar": 17
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7250c0_72eb22f2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5987,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Remove record in for() loop may throw ConcurrentModificationException.",
+      "parentUuid": "df7b4feb_4f755d03",
       "range": {
         "startLine": 5981,
         "startChar": 0,
@@ -208,6 +352,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15714ac5_a6f68830",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6004,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Yes, it will be. Unfortunately, after switch to SparseArray, we are not able to use stream.",
+      "parentUuid": "72918966_c99009d3",
+      "range": {
+        "startLine": 5998,
+        "startChar": 12,
+        "endLine": 6004,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d43a9a9a_58ea3260",
@@ -221,6 +389,30 @@
       "writtenOn": "2021-01-14T22:56:40Z",
       "side": 1,
       "message": "Any particular reason we\u0027re passing literals here vs. just doing mPhone.setAlwaysReportSS(alwaysReport)?",
+      "range": {
+        "startLine": 6007,
+        "startChar": 49,
+        "endLine": 6007,
+        "endChar": 53
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b03fe293_f31edd94",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6007,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Yeah. This is a typical useless verbose logic. Updated. Thanks!",
+      "parentUuid": "d43a9a9a_58ea3260",
       "range": {
         "startLine": 6007,
         "startChar": 49,
@@ -277,6 +469,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "065dc60c_ec58c272",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6016,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Agree. Done.",
+      "parentUuid": "6cd4bbb4_6b0cec6b",
+      "range": {
+        "startLine": 6016,
+        "startChar": 10,
+        "endLine": 6016,
+        "endChar": 49
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3cc7c68_47db6654",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6016,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "The only caller comes from GsmCdmaPhone#setSignalStrengthReportingCriteria, that\u0027s why it is package private.",
+      "parentUuid": "cc6c3fe8_9839ffe6",
+      "range": {
+        "startLine": 6016,
+        "startChar": 4,
+        "endLine": 6016,
+        "endChar": 7
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe6e4c4e_1f908e43",
@@ -323,6 +563,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff44cc3d_c5b6625c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6035,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "updateAlwaysReportSignalStrengthIfNeeded() make sure signal indication filter is set even on idle if either isSystemThresholdReportingRequestedWhileIdle or isReportingRequestedWhileIdle set by any client.\n\nshouldHonorSystemThreshold() here is used to determine if we need to take with system thresholds when consolidating thresholds together. When it return true, system + apps thresholds are consolidated. When it return false, only apps thresholds are consolidated.",
+      "parentUuid": "ae03a315_0398bfb2",
+      "range": {
+        "startLine": 6035,
+        "startChar": 12,
+        "endLine": 6035,
+        "endChar": 38
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fabecd85_c5510d11",
@@ -346,6 +610,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c94888_dab79ec1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Again, no #stream available after switch to SparseArray",
+      "parentUuid": "fabecd85_c5510d11",
+      "range": {
+        "startLine": 6038,
+        "startChar": 12,
+        "endLine": 6042,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12b6c8ae_8dd988b0",
@@ -359,6 +647,30 @@
       "writtenOn": "2021-01-14T22:56:40Z",
       "side": 1,
       "message": "Make this an early return, we don\u0027t need to loop if this method returns false.",
+      "range": {
+        "startLine": 6044,
+        "startChar": 15,
+        "endLine": 6044,
+        "endChar": 37
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c73f6cf_6b30eb7a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Nice. Done.",
+      "parentUuid": "12b6c8ae_8dd988b0",
       "range": {
         "startLine": 6044,
         "startChar": 15,
@@ -417,6 +729,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16a1434f_5508d6c2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Will prepare both and ask Jack to pick up one. The good part for current one is it is O(M+N) for both time and space complexity. Good for performance.",
+      "parentUuid": "3af701e0_4d6ed681",
+      "range": {
+        "startLine": 6070,
+        "startChar": 35,
+        "endLine": 6070,
+        "endChar": 44
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5763570b_52f9a6e3",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 10
@@ -428,6 +764,30 @@
       "writtenOn": "2021-01-14T22:56:40Z",
       "side": 1,
       "message": "Nit: might be a bit more expressive as a for loop\n\nfor (; i \u003c base.length; ++i) { ... }",
+      "range": {
+        "startLine": 6090,
+        "startChar": 8,
+        "endLine": 6090,
+        "endChar": 33
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "100308f8_3e5d6c7b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6090,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Yes, for look is born to express \"do something for each...\"",
+      "parentUuid": "5763570b_52f9a6e3",
       "range": {
         "startLine": 6090,
         "startChar": 8,
@@ -451,6 +811,30 @@
       "writtenOn": "2021-01-14T22:56:40Z",
       "side": 1,
       "message": "Ditto",
+      "range": {
+        "startLine": 6095,
+        "startChar": 8,
+        "endLine": 6095,
+        "endChar": 13
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb1823c_c3b72ca1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6095,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-15T23:05:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0207515d_bc24345a",
       "range": {
         "startLine": 6095,
         "startChar": 8,
