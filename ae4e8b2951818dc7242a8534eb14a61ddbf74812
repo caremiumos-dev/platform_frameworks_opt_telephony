@@ -16,6 +16,46 @@
       "message": "hello",
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e9af09_f235238f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2021-01-15T13:37:40Z",
+      "side": 1,
+      "message": "LGTM but telephony OWNERS will need to take a look. Jack, are you the right person to review this? Might also want to look at my inline comment on whether the subscriber ID for mPhone can change. It seems unlikely/impossible that it would, but I don\u0027t know enough about this code to say for sure.",
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29a94afe_5b67583c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2021-01-15T13:37:40Z",
+      "side": 1,
+      "message": "Would be good to double-check that this is always guaranteed to return the correct/current value. Previously, the subscriberId was sent to the core stack by putting it into NetworkAgentConfig, which is sent once and can never change after the network is connected. After this CL, it\u0027s calculated by this method, so it could in theory change.\n\nThis is very likely fine, but the telephony folks should probably confirm.",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
