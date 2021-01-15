@@ -729,6 +729,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26e7e2e1_f9e10372",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-15T00:09:09Z",
+      "side": 1,
+      "message": "In general we have a DBG flag in our files, even if it\u0027s set to true. This is fine -- marking as resolved.",
+      "parentUuid": "18079e58_2c44cce7",
+      "range": {
+        "startLine": 32,
+        "startChar": 39,
+        "endLine": 32,
+        "endChar": 43
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dc8baab_c1bd17c0",
@@ -955,6 +979,30 @@
       "side": 1,
       "message": "So, I guess this falls under the first case \"it needs to be exposed\"?",
       "parentUuid": "27115181_808994a8",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37fefb16_73bbfc79",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-15T00:09:09Z",
+      "side": 1,
+      "message": "Right, although the contact app may not be running. I don\u0027t think this is the right way to notify them -- this should probably be done via PhoneStateListener.",
+      "parentUuid": "f65c7189_d3d86567",
       "range": {
         "startLine": 72,
         "startChar": 51,
