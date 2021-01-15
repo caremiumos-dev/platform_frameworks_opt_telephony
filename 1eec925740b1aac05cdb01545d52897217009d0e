@@ -212,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a85dd082_e79c8d56",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-15T08:49:57Z",
+      "side": 1,
+      "message": "oldAdn and newAdn will be used at\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1440475/8/src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java#275",
+      "parentUuid": "717eeefb_5fee270c",
+      "range": {
+        "startLine": 257,
+        "startChar": 16,
+        "endLine": 257,
+        "endChar": 25
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53b33154_63a8ae42",
