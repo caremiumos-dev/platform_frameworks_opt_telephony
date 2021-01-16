@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007346805",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1548932?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "fd6ec862_0af5030f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-16T00:32:43Z",
+      "side": 1,
+      "message": "Prefer to use context.getSystemService(AlarmManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 3145,
+        "startChar": 24,
+        "endLine": 3145,
+        "endChar": 64
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
