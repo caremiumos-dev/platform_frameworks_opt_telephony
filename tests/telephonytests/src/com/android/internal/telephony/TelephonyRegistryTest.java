@@ -24,16 +24,23 @@ import static android.telephony.TelephonyManager.RADIO_POWER_UNAVAILABLE;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import android.content.Intent;
+import android.content.pm.UserInfo;
 import android.net.LinkProperties;
+import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation;
+import android.telephony.CellIdentity;
+import android.telephony.CellIdentityGsm;
+import android.telephony.CellLocation;
 import android.telephony.PhoneCapability;
 import android.telephony.PhoneStateListener;
 import android.telephony.PreciseDataConnectionState;
@@ -55,6 +62,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,6 +79,7 @@ public class TelephonyRegistryTest extends TelephonyTest {
     private TelephonyDisplayInfo mTelephonyDisplayInfo;
     private int mSrvccState = -1;
     private int mRadioPowerState = RADIO_POWER_UNAVAILABLE;
+    private CellLocation mCellLocation;
 
     // All events contribute to TelephonyRegistry#isPhoneStatePermissionRequired
     private static final Set<Integer> READ_PHONE_STATE_EVENTS;
@@ -162,6 +171,11 @@ public class TelephonyRegistryTest extends TelephonyTest {
         @Override
         public void onDisplayInfoChanged(TelephonyDisplayInfo displayInfo) {
             mTelephonyDisplayInfo = displayInfo;
+        }
+
+        @Override
+        public void onCellLocationChanged(CellLocation location) {
+            mCellLocation = location;
         }
     }
 
@@ -494,6 +508,40 @@ public class TelephonyRegistryTest extends TelephonyTest {
         mTelephonyRegistry.notifyDisplayInfoChanged(0, 2, displayInfo);
         processAllMessages();
         assertEquals(displayInfo, mTelephonyDisplayInfo);
+    }
+
+    @Test
+    public void testNotifyCellLocationForSubscriberByUserSwitched() throws RemoteException {
+        // Return a slotIndex / phoneId of 0 for all sub ids given.
+        doReturn(mMockSubInfo).when(mSubscriptionManager).getActiveSubscriptionInfo(anyInt());
+        doReturn(0 /* slotIndex */).when(mMockSubInfo).getSimSlotIndex();
+        doReturn(true).when(mLocationManager).isLocationEnabledForUser(any(UserHandle.class));
+
+        CellIdentity cellIdentity = new CellIdentityGsm(-1, -1, -1, -1, null, null, null, null,
+                Collections.emptyList());
+        mTelephonyRegistry.notifyCellLocationForSubscriber(1 /* subId */, cellIdentity);
+        processAllMessages();
+
+        // Listen to EVENT_CELL_LOCATION_CHANGED for current user(USER_SYSTEM).
+        int[] events = {PhoneStateListener.EVENT_CELL_LOCATION_CHANGED};
+        mTelephonyRegistry.listenWithEventList(1 /* subId */, mContext.getOpPackageName(),
+                mContext.getAttributionTag(), mPhoneStateListener.callback, events, false);
+
+        // Broadcast ACTION_USER_SWITCHED for USER_SYSTEM. Callback should be triggered.
+        mCellLocation = null;
+        mContext.sendBroadcast(new Intent(Intent.ACTION_USER_SWITCHED));
+
+        processAllMessages();
+        assertEquals(cellIdentity.asCellLocation(), mCellLocation);
+
+        // Broadcast ACTION_USER_SWITCHED for non USER_SYSTEM. Callback shouldn't be triggered.
+        mCellLocation = null;
+        UserInfo userInfo = new UserInfo(UserHandle.PER_USER_RANGE, "" /* name */, 0 /* flags */);
+        doReturn(userInfo).when(mIActivityManager).getCurrentUser();
+        mContext.sendBroadcast(new Intent(Intent.ACTION_USER_SWITCHED));
+
+        processAllMessages();
+        assertEquals(null, mCellLocation);
     }
 
     private void assertSecurityExceptionThrown(int[] event) {
