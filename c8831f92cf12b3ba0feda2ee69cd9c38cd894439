@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d2d6ffa_8b4b566a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-01-18T18:49:20Z",
+      "side": 1,
+      "message": "Removed this and defined a new carrier config",
+      "parentUuid": "743d95cc_ad7cff27",
+      "range": {
+        "startLine": 754,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 9
+      },
+      "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5649437_8153d9aa",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "What I mean by carrier config is don\u0027t allow initial attach on a particular carrier. We won\u0027t use SIM ICCID to distinguish the behaviors.",
       "parentUuid": "a5649437_8153d9aa",
+      "range": {
+        "startLine": 2186,
+        "startChar": 0,
+        "endLine": 2201,
+        "endChar": 0
+      },
+      "revId": "c8831f92cf12b3ba0feda2ee69cd9c38cd894439",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "181db091_dcb7341f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-01-18T18:49:20Z",
+      "side": 1,
+      "message": "Earlier we observed conflicts with mcc-mnc between two operators, hence used iccid to differentiate Reliance Jio. Will set new carrier config value for Relaince Jio operator",
+      "parentUuid": "c688a47c_57e849e7",
       "range": {
         "startLine": 2186,
         "startChar": 0,
