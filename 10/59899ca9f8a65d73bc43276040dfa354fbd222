@@ -1,0 +1,11 @@
+Code-Review+2: Jack Yu <jackyu@google.com>
+Code-Review+1: Rambo Wang <rambowang@google.com>
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Verified+1: Rambo Wang <rambowang@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Rambo Wang <rambowang@google.com>
+Submitted-at: Mon, 18 Jan 2021 22:12:33 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1542024
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
