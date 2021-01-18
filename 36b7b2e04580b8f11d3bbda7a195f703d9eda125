@@ -143,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33b7467c_9a0c91d3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 5937,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-18T22:43:28Z",
+      "side": 1,
+      "message": "Right. The the request are applied to the original subId. This means the request can only take effect when current subId is the same as original requested subId.\n\nMy current choice is that, the original subId is kept in the SignalRequestRecord. And the subId there is always compared to current subId dynamically. Only apply the request whose original subId match current subId.\n\nPlease advise if we have better strategy.",
+      "parentUuid": "86e2fa86_727387f5",
+      "range": {
+        "startLine": 5937,
+        "startChar": 18,
+        "endLine": 5937,
+        "endChar": 24
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5949253_e961c99a",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 10
@@ -530,6 +554,30 @@
       "writtenOn": "2021-01-14T22:56:40Z",
       "side": 1,
       "message": "Nit: this could be a race condition, consider pulling this out of the loop to only call 1x/RAN value rather than 1x/SignalRequestRecord.",
+      "range": {
+        "startLine": 6021,
+        "startChar": 27,
+        "endLine": 6021,
+        "endChar": 39
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd4035b_8d82cc4f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6021,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-18T22:43:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe6e4c4e_1f908e43",
       "range": {
         "startLine": 6021,
         "startChar": 27,
