@@ -752,6 +752,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a95519_d52de5c6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6056,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T00:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "488e25be_0bb0ee3e",
+      "range": {
+        "startLine": 6055,
+        "startChar": 9,
+        "endLine": 6056,
+        "endChar": 81
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3af701e0_4d6ed681",
@@ -789,6 +813,30 @@
       "side": 1,
       "message": "Will prepare both and ask Jack to pick up one. The good part for current one is it is O(M+N) for both time and space complexity. Good for performance.",
       "parentUuid": "3af701e0_4d6ed681",
+      "range": {
+        "startLine": 6070,
+        "startChar": 35,
+        "endLine": 6070,
+        "endChar": 44
+      },
+      "revId": "36b7b2e04580b8f11d3bbda7a195f703d9eda125",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57f78f1c_11b25324",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T00:53:23Z",
+      "side": 1,
+      "message": "While the TreeSet based solution can not beat the performance, it is shorter and much more readable. We really have a few clients who will set a few thresholds, the performance is really not a concern. So at last I switch to this more readable solution.\nThanks!",
+      "parentUuid": "16a1434f_5508d6c2",
       "range": {
         "startLine": 6070,
         "startChar": 35,
