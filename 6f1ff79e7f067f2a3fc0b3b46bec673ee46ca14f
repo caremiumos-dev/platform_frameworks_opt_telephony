@@ -1,6 +1,299 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d35255_871f2bb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "I think there\u0027s a lot of structural improvements that could be made here with some refactoring, but this looks like a reasonable approach assuming (as instructed) that we aren\u0027t going to refactor, at least prior to IC.",
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db9801b8_80a39b79",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "I\u0027m sure based on the code that there\u0027s a good reason for this, but it\u0027s definitely not obvious; please provide a nice detailed explanation of why this flag needs to be here and how/when/why future maintainers should observe it.",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "773c4c77_27a71c41",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "nit: odd to have this here. Suggest to move it to its own line.",
+      "range": {
+        "startLine": 4057,
+        "startChar": 76,
+        "endLine": 4057,
+        "endChar": 79
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "900b5ad1_1f6612f0",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4067,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "ThresholdsUnlimited?",
+      "range": {
+        "startLine": 4067,
+        "startChar": 25,
+        "endLine": 4067,
+        "endChar": 47
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c39c8a4_f186665f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "subId match here will actually allow \"dangling\" requests if the subId changes for a given phone object but only if those subIds were previously active. Since there will always only be one active subId for a phone, and since we\u0027re only intending to let the requests live on active subscriptions, I think we need to:\n1) clear the list when the phone\u0027s active subId changes, and possibly:\n2) not bother checking for a subId match here (depends on how the clear()) is implemented).\n\nOtherwise, we\u0027re just changing the race condition under which requests can succeed. I need to think a little more about this.",
+      "range": {
+        "startLine": 1773,
+        "startChar": 32,
+        "endLine": 1773,
+        "endChar": 62
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e93227_3fcd03c9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "shouldn\u0027t be necessary since all accesses should be on the same thread, no?",
+      "range": {
+        "startLine": 1790,
+        "startChar": 16,
+        "endLine": 1790,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c00b274_3d7fe682",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "There are versions of AsyncResult.forMessage() that make this cleaner for (I think) all combinations of parameters.\n\nYou shouldn\u0027t have to explicitly set ret.exception \u003d null;\n\nhttps://source.corp.google.com/android/frameworks/base/core/java/android/os/AsyncResult.java;l\u003d58?q\u003dAsyncResult.java\u0026ct\u003dos\u0026sq\u003dpackage:%5Eandroid$",
+      "range": {
+        "startLine": 1797,
+        "startChar": 20,
+        "endLine": 1797,
+        "endChar": 29
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0bfb2db_fc0e7154",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 1804,
+        "startChar": 59,
+        "endLine": 1804,
+        "endChar": 60
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee378211_5748118a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "since add and remove are always done on the same thread, no synchronization is needed. If they aren\u0027t, please help me understand why/where.",
+      "range": {
+        "startLine": 1808,
+        "startChar": 16,
+        "endLine": 1808,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112eed5e_ac75a600",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "Why not:\n\nfor(Record r : mRecords) {\n if (r.getToken().equals(recordToRemove.getToken()) mRecords.remove(r);\n}",
+      "range": {
+        "startLine": 1809,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 21
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc34c80_fad0eebe",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6061,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "Set?",
+      "range": {
+        "startLine": 6061,
+        "startChar": 8,
+        "endLine": 6061,
+        "endChar": 15
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ae333d5_44e693f9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "target.addAll(Arrays.asList(systemThresholds)) ?",
+      "range": {
+        "startLine": 6068,
+        "startChar": 0,
+        "endLine": 6070,
+        "endChar": 9
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea82749_42e70b15",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6075,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "Nested for() loops are generally concerning, but I think it\u0027s OK here. Can you add a note that the expected number of visits here is small (maybe 10-15 tops), so it\u0027s not worth trying to optimize this?",
+      "range": {
+        "startLine": 6075,
+        "startChar": 12,
+        "endLine": 6075,
+        "endChar": 15
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71486abf_9683b7d4",
@@ -43,6 +336,98 @@
         "startChar": 16,
         "endLine": 6079,
         "endChar": 17
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31500e81_0e9ed6c9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6091,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "Streams still don\u0027t have good performance. Since it\u0027s not saving a mountain of complexity, can a loop be used instead?\n\nhttps://mail.google.com/mail/u/0/?source\u003dsync\u0026tf\u003d1\u0026view\u003dpt\u0026th\u003d1761a2b6553e4c0e\u0026search\u003dall\u0026msg",
+      "range": {
+        "startLine": 6091,
+        "startChar": 22,
+        "endLine": 6091,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae5e2700_1a082b1d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6095,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "I noticed a flag related to this also in DeviceStateMonitor. Does it need to be considered in two places?",
+      "range": {
+        "startLine": 6095,
+        "startChar": 45,
+        "endLine": 6095,
+        "endChar": 64
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8005f9_a0a3bd4b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6122,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "this needs to be posted to the handler as a runnable.",
+      "range": {
+        "startLine": 6122,
+        "startChar": 12,
+        "endLine": 6122,
+        "endChar": 31
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b643cff0_eca7d9b4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6126,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-19T23:14:45Z",
+      "side": 1,
+      "message": "might not need a separate method for this.",
+      "range": {
+        "startLine": 6126,
+        "startChar": 17,
+        "endLine": 6126,
+        "endChar": 46
       },
       "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
