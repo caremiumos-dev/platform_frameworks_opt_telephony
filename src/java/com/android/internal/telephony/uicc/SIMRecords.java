@@ -2072,6 +2072,7 @@ public class SIMRecords extends IccRecords {
         int usedCspGroups = data.length / 2;
         // This is the "Service Group Number" of "Value Added Services Group".
         byte valueAddedServicesGroup = (byte)0xC0;
+        boolean oldCspPlmnEnabled = mCspPlmnEnabled;
 
         mCspPlmnEnabled = true;
         for (int i = 0; i < usedCspGroups; i++) {
@@ -2083,17 +2084,17 @@ public class SIMRecords extends IccRecords {
                      // Operator Selection menu should be enabled.
                      mCspPlmnEnabled = true;
                  } else {
-                     mCspPlmnEnabled = false;
                      // Operator Selection menu should be disabled.
                      // Operator Selection Mode should be set to Automatic.
-                     log("[CSP] Set Automatic Network Selection");
-                     mNetworkSelectionModeAutomaticRegistrants.notifyRegistrants();
+                     mCspPlmnEnabled = false;
                  }
-                 return;
              }
         }
 
-        log("[CSP] Value Added Service Group (0xC0), not found!");
+        if (oldCspPlmnEnabled != mCspPlmnEnabled) {
+            log("[CSP] Set Automatic Network Selection:" + mCspPlmnEnabled);
+            mNetworkSelectionModeAutomaticRegistrants.notifyRegistrants();
+        }
     }
 
     @Override
