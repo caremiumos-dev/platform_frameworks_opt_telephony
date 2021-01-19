@@ -35,6 +35,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05366950_4edbf278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-01-19T16:00:02Z",
+      "side": 1,
+      "message": "I don\u0027t have enough knowledge on this to be able to answer; I\u0027ll defer to Jack.",
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29a94afe_5b67583c",
