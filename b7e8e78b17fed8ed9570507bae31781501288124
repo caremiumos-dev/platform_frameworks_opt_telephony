@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "794be7ac_414a5fe9",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Nice. All fields and methods are updated with the new name. Thanks",
+      "parentUuid": "8ac9b791_4e2e3b03",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 34
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f98856bb_82c5cb77",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "Ditto",
+      "range": {
+        "startLine": 419,
+        "startChar": 19,
+        "endLine": 419,
+        "endChar": 37
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6308ec_f0a308e0",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f98856bb_82c5cb77",
       "range": {
         "startLine": 419,
         "startChar": 19,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9101d94_ee8416c8",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28c030f7_490d795b",
+      "range": {
+        "startLine": 531,
+        "startChar": 47,
+        "endLine": 531,
+        "endChar": 48
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21b24adf_21b649b1",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "Should we just rename to isInHighPowerMode at this point and flip the boolean?",
+      "range": {
+        "startLine": 4609,
+        "startChar": 19,
+        "endLine": 4609,
+        "endChar": 31
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "194968e6_89c1996c",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 4609,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "I suggest to use \"idle\" instead \"high power mode\" in the name here.\n\nMany fields/method in our feature are conditioned with idle state (eg. isSystemThresholdReportingRequestedWhileIdle/isReportingRequestedWhileIdle), this will make the logic in SST with same concept.\n\nIn short, we flip concept of high power to idle here ONCE, so no need to flip concept in SST for many places.",
+      "parentUuid": "21b24adf_21b649b1",
       "range": {
         "startLine": 4609,
         "startChar": 19,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55111ab6_5a9a1c4c",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 4624,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df2d7f93_bfd10661",
+      "range": {
+        "startLine": 4624,
+        "startChar": 19,
+        "endLine": 4624,
+        "endChar": 37
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3dee890_6304ff52",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "What about trying to register multiple requests for the same subId? That should throw too",
+      "range": {
+        "startLine": 1771,
+        "startChar": 24,
+        "endLine": 1771,
+        "endChar": 34
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6522abc_04c71266",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Right. It should throw in this case. Just added the check and update the exception msg.\nThanks",
+      "parentUuid": "b3dee890_6304ff52",
       "range": {
         "startLine": 1771,
         "startChar": 24,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "572e86e7_37329b59",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f0e3d1d_d1bedb3d",
+      "range": {
+        "startLine": 1811,
+        "startChar": 55,
+        "endLine": 1811,
+        "endChar": 59
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57149678_1e443fb5",
@@ -175,6 +343,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "If we\u0027re only checking token equality, I don\u0027t think we need this comment?",
+      "range": {
+        "startLine": 1815,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 75
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0d7cf00_ecf5b15e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Removed. I thought hard and did not find a case we have to ask open door for system/phone, so far.",
+      "parentUuid": "57149678_1e443fb5",
       "range": {
         "startLine": 1815,
         "startChar": 0,
@@ -208,6 +400,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "959d23b6_f6e68de5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6032,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12dacefd_bf47fd00",
+      "range": {
+        "startLine": 6032,
+        "startChar": 40,
+        "endLine": 6032,
+        "endChar": 43
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe34b72f_c042382a",
@@ -221,6 +437,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "Nit: CLEAR",
+      "range": {
+        "startLine": 6042,
+        "startChar": 40,
+        "endLine": 6042,
+        "endChar": 46
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2afecc21_615b0cbf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe34b72f_c042382a",
       "range": {
         "startLine": 6042,
         "startChar": 40,
@@ -254,6 +494,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "627cac86_54bcf8e7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Good idea! This will save lots of temporary objects allocated!",
+      "parentUuid": "9f35e769_8057d2e0",
+      "range": {
+        "startLine": 6059,
+        "startChar": 79,
+        "endLine": 6059,
+        "endChar": 80
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "241cd046_38ff3b14",
@@ -267,6 +531,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "TODO(b/###)",
+      "range": {
+        "startLine": 6111,
+        "startChar": 11,
+        "endLine": 6111,
+        "endChar": 21
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1cda1c9_588474eb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6111,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "241cd046_38ff3b14",
       "range": {
         "startLine": 6111,
         "startChar": 11,
@@ -300,6 +588,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "773749f9_1516ac7a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6140,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7597ee9f_e387ec69",
+      "range": {
+        "startLine": 6134,
+        "startChar": 0,
+        "endLine": 6140,
+        "endChar": 0
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b477eb7b_d2b0d1aa",
@@ -323,6 +635,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef41da23_107563a0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6141,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b477eb7b_d2b0d1aa",
+      "range": {
+        "startLine": 6141,
+        "startChar": 13,
+        "endLine": 6141,
+        "endChar": 20
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1cb9385_4e5a5f1b",
@@ -336,6 +672,30 @@
       "writtenOn": "2021-01-19T19:15:37Z",
       "side": 1,
       "message": "Ditto",
+      "range": {
+        "startLine": 6144,
+        "startChar": 13,
+        "endLine": 6144,
+        "endChar": 20
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddc401bd_212e18eb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6144,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-19T20:15:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1cb9385_4e5a5f1b",
       "range": {
         "startLine": 6144,
         "startChar": 13,
