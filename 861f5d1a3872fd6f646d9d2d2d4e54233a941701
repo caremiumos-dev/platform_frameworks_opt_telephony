@@ -22,6 +22,30 @@
       },
       "revId": "861f5d1a3872fd6f646d9d2d2d4e54233a941701",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfaee924_cd99032e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcNetworkAgent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-01-19T22:00:30Z",
+      "side": 1,
+      "message": "Per our discussion offline, updated to implement VCN-listening behavior in DataConnection instead of DcNetworkAgent.\n\nDone.",
+      "parentUuid": "2969cd93_80f733e2",
+      "range": {
+        "startLine": 99,
+        "startChar": 16,
+        "endLine": 99,
+        "endChar": 51
+      },
+      "revId": "861f5d1a3872fd6f646d9d2d2d4e54233a941701",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
