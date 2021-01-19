@@ -22,6 +22,30 @@
       },
       "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46263dd6_4eafd855",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6079,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T22:59:04Z",
+      "side": 1,
+      "message": "Ah - actually it\u0027s a method on SignalThresholdInfo, so we\u0027ll need to handle inside the inner loop I suppose?",
+      "parentUuid": "71486abf_9683b7d4",
+      "range": {
+        "startLine": 6076,
+        "startChar": 16,
+        "endLine": 6079,
+        "endChar": 17
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
