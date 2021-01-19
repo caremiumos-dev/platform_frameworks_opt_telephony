@@ -1,0 +1,82 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007399828",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1428988?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "cf110fba_190b4c19",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2326,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-19T14:55:14Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 2326,
+        "startChar": 0,
+        "endLine": 2326,
+        "endChar": 103
+      },
+      "revId": "332b5e0308c6a3e6fbb4f5abed85befb22677a28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007399828",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1428988?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "37baeaf6_d4f0c9cc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5466,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-19T14:55:14Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 5466,
+        "startChar": 0,
+        "endLine": 5466,
+        "endChar": 106
+      },
+      "revId": "332b5e0308c6a3e6fbb4f5abed85befb22677a28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007399828",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1428988?revision\u003d6",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d7f0c5c4_8df550c2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 5472,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-19T14:55:14Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 5472,
+        "startChar": 0,
+        "endLine": 5472,
+        "endChar": 104
+      },
+      "revId": "332b5e0308c6a3e6fbb4f5abed85befb22677a28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
