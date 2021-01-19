@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ac9b791_4e2e3b03",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "\"OnResetting\" sounds weird - how about mIsResetOngoing",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 34
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f98856bb_82c5cb77",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 419,
+        "startChar": 19,
+        "endLine": 419,
+        "endChar": 37
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c030f7_490d795b",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Nit: suggest /* inlineParamName */ here to make clear why we\u0027re negating.",
+      "range": {
+        "startLine": 531,
+        "startChar": 47,
+        "endLine": 531,
+        "endChar": 48
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b24adf_21b649b1",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 4609,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Should we just rename to isInHighPowerMode at this point and flip the boolean?",
+      "range": {
+        "startLine": 4609,
+        "startChar": 19,
+        "endLine": 4609,
+        "endChar": 31
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2d7f93_bfd10661",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 4624,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 4624,
+        "startChar": 19,
+        "endLine": 4624,
+        "endChar": 37
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3dee890_6304ff52",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "What about trying to register multiple requests for the same subId? That should throw too",
+      "range": {
+        "startLine": 1771,
+        "startChar": 24,
+        "endLine": 1771,
+        "endChar": 34
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f0e3d1d_d1bedb3d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": ".equals?",
+      "range": {
+        "startLine": 1811,
+        "startChar": 55,
+        "endLine": 1811,
+        "endChar": 59
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57149678_1e443fb5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "If we\u0027re only checking token equality, I don\u0027t think we need this comment?",
+      "range": {
+        "startLine": 1815,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 75
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12dacefd_bf47fd00",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6032,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Nit: SET",
+      "range": {
+        "startLine": 6032,
+        "startChar": 40,
+        "endLine": 6032,
+        "endChar": 43
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe34b72f_c042382a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Nit: CLEAR",
+      "range": {
+        "startLine": 6042,
+        "startChar": 40,
+        "endLine": 6042,
+        "endChar": 46
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f35e769_8057d2e0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Can we just use a single TreeSet at this level of code, rather than repeated ones in separate alignThresholds calls?",
+      "range": {
+        "startLine": 6059,
+        "startChar": 79,
+        "endLine": 6059,
+        "endChar": 80
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "241cd046_38ff3b14",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6111,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "TODO(b/###)",
+      "range": {
+        "startLine": 6111,
+        "startChar": 11,
+        "endLine": 6111,
+        "endChar": 21
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7597ee9f_e387ec69",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6140,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Comment what this is doing, this is a pretty non-obvious piece of code.",
+      "range": {
+        "startLine": 6134,
+        "startChar": 0,
+        "endLine": 6140,
+        "endChar": 0
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b477eb7b_d2b0d1aa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6141,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Nit: int",
+      "range": {
+        "startLine": 6141,
+        "startChar": 13,
+        "endLine": 6141,
+        "endChar": 20
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1cb9385_4e5a5f1b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 6144,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-19T19:15:37Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 6144,
+        "startChar": 13,
+        "endLine": 6144,
+        "endChar": 20
+      },
+      "revId": "b7e8e78b17fed8ed9570507bae31781501288124",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
