@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc96283b_93e0335e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-20T19:38:00Z",
+      "side": 1,
+      "message": "what other values can infos[0] hold, and what does it mean if it\u0027s something nonzero other than 1? The commit message seems to suggest that it\u0027s only one bit, so it\u0027d only be 0 or 1? Please resolve this discrepancy.",
+      "range": {
+        "startLine": 1625,
+        "startChar": 24,
+        "endLine": 1625,
+        "endChar": 33
+      },
+      "revId": "437a20d8813c04d703840a413411492cf9a6adca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
