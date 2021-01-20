@@ -1604,6 +1604,16 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog("getDataRegistrationState: overrideHalVersion=" + overrideHalVersion);
             }
             if ((overrideHalVersion == null
+                    || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6))
+                            && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                final android.hardware.radio.V1_6.IRadio radioProxy16 =
+                        (android.hardware.radio.V1_6.IRadio) radioProxy;
+                try {
+                    radioProxy16.getDataRegistrationState_1_6(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getDataRegistrationState_1_6", e);
+                }
+            } else if ((overrideHalVersion == null
                         || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5))
                     && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
                 final android.hardware.radio.V1_5.IRadio radioProxy15 =
