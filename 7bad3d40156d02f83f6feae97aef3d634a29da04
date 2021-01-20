@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "572f78b8_8a6fc694",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-01-20T05:24:26Z",
+      "side": 1,
+      "message": "(This also goes for the comment below)\n\nFrom what I gathered from the code, I see mImsRegistered and mImsRegisteredOnOff having different purposes.\n\nmImsRegisteredOnOff- set as a matter of intention, like, I want to set to ims registered to be either on or off.\nmImsRegistered- set when IMS is actaully on or off through the HAL.\n\nBased off of those assumptions, I chose to set the internal state after all other work is complete thinking ims is officially on \\ off.",
+      "parentUuid": "551d4818_0899731b",
+      "range": {
+        "startLine": 1323,
+        "startChar": 20,
+        "endLine": 1324,
+        "endChar": 51
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fe6f4cc_f77794a0",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 6
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67c117a2_3d09b355",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3133,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-01-20T05:24:26Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "6fe6f4cc_f77794a0",
+      "range": {
+        "startLine": 3133,
+        "startChar": 16,
+        "endLine": 3133,
+        "endChar": 39
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b29a4f3d_772d41cf",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 6
@@ -60,6 +108,30 @@
       "writtenOn": "2021-01-20T01:47:36Z",
       "side": 1,
       "message": "should mImsRegistered also be set here? if this is set through IMS path, it looks like mImsRegistered will never get set to true...\n\nAlso, can we consolidate mImsRegistered and mImsRegistrationOnOff into mImsRegistered? I do not really see the difference here...",
+      "range": {
+        "startLine": 3153,
+        "startChar": 8,
+        "endLine": 3153,
+        "endChar": 29
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "613b2cbd_41781050",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3153,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-01-20T05:24:26Z",
+      "side": 1,
+      "message": "reply above\n\nAlso, mImsRegistered is being read through a public getter and so pointing it to ims registered on off could have unexpected consequences since the timing would be different.",
+      "parentUuid": "b29a4f3d_772d41cf",
       "range": {
         "startLine": 3153,
         "startChar": 8,
