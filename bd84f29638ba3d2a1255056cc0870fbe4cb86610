@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0be15232_0c6010ad",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-20T18:20:53Z",
+      "side": 1,
+      "message": "You don\u0027t need this. They all run in the main thread.",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 31
+      },
+      "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
