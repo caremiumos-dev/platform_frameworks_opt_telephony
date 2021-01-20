@@ -16,6 +16,24 @@
       "message": "Internal conflict?",
       "revId": "ff22e44e8d5e1d3c4d256123f975251128b4abc7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcea2c26_dff6c471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-20T19:38:37Z",
+      "side": 1,
+      "message": "Yes, I will resolve it when I get a chance.",
+      "parentUuid": "9174a1d6_539f4c83",
+      "revId": "ff22e44e8d5e1d3c4d256123f975251128b4abc7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
