@@ -87,6 +87,30 @@
       },
       "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be34418c_5ce3b4d4",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T19:32:43Z",
+      "side": 1,
+      "message": "Jack, Here is the logic path (sequence operation in same thread):\nDST#onReset \u003d\u003e mIsResetOngoing \u003d true; \u003d\u003e DST#setSignalStrengthReportingCriteria \u003d\u003e\nGmsCdmaPhone#setSignalStrengthReportingCriteria \u003d\u003e SST#getConsolidatedSignalThresholds\n\u003d\u003e SST.shouldHonorSystemThresholds() \u003d\u003e Phone.isRadioResetOngoing() return true which is exactly what we want.\n\nAny problem for the logic path here? Pls let me know if you prefer to removing all logic related to mIsResetOngoing. Thanks!",
+      "parentUuid": "5be45d7d_24675fb1",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 31
+      },
+      "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
