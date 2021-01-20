@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c3fa5e4_d657218f",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Phone process crash and modem crash cases are planned to handle after IC.\n\nBut one important case is that, when modem reboot, DSM will set default system thresholds define here during onReset(). So if the onReset() occur when device is idle,  even no app has set isSystemThresholdReportingRequestedWhileIdle, we have to honor the default system thresholds set here.\n\nThat\u0027s why this flag is introduced and the isRadioResetOngoing() is checked in SST#shouldHonorSystemThresholds.\n\nThis flag should be able to replaced with better solution after IC when we formally support Phone or Modem crash cases.",
+      "parentUuid": "db9801b8_80a39b79",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "773c4c77_27a71c41",
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "100f4985_2787357c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "773c4c77_27a71c41",
+      "range": {
+        "startLine": 4057,
+        "startChar": 76,
+        "endLine": 4057,
+        "endChar": 79
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "900b5ad1_1f6612f0",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "ThresholdsUnlimited?",
+      "range": {
+        "startLine": 4067,
+        "startChar": 25,
+        "endLine": 4067,
+        "endChar": 47
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1eb34a5_1e3cb76c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4067,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "See aosp/1532958, during API review, we are asked to perform the thresholds length check in SignalThresholdInfo. A new hide method setThresholdsUnlimited is introduced for system caller to bypass this limitation.",
+      "parentUuid": "900b5ad1_1f6612f0",
       "range": {
         "startLine": 4067,
         "startChar": 25,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7c3fe97_bd68972b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Yes, we do have some room to better maintain the record list. But this should not be a blocker for IC.\n\nCurrent behavior is the \"dangling\" requests will be cleared up when the app process die. As we always check the subId in the record with current subId, it will cause us much trouble.",
+      "parentUuid": "1c39c8a4_f186665f",
+      "range": {
+        "startLine": 1773,
+        "startChar": 32,
+        "endLine": 1773,
+        "endChar": 62
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3e93227_3fcd03c9",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 26
@@ -123,6 +219,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "shouldn\u0027t be necessary since all accesses should be on the same thread, no?",
+      "range": {
+        "startLine": 1790,
+        "startChar": 16,
+        "endLine": 1790,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce92e6a7_aeb38e95",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Try to make all access of mSignalRequestRecord in SST\u0027s handler thread but did not make it yet.\n\nThe following call path is an exception for now:\nDeviceStateMonitor#onReset \u003d\u003e DSM#setSignalStrengthReportingCriteria \u003d\u003e GmsCdmaPhone#setSignalStrengthReportingCriteria \u003d\u003e mSST.getConsolidatedSignalThresholds \u003d\u003e access mSignalRequestRecord\n\nFor safety, keep the lock for now and improve it later.",
+      "parentUuid": "a3e93227_3fcd03c9",
       "range": {
         "startLine": 1790,
         "startChar": 16,
@@ -156,6 +276,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c1d0a3_136d90f4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "yes, null ret.exception is the default. removed.\n\nUse AsyncResult.forMessage() may be a bit cleaner, but it is most likely to replace current ret.exception assignment with a new forMessage call. Not a big change.",
+      "parentUuid": "3c00b274_3d7fe682",
+      "range": {
+        "startLine": 1797,
+        "startChar": 20,
+        "endLine": 1797,
+        "endChar": 29
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0bfb2db_fc0e7154",
@@ -169,6 +313,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "nit",
+      "range": {
+        "startLine": 1804,
+        "startChar": 59,
+        "endLine": 1804,
+        "endChar": 60
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10691187_ad1ee788",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0bfb2db_fc0e7154",
       "range": {
         "startLine": 1804,
         "startChar": 59,
@@ -202,6 +370,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02aff075_47499e56",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "The path is shown in above comments. We should be able to make it handler thread compliance at last. Just did not make it for now.",
+      "parentUuid": "ee378211_5748118a",
+      "range": {
+        "startLine": 1808,
+        "startChar": 16,
+        "endLine": 1808,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "112eed5e_ac75a600",
@@ -215,6 +407,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "Why not:\n\nfor(Record r : mRecords) {\n if (r.getToken().equals(recordToRemove.getToken()) mRecords.remove(r);\n}",
+      "range": {
+        "startLine": 1809,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 21
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bccd063_e425e85f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "ConcurrentModificationException :-)",
+      "parentUuid": "112eed5e_ac75a600",
       "range": {
         "startLine": 1809,
         "startChar": 0,
@@ -248,6 +464,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9759bfc6_8bd7fec8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6061,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Yes, Set as interface is enough here. TreeSet is the implementation type behind the scene.",
+      "parentUuid": "cbc34c80_fad0eebe",
+      "range": {
+        "startLine": 6061,
+        "startChar": 8,
+        "endLine": 6061,
+        "endChar": 15
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ae333d5_44e693f9",
@@ -271,6 +511,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1185e3de_28e49dff",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Tried, can\u0027t compile. \n\nsystemThresholds must be literal array to compile?",
+      "parentUuid": "6ae333d5_44e693f9",
+      "range": {
+        "startLine": 6068,
+        "startChar": 0,
+        "endLine": 6070,
+        "endChar": 9
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ea82749_42e70b15",
@@ -284,6 +548,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "Nested for() loops are generally concerning, but I think it\u0027s OK here. Can you add a note that the expected number of visits here is small (maybe 10-15 tops), so it\u0027s not worth trying to optimize this?",
+      "range": {
+        "startLine": 6075,
+        "startChar": 12,
+        "endLine": 6075,
+        "endChar": 15
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84673c71_99004067",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6075,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ea82749_42e70b15",
       "range": {
         "startLine": 6075,
         "startChar": 12,
@@ -341,6 +629,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ac2a28_de3cae86",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6079,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "The isEnabled filed of SignalThresholdInfo  from apps is always false. But we treat it as always try to enable (only system is allowed to disable the criteria)",
+      "parentUuid": "46263dd6_4eafd855",
+      "range": {
+        "startLine": 6076,
+        "startChar": 16,
+        "endLine": 6079,
+        "endChar": 17
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31500e81_0e9ed6c9",
@@ -354,6 +666,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "Streams still don\u0027t have good performance. Since it\u0027s not saving a mountain of complexity, can a loop be used instead?\n\nhttps://mail.google.com/mail/u/0/?source\u003dsync\u0026tf\u003d1\u0026view\u003dpt\u0026th\u003d1761a2b6553e4c0e\u0026search\u003dall\u0026msg",
+      "range": {
+        "startLine": 6091,
+        "startChar": 22,
+        "endLine": 6091,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf6074f_934c431c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6091,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31500e81_0e9ed6c9",
       "range": {
         "startLine": 6091,
         "startChar": 22,
@@ -387,6 +723,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e8f4055_d834b925",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6095,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Only one flag in DeviceStateMonitor. \n\nmPhone.isRadioResetOngoing() call DSM.isRadioResetOngoing() which return mIsResetOngoing",
+      "parentUuid": "ae5e2700_1a082b1d",
+      "range": {
+        "startLine": 6095,
+        "startChar": 45,
+        "endLine": 6095,
+        "endChar": 64
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f8005f9_a0a3bd4b",
@@ -410,6 +770,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f17da9e_f4bbb208",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6122,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "clearSignalStrengthUpdateRequest() post the msg only and the real work is in handler thread.",
+      "parentUuid": "8f8005f9_a0a3bd4b",
+      "range": {
+        "startLine": 6122,
+        "startChar": 12,
+        "endLine": 6122,
+        "endChar": 31
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b643cff0_eca7d9b4",
@@ -423,6 +807,30 @@
       "writtenOn": "2021-01-19T23:14:45Z",
       "side": 1,
       "message": "might not need a separate method for this.",
+      "range": {
+        "startLine": 6126,
+        "startChar": 17,
+        "endLine": 6126,
+        "endChar": 46
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e10ff8ee_32fcdf95",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6126,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T00:33:22Z",
+      "side": 1,
+      "message": "Right. Just inlined.",
+      "parentUuid": "b643cff0_eca7d9b4",
       "range": {
         "startLine": 6126,
         "startChar": 17,
