@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d93657d6_b29003ef",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "I should have been more specific. Please provide a comment in the code that explains why this is here, what it\u0027s used for etc. :-) It\u0027ll be hard to figure it out otherwise. That said...\n\nWhen the device is \"idle\" if the modem crashes, I don\u0027t think we should necessarily set any thresholds since the filter bit for SignalStrength should be \"true\" (as in, when the device is idle, no signal strength info should be reported).\n\nWhat am I missing?",
+      "parentUuid": "0c3fa5e4_d657218f",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "773c4c77_27a71c41",
         "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
         "patchSetId": 26
@@ -161,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37cc52b5_07e40fa6",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4067,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "Weird, let\u0027s file a bug to bikeshed about that name. I would have assumed it to be something like setSystemThresholds() or something like that and had the implementation detail be that it allows any/all values.",
+      "parentUuid": "b1eb34a5_1e3cb76c",
+      "range": {
+        "startLine": 4067,
+        "startChar": 25,
+        "endLine": 4067,
+        "endChar": 47
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c39c8a4_f186665f",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 26
@@ -208,6 +256,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96ddd4bd_048a99ad",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "Please file a P1 bug for that explaining how old requests will be cleaned up. It seems like an important bit of the behavior.\n\nAlso, please put a TODO here that links to that bug explaining that the subId check is necessary to filter out old requests until you make the cleanup improvements.",
+      "parentUuid": "b7c3fe97_bd68972b",
+      "range": {
+        "startLine": 1773,
+        "startChar": 32,
+        "endLine": 1773,
+        "endChar": 62
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3e93227_3fcd03c9",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 26
@@ -243,6 +315,30 @@
       "side": 1,
       "message": "Try to make all access of mSignalRequestRecord in SST\u0027s handler thread but did not make it yet.\n\nThe following call path is an exception for now:\nDeviceStateMonitor#onReset \u003d\u003e DSM#setSignalStrengthReportingCriteria \u003d\u003e GmsCdmaPhone#setSignalStrengthReportingCriteria \u003d\u003e mSST.getConsolidatedSignalThresholds \u003d\u003e access mSignalRequestRecord\n\nFor safety, keep the lock for now and improve it later.",
       "parentUuid": "a3e93227_3fcd03c9",
+      "range": {
+        "startLine": 1790,
+        "startChar": 16,
+        "endLine": 1790,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "129714d0_942fdbd9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "get() is actually safe. The only time you\u0027ll have a serious problem is if you mututate from two different threads (that will cause concurrentmodificationexception). If you do the set, clear, and binderDeath all on the handler, I think everything else is safe. It might get a stale value sometimes, but that can be cleaned up later.\n\nIf Jack is willing to wave through the synchronized() stuff, then so be it, but as a code reviewer, it causes me to stop and try to figure out the threading model and why it\u0027s necessary, so it might be faster... but it could also be slower to leave it in.",
+      "parentUuid": "ce92e6a7_aeb38e95",
       "range": {
         "startLine": 1790,
         "startChar": 16,
@@ -443,6 +539,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8114cac_7da686c0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "Ooooooo... please add a small comment.",
+      "parentUuid": "4bccd063_e425e85f",
+      "range": {
+        "startLine": 1809,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 21
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbc34c80_fad0eebe",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 26
@@ -525,6 +645,30 @@
       "side": 1,
       "message": "Tried, can\u0027t compile. \n\nsystemThresholds must be literal array to compile?",
       "parentUuid": "6ae333d5_44e693f9",
+      "range": {
+        "startLine": 6068,
+        "startChar": 0,
+        "endLine": 6070,
+        "endChar": 9
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "510b59a3_6adb9f97",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-20T01:54:58Z",
+      "side": 1,
+      "message": "There are some oddities because of Integer. There are ways around it, but this is fine for now.",
+      "parentUuid": "1185e3de_28e49dff",
       "range": {
         "startLine": 6068,
         "startChar": 0,
