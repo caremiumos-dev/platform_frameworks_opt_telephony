@@ -97,6 +97,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d27465_520ec081",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-20T03:07:35Z",
+      "side": 1,
+      "message": "Couples of points I\u0027d like to comment here.\n\n1. Subscriber id (i.e. IMSI) is considered as sensitive information. It requires a signature permission to get it . https://source.corp.google.com/android/frameworks/base/telephony/java/android/telephony/TelephonyManager.java;l\u003d4078?q\u003dgetsubscriberid%20package:android%20file:telephonymanager.java\n\nBut now it seems you want to make it part of the network capability, which can be obtained by 3rd party apps?\n\nIMO, you should use sub id, not subscriber id. If not, there must be a way to convert between these two IDs.\n\n2. Lorenzo has a good point. The data connection and getSubscriberId is not always sync. There might be a small window that the data connection is still there, but the SIM is already removed.\n\n3. DataConnection can be used for emergency APN, which means no SIM is required.\n\nThe bottom line is that I would not recommend passing subscriber id in the network agent, for privacy concern. You can use sub id, but you might still face the issue I mention in 2.",
+      "parentUuid": "ae356d76_c41ce8c0",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
