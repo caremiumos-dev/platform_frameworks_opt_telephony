@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "551d4818_0899731b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-20T01:47:36Z",
+      "side": 1,
+      "message": "Should we set mImsRegistered first in this case? we may want to set internal state first before calling notifiers to other classes.\n\nI am also on the fence about a call that simply calls back into ServiceStateTracker#setImsRegistrationState, but i can see how we may want to keep the signalling using one path",
+      "range": {
+        "startLine": 1323,
+        "startChar": 20,
+        "endLine": 1324,
+        "endChar": 51
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29a4f3d_772d41cf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3153,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-20T01:47:36Z",
+      "side": 1,
+      "message": "should mImsRegistered also be set here? if this is set through IMS path, it looks like mImsRegistered will never get set to true...\n\nAlso, can we consolidate mImsRegistered and mImsRegistrationOnOff into mImsRegistered? I do not really see the difference here...",
+      "range": {
+        "startLine": 3153,
+        "startChar": 8,
+        "endLine": 3153,
+        "endChar": 29
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
