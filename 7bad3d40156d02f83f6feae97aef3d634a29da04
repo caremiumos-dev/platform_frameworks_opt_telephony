@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63695b08_ed560970",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-20T18:15:35Z",
+      "side": 1,
+      "message": "Okay, we can keep these two variables separate for now - it could probably be consolidated, but I can see the advantage of keeping them separate.",
+      "parentUuid": "572f78b8_8a6fc694",
+      "range": {
+        "startLine": 1323,
+        "startChar": 20,
+        "endLine": 1324,
+        "endChar": 51
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fe6f4cc_f77794a0",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "reply above\n\nAlso, mImsRegistered is being read through a public getter and so pointing it to ims registered on off could have unexpected consequences since the timing would be different.",
       "parentUuid": "b29a4f3d_772d41cf",
+      "range": {
+        "startLine": 3153,
+        "startChar": 8,
+        "endLine": 3153,
+        "endChar": 29
+      },
+      "revId": "7bad3d40156d02f83f6feae97aef3d634a29da04",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9250df8b_405c7073",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 3153,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-20T18:15:35Z",
+      "side": 1,
+      "message": "Okay, we can keep the two variables separate for now.",
+      "parentUuid": "613b2cbd_41781050",
       "range": {
         "startLine": 3153,
         "startChar": 8,
