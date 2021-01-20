@@ -73,6 +73,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae356d76_c41ce8c0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-01-20T01:21:04Z",
+      "side": 1,
+      "message": "IIUC if SIM locked, we cannot get subscriberId.\nBut if so there will be no data connection since no SIM.\n\n@Jackyu could you kindly help to input.",
+      "parentUuid": "29a94afe_5b67583c",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
