@@ -89,6 +89,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e0d46d_6b9c887e",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T02:43:56Z",
+      "side": 1,
+      "message": "This is specifically to make sure DeviceStateMonitor#onReset \u003d\u003e DSM#setSignalStrengthReportingCriteria is NOT impacted even phone is idle when modem crash:\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/DeviceStateMonitor.java;l\u003d630?q\u003dsetSignalStrengthReportingCriteria\n\nWithout isResetOngoing check, in our current logic (see SST#shouldHonorSystemThresholds will return false when in idle and no app set isSystemThresholdReportingRequestedWhileIdle flag), make the systemThreshold an empty array (in GmsCdmaPhone#setSignalStrengthReportingCriteria).",
+      "parentUuid": "d93657d6_b29003ef",
+      "range": {
+        "startLine": 190,
+        "startChar": 20,
+        "endLine": 190,
+        "endChar": 35
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "773c4c77_27a71c41",
@@ -207,6 +231,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db4ff7cc_7653c395",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 4067,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T02:43:56Z",
+      "side": 1,
+      "message": "File b/177956167 to trace it. It is a hide method which should not impact our feature IC.\nThanks",
+      "parentUuid": "37cc52b5_07e40fa6",
+      "range": {
+        "startLine": 4067,
+        "startChar": 25,
+        "endLine": 4067,
+        "endChar": 47
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c39c8a4_f186665f",
@@ -278,6 +326,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "294bb45c_8dbf8ac6",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T02:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96ddd4bd_048a99ad",
+      "range": {
+        "startLine": 1773,
+        "startChar": 32,
+        "endLine": 1773,
+        "endChar": 62
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3e93227_3fcd03c9",
@@ -339,6 +411,30 @@
       "side": 1,
       "message": "get() is actually safe. The only time you\u0027ll have a serious problem is if you mututate from two different threads (that will cause concurrentmodificationexception). If you do the set, clear, and binderDeath all on the handler, I think everything else is safe. It might get a stale value sometimes, but that can be cleaned up later.\n\nIf Jack is willing to wave through the synchronized() stuff, then so be it, but as a code reviewer, it causes me to stop and try to figure out the threading model and why it\u0027s necessary, so it might be faster... but it could also be slower to leave it in.",
       "parentUuid": "ce92e6a7_aeb38e95",
+      "range": {
+        "startLine": 1790,
+        "startChar": 16,
+        "endLine": 1790,
+        "endChar": 28
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2877b33f_a7f174f7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T02:43:56Z",
+      "side": 1,
+      "message": "Sure. Thread model is important design consideration. I will continue work to make a clean one (target is all operation of mSignalRequestRecord should be handler thread compliance, without synchronization at last).\n\nFor now, keep the synchronization to at least make right concurrent access.",
+      "parentUuid": "129714d0_942fdbd9",
       "range": {
         "startLine": 1790,
         "startChar": 16,
@@ -551,6 +647,30 @@
       "side": 1,
       "message": "Ooooooo... please add a small comment.",
       "parentUuid": "4bccd063_e425e85f",
+      "range": {
+        "startLine": 1809,
+        "startChar": 0,
+        "endLine": 1815,
+        "endChar": 21
+      },
+      "revId": "6f1ff79e7f067f2a3fc0b3b46bec673ee46ca14f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a1393e_780c9da4",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 26
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T02:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8114cac_7da686c0",
       "range": {
         "startLine": 1809,
         "startChar": 0,
