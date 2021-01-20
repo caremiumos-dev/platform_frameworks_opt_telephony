@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f7eb8e_da5bf409",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T18:30:15Z",
+      "side": 1,
+      "message": "Jack, thanks for the review. I provided more context on why we introduced the isResetOngoing in the CL.",
+      "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0be15232_0c6010ad",
@@ -14,6 +31,30 @@
       "writtenOn": "2021-01-20T18:20:53Z",
       "side": 1,
       "message": "You don\u0027t need this. They all run in the main thread.",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 31
+      },
+      "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe9d4b9_c8f2c9b1",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-20T18:30:15Z",
+      "side": 1,
+      "message": "Jack, this is not for thread synchronization. As the comment of mIsResetOngoing, we actually want to cover the case when modem crash handling during device idle time.\n\nThe flag is to make sure that setSignalStrengthReportingCriteria() which set default system thresholds during onReset() is work as before.\n\nWithout the flag, the feature logic (see SST#shouldHonorSystemThresholds) may bypass the system thresholds when detect device idle and no app show interest to report system thresholds in idle.\n\nPhone crash and modem crash will be carefully handled after IC. But for now we just want to make sure we did not break the onReset() process.\nThanks!",
+      "parentUuid": "0be15232_0c6010ad",
       "range": {
         "startLine": 603,
         "startChar": 0,
