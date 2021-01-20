@@ -63,6 +63,30 @@
       },
       "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be45d7d_24675fb1",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-20T19:17:34Z",
+      "side": 1,
+      "message": "SST and DST are running on the same thread. isRadioResetOngoing check from SST will never be true.",
+      "parentUuid": "bbe9d4b9_c8f2c9b1",
+      "range": {
+        "startLine": 603,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 31
+      },
+      "revId": "bd84f29638ba3d2a1255056cc0870fbe4cb86610",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
