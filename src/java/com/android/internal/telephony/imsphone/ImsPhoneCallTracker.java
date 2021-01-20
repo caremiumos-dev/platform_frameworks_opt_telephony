@@ -3771,8 +3771,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             if (imsCall == mUssdSession) {
                 mUssdSession = null;
                 if (mPendingUssd != null) {
-                    CommandException ex =
-                            new CommandException(CommandException.Error.GENERIC_FAILURE);
+                    ImsException ex =
+                            new ImsException("mPendingUssd failed", reasonInfo.getCode());
                     AsyncResult.forMessage(mPendingUssd, null, ex);
                     mPendingUssd.sendToTarget();
                     mPendingUssd = null;
