@@ -145,6 +145,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1593fed9_e8db0543",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-01-20T23:53:15Z",
+      "side": 1,
+      "message": "subId does not change after SDK update, and it is 1:1 mapping to subscriber id in our implementation (i.e. TelephonyManager.getSubscriberId() only returns one IMSI). We don\u0027t support two subscriptions in one SIM today (and it does not exist in real world either).\n\nAnother concern is that they will be gated by different permissions now. One is android.Manifest.permission.NETWORK_SETTINGS and the other one is android.Manifest.permission.READ_PRIVILEGED_PHONE_STATE (and their protection level is different). Even though they are the same protection level, gating the information by different permissions is not a good practice and can lead trouble in the future if someone just mistakenly change its protection level for other purposes.\n\nI spent some time before to eliminate IMSI as being used as index outside of telephony (i.e. NetworkStatsService) before but just didn\u0027t have time to finish it. I was doing that because 1. IMSI is a sensitive PII info, 2. sub id is created for that purposes.\n\nWill you have a long term plan migrating to use sub id in NetworkStatsService? If yes, I am okay with this as a short term solution.",
+      "parentUuid": "8cf4e176_236bb74c",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
