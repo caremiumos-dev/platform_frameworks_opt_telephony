@@ -121,6 +121,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf4e176_236bb74c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-01-20T07:01:14Z",
+      "side": 1,
+      "message": "Thanks for the input. Below is our answers for your concern:\n\n1. No, and we are highly aware of that kind of information is sensitive.\nWe\u0027ll redact it before publishing to anyone else. See aosp/1542746.\nJust like what we did for SSID and other sensitive information in NetworkCapabilities.\nThe one who is going to use this is for NetworkStatsService to index the data usage. We want to use subId if we could, but currently there are 2 concerns of it:\n  a. subId changes per SDK update, this cannot be used for NetworkStats.\n  b. From what we learned, subId \u0026 subscriberId is not strictly 1-1 mapping. We already have subId in the NetworkSpecifier inside NetworkCapabilities but in short/mid term we cannot use that.\n\n2. After internal discussion, we\u0027ll reject any update of IMSI inside ConnectivityService once it has been set, then it could act like what\nwe did in NetworkAgentConfig.\n\n3. Today the information is already passed by networkAgentConfig so there is no behavior change for that. ConnectivityService/NetworkStatsSerivce/NetworkPolicyManagerService can already deal with null/empty IMSI string.\n\nWDYT?",
+      "parentUuid": "f5d27465_520ec081",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
