@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea869a8_6fa5c137",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-21T01:52:18Z",
+      "side": 1,
+      "message": "can this just be moved to startListeningForCalls?",
+      "range": {
+        "startLine": 950,
+        "startChar": 24,
+        "endLine": 959,
+        "endChar": 25
+      },
+      "revId": "6e424a80ff3a5089d83b9fab90ab990aa89e3af6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a247871_00cc7a9d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-21T01:52:18Z",
+      "side": 1,
+      "message": "I\u0027m on the edge of my seat",
+      "range": {
+        "startLine": 1286,
+        "startChar": 7,
+        "endLine": 1286,
+        "endChar": 23
+      },
+      "revId": "6e424a80ff3a5089d83b9fab90ab990aa89e3af6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
