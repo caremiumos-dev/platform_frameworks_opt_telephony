@@ -13,6 +13,16 @@
 // limitations under the License.
 
 
+package {
+    default_applicable_licenses: ["frameworks_opt_telephony_license"],
+}
+
+license {
+    name: "frameworks_opt_telephony_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-Apache-2.0","SPDX-license-identifier-BSD","legacy_not_allowed"],
+}
+
 filegroup {
     name: "opt-telephony-srcs",
     srcs: [
