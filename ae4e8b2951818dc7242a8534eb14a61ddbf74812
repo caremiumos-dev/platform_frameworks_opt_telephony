@@ -169,6 +169,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03fcf068_d47ce694",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-01-21T11:23:53Z",
+      "side": 1,
+      "message": "b/80526261 is the long term plan for migrating to use sub id.\nWe agree that for long term IMSI should not be used out side telephony.\nFor other concerns we would like to have GVC discussion to resolve it once and for all.\nPlease kindly join the discussion if you still think it is not ok to do this.",
+      "parentUuid": "1593fed9_e8db0543",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
