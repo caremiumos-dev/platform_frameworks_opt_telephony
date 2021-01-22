@@ -428,11 +428,6 @@ abstract class ImsPhoneBase extends Phone {
     public void setNetworkSelectionModeAutomatic(Message response) {
     }
 
-    @Override
-    public void selectNetworkManually(OperatorInfo network, boolean persistSelection,
-            Message response) {
-    }
-
     public List<DataConnection> getCurrentDataConnectionList () {
         return null;
     }

@@ -393,11 +393,6 @@ abstract class SipPhoneBase extends Phone {
     }
 
     @Override
-    public void selectNetworkManually(OperatorInfo network, boolean persistSelection,
-            Message response) {
-    }
-
-    @Override
     public void setOnPostDialCharacter(Handler h, int what, Object obj) {
     }
 
