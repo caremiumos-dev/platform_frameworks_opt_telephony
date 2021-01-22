@@ -197,9 +197,6 @@ public class GsmCdmaPhone extends Phone {
      */
     private SIMRecords mSimRecords;
 
-    // For non-persisted manual network selection
-    private String mManualNetworkSelectionPlmn = "";
-
     //Common
     // Instance Variables
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
@@ -2021,29 +2018,6 @@ public class GsmCdmaPhone extends Phone {
         } else { //isPhoneTypeCdmaLte()
             return (mSimRecords != null) ? mSimRecords.getPnnHomeName() : null;
         }
-    }
-
-    /**
-     * Update non-persisited manual network selection.
-     *
-     * @param nsm contains Plmn info
-     */
-    @Override
-    protected void updateManualNetworkSelection(NetworkSelectMessage nsm) {
-        int subId = getSubId();
-        if (SubscriptionManager.isValidSubscriptionId(subId)) {
-            mManualNetworkSelectionPlmn = nsm.operatorNumeric;
-        } else {
-        //on Phone0 in emergency mode (no SIM), or in some races then clear the cache
-            mManualNetworkSelectionPlmn = "";
-            Rlog.e(LOG_TAG, "Cannot update network selection due to invalid subId "
-                    + subId);
-        }
-    }
-
-    @Override
-    public String getManualNetworkSelectionPlmn() {
-        return (mManualNetworkSelectionPlmn == null) ? "" : mManualNetworkSelectionPlmn;
     }
 
     @Override
@@ -4152,7 +4126,6 @@ public class GsmCdmaPhone extends Phone {
             pw.println(" isMinInfoReady()=" + isMinInfoReady());
         }
         pw.println(" isCspPlmnEnabled()=" + isCspPlmnEnabled());
-        pw.println(" mManualNetworkSelectionPlmn=" + mManualNetworkSelectionPlmn);
         pw.flush();
     }
 
