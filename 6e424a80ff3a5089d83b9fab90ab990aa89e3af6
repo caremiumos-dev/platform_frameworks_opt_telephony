@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "225a8859_1cebd8ff",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-22T23:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adc339cc_6a1fb64b",
+      "range": {
+        "startLine": 950,
+        "startChar": 24,
+        "endLine": 959,
+        "endChar": 25
+      },
+      "revId": "6e424a80ff3a5089d83b9fab90ab990aa89e3af6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a247871_00cc7a9d",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Coming soon to a CL near you!",
       "parentUuid": "8a247871_00cc7a9d",
+      "range": {
+        "startLine": 1286,
+        "startChar": 7,
+        "endLine": 1286,
+        "endChar": 23
+      },
+      "revId": "6e424a80ff3a5089d83b9fab90ab990aa89e3af6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dacee14b_5ee90292",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/imsphone/ImsPhoneCallTrackerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-01-22T23:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd20ca80_f8670227",
       "range": {
         "startLine": 1286,
         "startChar": 7,
