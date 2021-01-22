@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcb9b03e_d5909830",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-01-22T21:17:24Z",
+      "side": 1,
+      "message": "per discussion with Daniel, update it to volatile to make sure only one reference of the apn setting.",
+      "range": {
+        "startLine": 275,
+        "startChar": 12,
+        "endLine": 275,
+        "endChar": 20
+      },
+      "revId": "ab48d169f03d9d7b34fe3e9078a8f1b06742efbc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
