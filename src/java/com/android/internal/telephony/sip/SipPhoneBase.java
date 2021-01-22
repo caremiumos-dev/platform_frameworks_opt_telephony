@@ -33,7 +33,6 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 import com.android.internal.telephony.MmiCode;
-import com.android.internal.telephony.OperatorInfo;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneNotifier;
@@ -390,11 +389,6 @@ abstract class SipPhoneBase extends Phone {
 
     @Override
     public void setNetworkSelectionModeAutomatic(Message response) {
-    }
-
-    @Override
-    public void selectNetworkManually(OperatorInfo network, boolean persistSelection,
-            Message response) {
     }
 
     @Override

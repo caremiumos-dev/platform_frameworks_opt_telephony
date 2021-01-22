@@ -202,7 +202,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_GET_RADIO_CAPABILITY           = 35;
     protected static final int EVENT_SS                             = 36;
     private static final int EVENT_CONFIG_LCE                       = 37;
-    private static final int EVENT_CHECK_FOR_NETWORK_AUTOMATIC      = 38;
+    private static final int EVENT_CHECK_NETWORK_SELECTION_MODE_DONE      = 38;
     protected static final int EVENT_VOICE_RADIO_TECH_CHANGED       = 39;
     protected static final int EVENT_REQUEST_VOICE_RADIO_TECH_DONE  = 40;
     protected static final int EVENT_RIL_CONNECTED                  = 41;
@@ -259,19 +259,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * This method is invoked when the Phone exits Emergency Callback Mode.
      */
     protected void handleExitEmergencyCallbackMode() {
-    }
-
-    /**
-     * Small container class used to hold information relevant to
-     * the carrier selection process. operatorNumeric can be ""
-     * if we are looking for automatic selection. operatorAlphaLong is the
-     * corresponding operator name.
-     */
-    protected static class NetworkSelectMessage {
-        public Message message;
-        public String operatorNumeric;
-        public String operatorAlphaLong;
-        public String operatorAlphaShort;
     }
 
     public static class SilentRedialParam {
@@ -351,6 +338,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private static final boolean LCE_PULL_MODE = true;
     private int mLceStatus = RILConstants.LCE_NOT_AVAILABLE;
     protected TelephonyComponentFactory mTelephonyComponentFactory;
+
+
+    // For non-persisted manual network selection
+    private String mManualNetworkSelectionPlmn = "";
 
     //IMS
     /**
@@ -691,7 +682,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             // handle the select network completion callbacks.
             case EVENT_SET_NETWORK_MANUAL_COMPLETE:
             case EVENT_SET_NETWORK_AUTOMATIC_COMPLETE:
-                handleSetSelectNetwork((AsyncResult) msg.obj);
+                handleSetNetworkSelectionModeComplete((AsyncResult) msg.obj);
                 return;
         }
 
@@ -771,8 +762,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 }
                 break;
 
-            case EVENT_CHECK_FOR_NETWORK_AUTOMATIC: {
-                onCheckForNetworkSelectionModeAutomatic(msg);
+            case EVENT_CHECK_NETWORK_SELECTION_MODE_DONE: {
+                onCheckNetworkSelectionModeDone((AsyncResult) msg.obj);
                 break;
             }
 
@@ -1355,60 +1346,45 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @param response The message to dispatch when the network selection
      * is complete.
-     *
-     * @see #selectNetworkManually(OperatorInfo, boolean, android.os.Message)
      */
     @UnsupportedAppUsage
     public void setNetworkSelectionModeAutomatic(Message response) {
         Rlog.d(LOG_TAG, "setNetworkSelectionModeAutomatic, querying current mode");
-        // we don't want to do this unecesarily - it acutally causes
-        // the radio to repeate network selection and is costly
-        // first check if we're already in automatic mode
-        Message msg = obtainMessage(EVENT_CHECK_FOR_NETWORK_AUTOMATIC);
+        // We don't want to set automatic unecesarily - it actually causes
+        // the radio to repeat network selection and is costly.
+        // Instead, first check if we're already in automatic mode.
+        Message msg = obtainMessage(EVENT_CHECK_NETWORK_SELECTION_MODE_DONE);
         msg.obj = response;
         mCi.getNetworkSelectionMode(msg);
     }
 
-    private void onCheckForNetworkSelectionModeAutomatic(Message fromRil) {
-        AsyncResult ar = (AsyncResult)fromRil.obj;
-        Message response = (Message)ar.userObj;
-        boolean doAutomatic = true;
+    private void onCheckNetworkSelectionModeDone(AsyncResult ar) {
+        Message response = (Message) ar.userObj;
+        boolean isAutomaticMode = true;
         if (ar.exception == null && ar.result != null) {
             try {
-                int[] modes = (int[])ar.result;
+                int[] modes = (int[]) ar.result;
                 if (modes[0] == 0) {
                     // already confirmed to be in automatic mode - don't resend
-                    doAutomatic = false;
+                    isAutomaticMode = false;
                 }
             } catch (Exception e) {
                 // send the setting on error
             }
         }
 
-        // wrap the response message in our own message along with
-        // an empty string (to indicate automatic selection) for the
-        // operator's id.
-        NetworkSelectMessage nsm = new NetworkSelectMessage();
-        nsm.message = response;
-        nsm.operatorNumeric = "";
-        nsm.operatorAlphaLong = "";
-        nsm.operatorAlphaShort = "";
-
-        if (doAutomatic) {
-            Message msg = obtainMessage(EVENT_SET_NETWORK_AUTOMATIC_COMPLETE, nsm);
+        if (isAutomaticMode) {
+            Message msg = obtainMessage(EVENT_SET_NETWORK_AUTOMATIC_COMPLETE, response);
             mCi.setNetworkSelectionModeAutomatic(msg);
         } else {
             Rlog.d(LOG_TAG, "setNetworkSelectionModeAutomatic - already auto, ignoring");
             // let the calling application know that the we are ignoring automatic mode switch.
-            if (nsm.message != null) {
-                nsm.message.arg1 = ALREADY_IN_AUTO_SELECTION;
+            if (response != null) {
+                handleSetNetworkSelectionModeComplete(ar);
             }
-
-            ar.userObj = nsm;
-            handleSetSelectNetwork(ar);
         }
 
-        updateSavedNetworkOperator(nsm);
+        clearSavedNetworkSelection();
     }
 
     /**
@@ -1434,25 +1410,17 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @see #setNetworkSelectionModeAutomatic(Message)
      */
-    @UnsupportedAppUsage
-    public void selectNetworkManually(OperatorInfo network, boolean persistSelection,
-            Message response) {
-        // wrap the response message in our own message along with
-        // the operator's id.
-        NetworkSelectMessage nsm = new NetworkSelectMessage();
-        nsm.message = response;
-        nsm.operatorNumeric = network.getOperatorNumeric();
-        nsm.operatorAlphaLong = network.getOperatorAlphaLong();
-        nsm.operatorAlphaShort = network.getOperatorAlphaShort();
+    public void setNetworkSelectionModeManual(
+            String plmnId, int optionalRan, boolean persistSelection, Message response) {
 
-        Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
-        mCi.setNetworkSelectionModeManual(network.getOperatorNumeric(), network.getRan(), msg);
+        Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, response);
+        mCi.setNetworkSelectionModeManual(plmnId, optionalRan, msg);
 
         if (persistSelection) {
-            updateSavedNetworkOperator(nsm);
+            updateSavedNetworkOperator(plmnId);
         } else {
             clearSavedNetworkSelection();
-            updateManualNetworkSelection(nsm);
+            updateManualNetworkSelection(plmnId);
         }
     }
 
@@ -1473,16 +1441,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mEmergencyCallToggledRegistrants.remove(h);
     }
 
-    private void updateSavedNetworkOperator(NetworkSelectMessage nsm) {
+    private void updateSavedNetworkOperator(String plmnId) {
         int subId = getSubId();
         if (SubscriptionManager.isValidSubscriptionId(subId)) {
             // open the shared preferences editor, and write the value.
             // nsm.operatorNumeric is "" if we're in automatic.selection.
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString(NETWORK_SELECTION_KEY + subId, nsm.operatorNumeric);
-            editor.putString(NETWORK_SELECTION_NAME_KEY + subId, nsm.operatorAlphaLong);
-            editor.putString(NETWORK_SELECTION_SHORT_KEY + subId, nsm.operatorAlphaShort);
+            editor.putString(NETWORK_SELECTION_KEY + subId, plmnId);
 
             // commit and log the result.
             if (!editor.commit()) {
@@ -1499,42 +1465,48 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @param nsm PLMN info of the selected network
      */
-    protected void updateManualNetworkSelection(NetworkSelectMessage nsm)  {
-        Rlog.e(LOG_TAG, "updateManualNetworkSelection() should be overridden");
+    protected void updateManualNetworkSelection(String plmnId)  {
+        int subId = getSubId();
+        if (SubscriptionManager.isValidSubscriptionId(subId)) {
+            mManualNetworkSelectionPlmn = plmnId;
+        } else {
+            //on Phone0 in emergency mode (no SIM), or in some races then clear the cache
+            mManualNetworkSelectionPlmn = "";
+            Rlog.e(LOG_TAG, "Cannot update network selection due to invalid subId "
+                    + subId);
+        }
+    }
+
+    /**
+     *  Retrieves manually selected network info.
+     */
+    public String getManualNetworkSelectionPlmn() {
+        return (mManualNetworkSelectionPlmn == null) ? "" : mManualNetworkSelectionPlmn;
     }
 
     /**
      * Used to track the settings upon completion of the network change.
      */
-    private void handleSetSelectNetwork(AsyncResult ar) {
-        // look for our wrapper within the asyncresult, skip the rest if it
-        // is null.
-        if (!(ar.userObj instanceof NetworkSelectMessage)) {
+    private void handleSetNetworkSelectionModeComplete(AsyncResult ar) {
+        if (!(ar.userObj instanceof Message)) {
             Rlog.e(LOG_TAG, "unexpected result from user object.");
             return;
         }
 
-        NetworkSelectMessage nsm = (NetworkSelectMessage) ar.userObj;
+        Message rspMsg = (Message) ar.userObj;
 
-        // found the object, now we send off the message we had originally
-        // attached to the request.
-        if (nsm.message != null) {
-            AsyncResult.forMessage(nsm.message, ar.result, ar.exception);
-            nsm.message.sendToTarget();
-        }
+        AsyncResult.forMessage(rspMsg, ar.result, ar.exception);
+        rspMsg.sendToTarget();
     }
 
     /**
      * Method to retrieve the saved operator from the Shared Preferences
      */
     @NonNull
-    public OperatorInfo getSavedNetworkSelection() {
+    public String getSavedNetworkSelection() {
         // open the shared preferences and search with our key.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String numeric = sp.getString(NETWORK_SELECTION_KEY + getSubId(), "");
-        String name = sp.getString(NETWORK_SELECTION_NAME_KEY + getSubId(), "");
-        String shrt = sp.getString(NETWORK_SELECTION_SHORT_KEY + getSubId(), "");
-        return new OperatorInfo(name, shrt, numeric);
+        return sp.getString(NETWORK_SELECTION_KEY + getSubId(), "");
     }
 
     /**
@@ -1544,6 +1516,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         // open the shared preferences and search with our key.
         PreferenceManager.getDefaultSharedPreferences(getContext()).edit().
                 remove(NETWORK_SELECTION_KEY + getSubId()).
+                // The following two should be cleared and then never set again
                 remove(NETWORK_SELECTION_NAME_KEY + getSubId()).
                 remove(NETWORK_SELECTION_SHORT_KEY + getSubId()).commit();
     }
@@ -1555,13 +1528,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     private void restoreSavedNetworkSelection(Message response) {
         // retrieve the operator
-        OperatorInfo networkSelection = getSavedNetworkSelection();
+        String savedPlmnId = getSavedNetworkSelection();
 
         // set to auto if the id is empty, otherwise select the network.
-        if (networkSelection == null || TextUtils.isEmpty(networkSelection.getOperatorNumeric())) {
+        if (TextUtils.isEmpty(savedPlmnId)) {
             setNetworkSelectionModeAutomatic(response);
         } else {
-            selectNetworkManually(networkSelection, true, response);
+            // FIXME: need to find the right RAN value here
+            setNetworkSelectionModeManual(
+                    savedPlmnId, AccessNetworkConstants.AccessNetworkType.UNKNOWN, true, response);
         }
     }
 
@@ -2028,14 +2003,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public boolean getMessageWaitingIndicator() {
         return mVmCount != 0;
     }
-
-    /**
-     *  Retrieves manually selected network info.
-     */
-    public String getManualNetworkSelectionPlmn() {
-        return "";
-    }
-
 
     private int getCallForwardingIndicatorFromSharedPref() {
         int status = IccRecords.CALL_FORWARDING_STATUS_DISABLED;
@@ -4683,6 +4650,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" isInEmergencySmsMode=" + isInEmergencySmsMode());
         pw.println(" isEcmCanceledForEmergency=" + isEcmCanceledForEmergency());
         pw.println(" service state=" + getServiceState());
+        pw.println(" mManualNetworkSelectionPlmn=" + mManualNetworkSelectionPlmn);
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
 
