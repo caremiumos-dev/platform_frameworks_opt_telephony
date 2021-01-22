@@ -16,6 +16,24 @@
       "message": "Please add this comment before this if block if it is correct:\n\nddsPhoneId is the phone id corresponding to permanent DDS. phoneId is the phone id corresponding to the sub for which the last modem command was sent. If they are the different that indicates that it was a temporary DDS switch request, otherwise it was a permanent one.",
       "revId": "605f905947170b3261c63c43ab97772acb22d874",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "609f20a8_f6dd8c0a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-01-22T08:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08e22813_42688c97",
+      "revId": "605f905947170b3261c63c43ab97772acb22d874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
