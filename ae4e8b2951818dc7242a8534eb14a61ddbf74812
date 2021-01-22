@@ -193,6 +193,30 @@
       },
       "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3665aa80_07be4f69",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-01-22T06:55:50Z",
+      "side": 1,
+      "message": "After the internal discussion, we think it is not safe to call getSubscriberId from subId inside ConnectivityService and NetworkStatsService because of the possiblities of making deadlocks.\nThus we need to put it into NetworkCapabilities. As we discussed, we are highly aware of that kind of information is sensitive. So it won\u0027t be leak to 3rd-party apps.\nBut we plan to fill it from NetworkAgentConfig, so hopefully this patch is not needed anymore.",
+      "parentUuid": "03fcf068_d47ce694",
+      "range": {
+        "startLine": 1659,
+        "startChar": 15,
+        "endLine": 1659,
+        "endChar": 30
+      },
+      "revId": "ae4e8b2951818dc7242a8534eb14a61ddbf74812",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
