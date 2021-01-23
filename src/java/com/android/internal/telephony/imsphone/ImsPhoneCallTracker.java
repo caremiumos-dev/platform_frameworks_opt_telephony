@@ -88,7 +88,6 @@ import com.android.ims.ImsConfigListener;
 import com.android.ims.ImsEcbm;
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
-import com.android.ims.ImsMultiEndpoint;
 import com.android.ims.ImsUtInterface;
 import com.android.ims.internal.ConferenceParticipant;
 import com.android.ims.internal.IImsCallSession;
@@ -490,7 +489,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private ImsManager mImsManager;
-    private ImsUtInterface mUtInterface;
 
     private Call.SrvccState mSrvccState = Call.SrvccState.NONE;
 
@@ -971,7 +969,13 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     public void startListeningForCalls() throws ImsException {
         log("startListeningForCalls");
         mOperationLocalLog.log("startListeningForCalls - Connecting to ImsService");
-        mImsManager.open(mMmTelFeatureListener);
+        ImsExternalCallTracker externalCallTracker = mPhone.getExternalCallTracker();
+        ImsExternalCallTracker.ExternalCallStateListener externalCallStateListener =
+                externalCallTracker != null
+                        ? externalCallTracker.getExternalCallStateListener() : null;
+
+        mImsManager.open(mMmTelFeatureListener, mPhone.getImsEcbmStateListener(),
+                externalCallStateListener);
         mImsManager.addRegistrationCallback(mPhone.getImsMmTelRegistrationCallback(), this::post);
         mImsManager.addCapabilitiesCallback(mImsCapabilityCallback, this::post);
 
@@ -979,8 +983,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         mImsManager.getConfigInterface().addConfigCallback(mConfigCallback);
 
-        // Get the ECBM interface and set IMSPhone's listener object for notifications
-        getEcbmInterface().setEcbmStateListener(mPhone.getImsEcbmStateListener());
         if (mPhone.isInEcm()) {
             // Call exit ECBM which will invoke onECBMExited
             mPhone.exitEmergencyCallbackMode();
@@ -991,17 +993,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 Phone.TTY_MODE_OFF);
         mImsManager.setUiTTYMode(mPhone.getContext(), mPreferredTtyMode, null);
 
-        ImsMultiEndpoint multiEndpoint = getMultiEndpointInterface();
-        if (multiEndpoint != null) {
-            multiEndpoint.setExternalCallStateListener(
-                    mPhone.getExternalCallTracker().getExternalCallStateListener());
-        }
-
         //Set UT interface listener to receive UT indications.
-        mUtInterface = getUtInterface();
-        if (mUtInterface != null) {
-            mUtInterface.registerForSuppServiceIndication(this,
-                    EVENT_SUPP_SERVICE_INDICATION, null);
+        ImsUtInterface utInterface = getUtInterface();
+        if (utInterface != null) {
+            utInterface.registerForSuppServiceIndication(this, EVENT_SUPP_SERVICE_INDICATION, null);
         }
 
         if (mCarrierConfigLoaded) {
@@ -1014,16 +1009,25 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
     private void stopListeningForCalls() {
         log("stopListeningForCalls");
         mOperationLocalLog.log("stopListeningForCalls - Disconnecting from ImsService");
-        resetImsCapabilities();
         // Only close on valid session.
         if (mImsManager != null) {
+            mImsManager.removeRegistrationListener(mPhone.getImsMmTelRegistrationCallback());
+            mImsManager.removeCapabilitiesCallback(mImsCapabilityCallback);
             try {
+                mImsManager.setConfigListener(null);
                 mImsManager.getConfigInterface().removeConfigCallback(mConfigCallback.getBinder());
+                ImsUtInterface utInterface = getUtInterface();
+                if (utInterface != null) {
+                    utInterface.unregisterForSuppServiceIndication(this);
+                }
             } catch (ImsException e) {
                 Log.w(LOG_TAG, "stopListeningForCalls: unable to remove config callback.");
             }
+            // Will release other listeners for MMTEL/ECBM/UT/MultiEndpoint Indications set in #open
             mImsManager.close();
         }
+
+        resetImsCapabilities();
         hangupAllOrphanedConnections(DisconnectCause.LOST_SIGNAL);
         // For compatibility with apps that still use deprecated intent
         sendImsServiceStateIntent(ImsManager.ACTION_IMS_SERVICE_DOWN);
@@ -1080,9 +1084,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mHandoverCall.dispose();
 
         clearDisconnected();
-        if (mUtInterface != null) {
-            mUtInterface.unregisterForSuppServiceIndication(this);
-        }
         mPhone.getContext().unregisterReceiver(mReceiver);
         mPhone.getDefaultPhone().getDataEnabledSettings().unregisterForDataEnabledChanged(this);
         mImsManagerConnector.disconnect();
@@ -4320,24 +4321,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
         ImsEcbm ecbm = mImsManager.getEcbmInterface();
         return ecbm;
-    }
-
-    /* package */
-    ImsMultiEndpoint getMultiEndpointInterface() throws ImsException {
-        if (mImsManager == null) {
-            throw getImsManagerIsNullException();
-        }
-
-        try {
-            return mImsManager.getMultiEndpointInterface();
-        } catch (ImsException e) {
-            if (e.getCode() == ImsReasonInfo.CODE_MULTIENDPOINT_NOT_SUPPORTED) {
-                return null;
-            } else {
-                throw e;
-            }
-
-        }
     }
 
     public boolean isInEmergencyCall() {
