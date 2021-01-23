@@ -52,6 +52,29 @@
       "parentUuid": "d3c891cc_e22e602d",
       "revId": "dcaedfea275fcc7f73c3dbeed037cb1d02a017cb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5ebcde_d0c05b0f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1413995
+      },
+      "writtenOn": "2021-01-23T09:09:35Z",
+      "side": 1,
+      "message": "ICCID information is not available in IccRecords by the time SIM READY received.\n\nOnly after SIM records Loading completed ICCID information will be available in IccRecords() hence I fallback the code logic back to initial implementation where we get IccId from UiccController.\n\nIn UiccController will have the ICCID info early which it gets in response to GET_SIM_STATUS.",
+      "range": {
+        "startLine": 421,
+        "startChar": 50,
+        "endLine": 421,
+        "endChar": 68
+      },
+      "revId": "dcaedfea275fcc7f73c3dbeed037cb1d02a017cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
