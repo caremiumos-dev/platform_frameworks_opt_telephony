@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36210a13_fcb8b32a",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-23T00:58:50Z",
+      "side": 1,
+      "message": "Nit: I\u0027d guess the formatter has an opinion on this. It will usually try to line up the \u003d ## bits in a column",
+      "range": {
+        "startLine": 205,
+        "startChar": 68,
+        "endLine": 205,
+        "endChar": 74
+      },
+      "revId": "6240d6a313300dfb70713cc446a1181ce5d6d7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e547f3f1_8a168cc7",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-23T00:58:50Z",
+      "side": 1,
+      "message": "int optionalRan? I assume that should get restored upon reboot too, right?",
+      "range": {
+        "startLine": 1444,
+        "startChar": 57,
+        "endLine": 1444,
+        "endChar": 58
+      },
+      "revId": "6240d6a313300dfb70713cc446a1181ce5d6d7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c953871_cdef119e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-23T00:58:50Z",
+      "side": 1,
+      "message": "Nit",
+      "range": {
+        "startLine": 1466,
+        "startChar": 8,
+        "endLine": 1466,
+        "endChar": 17
+      },
+      "revId": "6240d6a313300dfb70713cc446a1181ce5d6d7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d666611_cab637ad",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-23T00:58:50Z",
+      "side": 1,
+      "message": "Formatter should definitely have an opinion on this, trailing operator. is a big wat",
+      "range": {
+        "startLine": 1518,
+        "startChar": 58,
+        "endLine": 1518,
+        "endChar": 59
+      },
+      "revId": "6240d6a313300dfb70713cc446a1181ce5d6d7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "473b46eb_5daac4e3",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-01-23T00:58:50Z",
+      "side": 1,
+      "message": "See above, should probably be stored in sharedprefs",
+      "range": {
+        "startLine": 1537,
+        "startChar": 12,
+        "endLine": 1537,
+        "endChar": 59
+      },
+      "revId": "6240d6a313300dfb70713cc446a1181ce5d6d7f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
