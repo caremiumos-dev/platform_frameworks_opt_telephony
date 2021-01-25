@@ -75,6 +75,30 @@
       },
       "revId": "dcaedfea275fcc7f73c3dbeed037cb1d02a017cb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "319d41a0_1abbf03f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-25T23:21:15Z",
+      "side": 1,
+      "message": "Ack. Please add that as a comment here for future reference.",
+      "parentUuid": "ab5ebcde_d0c05b0f",
+      "range": {
+        "startLine": 421,
+        "startChar": 50,
+        "endLine": 421,
+        "endChar": 68
+      },
+      "revId": "dcaedfea275fcc7f73c3dbeed037cb1d02a017cb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
