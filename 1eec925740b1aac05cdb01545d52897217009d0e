@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43f31116_11e5206f",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-25T23:36:29Z",
+      "side": 1,
+      "message": "Sorry... what I meant is: move allocation of oldAdn and newAdn inside if (mAdnCache !\u003d null).\nThe reason is that we only use them inside the if block, so we can avoid allocation if mAdnCache is null.",
+      "parentUuid": "a85dd082_e79c8d56",
+      "range": {
+        "startLine": 257,
+        "startChar": 16,
+        "endLine": 257,
+        "endChar": 25
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53b33154_63a8ae42",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 4
@@ -485,6 +509,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "e8c4a151_82543159",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cbc352d_0d9add41",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-25T23:36:29Z",
+      "side": 1,
+      "message": "As per previous comment \"It might still be safer to not change the index\".\nIs this going to be implemented?",
+      "parentUuid": "f44c2230_8486c6c7",
       "range": {
         "startLine": 585,
         "startChar": 12,
