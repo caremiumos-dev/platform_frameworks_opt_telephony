@@ -1063,6 +1063,7 @@ public class SubscriptionInfoUpdater extends Handler {
         // this current package is not a CarrierServicePackage
         String[] certs = config.getStringArray(
             CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
+        // Certificates have an optional package name
         UiccAccessRule[] carrierConfigAccessRules = null;
         if (certs != null) {
             carrierConfigAccessRules = new UiccAccessRule[certs.length];

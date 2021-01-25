@@ -320,6 +320,7 @@ public class CarrierPrivilegesTracker extends Handler {
         }
 
         Set<String> updatedCarrierConfigCerts = new ArraySet<>();
+        // TODO this is no longer accurate
         String[] carrierConfigCerts =
                 carrierConfigs.getStringArray(KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
 
