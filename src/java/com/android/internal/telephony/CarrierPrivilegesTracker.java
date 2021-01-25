@@ -306,6 +306,7 @@ public class CarrierPrivilegesTracker extends Handler {
             updatedCarrierConfigCerts = getCarrierConfigCerts(subId);
         }
 
+        // TEST
         mLocalLog.log("CarrierConfigUpdated:"
                 + " subId=" + subId
                 + " slotIndex=" + slotIndex
