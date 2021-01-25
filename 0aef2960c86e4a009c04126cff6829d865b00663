@@ -2407,6 +2407,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5192af64_9a1f9267",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-25T23:46:31Z",
+      "side": 1,
+      "message": "That logic is not perfect (and comments are mentioning it), but at least avoids fetching everything in case of most common refresh cases.\n\nAgain, not sure what the most appropriate way of handling it is, but the current implementation would trigger a new sync of the entire phonebook frequently. The overall goal of the feature is to improve the transfer of the phonebook from modem to Android.",
+      "parentUuid": "c787b934_2d5c568e",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 97
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72ac35b5_10319040",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5

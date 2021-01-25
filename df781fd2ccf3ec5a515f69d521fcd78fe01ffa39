@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c5abe44_78760ecb",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-25T23:46:31Z",
+      "side": 1,
+      "message": "If you need a comment for the method, use Javadoc before it.\nNot sure otherwise about the value of this comment here.",
+      "range": {
+        "startLine": 418,
+        "startChar": 8,
+        "endLine": 418,
+        "endChar": 22
+      },
+      "revId": "df781fd2ccf3ec5a515f69d521fcd78fe01ffa39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdfa9d5f_18415389",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-25T23:46:31Z",
+      "side": 1,
+      "message": "Maybe should be javadoc above the method?",
+      "range": {
+        "startLine": 457,
+        "startChar": 8,
+        "endLine": 457,
+        "endChar": 48
+      },
+      "revId": "df781fd2ccf3ec5a515f69d521fcd78fe01ffa39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
