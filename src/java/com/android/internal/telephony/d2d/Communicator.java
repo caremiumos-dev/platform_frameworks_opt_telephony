@@ -184,6 +184,20 @@ public class Communicator implements TransportProtocol.Callback {
     }
 
     /**
+     * Forces a series of messages to be sent, regardless if the current transport has completed the
+     * negotiation process yet.  Primarily intended for protocol testing.
+     * @param messages The messages to be sent.
+     */
+    public void forceSendMessages(@NonNull Set<Message> messages) {
+        if (mActiveTransport == null) {
+            Log.w(this, "sendMessages: no active transport");
+            return;
+        }
+
+        mActiveTransport.sendMessages(messages);
+    }
+
+    /**
      * Find a new protocol to use and start negotiation.
      */
     private void negotiateNextProtocol() {

@@ -21,6 +21,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.telecom.Connection;
@@ -100,6 +101,38 @@ public class CommunicatorTest {
         verify(protocol).sendMessages(mMessagesCaptor.capture());
         Set<Communicator.Message> send = mMessagesCaptor.getValue();
         assertEquals(test, send);
+    }
+
+    /**
+    *  Verifies we can force messages to be sent even if a protocol is not yet negotiated.
+    */
+    @SmallTest
+    @Test
+    public void testForceSendMessage() {
+        // Start negotiating a protocol but don't succeed
+        mCommunicator = new Communicator(mTransportProtocols, mCommunicatorCallback);
+        mCommunicator.onStateChanged(null, Connection.STATE_ACTIVE);
+        verify(mTransportProtocols.get(0)).startNegotiation();
+        assertEquals(mTransportProtocols.get(0), mCommunicator.getActiveTransport());
+
+        // Send a couple test messages.
+        ArraySet<Communicator.Message> test = new ArraySet<>();
+        test.add(new Communicator.Message(Communicator.MESSAGE_DEVICE_BATTERY_STATE,
+                Communicator.BATTERY_STATE_GOOD));
+        test.add(new Communicator.Message(Communicator.MESSAGE_CALL_AUDIO_CODEC,
+                Communicator.AUDIO_CODEC_EVS));
+        mCommunicator.forceSendMessages(test);
+
+        // Ensure they got relayed to the transport protocol intact.
+        TransportProtocol protocol = mCommunicator.getActiveTransport();
+        verify(protocol).sendMessages(mMessagesCaptor.capture());
+        Set<Communicator.Message> send = mMessagesCaptor.getValue();
+        assertEquals(test, send);
+
+        // Try sending using the regular method; those should not be sent.
+        mCommunicator.sendMessages(test);
+        // We should have just sent message the one time above.
+        verify(protocol, times(1)).sendMessages(mMessagesCaptor.capture());
     }
 
     /**
