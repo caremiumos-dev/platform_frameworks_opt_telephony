@@ -1063,6 +1063,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abc16c97_a3e0c2a3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-25T23:53:17Z",
+      "side": 1,
+      "message": "Yes, but then how will any users of it be notified? Is there a getter to check the whether PB init is done?",
+      "parentUuid": "bf4d9d3f_c4356c77",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4d8ff40_0707fcbf",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5
