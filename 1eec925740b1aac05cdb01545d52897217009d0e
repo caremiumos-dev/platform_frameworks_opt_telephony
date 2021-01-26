@@ -593,6 +593,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a28f7d1d_cd70f273",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-26T19:00:01Z",
+      "side": 1,
+      "message": "Actually this method is marked @UnsupportedAppUsage. We should not change its behavior. There may be other apps using it and relying on the order. Please change it and add new value at the end.",
+      "parentUuid": "eb0d9156_756ef3d0",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7230bd3_b57c0bda",
         "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
         "patchSetId": 4
