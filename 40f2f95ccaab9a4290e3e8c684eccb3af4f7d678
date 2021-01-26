@@ -47,6 +47,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de979313_297392dc",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49180f03_47e31d3b",
+      "range": {
+        "startLine": 100,
+        "startChar": 53,
+        "endLine": 100,
+        "endChar": 54
+      },
+      "revId": "40f2f95ccaab9a4290e3e8c684eccb3af4f7d678",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "691979ea_13ab8f16",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f7ea70d_b3579cf6",
+      "range": {
+        "startLine": 100,
+        "startChar": 60,
+        "endLine": 100,
+        "endChar": 63
+      },
+      "revId": "40f2f95ccaab9a4290e3e8c684eccb3af4f7d678",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ab1df9b_131020cc",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-01-25T23:36:29Z",
       "side": 1,
       "message": "Align throws under ContentValues above.",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 8
+      },
+      "revId": "40f2f95ccaab9a4290e3e8c684eccb3af4f7d678",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1690e027_8e63a3d9",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ab1df9b_131020cc",
       "range": {
         "startLine": 160,
         "startChar": 0,

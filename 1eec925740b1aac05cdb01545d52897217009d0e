@@ -260,6 +260,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb22e706_e3117f52",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:21:04Z",
+      "side": 1,
+      "message": "Yes，but the oldAdn and newAdn are also used if mSimPbRecordCache !\u003d null block @https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1440475/8/src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java#275",
+      "parentUuid": "43f31116_11e5206f",
+      "range": {
+        "startLine": 257,
+        "startChar": 16,
+        "endLine": 257,
+        "endChar": 25
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53b33154_63a8ae42",
@@ -533,6 +557,30 @@
       "side": 1,
       "message": "As per previous comment \"It might still be safer to not change the index\".\nIs this going to be implemented?",
       "parentUuid": "f44c2230_8486c6c7",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0d9156_756ef3d0",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:21:04Z",
+      "side": 1,
+      "message": "Qcom and our cusomter\u0027s contact app for all android release followed the id in index 4 solution, since we will add this patch manually when version upgrade.\nI think it will make some confuse if the id index changed back to 3.",
+      "parentUuid": "9cbc352d_0d9add41",
       "range": {
         "startLine": 585,
         "startChar": 12,
