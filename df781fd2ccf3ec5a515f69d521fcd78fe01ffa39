@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c734466_167c256d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:46:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c5abe44_78760ecb",
+      "range": {
+        "startLine": 418,
+        "startChar": 8,
+        "endLine": 418,
+        "endChar": 22
+      },
+      "revId": "df781fd2ccf3ec5a515f69d521fcd78fe01ffa39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdfa9d5f_18415389",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-01-25T23:46:31Z",
       "side": 1,
       "message": "Maybe should be javadoc above the method?",
+      "range": {
+        "startLine": 457,
+        "startChar": 8,
+        "endLine": 457,
+        "endChar": 48
+      },
+      "revId": "df781fd2ccf3ec5a515f69d521fcd78fe01ffa39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb3858a8_11719fec",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:46:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdfa9d5f_18415389",
       "range": {
         "startLine": 457,
         "startChar": 8,

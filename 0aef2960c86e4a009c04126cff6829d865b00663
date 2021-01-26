@@ -1085,6 +1085,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e005e01_7640f4bd",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:46:34Z",
+      "side": 1,
+      "message": "Done. Now the contact app will query the after card initialized done and re-query if the PB didnot init completed from checking the returned capacity values.",
+      "parentUuid": "abc16c97_a3e0c2a3",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d8ff40_0707fcbf",
@@ -1838,6 +1862,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f48b6a5_4a59d705",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:46:34Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "c2e74980_e2fac04f",
+      "range": {
+        "startLine": 273,
+        "startChar": 20,
+        "endLine": 277,
+        "endChar": 79
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5887c4e0_fd1e4165",
@@ -2443,6 +2491,30 @@
       "side": 1,
       "message": "That logic is not perfect (and comments are mentioning it), but at least avoids fetching everything in case of most common refresh cases.\n\nAgain, not sure what the most appropriate way of handling it is, but the current implementation would trigger a new sync of the entire phonebook frequently. The overall goal of the feature is to improve the transfer of the phonebook from modem to Android.",
       "parentUuid": "c787b934_2d5c568e",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 97
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a58bb31e_b5d770a3",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-26T06:46:34Z",
+      "side": 1,
+      "message": "Add EFPBR checking in condition.",
+      "parentUuid": "5192af64_9a1f9267",
       "range": {
         "startLine": 461,
         "startChar": 24,
