@@ -1111,6 +1111,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89cfb979_89941eb4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-26T18:57:55Z",
+      "side": 1,
+      "message": "How will the app know when to re-query, and when to give up in case it is not supported?",
+      "parentUuid": "3e005e01_7640f4bd",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4d8ff40_0707fcbf",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5
