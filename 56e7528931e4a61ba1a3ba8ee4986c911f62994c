@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28f925c5_91d9cf17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-26T22:43:55Z",
+      "side": 1,
+      "message": "+ Ajay, can you give a QR +1 on this?",
+      "revId": "56e7528931e4a61ba1a3ba8ee4986c911f62994c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
