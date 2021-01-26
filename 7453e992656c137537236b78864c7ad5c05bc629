@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007599127",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d10",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "f1064970_0a279941",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-26T06:46:57Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 397,
+        "endChar": 101
+      },
+      "revId": "7453e992656c137537236b78864c7ad5c05bc629",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007599127",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d10",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "cb8dab51_aa3ba844",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-26T06:46:57Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 398,
+        "endChar": 110
+      },
+      "revId": "7453e992656c137537236b78864c7ad5c05bc629",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
