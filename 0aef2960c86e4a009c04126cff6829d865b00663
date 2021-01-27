@@ -1159,6 +1159,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf3f79ca_8383518e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-27T21:18:46Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s ok. How will the app know whether it is supported or not? If it is not supported then the caller should not re-try. There needs to be a notification mechanism instead of caller re-trying itself, and also a way to query if it is supported.\n\nMichele, do you have any thoughts on this?",
+      "parentUuid": "0d48e4f4_7c061483",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4d8ff40_0707fcbf",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5
