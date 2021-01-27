@@ -1551,6 +1551,8 @@ public class DataConnection extends StateMachine {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_CBS);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_VSIM);
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_BIP);
                         break;
                     }
                     case PhoneConstants.APN_TYPE_DEFAULT: {
@@ -1595,6 +1597,14 @@ public class DataConnection extends StateMachine {
                     }
                     case PhoneConstants.APN_TYPE_XCAP: {
                         result.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_VSIM: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_VSIM);
+                        break;
+                    }
+                    case PhoneConstants.APN_TYPE_BIP: {
+                        result.addCapability(NetworkCapabilities.NET_CAPABILITY_BIP);
                         break;
                     }
                     default:

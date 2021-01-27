@@ -410,6 +410,8 @@ public class PhoneSwitcher extends Handler {
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_RCS);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
+        netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_VSIM);
+        netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_BIP);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         netCap.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);

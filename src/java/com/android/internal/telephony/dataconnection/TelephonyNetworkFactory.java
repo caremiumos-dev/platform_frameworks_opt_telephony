@@ -142,6 +142,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_RCS);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
+        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_VSIM);
+        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_BIP);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         nc.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);

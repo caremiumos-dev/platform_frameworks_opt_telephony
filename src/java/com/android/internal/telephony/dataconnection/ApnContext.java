@@ -589,6 +589,14 @@ public class ApnContext {
             if (apnType != ApnSetting.TYPE_NONE) error = true;
             apnType = ApnSetting.TYPE_XCAP;
         }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_VSIM)) {
+            if (apnType != ApnSetting.TYPE_NONE) error = true;
+            apnType = ApnSetting.TYPE_VSIM;
+        }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_BIP)) {
+            if (apnType != ApnSetting.TYPE_NONE) error = true;
+            apnType = ApnSetting.TYPE_BIP;
+        }
         if (error) {
             // TODO: If this error condition is removed, the framework's handling of
             // NET_CAPABILITY_NOT_RESTRICTED will need to be updated so requests for
