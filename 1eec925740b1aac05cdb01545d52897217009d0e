@@ -639,6 +639,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "446b444e_45cc6e52",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-27T07:53:47Z",
+      "side": 1,
+      "message": "changed to https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1440475/12/src/java/com/android/internal/telephony/IccProvider.java",
+      "parentUuid": "7a5e42e7_f0ab8e05",
+      "range": {
+        "startLine": 585,
+        "startChar": 12,
+        "endLine": 585,
+        "endChar": 27
+      },
+      "revId": "1eec925740b1aac05cdb01545d52897217009d0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7230bd3_b57c0bda",
