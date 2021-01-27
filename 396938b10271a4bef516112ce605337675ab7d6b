@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a66bc8_127bfbfc",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Minor. Lower case.",
+      "range": {
+        "startLine": 100,
+        "startChar": 62,
+        "endLine": 100,
+        "endChar": 63
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b80c51f_cc3af4fc",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Minor. Lower case",
+      "range": {
+        "startLine": 100,
+        "startChar": 55,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6636d000_376a827c",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Minor. Email is not an acronym. I would use lower case.",
+      "range": {
+        "startLine": 185,
+        "startChar": 51,
+        "endLine": 185,
+        "endChar": 56
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dd773c6_aadc5fe0",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Minor. Capital letters.",
+      "range": {
+        "startLine": 192,
+        "startChar": 52,
+        "endLine": 192,
+        "endChar": 55
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5deeee34_7c8147bc",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 203,
+        "startChar": 51,
+        "endLine": 203,
+        "endChar": 56
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3cd9600_292edc77",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 10
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-27T23:43:46Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 210,
+        "startChar": 52,
+        "endLine": 210,
+        "endChar": 55
+      },
+      "revId": "396938b10271a4bef516112ce605337675ab7d6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
