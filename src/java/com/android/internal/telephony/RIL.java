@@ -1974,6 +1974,44 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
+     * Convert to DataProfileInfo defined in radio/1.6/types.hal
+     * @param dp Data profile
+     * @return A converted data profile
+     */
+    private static android.hardware.radio.V1_6.DataProfileInfo convertToHalDataProfile16(
+            DataProfile dp) {
+        android.hardware.radio.V1_6.DataProfileInfo dpi =
+                new android.hardware.radio.V1_6.DataProfileInfo();
+
+        dpi.apn = dp.getApn();
+        dpi.protocol = dp.getProtocolType();
+        dpi.roamingProtocol = dp.getRoamingProtocolType();
+        dpi.authType = dp.getAuthType();
+        dpi.user = dp.getUserName();
+        dpi.password = dp.getPassword();
+        dpi.type = dp.getType();
+        dpi.maxConnsTime = dp.getMaxConnectionsTime();
+        dpi.maxConns = dp.getMaxConnections();
+        dpi.waitTime = dp.getWaitTime();
+        dpi.enabled = dp.isEnabled();
+        dpi.supportedApnTypesBitmap = dp.getSupportedApnTypesBitmask();
+        // Shift by 1 bit due to the discrepancy between
+        // android.hardware.radio.V1_0.RadioAccessFamily and the bitmask version of
+        // ServiceState.RIL_RADIO_TECHNOLOGY_XXXX.
+        dpi.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
+            dp.getBearerBitmask()) << 1;
+        dpi.mtuV4 = dp.getMtuV4();
+        dpi.mtuV6 = dp.getMtuV6();
+        dpi.persistent = dp.isPersistent();
+        dpi.preferred = dp.isPreferred();
+
+        // profile id is only meaningful when it's persistent on the modem.
+        dpi.profileId = (dpi.persistent) ? dp.getProfileId() : DataProfileId.INVALID;
+
+        return dpi;
+    }
+
+    /**
      * Convert NV reset type into ResetNvType defined in types.hal.
      * @param resetType NV reset type.
      * @return Converted reset type in integer or -1 if param is invalid.
@@ -2022,8 +2060,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             (android.hardware.radio.V1_6.IRadio) radioProxy;
 
                     // Convert to HAL data profile
-                    android.hardware.radio.V1_5.DataProfileInfo dpi =
-                            convertToHalDataProfile15(dataProfile);
+                    android.hardware.radio.V1_6.DataProfileInfo dpi =
+                            convertToHalDataProfile16(dataProfile);
 
                     android.hardware.radio.V1_6.OptionalSliceInfo sliceInfo16 =
                             convertToHalSliceInfo16(sliceInfo);
