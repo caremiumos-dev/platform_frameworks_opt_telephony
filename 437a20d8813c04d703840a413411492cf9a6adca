@@ -22,6 +22,30 @@
       },
       "revId": "437a20d8813c04d703840a413411492cf9a6adca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f11ba52_2a11b5ce",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1535831
+      },
+      "writtenOn": "2021-01-27T07:07:08Z",
+      "side": 1,
+      "message": "for query callbarring\nif callbarring is disable, infos[0] is 0;if callbarring is enable, infos[0] is serviceClass.\n\ncode:\n if (isServiceCodeCallBarring(mSc)) {\n      // ints[0] for Call Barring is a bit vector of services\n      sb.append(createQueryCallBarringResultMessage(ints[0]));\n\nInterface Description:\n     /**\n      * Query the status of a facility lock state\n      *\n      * @param serial Serial number of request.\n      * @param facility is the facility string code from TS 27.007 7.4\n      *        (eg \"AO\" for BAOC, \"SC\" for SIM lock)\n      * @param password is the password, or \"\" if not required\n      * @param serviceClass is the TS 27.007 service class bit vector of services to query\n      * @param appId is AID value, See ETSI 102.221 8.1 and 101.220 4, empty string if no value.\n      *        This is only applicable in the case of Fixed Dialing Numbers (FDN) requests.\n      *\n      * Response function is IRadioResponse.getFacilityLockForAppResponse()\n      */\n     oneway getFacilityLockForApp(int32_t serial, string facility,\n             string password, int32_t serviceClass, string appId);",
+      "parentUuid": "dc96283b_93e0335e",
+      "range": {
+        "startLine": 1625,
+        "startChar": 24,
+        "endLine": 1625,
+        "endChar": 33
+      },
+      "revId": "437a20d8813c04d703840a413411492cf9a6adca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
