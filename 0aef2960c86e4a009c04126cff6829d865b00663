@@ -1133,6 +1133,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d48e4f4_7c061483",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1754755
+      },
+      "writtenOn": "2021-01-27T07:50:36Z",
+      "side": 1,
+      "message": "If the capacity value is invalid，app will try to re-query.\nIn most of case， the pb will init completed before the card state changed to state.",
+      "parentUuid": "89cfb979_89941eb4",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d8ff40_0707fcbf",
