@@ -1450,6 +1450,13 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setInitialAttachApnResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo) {
+        responseVoid_1_6(responseInfo);
+    }
+
+    /**
      *
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param isRegistered false = not registered, true = registered
@@ -1606,6 +1613,13 @@ public class RadioResponse extends IRadioResponse.Stub {
      */
     public void setDataProfileResponse_1_5(RadioResponseInfo responseInfo) {
         responseVoid(responseInfo);
+    }
+
+    /**
+     * @param responseInfo Response info struct containing response type, serial no. and error
+     */
+    public void setDataProfileResponse_1_6(android.hardware.radio.V1_6.RadioResponseInfo responseInfo) {
+        responseVoid_1_6(responseInfo);
     }
 
     /**

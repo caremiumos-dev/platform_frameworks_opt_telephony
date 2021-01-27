@@ -614,6 +614,10 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_MMS));
         assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE));
+        assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_BIP));
+        assertFalse("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_VSIM));
 
         mContextFixture.getCarrierConfigBundle().putStringArray(
                 CarrierConfigManager.KEY_CARRIER_WWAN_DISALLOWED_APN_TYPES_STRING_ARRAY,
@@ -623,6 +627,8 @@ public class DataConnectionTest extends TelephonyTest {
         waitForMs(100);
         doReturn(mApn1).when(mApnContext).getApnSetting();
         doReturn(ApnSetting.TYPE_ENTERPRISE).when(mApnContext).getApnTypeBitmask();
+        doReturn(ApnSetting.TYPE_BIP).when(mApnContext).getApnTypeBitmask();
+        doReturn(ApnSetting.TYPE_VSIM).when(mApnContext).getApnTypeBitmask();
         mDc.sendMessage(DataConnection.EVENT_CONNECT, mCp);
         waitForMs(200);
 
@@ -634,6 +640,10 @@ public class DataConnectionTest extends TelephonyTest {
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_SUPL));
         assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
                 .hasCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE));
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_BIP));
+        assertTrue("capabilities: " + getNetworkCapabilities(), getNetworkCapabilities()
+                .hasCapability(NetworkCapabilities.NET_CAPABILITY_VSIM));
     }
 
     @Test
