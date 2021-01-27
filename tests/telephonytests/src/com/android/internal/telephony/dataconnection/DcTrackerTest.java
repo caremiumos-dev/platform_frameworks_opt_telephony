@@ -1187,6 +1187,36 @@ public class DcTrackerTest extends TelephonyTest {
                 anyBoolean(), any(Message.class));
     }
 
+    // Test the VSIM APN setup.
+    @Test
+    @SmallTest
+    public void testTrySetupDataVsimApn() {
+        initApns(ApnSetting.TYPE_VSIM_STRING, new String[]{ApnSetting.TYPE_VSIM_STRING});
+        mDct.enableApn(ApnSetting.TYPE_VSIM, DcTracker.REQUEST_TYPE_NORMAL, null);
+
+        sendInitializationEvents();
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), any(DataProfile.class), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), any(), anyInt(), any(), any(),
+                anyBoolean(), any(Message.class));
+    }
+
+    // Test the BIP APN setup.
+    @Test
+    @SmallTest
+    public void testTrySetupDataVsimApn() {
+        initApns(ApnSetting.TYPE_BIP_STRING, new String[]{ApnSetting.TYPE_BIP_STRING});
+        mDct.enableApn(ApnSetting.TYPE_BIP, DcTracker.REQUEST_TYPE_NORMAL, null);
+
+        sendInitializationEvents();
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), any(DataProfile.class), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), any(), anyInt(), any(), any(),
+                anyBoolean(), any(Message.class));
+    }
+
     // Test the ENTERPRISE APN setup.
     @Test
     public void testTrySetupDataEnterpriseApn() {

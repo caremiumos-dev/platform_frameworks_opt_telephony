@@ -80,6 +80,8 @@ public class ApnConfigTypeRepository {
         add(ApnSetting.TYPE_EMERGENCY, apnTypeMap);
         add(ApnSetting.TYPE_MCX, apnTypeMap);
         add(ApnSetting.TYPE_XCAP, apnTypeMap);
+        add(ApnSetting.TYPE_VSIM, apnTypeMap);
+        add(ApnSetting.TYPE_BIP, apnTypeMap);
         add(ApnSetting.TYPE_ENTERPRISE, apnTypeMap);
     }
 

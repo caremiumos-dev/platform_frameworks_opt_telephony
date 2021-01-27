@@ -2029,6 +2029,44 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     /**
+     * Convert to DataProfileInfo defined in radio/1.6/types.hal
+     * @param dp Data profile
+     * @return A converted data profile
+     */
+    private static android.hardware.radio.V1_6.DataProfileInfo convertToHalDataProfile16(
+            DataProfile dp) {
+        android.hardware.radio.V1_6.DataProfileInfo dpi =
+                new android.hardware.radio.V1_6.DataProfileInfo();
+
+        dpi.base.apn = dp.getApn();
+        dpi.base.protocol = dp.getProtocolType();
+        dpi.base.roamingProtocol = dp.getRoamingProtocolType();
+        dpi.base.authType = dp.getAuthType();
+        dpi.base.user = dp.getUserName();
+        dpi.base.password = dp.getPassword();
+        dpi.base.type = dp.getType();
+        dpi.base.maxConnsTime = dp.getMaxConnectionsTime();
+        dpi.base.maxConns = dp.getMaxConnections();
+        dpi.base.waitTime = dp.getWaitTime();
+        dpi.base.enabled = dp.isEnabled();
+        dpi.supportedApnTypesBitmap = dp.getSupportedApnTypesBitmask();
+        // Shift by 1 bit due to the discrepancy between
+        // android.hardware.radio.V1_0.RadioAccessFamily and the bitmask version of
+        // ServiceState.RIL_RADIO_TECHNOLOGY_XXXX.
+        dpi.base.bearerBitmap = ServiceState.convertNetworkTypeBitmaskToBearerBitmask(
+            dp.getBearerBitmask()) << 1;
+        dpi.base.mtuV4 = dp.getMtuV4();
+        dpi.base.mtuV6 = dp.getMtuV6();
+        dpi.base.persistent = dp.isPersistent();
+        dpi.base.preferred = dp.isPreferred();
+
+        // profile id is only meaningful when it's persistent on the modem.
+        dpi.base.profileId = (dpi.base.persistent) ? dp.getProfileId() : DataProfileId.INVALID;
+
+        return dpi;
+    }
+
+    /**
      * Convert NV reset type into ResetNvType defined in types.hal.
      * @param resetType NV reset type.
      * @return Converted reset type in integer or -1 if param is invalid.
@@ -2078,8 +2116,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                             (android.hardware.radio.V1_6.IRadio) radioProxy;
 
                     // Convert to HAL data profile
-                    android.hardware.radio.V1_5.DataProfileInfo dpi =
-                            convertToHalDataProfile15(dataProfile);
+                    android.hardware.radio.V1_6.DataProfileInfo dpi =
+                            convertToHalDataProfile16(dataProfile);
 
                     OptionalSliceInfo si = convertToHalSliceInfo(sliceInfo);
 

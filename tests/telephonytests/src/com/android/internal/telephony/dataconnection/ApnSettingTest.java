@@ -359,6 +359,8 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_IA, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_HIPRI, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_XCAP, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_VSIM, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_BIP, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_ENTERPRISE, mPhone));
 
         // Carrier config settings changes.
@@ -406,6 +408,8 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_MMS, mPhone));
         assertTrue(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_FOTA, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_XCAP, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_VSIM, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_BIP, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_ENTERPRISE, mPhone));
     }
 
@@ -438,6 +442,8 @@ public class ApnSettingTest extends TelephonyTest {
 
         assertFalse(ApnSettingUtils.isMetered(createApnSetting(ApnSetting.TYPE_IMS), mPhone));
         assertFalse(ApnSettingUtils.isMetered(createApnSetting(ApnSetting.TYPE_XCAP), mPhone));
+        assertFalse(ApnSettingUtils.isMetered(createApnSetting(ApnSetting.TYPE_VSIM), mPhone));
+        assertFalse(ApnSettingUtils.isMetered(createApnSetting(ApnSetting.TYPE_BIP), mPhone));
         assertFalse(ApnSettingUtils.isMetered(
                 createApnSetting(ApnSetting.TYPE_ENTERPRISE), mPhone));
     }
@@ -479,6 +485,8 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_IA, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_HIPRI, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_XCAP, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_VSIM, mPhone));
+        assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_BIP, mPhone));
         assertFalse(ApnSettingUtils.isMeteredApnType(ApnSetting.TYPE_ENTERPRISE, mPhone));
     }
 
@@ -560,7 +568,7 @@ public class ApnSettingTest extends TelephonyTest {
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_IA)
                 .canHandleType(ApnSetting.TYPE_IA));
 
-        // same for emergency, mcx, xcap, and enterprise
+        // same for emergency, mcx, xcap, vsim, bip and enterprise
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
                 .canHandleType(ApnSetting.TYPE_EMERGENCY));
         assertTrue(createApnSetting(
@@ -576,6 +584,16 @@ public class ApnSettingTest extends TelephonyTest {
         assertTrue(createApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_XCAP)
                 .canHandleType(ApnSetting.TYPE_XCAP));
+        assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
+                .canHandleType(ApnSetting.TYPE_VSIM));
+        assertTrue(createApnSetting(
+                ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_VSIM)
+                .canHandleType(ApnSetting.TYPE_VSIM));
+        assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
+                .canHandleType(ApnSetting.TYPE_BIP));
+        assertTrue(createApnSetting(
+                ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_BIP)
+                .canHandleType(ApnSetting.TYPE_BIP));
         assertFalse(createApnSetting(ApnSetting.TYPE_ALL)
                 .canHandleType(ApnSetting.TYPE_ENTERPRISE));
         assertTrue(createApnSetting(
@@ -599,6 +617,12 @@ public class ApnSettingTest extends TelephonyTest {
         assertFalse(createDisabledApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_XCAP)
                 .canHandleType(ApnSetting.TYPE_XCAP));
+        assertFalse(createDisabledApnSetting(
+                ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_VSIM)
+                .canHandleType(ApnSetting.TYPE_VSIM));
+        assertFalse(createDisabledApnSetting(
+                ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_BIP)
+                .canHandleType(ApnSetting.TYPE_BIP));
         assertFalse(createDisabledApnSetting(
                 ApnSetting.TYPE_DEFAULT | ApnSetting.TYPE_MMS | ApnSetting.TYPE_ENTERPRISE)
                 .canHandleType(ApnSetting.TYPE_ENTERPRISE));

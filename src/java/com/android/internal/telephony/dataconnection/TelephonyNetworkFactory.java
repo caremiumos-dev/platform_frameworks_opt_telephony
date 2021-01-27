@@ -142,6 +142,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_IA)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_RCS)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_VSIM)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_BIP)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
