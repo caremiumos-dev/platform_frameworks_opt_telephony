@@ -103,6 +103,10 @@ public class SubscriptionInfoUpdater extends Handler {
     // Key used to read/write the current IMSI. Updated on SIM_STATE_CHANGED - LOADED.
     public static final String CURR_SUBID = "curr_subid";
 
+    // Delimiters for parsing KEY_CARRIER_CERTIFICATE_STRING_ARRAY
+    static final String DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES = "\\|";
+    static final String DELIMITER_INDIVIDUAL_PACKAGE_NAMES = ",";
+
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private static Context sContext = null;
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
@@ -410,6 +414,26 @@ public class SubscriptionInfoUpdater extends Handler {
 
     protected void handleSimReady(int phoneId) {
         List<Integer> cardIds = new ArrayList<>();
+        logd("handleSimReady: phoneId: " + phoneId);
+
+        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd(" SIM" + (phoneId + 1) + " hot plug in");
+            sIccId[phoneId] = null;
+        }
+
+        // ICCID is not available in IccRecords by the time SIM Ready event received
+        // hence get ICCID from UiccSlot.
+        UiccSlot uiccSlot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
+        String iccId = (uiccSlot != null) ? IccUtils.stripTrailingFs(uiccSlot.getIccId()) : null;
+        if (!TextUtils.isEmpty(iccId)) {
+            // Call updateSubscriptionInfoByIccId() only if was
+            // not done earlier from SIM Locked event
+            if (sIccId[phoneId] == null) {
+                sIccId[phoneId] = iccId;
+
+                updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+            }
+        }
 
         cardIds.add(getCardIdFromPhoneId(phoneId));
         updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
@@ -421,7 +445,6 @@ public class SubscriptionInfoUpdater extends Handler {
         broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
         broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
     }
-
 
     protected void handleSimNotReady(int phoneId) {
         logd("handleSimNotReady: phoneId: " + phoneId);
@@ -485,9 +508,14 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("handleSimLoaded: IccID null");
             return;
         }
-        sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
-        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        // Call updateSubscriptionInfoByIccId() only if was not done earlier from SIM READY event
+        if (sIccId[phoneId] == null) {
+            sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+
+            updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        }
+
         List<SubscriptionInfo> subscriptionInfos =
                 mSubscriptionController.getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
@@ -1065,11 +1093,26 @@ public class SubscriptionInfoUpdater extends Handler {
             CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
         UiccAccessRule[] carrierConfigAccessRules = null;
         if (certs != null) {
-            carrierConfigAccessRules = new UiccAccessRule[certs.length];
-            for (int i = 0; i < certs.length; i++) {
-                carrierConfigAccessRules[i] = new UiccAccessRule(IccUtils.hexStringToBytes(
-                    certs[i]), null, 0);
+            List<UiccAccessRule> carrierConfigAccessRulesArray = new ArrayList();
+            for (String cert : certs) {
+                String[] splitStr = cert.split(DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES);
+                String certificateHash = splitStr[0];
+                if (splitStr.length == 1) {
+                    // The value is a certificate hash, without any package name
+                    carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                            IccUtils.hexStringToBytes(certificateHash), null, 0));
+                } else {
+                    // The value is composed of the certificate hash followed by at least one
+                    // package name
+                    String[] packageNames = splitStr[1].split(DELIMITER_INDIVIDUAL_PACKAGE_NAMES);
+                    for (String packageName : packageNames) {
+                        carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                                IccUtils.hexStringToBytes(certificateHash), packageName, 0));
+                    }
+                }
             }
+            carrierConfigAccessRules = carrierConfigAccessRulesArray.toArray(
+                new UiccAccessRule[carrierConfigAccessRulesArray.size()]);
         }
         cv.put(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS,
                 UiccAccessRule.encodeRules(carrierConfigAccessRules));
@@ -1239,3 +1282,4 @@ public class SubscriptionInfoUpdater extends Handler {
         mCarrierServiceBindHelper.dump(fd, pw, args);
     }
 }
+
