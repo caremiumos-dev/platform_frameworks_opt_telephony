@@ -137,6 +137,9 @@ public class CarrierPrivilegesTracker extends Handler {
     // Stores certificate hashes for Carrier Config-loaded certs. Certs must be UPPERCASE.
     private final Set<String> mCarrierConfigCerts;
 
+    // Map of certificate hash -> package names for that certificate hash
+    private final Map<String, Set<String>> mCarrierConfigCertsPackageNames;
+
     // TODO(b/151981841): Use Set<UiccAccessRule> to also check for package names loaded from SIM
     private final Set<String> mUiccCerts;
 
@@ -235,6 +238,7 @@ public class CarrierPrivilegesTracker extends Handler {
 
         mRegistrantList = new RegistrantList();
         mCarrierConfigCerts = new ArraySet<>();
+        mCarrierConfigCertsPackageNames = new ArrayMap<>();
         mUiccCerts = new ArraySet<>();
         mInstalledPackageCerts = new ArrayMap<>();
         mCachedUids = new ArrayMap<>();
@@ -473,7 +477,7 @@ public class CarrierPrivilegesTracker extends Handler {
     private int[] getCurrentPrivilegedUidsForAllUsers() {
         Set<Integer> privilegedUids = new ArraySet<>();
         for (Map.Entry<String, Set<String>> e : mInstalledPackageCerts.entrySet()) {
-            if (isPackagePrivileged(e.getValue())) {
+            if (isPackagePrivileged(e.getKey(), e.getValue())) {
                 privilegedUids.addAll(getUidsForPackage(e.getKey()));
             }
         }
@@ -486,10 +490,12 @@ public class CarrierPrivilegesTracker extends Handler {
     }
 
     /**
-     * Returns true iff there is an overlap between the provided certificate hashes and the
+     * Returns true if there is an overlap between the provided certificate hashes and the
      * certificate hashes stored in mCarrierConfigCerts and mUiccCerts.
      */
-    private boolean isPackagePrivileged(Set<String> certs) {
+    private boolean isPackagePrivileged(String pkgName, Set<String> certs) {
+        // TODO(b/149749602): Populate mCarrierConfigCertsPackageNames and look at the
+        // pkgName/cert combinations
         return !Collections.disjoint(mCarrierConfigCerts, certs)
                 || !Collections.disjoint(mUiccCerts, certs);
     }
