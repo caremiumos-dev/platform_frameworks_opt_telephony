@@ -36,9 +36,6 @@ import android.os.ParcelUuid;
 import android.os.PersistableBundle;
 import android.os.UserHandle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.provider.Settings.Global;
-import android.provider.Settings.SettingNotFoundException;
 import android.service.carrier.CarrierIdentifier;
 import android.service.carrier.CarrierService;
 import android.service.euicc.EuiccProfileInfo;
@@ -102,6 +99,10 @@ public class SubscriptionInfoUpdater extends Handler {
 
     // Key used to read/write the current IMSI. Updated on SIM_STATE_CHANGED - LOADED.
     public static final String CURR_SUBID = "curr_subid";
+
+    // Delimiters for parsing KEY_CARRIER_CERTIFICATE_STRING_ARRAY
+    static final String DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES = "\\|";
+    static final String DELIMITER_INDIVIDUAL_PACKAGE_NAMES = ",";
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private static Context sContext = null;
@@ -410,6 +411,26 @@ public class SubscriptionInfoUpdater extends Handler {
 
     protected void handleSimReady(int phoneId) {
         List<Integer> cardIds = new ArrayList<>();
+        logd("handleSimReady: phoneId: " + phoneId);
+
+        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
+            logd(" SIM" + (phoneId + 1) + " hot plug in");
+            sIccId[phoneId] = null;
+        }
+
+        // ICCID is not available in IccRecords by the time SIM Ready event received
+        // hence get ICCID from UiccSlot.
+        UiccSlot uiccSlot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
+        String iccId = (uiccSlot != null) ? IccUtils.stripTrailingFs(uiccSlot.getIccId()) : null;
+        if (!TextUtils.isEmpty(iccId)) {
+            // Call updateSubscriptionInfoByIccId() only if was
+            // not done earlier from SIM Locked event
+            if (sIccId[phoneId] == null) {
+                sIccId[phoneId] = iccId;
+
+                updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+            }
+        }
 
         cardIds.add(getCardIdFromPhoneId(phoneId));
         updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
@@ -421,7 +442,6 @@ public class SubscriptionInfoUpdater extends Handler {
         broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
         broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
     }
-
 
     protected void handleSimNotReady(int phoneId) {
         logd("handleSimNotReady: phoneId: " + phoneId);
@@ -485,9 +505,14 @@ public class SubscriptionInfoUpdater extends Handler {
             logd("handleSimLoaded: IccID null");
             return;
         }
-        sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
 
-        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        // Call updateSubscriptionInfoByIccId() only if was not done earlier from SIM READY event
+        if (sIccId[phoneId] == null) {
+            sIccId[phoneId] = IccUtils.stripTrailingFs(records.getFullIccId());
+
+            updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
+        }
+
         List<SubscriptionInfo> subscriptionInfos =
                 mSubscriptionController.getSubInfoUsingSlotIndexPrivileged(phoneId);
         if (subscriptionInfos == null || subscriptionInfos.isEmpty()) {
@@ -540,35 +565,17 @@ public class SubscriptionInfoUpdater extends Handler {
                 int storedSubId = sp.getInt(CURR_SUBID + phoneId, -1);
 
                 if (storedSubId != subId) {
-                    int networkType = Settings.Global.getInt(
-                            PhoneFactory.getPhone(phoneId).getContext().getContentResolver(),
-                            Settings.Global.PREFERRED_NETWORK_MODE + subId,
-                            -1 /* invalid network mode */);
-
-                    if (networkType == -1) {
-                        networkType = RILConstants.PREFERRED_NETWORK_MODE;
-                        try {
-                            networkType = TelephonyManager.getIntAtIndex(
-                                    sContext.getContentResolver(),
-                                    Settings.Global.PREFERRED_NETWORK_MODE, phoneId);
-                        } catch (SettingNotFoundException retrySnfe) {
-                            Rlog.e(LOG_TAG, "Settings Exception Reading Value At Index for "
-                                    + "Settings.Global.PREFERRED_NETWORK_MODE");
-                        }
-                        Settings.Global.putInt(
-                                PhoneFactory.getPhone(phoneId).getContext().getContentResolver(),
-                                Global.PREFERRED_NETWORK_MODE + subId,
-                                networkType);
-                    }
+                    long networkType = PhoneFactory.getPhone(phoneId).getAllowedNetworkTypes(
+                            TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER);
 
                     // Set the modem network mode
-                    PhoneFactory.getPhone(phoneId).setPreferredNetworkType(networkType, null);
+                    PhoneFactory.getPhone(phoneId).setAllowedNetworkTypes(
+                            TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER, networkType, null);
 
                     // Only support automatic selection mode on SIM change.
                     PhoneFactory.getPhone(phoneId).getNetworkSelectionMode(
                             obtainMessage(EVENT_GET_NETWORK_SELECTION_MODE_DONE,
                                     new Integer(phoneId)));
-
                     // Update stored subId
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt(CURR_SUBID + phoneId, subId);
@@ -1065,11 +1072,26 @@ public class SubscriptionInfoUpdater extends Handler {
             CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
         UiccAccessRule[] carrierConfigAccessRules = null;
         if (certs != null) {
-            carrierConfigAccessRules = new UiccAccessRule[certs.length];
-            for (int i = 0; i < certs.length; i++) {
-                carrierConfigAccessRules[i] = new UiccAccessRule(IccUtils.hexStringToBytes(
-                    certs[i]), null, 0);
+            List<UiccAccessRule> carrierConfigAccessRulesArray = new ArrayList();
+            for (String cert : certs) {
+                String[] splitStr = cert.split(DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES);
+                String certificateHash = splitStr[0];
+                if (splitStr.length == 1) {
+                    // The value is a certificate hash, without any package name
+                    carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                            IccUtils.hexStringToBytes(certificateHash), null, 0));
+                } else {
+                    // The value is composed of the certificate hash followed by at least one
+                    // package name
+                    String[] packageNames = splitStr[1].split(DELIMITER_INDIVIDUAL_PACKAGE_NAMES);
+                    for (String packageName : packageNames) {
+                        carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                                IccUtils.hexStringToBytes(certificateHash), packageName, 0));
+                    }
+                }
             }
+            carrierConfigAccessRules = carrierConfigAccessRulesArray.toArray(
+                new UiccAccessRule[carrierConfigAccessRulesArray.size()]);
         }
         cv.put(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS,
                 UiccAccessRule.encodeRules(carrierConfigAccessRules));
@@ -1127,12 +1149,10 @@ public class SubscriptionInfoUpdater extends Handler {
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected void broadcastSimStateChanged(int phoneId, String state, String reason) {
+        // Note: This intent is way deprecated and is only being kept around because there's no
+        // graceful way to deprecate a sticky broadcast that has a lot of listeners.
+        // DO NOT add any new extras to this broadcast -- it is not protected by any permissions.
         Intent i = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
-        // TODO - we'd like this intent to have a single snapshot of all sim state,
-        // but until then this should not use REPLACE_PENDING or we may lose
-        // information
-        // i.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
-        //         | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
         i.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
         i.putExtra(PhoneConstants.PHONE_NAME_KEY, "Phone");
         i.putExtra(IccCardConstants.INTENT_KEY_ICC_STATE, state);
@@ -1239,3 +1259,4 @@ public class SubscriptionInfoUpdater extends Handler {
         mCarrierServiceBindHelper.dump(fd, pw, args);
     }
 }
+

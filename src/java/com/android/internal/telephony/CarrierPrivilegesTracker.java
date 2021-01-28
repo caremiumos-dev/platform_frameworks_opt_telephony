@@ -134,8 +134,11 @@ public class CarrierPrivilegesTracker extends Handler {
     private final RegistrantList mRegistrantList;
     private final LocalLog mLocalLog;
 
-    // Stores certificate hashes for Carrier Config-loaded certs. Certs must be UPPERCASE.
-    private final Set<String> mCarrierConfigCerts;
+    /**
+     * Map of certificate hash -> package names for that certificate hash.
+     * The set of package names may be empty. Certs must be UPPERCASE.
+     */
+    private final Map<String, Set<String>> mCarrierConfigCerts;
 
     // TODO(b/151981841): Use Set<UiccAccessRule> to also check for package names loaded from SIM
     private final Set<String> mUiccCerts;
@@ -234,7 +237,7 @@ public class CarrierPrivilegesTracker extends Handler {
         mContext.registerReceiver(mIntentReceiver, packageFilter);
 
         mRegistrantList = new RegistrantList();
-        mCarrierConfigCerts = new ArraySet<>();
+        mCarrierConfigCerts = new ArrayMap<>();
         mUiccCerts = new ArraySet<>();
         mInstalledPackageCerts = new ArrayMap<>();
         mCachedUids = new ArrayMap<>();
@@ -297,7 +300,7 @@ public class CarrierPrivilegesTracker extends Handler {
     private void handleCarrierConfigUpdated(int subId, int slotIndex) {
         if (slotIndex != mPhone.getPhoneId()) return;
 
-        Set<String> updatedCarrierConfigCerts = Collections.EMPTY_SET;
+        Map<String, Set<String>> updatedCarrierConfigCerts = Collections.EMPTY_MAP;
 
         // Carrier Config broadcasts with INVALID_SUBSCRIPTION_ID when the SIM is removed. This is
         // an expected event. When this happens, clear the certificates from the previous configs.
@@ -313,21 +316,29 @@ public class CarrierPrivilegesTracker extends Handler {
         maybeUpdateCertsAndNotifyRegistrants(mCarrierConfigCerts, updatedCarrierConfigCerts);
     }
 
-    private Set<String> getCarrierConfigCerts(int subId) {
+    private Map<String, Set<String>> getCarrierConfigCerts(int subId) {
         PersistableBundle carrierConfigs = mCarrierConfigManager.getConfigForSubId(subId);
         if (!mCarrierConfigManager.isConfigForIdentifiedCarrier(carrierConfigs)) {
-            return Collections.EMPTY_SET;
+            return Collections.EMPTY_MAP;
         }
 
-        Set<String> updatedCarrierConfigCerts = new ArraySet<>();
+        Map<String, Set<String>> updatedCarrierConfigCerts = new ArrayMap<>();
         String[] carrierConfigCerts =
                 carrierConfigs.getStringArray(KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
 
         if (carrierConfigCerts != null) {
             for (String cert : carrierConfigCerts) {
-                updatedCarrierConfigCerts.add(cert.toUpperCase());
+                String[] splitStr = cert.split(
+                    SubscriptionInfoUpdater.DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES);
+                updatedCarrierConfigCerts.put(splitStr[0].toUpperCase(),
+                        // Case 1: allow all package names for that certificate
+                        splitStr.length == 1 ? Collections.EMPTY_SET :
+                        // Case 2: only allow the package names which follow the certificate
+                        new ArraySet<String>(splitStr[1].split(
+                            SubscriptionInfoUpdater.DELIMITER_INDIVIDUAL_PACKAGE_NAMES)));
             }
         }
+
         return updatedCarrierConfigCerts;
     }
 
@@ -410,7 +421,7 @@ public class CarrierPrivilegesTracker extends Handler {
 
     private void handleInitializeTracker() {
         // Cache CarrierConfig Certs
-        mCarrierConfigCerts.addAll(getCarrierConfigCerts(mPhone.getSubId()));
+        mCarrierConfigCerts.putAll(getCarrierConfigCerts(mPhone.getSubId()));
 
         // Cache SIM certs
         mUiccCerts.addAll(getSimCerts());
@@ -457,6 +468,16 @@ public class CarrierPrivilegesTracker extends Handler {
         maybeUpdatePrivilegedUidsAndNotifyRegistrants();
     }
 
+    private void maybeUpdateCertsAndNotifyRegistrants(
+            Map<String, Set<String>> currentCerts, Map<String, Set<String>> updatedCerts) {
+        if (currentCerts.equals(updatedCerts)) return;
+
+        currentCerts.clear();
+        currentCerts.putAll(updatedCerts);
+
+        maybeUpdatePrivilegedUidsAndNotifyRegistrants();
+    }
+
     private void maybeUpdatePrivilegedUidsAndNotifyRegistrants() {
         int[] currentPrivilegedUids = getCurrentPrivilegedUidsForAllUsers();
 
@@ -473,7 +494,7 @@ public class CarrierPrivilegesTracker extends Handler {
     private int[] getCurrentPrivilegedUidsForAllUsers() {
         Set<Integer> privilegedUids = new ArraySet<>();
         for (Map.Entry<String, Set<String>> e : mInstalledPackageCerts.entrySet()) {
-            if (isPackagePrivileged(e.getValue())) {
+            if (isPackagePrivileged(e.getKey(), e.getValue())) {
                 privilegedUids.addAll(getUidsForPackage(e.getKey()));
             }
         }
@@ -486,12 +507,21 @@ public class CarrierPrivilegesTracker extends Handler {
     }
 
     /**
-     * Returns true iff there is an overlap between the provided certificate hashes and the
+     * Returns true if there is an overlap between the provided certificate hashes and the
      * certificate hashes stored in mCarrierConfigCerts and mUiccCerts.
      */
-    private boolean isPackagePrivileged(Set<String> certs) {
-        return !Collections.disjoint(mCarrierConfigCerts, certs)
-                || !Collections.disjoint(mUiccCerts, certs);
+    private boolean isPackagePrivileged(String pkgName, Set<String> certs) {
+        if (mCarrierConfigCerts != null) {
+            for (String cert : certs) {
+                if (mCarrierConfigCerts.containsKey(cert) && (
+                        mCarrierConfigCerts.get(cert).isEmpty()
+                        || mCarrierConfigCerts.get(cert).contains(pkgName))) {
+                    return true;
+                }
+            }
+        }
+
+        return !Collections.disjoint(mUiccCerts, certs);
     }
 
     private Set<Integer> getUidsForPackage(String pkgName) {
@@ -549,3 +579,4 @@ public class CarrierPrivilegesTracker extends Handler {
         sendMessage(obtainMessage(ACTION_UNREGISTER_LISTENER, handler));
     }
 }
+
