@@ -103,6 +103,10 @@ public class SubscriptionInfoUpdater extends Handler {
     // Key used to read/write the current IMSI. Updated on SIM_STATE_CHANGED - LOADED.
     public static final String CURR_SUBID = "curr_subid";
 
+    // Delimiters for parsing KEY_CARRIER_CERTIFICATE_STRING_ARRAY
+    private static final String DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES = "\\|";
+    private static final String DELIMITER_INDIVIDUAL_PACKAGE_NAMES = ",";
+
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private static Context sContext = null;
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
@@ -1065,11 +1069,26 @@ public class SubscriptionInfoUpdater extends Handler {
             CarrierConfigManager.KEY_CARRIER_CERTIFICATE_STRING_ARRAY);
         UiccAccessRule[] carrierConfigAccessRules = null;
         if (certs != null) {
-            carrierConfigAccessRules = new UiccAccessRule[certs.length];
-            for (int i = 0; i < certs.length; i++) {
-                carrierConfigAccessRules[i] = new UiccAccessRule(IccUtils.hexStringToBytes(
-                    certs[i]), null, 0);
+            List<UiccAccessRule> carrierConfigAccessRulesArray = new ArrayList();
+            for (String cert : certs) {
+                String[] splitStr = cert.split(DELIMITER_CERTIFICATE_HASH_PACKAGE_NAMES);
+                String certificateHash = splitStr[0];
+                if (splitStr.length == 1) {
+                    // The value is a certificate hash, without any package name
+                    carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                            IccUtils.hexStringToBytes(certificateHash), null, 0));
+                } else {
+                    // The value is composed of the certificate hash followed by at least one
+                    // package name
+                    String[] packageNames = splitStr[1].split(DELIMITER_INDIVIDUAL_PACKAGE_NAMES);
+                    for (String packageName : packageNames) {
+                        carrierConfigAccessRulesArray.add(new UiccAccessRule(
+                                IccUtils.hexStringToBytes(certificateHash), packageName, 0));
+                    }
+                }
             }
+            carrierConfigAccessRules = carrierConfigAccessRulesArray.toArray(
+                new UiccAccessRule[carrierConfigAccessRulesArray.size()]);
         }
         cv.put(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS,
                 UiccAccessRule.encodeRules(carrierConfigAccessRules));
