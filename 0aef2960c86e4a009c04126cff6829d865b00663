@@ -1183,6 +1183,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9617933_98dd6dca",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-28T00:29:16Z",
+      "side": 1,
+      "message": "No, no idea about it.\n\n\u003e How will the app know whether it is supported or not?\nAs of now, this is exposed in the resources. Can the app read that?\n\n\u003e There needs to be a notification mechanism instead of caller re-trying itself\nI agree on this. But not sure about the correct way to handle it. I\u0027m not familiar on how the app works today with regards to SIM phonebook. If this feature is disabled, when can the app read it? Shouldn\u0027t the behavior be transparent for the app, regardless if this feature is enabled or not?",
+      "parentUuid": "cf3f79ca_8383518e",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 96
+      },
+      "revId": "0aef2960c86e4a009c04126cff6829d865b00663",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4d8ff40_0707fcbf",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 5

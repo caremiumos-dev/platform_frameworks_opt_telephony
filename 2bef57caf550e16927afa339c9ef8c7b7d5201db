@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fd70000_94bea3e4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-01-28T00:29:16Z",
+      "side": 1,
+      "message": "Space after //",
+      "range": {
+        "startLine": 320,
+        "startChar": 16,
+        "endLine": 320,
+        "endChar": 18
+      },
+      "revId": "2bef57caf550e16927afa339c9ef8c7b7d5201db",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
