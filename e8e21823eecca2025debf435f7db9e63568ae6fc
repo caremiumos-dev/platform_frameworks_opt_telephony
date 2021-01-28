@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e20076_d5072b0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-01-28T23:18:37Z",
+      "side": 1,
+      "message": "It still fails:\n\njava.lang.AssertionError: expected:\u003cnull\u003e but was:\u003c[-1,-1,-1]\u003e\njava.lang.AssertionError: expected:\u003cnull\u003e but was:\u003c[-1,-1,-1]\u003e\n\tat org.junit.Assert.fail(Assert.java:88)\n\tat org.junit.Assert.failNotEquals(Assert.java:834)\n\tat org.junit.Assert.assertEquals(Assert.java:118)\n\tat org.junit.Assert.assertEquals(Assert.java:144)\n\tat com.android.internal.telephony.TelephonyRegistryTest.testNotifyCellLocationForSubscriberByUserSwitched(TelephonyRegistryTest.java:575)",
+      "revId": "e8e21823eecca2025debf435f7db9e63568ae6fc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
