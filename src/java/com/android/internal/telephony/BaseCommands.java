@@ -20,6 +20,7 @@ package com.android.internal.telephony;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -51,6 +52,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mCallStateRegistrants = new RegistrantList();
     protected RegistrantList mNetworkStateRegistrants = new RegistrantList();
     protected RegistrantList mDataCallListChangedRegistrants = new RegistrantList();
+    protected RegistrantList mApnUnthrottledRegistrants = new RegistrantList();
     @UnsupportedAppUsage
     protected RegistrantList mVoiceRadioTechChangedRegistrants = new RegistrantList();
     @UnsupportedAppUsage
@@ -156,7 +158,7 @@ public abstract class BaseCommands implements CommandsInterface {
     // Preferred network type received from PhoneFactory.
     // This is used when establishing a connection to the
     // vendor ril so it starts up in the correct mode.
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected int mPreferredNetworkType;
     // CDMA subscription received from PhoneFactory
     protected int mCdmaSubscription;
@@ -300,6 +302,16 @@ public abstract class BaseCommands implements CommandsInterface {
     @Override
     public void unregisterForDataCallListChanged(Handler h) {
         mDataCallListChangedRegistrants.remove(h);
+    }
+
+    @Override
+    public void registerForApnUnthrottled(Handler h, int what, Object obj) {
+        mApnUnthrottledRegistrants.addUnique(h, what, obj);
+    }
+
+    @Override
+    public void unregisterForApnUnthrottled(Handler h) {
+        mApnUnthrottledRegistrants.remove(h);
     }
 
     @Override

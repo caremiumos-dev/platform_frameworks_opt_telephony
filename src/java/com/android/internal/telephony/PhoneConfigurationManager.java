@@ -19,16 +19,19 @@ package com.android.internal.telephony;
 import static android.telephony.TelephonyManager.ACTION_MULTI_SIM_CONFIG_CHANGED;
 import static android.telephony.TelephonyManager.EXTRA_ACTIVE_SIM_SUPPORTED_COUNT;
 
+import android.annotation.NonNull;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.RegistrantList;
 import android.os.storage.StorageManager;
 import android.sysprop.TelephonyProperties;
 import android.telephony.PhoneCapability;
+import android.telephony.RadioInterfaceCapabilities;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -56,17 +59,22 @@ public class PhoneConfigurationManager {
     private static final int EVENT_GET_MODEM_STATUS = 101;
     private static final int EVENT_GET_MODEM_STATUS_DONE = 102;
     private static final int EVENT_GET_PHONE_CAPABILITY_DONE = 103;
+    private static final int EVENT_GET_HAL_DEVICE_CAPABILITIES_DONE = 104;
 
     private static PhoneConfigurationManager sInstance = null;
     private final Context mContext;
     private PhoneCapability mStaticCapability;
     private final RadioConfig mRadioConfig;
     private final Handler mHandler;
-    private final Phone[] mPhones;
+    // mPhones is obtained from PhoneFactory and can have phones corresponding to inactive modems as
+    // well. That is, the array size can be 2 even if num of active modems is 1.
+    private Phone[] mPhones;
     private final Map<Integer, Boolean> mPhoneStatusMap;
     private MockableInterface mMi = new MockableInterface();
     private TelephonyManager mTelephonyManager;
     private static final RegistrantList sMultiSimConfigChangeRegistrants = new RegistrantList();
+    private RadioInterfaceCapabilities mRadioInterfaceCapabilities;
+    private final Object mLockRadioInterfaceCapabilities = new Object();
 
     /**
      * Init method to instantiate the object
@@ -101,14 +109,16 @@ public class PhoneConfigurationManager {
 
         mPhones = PhoneFactory.getPhones();
 
+        for (Phone phone : mPhones) {
+            registerForRadioState(phone);
+        }
+    }
+
+    private void registerForRadioState(Phone phone) {
         if (!StorageManager.inCryptKeeperBounce()) {
-            for (Phone phone : mPhones) {
-                phone.mCi.registerForAvailable(mHandler, Phone.EVENT_RADIO_AVAILABLE, phone);
-            }
+            phone.mCi.registerForAvailable(mHandler, Phone.EVENT_RADIO_AVAILABLE, phone);
         } else {
-            for (Phone phone : mPhones) {
-                phone.mCi.registerForOn(mHandler, Phone.EVENT_RADIO_ON, phone);
-            }
+            phone.mCi.registerForOn(mHandler, Phone.EVENT_RADIO_ON, phone);
         }
     }
 
@@ -153,6 +163,7 @@ public class PhoneConfigurationManager {
                                 + "No phone object provided for event " + msg.what);
                     }
                     getStaticPhoneCapability();
+                    getRadioInterfaceCapabilities();
                     break;
                 case EVENT_SWITCH_DSDS_CONFIG_DONE:
                     ar = (AsyncResult) msg.obj;
@@ -182,6 +193,10 @@ public class PhoneConfigurationManager {
                     } else {
                         log(msg.what + " failure. Not getting phone capability." + ar.exception);
                     }
+                    break;
+                case EVENT_GET_HAL_DEVICE_CAPABILITIES_DONE:
+                    setupRadioInterfaceCapabilities((AsyncResult) msg.obj);
+                    break;
             }
         }
     }
@@ -300,6 +315,51 @@ public class PhoneConfigurationManager {
     }
 
     /**
+     * Gets the radio interface capabilities for the device
+     */
+    @NonNull
+    public synchronized RadioInterfaceCapabilities getRadioInterfaceCapabilities() {
+        if (mRadioInterfaceCapabilities == null) {
+            //Only incur cost of synchronization block if mRadioInterfaceCapabilities isn't null
+            synchronized (mLockRadioInterfaceCapabilities) {
+                if (mRadioInterfaceCapabilities == null) {
+                    mRadioConfig.getHalDeviceCapabilities(
+                            mHandler.obtainMessage(EVENT_GET_HAL_DEVICE_CAPABILITIES_DONE));
+                    try {
+                        if (Looper.myLooper() == this.mHandler.getLooper()) {
+                            //Expected if this is called after the radio just turns on
+                            log("getRadioInterfaceCapabilities: myLoop == handler.getLooper "
+                                    + "returning non-available capabilities.");
+                        } else {
+                            mLockRadioInterfaceCapabilities.wait(2000);
+                        }
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }
+        if (mRadioInterfaceCapabilities == null) return new RadioInterfaceCapabilities();
+        else return mRadioInterfaceCapabilities;
+    }
+
+    private void setupRadioInterfaceCapabilities(@NonNull AsyncResult ar) {
+        if (mRadioInterfaceCapabilities == null) {
+            synchronized (mLockRadioInterfaceCapabilities) {
+                if (mRadioInterfaceCapabilities == null) {
+                    if (ar.exception != null) {
+                        loge("setupRadioInterfaceCapabilities: " + ar.exception);
+                    }
+                    log("setupRadioInterfaceCapabilities: "
+                            + "mRadioInterfaceCapabilities now setup");
+
+                    mRadioInterfaceCapabilities = (RadioInterfaceCapabilities) ar.result;
+                }
+                mLockRadioInterfaceCapabilities.notify();
+            }
+        }
+    }
+
+    /**
      * get configuration related status of each phone.
      */
     public PhoneCapability getCurrentPhoneCapability() {
@@ -347,6 +407,7 @@ public class PhoneConfigurationManager {
     }
 
     private void onMultiSimConfigChanged(int numOfActiveModems) {
+        int oldNumOfActiveModems = getPhoneCount();
         setMultiSimProperties(numOfActiveModems);
 
         if (isRebootRequiredForModemConfigChange()) {
@@ -357,10 +418,35 @@ public class PhoneConfigurationManager {
             log("onMultiSimConfigChanged: Rebooting is not required.");
             mMi.notifyPhoneFactoryOnMultiSimConfigChanged(mContext, numOfActiveModems);
             broadcastMultiSimConfigChange(numOfActiveModems);
-            // Register to RIL service if needed.
-            for (int i = 0; i < mPhones.length; i++) {
-                Phone phone = mPhones[i];
-                phone.mCi.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(i));
+            boolean subInfoCleared = false;
+            // if numOfActiveModems is decreasing, deregister old RILs
+            // eg if we are going from 2 phones to 1 phone, we need to deregister RIL for the
+            // second phone. This loop does nothing if numOfActiveModems is increasing.
+            for (int phoneId = numOfActiveModems; phoneId < oldNumOfActiveModems; phoneId++) {
+                SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
+                subInfoCleared = true;
+                mPhones[phoneId].mCi.onSlotActiveStatusChange(
+                        SubscriptionManager.isValidPhoneId(phoneId));
+            }
+            if (subInfoCleared) {
+                // This triggers update of default subs. This should be done asap after
+                // setMultiSimProperties() to avoid (minimize) duration for which default sub can be
+                // invalid and can map to a non-existent phone.
+                // If forexample someone calls a TelephonyManager API on default sub after
+                // setMultiSimProperties() and before onSubscriptionsChanged() below -- they can be
+                // using an invalid sub, which can map to a non-existent phone and can cause an
+                // exception (see b/163582235).
+                MultiSimSettingController.getInstance().onPhoneRemoved();
+            }
+            // old phone objects are not needed now; mPhones can be updated
+            mPhones = PhoneFactory.getPhones();
+            // if numOfActiveModems is increasing, register new RILs
+            // eg if we are going from 1 phone to 2 phones, we need to register RIL for the second
+            // phone. This loop does nothing if numOfActiveModems is decreasing.
+            for (int phoneId = oldNumOfActiveModems; phoneId < numOfActiveModems; phoneId++) {
+                Phone phone = mPhones[phoneId];
+                registerForRadioState(phone);
+                phone.mCi.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(phoneId));
             }
         }
     }
@@ -466,5 +552,13 @@ public class PhoneConfigurationManager {
 
     private static void log(String s) {
         Rlog.d(LOG_TAG, s);
+    }
+
+    private static void loge(String s) {
+        Rlog.e(LOG_TAG, s);
+    }
+
+    private static void loge(String s, Exception ex) {
+        Rlog.e(LOG_TAG, s, ex);
     }
 }

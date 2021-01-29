@@ -36,9 +36,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.app.IAlarmManager;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -98,6 +99,7 @@ import androidx.test.filters.FlakyTest;
 
 import com.android.internal.R;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
+import com.android.internal.telephony.metrics.ServiceStateStats;
 import com.android.internal.telephony.test.SimulatedCommands;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -124,7 +126,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     @Mock
     private Handler mTestHandler;
     @Mock
-    protected IAlarmManager mAlarmManager;
+    protected AlarmManager mAlarmManager;
 
     private CellularNetworkService mCellularNetworkService;
 
@@ -135,6 +137,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     @Mock
     private SubscriptionInfo mSubInfo;
+
+    @Mock
+    private ServiceStateStats mServiceStateStats;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -185,6 +190,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         @Override
         public void onLooperPrepared() {
             sst = new ServiceStateTracker(mPhone, mSimulatedCommands);
+            sst.setServiceStateStats(mServiceStateStats);
             setReady(true);
         }
     }
@@ -225,6 +231,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         logd("ServiceStateTrackerTest +Setup!");
         super.setUp("ServiceStateTrackerTest");
+
+        doReturn(mAlarmManager).when(mContext).getSystemService(eq(Context.ALARM_SERVICE));
 
         mContextFixture.putResource(R.string.config_wwan_network_service_package,
                 "com.android.phone");
@@ -393,6 +401,42 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         assertFalse(mSimulatedCommands.mSetRadioPowerForEmergencyCall);
         assertFalse(mSimulatedCommands.mSetRadioPowerAsSelectedPhoneForEmergencyCall);
+    }
+
+    @Test
+    @MediumTest
+    public void testSetRadioPowerForReason() {
+        // Radio does not turn on if off for other reason and not emergency call.
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().isEmpty());
+        sst.setRadioPowerForReason(false, false, false, false, Phone.RADIO_POWER_REASON_THERMAL);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().contains(Phone.RADIO_POWER_REASON_THERMAL));
+        assertTrue(sst.getRadioPowerOffReasonsForTest().size() == 1);
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_OFF);
+        sst.setRadioPowerForReason(true, false, false, false, Phone.RADIO_POWER_REASON_USER);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().contains(Phone.RADIO_POWER_REASON_THERMAL));
+        assertTrue(sst.getRadioPowerOffReasonsForTest().size() == 1);
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_OFF);
+
+        // Radio power state reason is removed and radio turns on if turned on for same reason it
+        // had been turned off for.
+        sst.setRadioPowerForReason(true, false, false, false, Phone.RADIO_POWER_REASON_THERMAL);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().isEmpty());
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
+
+        // Turn radio off, then successfully turn radio on for emergency call.
+        sst.setRadioPowerForReason(false, false, false, false, Phone.RADIO_POWER_REASON_THERMAL);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().contains(Phone.RADIO_POWER_REASON_THERMAL));
+        assertTrue(sst.getRadioPowerOffReasonsForTest().size() == 1);
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_OFF);
+        sst.setRadioPower(true, true, true, false);
+        assertTrue(sst.getRadioPowerOffReasonsForTest().isEmpty());
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertTrue(mSimulatedCommands.getRadioState() == TelephonyManager.RADIO_POWER_ON);
     }
 
     @Test
@@ -1878,6 +1922,25 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testSetImsRegisteredStateRunsShutdownImmediately() throws Exception {
+        doReturn(true).when(mPhone).isPhoneTypeGsm();
+        sst.setImsRegistrationState(true);
+        mSimulatedCommands.setRadioPowerFailResponse(false);
+        sst.setRadioPower(true);
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+
+        assertEquals(TelephonyManager.RADIO_POWER_ON, mSimulatedCommands.getRadioState());
+        sst.requestShutdown();
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+
+        sst.setImsRegistrationState(false);
+        verify(mAlarmManager).cancel(any(PendingIntent.class));
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        assertEquals(TelephonyManager.RADIO_POWER_UNAVAILABLE, mSimulatedCommands.getRadioState());
+    }
+
+    @Test
+    @SmallTest
     public void testSetTimeFromNITZStr() throws Exception {
         {
             // Mock sending incorrect nitz str from RIL
@@ -2419,7 +2482,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     }
 
     @Test
-    public void testUpdateSpnDisplay_flightMode_displayOOS() {
+    public void testUpdateSpnDisplay_flightMode_displayNull() {
         // GSM phone
         doReturn(true).when(mPhone).isPhoneTypeGsm();
 
@@ -2432,10 +2495,9 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // update the spn
         sst.updateSpnDisplay();
 
-        // Plmn should be shown, and the string is "No service"
+        // Plmn should be shown, and the string is null
         Bundle b = getExtrasFromLastSpnUpdateIntent();
-        assertThat(b.getString(TelephonyManager.EXTRA_PLMN))
-                .isEqualTo(CARRIER_NAME_DISPLAY_NO_SERVICE);
+        assertThat(b.getString(TelephonyManager.EXTRA_PLMN)).isEqualTo(null);
         assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
     }
 

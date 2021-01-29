@@ -24,15 +24,17 @@ import android.os.Message;
 import android.telephony.ImsiEncryptionInfo;
 import android.telephony.NetworkScanRequest;
 import android.telephony.SignalThresholdInfo;
+import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
+import android.telephony.data.SliceInfo;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.BaseCommands;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.UUSInfo;
-import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 
 /**
  * SIP doesn't need CommandsInterface. The class does nothing but made to work
@@ -284,7 +286,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              Message result) {
+                              int pduSessionId, SliceInfo sliceInfo, Message result) {
     }
 
     @Override
@@ -453,6 +455,15 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void getPreferredNetworkType(Message response) {
+    }
+
+    @Override
+    public void setAllowedNetworkTypeBitmask(
+            @TelephonyManager.NetworkTypeBitMask int networkTypeBitmask, Message response) {
+    }
+
+    @Override
+    public void getAllowedNetworkTypeBitmask(Message response) {
     }
 
     @Override
@@ -662,5 +673,21 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void stopNattKeepalive(int sessionHandle, Message result) {
+    }
+
+    @Override
+    public void allocatePduSessionId(Message result) {
+    }
+
+    @Override
+    public void releasePduSessionId(Message result, int pduSessionId) {
+    }
+
+    @Override
+    public void startHandover(Message result, int callId) {
+    }
+
+    @Override
+    public void cancelHandover(Message result, int callId) {
     }
 }

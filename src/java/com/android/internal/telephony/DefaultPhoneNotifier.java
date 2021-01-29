@@ -25,6 +25,7 @@ import android.telephony.CallQuality;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
 import android.telephony.PhoneCapability;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseCallState;
 import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
@@ -70,11 +71,14 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     @Override
     public void notifyServiceState(Phone sender) {
-        ServiceState ss = sender.getServiceState();
-        int phoneId = sender.getPhoneId();
-        int subId = sender.getSubId();
+        notifyServiceStateForSubId(sender, sender.getServiceState(), sender.getSubId());
+    }
 
-        Rlog.d(LOG_TAG, "notifyServiceState: mRegistryMgr=" + mTelephonyRegistryMgr + " ss="
+    @Override
+    public void notifyServiceStateForSubId(Phone sender, ServiceState ss, int subId) {
+        int phoneId = sender.getPhoneId();
+
+        Rlog.d(LOG_TAG, "notifyServiceStateForSubId: mRegistryMgr=" + mTelephonyRegistryMgr + " ss="
                 + ss + " sender=" + sender + " phondId=" + phoneId + " subId=" + subId);
         if (ss == null) {
             ss = new ServiceState();
@@ -207,12 +211,6 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
-    public void notifyOutgoingEmergencyCall(Phone sender, EmergencyNumber emergencyNumber) {
-        mTelephonyRegistryMgr.notifyOutgoingEmergencyCall(
-                sender.getPhoneId(), sender.getSubId(), emergencyNumber);
-    }
-
-    @Override
     public void notifyOutgoingEmergencySms(Phone sender, EmergencyNumber emergencyNumber) {
         mTelephonyRegistryMgr.notifyOutgoingEmergencySms(
                 sender.getPhoneId(), sender.getSubId(), emergencyNumber);
@@ -236,6 +234,13 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     public void notifyBarringInfoChanged(Phone sender, BarringInfo barringInfo) {
         mTelephonyRegistryMgr.notifyBarringInfoChanged(sender.getPhoneId(), sender.getSubId(),
                 barringInfo);
+    }
+
+    @Override
+    public void notifyPhysicalChannelConfig(Phone sender,
+                                                   List<PhysicalChannelConfig> configs) {
+        int subId = sender.getSubId();
+        mTelephonyRegistryMgr.notifyPhysicalChannelConfigForSubscriber(subId, configs);
     }
 
     /**

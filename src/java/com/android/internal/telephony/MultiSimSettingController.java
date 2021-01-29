@@ -21,6 +21,7 @@ import static android.telephony.TelephonyManager.ACTION_PRIMARY_SUBSCRIPTION_LIS
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE;
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_ALL;
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DATA;
+import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DISMISS;
 import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_NONE;
 import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_NAMES;
 import static android.telephony.TelephonyManager.EXTRA_SIM_COMBINATION_WARNING_TYPE;
@@ -37,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelUuid;
 import android.provider.Settings;
@@ -90,7 +92,8 @@ public class MultiSimSettingController extends Handler {
                     PRIMARY_SUB_SWAPPED,
                     PRIMARY_SUB_SWAPPED_IN_GROUP,
                     PRIMARY_SUB_MARKED_OPPT,
-                    PRIMARY_SUB_INITIALIZED
+                    PRIMARY_SUB_INITIALIZED,
+                    PRIMARY_SUB_REMOVED_IN_GROUP
     })
     private @interface PrimarySubChangeType {}
 
@@ -108,6 +111,9 @@ public class MultiSimSettingController extends Handler {
     private static final int PRIMARY_SUB_MARKED_OPPT            = 5;
     // Subscription information is initially loaded.
     private static final int PRIMARY_SUB_INITIALIZED            = 6;
+    // One or more primary subscriptions are deactivated but within the same group as another active
+    // sub.
+    private static final int PRIMARY_SUB_REMOVED_IN_GROUP       = 7;
 
     protected final Context mContext;
     protected final SubscriptionController mSubController;
@@ -137,6 +143,10 @@ public class MultiSimSettingController extends Handler {
     // Then if subId 2 is deactivated from phone 0, the value becomes INVALID,
     // mCarrierConfigLoadedSubIds[0] = INVALID_SUBSCRIPTION_ID.
     private int[] mCarrierConfigLoadedSubIds;
+
+    // It indicates whether "Ask every time" option for default SMS subscription is supported by the
+    // device.
+    private final boolean mIsAskEverytimeSupportedForSms;
 
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -192,6 +202,8 @@ public class MultiSimSettingController extends Handler {
         PhoneConfigurationManager.registerForMultiSimConfigChange(
                 this, EVENT_MULTI_SIM_CONFIG_CHANGED, null);
 
+        mIsAskEverytimeSupportedForSms = mContext.getResources()
+                .getBoolean(com.android.internal.R.bool.config_sms_ask_every_time_support);
         context.registerReceiver(mIntentReceiver, new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
     }
@@ -226,6 +238,7 @@ public class MultiSimSettingController extends Handler {
      * Notify subscription info change.
      */
     public void notifySubscriptionInfoChanged() {
+        log("notifySubscriptionInfoChanged");
         obtainMessage(EVENT_SUBSCRIPTION_INFO_CHANGED).sendToTarget();
     }
 
@@ -328,6 +341,22 @@ public class MultiSimSettingController extends Handler {
      */
     private void onSubscriptionsChanged() {
         if (DBG) log("onSubscriptionsChanged");
+        reEvaluateAll();
+    }
+
+    /**
+     * This method is called when a phone object is removed (for example when going from multi-sim
+     * to single-sim).
+     * NOTE: This method does not post a message to self, instead it calls reEvaluateAll() directly.
+     * so it should only be called from the main thread. The reason is to update defaults asap
+     * after multi_sim_config property has been updated (see b/163582235).
+     */
+    public void onPhoneRemoved() {
+        if (DBG) log("onPhoneRemoved");
+        if (Looper.myLooper() != this.getLooper()) {
+            throw new RuntimeException("This method must be called from the same looper as "
+                    + "MultiSimSettingController.");
+        }
         reEvaluateAll();
     }
 
@@ -518,6 +547,7 @@ public class MultiSimSettingController extends Handler {
             mSubController.setDefaultDataSubId(subId);
             mSubController.setDefaultVoiceSubId(subId);
             mSubController.setDefaultSmsSubId(subId);
+            sendDefaultSubConfirmedNotification(subId);
             return;
         }
 
@@ -539,7 +569,8 @@ public class MultiSimSettingController extends Handler {
         if (DBG) log("[updateDefaultValues] Update default sms subscription");
         boolean smsSelected = updateDefaultValue(mPrimarySubList,
                 mSubController.getDefaultSmsSubId(),
-                (newValue -> mSubController.setDefaultSmsSubId(newValue)));
+                (newValue -> mSubController.setDefaultSmsSubId(newValue)),
+                mIsAskEverytimeSupportedForSms);
 
         sendSubChangeNotificationIfNeeded(change, dataSelected, voiceSelected, smsSelected);
     }
@@ -580,7 +611,14 @@ public class MultiSimSettingController extends Handler {
             // any previous primary subscription becomes inactive, we consider it
             for (int subId : prevPrimarySubList) {
                 if (mPrimarySubList.contains(subId)) continue;
-                if (!mSubController.isActiveSubId(subId)) return PRIMARY_SUB_REMOVED;
+                if (!mSubController.isActiveSubId(subId)) {
+                    for (int currentSubId : mPrimarySubList) {
+                        if (areSubscriptionsInSameGroup(currentSubId, subId)) {
+                            return PRIMARY_SUB_REMOVED_IN_GROUP;
+                        }
+                    }
+                    return PRIMARY_SUB_REMOVED;
+                }
                 if (!mSubController.isOpportunistic(subId)) {
                     // Should never happen.
                     loge("[updatePrimarySubListAndGetChangeType]: missing active primary subId "
@@ -589,6 +627,19 @@ public class MultiSimSettingController extends Handler {
             }
             return PRIMARY_SUB_MARKED_OPPT;
         }
+    }
+
+    private void sendDefaultSubConfirmedNotification(int defaultSubId) {
+        Intent intent = new Intent();
+        intent.setAction(ACTION_PRIMARY_SUBSCRIPTION_LIST_CHANGED);
+        intent.setClassName("com.android.settings",
+                "com.android.settings.sim.SimSelectNotification");
+
+        intent.putExtra(EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE,
+                EXTRA_DEFAULT_SUBSCRIPTION_SELECT_TYPE_DISMISS);
+        intent.putExtra(EXTRA_SUBSCRIPTION_ID, defaultSubId);
+
+        mContext.sendBroadcast(intent);
     }
 
     private void sendSubChangeNotificationIfNeeded(int change, boolean dataSelected,
@@ -699,7 +750,8 @@ public class MultiSimSettingController extends Handler {
                     && phone.isUserDataEnabled()
                     && !areSubscriptionsInSameGroup(defaultDataSub, phone.getSubId())) {
                 log("setting data to false on " + phone.getSubId());
-                phone.getDataEnabledSettings().setUserDataEnabled(false);
+                phone.getDataEnabledSettings().setDataEnabled(
+                        TelephonyManager.DATA_ENABLED_REASON_USER, false);
             }
         }
     }
@@ -771,14 +823,23 @@ public class MultiSimSettingController extends Handler {
     // Returns whether the new default value is valid.
     private boolean updateDefaultValue(List<Integer> primarySubList, int oldValue,
             UpdateDefaultAction action) {
+        return updateDefaultValue(primarySubList, oldValue, action, true);
+    }
+
+    private boolean updateDefaultValue(List<Integer> primarySubList, int oldValue,
+            UpdateDefaultAction action, boolean allowInvalidSubId) {
         int newValue = INVALID_SUBSCRIPTION_ID;
 
         if (primarySubList.size() > 0) {
             for (int subId : primarySubList) {
                 if (DBG) log("[updateDefaultValue] Record.id: " + subId);
-                // If the old subId is still active, or there's another active primary subscription
-                // that is in the same group, that should become the new default subscription.
-                if (areSubscriptionsInSameGroup(subId, oldValue)) {
+                // 1) If the old subId is still active, or there's another active primary
+                // subscription that is in the same group, that should become the new default
+                // subscription.
+                // 2) If the old subId is INVALID_SUBSCRIPTION_ID and allowInvalidSubId is false,
+                // first active subscription is used for new default always.
+                if (areSubscriptionsInSameGroup(subId, oldValue)
+                        || (!allowInvalidSubId && oldValue == INVALID_SUBSCRIPTION_ID)) {
                     newValue = subId;
                     log("[updateDefaultValue] updates to subId=" + newValue);
                     break;

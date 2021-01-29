@@ -24,6 +24,8 @@ import static android.provider.Telephony.Sms.Intents.RESULT_SMS_NULL_PDU;
 import static android.service.carrier.CarrierMessagingService.RECEIVE_OPTIONS_SKIP_NOTIFY_WHEN_CREDENTIAL_PROTECTED_STORAGE_UNAVAILABLE;
 import static android.telephony.TelephonyManager.PHONE_TYPE_CDMA;
 
+import android.annotation.IntDef;
+import android.annotation.Nullable;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.BroadcastOptions;
@@ -45,6 +47,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.PowerManager;
@@ -78,31 +81,32 @@ import com.android.telephony.Rlog;
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 /**
- * This class broadcasts incoming SMS messages to interested apps after storing them in
- * the SmsProvider "raw" table and ACKing them to the SMSC. After each message has been
- * broadcast, its parts are removed from the raw table. If the device crashes after ACKing
- * but before the broadcast completes, the pending messages will be rebroadcast on the next boot.
+ * This class broadcasts incoming SMS messages to interested apps after storing them in the
+ * SmsProvider "raw" table and ACKing them to the SMSC. After each message has been broadcast, its
+ * parts are removed from the raw table. If the device crashes after ACKing but before the broadcast
+ * completes, the pending messages will be rebroadcast on the next boot.
  *
- * <p>The state machine starts in {@link IdleState} state. When the {@link SMSDispatcher} receives a
- * new SMS from the radio, it calls {@link #dispatchNormalMessage},
- * which sends a message to the state machine, causing the wakelock to be acquired in
- * {@link #haltedProcessMessage}, which transitions to {@link DeliveringState} state, where the message
- * is saved to the raw table, then acknowledged via the {@link SMSDispatcher} which called us.
+ * <p>The state machine starts in {@link IdleState} state. When we receive a new SMS from the radio,
+ * the wakelock is acquired, then transition to {@link DeliveringState} state, where the message is
+ * saved to the raw table, then acknowledged to the modem which in turn acknowledges it to the SMSC.
  *
- * <p>After saving the SMS, if the message is complete (either single-part or the final segment
- * of a multi-part SMS), we broadcast the completed PDUs as an ordered broadcast, then transition to
+ * <p>After saving the SMS, if the message is complete (either single-part or the final segment of a
+ * multi-part SMS), we broadcast the completed PDUs as an ordered broadcast, then transition to
  * {@link WaitingState} state to wait for the broadcast to complete. When the local
  * {@link BroadcastReceiver} is called with the result, it sends {@link #EVENT_BROADCAST_COMPLETE}
- * to the state machine, causing us to either broadcast the next pending message (if one has
- * arrived while waiting for the broadcast to complete), or to transition back to the halted state
- * after all messages are processed. Then the wakelock is released and we wait for the next SMS.
+ * to the state machine, causing us to either broadcast the next pending message (if one has arrived
+ * while waiting for the broadcast to complete), or to transition back to the halted state after all
+ * messages are processed. Then the wakelock is released and we wait for the next SMS.
  */
 public abstract class InboundSmsHandler extends StateMachine {
     protected static final boolean DBG = true;
@@ -162,7 +166,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     public static final int EVENT_BROADCAST_SMS = 2;
 
     /** Message from resultReceiver notifying {@link WaitingState} of a completed broadcast. */
-    private static final int EVENT_BROADCAST_COMPLETE = 3;
+    public static final int EVENT_BROADCAST_COMPLETE = 3;
 
     /** Sent on exit from {@link WaitingState} to return to idle after sending all broadcasts. */
     private static final int EVENT_RETURN_TO_IDLE = 4;
@@ -182,6 +186,24 @@ public abstract class InboundSmsHandler extends StateMachine {
     /** Wakelock release delay when returning to idle state. */
     private static final int WAKELOCK_TIMEOUT = 3000;
 
+    /** Received SMS was not injected. */
+    public static final int SOURCE_NOT_INJECTED = 0;
+
+    /** Received SMS was received over IMS and injected. */
+    public static final int SOURCE_INJECTED_FROM_IMS = 1;
+
+    /** Received SMS was injected from source different than IMS. */
+    public static final int SOURCE_INJECTED_FROM_UNKNOWN = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(prefix = {"SOURCE_"},
+            value = {
+                SOURCE_NOT_INJECTED,
+                SOURCE_INJECTED_FROM_IMS,
+                SOURCE_INJECTED_FROM_UNKNOWN
+    })
+    public @interface SmsSource {}
+
     // The notitfication tag used when showing a notification. The combination of notification tag
     // and notification id should be unique within the phone app.
     private static final String NOTIFICATION_TAG = "InboundSmsHandler";
@@ -192,17 +214,17 @@ public abstract class InboundSmsHandler extends StateMachine {
     protected static final Uri sRawUriPermanentDelete =
             Uri.withAppendedPath(Telephony.Sms.CONTENT_URI, "raw/permanentDelete");
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected final Context mContext;
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final ContentResolver mResolver;
 
     /** Special handler for WAP push messages. */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final WapPushOverSms mWapPush;
 
     /** Wake lock to ensure device stays awake while dispatching the SMS intents. */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final PowerManager.WakeLock mWakeLock;
 
     /** DefaultState throws an exception or logs an error for unhandled message types. */
@@ -212,15 +234,15 @@ public abstract class InboundSmsHandler extends StateMachine {
     private final StartupState mStartupState = new StartupState();
 
     /** Idle state. Waiting for messages to process. */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final IdleState mIdleState = new IdleState();
 
     /** Delivering state. Saves the PDU in the raw table and acknowledges to SMSC. */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final DeliveringState mDeliveringState = new DeliveringState();
 
     /** Broadcasting state. Waits for current broadcast to complete before delivering next. */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private final WaitingState mWaitingState = new WaitingState();
 
     /** Helper class to check whether storage is available for incoming messages. */
@@ -228,10 +250,10 @@ public abstract class InboundSmsHandler extends StateMachine {
 
     private final boolean mSmsReceiveDisabled;
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected Phone mPhone;
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private UserManager mUserManager;
 
     protected TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
@@ -254,9 +276,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     /** Timeout for releasing wakelock */
     private int mWakeLockTimeout;
 
-    /** Indicates if last SMS was injected. This is used to recognize SMS received over IMS from
-        others in order to update metrics. */
-    private boolean mLastSmsWasInjected = false;
+    private List<SmsFilter> mSmsFilters;
 
     /**
      * Create a new SMS broadcast helper.
@@ -286,6 +306,8 @@ public abstract class InboundSmsHandler extends StateMachine {
         mPowerWhitelistManager =
                 (PowerWhitelistManager) mContext.getSystemService(Context.POWER_WHITELIST_MANAGER);
         mCellBroadcastServiceManager = new CellBroadcastServiceManager(context, phone);
+
+        mSmsFilters = createDefaultSmsFilters();
 
         addState(mDefaultState);
         addState(mStartupState, mDefaultState);
@@ -318,7 +340,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     }
 
     // CAF_MSIM Is this used anywhere ? if not remove it
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public Phone getPhone() {
         return mPhone;
     }
@@ -511,7 +533,7 @@ public abstract class InboundSmsHandler extends StateMachine {
 
                 case EVENT_INJECT_SMS:
                     // handle new injected SMS
-                    handleInjectSms((AsyncResult) msg.obj);
+                    handleInjectSms((AsyncResult) msg.obj, msg.arg1 == 1 /* isOverIms */);
                     sendMessage(EVENT_RETURN_TO_IDLE);
                     return HANDLED;
 
@@ -626,7 +648,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         }
     }
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private void handleNewSms(AsyncResult ar) {
         if (ar.exception != null) {
             loge("Exception processing incoming SMS: " + ar.exception);
@@ -636,8 +658,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         int result;
         try {
             SmsMessage sms = (SmsMessage) ar.result;
-            mLastSmsWasInjected = false;
-            result = dispatchMessage(sms.mWrappedSmsMessage);
+            result = dispatchMessage(sms.mWrappedSmsMessage, SOURCE_NOT_INJECTED);
         } catch (RuntimeException ex) {
             loge("Exception dispatching message", ex);
             result = RESULT_SMS_DISPATCH_FAILURE;
@@ -656,7 +677,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * @param ar is the AsyncResult that has the SMS PDU to be injected.
      */
     @UnsupportedAppUsage
-    private void handleInjectSms(AsyncResult ar) {
+    private void handleInjectSms(AsyncResult ar, boolean isOverIms) {
         int result;
         SmsDispatchersController.SmsInjectionCallback callback = null;
         try {
@@ -666,8 +687,9 @@ public abstract class InboundSmsHandler extends StateMachine {
                 loge("Null injected sms");
                 result = RESULT_SMS_NULL_PDU;
             } else {
-                mLastSmsWasInjected = true;
-                result = dispatchMessage(sms.mWrappedSmsMessage);
+                @SmsSource int smsSource =
+                        isOverIms ? SOURCE_INJECTED_FROM_IMS : SOURCE_INJECTED_FROM_UNKNOWN;
+                result = dispatchMessage(sms.mWrappedSmsMessage, smsSource);
             }
         } catch (RuntimeException ex) {
             loge("Exception dispatching message", ex);
@@ -684,10 +706,11 @@ public abstract class InboundSmsHandler extends StateMachine {
      * 3GPP2-specific message types.
      *
      * @param smsb the SmsMessageBase object from the RIL
+     * @param smsSource the source of the SMS message
      * @return a result code from {@link android.provider.Telephony.Sms.Intents},
      *  or {@link Activity#RESULT_OK} for delayed acknowledgment to SMSC
      */
-    private int dispatchMessage(SmsMessageBase smsb) {
+    private int dispatchMessage(SmsMessageBase smsb, @SmsSource int smsSource) {
         // If sms is null, there was a parsing error.
         if (smsb == null) {
             loge("dispatchSmsMessage: message is null");
@@ -714,12 +737,13 @@ public abstract class InboundSmsHandler extends StateMachine {
             return Intents.RESULT_SMS_RECEIVED_WHILE_ENCRYPTED;
         }
 
-        int result = dispatchMessageRadioSpecific(smsb);
+        int result = dispatchMessageRadioSpecific(smsb, smsSource);
 
         // In case of error, add to metrics. This is not required in case of success, as the
         // data will be tracked when the message is processed (processMessagePart).
-        if (result != Intents.RESULT_SMS_HANDLED) {
-            mMetrics.writeIncomingSmsError(mPhone.getPhoneId(), mLastSmsWasInjected, result);
+        if (result != Intents.RESULT_SMS_HANDLED && result != Activity.RESULT_OK) {
+            mMetrics.writeIncomingSmsError(mPhone.getPhoneId(), smsSource, result);
+            mPhone.getSmsStats().onIncomingSmsError(is3gpp2(), smsSource, result);
         }
         return result;
     }
@@ -730,10 +754,12 @@ public abstract class InboundSmsHandler extends StateMachine {
      * {@link #dispatchNormalMessage} from this class.
      *
      * @param smsb the SmsMessageBase object from the RIL
+     * @param smsSource the source of the SMS message
      * @return a result code from {@link android.provider.Telephony.Sms.Intents},
      *  or {@link Activity#RESULT_OK} for delayed acknowledgment to SMSC
      */
-    protected abstract int dispatchMessageRadioSpecific(SmsMessageBase smsb);
+    protected abstract int dispatchMessageRadioSpecific(SmsMessageBase smsb,
+            @SmsSource int smsSource);
 
     /**
      * Send an acknowledge message to the SMSC.
@@ -741,7 +767,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * @param result result code indicating any error
      * @param response callback message sent when operation completes.
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected abstract void acknowledgeLastIncomingSms(boolean success,
             int result, Message response);
 
@@ -777,10 +803,11 @@ public abstract class InboundSmsHandler extends StateMachine {
      * {@link #EVENT_BROADCAST_SMS}. Returns {@link Intents#RESULT_SMS_HANDLED} or an error value.
      *
      * @param sms the message to dispatch
+     * @param smsSource the source of the SMS message
      * @return {@link Intents#RESULT_SMS_HANDLED} if the message was accepted, or an error status
      */
     @UnsupportedAppUsage
-    protected int dispatchNormalMessage(SmsMessageBase sms) {
+    protected int dispatchNormalMessage(SmsMessageBase sms, @SmsSource int smsSource) {
         SmsHeader smsHeader = sms.getUserDataHeader();
         InboundSmsTracker tracker;
 
@@ -795,10 +822,10 @@ public abstract class InboundSmsHandler extends StateMachine {
             tracker = TelephonyComponentFactory.getInstance()
                     .inject(InboundSmsTracker.class.getName())
                     .makeInboundSmsTracker(mContext, sms.getPdu(),
-                    sms.getTimestampMillis(), destPort, is3gpp2(), false,
-                    sms.getOriginatingAddress(), sms.getDisplayOriginatingAddress(),
-                    sms.getMessageBody(), sms.getMessageClass() == MessageClass.CLASS_0,
-                            mPhone.getSubId());
+                            sms.getTimestampMillis(), destPort, is3gpp2(), false,
+                            sms.getOriginatingAddress(), sms.getDisplayOriginatingAddress(),
+                            sms.getMessageBody(), sms.getMessageClass() == MessageClass.CLASS_0,
+                            mPhone.getSubId(), smsSource);
         } else {
             // Create a tracker for this message segment.
             SmsHeader.ConcatRef concatRef = smsHeader.concatRef;
@@ -807,10 +834,11 @@ public abstract class InboundSmsHandler extends StateMachine {
             tracker = TelephonyComponentFactory.getInstance()
                     .inject(InboundSmsTracker.class.getName())
                     .makeInboundSmsTracker(mContext, sms.getPdu(),
-                    sms.getTimestampMillis(), destPort, is3gpp2(), sms.getOriginatingAddress(),
-                    sms.getDisplayOriginatingAddress(), concatRef.refNumber, concatRef.seqNumber,
-                    concatRef.msgCount, false, sms.getMessageBody(),
-                    sms.getMessageClass() == MessageClass.CLASS_0, mPhone.getSubId());
+                            sms.getTimestampMillis(), destPort, is3gpp2(),
+                            sms.getOriginatingAddress(), sms.getDisplayOriginatingAddress(),
+                            concatRef.refNumber, concatRef.seqNumber, concatRef.msgCount, false,
+                            sms.getMessageBody(), sms.getMessageClass() == MessageClass.CLASS_0,
+                            mPhone.getSubId(), smsSource);
         }
 
         if (VDBG) log("created tracker: " + tracker);
@@ -857,7 +885,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * @param tracker the tracker containing the message segment to process
      * @return true if an ordered broadcast was sent; false if waiting for more message segments
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private boolean processMessagePart(InboundSmsTracker tracker) {
         int messageCount = tracker.getMessageCount();
         byte[][] pdus;
@@ -970,14 +998,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         }
 
         final boolean isWapPush = (destPort == SmsHeader.PORT_WAP_PUSH);
-
-        // At this point, all parts of the SMS are received. Update metrics for incoming SMS.
-        // WAP-PUSH messages are handled below to also keep track of the result of the processing.
         String format = tracker.getFormat();
-        if (!isWapPush) {
-            mMetrics.writeIncomingSmsSession(mPhone.getPhoneId(), mLastSmsWasInjected,
-                    format, timestamps, block, tracker.getMessageId());
-        }
 
         // Do not process null pdu(s). Check for that and return false in that case.
         List<byte[]> pduList = Arrays.asList(pdus);
@@ -985,6 +1006,8 @@ public abstract class InboundSmsHandler extends StateMachine {
             String errorMsg = "processMessagePart: returning false due to "
                     + (pduList.size() == 0 ? "pduList.size() == 0" : "pduList.contains(null)");
             logeWithLocalLog(errorMsg, tracker.getMessageId());
+            mPhone.getSmsStats().onIncomingSmsError(
+                    is3gpp2(), tracker.getSource(), RESULT_SMS_NULL_PDU);
             return false;
         }
 
@@ -999,9 +1022,11 @@ public abstract class InboundSmsHandler extends StateMachine {
                     } else {
                         loge("processMessagePart: SmsMessage.createFromPdu returned null",
                                 tracker.getMessageId());
-                        mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), mLastSmsWasInjected,
+                        mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), tracker.getSource(),
                                 SmsConstants.FORMAT_3GPP, timestamps, false,
                                 tracker.getMessageId());
+                        mPhone.getSmsStats().onIncomingSmsWapPush(tracker.getSource(),
+                                messageCount, RESULT_SMS_NULL_MESSAGE, tracker.getMessageId());
                         return false;
                     }
                 }
@@ -1030,13 +1055,12 @@ public abstract class InboundSmsHandler extends StateMachine {
             }
             // Add result of WAP-PUSH into metrics. RESULT_SMS_HANDLED indicates that the WAP-PUSH
             // needs to be ignored, so treating it as a success case.
-            if (result == Activity.RESULT_OK || result == Intents.RESULT_SMS_HANDLED) {
-                mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), mLastSmsWasInjected,
-                        format, timestamps, true, tracker.getMessageId());
-            } else {
-                mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), mLastSmsWasInjected,
-                        format, timestamps, false, tracker.getMessageId());
-            }
+            boolean wapPushResult =
+                    result == Activity.RESULT_OK || result == Intents.RESULT_SMS_HANDLED;
+            mMetrics.writeIncomingWapPush(mPhone.getPhoneId(), tracker.getSource(),
+                    format, timestamps, wapPushResult, tracker.getMessageId());
+            mPhone.getSmsStats().onIncomingSmsWapPush(tracker.getSource(), messageCount,
+                    result, tracker.getMessageId());
             // result is Activity.RESULT_OK if an ordered broadcast was sent
             if (result == Activity.RESULT_OK) {
                 return true;
@@ -1049,18 +1073,32 @@ public abstract class InboundSmsHandler extends StateMachine {
             }
         }
 
-        if (block) {
-            deleteFromRawTable(tracker.getDeleteWhere(), tracker.getDeleteWhereArgs(),
-                    DELETE_PERMANENTLY);
-            log("processMessagePart: returning false as the phone number is blocked",
-                    tracker.getMessageId());
-            return false;
-        }
+        // All parts of SMS are received. Update metrics for incoming SMS.
+        // The metrics are generated before SMS filters are invoked.
+        // For messages composed by multiple parts, the metrics are generated considering the
+        // characteristics of the last one.
+        mMetrics.writeIncomingSmsSession(mPhone.getPhoneId(), tracker.getSource(),
+                format, timestamps, block, tracker.getMessageId());
+        mPhone.getSmsStats().onIncomingSmsSuccess(is3gpp2(), tracker.getSource(),
+                messageCount, block, tracker.getMessageId());
 
+        // Always invoke SMS filters, even if the number ends up being blocked, to prevent
+        // surprising bugs due to blocking numbers that happen to be used for visual voicemail SMS
+        // or other carrier system messages.
         boolean filterInvoked = filterSms(
-            pdus, destPort, tracker, resultReceiver, true /* userUnlocked */);
+                pdus, destPort, tracker, resultReceiver, true /* userUnlocked */, block);
 
         if (!filterInvoked) {
+            // Block now if the filter wasn't invoked. Otherwise, it will be the responsibility of
+            // the filter to delete the SMS once processing completes.
+            if (block) {
+                deleteFromRawTable(tracker.getDeleteWhere(), tracker.getDeleteWhereArgs(),
+                        DELETE_PERMANENTLY);
+                log("processMessagePart: returning false as the phone number is blocked",
+                        tracker.getMessageId());
+                return false;
+            }
+
             dispatchSmsDeliveryIntent(pdus, format, destPort, resultReceiver,
                     tracker.isClass0(), tracker.getSubId(), tracker.getMessageId());
         }
@@ -1086,7 +1124,8 @@ public abstract class InboundSmsHandler extends StateMachine {
         if (destPort == -1) {
             // This is a regular SMS - hand it to the carrier or system app for filtering.
             boolean filterInvoked = filterSms(
-                pdus, destPort, tracker, resultReceiver, false /* userUnlocked */);
+                    pdus, destPort, tracker, resultReceiver, false /* userUnlocked */,
+                    false /* block */);
             if (filterInvoked) {
                 // filter invoked, wait for it to return the result.
                 return true;
@@ -1099,7 +1138,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         return false;
     }
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private void showNewMessageNotification() {
         // Do not show the notification on non-FBE devices.
         if (!StorageManager.isFileEncryptedNativeOrEmulated()) {
@@ -1134,53 +1173,100 @@ public abstract class InboundSmsHandler extends StateMachine {
     }
 
     /**
+     * Creates the default filters used to filter SMS messages.
+     *
+     * <p>Currently 3 filters exist: the carrier package, the VisualVoicemailSmsFilter, and the
+     * missed incoming call SMS filter.
+     *
+     * <p>Since the carrier filter is asynchronous, if a message passes through the carrier filter,
+     * the remaining filters will be applied in the callback.
+     */
+    private List<SmsFilter> createDefaultSmsFilters() {
+        List<SmsFilter> smsFilters = new ArrayList<>(3);
+        smsFilters.add(
+                (pdus, destPort, tracker, resultReceiver, userUnlocked, block, remainingFilters)
+                        -> {
+                    CarrierServicesSmsFilterCallback filterCallback =
+                            new CarrierServicesSmsFilterCallback(
+                                    pdus, destPort, tracker, tracker.getFormat(), resultReceiver,
+                                    userUnlocked,
+                                    tracker.isClass0(), tracker.getSubId(), tracker.getMessageId(),
+                                    block, remainingFilters);
+                    CarrierServicesSmsFilter carrierServicesFilter = new CarrierServicesSmsFilter(
+                            mContext, mPhone, pdus, destPort, tracker.getFormat(),
+                            filterCallback, getName() + "::CarrierServicesSmsFilter",
+                            mCarrierServiceLocalLog, tracker.getMessageId());
+                    if (carrierServicesFilter.filter()) {
+                        log("SMS is being handled by carrier service", tracker.getMessageId());
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+        smsFilters.add(
+                (pdus, destPort, tracker, resultReceiver, userUnlocked, block, remainingFilters)
+                        -> {
+                    if (VisualVoicemailSmsFilter.filter(
+                            mContext, pdus, tracker.getFormat(), destPort, tracker.getSubId())) {
+                        logWithLocalLog("Visual voicemail SMS dropped", tracker.getMessageId());
+                        dropFilteredSms(tracker, resultReceiver, block);
+                        return true;
+                    }
+                    return false;
+                });
+        smsFilters.add(
+                (pdus, destPort, tracker, resultReceiver, userUnlocked, block, remainingFilters)
+                        -> {
+                    MissedIncomingCallSmsFilter missedIncomingCallSmsFilter =
+                            new MissedIncomingCallSmsFilter(mPhone);
+                    if (missedIncomingCallSmsFilter.filter(pdus, tracker.getFormat())) {
+                        logWithLocalLog("Missed incoming call SMS received",
+                                tracker.getMessageId());
+                        dropFilteredSms(tracker, resultReceiver, block);
+                        return true;
+                    }
+                    return false;
+                });
+        return smsFilters;
+    }
+
+    private void dropFilteredSms(
+            InboundSmsTracker tracker, SmsBroadcastReceiver resultReceiver, boolean block) {
+        if (block) {
+            deleteFromRawTable(
+                    tracker.getDeleteWhere(), tracker.getDeleteWhereArgs(),
+                    DELETE_PERMANENTLY);
+            sendMessage(EVENT_BROADCAST_COMPLETE);
+        } else {
+            dropSms(resultReceiver);
+        }
+    }
+
+    /**
      * Filters the SMS.
      *
-     * <p>currently 3 filters exists: the carrier package, the system package, and the
-     * VisualVoicemailSmsFilter.
-     *
-     * <p>The filtering process is:
-     *
-     * <p>If the carrier package exists, the SMS will be filtered with it first. If the carrier
-     * package did not drop the SMS, then the VisualVoicemailSmsFilter will filter it in the
-     * callback.
-     *
-     * <p>If the carrier package does not exists, we will let the VisualVoicemailSmsFilter filter
-     * it. If the SMS passed the filter, then we will try to find the system package to do the
-     * filtering.
+     * <p>Each filter in {@link #mSmsFilters} is invoked sequentially. If any filter returns true,
+     * this method returns true and subsequent filters are ignored.
      *
      * @return true if a filter is invoked and the SMS processing flow is diverted, false otherwise.
      */
     private boolean filterSms(byte[][] pdus, int destPort,
-        InboundSmsTracker tracker, SmsBroadcastReceiver resultReceiver, boolean userUnlocked) {
-        CarrierServicesSmsFilterCallback filterCallback =
-                new CarrierServicesSmsFilterCallback(
-                        pdus, destPort, tracker.getFormat(), resultReceiver, userUnlocked,
-                        tracker.isClass0(), tracker.getSubId(), tracker.getMessageId());
-        CarrierServicesSmsFilter carrierServicesFilter = new CarrierServicesSmsFilter(
-                mContext, mPhone, pdus, destPort, tracker.getFormat(),
-                filterCallback, getName() + "::CarrierServicesSmsFilter", mCarrierServiceLocalLog,
-                tracker.getMessageId());
-        if (carrierServicesFilter.filter()) {
-            log("filterSms: SMS is being handled by carrier service", tracker.getMessageId());
-            return true;
-        }
+            InboundSmsTracker tracker, SmsBroadcastReceiver resultReceiver, boolean userUnlocked,
+            boolean block) {
+        return filterSms(pdus, destPort, tracker, resultReceiver, userUnlocked, block, mSmsFilters);
+    }
 
-        if (VisualVoicemailSmsFilter.filter(
-                mContext, pdus, tracker.getFormat(), destPort, tracker.getSubId())) {
-            logWithLocalLog("filterSms: Visual voicemail SMS dropped", tracker.getMessageId());
-            dropSms(resultReceiver);
-            return true;
+    private static boolean filterSms(byte[][] pdus, int destPort,
+            InboundSmsTracker tracker, SmsBroadcastReceiver resultReceiver, boolean userUnlocked,
+            boolean block, List<SmsFilter> filters) {
+        ListIterator<SmsFilter> iterator = filters.listIterator();
+        while (iterator.hasNext()) {
+            SmsFilter smsFilter = iterator.next();
+            if (smsFilter.filterSms(pdus, destPort, tracker, resultReceiver, userUnlocked, block,
+                    filters.subList(iterator.nextIndex(), filters.size()))) {
+                return true;
+            }
         }
-
-        MissedIncomingCallSmsFilter missedIncomingCallSmsFilter =
-                new MissedIncomingCallSmsFilter(mPhone);
-        if (missedIncomingCallSmsFilter.filter(pdus, tracker.getFormat())) {
-            logWithLocalLog("filterSms: Missed incoming call SMS received", tracker.getMessageId());
-            dropSms(resultReceiver);
-            return true;
-        }
-
         return false;
     }
 
@@ -1193,7 +1279,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * @param appOp app op that is being performed when dispatching to a receiver
      * @param user user to deliver the intent to
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public void dispatchIntent(Intent intent, String permission, String appOp,
             Bundle opts, BroadcastReceiver resultReceiver, UserHandle user, int subId) {
         intent.addFlags(Intent.FLAG_RECEIVER_NO_ABORT);
@@ -1268,7 +1354,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     /**
      * Helper for {@link SmsBroadcastUndelivered} to delete an old message in the raw table.
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private void deleteFromRawTable(String deleteWhere, String[] deleteWhereArgs,
                                     int deleteType) {
         Uri uri = deleteType == DELETE_PERMANENTLY ? sRawUriPermanentDelete : sRawUri;
@@ -1280,7 +1366,7 @@ public abstract class InboundSmsHandler extends StateMachine {
         }
     }
 
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private Bundle handleSmsWhitelisting(ComponentName target, boolean bgActivityStartAllowed) {
         String pkgName;
         String reason;
@@ -1525,10 +1611,11 @@ public abstract class InboundSmsHandler extends StateMachine {
      * Handler for an {@link InboundSmsTracker} broadcast. Deletes PDUs from the raw table and
      * logs the broadcast duration (as an error if the other receivers were especially slow).
      */
-    private final class SmsBroadcastReceiver extends BroadcastReceiver {
-        @UnsupportedAppUsage
+    @VisibleForTesting
+    public final class SmsBroadcastReceiver extends BroadcastReceiver {
+        @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
         private final String mDeleteWhere;
-        @UnsupportedAppUsage
+        @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
         private final String[] mDeleteWhereArgs;
         private long mBroadcastTimeNano;
 
@@ -1610,53 +1697,76 @@ public abstract class InboundSmsHandler extends StateMachine {
             CarrierServicesSmsFilter.CarrierServicesSmsFilterCallbackInterface {
         private final byte[][] mPdus;
         private final int mDestPort;
+        private final InboundSmsTracker mTracker;
         private final String mSmsFormat;
         private final SmsBroadcastReceiver mSmsBroadcastReceiver;
         private final boolean mUserUnlocked;
         private final boolean mIsClass0;
         private final int mSubId;
         private final long mMessageId;
+        private final boolean mBlock;
+        private final List<SmsFilter> mRemainingFilters;
 
-        CarrierServicesSmsFilterCallback(byte[][] pdus, int destPort, String smsFormat,
-                SmsBroadcastReceiver smsBroadcastReceiver,  boolean userUnlocked,
-                boolean isClass0, int subId, long messageId) {
+        CarrierServicesSmsFilterCallback(byte[][] pdus, int destPort, InboundSmsTracker tracker,
+                String smsFormat, SmsBroadcastReceiver smsBroadcastReceiver, boolean userUnlocked,
+                boolean isClass0, int subId, long messageId, boolean block,
+                List<SmsFilter> remainingFilters) {
             mPdus = pdus;
             mDestPort = destPort;
+            mTracker = tracker;
             mSmsFormat = smsFormat;
             mSmsBroadcastReceiver = smsBroadcastReceiver;
             mUserUnlocked = userUnlocked;
             mIsClass0 = isClass0;
             mSubId = subId;
             mMessageId = messageId;
+            mBlock = block;
+            mRemainingFilters = remainingFilters;
         }
 
         @Override
         public void onFilterComplete(int result) {
             log("onFilterComplete: result is " + result, mMessageId);
-            if ((result & CarrierMessagingService.RECEIVE_OPTIONS_DROP) == 0) {
-                if (VisualVoicemailSmsFilter.filter(mContext, mPdus,
-                        mSmsFormat, mDestPort, mSubId)) {
-                    logWithLocalLog("Visual voicemail SMS dropped", mMessageId);
-                    dropSms(mSmsBroadcastReceiver);
-                    return;
-                }
 
-                if (mUserUnlocked) {
-                    dispatchSmsDeliveryIntent(
-                            mPdus, mSmsFormat, mDestPort, mSmsBroadcastReceiver, mIsClass0, mSubId,
-                            mMessageId);
-                } else {
-                    // Don't do anything further, leave the message in the raw table if the
-                    // credential-encrypted storage is still locked and show the new message
-                    // notification if the message is visible to the user.
-                    if (!isSkipNotifyFlagSet(result)) {
-                        showNewMessageNotification();
-                    }
-                    sendMessage(EVENT_BROADCAST_COMPLETE);
-                }
+            boolean carrierRequestedDrop =
+                    (result & CarrierMessagingService.RECEIVE_OPTIONS_DROP) != 0;
+            if (carrierRequestedDrop) {
+                // Carrier app asked the platform to drop the SMS. Drop it from the database and
+                // complete processing.
+                dropFilteredSms(mTracker, mSmsBroadcastReceiver, mBlock);
+                return;
+            }
+
+            boolean filterInvoked = filterSms(mPdus, mDestPort, mTracker, mSmsBroadcastReceiver,
+                    mUserUnlocked, mBlock, mRemainingFilters);
+            if (filterInvoked) {
+                // A remaining filter has assumed responsibility for further message processing.
+                return;
+            }
+
+            // Now that all filters have been invoked, drop the message if it is blocked.
+            // TODO(b/156910035): Remove mUserUnlocked once we stop showing the new message
+            // notification for blocked numbers.
+            if (mUserUnlocked && mBlock) {
+                log("onFilterComplete: dropping message as the sender is blocked",
+                        mTracker.getMessageId());
+                dropFilteredSms(mTracker, mSmsBroadcastReceiver, mBlock);
+                return;
+            }
+
+            // Message matched no filters and is not blocked, so complete processing.
+            if (mUserUnlocked) {
+                dispatchSmsDeliveryIntent(
+                        mPdus, mSmsFormat, mDestPort, mSmsBroadcastReceiver, mIsClass0, mSubId,
+                        mMessageId);
             } else {
-                // Drop this SMS.
-                dropSms(mSmsBroadcastReceiver);
+                // Don't do anything further, leave the message in the raw table if the
+                // credential-encrypted storage is still locked and show the new message
+                // notification if the message is visible to the user.
+                if (!isSkipNotifyFlagSet(result)) {
+                    showNewMessageNotification();
+                }
+                sendMessage(EVENT_BROADCAST_COMPLETE);
             }
         }
     }
@@ -1670,7 +1780,7 @@ public abstract class InboundSmsHandler extends StateMachine {
     /** Checks whether the flag to skip new message notification is set in the bitmask returned
      *  from the carrier app.
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private boolean isSkipNotifyFlagSet(int callbackResult) {
         return (callbackResult
             & RECEIVE_OPTIONS_SKIP_NOTIFY_WHEN_CREDENTIAL_PROTECTED_STORAGE_UNAVAILABLE) > 0;
@@ -1718,7 +1828,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * Log with debug level.
      * @param s the string to log
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @Override
     protected void log(String s) {
         Rlog.d(getName(), s);
@@ -1737,7 +1847,7 @@ public abstract class InboundSmsHandler extends StateMachine {
      * Log with error level.
      * @param s the string to log
      */
-    @UnsupportedAppUsage
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @Override
     protected void loge(String s) {
         Rlog.e(getName(), s);
@@ -1826,6 +1936,20 @@ public abstract class InboundSmsHandler extends StateMachine {
     }
 
     /**
+     * Set the SMS filters used by {@link #filterSms} for testing purposes.
+     *
+     * @param smsFilters List of SMS filters, or null to restore the default filters.
+     */
+    @VisibleForTesting
+    public void setSmsFiltersForTesting(@Nullable List<SmsFilter> smsFilters) {
+        if (smsFilters == null) {
+            mSmsFilters = createDefaultSmsFilters();
+        } else {
+            mSmsFilters = smsFilters;
+        }
+    }
+
+    /**
      * Handler for the broadcast sent when the new message notification is clicked. It launches the
      * default SMS app.
      */
@@ -1903,5 +2027,28 @@ public abstract class InboundSmsHandler extends StateMachine {
                 handleTestAction(intent);
             }
         }
+    }
+
+    /** A filter for incoming messages allowing the normal processing flow to be skipped. */
+    @VisibleForTesting
+    public interface SmsFilter {
+        /**
+         * Returns true if a filter is invoked and the SMS processing flow should be diverted, false
+         * otherwise.
+         *
+         * <p>If the filter can immediately determine that the message matches, it must call
+         * {@link #dropFilteredSms} to drop the message from the database once it has been
+         * processed.
+         *
+         * <p>If the filter must perform some asynchronous work to determine if the message matches,
+         * it should return true to defer processing. Once it has made a determination, if it finds
+         * the message matches, it must call {@link #dropFilteredSms}. If the message does not
+         * match, it must be passed through {@code remainingFilters} and either dropped if the
+         * remaining filters all return false or if {@code block} is true, or else it must be
+         * broadcast.
+         */
+        boolean filterSms(byte[][] pdus, int destPort, InboundSmsTracker tracker,
+                SmsBroadcastReceiver resultReceiver, boolean userUnlocked, boolean block,
+                List<SmsFilter> remainingFilters);
     }
 }
