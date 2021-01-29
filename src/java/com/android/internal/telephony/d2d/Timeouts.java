@@ -25,12 +25,26 @@ import android.provider.Settings;
 public final class Timeouts {
 
     public static class Adapter {
-        public Adapter() {
+        private final ContentResolver mContentResolver;
 
+        public Adapter(ContentResolver cr) {
+            mContentResolver = cr;
         }
 
-        public long getRtpMessageAckDurationMillis(ContentResolver cr)  {
-            return Timeouts.getRtpMessageAckDurationMillis(cr);
+        public long getRtpMessageAckDurationMillis()  {
+            return Timeouts.getRtpMessageAckDurationMillis(mContentResolver);
+        }
+
+        public long getDtmfMinimumIntervalMillis() {
+            return Timeouts.getDtmfMinimumIntervalMillis(mContentResolver);
+        }
+
+        public long getDtmfMaxSequenceIntervalMillis() {
+            return Timeouts.getDtmfMaxSequenceIntervalMillis(mContentResolver);
+        }
+
+        public long getDtmfNegotiationTimeoutMillis() {
+            return Timeouts.getDtmfNegotiationTimeoutMillis(mContentResolver);
         }
     }
 
@@ -58,5 +72,33 @@ public final class Timeouts {
      */
     public static long getRtpMessageAckDurationMillis(ContentResolver cr) {
         return get(cr, "rtp_message_ack_duration_millis", 1000L);
+    }
+
+    /**
+     * Determines the minimum duration between DTMF digits.  Digits are sent with this much spacing
+     * between them.
+     * @param cr
+     * @return
+     */
+    public static long getDtmfMinimumIntervalMillis(ContentResolver cr) {
+        return get(cr, "dtmf_minimum_interval_millis", 100L);
+    }
+
+    /**
+     * Determines the maximum amount of time to wait for a single DTMF sequence.
+     * @param cr
+     * @return
+     */
+    public static long getDtmfMaxSequenceIntervalMillis(ContentResolver cr) {
+        return get(cr, "dtmf_max_sequence_interval_millis", 1000L);
+    }
+
+    /**
+     * Determines the maximum amount of time to wait for negotiation of the DTMF protocol.
+     * @param cr
+     * @return
+     */
+    public static long getDtmfNegotiationTimeoutMillis(ContentResolver cr) {
+        return get(cr, "dtmf_negotiation_timeout_millis", 1000L);
     }
 }
