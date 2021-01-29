@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007729826",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1552066?revision\u003d5",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ea3aac1b_242610a5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-01-29T09:23:56Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(LocationManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 471,
+        "startChar": 27,
+        "endLine": 471,
+        "endChar": 71
+      },
+      "revId": "5030a1123533a502197ea714d86772479db74053",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
