@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b950ea39_8ae881b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-01-29T08:55:15Z",
+      "side": 1,
+      "message": "I think we\u0027ll need to add to the TelephonyNetworkFactory#makeNetworkFilter() as well:\n\nhttps://osscs.corp.google.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/dataconnection/TelephonyNetworkFactory.java;l\u003d133;bpv\u003d0;bpt\u003d1",
+      "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cb3a9ea_e9949115",
