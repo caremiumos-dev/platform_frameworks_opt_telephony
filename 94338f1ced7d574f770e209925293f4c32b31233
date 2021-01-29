@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f0346da_874c39f5",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-01-29T01:07:26Z",
+      "side": 1,
+      "message": "https://source.corp.google.com/android/frameworks/base/core/java/android/os/Handler.java;l\u003d411?q\u003dHandler.obtainMessage\u0026ct\u003dos\u0026sq\u003dpackage:%5Eandroid$",
+      "range": {
+        "startLine": 440,
+        "startChar": 22,
+        "endLine": 440,
+        "endChar": 35
+      },
+      "revId": "94338f1ced7d574f770e209925293f4c32b31233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
