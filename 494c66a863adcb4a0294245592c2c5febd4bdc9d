@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc467c4_0571ce45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1841493
+      },
+      "writtenOn": "2021-01-29T07:17:07Z",
+      "side": 1,
+      "message": "886535: Enable or disable modem | https://android-review.googlesource.com/c/platform/packages/services/AlternativeNetworkAccess/+/886535",
+      "revId": "494c66a863adcb4a0294245592c2c5febd4bdc9d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
