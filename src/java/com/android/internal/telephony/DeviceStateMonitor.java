@@ -437,7 +437,9 @@ public class DeviceStateMonitor extends Handler {
      * @param isEnable
      */
     public void setAlwaysReportSignalStrength(boolean isEnable) {
-        sendMessage(obtainMessage(EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH, isEnable ? 1 : 0));
+        sendMessage(
+                obtainMessage(EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH, isEnable ? 1 : 0 /*arg1*/,
+                        0 /*arg2*/));
     }
 
     /**

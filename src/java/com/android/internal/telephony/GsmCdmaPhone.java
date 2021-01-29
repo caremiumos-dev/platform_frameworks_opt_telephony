@@ -4064,6 +4064,12 @@ public class GsmCdmaPhone extends Phone {
                 signalStrengthMeasure,
                 mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
                 REPORTING_HYSTERESIS_DB);
+
+        logd("SSUT: setSignalStrengthReportingCriteria: ran= " + ran + ", signalStrengthMeasure"
+                + signalStrengthMeasure + ", thresholds=" + Arrays.toString(thresholds)
+                + ", consolidatedThresholds=" + Arrays.toString(consolidatedThresholds)
+                + ", isEnabled=" + isEnabled);
+
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
                         .setRadioAccessNetworkType(ran)

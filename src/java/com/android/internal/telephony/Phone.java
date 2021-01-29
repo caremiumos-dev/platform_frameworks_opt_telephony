@@ -3672,6 +3672,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @param isEnable {@code true} for enabling; {@code false} for disabling.
      */
     public void setAlwaysReportSignalStrength(boolean isEnable) {
+        Rlog.d(LOG_TAG, "SSUT: setAlwaysReportSignalStrength:" + isEnable);
         if (mDeviceStateMonitor != null) {
             mDeviceStateMonitor.setAlwaysReportSignalStrength(isEnable);
         }

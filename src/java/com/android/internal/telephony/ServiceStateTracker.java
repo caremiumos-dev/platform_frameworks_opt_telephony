@@ -1829,6 +1829,7 @@ public class ServiceStateTracker extends Handler {
             }
 
             case EVENT_ON_DEVICE_IDLE_STATE_CHANGED: {
+                log("SSUT: EVENT_ON_DEVICE_IDLE_STATE_CHANGED");
                 updateReportingCriteria(getCarrierConfig());
                 break;
             }
@@ -5424,6 +5425,7 @@ public class ServiceStateTracker extends Handler {
         pw.println(" mLteRsrpBoost=" + mLteRsrpBoost);
         pw.println(" mCellInfoMinIntervalMs=" + mCellInfoMinIntervalMs);
         pw.println(" mEriManager=" + mEriManager);
+        pw.println(" mSignalRequestRecords" + mSignalRequestRecords);
         dumpEarfcnPairList(pw);
 
         mLocaleTracker.dump(fd, pw, args);
@@ -6040,6 +6042,7 @@ public class ServiceStateTracker extends Handler {
      */
     public void setSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @NonNull Message onCompleted) {
+        log("SSUT: setSignalStrengthUpdateRequest subId=" + subId + ", callingUid=" + callingUid + ", SSUR=" + request);
         SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
         sendMessage(obtainMessage(EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
@@ -6050,6 +6053,7 @@ public class ServiceStateTracker extends Handler {
      */
     public void clearSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @Nullable Message onCompleted) {
+        log("SSUT: clearSignalStrengthUpdateRequest subId=" + subId + ", callingUid=" + callingUid + ", SSUR=" + request);
         SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
         sendMessage(obtainMessage(EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
@@ -6139,15 +6143,32 @@ public class ServiceStateTracker extends Handler {
 
         @Override
         public void binderDied() {
+            log("SSUT: binderDied, call clearSignalStrengthUpdateRequest");
             clearSignalStrengthUpdateRequest(mSubId, mCallingUid, mRequest, null /*onCompleted*/);
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer sb = new StringBuffer("SignalRequestRecord {");
+
+            sb.append("mSubId=").append(mSubId);
+            sb.append(" mCallingUid").append(mCallingUid);
+            sb.append(" mRequest").append(mRequest).append("}");
+
+            return sb.toString();
         }
     }
 
     private void updateAlwaysReportSignalStrength() {
         final int curSubId = mPhone.getSubId();
+        log("SSUT: updateAlwaysReportSignalStrength curSubId=" + curSubId);
+        for (SignalRequestRecord ssr : mSignalRequestRecords) {
+            log("SSUT: updateAlwaysReportSignalStrength mSubId=" + ssr.mSubId + ", mCallingUid=" + ssr.mCallingUid + ", SSUR=" + ssr.mRequest);
+        }
         boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
                 srr -> srr.mSubId == curSubId && (srr.mRequest.isReportingRequestedWhileIdle()
                         || srr.mRequest.isSystemThresholdReportingRequestedWhileIdle()));
+        log("SSUT: updateAlwaysReportSignalStrength alwaysReport=" + alwaysReport);
 
         // TODO(b/177924721): TM#setAlwaysReportSignalStrength will be removed and we will not
         // worry about unset flag which was set by other client.
