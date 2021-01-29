@@ -22,6 +22,53 @@
       },
       "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7c2853f_0b93687e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-01-29T08:52:45Z",
+      "side": 1,
+      "message": "Yep, this is a good place. We\u0027ll be inserting something basically at l.1679 to cross check the fully-built capabilities with VcnManagementService",
+      "parentUuid": "0cb3a9ea_e9949115",
+      "range": {
+        "startLine": 1676,
+        "startChar": 49,
+        "endLine": 1676,
+        "endChar": 79
+      },
+      "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d9055a_e84aebdb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-01-29T08:52:45Z",
+      "side": 1,
+      "message": "Smallest nit: Would suggest putting this right under the addTransport(TRANSPORT_CELLULAR) on l.1550; this is the closest we have to a \"default\" so it\u0027d be clear to be added at the start.",
+      "range": {
+        "startLine": 1676,
+        "startChar": 8,
+        "endLine": 1676,
+        "endChar": 14
+      },
+      "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
