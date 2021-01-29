@@ -22,6 +22,30 @@
       },
       "revId": "94338f1ced7d574f770e209925293f4c32b31233",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb11ddf_82d2f6ea",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-01-29T01:12:46Z",
+      "side": 1,
+      "message": "I was to use \nsendMessage(obtainMessage(EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH, isEnable ? 1 : 0 /*arg1*/), 0 /*arg2*/);\n\nBut arg2 will never be used and it is really better to explicitly specify that we assign isEnable to msg.arg1 instead.\n\nThat\u0027s why this three line version of change is used instead one line above.",
+      "parentUuid": "7f0346da_874c39f5",
+      "range": {
+        "startLine": 440,
+        "startChar": 22,
+        "endLine": 440,
+        "endChar": 35
+      },
+      "revId": "94338f1ced7d574f770e209925293f4c32b31233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
