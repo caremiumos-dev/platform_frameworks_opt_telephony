@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16cfe32b_d83846b4",
+        "filename": "src/java/com/android/internal/telephony/d2d/Communicator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "do you still want to log this if the \"this should never happen\" case gets hit?",
+      "range": {
+        "startLine": 148,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 53
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bd9a208_6474ac1f",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "if we need to change this in the future (e.g. if we run out of bits on one of the message categories), is there a plan for backwards compatibility? (e.g. the newer device would send ABDAC, where AC is the new codec identifier, and the older device sees only ABD, which it would interpret as \"unknown\"?)\n\nactually having gone through the code below, it looks like the older device would read ABD, recognize an invalid message, then receive AC, then time out, so I guess it works out if newLength \u003c 2*oldLength? might be good to make the backwards compat story explicit though.",
+      "range": {
+        "startLine": 80,
+        "startChar": 28,
+        "endLine": 80,
+        "endChar": 51
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e105a594_b26f84be",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "what\u0027s the plan for when we add two more codecs? would we need to wrap around to 0?",
+      "range": {
+        "startLine": 88,
+        "startChar": 31,
+        "endLine": 88,
+        "endChar": 67
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eca2bcc8_a7bb4b77",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "do you still need this? looks like it\u0027s not being read",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "446a0f5c_670d0437",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "rename to getMaxDurationOfDtmfMessage for consistency?",
+      "range": {
+        "startLine": 169,
+        "startChar": 55,
+        "endLine": 169,
+        "endChar": 87
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e86168a7_57e6db7d",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "maybe fuzz a bit extra on top of this in case there\u0027s some clock issues on the remote side?",
+      "range": {
+        "startLine": 226,
+        "startChar": 31,
+        "endLine": 226,
+        "endChar": 59
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbd543b2_bbd88e49",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "is this synchronized with handleReceivedDigit? there may be a race if the timeout fires concurrently with an incoming dtmf",
+      "range": {
+        "startLine": 398,
+        "startChar": 17,
+        "endLine": 398,
+        "endChar": 41
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f23bfb1_9a02296f",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "do you need to clear mReceivedDigits here like you do when the message times out?",
+      "range": {
+        "startLine": 448,
+        "startChar": 17,
+        "endLine": 448,
+        "endChar": 38
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc397ec9_4ff951c1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportConversionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 41,
+        "startChar": 10,
+        "endLine": 41,
+        "endChar": 26
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c6782a_a1d4034e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportConversionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "suggest using assertArrayEquals()",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 72
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77e7567e_4ea6adf1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-01-30T01:39:18Z",
+      "side": 1,
+      "message": "would it be better to check these after each time-advancement?",
+      "range": {
+        "startLine": 285,
+        "startChar": 8,
+        "endLine": 285,
+        "endChar": 62
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
