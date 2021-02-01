@@ -527,6 +527,7 @@ public class MultiSimSettingController extends Handler {
             mSubController.setDefaultDataSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
             mSubController.setDefaultVoiceSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
             mSubController.setDefaultSmsSubId(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+            mSubInfoInitialized = false;
             return;
         }
 

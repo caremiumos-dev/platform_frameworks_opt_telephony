@@ -222,9 +222,18 @@ public class SubscriptionInfoUpdater extends Handler {
         for (int i = 0; i < TelephonyManager.getDefault().getActiveModemCount(); i++) {
             UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(i);
             int slotId = UiccController.getInstance().getSlotIdFromPhoneId(i);
-            if  (sIccId[i] == null || slot == null || !slot.isActive()) {
+
+            logd("isAllIccIdQueryDone=+ sIccid[" + i + "]:" + sIccId[i] + ", slot.getCardState(): "
+                    + (slot != null ? slot.getCardState() : "NULL"));
+            if  (sIccId[i] == null || slot == null || !slot.isActive()
+                    || (slot.getCardState() == CardState.CARDSTATE_PRESENT
+                        && sIccId[i] == ICCID_STRING_FOR_NO_SIM)) {
                 if (sIccId[i] == null) {
                     logd("Wait for SIM " + i + " Iccid");
+                } else if (slot != null && (slot.getCardState() == CardState.CARDSTATE_PRESENT
+                        && sIccId[i] == ICCID_STRING_FOR_NO_SIM)) {
+                    logd("Wait for SIM" + i + " IccID, "
+                            + "CARDSTATE_PRESENT, but mIccid is ICCID_STRING_FOR_NO_SIM");
                 } else {
                     logd(String.format("Wait for slot corresponding to phone %d to be active, "
                             + "slotId is %d", i, slotId));
@@ -441,6 +450,8 @@ public class SubscriptionInfoUpdater extends Handler {
             // At this phase, the subscription list is accessible. Treating NOT_READY
             // as equivalent to ABSENT, once the rest of the system can handle it.
             sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+            // Check all sim is not ready. If they are, initialize sIsSubInfoInitialized as false.
+            setSubInfoInitializedAllSIMRemoved();
             updateSubscriptionInfoByIccId(phoneId, false /* updateEmbeddedSubs */);
         }
 
@@ -662,6 +673,7 @@ public class SubscriptionInfoUpdater extends Handler {
             sInactiveIccIds[phoneId] = null;
         }
         sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+        setSubInfoInitializedAllSIMRemoved();
         updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
     }
 
@@ -775,6 +787,22 @@ public class SubscriptionInfoUpdater extends Handler {
 
         mSubscriptionController.notifySubscriptionInfoChanged();
         if (DBG) logd("updateSubscriptionInfoByIccId: SubscriptionInfo update complete");
+    }
+
+    private void setSubInfoInitializedAllSIMRemoved() {
+        int currentSIMremovedCnt = 0;
+        int activeModemCnt = TelephonyManager.getDefault().getActiveModemCount();
+        for (int i = 0; i < activeModemCnt; i++) {
+            if (sIccId[i] == ICCID_STRING_FOR_NO_SIM) {
+                currentSIMremovedCnt++;
+            }
+        }
+
+        // Check all sim is not ready or absent.
+        // If they are, initialize sIsSubInfoInitialized as false.
+        if (currentSIMremovedCnt == activeModemCnt) {
+            sIsSubInfoInitialized = false;
+        }
     }
 
     private void setSubInfoInitialized() {
