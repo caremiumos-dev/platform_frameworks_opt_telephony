@@ -1,0 +1,784 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "29f0512c_15bd403b",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 136
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "bc1401ad_5d229c68",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 40
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "1c4abb45_321a180f",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 48
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "caa56789_1cf1ba80",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 113
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "85d8f6cc_d1932d63",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 105
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2eba836e_5da51adc",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "5cb6f13e_fe24db15",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "24f41849_1ed976fb",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d8bfac0e_2b60e471",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 105
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "a146bceb_7df2e6ae",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c59eeef7_e7d71292",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 106
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "76764542_e736c065",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "8b4f0dd5_b83fef28",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "20eb70ff_18e5ed5d",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "416f8a5a_db398338",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 105
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "259d46bb_d9e39e47",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c6d53807_0745cdc0",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 43
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "099cb7b4_b1b9a6f9",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "1d734ca1_c617cdfe",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "0bab911d_71beba65",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "8875f5f8_389911c9",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 101
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "623b8623_43555d2f",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 52
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "be7a81a7_ce7ffead",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 105
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c6304b69_3939573d",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 44
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "189311e1_e3486534",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 39
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9a211c18_616df4e1",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 47
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2fab3477_380471ee",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 47
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c481bfaa_3d3ab9ab",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 40
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "2593882e_45ca2581",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 48
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000007766907",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1567221?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "482b9fd1_7a99c32e",
+        "filename": "src/java/com/android/internal/telephony/CellBroadcastServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-01T02:12:19Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 113
+      },
+      "revId": "80a581ca9e99ce722af1c15a5707bbd3ef47ec9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
