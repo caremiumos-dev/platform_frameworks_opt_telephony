@@ -110,6 +110,30 @@
       },
       "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2d5a42e_d64e054e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-02-01T19:21:19Z",
+      "side": 1,
+      "message": "This was less about the transport, and more about adding it with the other \"defaults\" for this network. No strong feelings either way.",
+      "parentUuid": "3affd5e5_caef6253",
+      "range": {
+        "startLine": 1676,
+        "startChar": 8,
+        "endLine": 1676,
+        "endChar": 14
+      },
+      "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
