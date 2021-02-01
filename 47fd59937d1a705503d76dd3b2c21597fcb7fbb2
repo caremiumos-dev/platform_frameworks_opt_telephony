@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31fca940_1d2d50d7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-01T21:40:10Z",
+      "side": 1,
+      "message": "Bitmask",
+      "range": {
+        "startLine": 4426,
+        "startChar": 83,
+        "endLine": 4426,
+        "endChar": 90
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e374ec6c_5e79a24c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-01T21:40:10Z",
+      "side": 1,
+      "message": "@NonNull",
+      "range": {
+        "startLine": 4426,
+        "startChar": 60,
+        "endLine": 4426,
+        "endChar": 66
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e054a52_c6db6ff4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-01T21:40:10Z",
+      "side": 1,
+      "message": "@ApnType",
+      "range": {
+        "startLine": 4426,
+        "startChar": 72,
+        "endLine": 4426,
+        "endChar": 75
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e17b45f2_bfec1994",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-01T21:40:10Z",
+      "side": 1,
+      "message": "@NonNull",
+      "range": {
+        "startLine": 4426,
+        "startChar": 46,
+        "endLine": 4426,
+        "endChar": 52
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ec2ce94_6020f744",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4441,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-01T21:40:10Z",
+      "side": 1,
+      "message": "ApnSettings",
+      "range": {
+        "startLine": 4441,
+        "startChar": 27,
+        "endLine": 4441,
+        "endChar": 37
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
