@@ -232,6 +232,13 @@ public class SubscriptionInfoUpdater extends Handler {
                     logd("Wait for SIM " + i + " Iccid");
                 } else if (slot != null && (slot.getCardState() == CardState.CARDSTATE_PRESENT
                         && sIccId[i] == ICCID_STRING_FOR_NO_SIM)) {
+                    SubscriptionInfo info = SubscriptionController.getInstance()
+                            .getSubInfoForIccId(IccUtils.stripTrailingFs(slot.getIccId()));
+                    if (info != null && !info.areUiccApplicationsEnabled()) {
+                        logd("isAllIccIdQueryDone=+ Skip... Because [" + i
+                                + "] uicc application disabled");
+                        continue;
+                    }
                     logd("Wait for SIM" + i + " IccID, "
                             + "CARDSTATE_PRESENT, but mIccid is ICCID_STRING_FOR_NO_SIM");
                 } else {
