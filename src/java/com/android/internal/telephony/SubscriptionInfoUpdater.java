@@ -222,9 +222,18 @@ public class SubscriptionInfoUpdater extends Handler {
         for (int i = 0; i < TelephonyManager.getDefault().getActiveModemCount(); i++) {
             UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(i);
             int slotId = UiccController.getInstance().getSlotIdFromPhoneId(i);
-            if  (sIccId[i] == null || slot == null || !slot.isActive()) {
+
+            logd("isAllIccIdQueryDone=+ sIccid[" + i + "]:" + sIccId[i] + ", slot.getCardState(): "
+                    + (slot != null ? slot.getCardState() : "NULL"));
+            if  (sIccId[i] == null || slot == null || !slot.isActive()
+                    || (slot.getCardState() == CardState.CARDSTATE_PRESENT
+                        && sIccId[i] == ICCID_STRING_FOR_NO_SIM)) {
                 if (sIccId[i] == null) {
                     logd("Wait for SIM " + i + " Iccid");
+                } else if (slot != null && (slot.getCardState() == CardState.CARDSTATE_PRESENT
+                        && sIccId[i] == ICCID_STRING_FOR_NO_SIM)) {
+                    logd("Wait for SIM" + i + " IccID, "
+                            + "CARDSTATE_PRESENT, but mIccid is ICCID_STRING_FOR_NO_SIM");
                 } else {
                     logd(String.format("Wait for slot corresponding to phone %d to be active, "
                             + "slotId is %d", i, slotId));
