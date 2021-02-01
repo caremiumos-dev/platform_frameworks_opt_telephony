@@ -93,6 +93,7 @@ import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
 import com.android.internal.telephony.metrics.VoiceCallSessionStats;
@@ -295,8 +296,10 @@ public class GsmCdmaPhone extends Phone {
         // DcTracker uses ServiceStateTracker and DisplayInfoController so needs to be created
         // after they are instantiated
         for (int transport : mTransportManager.getAvailableTransports()) {
-            mDcTrackers.put(transport, mTelephonyComponentFactory.inject(DcTracker.class.getName())
-                    .makeDcTracker(this, transport));
+            DcTracker dcTracker = mTelephonyComponentFactory.inject(DcTracker.class.getName())
+                    .makeDcTracker(this, transport);
+            mDcTrackers.put(transport, dcTracker);
+            mTransportManager.registerDataThrottler(dcTracker.getDataThrottler());
         }
 
         mCarrierResolver = mTelephonyComponentFactory.inject(CarrierResolver.class.getName())
@@ -848,6 +851,10 @@ public class GsmCdmaPhone extends Phone {
         super.notifyServiceStateChangedP(ss);
     }
 
+    void notifyServiceStateChangedForSubId(ServiceState ss, int subId) {
+        super.notifyServiceStateChangedPForSubId(ss, subId);
+    }
+
     /**
      * Notify that the cell location has changed.
      *
@@ -1324,8 +1331,12 @@ public class GsmCdmaPhone extends Phone {
         }
         TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
         boolean isEmergency = tm.isEmergencyNumber(dialString);
+        ImsPhone.ImsDialArgs.Builder imsDialArgsBuilder;
+        imsDialArgsBuilder = ImsPhone.ImsDialArgs.Builder.from(dialArgs)
+                                                 .setIsEmergency(isEmergency);
+        mDialArgs = dialArgs = imsDialArgsBuilder.build();
+
         Phone imsPhone = mImsPhone;
-        mDialArgs = dialArgs;
 
         CarrierConfigManager configManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
@@ -1438,13 +1449,8 @@ public class GsmCdmaPhone extends Phone {
             mIsTestingEmergencyCallbackMode = true;
             mCi.testingEmergencyCall();
         }
-        if (isPhoneTypeGsm()) {
-            return dialInternal(dialString, new DialArgs.Builder<>()
-                    .setIntentExtras(dialArgs.intentExtras)
-                    .build());
-        } else {
-            return dialInternal(dialString, dialArgs);
-        }
+
+        return dialInternal(dialString, dialArgs);
     }
 
     /**
@@ -1510,7 +1516,7 @@ public class GsmCdmaPhone extends Phone {
             if (DBG) logd("dialInternal: dialing w/ mmi '" + mmi + "'...");
 
             if (mmi == null) {
-                return mCT.dialGsm(newDialString, dialArgs.uusInfo, dialArgs.intentExtras);
+                return mCT.dialGsm(newDialString, dialArgs);
             } else if (mmi.isTemporaryModeCLIR()) {
                 return mCT.dialGsm(mmi.mDialingNumber, mmi.getCLIRMode(), dialArgs.uusInfo,
                         dialArgs.intentExtras);
@@ -1521,7 +1527,7 @@ public class GsmCdmaPhone extends Phone {
                 return null;
             }
         } else {
-            return mCT.dial(newDialString, dialArgs.intentExtras);
+            return mCT.dial(newDialString, dialArgs);
         }
     }
 
@@ -1856,11 +1862,11 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public ImsiEncryptionInfo getCarrierInfoForImsiEncryption(int keyType) {
+    public ImsiEncryptionInfo getCarrierInfoForImsiEncryption(int keyType, boolean fallback) {
         String operatorNumeric = TelephonyManager.from(mContext)
                 .getSimOperatorNumericForPhone(mPhoneId);
         return CarrierInfoManager.getCarrierInfoForImsiEncryption(keyType,
-                mContext, operatorNumeric);
+                mContext, operatorNumeric, fallback, getSubId());
     }
 
     @Override
@@ -1869,38 +1875,51 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public void deleteCarrierInfoForImsiEncryption() {
+        CarrierInfoManager.deleteCarrierInfoForImsiEncryption(mContext);
+    }
+
+    @Override
     public int getCarrierId() {
-        return mCarrierResolver.getCarrierId();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getCarrierId() : super.getCarrierId();
     }
 
     @Override
     public String getCarrierName() {
-        return mCarrierResolver.getCarrierName();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getCarrierName() : super.getCarrierName();
     }
 
     @Override
     public int getMNOCarrierId() {
-        return mCarrierResolver.getMnoCarrierId();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getMnoCarrierId() : super.getMNOCarrierId();
     }
 
     @Override
     public int getSpecificCarrierId() {
-        return mCarrierResolver.getSpecificCarrierId();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getSpecificCarrierId() : super.getSpecificCarrierId();
     }
 
     @Override
     public String getSpecificCarrierName() {
-        return mCarrierResolver.getSpecificCarrierName();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getSpecificCarrierName() : super.getSpecificCarrierName();
     }
 
     @Override
     public void resolveSubscriptionCarrierId(String simState) {
-        mCarrierResolver.resolveSubscriptionCarrierId(simState);
+        if (mCarrierResolver != null) {
+            mCarrierResolver.resolveSubscriptionCarrierId(simState);
+        }
     }
 
     @Override
     public int getCarrierIdListVersion() {
-        return mCarrierResolver.getCarrierListVersion();
+        return mCarrierResolver != null
+                ? mCarrierResolver.getCarrierListVersion() : super.getCarrierIdListVersion();
     }
 
     @Override
@@ -2763,6 +2782,11 @@ public class GsmCdmaPhone extends Phone {
                 mImeiSv = respId[1];
                 mEsn  =  respId[2];
                 mMeid =  respId[3];
+                // some modems return all 0's instead of null/empty string when MEID is unavailable
+                if (!TextUtils.isEmpty(mMeid) && mMeid.matches("^0*$")) {
+                    logd("EVENT_GET_DEVICE_IDENTITY_DONE: set mMeid to null");
+                    mMeid = null;
+                }
             }
             break;
 
@@ -2851,14 +2875,6 @@ public class GsmCdmaPhone extends Phone {
                         com.android.internal.R.bool
                                 .config_switch_phone_on_voice_reg_state_change)) {
                     mCi.getVoiceRadioTechnology(obtainMessage(EVENT_REQUEST_VOICE_RADIO_TECH_DONE));
-                }
-                // Force update IMS service if it is available, if it isn't the config will be
-                // updated when ImsPhoneCallTracker opens a connection.
-                ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-                if (imsManager.isServiceAvailable()) {
-                    imsManager.updateImsServiceConfig();
-                } else {
-                    logd("ImsManager is not available to update CarrierConfig.");
                 }
 
                 // Update broadcastEmergencyCallStateChanges
@@ -3133,7 +3149,7 @@ public class GsmCdmaPhone extends Phone {
                     Rlog.d(LOG_TAG, "get phone radio capability fail, no need to change " +
                             "mRadioCapability");
                 } else {
-                    radioCapabilityUpdated(rc);
+                    radioCapabilityUpdated(rc, false);
                 }
                 Rlog.d(LOG_TAG, "EVENT_GET_RADIO_CAPABILITY: phone rc: " + rc);
                 break;
@@ -4048,8 +4064,20 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setSignalStrengthReportingCriteria(
             int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
-        mCi.setSignalStrengthReportingCriteria(new SignalThresholdInfo(signalStrengthMeasure,
-                REPORTING_HYSTERESIS_MILLIS, REPORTING_HYSTERESIS_DB, thresholds, isEnabled),
+        int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
+                ran,
+                signalStrengthMeasure,
+                mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
+                REPORTING_HYSTERESIS_DB);
+        mCi.setSignalStrengthReportingCriteria(
+                new SignalThresholdInfo.Builder()
+                        .setRadioAccessNetworkType(ran)
+                        .setSignalMeasurementType(signalStrengthMeasure)
+                        .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
+                        .setHysteresisDb(REPORTING_HYSTERESIS_DB)
+                        .setThresholdsUnlimited(consolidatedThresholds)
+                        .setIsEnabled(isEnabled)
+                        .build(),
                 ran, null);
     }
 

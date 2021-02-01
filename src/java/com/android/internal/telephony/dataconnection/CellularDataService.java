@@ -29,6 +29,7 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
+import android.telephony.data.SliceInfo;
 
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.Phone;
@@ -56,6 +57,7 @@ public class CellularDataService extends DataService {
     private static final int DATA_CALL_LIST_CHANGED                 = 6;
     private static final int START_HANDOVER                         = 7;
     private static final int CANCEL_HANDOVER                        = 8;
+    private static final int APN_UNTHROTTLED                        = 9;
 
     private class CellularDataServiceProvider extends DataService.DataServiceProvider {
 
@@ -117,6 +119,9 @@ public class CellularDataService extends DataService {
                         case CANCEL_HANDOVER:
                             callback.onHandoverCancelled(toResultCode(ar.exception));
                             break;
+                        case APN_UNTHROTTLED:
+                            notifyApnUnthrottled((String) ar.result);
+                            break;
                         default:
                             loge("Unexpected event: " + message.what);
                     }
@@ -125,6 +130,9 @@ public class CellularDataService extends DataService {
 
             if (DBG) log("Register for data call list changed.");
             mPhone.mCi.registerForDataCallListChanged(mHandler, DATA_CALL_LIST_CHANGED, null);
+
+            if (DBG) log("Register for apn unthrottled.");
+            mPhone.mCi.registerForApnUnthrottled(mHandler, APN_UNTHROTTLED, null);
         }
 
 
@@ -151,7 +159,7 @@ public class CellularDataService extends DataService {
         @Override
         public void setupDataCall(int accessNetworkType, DataProfile dataProfile,
                 boolean isRoaming, boolean allowRoaming, int reason, LinkProperties linkProperties,
-                int pduSessionId, DataServiceCallback callback) {
+                int pduSessionId, SliceInfo sliceInfo, DataServiceCallback callback) {
             if (DBG) log("setupDataCall " + getSlotIndex());
 
             Message message = null;
@@ -163,7 +171,7 @@ public class CellularDataService extends DataService {
             }
 
             mPhone.mCi.setupDataCall(accessNetworkType, dataProfile, isRoaming, allowRoaming,
-                    reason, linkProperties, pduSessionId, message);
+                    reason, linkProperties, pduSessionId, sliceInfo, message);
         }
 
         @Override

@@ -18,7 +18,6 @@ package com.android.internal.telephony.dataconnection;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED;
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_METERED;
-import static android.net.NetworkCapabilities.NET_CAPABILITY_TEMPORARILY_NOT_METERED;
 import static android.net.NetworkPolicyManager.SUBSCRIPTION_OVERRIDE_CONGESTED;
 import static android.net.NetworkPolicyManager.SUBSCRIPTION_OVERRIDE_UNMETERED;
 
@@ -69,6 +68,7 @@ import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.dataconnection.DataConnection.ConnectionParams;
 import com.android.internal.telephony.dataconnection.DataConnection.DisconnectParams;
 import com.android.internal.telephony.dataconnection.DataConnection.SetupResult;
+import com.android.internal.telephony.metrics.DataCallSessionStats;
 import com.android.internal.util.IState;
 import com.android.internal.util.StateMachine;
 
@@ -94,6 +94,8 @@ public class DataConnectionTest extends TelephonyTest {
     ApnContext mApnContext;
     @Mock
     DcFailBringUp mDcFailBringUp;
+    @Mock
+    DataCallSessionStats mDataCallSessionStats;
 
     private DataConnection mDc;
     private DataConnectionTestHandler mDataConnectionTestHandler;
@@ -312,6 +314,8 @@ public class DataConnectionTest extends TelephonyTest {
         mDataConnectionTestHandler.start();
 
         waitForMs(200);
+        mDc.setDataCallSessionStats(mDataCallSessionStats);
+
         logd("-Setup!");
     }
 
@@ -386,7 +390,7 @@ public class DataConnectionTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
                 eq(AccessNetworkType.UTRAN), dpCaptor.capture(), eq(false),
                 eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
-                anyInt(), any(Message.class));
+                anyInt(), any(), any(Message.class));
 
         assertEquals("spmode.ne.jp", dpCaptor.getValue().getApn());
 
@@ -420,7 +424,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(0)
+                .setRetryDurationMillis(0)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -438,7 +442,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(1000)
+                .setRetryDurationMillis(1000)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -456,7 +460,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(9999)
+                .setRetryDurationMillis(9999)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -478,7 +482,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemNotSuggestRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(-1)
+                .setRetryDurationMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -496,7 +500,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(-5)
+                .setRetryDurationMillis(-5)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -514,7 +518,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(Long.MIN_VALUE)
+                .setRetryDurationMillis(Long.MIN_VALUE)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -536,7 +540,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testModemSuggestNoRetry() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(Long.MAX_VALUE)
+                .setRetryDurationMillis(Long.MAX_VALUE)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -610,7 +614,6 @@ public class DataConnectionTest extends TelephonyTest {
         testConnectEvent();
 
         assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
-        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
     }
 
     @Test
@@ -634,18 +637,18 @@ public class DataConnectionTest extends TelephonyTest {
                 new String[] { "default" });
         testConnectEvent();
 
-        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
 
         mDc.onSubscriptionOverride(SUBSCRIPTION_OVERRIDE_UNMETERED,
                 SUBSCRIPTION_OVERRIDE_UNMETERED);
 
-        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
+        assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
 
         mDc.onSubscriptionOverride(SUBSCRIPTION_OVERRIDE_UNMETERED, 0);
 
-        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
+        assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
     }
 
@@ -726,7 +729,7 @@ public class DataConnectionTest extends TelephonyTest {
     public void testSetLinkProperties() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(-1)
+                .setRetryDurationMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -782,7 +785,7 @@ public class DataConnectionTest extends TelephonyTest {
         // 224.224.224.224 is an invalid address.
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(-1)
+                .setRetryDurationMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -805,7 +808,7 @@ public class DataConnectionTest extends TelephonyTest {
         // Empty dns entry.
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryIntervalMillis(-1)
+                .setRetryDurationMillis(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)

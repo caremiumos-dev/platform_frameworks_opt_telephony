@@ -65,6 +65,7 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_STK_SESSION_
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_SUPP_SVC_NOTIFICATION;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_APPLICATIONS_ENABLEMENT_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UNTHROTTLE_APN;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
 
@@ -85,7 +86,9 @@ import android.hardware.radio.V1_0.StkCcUnsolSsResult;
 import android.hardware.radio.V1_0.SuppSvcNotification;
 import android.hardware.radio.V1_2.CellConnectionStatus;
 import android.hardware.radio.V1_6.IRadioIndication;
+import android.hardware.radio.V1_6.PhysicalChannelConfig.Band;
 import android.os.AsyncResult;
+import android.os.RemoteException;
 import android.sysprop.TelephonyProperties;
 import android.telephony.Annotation.RadioPowerState;
 import android.telephony.AnomalyReporter;
@@ -313,10 +316,36 @@ public class RadioIndication extends IRadioIndication.Stub {
     }
 
     /**
+     * Indicates the current signal strength of the camped or primary serving cell.
+     */
+    public void currentSignalStrength_1_6(int indicationType,
+            android.hardware.radio.V1_6.SignalStrength signalStrength) {
+
+        mRil.processIndication(indicationType);
+
+        SignalStrength ss = new SignalStrength(signalStrength);
+
+        if (RIL.RILJ_LOGV) mRil.unsljLogvRet(RIL_UNSOL_SIGNAL_STRENGTH, ss);
+
+        if (mRil.mSignalStrengthRegistrant != null) {
+            mRil.mSignalStrengthRegistrant.notifyRegistrant(new AsyncResult(null, ss, null));
+        }
+    }
+
+    /**
      * Indicates current physical channel configuration.
      */
     public void currentPhysicalChannelConfigs_1_4(int indicationType,
             ArrayList<android.hardware.radio.V1_4.PhysicalChannelConfig> configs) {
+        mRil.processIndication(indicationType);
+        physicalChannelConfigsIndication(configs);
+    }
+
+    /**
+     * Indicates current physical channel configuration.
+     */
+    public void currentPhysicalChannelConfigs_1_6(int indicationType,
+            ArrayList<android.hardware.radio.V1_6.PhysicalChannelConfig> configs) {
         mRil.processIndication(indicationType);
         physicalChannelConfigsIndication(configs);
     }
@@ -381,8 +410,10 @@ public class RadioIndication extends IRadioIndication.Stub {
         responseDataCallListChanged(indicationType, dcList);
     }
 
-    /**  unthrottleApn */
-    public void unthrottleApn(int indicationType, String apn) {
+    @Override
+    public void unthrottleApn(int indicationType, String apn)
+            throws RemoteException {
+        responseApnUnthrottled(indicationType, apn);
     }
 
     public void suppSvcNotify(int indicationType, SuppSvcNotification suppSvcNotification) {
@@ -1145,7 +1176,7 @@ public class RadioIndication extends IRadioIndication.Stub {
                 builder.setFrequencyRange(config.rfInfo.range());
                 break;
             case android.hardware.radio.V1_4.RadioFrequencyInfo.hidl_discriminator.channelNumber:
-                builder.setChannelNumber(config.rfInfo.channelNumber());
+                builder.setDownlinkChannelNumber(config.rfInfo.channelNumber());
                 break;
             default:
                 mRil.riljLoge("Unsupported frequency type " + config.rfInfo.getDiscriminator());
@@ -1163,6 +1194,35 @@ public class RadioIndication extends IRadioIndication.Stub {
                 mRil.riljLoge("Unsupported CellConnectionStatus in PhysicalChannelConfig: "
                         + status);
                 return PhysicalChannelConfig.CONNECTION_UNKNOWN;
+        }
+    }
+
+    /**
+     * Set the band from the physical channel config.
+     *
+     * @param builder the builder of {@link PhysicalChannelConfig}.
+     * @param config physical channel config from ril.
+     */
+    public void setBandToBuilder(PhysicalChannelConfig.Builder builder,
+            android.hardware.radio.V1_6.PhysicalChannelConfig config) {
+
+        android.hardware.radio.V1_6.PhysicalChannelConfig.Band band = config.band;
+
+        switch (band.getDiscriminator()) {
+            case Band.hidl_discriminator.geranBand:
+                builder.setBand(band.geranBand());
+                break;
+            case Band.hidl_discriminator.utranBand:
+                builder.setBand(band.utranBand());
+                break;
+            case Band.hidl_discriminator.eutranBand:
+                builder.setBand(band.eutranBand());
+                break;
+            case Band.hidl_discriminator.ngranBand:
+                builder.setBand(band.ngranBand());
+                break;
+            default:
+                mRil.riljLoge("Unsupported band type " + band.getDiscriminator());
         }
     }
 
@@ -1186,7 +1246,22 @@ public class RadioIndication extends IRadioIndication.Stub {
                 response.add(builder.setCellConnectionStatus(
                         convertConnectionStatusFromCellConnectionStatus(config.base.status))
                         .setCellBandwidthDownlinkKhz(config.base.cellBandwidthDownlink)
-                        .setRat(ServiceState.rilRadioTechnologyToNetworkType(config.rat))
+                        .setNetworkType(ServiceState.rilRadioTechnologyToNetworkType(config.rat))
+                        .setPhysicalCellId(config.physicalCellId)
+                        .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
+                        .build());
+            } else if (obj instanceof android.hardware.radio.V1_6.PhysicalChannelConfig) {
+                android.hardware.radio.V1_6.PhysicalChannelConfig config =
+                        (android.hardware.radio.V1_6.PhysicalChannelConfig) obj;
+                PhysicalChannelConfig.Builder builder = new PhysicalChannelConfig.Builder();
+                setBandToBuilder(builder, config);
+                response.add(builder.setCellConnectionStatus(
+                        convertConnectionStatusFromCellConnectionStatus(config.status))
+                        .setDownlinkChannelNumber(config.downlinkChannelNumber)
+                        .setUplinkChannelNumber(config.uplinkChannelNumber)
+                        .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlink)
+                        .setCellBandwidthUplinkKhz(config.cellBandwidthUplink)
+                        .setNetworkType(ServiceState.rilRadioTechnologyToNetworkType(config.rat))
                         .setPhysicalCellId(config.physicalCellId)
                         .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
                         .build());
@@ -1261,5 +1336,14 @@ public class RadioIndication extends IRadioIndication.Stub {
         ArrayList<DataCallResponse> response = RIL.convertDataCallResultList(dcList);
         mRil.mDataCallListChangedRegistrants.notifyRegistrants(
                 new AsyncResult(null, response, null));
+    }
+
+    private void responseApnUnthrottled(int indicationType, String apn) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_UNTHROTTLE_APN, apn);
+
+        mRil.mApnUnthrottledRegistrants.notifyRegistrants(
+                new AsyncResult(null, apn, null));
     }
 }

@@ -25,6 +25,7 @@ import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,6 +72,7 @@ import android.testing.TestableLooper;
 import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
+import com.android.internal.telephony.test.SimulatedCommandsVerifier;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -488,7 +490,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
             Connection connection = mPhoneUT.dial("1234567890",
                     new PhoneInternalInterface.DialArgs.Builder().build());
-            verify(mCT).dialGsm("1234567890", null, null);
+            verify(mCT).dialGsm(eq("1234567890"), any(PhoneInternalInterface.DialArgs.class));
         } catch (CallStateException e) {
             fail();
         }
@@ -505,7 +507,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
             mPhoneUT.dial("*27216505551212", new PhoneInternalInterface.DialArgs.Builder().build());
 
-            verify(mCT).dialGsm("*27216505551212", null, null);
+            verify(mCT).dialGsm(eq("*27216505551212"), any(PhoneInternalInterface.DialArgs.class));
             verify(mImsCT).hangupAllConnections();
         } catch (CallStateException e) {
             fail();
@@ -561,7 +563,7 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
             mPhoneUT.dial("*27216505551212",
                     new PhoneInternalInterface.DialArgs.Builder().build());
-            verify(mCT).dialGsm("*27216505551212", null, null);
+            verify(mCT).dialGsm(eq("*27216505551212"), any(PhoneInternalInterface.DialArgs.class));
             verify(mImsCT, never()).hangupAllConnections();
         } catch (CallStateException e) {
             fail();
@@ -979,6 +981,32 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(SimulatedCommands.FAKE_IMEISV, mPhoneUT.getDeviceSvn());
         assertEquals(SimulatedCommands.FAKE_ESN, mPhoneUT.getEsn());
         assertEquals(SimulatedCommands.FAKE_MEID, mPhoneUT.getMeid());
+    }
+
+    @Test
+    public void testZeroMeid() {
+        doReturn(false).when(mSST).isDeviceShuttingDown();
+
+        SimulatedCommands sc = new SimulatedCommands() {
+            @Override
+            public void getDeviceIdentity(Message response) {
+                SimulatedCommandsVerifier.getInstance().getDeviceIdentity(response);
+                resultSuccess(response, new String[] {FAKE_IMEI, FAKE_IMEISV, FAKE_ESN, "0000000"});
+            }
+        };
+
+        Phone phone = new GsmCdmaPhone(mContext, sc, mNotifier, true, 0,
+                PhoneConstants.PHONE_TYPE_GSM, mTelephonyComponentFactory);
+        phone.setVoiceCallSessionStats(mVoiceCallSessionStats);
+        ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(mUiccController).registerForIccChanged(eq(phone), integerArgumentCaptor.capture(),
+                nullable(Object.class));
+        Message msg = Message.obtain();
+        msg.what = integerArgumentCaptor.getValue();
+        phone.sendMessage(msg);
+        processAllMessages();
+
+        assertNull(phone.getMeid());
     }
 
     @Test
@@ -1485,7 +1513,8 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
         // Throw CallStateException(Phone.CS_FALLBACK) from ImsPhone.dial().
         doReturn(Phone.CS_FALLBACK).when(callStateException).getMessage();
-        doThrow(callStateException).when(mImsPhone).dial("*135#", dialArgs);
+        doThrow(callStateException).when(mImsPhone).dial(eq("*135#"),
+                any(PhoneInternalInterface.DialArgs.class));
 
         replaceInstance(Phone.class, "mImsPhone", mPhoneUT, mImsPhone);
     }

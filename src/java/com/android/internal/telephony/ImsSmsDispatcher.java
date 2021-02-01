@@ -23,6 +23,7 @@ import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
+import android.telephony.SmsManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.aidl.IImsSmsListener;
@@ -139,7 +140,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private final IImsSmsListener mImsSmsListener = new IImsSmsListener.Stub() {
         @Override
         public void onSendSmsResult(int token, int messageRef, @SendStatusResult int status,
-                int reason, int networkReasonCode) {
+                @SmsManager.Result int reason, int networkReasonCode) {
             final long identity = Binder.clearCallingIdentity();
             try {
                 logd("onSendSmsResult token=" + token + " messageRef=" + messageRef
@@ -178,6 +179,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                         break;
                     default:
                 }
+                mPhone.getSmsStats().onOutgoingSms(
+                        true /* isOverIms */,
+                        SmsConstants.FORMAT_3GPP2.equals(getFormat()),
+                        status == ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK,
+                        reason,
+                        tracker.mMessageId,
+                        tracker.isFromDefaultSmsApplication(mContext));
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -195,17 +203,12 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     throw new RemoteException(
                             "Status report received with a PDU that could not be parsed.");
                 }
-                int messageRef = message.mWrappedSmsMessage.mMessageRef;
-                boolean handled = mSmsDispatchersController.handleSmsStatusReport(format, pdu);
-                if (!handled) {
-                    loge("Can not handle the status report for messageRef " + messageRef);
-                }
+                mSmsDispatchersController.handleSmsStatusReport(format, pdu);
                 try {
                     getImsManager().acknowledgeSmsReport(
                             token,
-                            messageRef,
-                            handled ? ImsSmsImplBase.STATUS_REPORT_STATUS_OK
-                                    : ImsSmsImplBase.STATUS_REPORT_STATUS_ERROR);
+                            message.mWrappedSmsMessage.mMessageRef,
+                            ImsSmsImplBase.STATUS_REPORT_STATUS_OK);
                 } catch (ImsException e) {
                     loge("Failed to acknowledgeSmsReport(). Error: " + e.getMessage());
                 }
@@ -250,7 +253,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     } catch (ImsException e) {
                         loge("Failed to acknowledgeSms(). Error: " + e.getMessage());
                     }
-                }, true);
+                }, true /* ignoreClass */, true /* isOverIms */);
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -441,6 +444,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
             fallbackToPstn(tracker);
             mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
                     ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK, tracker.mMessageId);
+            mPhone.getSmsStats().onOutgoingSms(
+                    true /* isOverIms */,
+                    SmsConstants.FORMAT_3GPP2.equals(format),
+                    true /* fallbackToCs */,
+                    SmsManager.RESULT_SYSTEM_ERROR,
+                    tracker.mMessageId,
+                    tracker.isFromDefaultSmsApplication(mContext));
         }
     }
 

@@ -24,7 +24,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
@@ -49,10 +48,10 @@ public class VendorSubscriptionInfoUpdater extends SubscriptionInfoUpdater {
             .getSupportedModemCount();
 
     static VendorSubscriptionInfoUpdater init(Looper looper, Context context,
-            CommandsInterface[] ci) {
+            SubscriptionController sc) {
         synchronized (VendorSubscriptionInfoUpdater.class) {
             if (sInstance == null) {
-                sInstance = new VendorSubscriptionInfoUpdater(looper, context, ci);
+                sInstance = new VendorSubscriptionInfoUpdater(looper, context, sc);
             } else {
                 Log.wtf(LOG_TAG, "init() called multiple times!  sInstance = " + sInstance);
             }
@@ -68,49 +67,14 @@ public class VendorSubscriptionInfoUpdater extends SubscriptionInfoUpdater {
     }
 
     protected VendorSubscriptionInfoUpdater(Looper looper, Context context,
-            CommandsInterface[] ci) {
-        super(looper, context, ci);
+            SubscriptionController sc) {
+        super(looper, context, sc);
         sContext = context;
         mIsRecordUpdateRequired = new boolean[SUPPORTED_MODEM_COUNT];
 
         for (int index = 0; index < SUPPORTED_MODEM_COUNT; index++) {
             mIsRecordUpdateRequired[index] = true;
         }
-    }
-
-    @Override
-    protected void handleSimReady(int phoneId) {
-        List<Integer> cardIds = new ArrayList<>();
-        Rlog.d(LOG_TAG, "handleSimReady: phoneId: " + phoneId);
-
-        if (sIccId[phoneId] != null && sIccId[phoneId].equals(ICCID_STRING_FOR_NO_SIM)) {
-            Rlog.d(LOG_TAG, " SIM" + (phoneId + 1) + " hot plug in");
-            sIccId[phoneId] = null;
-        }
-        UiccSlot uiccSlot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
-        if (uiccSlot == null) {
-            Rlog.d(LOG_TAG, "handleSimReady: uiccSlot null");
-            return;
-        }
-
-        String iccId = uiccSlot.getIccId();
-        if (IccUtils.stripTrailingFs(iccId) == null) {
-            Rlog.d(LOG_TAG, "handleSimReady: IccID null");
-            return;
-        }
-        sIccId[phoneId] = IccUtils.stripTrailingFs(iccId);
-
-        updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
-
-        cardIds.add(getCardIdFromPhoneId(phoneId));
-        updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
-            if (hasChanges) {
-                SubscriptionController.getInstance().notifySubscriptionInfoChanged();
-            }
-        });
-        broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_READY, null);
-        broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
-        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
     }
 
     @Override

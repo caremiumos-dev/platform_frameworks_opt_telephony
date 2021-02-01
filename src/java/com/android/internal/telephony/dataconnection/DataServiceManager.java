@@ -51,6 +51,7 @@ import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
 import android.telephony.data.IDataService;
 import android.telephony.data.IDataServiceCallback;
+import android.telephony.data.SliceInfo;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.Phone;
@@ -104,6 +105,8 @@ public class DataServiceManager extends Handler {
     private final Map<IBinder, Message> mMessageMap = new ConcurrentHashMap<>();
 
     private final RegistrantList mDataCallListChangedRegistrants = new RegistrantList();
+
+    private final RegistrantList mApnUnthrottledRegistrants = new RegistrantList();
 
     private String mTargetBindingPackageName;
 
@@ -316,6 +319,15 @@ public class DataServiceManager extends Handler {
             removeMessages(EVENT_WATCHDOG_TIMEOUT, CellularDataServiceCallback.this);
             Message msg = mMessageMap.remove(asBinder());
             sendCompleteMessage(msg, resultCode);
+        }
+
+        public void onApnUnthrottled(String apn) {
+            if (apn != null) {
+                mApnUnthrottledRegistrants.notifyRegistrants(
+                        new AsyncResult(null, apn, null));
+            } else {
+                loge("onApnUnthrottled: apn is null");
+            }
         }
     }
 
@@ -602,12 +614,15 @@ public class DataServiceManager extends Handler {
      * @param pduSessionId The pdu session id to be used for this data call.  A value of -1 means
      *                     no pdu session id was attached to this call.
      *                     Reference: 3GPP TS 24.007 section 11.2.3.1b
+     * @param sliceInfo The slice that represents S-NSSAI.
+     *                  Reference: 3GPP TS 24.501
      * @param onCompleteMessage The result message for this request. Null if the client does not
      *        care about the result.
      */
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, Message onCompleteMessage) {
+                              int pduSessionId, @Nullable  SliceInfo sliceInfo,
+                              Message onCompleteMessage) {
         if (DBG) log("setupDataCall");
         if (!mBound) {
             loge("setupDataCall: Data service not bound.");
@@ -623,7 +638,8 @@ public class DataServiceManager extends Handler {
             sendMessageDelayed(obtainMessage(EVENT_WATCHDOG_TIMEOUT, callback),
                     REQUEST_UNRESPONDED_TIMEOUT);
             mIDataService.setupDataCall(mPhone.getPhoneId(), accessNetworkType, dataProfile,
-                    isRoaming, allowRoaming, reason, linkProperties, pduSessionId, callback);
+                    isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo,
+                    callback);
         } catch (RemoteException e) {
             loge("setupDataCall: Cannot invoke setupDataCall on data service.");
             mMessageMap.remove(callback.asBinder());
@@ -867,6 +883,29 @@ public class DataServiceManager extends Handler {
     public void unregisterForDataCallListChanged(Handler h) {
         if (h != null) {
             mDataCallListChangedRegistrants.remove(h);
+        }
+    }
+
+    /**
+     * Register apn unthrottled event
+     *
+     * @param h The target to post the event message to.
+     * @param what The event.
+     */
+    public void registerForApnUnthrottled(Handler h, int what) {
+        if (h != null) {
+            mApnUnthrottledRegistrants.addUnique(h, what, null);
+        }
+    }
+
+    /**
+     * Unregister for apn unthrottled event
+     *
+     * @param h The handler
+     */
+    public void unregisterForApnUnthrottled(Handler h) {
+        if (h != null) {
+            mApnUnthrottledRegistrants.remove(h);
         }
     }
 

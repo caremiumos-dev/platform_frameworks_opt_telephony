@@ -162,8 +162,8 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 .getActiveSubIdList(/*visibleOnly*/false);
         mIccRecord = mUiccProfile.getIccRecords();
 
-        mUpdater = new SubscriptionInfoUpdater(Looper.myLooper(), mContext,
-            new CommandsInterface[]{mSimulatedCommands});
+        mUpdater =
+                new SubscriptionInfoUpdater(Looper.myLooper(), mContext, mSubscriptionController);
         processAllMessages();
 
         assertFalse(mUpdater.isSubInfoInitialized());
@@ -900,6 +900,46 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 .getAsByteArray(SubscriptionManager.ACCESS_RULES_FROM_CARRIER_CONFIGS)));
         assertEquals(1, cvCaptor.getValue().size());
         verify(mSubscriptionController, times(1)).refreshCachedActiveSubscriptionInfoList();
+        verify(mSubscriptionController, times(1)).notifySubscriptionInfoChanged();
+    }
+
+    @Test
+    @SmallTest
+    public void testSimReady() throws Exception {
+        replaceInstance(SubscriptionInfoUpdater.class, "sIccId", null,new String[]{""});
+
+        doReturn(FAKE_ICCID_1).when(mUiccSlot).getIccId();
+
+        mUpdater.updateInternalIccState(
+            IccCardConstants.INTENT_VALUE_ICC_READY, "TESTING", FAKE_SUB_ID_1);
+        processAllMessages();
+
+        verify(mSubscriptionController).clearSubInfoRecord(eq(FAKE_SUB_ID_1));
+        verify(mSubscriptionManager, times(1)).addSubscriptionInfoRecord(
+                eq(FAKE_ICCID_1), eq(FAKE_SUB_ID_1));
+        assertTrue(mUpdater.isSubInfoInitialized());
+        verify(mSubscriptionController, times(1)).notifySubscriptionInfoChanged();
+    }
+
+    @Test
+    @SmallTest
+    public void testSimReadyAndLoaded() throws Exception {
+        replaceInstance(SubscriptionInfoUpdater.class, "sIccId", null,new String[]{""});
+
+        doReturn(null).when(mUiccSlot).getIccId();
+
+        mUpdater.updateInternalIccState(
+            IccCardConstants.INTENT_VALUE_ICC_READY, "TESTING", FAKE_SUB_ID_1);
+        processAllMessages();
+
+        verify(mSubscriptionManager, times(0)).addSubscriptionInfoRecord(
+                eq(FAKE_ICCID_1), eq(FAKE_SUB_ID_1));
+
+        loadSim();
+
+        SubscriptionManager mSubscriptionManager = SubscriptionManager.from(mContext);
+        verify(mSubscriptionManager, times(1)).addSubscriptionInfoRecord(
+                eq(FAKE_ICCID_1), eq(FAKE_SUB_ID_1));
         verify(mSubscriptionController, times(1)).notifySubscriptionInfoChanged();
     }
 }
