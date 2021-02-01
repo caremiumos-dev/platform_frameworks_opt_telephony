@@ -33,12 +33,12 @@ import android.os.RemoteException;
 import android.telephony.CellBroadcastService;
 import android.telephony.ICellBroadcastService;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.Log;
 import android.util.Pair;
 
 import com.android.cellbroadcastservice.CellBroadcastStatsLog;
 import com.android.internal.telephony.cdma.SmsMessage;
+import com.android.modules.utils.LocalLog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -139,67 +139,113 @@ public class CellBroadcastServiceManager {
         }
         mCellBroadcastServicePackage = getCellBroadcastServicePackage();
         if (mCellBroadcastServicePackage != null) {
-            mModuleCellBroadcastHandler = new Handler() {
-                @Override
-                public void handleMessage(@NonNull Message msg) {
-                    if (!mEnabled) {
-                        Log.d(TAG, "CB module is disabled.");
-                        return;
-                    }
-                    if (sServiceConnection.mService == null) {
-                        final String errorMessage = "sServiceConnection.mService is null, ignoring message.";
-                        Log.d(TAG, errorMessage);
-                        CellBroadcastStatsLog.write(CellBroadcastStatsLog.CB_MESSAGE_ERROR,
-                                CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_ERROR__TYPE__NO_CONNECTION_TO_CB_SERVICE,
-                                errorMessage);
-                        return;
-                    }
-                    try {
-                        ICellBroadcastService cellBroadcastService =
-                                ICellBroadcastService.Stub.asInterface(
-                                        sServiceConnection.mService);
-                        if (msg.what == EVENT_NEW_GSM_SMS_CB) {
-                            mLocalLog.log("GSM SMS CB for phone " + mPhone.getPhoneId());
-                            CellBroadcastStatsLog.write(CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__TYPE__GSM,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
-                            cellBroadcastService.handleGsmCellBroadcastSms(mPhone.getPhoneId(),
-                                    (byte[]) ((AsyncResult) msg.obj).result);
-                        } else if (msg.what == EVENT_NEW_CDMA_SMS_CB) {
-                            mLocalLog.log("CDMA SMS CB for phone " + mPhone.getPhoneId());
-                            SmsMessage sms = (SmsMessage) msg.obj;
-                            CellBroadcastStatsLog.write(CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__TYPE__CDMA,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
-                            cellBroadcastService.handleCdmaCellBroadcastSms(mPhone.getPhoneId(),
-                                    sms.getEnvelopeBearerData(), sms.getEnvelopeServiceCategory());
-                        } else if (msg.what == EVENT_NEW_CDMA_SCP_MESSAGE) {
-                            mLocalLog.log("CDMA SCP message for phone " + mPhone.getPhoneId());
-                            CellBroadcastStatsLog.write(CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__TYPE__CDMA_SPC,
-                                    CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
-                            Pair<SmsMessage, RemoteCallback> smsAndCallback =
-                                    (Pair<SmsMessage, RemoteCallback>) msg.obj;
-                            SmsMessage sms = smsAndCallback.first;
-                            RemoteCallback callback = smsAndCallback.second;
-                            cellBroadcastService.handleCdmaScpMessage(mPhone.getPhoneId(),
-                                    sms.getSmsCbProgramData(),
-                                    sms.getOriginatingAddress(),
-                                    callback);
-                        }
-                    } catch (RemoteException e) {
-                        final String errorMessage = "Failed to connect to default app: "
-                                + mCellBroadcastServicePackage + " err: " + e.toString();
-                        Log.e(TAG, errorMessage);
-                        mLocalLog.log(errorMessage);
-                        CellBroadcastStatsLog.write(CellBroadcastStatsLog.CB_MESSAGE_ERROR,
-                                CellBroadcastStatsLog.CELL_BROADCAST_MESSAGE_ERROR__TYPE__NO_CONNECTION_TO_CB_SERVICE,
-                                errorMessage);
-                        mContext.unbindService(sServiceConnection);
-                        sServiceConnection = null;
-                    }
-                }
-            };
+            mModuleCellBroadcastHandler =
+
+                                       new Handler() {
+                                @Override
+                                public void handleMessage(@NonNull Message msg) {
+                                    if (!mEnabled) {
+                                        Log.d(TAG, "CB module is disabled.");
+                                        return;
+                                    }
+                                    if (sServiceConnection.mService == null) {
+                                        final String errorMessage =
+
+                                                                               "sServiceConnection.mService is null, ignoring message.";
+                                        Log.d(TAG, errorMessage);
+                                        CellBroadcastStatsLog.write(
+                                        
+                                        CellBroadcastStatsLog.CB_MESSAGE_ERROR,
+                                                CellBroadcastStatsLog
+                                                
+                                                .CELL_BROADCAST_MESSAGE_ERROR__TYPE__NO_CONNECTION_TO_CB_SERVICE,
+                                                errorMessage);
+                                        return;
+                                    }
+                                    try {
+                                        ICellBroadcastService cellBroadcastService =
+                                                ICellBroadcastService.Stub.asInterface(
+                                                        sServiceConnection.mService);
+                                        if (msg.what == EVENT_NEW_GSM_SMS_CB) {
+                                            mLocalLog.log("GSM SMS CB for phone " + mPhone.getPhoneId());
+                                            CellBroadcastStatsLog.write(
+                                            
+                                            CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__TYPE__GSM,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
+                                            cellBroadcastService.handleGsmCellBroadcastSms(
+                                            
+                                            mPhone.getPhoneId(),
+                                                    (byte[]) ((AsyncResult) msg.obj).result);
+                                        } else if (msg.what == EVENT_NEW_CDMA_SMS_CB) {
+                                            mLocalLog.log("CDMA SMS CB for phone " + mPhone.getPhoneId());
+                                            SmsMessage sms = (SmsMessage) msg.obj;
+                                            CellBroadcastStatsLog.write(
+                                            
+                                            CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__TYPE__CDMA,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
+                                            cellBroadcastService.handleCdmaCellBroadcastSms(
+                                            
+                                            mPhone.getPhoneId(),
+                                                    sms.getEnvelopeBearerData(),
+                                           
+                                            sms.getEnvelopeServiceCategory());
+                                        } else if (msg.what == EVENT_NEW_CDMA_SCP_MESSAGE) {
+                                            mLocalLog.log(
+                                            
+                                            "CDMA SCP message for phone " + mPhone.getPhoneId());
+                                            CellBroadcastStatsLog.write(
+                                            
+                                            CellBroadcastStatsLog.CB_MESSAGE_REPORTED,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__TYPE__CDMA_SPC,
+                                                    CellBroadcastStatsLog
+                                                    
+                                                    .CELL_BROADCAST_MESSAGE_REPORTED__SOURCE__FRAMEWORK);
+                                            Pair<SmsMessage, RemoteCallback> smsAndCallback =
+                                                    (Pair<SmsMessage, RemoteCallback>) msg.obj;
+                                            SmsMessage sms = smsAndCallback.first;
+                                            RemoteCallback callback = smsAndCallback.second;
+                                            cellBroadcastService.handleCdmaScpMessage(
+                                            
+                                            mPhone.getPhoneId(),
+                                                    sms.getSmsCbProgramData(),
+                                                    sms.getOriginatingAddress(),
+                                                    callback);
+                                        }
+                                    } catch (RemoteException e) {
+                                        final String errorMessage =
+                                       
+                                        "Failed to connect to default app: "
+                                                                + mCellBroadcastServicePackage
+                                               
+                                                + " err: "
+                                               
+                                                + e.toString();
+                                        Log.e(TAG, errorMessage);
+                                        mLocalLog.log(errorMessage);
+                                        CellBroadcastStatsLog.write(
+                                        
+                                        CellBroadcastStatsLog.CB_MESSAGE_ERROR,
+                                                CellBroadcastStatsLog
+                                                
+                                                .CELL_BROADCAST_MESSAGE_ERROR__TYPE__NO_CONNECTION_TO_CB_SERVICE,
+                                                errorMessage);
+                                        mContext.unbindService(sServiceConnection);
+                                        sServiceConnection = null;
+                                    }
+                                }
+                            };
 
             Intent intent = new Intent(CellBroadcastService.CELL_BROADCAST_SERVICE_INTERFACE);
             intent.setPackage(mCellBroadcastServicePackage);

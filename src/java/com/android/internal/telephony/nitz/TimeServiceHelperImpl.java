@@ -25,11 +25,11 @@ import android.app.timezonedetector.TimeZoneDetector;
 import android.content.Context;
 import android.os.SystemClock;
 import android.os.TimestampedValue;
-import android.util.LocalLog;
 
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 
 import java.io.PrintWriter;
 import java.util.Objects;

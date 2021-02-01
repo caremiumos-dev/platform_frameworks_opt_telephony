@@ -55,9 +55,9 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.IntArray;
-import android.util.LocalLog;
 
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

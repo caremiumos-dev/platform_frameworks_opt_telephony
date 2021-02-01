@@ -44,11 +44,11 @@ import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.SignalThresholdInfo;
-import android.util.LocalLog;
 import android.view.Display;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

@@ -88,7 +88,6 @@ import android.telephony.TelephonyManager;
 import android.telephony.VoiceSpecificRegistrationInfo;
 import android.text.TextUtils;
 import android.util.EventLog;
-import android.util.LocalLog;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -117,6 +116,7 @@ import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

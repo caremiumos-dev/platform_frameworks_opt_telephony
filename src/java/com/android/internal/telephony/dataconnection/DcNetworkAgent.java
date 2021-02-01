@@ -36,7 +36,6 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.ArrayMap;
-import android.util.LocalLog;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.DctConstants;
@@ -44,6 +43,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

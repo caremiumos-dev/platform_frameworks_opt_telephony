@@ -63,7 +63,6 @@ import android.service.carrier.CarrierMessagingService;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.util.LocalLog;
 import android.util.Pair;
 
 import com.android.internal.R;
@@ -76,6 +75,7 @@ import com.android.internal.util.HexDump;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.ByteArrayOutputStream;

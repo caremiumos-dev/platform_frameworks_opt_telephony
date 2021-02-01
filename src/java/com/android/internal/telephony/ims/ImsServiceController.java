@@ -37,7 +37,6 @@ import android.telephony.ims.aidl.IImsServiceController;
 import android.telephony.ims.aidl.ISipTransport;
 import android.telephony.ims.feature.ImsFeature;
 import android.telephony.ims.stub.ImsFeatureConfiguration;
-import android.util.LocalLog;
 import android.util.Log;
 
 import com.android.ims.ImsFeatureBinderRepository;
@@ -46,6 +45,7 @@ import com.android.ims.internal.IImsFeatureStatusCallback;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.ExponentialBackoff;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.modules.utils.LocalLog;
 
 import java.io.PrintWriter;
 import java.util.HashSet;

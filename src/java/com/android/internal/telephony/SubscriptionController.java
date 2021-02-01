@@ -60,7 +60,6 @@ import android.telephony.UiccAccessRule;
 import android.telephony.UiccSlotInfo;
 import android.telephony.euicc.EuiccManager;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -74,6 +73,7 @@ import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
 import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

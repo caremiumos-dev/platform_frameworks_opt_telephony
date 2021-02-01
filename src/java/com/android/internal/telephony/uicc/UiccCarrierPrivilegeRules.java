@@ -31,10 +31,10 @@ import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccAccessRule;
 import android.text.TextUtils;
-import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
