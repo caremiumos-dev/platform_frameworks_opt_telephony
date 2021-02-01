@@ -4075,7 +4075,7 @@ public class GsmCdmaPhone extends Phone {
                         .setSignalMeasurementType(signalStrengthMeasure)
                         .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
                         .setHysteresisDb(REPORTING_HYSTERESIS_DB)
-                        .setThresholdsUnlimited(consolidatedThresholds)
+                        .setSystemThresholds(consolidatedThresholds)
                         .setIsEnabled(isEnabled)
                         .build(),
                 ran, null);
