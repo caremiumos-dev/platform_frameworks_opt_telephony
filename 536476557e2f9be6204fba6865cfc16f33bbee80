@@ -86,6 +86,30 @@
       },
       "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3affd5e5_caef6253",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2021-02-01T09:44:03Z",
+      "side": 1,
+      "message": "Strongly disagree with this nit. This is a capability and has nothing to do with a transport. Let\u0027s not mix them together.\n\nThe essential distinction is : apps want nothing to do with transports. They want everything to do with capabilities. Any app who looks for transports is almost certainly wrong.",
+      "parentUuid": "67d9055a_e84aebdb",
+      "range": {
+        "startLine": 1676,
+        "startChar": 8,
+        "endLine": 1676,
+        "endChar": 14
+      },
+      "revId": "536476557e2f9be6204fba6865cfc16f33bbee80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
