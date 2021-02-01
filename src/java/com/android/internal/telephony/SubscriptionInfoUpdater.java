@@ -441,6 +441,8 @@ public class SubscriptionInfoUpdater extends Handler {
             // At this phase, the subscription list is accessible. Treating NOT_READY
             // as equivalent to ABSENT, once the rest of the system can handle it.
             sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+            // Check all sim is not ready. If they are, initialize sIsSubInfoInitialized as false.
+            setSubInfoInitializedIfAllSimAbsent();
             updateSubscriptionInfoByIccId(phoneId, false /* updateEmbeddedSubs */);
         }
 
@@ -662,6 +664,7 @@ public class SubscriptionInfoUpdater extends Handler {
             sInactiveIccIds[phoneId] = null;
         }
         sIccId[phoneId] = ICCID_STRING_FOR_NO_SIM;
+        setSubInfoInitializedIfAllSimAbsent();
         updateSubscriptionInfoByIccId(phoneId, true /* updateEmbeddedSubs */);
     }
 
@@ -775,6 +778,21 @@ public class SubscriptionInfoUpdater extends Handler {
 
         mSubscriptionController.notifySubscriptionInfoChanged();
         if (DBG) logd("updateSubscriptionInfoByIccId: SubscriptionInfo update complete");
+    }
+
+    private void setSubInfoInitializedIfAllSimAbsent() {
+        int simAbsentOrNotReadyCount = 0;
+        for (int i = 0; i < TelephonyManager.getDefault().getActiveModemCount(); i++) {
+            if (sIccId[i] == ICCID_STRING_FOR_NO_SIM) {
+                simAbsentOrNotReadyCount++;
+            }
+        }
+
+        // Check all sim is not ready or absent.
+        // If they are, initialize sIsSubInfoInitialized as false.
+        if (simAbsentOrNotReadyCount == TelephonyManager.getDefault().getActiveModemCount()) {
+            sIsSubInfoInitialized = false;
+        }
     }
 
     private void setSubInfoInitialized() {
