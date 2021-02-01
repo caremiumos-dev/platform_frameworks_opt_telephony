@@ -33,12 +33,12 @@ import android.os.RemoteException;
 import android.telephony.CellBroadcastService;
 import android.telephony.ICellBroadcastService;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.Log;
 import android.util.Pair;
 
 import com.android.cellbroadcastservice.CellBroadcastStatsLog;
 import com.android.internal.telephony.cdma.SmsMessage;
+import com.android.modules.utils.LocalLog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

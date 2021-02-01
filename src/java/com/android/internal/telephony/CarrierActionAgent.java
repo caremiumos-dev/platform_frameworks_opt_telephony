@@ -28,11 +28,11 @@ import android.os.RegistrantList;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.TelephonyManager;
-import android.util.LocalLog;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

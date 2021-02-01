@@ -41,7 +41,6 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
 import android.text.TextUtils;
-import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CommandException;
@@ -54,6 +53,7 @@ import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

@@ -70,7 +70,6 @@ import android.telephony.data.Qos;
 import android.telephony.data.QosSession;
 import android.telephony.data.SliceInfo;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.Pair;
 import android.util.TimeUtils;
 
@@ -96,6 +95,7 @@ import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

@@ -82,7 +82,6 @@ import android.telephony.ims.ImsSsInfo;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.stub.ImsUtImplBase;
 import android.text.TextUtils;
-import android.util.LocalLog;
 
 import com.android.ims.ImsEcbm;
 import com.android.ims.ImsEcbmStateListener;
@@ -116,6 +115,7 @@ import com.android.internal.telephony.nano.TelephonyProto.ImsConnectionState;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

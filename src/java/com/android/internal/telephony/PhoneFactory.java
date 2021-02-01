@@ -37,7 +37,6 @@ import android.provider.Settings.SettingNotFoundException;
 import android.telephony.AnomalyReporter;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.util.LocalLog;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.dataconnection.TelephonyNetworkFactory;
@@ -52,6 +51,7 @@ import com.android.internal.telephony.sip.SipPhoneFactory;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

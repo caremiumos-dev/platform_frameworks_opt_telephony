@@ -65,7 +65,6 @@ import android.telephony.emergency.EmergencyNumber;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.SparseArray;
 import android.util.Xml;
 
@@ -94,6 +93,7 @@ import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.XmlUtils;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import org.xmlpull.v1.XmlPullParser;

@@ -31,7 +31,6 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation.ApnType;
 import android.telephony.SubscriptionManager;
 import android.telephony.data.ApnSetting;
-import android.util.LocalLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
@@ -41,6 +40,7 @@ import com.android.internal.telephony.dataconnection.DcTracker.ReleaseNetworkTyp
 import com.android.internal.telephony.dataconnection.DcTracker.RequestNetworkType;
 import com.android.internal.telephony.dataconnection.TransportManager.HandoverParams;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;

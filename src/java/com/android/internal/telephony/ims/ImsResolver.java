@@ -47,7 +47,6 @@ import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsFeatureConfiguration;
 import android.text.TextUtils;
 import android.util.ArrayMap;
-import android.util.LocalLog;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -58,6 +57,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.os.SomeArgs;
 import com.android.internal.telephony.PhoneConfigurationManager;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

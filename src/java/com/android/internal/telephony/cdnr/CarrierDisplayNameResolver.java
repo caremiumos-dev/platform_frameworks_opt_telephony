@@ -35,7 +35,6 @@ import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.text.TextUtils;
-import android.util.LocalLog;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.GsmCdmaPhone;
@@ -49,6 +48,7 @@ import com.android.internal.telephony.uicc.IccRecords.PlmnNetworkName;
 import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.modules.utils.LocalLog;
 import com.android.telephony.Rlog;
 
 import java.util.Arrays;
