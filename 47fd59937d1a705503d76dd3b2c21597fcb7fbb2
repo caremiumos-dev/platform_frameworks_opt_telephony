@@ -93,6 +93,102 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2802982_f65686a4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-02T00:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e054a52_c6db6ff4",
+      "range": {
+        "startLine": 4426,
+        "startChar": 72,
+        "endLine": 4426,
+        "endChar": 75
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af62c57a_cc1794f2",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-02T00:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31fca940_1d2d50d7",
+      "range": {
+        "startLine": 4426,
+        "startChar": 83,
+        "endLine": 4426,
+        "endChar": 90
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0998ffec_e9e82644",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-02T00:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e374ec6c_5e79a24c",
+      "range": {
+        "startLine": 4426,
+        "startChar": 60,
+        "endLine": 4426,
+        "endChar": 66
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d67fe7_5e0f0ae4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4426,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-02T00:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e17b45f2_bfec1994",
+      "range": {
+        "startLine": 4426,
+        "startChar": 46,
+        "endLine": 4426,
+        "endChar": 52
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ec2ce94_6020f744",
@@ -106,6 +202,30 @@
       "writtenOn": "2021-02-01T21:40:10Z",
       "side": 1,
       "message": "ApnSettings",
+      "range": {
+        "startLine": 4441,
+        "startChar": 27,
+        "endLine": 4441,
+        "endChar": 37
+      },
+      "revId": "47fd59937d1a705503d76dd3b2c21597fcb7fbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5e71744_cb8a9343",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4441,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-02T00:40:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ec2ce94_6020f744",
       "range": {
         "startLine": 4441,
         "startChar": 27,
