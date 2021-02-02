@@ -22,6 +22,30 @@
       },
       "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "088d817e_73840a8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-02-02T02:22:07Z",
+      "side": 1,
+      "message": "Those two method was my original concern when synchronization was used. After carefully check all the access path of them (with details below), they are both accessed from the same phone process main thread (which is also the handler thread of DSM and SST).\n- shouldHonorSystemThresholds and getConsolidatedSignalThresholds are both only access from GsmCdmaPhone#setSignalStrengthReportingCriteria\n- GsmCdmaPhone#setSignalStrengthReportingCriteria are only accessed from either DSM#setSignalStrengthReportingCriteria or SST#updateReportingCriteria\n- DSM#setSignalStrengthReportingCriteria has single access path: DSM#onReset which is only triggered on DSM\u0027s handler (with msg EVENT_RIL_CONNECTED or EVENT_RADIO_AVAILABLE)\n- SST#updateReportingCriteria has has following 4 cases which are all handled in handler with followign msgs:\na. EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST \nb. EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST\nc. EVENT_ON_DEVICE_IDLE_STATE_CHANGED\nd. EVENT_CARRIER_CONFIG_CHANGED (which call onCarrierConfigChanged)\n\nThis cover all access path of #shouldHonorSystemThresholds and # getConsolidatedSignalThresholds. That\u0027s why I am confident we don\u0027t need the synchronization any more :-)",
+      "parentUuid": "61037314_48c72d45",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
