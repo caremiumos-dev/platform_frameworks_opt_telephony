@@ -46,6 +46,30 @@
       },
       "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d12be58_d0ba8deb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-02T19:08:18Z",
+      "side": 1,
+      "message": "Then that would imply the access from DSM#setSignalStrengthReportingCriteria is happening on a different thread 100% of the time, right?\n\nAlso what about future changes? It\u0027s very easy to mistakenly add a concurrency error in some CL much later (T?) and not notice it until it starts crashing and we can only fix via QPR or something. If anything I think the @GuardedBy should be un-commented and enforced where it\u0027s not already enforced.",
+      "parentUuid": "088d817e_73840a8a",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
