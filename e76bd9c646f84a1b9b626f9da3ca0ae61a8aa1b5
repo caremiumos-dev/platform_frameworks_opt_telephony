@@ -94,6 +94,30 @@
       },
       "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95bd98f4_0e2ec402",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-02T23:07:08Z",
+      "side": 1,
+      "message": "Discussed offline. Since there were some comments in the original CL that suggested removing the synchronization from Nathan and Jack, let\u0027s take care of that. Threading here shouldn\u0027t be an issue, even across different classes that all hang off the Phone object with handlers all posting to the main thread.",
+      "parentUuid": "5b512d4b_16d83ab9",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
