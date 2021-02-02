@@ -70,6 +70,30 @@
       },
       "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b512d4b_16d83ab9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-02-02T19:39:15Z",
+      "side": 1,
+      "message": "Hunter, I fully understand you concern. I know it is really difficult to debug a multiple thread issue. But this is actually why telephony components are designed to run in the single main thread for most of the important operations.\n\nThis seems a de facto pattern:\n1. When an inbound IPC comes (eg. from TM), perform permission check firstly and throw the operation to main thread (eg. in PhoneInterfaceManageer) asap.\n2. Keep all remain operation in main thread, for example, through the handler. And don\u0027t bother to synchronize the states.\n3. Only user synchronization when multiple threads HAVE TO access the state (e.g. from inbound IPC threads)\n\nHere in our case, we are sure that all access of mSignalRequestRecords are in main thread ( the path I show was to prove DSM#setSignalStrengthReportingCriteria is in the SAME thread actually :-). It is better to follow the thread model to NOT use synchronization, just like most of other states.\n\nPlease let me if you still have concern. I was also confused when I was asked why the synchronization block is used. The single thread compliant model in phone process does reduce the need for most of the state access with lock.\nThanks",
+      "parentUuid": "8d12be58_d0ba8deb",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
