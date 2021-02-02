@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61037314_48c72d45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-02T02:02:36Z",
+      "side": 1,
+      "message": "I don\u0027t think this change is safe? All *writes* occur on the handler, yes, but not all reads - in particular:\n- shouldHonorSystemThresholds\n- getConsolidatedSignalThresholds\n\nIt\u0027s still possible to get a concurrency error when those reader methods are looping over the list (or using a stream) at the same time that the handler calls .add/.remove.\n\nIn fact, I think we need to *add* synchronization to shouldHonorSystemThresholds to avoid issues.",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "e76bd9c646f84a1b9b626f9da3ca0ae61a8aa1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
