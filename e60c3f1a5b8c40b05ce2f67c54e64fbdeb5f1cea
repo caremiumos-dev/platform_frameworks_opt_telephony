@@ -95,6 +95,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "736b0ee9_ea35c056",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-02-02T12:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d074202d_283868a8",
+      "range": {
+        "startLine": 290,
+        "startChar": 22,
+        "endLine": 290,
+        "endChar": 33
+      },
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "565586f6_1c7558aa",
@@ -232,6 +256,48 @@
       "side": 1,
       "message": "i see. the simReady only applies for retry logic. which is better... but still it might lead weird behavior.\nimagine two SIM cards exists, and DDS is SIM2. THen both SIM cards are taken, and by default we try dds to SIM1, which might fail and we\u0027ll never retry as it\u0027s not LOADED. But the framework believes SIM 1 is the dds (again we shouldn\u0027t wait until modem confirmation. framework should control the state, not modem), then for emergency call or whatever reason there might be problems.",
       "parentUuid": "eab01b01_6e159aa9",
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "054dc10c_bc0d8913",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-02-02T12:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0c28d3a_d9b12e61",
+      "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e857fc_b562d5b3",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-02-02T12:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ca772d0_edbda66b",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 85
+      },
       "revId": "e60c3f1a5b8c40b05ce2f67c54e64fbdeb5f1cea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
