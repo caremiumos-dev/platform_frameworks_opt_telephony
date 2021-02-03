@@ -46,6 +46,30 @@
       },
       "revId": "437a20d8813c04d703840a413411492cf9a6adca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a04c29d6_8848c12f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-03T18:21:59Z",
+      "side": 1,
+      "message": "Okay, please amend the commit message to remove the reference to the call barring result being only 1 bit then.",
+      "parentUuid": "6f11ba52_2a11b5ce",
+      "range": {
+        "startLine": 1625,
+        "startChar": 24,
+        "endLine": 1625,
+        "endChar": 33
+      },
+      "revId": "437a20d8813c04d703840a413411492cf9a6adca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
