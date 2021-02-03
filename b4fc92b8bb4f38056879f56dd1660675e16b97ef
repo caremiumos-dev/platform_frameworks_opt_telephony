@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "90a145c8_c966561e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1364839
+      },
+      "writtenOn": "2021-02-03T16:40:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33f83a78_bc710be7",
+      "range": {
+        "startLine": 9,
+        "startChar": 56,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8ba25832_6a76ff52",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d14aca7_336736cd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1364839
+      },
+      "writtenOn": "2021-02-03T16:40:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c94bc9ce_8fe20007",
+      "range": {
+        "startLine": 1635,
+        "startChar": 24,
+        "endLine": 1635,
+        "endChar": 91
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2ee7083_0176134d",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-02-03T10:20:35Z",
       "side": 1,
       "message": "Similarly move this out of the switch",
+      "range": {
+        "startLine": 1647,
+        "startChar": 32,
+        "endLine": 1647,
+        "endChar": 45
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd3ddc2_8f0b6c3e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1364839
+      },
+      "writtenOn": "2021-02-03T16:40:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2ee7083_0176134d",
       "range": {
         "startLine": 1647,
         "startChar": 32,
