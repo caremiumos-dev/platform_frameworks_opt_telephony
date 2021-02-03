@@ -25,6 +25,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6adae7fa_3a10627e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-02-03T21:30:41Z",
+      "side": 1,
+      "message": "Initially opted for this because I assumed local style took precedence.\n\nDone",
+      "parentUuid": "585211e6_78d1f6d9",
+      "range": {
+        "startLine": 472,
+        "startChar": 22,
+        "endLine": 472,
+        "endChar": 61
+      },
+      "revId": "be5af7580103896ba32084ce9e5e0093dc7e1dcd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9f034cb_b56104fd",
@@ -38,6 +62,30 @@
       "writtenOn": "2021-01-29T09:17:13Z",
       "side": 1,
       "message": "Do we ever verify that this is called, and does a thing?",
+      "range": {
+        "startLine": 654,
+        "startChar": 29,
+        "endLine": 654,
+        "endChar": 55
+      },
+      "revId": "be5af7580103896ba32084ce9e5e0093dc7e1dcd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91f8c8d_4562079e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-02-03T21:30:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9f034cb_b56104fd",
       "range": {
         "startLine": 654,
         "startChar": 29,
