@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f83a78_bc710be7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1288034
+      },
+      "writtenOn": "2021-02-03T10:20:35Z",
+      "side": 1,
+      "message": "Nit: similarly to other changes, explain what your code changes do and why they are the right thing (this only explains that some change is necessary). Regardless of the modularization NetworkCapabilities should be built from a Builder, not mutated.",
+      "range": {
+        "startLine": 9,
+        "startChar": 56,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba25832_6a76ff52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288034
+      },
+      "writtenOn": "2021-02-03T10:20:35Z",
+      "side": 1,
+      "message": "LGTM but you\u0027ll need to merge this in sc-dev due to the merge conflict",
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c94bc9ce_8fe20007",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1288034
+      },
+      "writtenOn": "2021-02-03T10:20:35Z",
+      "side": 1,
+      "message": "To avoid having the builder and hasInternet be out of sync (in case we forget to update one when updating the other), could you move this out of the switch to L.1693:\n\n  if (hasInternet) {\n    builder.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);\n  }\n\n? This way there\u0027s less chance that someone will add the capability without updating the boolean (because there\u0027s only one place that sets the capability and it\u0027s based on the boolean), and we can be sure that when the boolean is updated the capability is set too.",
+      "range": {
+        "startLine": 1635,
+        "startChar": 24,
+        "endLine": 1635,
+        "endChar": 91
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2ee7083_0176134d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1288034
+      },
+      "writtenOn": "2021-02-03T10:20:35Z",
+      "side": 1,
+      "message": "Similarly move this out of the switch",
+      "range": {
+        "startLine": 1647,
+        "startChar": 32,
+        "endLine": 1647,
+        "endChar": 45
+      },
+      "revId": "b4fc92b8bb4f38056879f56dd1660675e16b97ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
