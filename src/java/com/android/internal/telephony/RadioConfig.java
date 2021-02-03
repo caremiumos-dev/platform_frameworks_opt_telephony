@@ -39,7 +39,6 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RemoteException;
 import android.os.WorkSource;
-import android.telephony.RadioInterfaceCapabilities;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.uicc.IccSlotStatus;
@@ -527,7 +526,10 @@ public class RadioConfig extends Handler {
                 if (DBG) {
                     logd("RIL_REQUEST_GET_HAL_DEVICE_CAPABILITIES > REQUEST_NOT_SUPPORTED");
                 }
-                AsyncResult.forMessage(result, new RadioInterfaceCapabilities() /* send empty */,
+                AsyncResult.forMessage(result,
+                        /* Send response such that all capabilities are supported (depending on
+                           the hal version of course.) */
+                        new RadioConfigCapabilitiesResponse(false),
                         CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                 result.sendToTarget();
             } else {
