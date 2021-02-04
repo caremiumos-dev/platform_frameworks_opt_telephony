@@ -16,6 +16,75 @@
       "message": "I\u0027ve updated things given our external discussion.  PTAL.",
       "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883753ee_912831c0",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-04T22:47:26Z",
+      "side": 1,
+      "message": "What\u0027s v2 intended to be? \u0027B\u0027 or \u0027AA\u0027? If it\u0027s \u0027B\u0027, you\u0027ll need to amend onDtmfReceived so it doesn\u0027t fail when negotiating with a higher version.",
+      "range": {
+        "startLine": 86,
+        "startChar": 42,
+        "endLine": 86,
+        "endChar": 45
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "920305ca_62664a97",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-04T22:47:26Z",
+      "side": 1,
+      "message": "queueing",
+      "range": {
+        "startLine": 241,
+        "startChar": 39,
+        "endLine": 241,
+        "endChar": 45
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e4d03f_8a33868d",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-04T22:47:26Z",
+      "side": 1,
+      "message": "are we concerned about the user pressing a \u00270\u0027-\u00279\u0027 character at some point and messing this up? should we restrict handling to just \u0027A\u0027-D\u0027?",
+      "range": {
+        "startLine": 392,
+        "startChar": 37,
+        "endLine": 392,
+        "endChar": 47
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
