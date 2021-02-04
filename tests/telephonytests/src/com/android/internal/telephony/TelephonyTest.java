@@ -162,6 +162,8 @@ public abstract class TelephonyTest {
     @Mock
     protected ServiceStateTracker mSST;
     @Mock
+    protected SignalStrengthController mSSC;
+    @Mock
     protected EmergencyNumberTracker mEmergencyNumberTracker;
     @Mock
     protected GsmCdmaCallTracker mCT;
@@ -468,6 +470,9 @@ public abstract class TelephonyTest {
 
         //mTelephonyComponentFactory
         doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
+        doReturn(mSSC).when(mTelephonyComponentFactory)
+                .makeSignalStrengthController(nullable(GsmCdmaPhone.class),
+                        nullable(CommandsInterface.class));
         doReturn(mSST).when(mTelephonyComponentFactory)
                 .makeServiceStateTracker(nullable(GsmCdmaPhone.class),
                         nullable(CommandsInterface.class));
@@ -529,6 +534,7 @@ public abstract class TelephonyTest {
         doReturn(true).when(mPhone).isPhoneTypeGsm();
         doReturn(PhoneConstants.PHONE_TYPE_GSM).when(mPhone).getPhoneType();
         doReturn(mCT).when(mPhone).getCallTracker();
+        doReturn(mSSC).when(mPhone).getSignalStrengthController();
         doReturn(mSST).when(mPhone).getServiceStateTracker();
         doReturn(mDeviceStateMonitor).when(mPhone).getDeviceStateMonitor();
         doReturn(mDisplayInfoController).when(mPhone).getDisplayInfoController();
