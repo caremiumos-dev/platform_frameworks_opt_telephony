@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfe9210_fa506376",
+        "filename": "src/java/com/android/internal/telephony/d2d/Communicator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-04T17:40:11Z",
+      "side": 1,
+      "message": "Good idea.",
+      "parentUuid": "16cfe32b_d83846b4",
+      "range": {
+        "startLine": 148,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 53
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bd9a208_6474ac1f",
@@ -208,6 +232,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7fa6f19_8fcc8e20",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportConversionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-04T17:40:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc397ec9_4ff951c1",
+      "range": {
+        "startLine": 41,
+        "startChar": 10,
+        "endLine": 41,
+        "endChar": 26
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54c6782a_a1d4034e",
@@ -231,6 +279,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef794710_629b194f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportConversionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-04T17:40:11Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "54c6782a_a1d4034e",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 72
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77e7567e_4ea6adf1",
@@ -244,6 +316,30 @@
       "writtenOn": "2021-01-30T01:39:18Z",
       "side": 1,
       "message": "would it be better to check these after each time-advancement?",
+      "range": {
+        "startLine": 285,
+        "startChar": 8,
+        "endLine": 285,
+        "endChar": 62
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad163196_ca8b0521",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/d2d/DtmfTransportTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-04T17:40:11Z",
+      "side": 1,
+      "message": "From a code standpoint I think it\u0027s functionally equivalent to do it this way since values.get(x) represents execution X of the method.  However it would probably read cleaner to do it inline, I agree.",
+      "parentUuid": "77e7567e_4ea6adf1",
       "range": {
         "startLine": 285,
         "startChar": 8,
