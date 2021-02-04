@@ -192,10 +192,10 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         @Override
         public void onLooperPrepared() {
+            mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
             sst = new ServiceStateTracker(mPhone, mSimulatedCommands);
             sst.setServiceStateStats(mServiceStateStats);
             setReady(true);
-            mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
         }
     }
 

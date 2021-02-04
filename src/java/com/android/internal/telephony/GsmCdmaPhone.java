@@ -278,6 +278,10 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierSignalAgent(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
+        // SST depends on SSC, need to instant SSC firstly
+        mSignalStrengthController = mTelephonyComponentFactory.inject(
+                SignalStrengthController.class.getName()).makeSignalStrengthController(this,
+                this.mCi);
         mSST = mTelephonyComponentFactory.inject(ServiceStateTracker.class.getName())
                 .makeServiceStateTracker(this, this.mCi);
         mEmergencyNumberTracker = mTelephonyComponentFactory
@@ -287,9 +291,6 @@ public class GsmCdmaPhone extends Phone {
                 .inject(DataEnabledSettings.class.getName()).makeDataEnabledSettings(this);
         mDeviceStateMonitor = mTelephonyComponentFactory.inject(DeviceStateMonitor.class.getName())
                 .makeDeviceStateMonitor(this);
-        mSignalStrengthController = mTelephonyComponentFactory.inject(
-                SignalStrengthController.class.getName()).makeSignalStrengthController(this,
-                this.mCi);
 
         // DisplayInfoController creates an OverrideNetworkTypeController, which uses
         // DeviceStateMonitor so needs to be crated after it is instantiated.

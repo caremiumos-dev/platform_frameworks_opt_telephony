@@ -18,8 +18,10 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -29,10 +31,18 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthNr;
+import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
+import android.telephony.SubscriptionInfo;
+import android.telephony.TelephonyManager;
 import android.util.Pair;
 
+import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
 
@@ -43,17 +53,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SignalStrengthController handles signal polling request and unsolicited signal strength update.
  */
 public class SignalStrengthController extends Handler {
-    protected static final boolean DBG = false; /* STOPSHIP if true */
+    protected static final boolean DBG = true; /* STOPSHIP if true */
     protected static final String TAG = SignalStrengthController.class.getSimpleName();
 
-    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST = 1;
-    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST = 2;
-    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED = 3;
+    private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
+            TimeUnit.SECONDS.toMillis(10);
+
+    /** Signal strength poll rate. */
+    private static final int POLL_PERIOD_MILLIS = 20 * 1000;
+
+    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST       = 1;
+    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST     = 2;
+    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED             = 3;
+
+    protected static final int EVENT_GET_SIGNAL_STRENGTH                    = 4;
+    protected static final int EVENT_POLL_SIGNAL_STRENGTH                   = 5;
+    protected static final int EVENT_SIGNAL_STRENGTH_UPDATE                 = 6;
 
     protected final GsmCdmaPhone mPhone;
     private final CommandsInterface mCi;
@@ -61,14 +82,29 @@ public class SignalStrengthController extends Handler {
     // @GuardedBy("mSignalRequestRecords")
     private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
+    /**
+     * By default, strength polling is enabled.  However, if we're
+     * getting unsolicited signal strength updates from the radio, set
+     * value to true and don't bother polling any more.
+     */
+    private boolean mDontPollSignalStrength = false;
+
+    @UnsupportedAppUsage
+    private SignalStrength mSignalStrength;
+    private long mSignalStrengthUpdatedTime;
+
     public SignalStrengthController(GsmCdmaPhone phone, CommandsInterface ci) {
         mPhone = phone;
         mCi = ci;
+
+        mCi.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
+        setSignalStrengthDefaultValues();
     }
 
     @Override
     public void handleMessage(Message msg) {
         if (DBG) log("received event " + msg.what);
+        AsyncResult ar;
 
         switch (msg.what) {
             case EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST: {
@@ -141,10 +177,131 @@ public class SignalStrengthController extends Handler {
                 break;
             }
 
-            default:
+            case EVENT_GET_SIGNAL_STRENGTH: {
+                // This callback is called when signal strength is polled
+                // all by itself
+
+                if (!(mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
+                    // Polling will continue when radio turns back on
+                    return;
+                }
+                ar = (AsyncResult) msg.obj;
+                onSignalStrengthResult(ar);
+                queueNextSignalStrengthPoll();
+
+                break;
+            }
+
+            case EVENT_POLL_SIGNAL_STRENGTH: {
+                // Just poll signal strength...not part of pollState()
+
+                mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+                break;
+            }
+
+            case EVENT_SIGNAL_STRENGTH_UPDATE: {
+                // This is a notification from CommandsInterface.setOnSignalStrengthUpdate
+
+                ar = (AsyncResult) msg.obj;
+
+                // The radio is telling us about signal strength changes
+                // we don't have to ask it
+                mDontPollSignalStrength = true;
+
+                onSignalStrengthResult(ar);
+                break;
+            }
+
+            default: {
                 log("Unhandled message with number: " + msg.what);
                 break;
+            }
         }
+    }
+
+    public void dispose() {
+        mCi.unSetOnSignalStrengthUpdate(this);
+    }
+
+    public void getSignalStrengthFromCi() {
+        // Query signal strength from the modem after service tracker is created (i.e. boot up,
+        // switching between GSM and CDMA phone), because the unsolicited signal strength
+        // information might come late or even never come. This will get the accurate signal
+        // strength information displayed on the UI.
+        mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+    }
+
+    /**
+     * send signal-strength-changed notification if changed Called both for
+     * solicited and unsolicited signal strength updates
+     *
+     * @return true if the signal strength changed and a notification was sent.
+     */
+    protected boolean onSignalStrengthResult(AsyncResult ar) {
+
+        // This signal is used for both voice and data radio signal so parse
+        // all fields
+
+        if ((ar.exception == null) && (ar.result != null)) {
+            mSignalStrength = (SignalStrength) ar.result;
+
+            PersistableBundle config = getCarrierConfig();
+            if (mPhone.getServiceStateTracker() != null) {
+                mSignalStrength.updateLevel(config, mPhone.getServiceStateTracker().mSS);
+            }
+        } else {
+            log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
+            mSignalStrength = new SignalStrength();
+        }
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
+
+        boolean ssChanged = notifySignalStrength();
+
+        return ssChanged;
+    }
+
+    /**
+     * @return signal strength
+     */
+    public SignalStrength getSignalStrength() {
+        if (shouldRefreshSignalStrength()) {
+            log("SST.getSignalStrength() refreshing signal strength.");
+            obtainMessage(EVENT_POLL_SIGNAL_STRENGTH).sendToTarget();
+        }
+        return mSignalStrength;
+    }
+
+    private boolean shouldRefreshSignalStrength() {
+        long curTime = System.currentTimeMillis();
+
+        // If last signal strength is older than 10 seconds, or somehow if curTime is smaller
+        // than mSignalStrengthUpdatedTime (system time update), it's considered stale.
+        boolean isStale = (mSignalStrengthUpdatedTime > curTime)
+                || (curTime - mSignalStrengthUpdatedTime > SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS);
+        if (!isStale) return false;
+
+        List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
+                .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
+                        mPhone.getContext().getAttributionTag());
+
+        if (!ArrayUtils.isEmpty(subInfoList)) {
+            for (SubscriptionInfo info : subInfoList) {
+                // If we have an active opportunistic subscription whose data is IN_SERVICE,
+                // we need to get signal strength to decide data switching threshold. In this case,
+                // we poll latest signal strength from modem.
+                if (info.isOpportunistic()) {
+                    TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                            .createForSubscriptionId(info.getSubscriptionId());
+                    ServiceState ss = tm.getServiceState();
+                    if (ss != null
+                            && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -178,8 +335,36 @@ public class SignalStrengthController extends Handler {
         final IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
         ipw.increaseIndent();
         pw.println("mSignalRequestRecords" + mSignalRequestRecords);
+        pw.println(" mLastSignalStrength=" + mLastSignalStrength);
+        pw.println(" mSignalStrength=" + mSignalStrength);
+        pw.println(" mDontPollSignalStrength=" + mDontPollSignalStrength);
         ipw.decreaseIndent();
         ipw.flush();
+    }
+
+    void queueNextSignalStrengthPoll() {
+        if (mDontPollSignalStrength) {
+            // The radio is telling us about signal strength changes
+            // we don't have to ask it
+            return;
+        }
+
+        // if there is no SIM present, do not poll signal strength
+        UiccCard uiccCard = UiccController.getInstance().getUiccCard(mPhone.getPhoneId());
+        if (uiccCard == null || uiccCard.getCardState() == IccCardStatus.CardState.CARDSTATE_ABSENT) {
+            log("Not polling signal strength due to absence of SIM");
+            return;
+        }
+
+        Message msg;
+
+        msg = obtainMessage();
+        msg.what = EVENT_POLL_SIGNAL_STRENGTH;
+
+        long nextTime;
+
+        // TODO Don't poll signal strength if screen is off
+        sendMessageDelayed(msg, POLL_PERIOD_MILLIS);
     }
 
     /**
@@ -374,6 +559,29 @@ public class SignalStrengthController extends Handler {
                     AccessNetworkThresholds.NGRAN_SSSINR,
                     AccessNetworkConstants.AccessNetworkType.NGRAN, false);
         }
+    }
+
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    void setSignalStrengthDefaultValues() {
+        mSignalStrength = new SignalStrength();
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
+    }
+
+    private SignalStrength mLastSignalStrength = null;
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    protected boolean notifySignalStrength() {
+        boolean notified = false;
+        if (!mSignalStrength.equals(mLastSignalStrength)) {
+            try {
+                mPhone.notifySignalStrength();
+                notified = true;
+                mLastSignalStrength = mSignalStrength;
+            } catch (NullPointerException ex) {
+                log("updateSignalStrength() Phone already destroyed: " + ex
+                        + "SignalStrength not notified");
+            }
+        }
+        return notified;
     }
 
     private void log(String msg) {
