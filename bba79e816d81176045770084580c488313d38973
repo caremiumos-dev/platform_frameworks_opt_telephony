@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403bcfa4_20d1bfae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-02-04T21:33:15Z",
+      "side": 1,
+      "message": "Hi Jack,\nWe understand your team is lack of resource recently. So we will not send you review request unless for those CLs which is minor (review time \u003c 1 min) and with low risk, like this one which is only to remove the redundant synchronization lock for mSignalRequestRecords which is always accessed in the main thread.\nThanks",
+      "revId": "bba79e816d81176045770084580c488313d38973",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
