@@ -30,6 +30,7 @@ import android.telephony.data.SliceInfo;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.HalVersion;
 import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
@@ -1481,5 +1482,10 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void getBarringInfo(Message result) {
+    }
+
+    @Override
+    public HalVersion getHalVersion() {
+        return HalVersion.UNKNOWN;
     }
 }

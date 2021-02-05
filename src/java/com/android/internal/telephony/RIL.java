@@ -478,7 +478,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     /** Returns a {@link IRadio} instance or null if the service is not available. */
     @VisibleForTesting
-    public synchronized IRadio getRadioProxy(Message result) {
+    public synchronized IRadio getRadioProxy(@Nullable Message result) {
         if (!SubscriptionManager.isValidPhoneId(mPhoneId)) return null;
         if (!mIsCellularSupported) {
             if (RILJ_LOGV) riljLog("getRadioProxy: Not calling getService(): wifi-only");
@@ -7586,6 +7586,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
      * @return the current HalVersion
      */
     public HalVersion getHalVersion() {
+
+        if (mRadioVersion == RIL.RADIO_HAL_VERSION_UNKNOWN) {
+            getRadioProxy(null);
+            if (mRadioVersion == RIL.RADIO_HAL_VERSION_UNKNOWN) {
+                Rlog.d(RILJ_LOG_TAG, "Radio HAL Version is Unknown");
+            }
+        }
         return mRadioVersion;
     }
 }
