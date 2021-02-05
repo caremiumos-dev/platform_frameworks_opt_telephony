@@ -2151,6 +2151,11 @@ public interface CommandsInterface {
      */
     int getRilVersion();
 
+    /**
+     * @return the radio hal version
+     */
+    HalVersion getHalVersion();
+
    /**
      * Sets user selected subscription at Modem.
      *

@@ -23,8 +23,6 @@ import android.hardware.radio.config.V1_3.HalDeviceCapabilities;
 import android.hardware.radio.config.V1_3.IRadioConfigResponse;
 import android.telephony.ModemInfo;
 import android.telephony.PhoneCapability;
-import android.telephony.RadioInterfaceCapabilities;
-import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.uicc.IccSlotStatus;
 import com.android.telephony.Rlog;
@@ -237,18 +235,17 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
             android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
             HalDeviceCapabilities halDeviceCapabilities) {
 
-        //convert hal device capabilities to RadioInterfaceCapabilities
+        // convert hal device capabilities to RadioInterfaceCapabilities
 
         RILRequest rr = mRadioConfig.processResponse_1_6(responseInfo);
         if (rr != null) {
-            RadioInterfaceCapabilities ret = new RadioInterfaceCapabilities();
-            if (!halDeviceCapabilities.modemReducedFeatureSet1) {
-                Rlog.d(TAG, "getHalDeviceCapabilitiesResponse: modemReducedFeatureSet1=false");
-                ret.addSupportedCapability(
-                        TelephonyManager.CAPABILITY_SECONDARY_LINK_BANDWIDTH_VISIBLE);
-            } else {
-                Rlog.d(TAG, "getHalDeviceCapabilitiesResponse: modemReducedFeatureSet1=true");
-            }
+            //RadioInterfaceCapabilities ret = new RadioInterfaceCapabilities();
+            // The response is compatible with Radio 1.6, it means the modem
+            // supports setAllowedNetworkTypeBitmap.
+
+            final RadioConfigCapabilitiesResponse ret =
+                    new RadioConfigCapabilitiesResponse(
+                            halDeviceCapabilities.modemReducedFeatureSet1);
 
             if (responseInfo.error == RadioError.NONE) {
                 // send response

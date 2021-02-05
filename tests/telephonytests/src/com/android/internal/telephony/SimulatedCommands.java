@@ -58,6 +58,7 @@ import com.android.internal.telephony.BaseCommands;
 import com.android.internal.telephony.CallFailCause;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.HalVersion;
 import com.android.internal.telephony.LastCallFailCause;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
@@ -2419,5 +2420,10 @@ public class SimulatedCommands extends BaseCommands
     public void getBarringInfo(Message result) {
         SimulatedCommandsVerifier.getInstance().getBarringInfo(result);
         resultSuccess(result, null);
+    }
+
+    @Override
+    public HalVersion getHalVersion() {
+        return HalVersion.UNKNOWN;
     }
 }

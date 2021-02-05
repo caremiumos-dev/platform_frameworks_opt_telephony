@@ -31,6 +31,7 @@ import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.BaseCommands;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.HalVersion;
 import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
@@ -689,5 +690,10 @@ class ImsPhoneCommandInterface extends BaseCommands implements CommandsInterface
 
     @Override
     public void cancelHandover(Message result, int callId) {
+    }
+
+    @Override
+    public HalVersion getHalVersion() {
+        return HalVersion.UNKNOWN;
     }
 }

@@ -34,6 +34,7 @@ import android.telephony.PhoneCapability;
 import android.telephony.RadioInterfaceCapabilities;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -320,7 +321,7 @@ public class PhoneConfigurationManager {
     @NonNull
     public synchronized RadioInterfaceCapabilities getRadioInterfaceCapabilities() {
         if (mRadioInterfaceCapabilities == null) {
-            //Only incur cost of synchronization block if mRadioInterfaceCapabilities isn't null
+            // Only incur cost of synchronization block if mRadioInterfaceCapabilities isn't null
             synchronized (mLockRadioInterfaceCapabilities) {
                 if (mRadioInterfaceCapabilities == null) {
                     mRadioConfig.getHalDeviceCapabilities(
@@ -338,21 +339,27 @@ public class PhoneConfigurationManager {
                 }
             }
         }
-        if (mRadioInterfaceCapabilities == null) return new RadioInterfaceCapabilities();
-        else return mRadioInterfaceCapabilities;
+
+        if (mRadioInterfaceCapabilities == null) {
+            Log.wtf(LOG_TAG, "mRadioInterfaceCapabilities is null");
+            return new RadioInterfaceCapabilities(new ArraySet<>());
+        }
+        return mRadioInterfaceCapabilities;
     }
 
     private void setupRadioInterfaceCapabilities(@NonNull AsyncResult ar) {
         if (mRadioInterfaceCapabilities == null) {
             synchronized (mLockRadioInterfaceCapabilities) {
                 if (mRadioInterfaceCapabilities == null) {
+                    final HalVersion version = PhoneFactory.getDefaultPhone().mCi.getHalVersion();
                     if (ar.exception != null) {
                         loge("setupRadioInterfaceCapabilities: " + ar.exception);
                     }
                     log("setupRadioInterfaceCapabilities: "
                             + "mRadioInterfaceCapabilities now setup");
-
-                    mRadioInterfaceCapabilities = (RadioInterfaceCapabilities) ar.result;
+                    final RadioConfigCapabilitiesResponse caps =
+                            (RadioConfigCapabilitiesResponse) ar.result;
+                    mRadioInterfaceCapabilities = caps.createRadioHalDeviceCapabilities(version);
                 }
                 mLockRadioInterfaceCapabilities.notify();
             }
