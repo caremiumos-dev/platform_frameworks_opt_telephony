@@ -172,12 +172,15 @@ public class CarrierServiceBindHelper {
             return;
         }
         if (TextUtils.isEmpty(simState) || phoneId >= mLastSimState.size()) return;
-        if (simState.equals(mLastSimState.get(phoneId))) {
-            // ignore consecutive duplicated events
+        if (simState.equals(mLastSimState.get(phoneId))
+                && !simState.equals(IccCardConstants.INTENT_VALUE_ICC_LOADED)) {
+            // Ignore consecutive duplicate events, unless it's LOADED. eSIM -> eSIM switches may
+            // ultimately present as a LOADED -> LOADED transition (the intermediate NOT_READY is
+            // not sent out), even if it's a switch from carrier A to carrier B, so we still rebind
+            // if necessary in this case.
             return;
-        } else {
-            mLastSimState.put(phoneId, simState);
         }
+        mLastSimState.put(phoneId, simState);
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_REBIND, phoneId));
     }
 
