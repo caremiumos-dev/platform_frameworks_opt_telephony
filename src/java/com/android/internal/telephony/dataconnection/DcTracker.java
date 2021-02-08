@@ -258,6 +258,15 @@ public class DcTracker extends Handler {
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE =
             "data_stall_alarm_extra_transport_type";
 
+    private static final String INTENT_DATA_RECONNECT_ALARM =
+            "com.android.internal.telephony.data-reconnect";
+    private static final String INTENT_DATA_RECONNECT_ALARM_EXTRA_APN_TYPE =
+            "reconnect_alarm_extra_apn_type";
+    private static final String INTENT_DATA_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE =
+            "reconnect_alarm_extra_transport_type";
+    private static final String INTENT_DATA_RECONNECT_ALARM_EXTRA_REQUEST_TYPE =
+            "reconnect_alarm_extra_request_type";
+
     /** The higher index has higher priority. */
     private static final DctConstants.State[] DATA_CONNECTION_STATE_PRIORITIES = {
             DctConstants.State.IDLE,
@@ -385,6 +394,19 @@ public class DcTracker extends Handler {
                 restartDataStallAlarm();
             } else if (action.equals(INTENT_DATA_STALL_ALARM)) {
                 onActionIntentDataStallAlarm(intent);
+            } else if (action.equals(INTENT_DATA_RECONNECT_ALARM)) {
+                int subId = intent.getIntExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX,
+                        SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+                int transport = intent.getIntExtra(INTENT_DATA_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE,
+                        -1);
+                if (subId == mPhone.getSubId() && transport == mTransportType) {
+                    int apnType = intent.getIntExtra(INTENT_DATA_RECONNECT_ALARM_EXTRA_APN_TYPE,
+                            -1);
+                    int requestType = intent.getIntExtra(
+                            INTENT_DATA_RECONNECT_ALARM_EXTRA_REQUEST_TYPE, -1);
+                    sendMessage(obtainMessage(DctConstants.EVENT_DATA_RECONNECT, apnType,
+                            requestType));
+                }
             } else if (action.equals(INTENT_PROVISIONING_APN_ALARM)) {
                 if (DBG) log("Provisioning apn alarm");
                 onActionIntentProvisioningApnAlarm(intent);
@@ -534,42 +556,25 @@ public class DcTracker extends Handler {
         }
     }
 
-    private void onDataReconnect(ApnContext apnContextforRetry, int subId,
-            @RequestNetworkType int requestType) {
-        int phoneSubId = mPhone.getSubId();
-        String apnType = apnContextforRetry.getApnType();
-        String reason =  apnContextforRetry.getReason();
-
-        if (!SubscriptionManager.isValidSubscriptionId(subId) || (subId != phoneSubId)) {
-            log("onDataReconnect: invalid subId");
-            return;
-        }
-
-        ApnContext apnContext = mApnContexts.get(apnType);
+    private void onDataReconnect(@ApnType int apnType, @RequestNetworkType int requestType) {
+        ApnContext apnContext = mApnContexts.get(ApnSetting.getApnTypeString(apnType));
 
         if (DBG) {
-            log("onDataReconnect: mState=" + mState + " reason=" + reason + " apnType=" + apnType
-                    + " apnContext=" + apnContext);
+            log("onDataReconnect: apnType=" + ApnSetting.getApnTypeString(apnType)
+                    + ", request type=" + requestTypeToString(requestType)
+                    + ", apnContext=" + apnContext);
         }
 
         if ((apnContext != null) && (apnContext.isEnabled())) {
-            apnContext.setReason(reason);
             DctConstants.State apnContextState = apnContext.getState();
-            if (DBG) {
-                log("onDataReconnect: apnContext state=" + apnContextState);
-            }
             if ((apnContextState == DctConstants.State.FAILED)
                     || (apnContextState == DctConstants.State.IDLE)) {
                 if (DBG) {
                     log("onDataReconnect: state is FAILED|IDLE, disassociate");
                 }
                 apnContext.releaseDataConnection("");
-            } else {
-                if (DBG) log("onDataReconnect: keep associated");
             }
-            // TODO: IF already associated should we send the EVENT_TRY_SETUP_DATA???
-            sendMessage(obtainMessage(DctConstants.EVENT_TRY_SETUP_DATA, requestType,
-                    0, apnContext));
+            trySetupData(apnContext, requestType);
         }
     }
 
@@ -626,7 +631,7 @@ public class DcTracker extends Handler {
     protected boolean mInVoiceCall = false;
 
     /** Intent sent when the reconnect alarm fires. */
-    private PendingIntent mReconnectIntent = null;
+    private final SparseArray<PendingIntent> mReconnectIntents = new SparseArray<>();
 
     // When false we will not auto attach and manually attaching is required.
     protected boolean mAutoAttachOnCreationConfig = false;
@@ -743,6 +748,7 @@ public class DcTracker extends Handler {
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(INTENT_DATA_STALL_ALARM);
+        filter.addAction(INTENT_DATA_RECONNECT_ALARM);
         filter.addAction(INTENT_PROVISIONING_APN_ALARM);
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
@@ -2324,15 +2330,38 @@ public class DcTracker extends Handler {
 
     protected void startReconnect(long delay, ApnContext apnContext,
             @RequestNetworkType int requestType) {
-        Message msg = obtainMessage(DctConstants.EVENT_DATA_RECONNECT,
-                       mPhone.getSubId(), requestType, apnContext);
-        cancelReconnect(apnContext);
-        sendMessageDelayed(msg, delay);
+        int apnType = apnContext.getApnTypeBitmask();
+
+        Intent intent = new Intent(INTENT_DATA_RECONNECT_ALARM);
+        intent.putExtra(INTENT_DATA_RECONNECT_ALARM_EXTRA_APN_TYPE, apnType);
+        intent.putExtra(INTENT_DATA_RECONNECT_ALARM_EXTRA_TRANSPORT_TYPE, mTransportType);
+        intent.putExtra(INTENT_DATA_RECONNECT_ALARM_EXTRA_REQUEST_TYPE, requestType);
+        SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
+
+        // This makes the intent unique per sub, apn type, abd transport type, otherwise when
+        // cancelling the alarm, all alarms will be cancelled together, or when calling
+        // startReconnect again from different sub overrides it.
+        // Calling startReconnect with the same sub id, apn type, and transport type updates the
+        // timer of scheduled retry if it hasn't happened.
+        intent.setIdentifier(mPhone.getSubId() + " " + apnType + " " + mTransportType);
+
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(mPhone.getContext(), 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        mReconnectIntents.put(apnType, alarmIntent);
+
+        // Use alarm manager instead of sendMessageDelayed because this retry might delay for
+        // 20~30 minutes. The device might enter doze mode at that time and won't wakeup to handle
+        // the message on time.
+        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + delay, alarmIntent);
 
         if (DBG) {
-            log("startReconnect: delay=" + delay + " apn="
-                    + apnContext + "reason: " + apnContext.getReason()
-                    + " subId=" + mPhone.getSubId() + " request type=" + requestType);
+            log("startReconnect: delay=" + delay + "ms, apnType="
+                    + ApnSetting.getApnTypeString(apnType) + ", request type="
+                    + requestTypeToString(requestType));
         }
     }
 
@@ -2348,6 +2377,10 @@ public class DcTracker extends Handler {
             log("cancelReconnect: apn=" + apnContext);
         }
         removeMessages(DctConstants.EVENT_DATA_RECONNECT, apnContext);
+        PendingIntent intent = mReconnectIntents.get(apnContext.getApnTypeBitmask());
+        if (intent != null) {
+            mAlarmManager.cancel(intent);
+        }
     }
 
     /**
@@ -3963,11 +3996,7 @@ public class DcTracker extends Handler {
                 break;
             }
             case DctConstants.EVENT_DATA_RECONNECT:
-                if (DBG) {
-                    log("EVENT_DATA_RECONNECT: subId=" + msg.arg1 + ", type="
-                            + requestTypeToString(msg.arg2));
-                }
-                onDataReconnect((ApnContext) msg.obj, msg.arg1, msg.arg2);
+                onDataReconnect(msg.arg1, msg.arg2);
                 break;
             case DctConstants.EVENT_DATA_SERVICE_BINDING_CHANGED:
                 onDataServiceBindingChanged((Boolean) ((AsyncResult) msg.obj).result);
@@ -4439,7 +4468,6 @@ public class DcTracker extends Handler {
         pw.println(" mSentSinceLastRecv=" + mSentSinceLastRecv);
         pw.println(" mNoRecvPollCount=" + mNoRecvPollCount);
         pw.println(" mResolver=" + mResolver);
-        pw.println(" mReconnectIntent=" + mReconnectIntent);
         pw.println(" mAutoAttachEnabled=" + mAutoAttachEnabled.get());
         pw.println(" mIsScreenOn=" + mIsScreenOn);
         pw.println(" mUniqueIdGenerator=" + mUniqueIdGenerator);

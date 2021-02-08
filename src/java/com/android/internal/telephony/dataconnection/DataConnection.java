@@ -770,7 +770,7 @@ public class DataConnection extends StateMachine {
                     .build();
 
             Message msg = obtainMessage(EVENT_SETUP_DATA_CONNECTION_DONE, cp);
-            AsyncResult.forMessage(msg, response, null);
+            msg.getData().putParcelable(DataServiceManager.DATA_CALL_RESPONSE, response);
             sendMessage(msg);
             if (DBG) {
                 log("connect: FailBringUpAll=" + mDcTesterFailBringUpAll.getDcFailBringUp()
