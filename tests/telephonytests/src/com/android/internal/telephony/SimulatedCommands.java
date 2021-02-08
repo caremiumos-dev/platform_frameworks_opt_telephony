@@ -2435,4 +2435,10 @@ public class SimulatedCommands extends BaseCommands
         SimulatedCommandsVerifier.getInstance().releasePduSessionId(message, pduSessionId);
         resultSuccess(message, null);
     }
+
+    @Override
+    public void getSlicingConfig(Message result) {
+        SimulatedCommandsVerifier.getInstance().getSlicingConfig(result);
+        resultSuccess(result, null);
+    }
 }

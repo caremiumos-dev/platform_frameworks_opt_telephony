@@ -5957,6 +5957,32 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void getSlicingConfig(Message result) {
+        android.hardware.radio.V1_6.IRadio radioProxy16 = getRadioV16(result);
+
+        if (radioProxy16 != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_SLICING_CONFIG, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+            try {
+                radioProxy16.getSlicingConfig(rr.mSerial);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "getSlicingConfig", e);
+            }
+        } else {
+            if (RILJ_LOGD) Rlog.d(RILJ_LOG_TAG, "getSlicingConfig: REQUEST_NOT_SUPPORTED");
+            AsyncResult.forMessage(result, null,
+                    CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+            result.sendToTarget();
+        }
+    }
+
     //***** Private Methods
     /** Helper that gets V1.6 of the radio interface OR sends back REQUEST_NOT_SUPPORTED */
     @Nullable private android.hardware.radio.V1_6.IRadio getRadioV16(Message msg) {
@@ -6934,6 +6960,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP";
             case RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP:
                 return "RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP";
+            case RIL_REQUEST_GET_SLICING_CONFIG:
+                return "RIL_REQUEST_GET_SLICING_CONFIG";
             default: return "<unknown request>";
         }
     }
