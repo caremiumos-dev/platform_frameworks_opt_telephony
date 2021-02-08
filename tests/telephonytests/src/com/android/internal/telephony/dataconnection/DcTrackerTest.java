@@ -1478,6 +1478,8 @@ public class DcTrackerTest extends TelephonyTest {
                 apnContexts.get(ApnSetting.TYPE_DEFAULT).getState());
         assertEquals(DctConstants.State.FAILED,
                 apnContexts.get(ApnSetting.TYPE_ENTERPRISE).getState());
+        assertEquals(null, tdCaptor.getValue().getDnn());
+        assertTrue(tdCaptor.getValue().getOsAppId().contains(ApnSetting.TYPE_ENTERPRISE_STRING));
     }
 
     @Test
