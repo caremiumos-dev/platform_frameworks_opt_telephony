@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce6d90c7_528b8ec7",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-09T00:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "883753ee_912831c0",
+      "range": {
+        "startLine": 86,
+        "startChar": 42,
+        "endLine": 86,
+        "endChar": 45
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "920305ca_62664a97",
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b621cba_514b7cd3",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-09T00:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "920305ca_62664a97",
+      "range": {
+        "startLine": 241,
+        "startChar": 39,
+        "endLine": 241,
+        "endChar": 45
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4e4d03f_8a33868d",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-02-04T22:47:26Z",
       "side": 1,
       "message": "are we concerned about the user pressing a \u00270\u0027-\u00279\u0027 character at some point and messing this up? should we restrict handling to just \u0027A\u0027-D\u0027?",
+      "range": {
+        "startLine": 392,
+        "startChar": 37,
+        "endLine": 392,
+        "endChar": 47
+      },
+      "revId": "2c0fdaf333fe510eff6d483b67aa3cef60e23d8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "826d07b7_551afe09",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1087703
+      },
+      "writtenOn": "2021-02-09T00:24:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e4e4d03f_8a33868d",
       "range": {
         "startLine": 392,
         "startChar": 37,
