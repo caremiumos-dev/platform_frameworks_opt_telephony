@@ -189,6 +189,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5196b2c_cffb5407",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-09T00:37:22Z",
+      "side": 1,
+      "message": "Nope, it\u0027s grey and unused.",
+      "parentUuid": "eca2bcc8_a7bb4b77",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "446a0f5c_670d0437",
@@ -225,6 +249,30 @@
       "writtenOn": "2021-02-09T00:24:05Z",
       "side": 1,
       "message": "Ack",
+      "parentUuid": "446a0f5c_670d0437",
+      "range": {
+        "startLine": 169,
+        "startChar": 55,
+        "endLine": 169,
+        "endChar": 87
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ca8761_57fe93bc",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-09T00:37:22Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "446a0f5c_670d0437",
       "range": {
         "startLine": 169,
@@ -285,6 +333,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7060d8bb_dc167c87",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-09T00:37:22Z",
+      "side": 1,
+      "message": "Good idea.",
+      "parentUuid": "e86168a7_57e6db7d",
+      "range": {
+        "startLine": 226,
+        "startChar": 31,
+        "endLine": 226,
+        "endChar": 59
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbd543b2_bbd88e49",
         "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
         "patchSetId": 1
@@ -319,6 +391,30 @@
       "writtenOn": "2021-02-09T00:24:05Z",
       "side": 1,
       "message": "Ack",
+      "parentUuid": "dbd543b2_bbd88e49",
+      "range": {
+        "startLine": 398,
+        "startChar": 17,
+        "endLine": 398,
+        "endChar": 41
+      },
+      "revId": "65dcf56ef328b7d99e01f795944ec140dc301fc5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d96ccef_7eaaa5e2",
+        "filename": "src/java/com/android/internal/telephony/d2d/DtmfTransport.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-09T00:37:22Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "dbd543b2_bbd88e49",
       "range": {
         "startLine": 398,
