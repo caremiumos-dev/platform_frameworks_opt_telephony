@@ -22,6 +22,30 @@
       },
       "revId": "68a4995ed9ca4045e9a4d3b990a22c0b2656ea21",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f71eb7d8_273696bc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-02-09T22:28:36Z",
+      "side": 1,
+      "message": "Updated to not tear down inside the getter. Instead, will check for underlying Network policies (and teardown-requested) directly in the PolicyListener and before fully bringing up a new DcNetworkAgent.\n\nDone.",
+      "parentUuid": "c1194d08_206806aa",
+      "range": {
+        "startLine": 1709,
+        "startChar": 12,
+        "endLine": 1709,
+        "endChar": 26
+      },
+      "revId": "68a4995ed9ca4045e9a4d3b990a22c0b2656ea21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
