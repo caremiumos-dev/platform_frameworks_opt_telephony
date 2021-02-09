@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58cdd38c_cee45cb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-09T19:37:41Z",
+      "side": 1,
+      "message": "FYI you should put this and aosp/1563677 into a topic together (in the top left of the page), that way they get treated as one logical unit for TreeHugger and submit purposes.",
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "989ecc0b_6a98858a",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-09T19:37:41Z",
+      "side": 1,
+      "message": "What about the case when no package names are specified? Add what that looks like in this comment.",
+      "range": {
+        "startLine": 138,
+        "startChar": 34,
+        "endLine": 138,
+        "endChar": 47
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73afe20b_d1bc6204",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-09T19:37:41Z",
+      "side": 1,
+      "message": "Suggest List\u003cUiccAccessRule\u003e",
+      "range": {
+        "startLine": 141,
+        "startChar": 18,
+        "endLine": 141,
+        "endChar": 42
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe0c76ce_5803b801",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-09T19:37:41Z",
+      "side": 1,
+      "message": "Can you move this into UiccAccessRule itself? There\u0027s already a similar decodeRules method in there for raw byte content from the SIM, so adding a method like `List\u003cUiccAccessRule\u003e decodeRules(PersistableBundle)` (or decodeRulesFromCarrierConfig(@Nullable String[])) method makes the most sense IMO.\n\nThen we don\u0027t have to repeat the work in both SubInfoUpdater and CarrierPrivsTracker.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 12,
+        "endLine": 1089,
+        "endChar": 13
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d56d07_2bcd8a41",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-02-09T19:37:41Z",
+      "side": 0,
+      "message": "Nit: this was fine as-is, \"iff\" \u003d\u003d \"if and only if\"",
+      "range": {
+        "startLine": 489,
+        "startChar": 22,
+        "endLine": 489,
+        "endChar": 23
+      },
+      "revId": "7db76f5d08ef23cd96898af3aeb6a490a35f80e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
