@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9698a075_9a661973",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-10T23:03:54Z",
+      "side": 1,
+      "message": "If you can do the work in getMergedCapability, then there must be a way for you to tell us whether to set that capability or not. I don\u0027t see any reason why the capability must be set in your module other than in telephony. You can pass in whatever information you need, then just tell us whether this bit this should be set or not. I\u0027ll be fine with that.\n\nFrom the code as of today, it\u0027s definitely possible to have a boolean VcnManager.isVcnManaged(NetworkCapabilities caps);",
+      "parentUuid": "9c339258_c5554282",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1687,
+        "endChar": 60
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ea9a1af_52cc36c5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 9
