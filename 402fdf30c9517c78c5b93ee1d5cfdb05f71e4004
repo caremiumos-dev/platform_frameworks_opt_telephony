@@ -51,6 +51,24 @@
       "message": "Daniel, can you ptal? The failure here is related to addition of the new SliceInfo parameter.",
       "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5acf875f_f8c8284e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-02-10T09:00:15Z",
+      "side": 1,
+      "message": "Hi Amit,\n\nNow SliceInfo parameter is available on AOSP. So, I updated the patch. Could you please review again?",
+      "parentUuid": "ef66246f_d99477dc",
+      "revId": "402fdf30c9517c78c5b93ee1d5cfdb05f71e4004",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
