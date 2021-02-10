@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f61fcb40_e72bda4a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-02-10T19:14:37Z",
+      "side": 1,
+      "message": "\u003e result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED, !mVcnActive);\n\nThe downside to this is that the bit-management is common logic, and that logic will have to be photocopied into each transport if we move it out (and it\u0027s not necessarily trivial logic). So you could internally have two methods in telephony: getPolicy() and then mergeCapabilities(), but... from a code-cleanliness perspective, I don\u0027t think you want the VCN code to grow or intermingle any more than necessary, so a shape like this that keeps all of the VCN-specific stuff in one place is still preferable. Then it\u0027s just a question of whether you want to own a copy of that code or not (and whether we make separate System APIs for telephony and for WiFi or whether we have a common shape)...\n\nSo, this shape is intentionally a bit abstract because it\u0027s optimized for reducing maintenance: it\u0027s a shape that can be common between WiFi and Telephony and makes the logic \"not your problem\" (which we thought was a good thing). If you have a strong preference, then we can accommodate, but I suggest we set up a short discussion to try and accelerate the resolution. LMK?",
+      "parentUuid": "8e24dad2_c41f5d5b",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1687,
+        "endChar": 60
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ea9a1af_52cc36c5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 9
