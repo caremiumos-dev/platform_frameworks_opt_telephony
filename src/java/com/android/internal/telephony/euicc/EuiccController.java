@@ -1292,8 +1292,12 @@ public class EuiccController extends IEuiccController.Stub {
         intent.putExtra(EuiccService.EXTRA_RESOLUTION_CONFIRMATION_CODE_RETRIED,
                 confirmationCodeRetried);
         intent.putExtra(EXTRA_OPERATION, op);
-        PendingIntent resolutionIntent = PendingIntent.getActivity(
-                mContext, 0 /* requestCode */, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent resolutionIntent =
+                PendingIntent.getActivity(
+                        mContext,
+                        0 /* requestCode */,
+                        intent,
+                        PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
         extrasIntent.putExtra(
                 EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_RESOLUTION_INTENT, resolutionIntent);
     }
