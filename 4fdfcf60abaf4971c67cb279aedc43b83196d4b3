@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e24dad2_c41f5d5b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-10T18:01:08Z",
+      "side": 1,
+      "message": "I am not comfortable with letting Vcn to determine the final capabilities of a mobile network. I think we should follow the add/remove capability pattern here. Also it\u0027s not very efficient if we need to call into Vcn manager every time.\n\nBetter to do something like this\n\nresult.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED, !mVcnActive);\nand then update the cached mVcnActive in the policy listener you added below.\n\nAlso is that right to set *every* data connection including internet, mms, IMS, etc....with the same VCN capability?",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1687,
+        "endChar": 60
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea9a1af_52cc36c5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 2515,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-10T18:01:08Z",
+      "side": 1,
+      "message": "tearDownAll(). Please follow DcNetworkAgent.onNetworkUnwanted and add a tear down reason.",
+      "range": {
+        "startLine": 2515,
+        "startChar": 20,
+        "endLine": 2515,
+        "endChar": 31
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
