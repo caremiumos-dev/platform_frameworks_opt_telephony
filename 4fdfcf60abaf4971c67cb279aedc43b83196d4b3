@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c339258_c5554282",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-02-10T19:35:59Z",
+      "side": 1,
+      "message": "\u003e  You can hide all your implementation details in isVcnManaged().\n\nWe can\u0027t quite do that. We already have 2 pieces of information that telephony would need to digest (teardown_requested and is_vcn_managed), and we fully anticipate having more. So you\u0027ll need to be prepared to digest these (and either we have to have different APIs between WiFI and Telephony OR WiFi has to be prepared to do the same).",
+      "parentUuid": "c568047c_af758e21",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1687,
+        "endChar": 60
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ea9a1af_52cc36c5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 9
