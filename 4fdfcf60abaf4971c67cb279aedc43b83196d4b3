@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c568047c_af758e21",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-10T19:26:30Z",
+      "side": 1,
+      "message": "I am okay with the abstraction, but I still think making an IPC call into Vcn every time in getNetworkCapability method is not that good. Also this makes telephony folks easier to trace the code. (We don\u0027t want to trace down to VCN every time when we are debugging a capability issue, this is my biggest concern)\n\nYou can add a isVcnManaged() and we have a mVcnManaged cache with a listener from VCN manager. You can hide all your implementation details in isVcnManaged().",
+      "parentUuid": "f61fcb40_e72bda4a",
+      "range": {
+        "startLine": 1684,
+        "startChar": 0,
+        "endLine": 1687,
+        "endChar": 60
+      },
+      "revId": "4fdfcf60abaf4971c67cb279aedc43b83196d4b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ea9a1af_52cc36c5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
         "patchSetId": 9
