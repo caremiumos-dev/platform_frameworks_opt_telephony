@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23ff53bd_10d67b22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-02-11T19:58:18Z",
+      "side": 1,
+      "message": "CP from AOSP, no merge conflicts, applying +2",
+      "revId": "b6d29489dd67b075cb69b2cc8fd29593c2b3ab70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
