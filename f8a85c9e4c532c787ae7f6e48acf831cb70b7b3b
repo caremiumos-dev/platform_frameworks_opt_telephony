@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45f7966d_8c475756",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-11T23:20:25Z",
+      "side": 1,
+      "message": "Are there battery, performance implications to using a PendingIntent here as opposed to sendMessageDelayed?  I ask because of the case where we have rapid delays during reconnect and worried that it could drain the device.  If that\u0027s the case, then you could check the delay and see if you should just directly call sendMessageDelayedwith EVENT_DATA_RECONNECT.",
+      "range": {
+        "startLine": 2335,
+        "startChar": 7,
+        "endLine": 2335,
+        "endChar": 21
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126e5d64_8ffa7d4e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-11T23:20:25Z",
+      "side": 1,
+      "message": "Does this have to be a PendingIntent?  (I\u0027m guessing the answer is yes but don\u0027t know enough to know why.  If it\u0027s a long answer, we can talk offline.)",
+      "range": {
+        "startLine": 2350,
+        "startChar": 36,
+        "endLine": 2350,
+        "endChar": 49
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78917da1_e1e7e951",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2373,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-11T23:20:25Z",
+      "side": 1,
+      "message": "In cleanUpConnectionInternal and startReconnect, cancelReconnect is called.  This method used to cancel the \"delayed reconnect event\" which was sendMessageDelayed, but now that it\u0027s a PendingIntent, it should cancel that too.",
+      "range": {
+        "startLine": 2373,
+        "startChar": 19,
+        "endLine": 2373,
+        "endChar": 34
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1bd79fc_0d59ae04",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-11T23:20:25Z",
+      "side": 1,
+      "message": "This relies on apnContext to remove messages but messages are now sent with apnType instead.",
+      "range": {
+        "startLine": 2379,
+        "startChar": 7,
+        "endLine": 2379,
+        "endChar": 70
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d971137b_4c46b359",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-11T23:20:25Z",
+      "side": 1,
+      "message": "Should the intent be removed now?",
+      "range": {
+        "startLine": 2381,
+        "startChar": 28,
+        "endLine": 2381,
+        "endChar": 29
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
