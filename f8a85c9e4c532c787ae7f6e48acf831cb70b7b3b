@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d12649d_b70c1761",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T01:03:00Z",
+      "side": 1,
+      "message": "Are you saying if it\u0027s a short retry we use sendMessageDelayed and if it\u0027s long we use AlarmManager? But what is short what is long?\n\nBattery impact is something we have to be aware of. I remember there were bugs that device keeps waking up during the night. Need to find out the original bug.",
+      "parentUuid": "45f7966d_8c475756",
+      "range": {
+        "startLine": 2335,
+        "startChar": 7,
+        "endLine": 2335,
+        "endChar": 21
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "126e5d64_8ffa7d4e",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-11T23:20:25Z",
       "side": 1,
       "message": "Does this have to be a PendingIntent?  (I\u0027m guessing the answer is yes but don\u0027t know enough to know why.  If it\u0027s a long answer, we can talk offline.)",
+      "range": {
+        "startLine": 2350,
+        "startChar": 36,
+        "endLine": 2350,
+        "endChar": 49
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a04cd9a_74251107",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T01:03:00Z",
+      "side": 1,
+      "message": "The alarm manager only takes pending intent.",
+      "parentUuid": "126e5d64_8ffa7d4e",
       "range": {
         "startLine": 2350,
         "startChar": 36,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ea42554_d22e63ff",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2373,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T01:03:00Z",
+      "side": 1,
+      "message": "Won\u0027t alarm manager\u0027s cancel be enough?",
+      "parentUuid": "78917da1_e1e7e951",
+      "range": {
+        "startLine": 2373,
+        "startChar": 19,
+        "endLine": 2373,
+        "endChar": 34
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1bd79fc_0d59ae04",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "981d07bf_fb0acb9e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T01:03:00Z",
+      "side": 1,
+      "message": "Good catch. Should change that to type.",
+      "parentUuid": "e1bd79fc_0d59ae04",
+      "range": {
+        "startLine": 2379,
+        "startChar": 7,
+        "endLine": 2379,
+        "endChar": 70
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d971137b_4c46b359",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
@@ -106,6 +202,30 @@
       "writtenOn": "2021-02-11T23:20:25Z",
       "side": 1,
       "message": "Should the intent be removed now?",
+      "range": {
+        "startLine": 2381,
+        "startChar": 28,
+        "endLine": 2381,
+        "endChar": 29
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e51fa83_48ab3339",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T01:03:00Z",
+      "side": 1,
+      "message": "I thought about it and decided it doesn\u0027t have to be removed, but now I think we should remove it, thanks.",
+      "parentUuid": "d971137b_4c46b359",
       "range": {
         "startLine": 2381,
         "startChar": 28,
