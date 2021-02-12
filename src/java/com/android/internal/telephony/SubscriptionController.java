@@ -2071,6 +2071,43 @@ public class SubscriptionController extends ISub.Stub {
         }
     }
 
+    /**
+     * Set device to device sharing status
+     * @param status the status to set
+     * @param subId
+     * @return the number of records updated
+     */
+    @Override
+    public int setDeviceToDeviceSharingStatus(int status, int subId) {
+        if (DBG) logd("[setDeviceToDeviceSharingStatus]- status:" + status + " subId:" + subId);
+
+        enforceModifyPhoneState("setDeviceToDeviceSharingStatus");
+
+        // Now that all security checks passes, perform the operation as ourselves.
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            validateSubId(subId);
+            if (status < 0) {
+                if (DBG) logd("[setDeviceToDeviceSharingStatus]- fail");
+                return -1;
+            }
+            ContentValues value = new ContentValues(1);
+            value.put(SubscriptionManager.D2D_SHARING_STATUS, status);
+            if (DBG) logd("[setDeviceToDeviceSharingStatus]- status:" + status + " set");
+
+            int result = updateDatabase(value, subId, true);
+
+            // Refresh the Cache of Active Subscription Info List
+            refreshCachedActiveSubscriptionInfoList();
+
+            notifySubscriptionInfoChanged();
+
+            return result;
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
     public void syncGroupedSetting(int refSubId) {
         logd("syncGroupedSetting");
         try (Cursor cursor = mContext.getContentResolver().query(
@@ -3086,6 +3123,7 @@ public class SubscriptionController extends ISub.Stub {
                         case SubscriptionManager.GROUP_UUID:
                         case SubscriptionManager.DATA_ENABLED_OVERRIDE_RULES:
                         case SubscriptionManager.ALLOWED_NETWORK_TYPES:
+                        case SubscriptionManager.D2D_SHARING_STATUS:
                             resultValue = cursor.getString(0);
                             break;
                         default:
