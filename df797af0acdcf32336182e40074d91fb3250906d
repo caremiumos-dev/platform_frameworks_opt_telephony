@@ -22,6 +22,30 @@
       },
       "revId": "df797af0acdcf32336182e40074d91fb3250906d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05215671_ecfde56a",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2021-02-12T20:05:20Z",
+      "side": 1,
+      "message": "existing api DataSpecificRegistrationInfo.getLteVopsSupportInfo is @NonNull. we would like to update it the api to @Nullable, or we create and return the instance with NOT_AVAILABLE there?",
+      "parentUuid": "a90bed11_1ebac760",
+      "range": {
+        "startLine": 481,
+        "startChar": 39,
+        "endLine": 483,
+        "endChar": 0
+      },
+      "revId": "df797af0acdcf32336182e40074d91fb3250906d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
