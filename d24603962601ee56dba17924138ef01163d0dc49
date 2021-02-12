@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfbe5321_147779c2",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1145478
+      },
+      "writtenOn": "2021-02-12T14:35:36Z",
+      "side": 1,
+      "message": "Please LMK if this is still necessary with the last version of the code.",
+      "parentUuid": "989ecc0b_6a98858a",
+      "range": {
+        "startLine": 138,
+        "startChar": 34,
+        "endLine": 138,
+        "endChar": 47
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73afe20b_d1bc6204",
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "657b0350_a4c89537",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1145478
+      },
+      "writtenOn": "2021-02-12T14:35:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73afe20b_d1bc6204",
+      "range": {
+        "startLine": 141,
+        "startChar": 18,
+        "endLine": 141,
+        "endChar": 42
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe0c76ce_5803b801",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-02-09T19:37:41Z",
       "side": 1,
       "message": "Can you move this into UiccAccessRule itself? There\u0027s already a similar decodeRules method in there for raw byte content from the SIM, so adding a method like `List\u003cUiccAccessRule\u003e decodeRules(PersistableBundle)` (or decodeRulesFromCarrierConfig(@Nullable String[])) method makes the most sense IMO.\n\nThen we don\u0027t have to repeat the work in both SubInfoUpdater and CarrierPrivsTracker.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 12,
+        "endLine": 1089,
+        "endChar": 13
+      },
+      "revId": "d24603962601ee56dba17924138ef01163d0dc49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bac4176_19fc84d4",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1145478
+      },
+      "writtenOn": "2021-02-12T14:35:36Z",
+      "side": 1,
+      "message": "Good point, thanks! Done.",
+      "parentUuid": "fe0c76ce_5803b801",
       "range": {
         "startLine": 1073,
         "startChar": 12,
