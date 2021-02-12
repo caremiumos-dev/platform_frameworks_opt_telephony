@@ -46,6 +46,30 @@
       },
       "revId": "df797af0acdcf32336182e40074d91fb3250906d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84edfce_d59e04f2",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T20:58:22Z",
+      "side": 1,
+      "message": "You can\u0027t change the existing API from @NonNull to @Nullable, but the constructor NetworkRegistrationInfo is @hide, it\u0027s okay to input null there. (remember to add a @Nullable annotation there). DataSpecificRegistrationInfo.getLteVopsSupportInfo should be always @NonNull.",
+      "parentUuid": "05215671_ecfde56a",
+      "range": {
+        "startLine": 481,
+        "startChar": 39,
+        "endLine": 483,
+        "endChar": 0
+      },
+      "revId": "df797af0acdcf32336182e40074d91fb3250906d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
