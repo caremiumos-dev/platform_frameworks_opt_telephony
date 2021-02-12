@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb997863_4a57daf6",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-12T01:19:05Z",
+      "side": 1,
+      "message": "Yeah, I am saying that.  It\u0027s arbitrary but it\u0027s something.  30 seconds?\n\nI bet you it\u0027s the networkUnwanted bug.  The delay was very small and so it drained the battery.  (I\u0027m assuming that sendMessageDelayed keeps the phone on.)\n\nI now see that alarm manager was originally there which makes the change less scary to me.  It still might not be a bad idea to consider.",
+      "parentUuid": "4d12649d_b70c1761",
+      "range": {
+        "startLine": 2335,
+        "startChar": 7,
+        "endLine": 2335,
+        "endChar": 21
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "126e5d64_8ffa7d4e",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Won\u0027t alarm manager\u0027s cancel be enough?",
       "parentUuid": "78917da1_e1e7e951",
+      "range": {
+        "startLine": 2373,
+        "startChar": 19,
+        "endLine": 2373,
+        "endChar": 34
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8109e63b_34f7abb9",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2373,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-12T01:19:05Z",
+      "side": 1,
+      "message": "Not sure how I missed that, my bad.",
+      "parentUuid": "0ea42554_d22e63ff",
       "range": {
         "startLine": 2373,
         "startChar": 19,
