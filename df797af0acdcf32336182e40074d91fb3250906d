@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a90bed11_1ebac760",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-12T18:34:06Z",
+      "side": 1,
+      "message": "null",
+      "range": {
+        "startLine": 481,
+        "startChar": 39,
+        "endLine": 483,
+        "endChar": 0
+      },
+      "revId": "df797af0acdcf32336182e40074d91fb3250906d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
