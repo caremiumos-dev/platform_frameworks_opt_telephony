@@ -94,6 +94,30 @@
       },
       "revId": "df797af0acdcf32336182e40074d91fb3250906d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c0b2e37_dfbbbbe5",
+        "filename": "src/java/com/android/internal/telephony/CellularNetworkService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-13T01:41:02Z",
+      "side": 1,
+      "message": "Yes. And the constructor of DataSpecificRegistrationInfo says vopsInfo is @Nullable, so it must handle it well.",
+      "parentUuid": "dd35b0bd_dbddc07f",
+      "range": {
+        "startLine": 481,
+        "startChar": 39,
+        "endLine": 483,
+        "endChar": 0
+      },
+      "revId": "df797af0acdcf32336182e40074d91fb3250906d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
