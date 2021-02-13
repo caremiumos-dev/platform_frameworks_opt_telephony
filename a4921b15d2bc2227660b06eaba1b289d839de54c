@@ -18,6 +18,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3652a731_ab1dd1bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "I think we need to focus on simplifying.\n\nIf we focus on the RIL and the cache - the cache should just be an optimization, not adding any new features.  For example tracking and enforcing sim limits is a new feature that will alter behavior depending on whether this optional HAL is in use.\n\nThis carries through into the other CLs - we shouldn\u0027t have a separate and parallel set of functions.  Reading and writing of sim contacts is already supported and those API should use or not use your cache depending of availability, but all current users should get the benefit without having to switch API (and we shouldn\u0027t develop and support two sets of API).",
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "073ca91b_84da7498",
@@ -36,6 +53,52 @@
         "startChar": 0,
         "endLine": 326,
         "endChar": 100
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cd49ba5_d2fbb468",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "I\u0027d rather not multiplex this function.  I understand where some hardware won\u0027t support the cache, but embedding this other feature in the caching code is a bad design - how can we make any use of this data if we can\u0027t rely on it being present.\n\nThe cache can be optional because it\u0027s just a speed optimization..  This stuff isn\u0027t an optimization.",
+      "range": {
+        "startLine": 2008,
+        "startChar": 0,
+        "endLine": 2017,
+        "endChar": 50
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7222aa52_d3605932",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "\"Represents a Phonebook entry from the SIM\"?\n\nThe current comment suggests this is only used in the storing of this type of data, which I think isn\u0027t what\u0027s intended",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 16
       },
       "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
@@ -89,6 +152,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b9b1a1f_c9d15cec",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "these are bad names, with little to distinguish *QUERY* from *LOAD*.\n\nAFAIK, one is ALL_RECORDS_LOADED and the other is BATCH_LOADED or something like that.  Better names makes the code understandable",
+      "range": {
+        "startLine": 67,
+        "startChar": 21,
+        "endLine": 67,
+        "endChar": 47
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "56a0f53f_6837a92d",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 14
@@ -112,6 +198,144 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c554d9a_3214d689",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "fillCache?",
+      "range": {
+        "startLine": 142,
+        "startChar": 17,
+        "endLine": 142,
+        "endChar": 31
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b124bd34_89f9164b",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "This is also a bad name\n\nregisterForPhonebookChunkRead?  Make the name tell the uninformed what it\u0027s doing.",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 42
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffbd4ccf_298ac0b4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "why do you need both?  Should the result message for the get suffice?",
+      "range": {
+        "startLine": 147,
+        "startChar": 7,
+        "endLine": 148,
+        "endChar": 76
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b1e1bd_f7e39e06",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "it seems like empty should just be another case of invalidated.  Can we simply?",
+      "range": {
+        "startLine": 170,
+        "startChar": 20,
+        "endLine": 170,
+        "endChar": 39
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98183e52_b9e8ac42",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "the results should be in a typed structure (object) for safety.",
+      "range": {
+        "startLine": 273,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 41
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8716f41_ade9956c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "what does this mean?  Should we log it?",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 307,
+        "endChar": 26
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01d76938_99cd4986",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
         "patchSetId": 14
@@ -128,6 +352,29 @@
         "startChar": 1,
         "endLine": 523,
         "endChar": 5
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c465906_0a5c38c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T03:01:14Z",
+      "side": 1,
+      "message": "isn\u0027t this done in clear which is called in queryAdnRecord?  Doesn\u0027t that mean that refreshSimPbCache \u003d\u003d queryAdnRecord?\n\nLet\u0027s simplify.",
+      "range": {
+        "startLine": 527,
+        "startChar": 8,
+        "endLine": 527,
+        "endChar": 21
       },
       "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
