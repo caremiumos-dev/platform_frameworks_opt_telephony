@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba25db2_04577f76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "Looking at this set of CLs it feels like a hodge-podge of changes.\n\nIf you want to focus on the cache, we should eliminate the email/adn changes.  Those changes will have their own set of comments, but blending it all into one makes this unmanagable.",
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073ca91b_84da7498",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "this is already a blocking call (waitForResult).  Why not initialize on first read?\n\nMy understanding is that sim contact reading is done as a mass-import operation trigger by user request, so its likely if you split this into a initialize and a read op, they\u0027re both going to happen at the same time anyway.",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 100
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0971eddd_d26da971",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "use a RegistrantList",
+      "range": {
+        "startLine": 59,
+        "startChar": 23,
+        "endLine": 59,
+        "endChar": 41
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "648c311e_dc449c36",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "This is concerning - you shouldn\u0027t assume there\u0027s only one person calling at a time.",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56a0f53f_6837a92d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be set to true?  It\u0027s unlikely that this empty state represents the backing store",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 36
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d76938_99cd4986",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-02-13T02:10:08Z",
+      "side": 1,
+      "message": "what is this needed for?  invalid should just be an internal state.",
+      "range": {
+        "startLine": 520,
+        "startChar": 1,
+        "endLine": 523,
+        "endChar": 5
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
