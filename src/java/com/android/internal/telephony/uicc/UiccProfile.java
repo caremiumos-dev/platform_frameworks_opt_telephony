@@ -1848,20 +1848,17 @@ public class UiccProfile extends IccCard {
      */
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("UiccProfile:");
+        pw.println(" mUiccCard=" + mUiccCard);
         pw.println(" mCi=" + mCi);
         pw.println(" mCatService=" + mCatService);
-        for (int i = 0; i < mCarrierPrivilegeRegistrants.size(); i++) {
-            pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
-                    + ((Registrant) mCarrierPrivilegeRegistrants.get(i)).getHandler());
-        }
-        for (int i = 0; i < mOperatorBrandOverrideRegistrants.size(); i++) {
-            pw.println("  mOperatorBrandOverrideRegistrants[" + i + "]="
-                    + ((Registrant) mOperatorBrandOverrideRegistrants.get(i)).getHandler());
-        }
+        pw.println(" mExternalState=" + mExternalState);
         pw.println(" mUniversalPinState=" + mUniversalPinState);
         pw.println(" mGsmUmtsSubscriptionAppIndex=" + mGsmUmtsSubscriptionAppIndex);
         pw.println(" mCdmaSubscriptionAppIndex=" + mCdmaSubscriptionAppIndex);
         pw.println(" mImsSubscriptionAppIndex=" + mImsSubscriptionAppIndex);
+        pw.println(" mCurrentAppType=" + mCurrentAppType);
+        pw.println(" mUiccApplication=" + mUiccApplication);
+        pw.println(" mIccRecords=" + mIccRecords);
         pw.println(" mUiccApplications: length=" + mUiccApplications.length);
         for (int i = 0; i < mUiccApplications.length; i++) {
             if (mUiccApplications[i] == null) {
@@ -1872,16 +1869,11 @@ public class UiccProfile extends IccCard {
             }
         }
         pw.println();
-        // Print details of all applications
+        // Print details of all applications and their IccRecords.
         for (UiccCardApplication app : mUiccApplications) {
             if (app != null) {
                 app.dump(fd, pw, args);
                 pw.println();
-            }
-        }
-        // Print details of all IccRecords
-        for (UiccCardApplication app : mUiccApplications) {
-            if (app != null) {
                 IccRecords ir = app.getIccRecords();
                 if (ir != null) {
                     ir.dump(fd, pw, args);
@@ -1906,18 +1898,18 @@ public class UiccProfile extends IccCard {
             pw.println("  mCarrierPrivilegeRegistrants[" + i + "]="
                     + ((Registrant) mCarrierPrivilegeRegistrants.get(i)).getHandler());
         }
-        pw.flush();
-
+        // Print details of registrants for other stuff.
+        pw.println(" mOperatorBrandOverrideRegistrants: size="
+                + mOperatorBrandOverrideRegistrants.size());
+        for (int i = 0; i < mOperatorBrandOverrideRegistrants.size(); i++) {
+            pw.println("  mOperatorBrandOverrideRegistrants[" + i + "]="
+                    + ((Registrant) mOperatorBrandOverrideRegistrants.get(i)).getHandler());
+        }
         pw.println(" mNetworkLockedRegistrants: size=" + mNetworkLockedRegistrants.size());
         for (int i = 0; i < mNetworkLockedRegistrants.size(); i++) {
             pw.println("  mNetworkLockedRegistrants[" + i + "]="
                     + ((Registrant) mNetworkLockedRegistrants.get(i)).getHandler());
         }
-        pw.println(" mCurrentAppType=" + mCurrentAppType);
-        pw.println(" mUiccCard=" + mUiccCard);
-        pw.println(" mUiccApplication=" + mUiccApplication);
-        pw.println(" mIccRecords=" + mIccRecords);
-        pw.println(" mExternalState=" + mExternalState);
         pw.flush();
     }
 }
