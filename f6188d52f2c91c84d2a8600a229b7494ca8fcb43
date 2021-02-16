@@ -16,6 +16,23 @@
       "message": "We can add b/179918968 to Fix: as well.",
       "revId": "f6188d52f2c91c84d2a8600a229b7494ca8fcb43",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02a118da_412d4a20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326377
+      },
+      "writtenOn": "2021-02-16T21:17:36Z",
+      "side": 1,
+      "message": "master/sc-dev merged in ag/13585396",
+      "revId": "f6188d52f2c91c84d2a8600a229b7494ca8fcb43",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
