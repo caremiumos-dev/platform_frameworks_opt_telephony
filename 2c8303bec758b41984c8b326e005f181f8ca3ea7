@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7403afc9_4c9e4bb3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-02-17T13:46:27Z",
+      "side": 1,
+      "message": "Should this be based on a carrier config?",
+      "revId": "2c8303bec758b41984c8b326e005f181f8ca3ea7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38f272e2_63f43fe4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-02-17T13:46:27Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "2c8303bec758b41984c8b326e005f181f8ca3ea7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
