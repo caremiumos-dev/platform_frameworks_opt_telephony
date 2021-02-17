@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92a72fd1_b2b23099",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-17T00:54:47Z",
+      "side": 1,
+      "message": "Robert asked me to show you how to change this from a resource to a radio hal capability.  A radio hal capability is similar to a resource, except that the setting comes from the hal instead of the resources xml.\n\nI created a doc that steps through how to create one by walking through an existing capability:\nhttps://docs.google.com/document/d/1zUmehYrJy-wMGkb4Ot0Q3kywvZWtVC-0H8YYA-F8Fn8/edit?usp\u003dsharing\u0026resourcekey\u003d0-MlEjtjW2aclsRn4bhD9jLQ\n\nTwo notes:\n1. I suggest using the name CAPABILITY_SIM_PHONEBOOK_IN_MODEM and have it as a non-SystemApi.  2. Also, please tie the capability to the existing reduced feature set flag as seen in the doc.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 71
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "073ca91b_84da7498",
         "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
         "patchSetId": 14
