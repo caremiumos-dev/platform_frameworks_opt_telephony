@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40d80fb0_c60898b9",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-17T17:08:55Z",
+      "side": 1,
+      "message": "print the converted text instead of just a number",
+      "range": {
+        "startLine": 1859,
+        "startChar": 41,
+        "endLine": 1859,
+        "endChar": 56
+      },
+      "revId": "0638a837af9270de3a31fe9b7801c37cf7729179",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d447ac6_bff27dfa",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-17T17:08:55Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be useful. Can we just remove it?",
+      "range": {
+        "startLine": 1901,
+        "startChar": 0,
+        "endLine": 1907,
+        "endChar": 9
+      },
+      "revId": "0638a837af9270de3a31fe9b7801c37cf7729179",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
