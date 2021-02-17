@@ -50,6 +50,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
+import android.net.Network;
 import android.net.NetworkAgent;
 import android.net.NetworkCapabilities;
 import android.net.NetworkPolicyManager;
@@ -2978,8 +2979,10 @@ public class DcTracker extends Handler {
                 }
                 if ((!isProvApn) || mIsProvisioning) {
                     // Hide any provisioning notification.
-                    cm.setProvisioningNotificationVisible(false, ConnectivityManager.TYPE_MOBILE,
+                    Network network = dataConnection.getNetworkAgent().getNetwork();
+                    cm.setProvisioningNotificationVisible(false, network,
                             INTENT_PROVISION + ":" + mPhone.getPhoneId());
+
                     // Complete the connection normally notifying the world we're connected.
                     // We do this if this isn't a special provisioning apn or if we've been
                     // told its time to provision.
