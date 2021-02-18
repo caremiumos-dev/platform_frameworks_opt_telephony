@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adbc168_ecc891ca",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2021-02-18T19:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76d0552e_94d0673e",
+      "range": {
+        "startLine": 65,
+        "startChar": 38,
+        "endLine": 65,
+        "endChar": 81
+      },
+      "revId": "eefae5f467bc95ed698691866d66aacb81e60b47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65748154_cb93c162",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5916494b_9feb0d31",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2021-02-18T19:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65748154_cb93c162",
+      "range": {
+        "startLine": 495,
+        "startChar": 20,
+        "endLine": 495,
+        "endChar": 36
+      },
+      "revId": "eefae5f467bc95ed698691866d66aacb81e60b47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6686f9a_35f9f890",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-02-18T19:13:42Z",
       "side": 1,
       "message": "Save in mTag, so you don\u0027t call getPhoneId every time. And lets use the same naming convention like DCT-C-0, DCT-I-1, DC-C-0. Maybe TransportManager-0.",
+      "range": {
+        "startLine": 524,
+        "startChar": 15,
+        "endLine": 524,
+        "endChar": 18
+      },
+      "revId": "eefae5f467bc95ed698691866d66aacb81e60b47",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e772d831_5726ec3d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/TransportManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2021-02-18T19:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6686f9a_35f9f890",
       "range": {
         "startLine": 524,
         "startChar": 15,
