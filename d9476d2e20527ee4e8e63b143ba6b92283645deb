@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008253053",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1590934?revision\u003d3",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "926eb435_efdae407",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T09:47:11Z",
+      "side": 1,
+      "message": "Prefer to use mContext.getSystemService(KeyguardManager.class) instead to avoid the cast.",
+      "range": {
+        "startLine": 477,
+        "startChar": 27,
+        "endLine": 477,
+        "endChar": 71
+      },
+      "revId": "d9476d2e20527ee4e8e63b143ba6b92283645deb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
