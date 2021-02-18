@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b151e1a7_79771ead",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2021-02-18T19:56:17Z",
+      "side": 1,
+      "message": "my mistake. Changed it.",
+      "parentUuid": "b2b3e865_94b47ecb",
+      "range": {
+        "startLine": 65,
+        "startChar": 12,
+        "endLine": 65,
+        "endChar": 18
+      },
+      "revId": "acb6a75a24403ea8c13d37227a9e022f29586095",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8dc0ca5_d7c99302",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-18T19:53:37Z",
       "side": 1,
       "message": "loge(\"xxx\", e);",
+      "range": {
+        "startLine": 309,
+        "startChar": 12,
+        "endLine": 309,
+        "endChar": 18
+      },
+      "revId": "acb6a75a24403ea8c13d37227a9e022f29586095",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11df810f_7aa38adb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1274496
+      },
+      "writtenOn": "2021-02-18T19:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8dc0ca5_d7c99302",
       "range": {
         "startLine": 309,
         "startChar": 12,
