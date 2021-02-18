@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1dfb5f0_8824b186",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-18T19:59:47Z",
+      "side": 1,
+      "message": "It is still static. BTW, should be final as well.",
+      "parentUuid": "b151e1a7_79771ead",
+      "range": {
+        "startLine": 65,
+        "startChar": 12,
+        "endLine": 65,
+        "endChar": 18
+      },
+      "revId": "acb6a75a24403ea8c13d37227a9e022f29586095",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8dc0ca5_d7c99302",

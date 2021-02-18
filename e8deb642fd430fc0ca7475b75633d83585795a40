@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "760ea624_37234cd4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/AccessNetworksManager.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-18T19:59:47Z",
+      "side": 1,
+      "message": "This wouldn\u0027t compile. Should be \u0027e\u0027.",
+      "range": {
+        "startLine": 309,
+        "startChar": 55,
+        "endLine": 309,
+        "endChar": 69
+      },
+      "revId": "e8deb642fd430fc0ca7475b75633d83585795a40",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
