@@ -387,7 +387,7 @@ public class DataConnectionTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1))
                 .registerForLceInfo(any(Handler.class),
                         eq(DataConnection.EVENT_LINK_CAPACITY_CHANGED), eq(null));
-        verify(mVcnManager, atLeastOnce()).getUnderlyingNetworkPolicy(any(), any());
+        verify(mVcnManager, atLeastOnce()).applyVcnNetworkPolicy(any(), any());
 
         ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
         verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
