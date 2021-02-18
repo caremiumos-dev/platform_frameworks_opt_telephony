@@ -483,15 +483,15 @@ public class AccessNetworksManager extends Handler {
     }
 
     private void log(String s) {
-        Rlog.d(TAG, s);
+        Rlog.d(TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 
     private void loge(String s) {
-        Rlog.e(TAG, s);
+        Rlog.e(TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 
     private void loge(String s, Exception ex) {
-        Rlog.e(TAG, s, ex);
+        Rlog.e(TAG, "[" + mPhone.getPhoneId() + "] " + s, ex);
     }
 
 }

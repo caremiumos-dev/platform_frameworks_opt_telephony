@@ -521,10 +521,10 @@ public class TransportManager extends Handler {
     }
 
     private void log(String s) {
-        Rlog.d(TAG, s);
+        Rlog.d(TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 
     private void loge(String s) {
-        Rlog.e(TAG, s);
+        Rlog.e(TAG, "[" + mPhone.getPhoneId() + "] " + s);
     }
 }
