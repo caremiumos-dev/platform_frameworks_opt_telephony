@@ -1,0 +1,134 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008251224",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1592925?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "aad01cb0_adc2a258",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T08:19:09Z",
+      "side": 1,
+      "message": "This file contains a set of conflict markers.If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 2082,
+        "startChar": 1,
+        "endLine": 2082,
+        "endChar": 7
+      },
+      "revId": "a8fd7415e2188eedbfecd4e46a463b4bdd524233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008251224",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1592925?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "af2933dd_0125e0f0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T08:19:09Z",
+      "side": 1,
+      "message": "This file contains a set of conflict markers.If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 1370,
+        "startChar": 1,
+        "endLine": 1370,
+        "endChar": 7
+      },
+      "revId": "a8fd7415e2188eedbfecd4e46a463b4bdd524233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008251224",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1592925?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "e411696c_6f77631a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T08:19:09Z",
+      "side": 1,
+      "message": "This file contains a set of conflict markers.If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 3060,
+        "startChar": 1,
+        "endLine": 3060,
+        "endChar": 7
+      },
+      "revId": "a8fd7415e2188eedbfecd4e46a463b4bdd524233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008251224",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1592925?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3bc0e33b_ab63073b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/RILTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T08:19:09Z",
+      "side": 1,
+      "message": "This file contains a set of conflict markers.If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 2395,
+        "startChar": 1,
+        "endLine": 2395,
+        "endChar": 7
+      },
+      "revId": "a8fd7415e2188eedbfecd4e46a463b4bdd524233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008251224",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1592925?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "0e980a97_3c527a5a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/dataconnection/DataCallResponseTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-18T08:19:09Z",
+      "side": 1,
+      "message": "This file contains a set of conflict markers.If this is a false alarm, add IGNORE_MERGE_CONFLICT_CHECK\u003d\u003d\u003creason\u003e to your commit message.",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 7
+      },
+      "revId": "a8fd7415e2188eedbfecd4e46a463b4bdd524233",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
