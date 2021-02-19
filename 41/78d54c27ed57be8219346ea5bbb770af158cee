@@ -1,0 +1,10 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Jack Yu <jackyu@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Autosubmit+1: Naina Nalluri <nainanalluri@google.com>
+Presubmit-Verified+2: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Fri, 19 Feb 2021 01:57:44 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1594453
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
