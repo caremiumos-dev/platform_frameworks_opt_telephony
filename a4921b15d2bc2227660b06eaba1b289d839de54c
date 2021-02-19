@@ -82,6 +82,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7947c3b1_94b19511",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-02-19T07:00:24Z",
+      "side": 1,
+      "message": "based on doc from https://developer.android.com/reference/androidx/annotation/RequiresFeature and code from frameworks/opt/telephony/src/java/com/android/internal/telephony/PhoneConfigurationManager.java\nhttps://developer.android.com/reference/androidx/annotation/RequiresFeature\n\ni have 2 concerns:\n\n1, this annotation\u0027s retention is source, so it is used to the purpose of lint check.\nhence seems we can\u0027t use RequiresFeature annotation instead of resource xml config directly\n\n2, if we use API isRadioInterfaceCapabilitySupported directly here, there is a race issue in main thread. because in this consturctor, the capabilites aren\u0027t loaded yet.",
+      "parentUuid": "a9de8278_9f1bdbf5",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 71
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "073ca91b_84da7498",
