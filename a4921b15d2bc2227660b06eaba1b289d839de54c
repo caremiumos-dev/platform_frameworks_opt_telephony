@@ -317,6 +317,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7651c254_113ec10d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-02-19T03:56:34Z",
+      "side": 1,
+      "message": "sorry, it is intended\n\n        if (mAdnUpdatingWaiter !\u003d null) {\n            sendErrorResponse(response, \"Have pending update for SIM Phonebook record\");\n            return;\n        }",
+      "parentUuid": "97255176_290dba13",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b9b1a1f_c9d15cec",
@@ -387,6 +411,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "356d3ca6_bb78740f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-02-19T03:56:34Z",
+      "side": 1,
+      "message": "DONE",
+      "parentUuid": "56a0f53f_6837a92d",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 36
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c554d9a_3214d689",
@@ -400,6 +448,30 @@
       "writtenOn": "2021-02-13T03:01:14Z",
       "side": 1,
       "message": "fillCache?",
+      "range": {
+        "startLine": 142,
+        "startChar": 17,
+        "endLine": 142,
+        "endChar": 31
+      },
+      "revId": "a4921b15d2bc2227660b06eaba1b289d839de54c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "196b4be6_330fd846",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-02-19T03:56:34Z",
+      "side": 1,
+      "message": "FINE",
+      "parentUuid": "0c554d9a_3214d689",
       "range": {
         "startLine": 142,
         "startChar": 17,
