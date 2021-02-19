@@ -104,10 +104,20 @@ public class InProgressSmsSession {
             mEventsDropped = true;
         }
 
-        builder.setDelay(TelephonyMetrics.toPrivacyFuzzedTimeInterval(
-                mLastElapsedTimeMs, timestamp));
+        // In case of SMS_TYPE_NORMAL or SMS_TYPE_WAP_PUSH, the timestamp indicates SCTS(Service
+        // Center Time Stamp). Otherwise event timestamp.
+        if (builder.mEvent.type == SmsSession.Event.Type.SMS_RECEIVED
+                && (builder.mEvent.smsType == SmsSession.Event.SmsType.SMS_TYPE_NORMAL
+                        || builder.mEvent.smsType == SmsSession.Event.SmsType.SMS_TYPE_WAP_PUSH)) {
+            builder.setDelay(
+                    TelephonyMetrics.toPrivacyFuzzedTimeInterval(
+                            timestamp, System.currentTimeMillis()));
+        } else {
+            builder.setDelay(
+                    TelephonyMetrics.toPrivacyFuzzedTimeInterval(mLastElapsedTimeMs, timestamp));
+            mLastElapsedTimeMs = timestamp;
+        }
 
         events.add(builder.build());
-        mLastElapsedTimeMs = timestamp;
     }
 }

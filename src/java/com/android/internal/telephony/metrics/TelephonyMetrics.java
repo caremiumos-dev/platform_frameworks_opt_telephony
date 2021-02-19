@@ -486,10 +486,12 @@ public class TelephonyMetrics {
             pw.print("Start time in minutes: " + callSession.startTimeMinutes);
             pw.print(", phone: " + callSession.phoneId);
             if (callSession.eventsDropped) {
-                pw.println(" Events dropped: " + callSession.eventsDropped);
+                pw.println(", events dropped: " + callSession.eventsDropped);
+            } else {
+                pw.println("");
             }
 
-            pw.println(" Events: ");
+            pw.println("Events: ");
             pw.increaseIndent();
             for (TelephonyCallSession.Event event : callSession.events) {
                 pw.print(event.delay);
@@ -542,9 +544,16 @@ public class TelephonyMetrics {
             for (SmsSession.Event event : smsSession.events) {
                 pw.print(event.delay);
                 pw.print(" T=");
-                pw.println(smsSessionEventToString(event.type));
-                // Only show more info for tx/rx sms
-                if (event.type == SmsSession.Event.Type.SMS_RECEIVED) {
+                if (event.type == TelephonyCallSession.Event.Type.RIL_SERVICE_STATE_CHANGED) {
+                    pw.println(smsSessionEventToString(event.type)
+                            + "(" + "Data RAT " + event.serviceState.dataRat
+                            + " Voice RAT " + event.serviceState.voiceRat
+                            + " Channel Number " + event.serviceState.channelNumber
+                            + " NR Frequency Range " + event.serviceState.nrFrequencyRange
+                            + " NR State " + event.serviceState.nrState
+                            + ")");
+                } else if (event.type == SmsSession.Event.Type.SMS_RECEIVED) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     switch (event.smsType) {
                         case SmsSession.Event.SmsType.SMS_TYPE_SMS_PP:
@@ -568,6 +577,7 @@ public class TelephonyMetrics {
                     pw.decreaseIndent();
                 } else if (event.type == SmsSession.Event.Type.SMS_SEND
                         || event.type == SmsSession.Event.Type.SMS_SEND_RESULT) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     pw.println("ReqId=" + event.rilRequestId);
                     pw.println("E=" + event.errorCode);
@@ -575,6 +585,7 @@ public class TelephonyMetrics {
                     pw.println("ImsE=" + event.imsError);
                     pw.decreaseIndent();
                 } else if (event.type == SmsSession.Event.Type.INCOMPLETE_SMS_RECEIVED) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     pw.println("Received: " + event.incompleteSms.receivedParts + "/"
                             + event.incompleteSms.totalParts);
