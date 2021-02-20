@@ -1740,9 +1740,12 @@ public class DataConnection extends StateMachine {
 
         result.setAdministratorUids(mAdministratorUids);
 
-        // Check for VCN-specified Network policy before returning NetworkCapabilities
-        result.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED,
-                !isVcnManaged(result));
+        // Always start with NOT_VCN_MANAGED, then remove if VcnManager indicates this is part of a
+        // VCN.
+        result.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED);
+        if (isVcnManaged(result)) {
+            result.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED);
+        }
 
         return result;
     }
