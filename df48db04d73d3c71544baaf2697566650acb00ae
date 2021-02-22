@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008362835",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1597527?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "72b1086e_dc408386",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-02-22T23:42:34Z",
+      "side": 1,
+      "message": "Wrong casing for \"sLock\". static final variables should be ALL_UPPERCASE.",
+      "range": {
+        "startLine": 81,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 37
+      },
+      "revId": "df48db04d73d3c71544baaf2697566650acb00ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
