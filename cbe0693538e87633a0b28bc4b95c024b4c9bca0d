@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dff185e_3fc02c2b",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-02-22T20:46:45Z",
+      "side": 1,
+      "message": "You can just\nbuilder.setCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED, !isVcnManaged(builder.build()));",
+      "range": {
+        "startLine": 1758,
+        "startChar": 0,
+        "endLine": 1761,
+        "endChar": 9
+      },
+      "revId": "cbe0693538e87633a0b28bc4b95c024b4c9bca0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
