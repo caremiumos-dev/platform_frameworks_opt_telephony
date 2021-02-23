@@ -33,12 +33,13 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.Annotation.ApnType;
+import android.telephony.AnomalyReporter;
 import android.telephony.CarrierConfigManager;
 import android.telephony.data.ApnSetting;
-import android.telephony.data.ApnThrottleStatus;
 import android.telephony.data.IQualifiedNetworksService;
 import android.telephony.data.IQualifiedNetworksServiceCallback;
 import android.telephony.data.QualifiedNetworksService;
+import android.telephony.data.ThrottleStatus;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
@@ -52,6 +53,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -60,8 +62,10 @@ import java.util.stream.Collectors;
  * networks changes.
  */
 public class AccessNetworksManager extends Handler {
-    private static final String TAG = AccessNetworksManager.class.getSimpleName();
+    private final String mLogTag;
     private static final boolean DBG = false;
+    private final UUID mAnomalyUUID = UUID.fromString("c2d1a639-00e2-4561-9619-6acf37d90590");
+    private String mLastBoundPackageName;
 
     private static final int[] SUPPORTED_APN_TYPES = {
             ApnSetting.TYPE_DEFAULT,
@@ -156,7 +160,9 @@ public class AccessNetworksManager extends Handler {
         @Override
         public void binderDied() {
             // TODO: try to rebind the service.
-            loge("QualifiedNetworksService(" + mTargetBindingPackageName + ") died.");
+            String message = "Qualified network service " + mLastBoundPackageName + " died.";
+            loge(message);
+            AnomalyReporter.reportAnomaly(mAnomalyUUID, message);
         }
     }
 
@@ -167,10 +173,10 @@ public class AccessNetworksManager extends Handler {
          * the same life cycle.
          */
         @NonNull
-        private final ApnThrottleStatusChangedCallback mThrottleStatusCallback;
+        private final ThrottleStatusChangedCallback mThrottleStatusCallback;
 
         QualifiedNetworksServiceConnection() {
-            mThrottleStatusCallback = new ApnThrottleStatusChangedCallback();
+            mThrottleStatusCallback = new ThrottleStatusChangedCallback();
         }
 
         @Override
@@ -178,6 +184,7 @@ public class AccessNetworksManager extends Handler {
             if (DBG) log("onServiceConnected " + name);
             mIQualifiedNetworksService = IQualifiedNetworksService.Stub.asInterface(service);
             mDeathRecipient = new AccessNetworksManagerDeathRecipient();
+            mLastBoundPackageName = getQualifiedNetworksServicePackageName();
 
             try {
                 service.linkToDeath(mDeathRecipient, 0 /* flags */);
@@ -205,41 +212,41 @@ public class AccessNetworksManager extends Handler {
         private void registerDataThrottlersFirstTime() {
             post(() -> {
                 for (DataThrottler dataThrottler : mDataThrottlers) {
-                    dataThrottler.registerForApnThrottleStatusChanges(mThrottleStatusCallback);
+                    dataThrottler.registerForThrottleStatusChanges(mThrottleStatusCallback);
                 }
             });
         }
 
         private void registerDataThrottler(DataThrottler dataThrottler) {
             post(() -> {
-                dataThrottler.registerForApnThrottleStatusChanges(mThrottleStatusCallback);
+                dataThrottler.registerForThrottleStatusChanges(mThrottleStatusCallback);
             });
         }
 
         private void unregisterForThrottleCallbacks() {
             post(() -> {
                 for (DataThrottler dataThrottler : mDataThrottlers) {
-                    dataThrottler.unregisterForApnThrottleStatusChanges(mThrottleStatusCallback);
+                    dataThrottler.unregisterForThrottleStatusChanges(mThrottleStatusCallback);
                 }
             });
         }
     }
 
-    private class ApnThrottleStatusChangedCallback implements DataThrottler.Callback {
+    private class ThrottleStatusChangedCallback implements DataThrottler.Callback {
         @Override
-        public void onApnThrottleStatusChanged(List<ApnThrottleStatus> apnThrottleStatuses) {
+        public void onThrottleStatusChanged(List<ThrottleStatus> throttleStatuses) {
             post(() -> {
                 try {
-                    List<ApnThrottleStatus> apnThrottleStatusesBySlot =
-                            apnThrottleStatuses
+                    List<ThrottleStatus> throttleStatusesBySlot =
+                            throttleStatuses
                                     .stream()
                                     .filter(x -> x.getSlotIndex() == mPhone.getPhoneId())
                                     .collect(Collectors.toList());
 
-                    mIQualifiedNetworksService.reportApnThrottleStatusChanged(mPhone.getPhoneId(),
-                            apnThrottleStatusesBySlot);
+                    mIQualifiedNetworksService.reportThrottleStatusChanged(mPhone.getPhoneId(),
+                            throttleStatusesBySlot);
                 } catch (Exception ex) {
-                    loge("onApnThrottleStatusChanged", ex);
+                    loge("onThrottleStatusChanged", ex);
                 }
             });
         }
@@ -289,6 +296,7 @@ public class AccessNetworksManager extends Handler {
         mPhone = phone;
         mCarrierConfigManager = (CarrierConfigManager) phone.getContext().getSystemService(
                 Context.CARRIER_CONFIG_SERVICE);
+        mLogTag = "ANM-" + mPhone.getPhoneId();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
@@ -298,7 +306,7 @@ public class AccessNetworksManager extends Handler {
             contextAsUser.registerReceiver(mConfigChangedReceiver, intentFilter,
                 null /* broadcastPermission */, null);
         } catch (PackageManager.NameNotFoundException e) {
-            Rlog.e(TAG, "Package name not found: " + e.getMessage());
+            loge("Package name not found: ", e);
         }
         bindQualifiedNetworksService();
     }
@@ -476,15 +484,15 @@ public class AccessNetworksManager extends Handler {
     }
 
     private void log(String s) {
-        Rlog.d(TAG, s);
+        Rlog.d(mLogTag, s);
     }
 
     private void loge(String s) {
-        Rlog.e(TAG, s);
+        Rlog.e(mLogTag, s);
     }
 
     private void loge(String s, Exception ex) {
-        Rlog.e(TAG, s, ex);
+        Rlog.e(mLogTag, s, ex);
     }
 
 }
