@@ -123,6 +123,8 @@ public class DcTrackerTest extends TelephonyTest {
     public static final String FAKE_APN4 = "FAKE APN 4";
     public static final String FAKE_APN5 = "FAKE APN 5";
     public static final String FAKE_APN6 = "FAKE APN 6";
+    public static final String FAKE_APN7 = "FAKE APN 7";
+    public static final String FAKE_APN8 = "FAKE APN 8";
     public static final String FAKE_IFNAME = "FAKE IFNAME";
     public static final String FAKE_PCSCF_ADDRESS = "22.33.44.55";
     public static final String FAKE_GATEWAY = "11.22.33.44";
@@ -449,6 +451,72 @@ public class DcTrackerTest extends TelephonyTest {
                             "",                     // mnvo_match_data
                             NETWORK_TYPE_LTE_BITMASK, // network_type_bitmask
                             0,                      // apn_set_id
+                            -1,                     // carrier_id
+                            -1                      // skip_464xlat
+                    });
+
+                    mc.addRow(new Object[]{
+                            2169,                   // id
+                            FAKE_PLMN,              // numeric
+                            "sp-mode",              // name
+                            FAKE_APN7,              // apn
+                            "",                     // proxy
+                            "",                     // port
+                            "",                     // mmsc
+                            "",                     // mmsproxy
+                            "",                     // mmsport
+                            "",                     // user
+                            "",                     // password
+                            -1,                     // authtype
+                            "default",              // types
+                            "IP",                   // protocol
+                            "IP",                   // roaming_protocol
+                            1,                      // carrier_enabled
+                            ServiceState.RIL_RADIO_TECHNOLOGY_LTE, // bearer
+                            0,                      // bearer_bitmask
+                            0,                      // profile_id
+                            1,                      // modem_cognitive
+                            0,                      // max_conns
+                            0,                      // wait_time
+                            0,                      // max_conns_time
+                            0,                      // mtu
+                            "",                     // mvno_type
+                            "",                     // mnvo_match_data
+                            NETWORK_TYPE_LTE_BITMASK,  // network_type_bitmask
+                            1,                      // apn_set_id
+                            -1,                     // carrier_id
+                            -1                      // skip_464xlat
+                    });
+
+                    mc.addRow(new Object[]{
+                            2170,                   // id
+                            FAKE_PLMN,              // numeric
+                            "IMS",                  // name
+                            FAKE_APN8,              // apn
+                            "",                     // proxy
+                            "",                     // port
+                            "",                     // mmsc
+                            "",                     // mmsproxy
+                            "",                     // mmsport
+                            "",                     // user
+                            "",                     // password
+                            -1,                     // authtype
+                            "ims",                  // types
+                            "IP",                   // protocol
+                            "IP",                   // roaming_protocol
+                            1,                      // carrier_enabled
+                            ServiceState.RIL_RADIO_TECHNOLOGY_LTE, // bearer
+                            0,                      // bearer_bitmask
+                            0,                      // profile_id
+                            1,                      // modem_cognitive
+                            0,                      // max_conns
+                            0,                      // wait_time
+                            0,                      // max_conns_time
+                            0,                      // mtu
+                            "",                     // mvno_type
+                            "",                     // mnvo_match_data
+                            NETWORK_TYPE_LTE_BITMASK,  // network_type_bitmask
+                            -1,                      // apn_set_id
                             -1,                     // carrier_id
                             -1                      // skip_464xlat
                     });
@@ -1493,6 +1561,45 @@ public class DcTrackerTest extends TelephonyTest {
                 apnContextsAfterRowIdsChanged.get(ApnSetting.TYPE_DUN).getDataConnection());
     }
 
+    // Test for Data setup with APN Set ID
+    @Test
+    @SmallTest
+    public void testDataSetupWithApnSetId() throws Exception {
+        // Set the prefer apn set id to "1"
+        ContentResolver cr = mContext.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(Telephony.Carriers.APN_SET_ID, 1);
+        cr.update(PREFERAPN_URI, values, null, null);
+
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+
+        sendInitializationEvents();
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mSimulatedCommandsVerifier, times(2)).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                anyInt(), any(), any(Message.class));
+
+        List<DataProfile> dataProfiles = dpCaptor.getAllValues();
+        assertEquals(2, dataProfiles.size());
+
+        // Verify to use FAKE APN7 which is Default APN with apnSetId=1(Same as the pereferred
+        // APN's set id).
+        Optional<DataProfile> fakeApn7 = dataProfiles.stream()
+                .filter(dp -> dp.getApn().equals(FAKE_APN7)).findFirst();
+        assertTrue(fakeApn7.isPresent());
+        verifyDataProfile(fakeApn7.get(), FAKE_APN7, 0, 17, 1, NETWORK_TYPE_LTE_BITMASK);
+
+        // Verify to use FAKE APN8 which is IMS APN with apnSetId=-1
+        // (Telephony.Carriers.MATCH_ALL_APN_SET_ID).
+        Optional<DataProfile> fakeApn8 = dataProfiles.stream()
+                .filter(dp -> dp.getApn().equals(FAKE_APN8)).findFirst();
+        assertTrue(fakeApn8.isPresent());
+        verifyDataProfile(fakeApn8.get(), FAKE_APN8, 2, 64, 1, NETWORK_TYPE_LTE_BITMASK);
+    }
+
     // Test oos
     @Test
     @SmallTest
@@ -1814,9 +1921,9 @@ public class DcTrackerTest extends TelephonyTest {
         clearInvocations(mHandler);
     }
 
-    private void setUpSubscriptionPlans(boolean is5GUnmetered) throws Exception {
+    private void setUpSubscriptionPlans(boolean isNrUnmetered) throws Exception {
         List<SubscriptionPlan> plans = new ArrayList<>();
-        if (is5GUnmetered) {
+        if (isNrUnmetered) {
             plans.add(SubscriptionPlan.Builder
                     .createRecurring(ZonedDateTime.parse("2007-03-14T00:00:00.000Z"),
                             Period.ofMonths(1))
@@ -1832,6 +1939,28 @@ public class DcTrackerTest extends TelephonyTest {
                 .setDataUsage(500_000_000, System.currentTimeMillis())
                 .build());
         replaceInstance(DcTracker.class, "mSubscriptionPlans", mDct, plans);
+    }
+
+    private void resetSubscriptionPlans() throws Exception {
+        replaceInstance(DcTracker.class, "mSubscriptionPlans", mDct, null);
+    }
+
+    private void setUpSubscriptionOverride(int[] networkTypes, boolean isUnmetered)
+            throws Exception {
+        List<Integer> networkTypesList = null;
+        if (networkTypes != null) {
+            networkTypesList = new ArrayList<>();
+            for (int networkType : networkTypes) {
+                networkTypesList.add(networkType);
+            }
+        }
+        replaceInstance(DcTracker.class, "mUnmeteredNetworkTypes", mDct, networkTypesList);
+        replaceInstance(DcTracker.class, "mUnmeteredOverride", mDct, isUnmetered);
+    }
+
+    private void resetSubscriptionOverride() throws Exception {
+        replaceInstance(DcTracker.class, "mUnmeteredNetworkTypes", mDct, null);
+        replaceInstance(DcTracker.class, "mUnmeteredOverride", mDct, false);
     }
 
     private boolean isNetworkTypeUnmetered(int networkType) throws Exception {
@@ -1873,8 +2002,48 @@ public class DcTrackerTest extends TelephonyTest {
         return (boolean) field.get(mDct);
     }
 
+    private void setUpTempNotMetered() {
+        doReturn((int) TelephonyManager.NETWORK_TYPE_BITMASK_NR)
+                .when(mPhone).getRadioAccessFamily();
+        doReturn(1).when(mPhone).getSubId();
+        mBundle.putBoolean(CarrierConfigManager.KEY_NETWORK_TEMP_NOT_METERED_SUPPORTED_BOOL, true);
+        Intent intent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        intent.putExtra(CarrierConfigManager.EXTRA_SLOT_INDEX, mPhone.getPhoneId());
+        intent.putExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX, mPhone.getSubId());
+        mContext.sendBroadcast(intent);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+    }
+
     @Test
     public void testIsNetworkTypeUnmetered() throws Exception {
+        initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
+
+        // only 5G unmetered
+        setUpSubscriptionOverride(new int[]{TelephonyManager.NETWORK_TYPE_NR}, true);
+
+        assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_NR));
+        assertFalse(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_LTE));
+        assertFalse(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_UNKNOWN));
+
+        // all network types metered
+        setUpSubscriptionOverride(TelephonyManager.getAllNetworkTypes(), false);
+
+        assertFalse(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_NR));
+        assertFalse(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_LTE));
+        assertFalse(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_UNKNOWN));
+
+        // all network types unmetered
+        setUpSubscriptionOverride(TelephonyManager.getAllNetworkTypes(), true);
+
+        assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_NR));
+        assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_LTE));
+        assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_UNKNOWN));
+
+        resetSubscriptionOverride();
+    }
+
+    @Test
+    public void testIsNetworkTypeUnmeteredViaSubscriptionPlans() throws Exception {
         initApns(PhoneConstants.APN_TYPE_DEFAULT, new String[]{PhoneConstants.APN_TYPE_ALL});
 
         // only 5G unmetered
@@ -1896,7 +2065,6 @@ public class DcTrackerTest extends TelephonyTest {
         plans.add(SubscriptionPlan.Builder
                 .createRecurring(ZonedDateTime.parse("2007-03-14T00:00:00.000Z"),
                         Period.ofMonths(1))
-                .setTitle("Some 5GB Plan")
                 .setDataLimit(SubscriptionPlan.BYTES_UNLIMITED,
                         SubscriptionPlan.LIMIT_BEHAVIOR_THROTTLED)
                 .build());
@@ -1905,6 +2073,8 @@ public class DcTrackerTest extends TelephonyTest {
         assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_NR));
         assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_LTE));
         assertTrue(isNetworkTypeUnmetered(TelephonyManager.NETWORK_TYPE_UNKNOWN));
+
+        resetSubscriptionPlans();
     }
 
     @Test
@@ -1916,7 +2086,7 @@ public class DcTrackerTest extends TelephonyTest {
         doReturn(new TelephonyDisplayInfo(TelephonyManager.NETWORK_TYPE_LTE,
                 TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA))
                 .when(mDisplayInfoController).getTelephonyDisplayInfo();
-        doReturn(1).when(mPhone).getSubId();
+        setUpTempNotMetered();
 
         // NetCapability should be metered when connected to 5G with no unmetered plan or frequency
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_TELEPHONY_DISPLAY_INFO_CHANGED));
@@ -1953,6 +2123,7 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mDataConnection, times(2)).onMeterednessChanged(true);
 
         resetDataConnection(id);
+        resetSubscriptionPlans();
     }
 
     @Test
@@ -1964,7 +2135,7 @@ public class DcTrackerTest extends TelephonyTest {
         doReturn(new TelephonyDisplayInfo(TelephonyManager.NETWORK_TYPE_LTE,
                 TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA))
                 .when(mDisplayInfoController).getTelephonyDisplayInfo();
-        doReturn(1).when(mPhone).getSubId();
+        setUpTempNotMetered();
 
         // NetCapability should be metered when connected to 5G with no unmetered plan or frequency
         mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_TELEPHONY_DISPLAY_INFO_CHANGED));
@@ -2014,6 +2185,7 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mDataConnection, times(2)).onMeterednessChanged(true);
 
         resetDataConnection(id);
+        resetSubscriptionPlans();
     }
 
     @Test
@@ -2022,6 +2194,7 @@ public class DcTrackerTest extends TelephonyTest {
         int id = setUpDataConnection();
         setUpSubscriptionPlans(true);
         setUpWatchdogTimer();
+        setUpTempNotMetered();
 
         // NetCapability should be unmetered when connected to 5G
         doReturn(new TelephonyDisplayInfo(TelephonyManager.NETWORK_TYPE_LTE,
@@ -2042,6 +2215,7 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mDataConnection, times(1)).onMeterednessChanged(false);
 
         resetDataConnection(id);
+        resetSubscriptionPlans();
     }
 
     @Test
@@ -2074,6 +2248,7 @@ public class DcTrackerTest extends TelephonyTest {
         assertFalse(getWatchdogStatus());
 
         resetDataConnection(id);
+        resetSubscriptionPlans();
     }
 
     /**
