@@ -22,6 +22,30 @@
       },
       "revId": "cbe0693538e87633a0b28bc4b95c024b4c9bca0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "734ee4f6_4b02003a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-02-23T01:14:49Z",
+      "side": 1,
+      "message": "For context, the NOT_VCN_MANAGED bit was originally planned to be a default capability but was instead moved to be a non-default capability that transports are supposed to manually add themselves. Based on this, we currently only remove the NOT_VCN_MANAGED bit in VcnManagementService. We can technically fix this by setting the bit as needed, but the change here best follows our compromise with Core Networking.\n\nManually adding the NOT_VCN_MANAGED bit also reflects the previous approach (before checking VCN network policies was added)\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1540585/11/src/java/com/android/internal/telephony/dataconnection/DataConnection.java\n\n\nAlso it looks like NetworkCapabilities.Builder does not provide a setCapability() method\nhttp://cs/android/frameworks/base/packages/Connectivity/framework/src/android/net/NetworkCapabilities.java?l\u003d2316\u0026rcl\u003d38f7ae7afad69cfe86f5bc29f1c283c097224796",
+      "parentUuid": "3dff185e_3fc02c2b",
+      "range": {
+        "startLine": 1758,
+        "startChar": 0,
+        "endLine": 1761,
+        "endChar": 9
+      },
+      "revId": "cbe0693538e87633a0b28bc4b95c024b4c9bca0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
