@@ -1,0 +1,11 @@
+Open-Source-Licensing+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Daniel Bright <dbright@google.com>
+Autosubmit+1: Daniel Bright <dbright@google.com>
+Presubmit-Ready+1: Daniel Bright <dbright@google.com>
+Bypass-Presubmit+1: Jing Ji <jji@google.com>
+Build-Cop-Override+1: Jing Ji <jji@google.com>
+Submitted-by: Daniel Bright <dbright@google.com>
+Submitted-at: Wed, 24 Feb 2021 19:59:07 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1606539
+Project: platform/frameworks/opt/telephony
+Branch: refs/heads/master
