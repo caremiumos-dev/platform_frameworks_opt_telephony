@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d581d4c_bf1cc05c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-02-24T10:14:01Z",
+      "side": 1,
+      "message": "LGTM. Michele, can you ptal?",
+      "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
