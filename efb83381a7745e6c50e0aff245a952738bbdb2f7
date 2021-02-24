@@ -16,6 +16,24 @@
       "message": "Can you please file a bug for this and describe what issue this causes?",
       "revId": "efb83381a7745e6c50e0aff245a952738bbdb2f7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f886285f_b35f862f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2021-02-24T06:07:15Z",
+      "side": 1,
+      "message": "I\u0027m sorry to bother you, amit.\nThis patch depends on 1566056. I forgot abandoning this patch.",
+      "parentUuid": "d648e753_bea9c20c",
+      "revId": "efb83381a7745e6c50e0aff245a952738bbdb2f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
