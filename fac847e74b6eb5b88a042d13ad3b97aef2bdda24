@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d094c6_1d39ea61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-02-24T00:06:03Z",
+      "side": 1,
+      "message": "Cosmetic / name-change only CL. Reviewed and LGTM.",
+      "revId": "fac847e74b6eb5b88a042d13ad3b97aef2bdda24",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
