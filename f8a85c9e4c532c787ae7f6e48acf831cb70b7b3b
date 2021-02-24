@@ -121,6 +121,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f153841e_c1029687",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2350,
+      "author": {
+        "id": 1435598
+      },
+      "writtenOn": "2021-02-24T01:12:39Z",
+      "side": 1,
+      "message": "The requestCode parameter in getBroadcast should be unique, otherwise the alarm will override previous one.",
+      "range": {
+        "startLine": 2350,
+        "startChar": 84,
+        "endLine": 2350,
+        "endChar": 85
+      },
+      "revId": "f8a85c9e4c532c787ae7f6e48acf831cb70b7b3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78917da1_e1e7e951",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 1
