@@ -73,6 +73,94 @@ public class IccUtilsTest {
     }
 
     @Test
+    public void stringToAdnStringField_charRange_128to255() {
+        String alphaTag = "££®®";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() * 2 + 1);
+        assertThat(result[0]).isEqualTo((byte) 0x80);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_81format() {
+        String alphaTag = "杜杜杜";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() + 3);
+        assertThat(result[0]).isEqualTo((byte) 0x81);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_82format() {
+        String alphaTag = "潢潤激";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() + 4);
+        assertThat(result[0]).isEqualTo((byte) 0x82);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_82format_difference_128_between_words() {
+        String alphaTag = "亚会";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() + 4);
+        assertThat(result[0]).isEqualTo((byte) 0x82);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_80format_only_one_character() {
+        String alphaTag = "金";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() * 2 + 1);
+        assertThat(result[0]).isEqualTo((byte) 0x80);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_80format_if_81or82format_not_possible() {
+        String alphaTag = "潢潤烹";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() * 2 + 1);
+        assertThat(result[0]).isEqualTo((byte) 0x80);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_81format_including_gsm_mixed() {
+        String alphaTag = "杜杜杜^";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() * 2 + 1);
+        assertThat(result[0]).isEqualTo((byte) 0x80);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_82format_including_gsm_mixed() {
+        String alphaTag = "潢潤激$";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() * 2 + 1);
+        assertThat(result[0]).isEqualTo((byte) 0x80);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
     public void stringToAdnStringField_mixed() {
         String alphaTag = "ni=日;hon=本;";
 
