@@ -73,6 +73,28 @@ public class IccUtilsTest {
     }
 
     @Test
+    public void stringToAdnStringField_81format() {
+        String alphaTag = "杜杜杜";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() / 2 + 3);
+        assertThat(result[0]).isEqualTo((byte) 0x81);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
+    public void stringToAdnStringField_82format() {
+        String alphaTag = "鼡龓龅鼷鼩";
+
+        byte[] result = IccUtils.stringToAdnStringField(alphaTag);
+        assertThat(result.length).isEqualTo(alphaTag.length() / 2 + 4);
+        assertThat(result[0]).isEqualTo((byte) 0x82);
+        assertThat(IccUtils.adnStringFieldToString(result, 0, result.length))
+                .isEqualTo(alphaTag);
+    }
+
+    @Test
     public void stringToAdnStringField_mixed() {
         String alphaTag = "ni=日;hon=本;";
 
