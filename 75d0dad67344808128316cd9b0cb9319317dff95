@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c55c8cd0_3b34318c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1288034
+      },
+      "writtenOn": "2021-02-25T09:14:34Z",
+      "side": 1,
+      "message": "Also explain what the problem is: the jarjar rules put all classes in com.android.internal.telephony, so if there\u0027s a duplicate name (like LocalLog which is being migrated to modules-utils), it fails to build even though the original classes have different package names.",
+      "revId": "75d0dad67344808128316cd9b0cb9319317dff95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
