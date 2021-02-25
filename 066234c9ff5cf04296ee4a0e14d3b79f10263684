@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b0b9b2_cfeec563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1352498
+      },
+      "writtenOn": "2021-02-25T00:34:27Z",
+      "side": 1,
+      "message": "out/soong/.intermediates/frameworks/base/tests/net/FrameworksNetTests/android_common/javac/classes \u0026\u0026 rm -rf \"out/soong/.intermediates/frameworks/base/tests/net/FrameworksNetTests/android_common/javac/srcjars\"\nframeworks/base/tests/net/java/com/android/server/net/NetworkStatsServiceTest.java:1185: error: cannot find symbol\n        mService.forceUpdateIfaces(NETWORKS_MOBILE, states, getActiveIface(states), new VpnInfo[0]);\n                                                                                        ^\n  symbol:   class VpnInfo\n  location: class NetworkStatsServiceTest\nframeworks/base/tests/net/java/com/android/server/net/NetworkStatsServiceTest.java:1563: error: cannot find symbol\n        final NetworkInfo info \u003d new NetworkInfo(\n              ^\n  symbol:   class NetworkInfo\n  location: class NetworkStatsServiceTest\nframeworks/base/tests/net/java/com/android/server/net/NetworkStatsServiceTest.java:1563: error: cannot find symbol\n        final NetworkInfo info \u003d new NetworkInfo(\n                                     ^\n  symbol:   class NetworkInfo\n  location: class NetworkStatsServiceTest\nframeworks/base/tests/net/java/com/android/server/net/NetworkStatsServiceTest.java:1565: error: cannot find symbol\n        info.setDetailedState(DetailedState.CONNECTED, null, null);\n                              ^\n  symbol:   variable DetailedState\n  location: class NetworkStatsServiceTest\n4 errors",
+      "revId": "066234c9ff5cf04296ee4a0e14d3b79f10263684",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
