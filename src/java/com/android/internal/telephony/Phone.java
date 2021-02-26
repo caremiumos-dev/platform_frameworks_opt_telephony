@@ -568,8 +568,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mIsVoiceCapable = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE))
                 .isVoiceCapable();
 
-        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
-
         /**
          *  Some RIL's don't always send RIL_UNSOL_CALL_RING so it needs
          *  to be generated locally. Ideally all ring tones should be loops
@@ -608,8 +606,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (getPhoneType() != PhoneConstants.PHONE_TYPE_SIP) {
             mCi.registerForSrvccStateChanged(this, EVENT_SRVCC_STATE_CHANGED, null);
         }
-        mCi.startLceService(DEFAULT_REPORT_INTERVAL_MS, LCE_PULL_MODE,
-                obtainMessage(EVENT_CONFIG_LCE));
+        mCi.startLceService(
+                DEFAULT_REPORT_INTERVAL_MS, LCE_PULL_MODE, obtainMessage(EVENT_CONFIG_LCE));
+
+        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
     }
 
     /**
