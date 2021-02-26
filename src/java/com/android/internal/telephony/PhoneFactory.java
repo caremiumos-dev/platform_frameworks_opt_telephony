@@ -178,6 +178,10 @@ public class PhoneFactory {
                 else radioHalVersion = HalVersion.UNKNOWN;
                 RadioConfig.make(context, radioHalVersion);
 
+                sPhoneConfigurationManager = PhoneConfigurationManager
+                        .init(sContext, sCommandsInterfaces);
+
+
                 // Instantiate UiccController so that all other classes can just
                 // call getInstance()
                 sUiccController = UiccController.make(context);
@@ -239,8 +243,6 @@ public class PhoneFactory {
                 } else {
                     Rlog.i(LOG_TAG, "IMS is not supported on this device, skipping ImsResolver.");
                 }
-
-                sPhoneConfigurationManager = PhoneConfigurationManager.init(sContext);
 
                 sCellularNetworkValidator = CellularNetworkValidator.make(sContext);
 
