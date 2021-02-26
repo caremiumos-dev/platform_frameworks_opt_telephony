@@ -715,6 +715,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    @Override
+    public int getInstanceId() {
+        return mPhoneId;
+    }
+
     private boolean isRadioBugDetectionEnabled() {
         return Settings.Global.getInt(
                 mContext.getContentResolver(),

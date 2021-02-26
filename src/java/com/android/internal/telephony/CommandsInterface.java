@@ -2634,4 +2634,14 @@ public interface CommandsInterface {
      */
     default void setDataThrottling(Message result, WorkSource workSource,
             int dataThrottlingAction, long completionWindowMillis) {};
+
+
+    /**
+     * Gets the instance id.
+     * <p/>
+     * Equivalent to {@link Phone#getPhoneId()}.
+     */
+    default int getInstanceId() {
+        return -1;
+    }
 }

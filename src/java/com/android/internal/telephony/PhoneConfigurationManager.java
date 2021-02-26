@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
@@ -39,10 +40,9 @@ import android.util.Log;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.telephony.Rlog;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class manages phone's configuration which defines the potential capability (static) of the
@@ -69,10 +69,10 @@ public class PhoneConfigurationManager {
     private final Handler mHandler;
     // mPhones is obtained from PhoneFactory and can have phones corresponding to inactive modems as
     // well. That is, the array size can be 2 even if num of active modems is 1.
-    private Phone[] mPhones;
-    private final Map<Integer, Boolean> mPhoneStatusMap;
-    private MockableInterface mMi = new MockableInterface();
-    private TelephonyManager mTelephonyManager;
+    private CommandsInterface[] mCommandInterfaces;
+    private final ConcurrentHashMap<Integer, Boolean> mCommandsInterfaceStatusMap;
+    private final MockableInterface mMi = new MockableInterface();
+    private final TelephonyManager mTelephonyManager;
     private static final RegistrantList sMultiSimConfigChangeRegistrants = new RegistrantList();
     private Set<String> mRadioInterfaceCapabilities;
     private final Object mLockRadioInterfaceCapabilities = new Object();
@@ -81,10 +81,11 @@ public class PhoneConfigurationManager {
      * Init method to instantiate the object
      * Should only be called once.
      */
-    public static PhoneConfigurationManager init(Context context) {
+    public static PhoneConfigurationManager init(final Context context,
+            final CommandsInterface[] commandInterfaces) {
         synchronized (PhoneConfigurationManager.class) {
             if (sInstance == null) {
-                sInstance = new PhoneConfigurationManager(context);
+                sInstance = new PhoneConfigurationManager(context, commandInterfaces);
             } else {
                 Log.wtf(LOG_TAG, "init() called multiple times!  sInstance = " + sInstance);
             }
@@ -96,30 +97,35 @@ public class PhoneConfigurationManager {
      * Constructor.
      * @param context context needed to send broadcast.
      */
-    private PhoneConfigurationManager(Context context) {
+    private PhoneConfigurationManager(final Context context,
+            final CommandsInterface[] commandInterfaces) {
         mContext = context;
         // TODO: send commands to modem once interface is ready.
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         //initialize with default, it'll get updated when RADIO is ON/AVAILABLE
         mStaticCapability = getDefaultCapability();
         mRadioConfig = RadioConfig.getInstance();
-        mHandler = new ConfigManagerHandler();
-        mPhoneStatusMap = new HashMap<>();
+
+        final HandlerThread handlerThread = new HandlerThread("PhoneCfgManager");
+        handlerThread.start();
+        mHandler = new ConfigManagerHandler(handlerThread.getLooper());
+
+        mCommandsInterfaceStatusMap = new ConcurrentHashMap<>();
 
         notifyCapabilityChanged();
 
-        mPhones = PhoneFactory.getPhones();
+        mCommandInterfaces = commandInterfaces;
 
-        for (Phone phone : mPhones) {
-            registerForRadioState(phone);
+        for (final CommandsInterface commandsInterface : mCommandInterfaces) {
+            registerForRadioState(commandsInterface);
         }
     }
 
-    private void registerForRadioState(Phone phone) {
+    private void registerForRadioState(final CommandsInterface ci) {
         if (!StorageManager.inCryptKeeperBounce()) {
-            phone.mCi.registerForAvailable(mHandler, Phone.EVENT_RADIO_AVAILABLE, phone);
+            ci.registerForAvailable(mHandler, Phone.EVENT_RADIO_AVAILABLE, ci);
         } else {
-            phone.mCi.registerForOn(mHandler, Phone.EVENT_RADIO_ON, phone);
+            ci.registerForOn(mHandler, Phone.EVENT_RADIO_ON, ci);
         }
     }
 
@@ -146,22 +152,26 @@ public class PhoneConfigurationManager {
      * Handler class to handle callbacks
      */
     private final class ConfigManagerHandler extends Handler {
+
+        ConfigManagerHandler(final Looper looper) {
+            super(looper);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            AsyncResult ar;
-            Phone phone = null;
+            final AsyncResult ar;
             switch (msg.what) {
                 case Phone.EVENT_RADIO_AVAILABLE:
                 case Phone.EVENT_RADIO_ON:
                     log("Received EVENT_RADIO_AVAILABLE/EVENT_RADIO_ON");
                     ar = (AsyncResult) msg.obj;
-                    if (ar.userObj != null && ar.userObj instanceof Phone) {
-                        phone = (Phone) ar.userObj;
-                        updatePhoneStatus(phone);
+                    if (ar.userObj instanceof CommandsInterface) {
+                        final CommandsInterface commandsInterface = (CommandsInterface) ar.userObj;
+                        updatePhoneStatus(commandsInterface);
                     } else {
                         // phone is null
-                        log("Unable to add phoneStatus to cache. "
-                                + "No phone object provided for event " + msg.what);
+                        log("Unable to add commandsInterface to cache. "
+                                + "No commandsInterface object provided for event " + msg.what);
                     }
                     getStaticPhoneCapability();
                     getRadioInterfaceCapabilities();
@@ -224,18 +234,16 @@ public class PhoneConfigurationManager {
      *
      * @param phone which phone to operate on
      */
-    public boolean getPhoneStatus(Phone phone) {
+    public boolean getPhoneStatus(final Phone phone) {
         if (phone == null) {
             log("getPhoneStatus failed phone is null");
             return false;
         }
 
-        int phoneId = phone.getPhoneId();
-
         //use cache if the status has already been updated/queried
         try {
-            return getPhoneStatusFromCache(phoneId);
-        } catch (NoSuchElementException ex) {
+            return getPhoneStatusFromCache(phone.mCi.getInstanceId());
+        } catch (final NoSuchElementException ex) {
             // Return true if modem status cannot be retrieved. For most cases, modem status
             // is on. And for older version modems, GET_MODEM_STATUS and disable modem are not
             // supported. Modem is always on.
@@ -243,13 +251,13 @@ public class PhoneConfigurationManager {
             return true;
         } finally {
             //in either case send an asynchronous request to retrieve the phone status
-            updatePhoneStatus(phone);
+            updatePhoneStatus(phone.mCi);
         }
     }
 
     /**
      * Get phone status (enabled/disabled) directly from modem, and use a result Message object
-     * Note: the caller of this method is reponsible to call this in a blocking fashion as well
+     * Note: the caller of this method is responsible to call this in a blocking fashion as well
      * as read the results and handle the error case.
      * (In order to be consistent, in error case, we should return default value of true; refer
      *  to #getPhoneStatus method)
@@ -266,32 +274,32 @@ public class PhoneConfigurationManager {
 
     /**
      * return modem status from cache, NoSuchElementException if phoneId not in cache
-     * @param phoneId
+     * @param instanceId equivalent {@link Phone#getPhoneId()}
      */
-    public boolean getPhoneStatusFromCache(int phoneId) throws NoSuchElementException {
-        if (mPhoneStatusMap.containsKey(phoneId)) {
-            return mPhoneStatusMap.get(phoneId);
+    public boolean getPhoneStatusFromCache(int instanceId)
+            throws NoSuchElementException {
+        if (mCommandsInterfaceStatusMap.containsKey(instanceId)) {
+            return mCommandsInterfaceStatusMap.get(instanceId);
         } else {
-            throw new NoSuchElementException("phoneId not found: " + phoneId);
+            throw new NoSuchElementException("instanceId not found: " + instanceId);
         }
     }
 
     /**
      * method to call RIL getModemStatus
      */
-    private void updatePhoneStatus(Phone phone) {
-        Message result = Message.obtain(
-                mHandler, EVENT_GET_MODEM_STATUS_DONE, phone.getPhoneId(), 0 /**dummy arg*/);
-        phone.mCi.getModemStatus(result);
+    private void updatePhoneStatus(final CommandsInterface commandsInterface) {
+        final Message result = Message.obtain(
+                mHandler, EVENT_GET_MODEM_STATUS_DONE, commandsInterface);
+        commandsInterface.getModemStatus(result);
     }
 
     /**
-     * Add status of the phone to the status HashMap
-     * @param phoneId
-     * @param status
+     * Add status of the commands interface to the cache.
      */
-    public void addToPhoneStatusCache(int phoneId, boolean status) {
-        mPhoneStatusMap.put(phoneId, status);
+    public void addToPhoneStatusCache(final int instanceId,
+            final boolean status) {
+        mCommandsInterfaceStatusMap.put(instanceId, status);
     }
 
     /**
@@ -333,6 +341,10 @@ public class PhoneConfigurationManager {
                                     + "returning non-available capabilities.");
                         } else {
                             mLockRadioInterfaceCapabilities.wait(2000);
+                            if (mRadioInterfaceCapabilities == null) {
+                                loge("getRadioInterfaceCapabilities: Radio Capabilities not "
+                                        + "loaded in time");
+                            }
                         }
                     } catch (InterruptedException e) {
                     }
@@ -423,11 +435,11 @@ public class PhoneConfigurationManager {
             // if numOfActiveModems is decreasing, deregister old RILs
             // eg if we are going from 2 phones to 1 phone, we need to deregister RIL for the
             // second phone. This loop does nothing if numOfActiveModems is increasing.
-            for (int phoneId = numOfActiveModems; phoneId < oldNumOfActiveModems; phoneId++) {
-                SubscriptionController.getInstance().clearSubInfoRecord(phoneId);
+            for (int i = numOfActiveModems; i < oldNumOfActiveModems; i++) {
+                SubscriptionController.getInstance().clearSubInfoRecord(i);
                 subInfoCleared = true;
-                mPhones[phoneId].mCi.onSlotActiveStatusChange(
-                        SubscriptionManager.isValidPhoneId(phoneId));
+                mCommandInterfaces[i].onSlotActiveStatusChange(
+                        SubscriptionManager.isValidPhoneId(i));
             }
             if (subInfoCleared) {
                 // This triggers update of default subs. This should be done asap after
@@ -439,15 +451,21 @@ public class PhoneConfigurationManager {
                 // exception (see b/163582235).
                 MultiSimSettingController.getInstance().onPhoneRemoved();
             }
-            // old phone objects are not needed now; mPhones can be updated
-            mPhones = PhoneFactory.getPhones();
+
+            // old phone objects are not needed now; mCommandsInterfaces can be updated.
+            final Phone[] phones = PhoneFactory.getPhones();
+            mCommandInterfaces = new CommandsInterface[phones.length];
+            for (int i = 0; i < phones.length; i++) {
+                mCommandInterfaces[i] = phones[i].mCi;
+            }
+
             // if numOfActiveModems is increasing, register new RILs
             // eg if we are going from 1 phone to 2 phones, we need to register RIL for the second
             // phone. This loop does nothing if numOfActiveModems is decreasing.
-            for (int phoneId = oldNumOfActiveModems; phoneId < numOfActiveModems; phoneId++) {
-                Phone phone = mPhones[phoneId];
-                registerForRadioState(phone);
-                phone.mCi.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(phoneId));
+            for (int i = oldNumOfActiveModems; i < numOfActiveModems; i++) {
+                CommandsInterface commandsInterface = mCommandInterfaces[i];
+                registerForRadioState(commandsInterface);
+                commandsInterface.onSlotActiveStatusChange(SubscriptionManager.isValidPhoneId(i));
             }
         }
     }
