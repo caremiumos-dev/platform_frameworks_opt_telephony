@@ -1694,6 +1694,19 @@ public class UiccProfile extends IccCard {
     }
 
     /**
+     * @return a list of {@link UiccAccessRule}s, or {@code null} if there are no rules or privilege
+     *     rules are not loaded yet.
+     */
+    public List<UiccAccessRule> getCarrierPrivilegeAccessRules() {
+        final List<UiccAccessRule> rules = new ArrayList<>();
+        final UiccCarrierPrivilegeRules carrierPrivilegeRules = getCarrierPrivilegeRules();
+        if (carrierPrivilegeRules != null) {
+            rules.addAll(carrierPrivilegeRules.getAccessRules());
+        }
+        return rules.isEmpty() ? null : rules;
+    }
+
+    /**
      * Exposes {@link UiccCarrierPrivilegeRules#getCarrierPackageNamesForIntent}.
      */
     public List<String> getCarrierPackageNamesForIntent(
