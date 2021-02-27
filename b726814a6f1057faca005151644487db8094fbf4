@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc503a26_a931855e",
+        "filename": "src/java/com/android/internal/telephony/SlidingWindowEventCounter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-02-27T00:45:07Z",
+      "side": 1,
+      "message": "If you pass in the time as a long, it\u0027ll make it easier to test this.",
+      "range": {
+        "startLine": 55,
+        "startChar": 32,
+        "endLine": 55,
+        "endChar": 49
+      },
+      "revId": "b726814a6f1057faca005151644487db8094fbf4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "edd1ffa9_c56ecf4e",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
         "patchSetId": 3
