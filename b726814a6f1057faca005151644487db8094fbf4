@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edd1ffa9_c56ecf4e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-02-27T00:37:35Z",
+      "side": 1,
+      "message": "What about tests that mock the elapsed time so that you can test more scenarios",
+      "range": {
+        "startLine": 29,
+        "startChar": 13,
+        "endLine": 29,
+        "endChar": 42
+      },
+      "revId": "b726814a6f1057faca005151644487db8094fbf4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
