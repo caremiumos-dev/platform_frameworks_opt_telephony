@@ -99,6 +99,7 @@ public class PhoneFactory {
 
     static private final HashMap<String, LocalLog>sLocalLogs = new HashMap<String, LocalLog>();
     private static MetricsCollector sMetricsCollector;
+    private static RadioInterfaceCapabilities sRadioHalCapabilities;
 
     //***** Class Methods
 
@@ -173,10 +174,13 @@ public class PhoneFactory {
                     sCommandsInterfaces[i] = new RIL(context, networkModes[i],
                             cdmaSubscription, i);
                 }
-                HalVersion radioHalVersion;
+
+                final HalVersion radioHalVersion;
                 if (numPhones > 0) radioHalVersion = sCommandsInterfaces[0].getHalVersion();
                 else radioHalVersion = HalVersion.UNKNOWN;
-                RadioConfig.make(context, radioHalVersion);
+                final RadioConfig radioConfig = RadioConfig.make(context, radioHalVersion);
+                sRadioHalCapabilities = RadioInterfaceCapabilities.init(radioConfig,
+                        sCommandsInterfaces[0]);
 
                 // Instantiate UiccController so that all other classes can just
                 // call getInstance()
