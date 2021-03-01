@@ -307,14 +307,6 @@ public class MultiSimSettingController extends Handler {
         if (DBG) log("onUserDataEnabled");
         // Make sure MOBILE_DATA of subscriptions in same group are synced.
         setUserDataEnabledForGroup(subId, enable);
-
-        // If user is enabling a non-default non-opportunistic subscription, make it default.
-        if (mSubController.getDefaultDataSubId() != subId && !mSubController.isOpportunistic(subId)
-                && enable && mSubController.isActiveSubId(subId)) {
-             android.provider.Settings.Global.putInt(mContext.getContentResolver(),
-                 SETTING_USER_PREF_DATA_SUB, subId);
-            mSubController.setDefaultDataSubId(subId);
-        }
     }
 
     /**
@@ -754,20 +746,6 @@ public class MultiSimSettingController extends Handler {
 
     protected void disableDataForNonDefaultNonOpportunisticSubscriptions() {
         if (!isReadyToReevaluate()) return;
-
-        int defaultDataSub = mSubController.getDefaultDataSubId();
-
-        for (Phone phone : PhoneFactory.getPhones()) {
-            if (phone.getSubId() != defaultDataSub
-                    && SubscriptionManager.isValidSubscriptionId(phone.getSubId())
-                    && !mSubController.isOpportunistic(phone.getSubId())
-                    && phone.isUserDataEnabled()
-                    && !areSubscriptionsInSameGroup(defaultDataSub, phone.getSubId())) {
-                log("setting data to false on " + phone.getSubId());
-                phone.getDataEnabledSettings().setDataEnabled(
-                        TelephonyManager.DATA_ENABLED_REASON_USER, false);
-            }
-        }
     }
 
     private boolean areSubscriptionsInSameGroup(int subId1, int subId2) {
