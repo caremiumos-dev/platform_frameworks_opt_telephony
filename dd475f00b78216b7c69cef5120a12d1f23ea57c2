@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008557895",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1576985?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3cc7716e_8436b846",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-02T03:47:16Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1454,
+        "startChar": 0,
+        "endLine": 1454,
+        "endChar": 109
+      },
+      "revId": "dd475f00b78216b7c69cef5120a12d1f23ea57c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008557895",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1576985?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "26d24d28_f7268407",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-02T03:47:16Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1620,
+        "startChar": 0,
+        "endLine": 1620,
+        "endChar": 104
+      },
+      "revId": "dd475f00b78216b7c69cef5120a12d1f23ea57c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
