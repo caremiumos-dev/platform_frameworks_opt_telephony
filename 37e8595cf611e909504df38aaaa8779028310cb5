@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d166be26_430e953b",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "What is this? Write some comments. REQUIRED is a dead code.",
+      "range": {
+        "startLine": 298,
+        "startChar": 0,
+        "endLine": 300,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dd62036_bd5ec1a6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "This is deprecated.",
+      "range": {
+        "startLine": 459,
+        "startChar": 47,
+        "endLine": 459,
+        "endChar": 71
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426c4e16_c4a69fef",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Do not do the work in broadcast receiver. This can cause ANR. You should post an event and let the handler do the work.",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 17
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ec09054_6492ff19",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "You don\u0027t need this method. Just use ACTION_SIM_APPLICATION_STATE_CHANGED along with ACTION_SIM_CARD_STATE_CHANGED above.",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45aba199_4665ed4d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Right now this is called once only when radio is available. I think you can move this to the constructor. RadioConfig is ready earlier than PhoneSwitcher, so there should not be problems of knowing which HAL command to use when PhoneSwitcher is created. Then you don\u0027t need the check here.\n\nPlease test it locally and let me know if this works or not.",
+      "range": {
+        "startLine": 512,
+        "startChar": 20,
+        "endLine": 512,
+        "endChar": 44
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a2bf2dc_3f91b189",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "You are using a single failure flag for all different failures, and then blindly retry when one of the condition changes. As I mentioned below, you should change the design to return a specific failure, then only retry when that failure condition is gone.",
+      "range": {
+        "startLine": 574,
+        "startChar": 28,
+        "endLine": 574,
+        "endChar": 54
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c7687f3_99ba090f",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Revert to the original check, but remove ar!\u003dnull check in line 629. ar can\u0027t be null in any case. If it is, just let it crash.",
+      "range": {
+        "startLine": 635,
+        "startChar": 27,
+        "endLine": 635,
+        "endChar": 37
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aebc5ef3_a6b9ab8c",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Could you please clarify how this could happen?",
+      "range": {
+        "startLine": 1057,
+        "startChar": 57,
+        "endLine": 1057,
+        "endChar": 88
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f509ee6_5f96c1c2",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "PhoneSwitcher already registered for precise phone state, you can just use that instead of using another approach to check if there is any active call.",
+      "range": {
+        "startLine": 1496,
+        "startChar": 0,
+        "endLine": 1496,
+        "endChar": 90
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c356def_510b773f",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "You are guessing what the error might cause switch failure. In fact, there could be other reasons that caused the setPreferredDataModem or setAllowedData failed.\n\nThe right design is expanding the error codes in IRadioConfigResponse::setPreferredDataModemResponse, and returns an explicit error code indicating why the switch was failed. And then using the exception type to determine if you want to retry, or just wait for call inactive/sim ready event.",
+      "range": {
+        "startLine": 1505,
+        "startChar": 0,
+        "endLine": 1515,
+        "endChar": 13
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff210c3_ab68e39d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Why do need an accessor and make them public? If not necessary, remove those two methods.",
+      "range": {
+        "startLine": 1530,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244b7b82_a9b20ef4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "Why is this specific for retry? Why is this not isValidForSwitch?\n\nMy point is why is the logic like this\nswitch-\u003efail-\u003eisPhoneIdValidForRetry-\u003eretry\n\nShouldn\u0027t that be\nisPhoneIdValidForSwitch-\u003eswitch or no switch?",
+      "range": {
+        "startLine": 1548,
+        "startChar": 0,
+        "endLine": 1548,
+        "endChar": 57
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ec5605_6c799b92",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-02T09:18:32Z",
+      "side": 1,
+      "message": "I think you should not use if there is any network request to determine if retry is needed or not. We should be able to switch DDS even if there is no network request.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 0,
+        "endLine": 1557,
+        "endChar": 13
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
