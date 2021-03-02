@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b55bc9_2e5e9c12",
+        "filename": "src/java/com/android/internal/telephony/SlidingWindowEventCounter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-03-02T19:12:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d139cb_c726401f",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 63
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e12b249_08a88da3",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "the timestamps are 0,1,2,50,51,52",
       "parentUuid": "6e12b249_08a88da3",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 41
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "475429c5_a691b13f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-03-02T19:12:26Z",
+      "side": 1,
+      "message": "wow... my bad.",
+      "parentUuid": "5c41e0cf_88615f43",
       "range": {
         "startLine": 51,
         "startChar": 0,
