@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8d139cb_c726401f",
+        "filename": "src/java/com/android/internal/telephony/SlidingWindowEventCounter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2021-03-02T19:09:29Z",
+      "side": 1,
+      "message": "yeah, I\u0027d made the fix last night, but forgot to upload it 😄",
+      "parentUuid": "6b470e61_ac45068a",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 63
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e12b249_08a88da3",
         "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
         "patchSetId": 4
