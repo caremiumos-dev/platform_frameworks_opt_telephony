@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b470e61_ac45068a",
+        "filename": "src/java/com/android/internal/telephony/SlidingWindowEventCounter.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-03-02T18:36:53Z",
+      "side": 1,
+      "message": "I think you\u0027re missing:\n                \u0026\u0026 mTimestampQueueMillis.peekFirst()\n                + mWindowSizeMillis \u003e\u003d mTimestampQueueMillis.peekLast();",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 63
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e12b249_08a88da3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1606087
+      },
+      "writtenOn": "2021-03-02T18:36:53Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be assertFalse since the window is 100 and the three occurences were over ~150ms",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 41
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
