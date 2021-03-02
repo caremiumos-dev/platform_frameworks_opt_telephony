@@ -69,6 +69,30 @@
       },
       "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c41e0cf_88615f43",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SlidingWindowEventCounterTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1377475
+      },
+      "writtenOn": "2021-03-02T19:11:10Z",
+      "side": 1,
+      "message": "the timestamps are 0,1,2,50,51,52",
+      "parentUuid": "6e12b249_08a88da3",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 41
+      },
+      "revId": "78896d65376b7788ae55c23e3ae319cf3467b127",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
