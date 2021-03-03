@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5011faa_f6c7d27b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4976,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-03T10:11:37Z",
+      "side": 1,
+      "message": "If getEarfcn and pccChannel are both unknown, can we return true if RAT matches and Pci matches? If yes, then we need to deal with the different unknown values.\nOne is CellInfo.UNAVAILABLE (INT_MAX) and the other is PhysicalChannelConfig.CHANNEL_NUMBER_UNKNOWN (-1). I am going to ask Zoey to change PhysicalChannelConfig.CHANNEL_NUMBER_UNKNOWN to INT_MAX to avoid the trouble we might encounter in the future.",
+      "range": {
+        "startLine": 4976,
+        "startChar": 52,
+        "endLine": 4976,
+        "endChar": 84
+      },
+      "revId": "b065fd2e572ccdc2548baf194c2ec6daacd22cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
