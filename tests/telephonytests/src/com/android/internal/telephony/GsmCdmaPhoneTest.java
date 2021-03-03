@@ -25,6 +25,7 @@ import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,6 +65,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -71,6 +73,7 @@ import android.testing.TestableLooper;
 import androidx.test.filters.FlakyTest;
 
 import com.android.internal.telephony.test.SimulatedCommands;
+import com.android.internal.telephony.test.SimulatedCommandsVerifier;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRecords;
@@ -414,29 +417,29 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         // 1. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn != APN_TYPE_EMERGENCY
         doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mSST).getCurrentDataConnectionState();
         assertEquals(PhoneConstants.DataState.DISCONNECTED, mPhoneUT.getDataConnectionState(
-                PhoneConstants.APN_TYPE_ALL));
+                ApnSetting.TYPE_ALL_STRING));
 
         // 2. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY, apn
         // not connected
         doReturn(DctConstants.State.IDLE).when(mDcTracker).getState(
-                PhoneConstants.APN_TYPE_EMERGENCY);
+                ApnSetting.TYPE_EMERGENCY_STRING);
         assertEquals(PhoneConstants.DataState.DISCONNECTED, mPhoneUT.getDataConnectionState(
-                PhoneConstants.APN_TYPE_EMERGENCY));
+                ApnSetting.TYPE_EMERGENCY_STRING));
 
         // 3. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY,
         // APN is connected, callTracker state = idle
         doReturn(DctConstants.State.CONNECTED).when(mDcTracker).getState(
-                PhoneConstants.APN_TYPE_EMERGENCY);
+                ApnSetting.TYPE_EMERGENCY_STRING);
         mCT.mState = PhoneConstants.State.IDLE;
         assertEquals(PhoneConstants.DataState.CONNECTED, mPhoneUT.getDataConnectionState(
-                PhoneConstants.APN_TYPE_EMERGENCY));
+                ApnSetting.TYPE_EMERGENCY_STRING));
 
         // 3. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY,
         // APN enabled and CONNECTED, callTracker state != idle, !isConcurrentVoiceAndDataAllowed
         mCT.mState = PhoneConstants.State.RINGING;
         doReturn(false).when(mSST).isConcurrentVoiceAndDataAllowed();
         assertEquals(PhoneConstants.DataState.SUSPENDED, mPhoneUT.getDataConnectionState(
-                PhoneConstants.APN_TYPE_EMERGENCY));
+                ApnSetting.TYPE_EMERGENCY_STRING));
     }
 
     @Test
@@ -979,6 +982,32 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(SimulatedCommands.FAKE_IMEISV, mPhoneUT.getDeviceSvn());
         assertEquals(SimulatedCommands.FAKE_ESN, mPhoneUT.getEsn());
         assertEquals(SimulatedCommands.FAKE_MEID, mPhoneUT.getMeid());
+    }
+
+    @Test
+    public void testZeroMeid() {
+        doReturn(false).when(mSST).isDeviceShuttingDown();
+
+        SimulatedCommands sc = new SimulatedCommands() {
+            @Override
+            public void getDeviceIdentity(Message response) {
+                SimulatedCommandsVerifier.getInstance().getDeviceIdentity(response);
+                resultSuccess(response, new String[] {FAKE_IMEI, FAKE_IMEISV, FAKE_ESN, "0000000"});
+            }
+        };
+
+        Phone phone = new GsmCdmaPhone(mContext, sc, mNotifier, true, 0,
+                PhoneConstants.PHONE_TYPE_GSM, mTelephonyComponentFactory);
+        phone.setVoiceCallSessionStats(mVoiceCallSessionStats);
+        ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(mUiccController).registerForIccChanged(eq(phone), integerArgumentCaptor.capture(),
+                nullable(Object.class));
+        Message msg = Message.obtain();
+        msg.what = integerArgumentCaptor.getValue();
+        phone.sendMessage(msg);
+        processAllMessages();
+
+        assertNull(phone.getMeid());
     }
 
     @Test

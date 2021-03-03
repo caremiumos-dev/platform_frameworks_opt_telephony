@@ -51,6 +51,7 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.SliceInfo;
+import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -1178,11 +1179,13 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, SliceInfo sliceInfo, Message result) {
+            boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
+            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
+            Message result) {
 
         SimulatedCommandsVerifier.getInstance().setupDataCall(accessNetworkType, dataProfile,
-                isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo, result);
+                isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo,
+                trafficDescriptor, matchAllRuleAllowed, result);
 
         if (mSetupDataCallResult == null) {
             try {
@@ -1733,7 +1736,7 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @UnsupportedAppUsage
-    private void resultSuccess(Message result, Object ret) {
+    protected void resultSuccess(Message result, Object ret) {
         if (result != null) {
             AsyncResult.forMessage(result).result = ret;
             if (mPausedResponseCount > 0) {
@@ -2419,5 +2422,17 @@ public class SimulatedCommands extends BaseCommands
     public void getBarringInfo(Message result) {
         SimulatedCommandsVerifier.getInstance().getBarringInfo(result);
         resultSuccess(result, null);
+    }
+
+    @Override
+    public void allocatePduSessionId(Message message) {
+        SimulatedCommandsVerifier.getInstance().allocatePduSessionId(message);
+        resultSuccess(message, 1);
+    }
+
+    @Override
+    public void releasePduSessionId(Message message, int pduSessionId) {
+        SimulatedCommandsVerifier.getInstance().releasePduSessionId(message, pduSessionId);
+        resultSuccess(message, null);
     }
 }
