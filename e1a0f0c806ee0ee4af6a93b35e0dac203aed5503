@@ -16,6 +16,29 @@
       "message": "LGTM. Michele, can you ptal?",
       "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68b9f997_c6d1d600",
+        "filename": "src/java/com/android/internal/telephony/metrics/InProgressSmsSession.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-03-03T20:03:15Z",
+      "side": 1,
+      "message": "Instead of making an exception here (hard to maintain and read), could you apply this logic in the caller?\n\nFrom code analysis, it seems that the only impacted caller is writeIncomingSmsSessionWithType().\n\nIn terms of defining the logic inside writeIncomingSmsSessionWithType(), I think we could calculate\n - offset \u003d timestamps[0] - SystemClock.elapsedRealtime();\n - for each event, use timestamp \u003d timestamps[i] - offset\n\nIn this way, we correctly capture the delays between events, without mixing different sources of time (as some SMS events are anyway calculated using SystemClock.elapsedRealtime()).",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
