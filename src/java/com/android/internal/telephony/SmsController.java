@@ -363,6 +363,10 @@ public class SmsController extends ISmsImplBase {
 
     @Override
     public int getPremiumSmsPermissionForSubscriber(int subId, String packageName) {
+        if (!TelephonyPermissions.checkCallingOrSelfReadPhoneState(mContext, subId, packageName,
+                null, "getPremiumSmsPermissionForSubscriber")) {
+            return 0;
+        }
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             return iccSmsIntMgr.getPremiumSmsPermission(packageName);
