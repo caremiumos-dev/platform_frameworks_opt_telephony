@@ -4938,6 +4938,51 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * Compare a CellIdentity and a PhysicalChannelConfig to see if the PhysicalChannelConfig
+     * is reported for the given CellIdentity.
+     *
+     * @param cid the CellIdentity object containing a complete cell identity
+     * @param pcc the PhysicalChannelConfig containing only physical cell identity
+     */
+    private static boolean physicalCellIdentityEquals(
+            @NonNull CellIdentity cid, @NonNull PhysicalChannelConfig pcc) {
+
+        if (cid == null || pcc == null) return false;
+
+        final int pccChannel = pcc.getChannelNumber();
+        final int pccPci = pcc.getPhysicalCellId();
+        switch (pcc.getNetworkType()) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_GSM:
+                if (!(cid instanceof CellIdentityGsm)) return false;
+                CellIdentityGsm cidGsm = (CellIdentityGsm) cid;
+                return cidGsm.getBsic() == pccPci && cidGsm.getArfcn() == pccChannel;
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                if (!(cid instanceof CellIdentityWcdma)) return false;
+                CellIdentityWcdma cidWcdma = (CellIdentityWcdma) cid;
+                return cidWcdma.getPsc() == pccPci && cidWcdma.getUarfcn() == pccChannel;
+            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+                if (!(cid instanceof CellIdentityTdscdma)) return false;
+                CellIdentityTdscdma cidTdscdma = (CellIdentityTdscdma) cid;
+                return cidTdscdma.getCpid() == pccPci && cidTdscdma.getUarfcn() == pccChannel;
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                if (!(cid instanceof CellIdentityLte)) return false;
+                CellIdentityLte cidLte = (CellIdentityLte) cid;
+                return cidLte.getPci() == pccPci && cidLte.getEarfcn() == pccChannel;
+            case TelephonyManager.NETWORK_TYPE_NR:
+                if (!(cid instanceof CellIdentityNr)) return false;
+                CellIdentityNr cidNr = (CellIdentityNr) cid;
+                return cidNr.getPci() == pccPci && cidNr.getChannelNumber() == pccChannel;
+        }
+        return false;
+    }
+
+    /**
      * Convert the earfcnStringArray to list of pairs.
      *
      * Format of the earfcnsList is expected to be {"erafcn1_start-earfcn1_end",
