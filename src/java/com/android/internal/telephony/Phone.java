@@ -227,8 +227,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_REGISTRATION_FAILED = 57;
     protected static final int EVENT_BARRING_INFO_CHANGED = 58;
     protected static final int EVENT_LINK_CAPACITY_CHANGED = 59;
+    protected static final int EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION = 60;
 
-    protected static final int EVENT_LAST = EVENT_LINK_CAPACITY_CHANGED;
+    protected static final int EVENT_LAST = EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION;
 
     // For shared prefs.
     private static final String GSM_ROAMING_LIST_OVERRIDE_PREFIX = "gsm_roaming_list_";
@@ -2716,6 +2717,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyOutgoingEmergencySms(this, emergencyNumber);
     }
 
+    /** Notify the data enabled changes. */
+    public void notifyDataEnabled(boolean enabled,
+            @TelephonyManager.DataEnabledReason int reason) {
+        mNotifier.notifyDataEnabled(this, enabled, reason);
+    }
+
     /**
      * @return true if a mobile originating emergency call is active
      */
@@ -3726,7 +3733,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public PhoneConstants.DataState getDataConnectionState() {
-        return getDataConnectionState(PhoneConstants.APN_TYPE_DEFAULT);
+        return getDataConnectionState(ApnSetting.TYPE_DEFAULT_STRING);
     }
 
     public void notifyCallForwardingIndicator() {

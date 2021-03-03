@@ -31,6 +31,7 @@ import static org.mockito.Mockito.eq;
 import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.usage.NetworkStatsManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -41,6 +42,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.vcn.VcnManager;
+import android.net.vcn.VcnNetworkPolicyResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -98,6 +102,7 @@ import com.android.internal.telephony.test.SimulatedCommandsVerifier;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.IsimUiccRecords;
+import com.android.internal.telephony.uicc.PinStorage;
 import com.android.internal.telephony.uicc.RuimRecords;
 import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -313,6 +318,8 @@ public abstract class TelephonyTest {
     protected WifiInfo mWifiInfo;
     @Mock
     protected ImsStats mImsStats;
+    @Mock
+    protected PinStorage mPinStorage;
 
     protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
@@ -325,6 +332,8 @@ public abstract class TelephonyTest {
     protected AppOpsManager mAppOpsManager;
     protected CarrierConfigManager mCarrierConfigManager;
     protected UserManager mUserManager;
+    protected KeyguardManager mKeyguardManager;
+    protected VcnManager mVcnManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -465,6 +474,8 @@ public abstract class TelephonyTest {
         mCarrierConfigManager =
                 (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        mVcnManager = mContext.getSystemService(VcnManager.class);
 
         //mTelephonyComponentFactory
         doReturn(mTelephonyComponentFactory).when(mTelephonyComponentFactory).inject(anyString());
@@ -572,6 +583,7 @@ public abstract class TelephonyTest {
             }
         }).when(mUiccController).getIccRecords(anyInt(), anyInt());
         doReturn(new UiccSlot[] {}).when(mUiccController).getUiccSlots();
+        doReturn(mPinStorage).when(mUiccController).getPinStorage();
 
         //UiccCardApplication
         doReturn(mSimRecords).when(mUiccCardApplication3gpp).getIccRecords();
@@ -641,6 +653,12 @@ public abstract class TelephonyTest {
         doReturn(mWifiInfo).when(mWifiManager).getConnectionInfo();
         doReturn(2).when(mWifiManager).calculateSignalLevel(anyInt());
         doReturn(4).when(mWifiManager).getMaxSignalLevel();
+
+        doAnswer(invocation -> {
+            NetworkCapabilities nc = invocation.getArgument(0);
+            return new VcnNetworkPolicyResult(
+                    false /* isTearDownRequested */, nc);
+        }).when(mVcnManager).applyVcnNetworkPolicy(any(), any());
 
         //SIM
         doReturn(1).when(mTelephonyManager).getSimCount();
