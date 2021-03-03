@@ -33,6 +33,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.R;
 import com.android.internal.telephony.DctConstants;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyTest;
 
 import org.junit.After;
@@ -71,8 +72,8 @@ public class ApnContextTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testGetApnType() {
-        assertEquals(ApnSetting.TYPE_DEFAULT_STRING, mApnContext.getApnType());
+    public void testGetApnType() throws Exception {
+        assertEquals(PhoneConstants.APN_TYPE_DEFAULT, mApnContext.getApnType());
     }
 
     @Test

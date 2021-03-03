@@ -27,7 +27,6 @@ import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
 import android.telephony.data.SliceInfo;
-import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.CommandsInterface;
@@ -1203,9 +1202,8 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
-            boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
-            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
-            Message result) {
+                              boolean allowRoaming, int reason, LinkProperties linkProperties,
+                              int pduSessionId, SliceInfo sliceInfo, Message result) {
     }
 
     @Override

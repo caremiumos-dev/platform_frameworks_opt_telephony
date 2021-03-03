@@ -274,7 +274,8 @@ public class DcController extends Handler {
 
                     // Its active so update the DataConnections link properties
                     UpdateLinkPropertyResult result = dc.updateLinkProperty(newState);
-                    dc.updateResponseFields(newState);
+                    dc.updateQosParameters(newState);
+                    dc.updateSliceInfo(newState);
                     if (result.oldLp.equals(result.newLp)) {
                         if (DBG) log("onDataStateChanged: no change");
                     } else {

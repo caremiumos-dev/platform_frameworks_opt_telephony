@@ -65,7 +65,6 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.telephony.data.ApnSetting;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -417,29 +416,29 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         // 1. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn != APN_TYPE_EMERGENCY
         doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mSST).getCurrentDataConnectionState();
         assertEquals(PhoneConstants.DataState.DISCONNECTED, mPhoneUT.getDataConnectionState(
-                ApnSetting.TYPE_ALL_STRING));
+                PhoneConstants.APN_TYPE_ALL));
 
         // 2. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY, apn
         // not connected
         doReturn(DctConstants.State.IDLE).when(mDcTracker).getState(
-                ApnSetting.TYPE_EMERGENCY_STRING);
+                PhoneConstants.APN_TYPE_EMERGENCY);
         assertEquals(PhoneConstants.DataState.DISCONNECTED, mPhoneUT.getDataConnectionState(
-                ApnSetting.TYPE_EMERGENCY_STRING));
+                PhoneConstants.APN_TYPE_EMERGENCY));
 
         // 3. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY,
         // APN is connected, callTracker state = idle
         doReturn(DctConstants.State.CONNECTED).when(mDcTracker).getState(
-                ApnSetting.TYPE_EMERGENCY_STRING);
+                PhoneConstants.APN_TYPE_EMERGENCY);
         mCT.mState = PhoneConstants.State.IDLE;
         assertEquals(PhoneConstants.DataState.CONNECTED, mPhoneUT.getDataConnectionState(
-                ApnSetting.TYPE_EMERGENCY_STRING));
+                PhoneConstants.APN_TYPE_EMERGENCY));
 
         // 3. GSM, getCurrentDataConnectionState != STATE_IN_SERVICE, apn = APN_TYPE_EMERGENCY,
         // APN enabled and CONNECTED, callTracker state != idle, !isConcurrentVoiceAndDataAllowed
         mCT.mState = PhoneConstants.State.RINGING;
         doReturn(false).when(mSST).isConcurrentVoiceAndDataAllowed();
         assertEquals(PhoneConstants.DataState.SUSPENDED, mPhoneUT.getDataConnectionState(
-                ApnSetting.TYPE_EMERGENCY_STRING));
+                PhoneConstants.APN_TYPE_EMERGENCY));
     }
 
     @Test
