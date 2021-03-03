@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ad60a3_8dce9609",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-03T02:44:26Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "a8870c7a_0fd4fd8e",
+      "range": {
+        "startLine": 31,
+        "startChar": 19,
+        "endLine": 31,
+        "endChar": 42
+      },
+      "revId": "a99c6c420f4be3cce3a4a7bd0ea1423dc52e1ef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "167a7410_fc59a7d9",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-02-25T21:25:43Z",
       "side": 1,
       "message": "Change to be static",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 30
+      },
+      "revId": "a99c6c420f4be3cce3a4a7bd0ea1423dc52e1ef4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29100d23_6cb71c7d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-03T02:44:26Z",
+      "side": 1,
+      "message": "fine",
+      "parentUuid": "167a7410_fc59a7d9",
       "range": {
         "startLine": 103,
         "startChar": 4,
