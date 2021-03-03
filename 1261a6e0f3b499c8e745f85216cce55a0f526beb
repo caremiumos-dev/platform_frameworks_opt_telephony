@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c549e3a3_f6d754bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "apologies for",
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef19e49_6be45729",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "For some reason I thought streams were soft-banned in Android. Looks like there are some uses in frameworks/opt/telephony (less common in frameworks/base)\n\nhttps://source.corp.google.com/search?q\u003df:frameworks%2Fopt%2Ftelephony%20%22stream()%22\u0026sq\u003dpackage:%5Eandroid$",
+      "range": {
+        "startLine": 495,
+        "startChar": 16,
+        "endLine": 496,
+        "endChar": 88
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b8d572f_36a96b3d",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "is there a reason this can\u0027t stay final?",
+      "range": {
+        "startLine": 445,
+        "startChar": 12,
+        "endLine": 445,
+        "endChar": 63
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf98ddac_39b90842",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "I may be missing something, but does this need to be nullable? in CPT we check for null and replace with Collections.EMPTY_LIST\n\nThis might be simplified to\n\n```\nreturn rules \u003d\u003d null ?\n    Collections.EMPTY_LIST : Collections.immutableList(rules.getAccessRules());\n```",
+      "range": {
+        "startLine": 1706,
+        "startChar": 8,
+        "endLine": 1706,
+        "endChar": 46
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe62c066_f5fb4f71",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "nit: the pattern I\u0027ve generally seen is\n```\n\u003cvalue\u003e /* \u003cparam name\u003e */\n```",
+      "range": {
+        "startLine": 144,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 34
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a5fd4c3_d8297660",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-03-03T02:51:34Z",
+      "side": 1,
+      "message": "nit: may be worth breaking this out to a helper method for readability\n\n```\nString getFormattedCarrierConfigRule(String cert, String... pkgs)\n```\n\n(I\u0027ll defer to your judgement on this though)",
+      "range": {
+        "startLine": 341,
+        "startChar": 16,
+        "endLine": 341,
+        "endChar": 49
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
