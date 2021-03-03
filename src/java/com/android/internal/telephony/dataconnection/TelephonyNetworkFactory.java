@@ -131,23 +131,25 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     }
 
     private NetworkCapabilities makeNetworkFilter(int subscriptionId) {
-        NetworkCapabilities nc = new NetworkCapabilities();
-        nc.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_MMS);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_SUPL);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_FOTA);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_IMS);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_CBS);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_RCS);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
-        nc.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        nc.setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
+        final NetworkCapabilities.Builder builder = new NetworkCapabilities.Builder()
+                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_MMS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_SUPL)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_DUN)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_FOTA)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_IMS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_CBS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_IA)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_RCS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
                 .setSubscriptionId(subscriptionId).build());
-        return nc;
+        return builder.build();
     }
 
     private class InternalHandler extends Handler {
@@ -327,11 +329,11 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private void onDataHandoverNeeded(@ApnType int apnType, int targetTransport,
                                       HandoverParams handoverParams) {
-        log("onDataHandoverNeeded: apnType=" + ApnSetting.getApnTypeString(apnType)
+        log("onDataHandoverNeeded: apnType=" + ApnSetting.getApnTypeStringInternal(apnType)
                 + ", target transport="
                 + AccessNetworkConstants.transportTypeToString(targetTransport));
         if (mTransportManager.getCurrentTransport(apnType) == targetTransport) {
-            log("APN type " + ApnSetting.getApnTypeString(apnType) + " is already on "
+            log("APN type " + ApnSetting.getApnTypeStringInternal(apnType) + " is already on "
                     + AccessNetworkConstants.transportTypeToString(targetTransport));
             return;
         }
@@ -347,7 +349,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 DcTracker dcTracker = mPhone.getDcTracker(currentTransport);
                 if (dcTracker != null) {
                     DataConnection dc = dcTracker.getDataConnectionByApnType(
-                            ApnSetting.getApnTypeString(apnType));
+                            ApnSetting.getApnTypeStringInternal(apnType));
                     if (dc != null && (dc.isActive())) {
                         Message onCompleteMsg = mInternalHandler.obtainMessage(
                                 EVENT_DATA_HANDOVER_COMPLETED);
@@ -356,7 +358,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                         mPendingHandovers.put(onCompleteMsg, handoverParams);
                         requestNetworkInternal(networkRequest, DcTracker.REQUEST_TYPE_HANDOVER,
                                 targetTransport, onCompleteMsg);
-                        log("Requested handover " + ApnSetting.getApnTypeString(apnType) + " to "
+                        log("Requested handover " + ApnSetting.getApnTypeStringInternal(apnType)
+                                + " to "
                                 + AccessNetworkConstants.transportTypeToString(targetTransport));
                         handoverPending = true;
                     } else {
