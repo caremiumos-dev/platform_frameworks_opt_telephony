@@ -1207,7 +1207,6 @@ public class DataConnection extends StateMachine {
                 mLastFailTime = timeStamp;
 
                 // Return message with a Throwable exception to signify an error.
-                if (cause == DataFailCause.NONE) cause = DataFailCause.UNKNOWN;
                 AsyncResult.forMessage(connectionCompletedMsg, cause,
                         new Throwable(DataFailCause.toString(cause)));
             }

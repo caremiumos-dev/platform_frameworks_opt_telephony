@@ -47,6 +47,7 @@ import android.os.SystemProperties;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CallQuality;
+import android.telephony.DataFailCause;
 import android.telephony.DisconnectCause;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
@@ -1766,8 +1767,13 @@ public class TelephonyMetrics {
         RilDataCall dataCall = new RilDataCall();
 
         if (response != null) {
-            setupDataCallResponse.status = (response.getCause() == 0
-                    ? RilDataCallFailCause.PDP_FAIL_NONE : response.getCause());
+            if (response.getCause() == DataFailCause.NONE) {
+                setupDataCallResponse.status = RilDataCallFailCause.PDP_FAIL_NONE;
+            } else if (response.getCause() == DataFailCause.UNKNOWN) {
+                setupDataCallResponse.status = RilDataCallFailCause.PDP_FAIL_UNKNOWN;
+            } else {
+                setupDataCallResponse.status = response.getCause();
+            }
             setupDataCallResponse.suggestedRetryTimeMillis = response.getSuggestedRetryTime();
 
             dataCall.cid = response.getId();
