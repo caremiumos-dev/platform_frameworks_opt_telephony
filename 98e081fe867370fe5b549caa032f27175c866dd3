@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2de4b41a_101164b1",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2601,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-03-04T16:29:46Z",
+      "side": 1,
+      "message": "Objects.equals() takes into account nulls.  So if currentHandle !\u003d null and newHandle is null, then we\u0027d call telecomManager.setUserSelectedOutgoingPHoneAccount.  The opposite is also true.\n\nThe behavior change you\u0027re proposing here would cause telecomManager.setUserSelectedOutgoingPhoneAccount to be called with null even if the currentHandle is already null, hence it would effectively do nothing.\n\nGiven that the original but indicates that both sims are being inserted at the same time, it sounds more likely that this is a concurrency issue as a result of setDefaultVoiceSubId being called multiple times due to the subscription info being updated at the same time.  I don\u0027t think a fix like this is going to be a reliable fix to such a concurrency issue (all it takes is the timing to change subtly for it to break in some other way).\n\nLooking quickly at SubscriptionController I don\u0027t see any synchronization taking place, so I suspect this will not be an easy bug to fix.",
+      "range": {
+        "startLine": 2601,
+        "startChar": 7,
+        "endLine": 2601,
+        "endChar": 77
+      },
+      "revId": "98e081fe867370fe5b549caa032f27175c866dd3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
