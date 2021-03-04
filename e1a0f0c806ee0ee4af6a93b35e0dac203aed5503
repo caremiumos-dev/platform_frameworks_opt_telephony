@@ -39,6 +39,30 @@
       },
       "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d3ed15f_628e4541",
+        "filename": "src/java/com/android/internal/telephony/metrics/InProgressSmsSession.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-04T02:27:46Z",
+      "side": 1,
+      "message": "By this CL, the delay will be the time interval between the current time and SCTS. However,\n\nwriteIncomingSmsSessionWithType(..., timestamps[], ...) {\n    offset \u003d timestamps[0] - SystemClock.elapsedRealtime();\n    FOR(i) {\n        smsSession.addEvent(timestamps[i] - offset, ...);\n    }\n}\nNamely,\nIf A \u003d SystemClock.elapsedRealtime();\n1st part or single SMS \u003d\u003e smsSession.addEvent(A, ...); \u003d\u003e Maybe, the delay will be 1 always.\n\n2nd part \u003d\u003e smsSession.addEvent(A + interval between 1st and 2nd part , ...);\n..\ni-th part \u003d\u003e smsSession.addEvent(A + interval between 1st and i-th part , ...);\n\nAre they expected result?",
+      "parentUuid": "68b9f997_c6d1d600",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
