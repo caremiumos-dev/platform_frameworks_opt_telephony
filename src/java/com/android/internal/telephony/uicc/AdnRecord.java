@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
+import android.annotation.NonNull;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.os.Build;
 import android.os.Parcel;
@@ -23,7 +24,6 @@ import android.os.Parcelable;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 
-import com.android.internal.telephony.GsmAlphabet;
 import com.android.telephony.Rlog;
 
 import java.util.Arrays;
@@ -104,6 +104,48 @@ public class AdnRecord implements Parcelable {
         }
     };
 
+    /**
+     * Returns the maximum number of characters that supported by the alpha tag for a record with
+     * the specified maximum size.
+     */
+    public static int getMaxAlphaTagBytes(int maxRecordLength) {
+        return Math.max(0, maxRecordLength - FOOTER_SIZE_BYTES);
+    }
+
+    /**
+     * Encodes the alphaTag to a binary representation supported by the SIM.
+     *
+     * <p>This is the same representation as is used for this field in buildAdnString but there
+     * is no restriction on the length.
+     */
+    @NonNull
+    public static byte[] encodeAlphaTag(String alphaTag) {
+        if (TextUtils.isEmpty(alphaTag)) {
+            return new byte[0];
+        }
+        return IccUtils.stringToAdnStringField(alphaTag);
+    }
+
+    /**
+     * Decodes an encoded alphaTag from a record or encoded tag.
+     *
+     * <p>This is the same as is used to construct an AdnRecord from byte[]
+     */
+    public static String decodeAlphaTag(byte[] encodedTagOrRecord, int offset, int length) {
+        return IccUtils.adnStringFieldToString(encodedTagOrRecord, offset, length);
+    }
+
+    /**
+     * Returns the maximum number of digits (or other dialable characters) that can be stored in
+     * the phone number.
+     *
+     * <p>Additional length is supported via the ext1 entity file but the current implementation
+     * doesn't support writing of that file so it is not included in this calculation.
+     */
+    public static int getMaxPhoneNumberDigits() {
+        // Multiply by 2 because it is packed BCD encoded (2 digits per byte).
+        return (ADN_DIALING_NUMBER_END - ADN_DIALING_NUMBER_START + 1) * 2;
+    }
 
     //***** Constructor
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
@@ -260,8 +302,7 @@ public class AdnRecord implements Parcelable {
             return null;
         }
 
-        byteTag = !TextUtils.isEmpty(mAlphaTag) ? GsmAlphabet.stringToGsm8BitPacked(mAlphaTag)
-                : new byte[0];
+        byteTag = encodeAlphaTag(mAlphaTag);
 
         if (byteTag.length > footerOffset) {
             Rlog.w(LOG_TAG, "[buildAdnString] Max length of tag is " + footerOffset);
@@ -329,7 +370,7 @@ public class AdnRecord implements Parcelable {
     private void
     parseRecord(byte[] record) {
         try {
-            mAlphaTag = IccUtils.adnStringFieldToString(
+            mAlphaTag = decodeAlphaTag(
                             record, 0, record.length - FOOTER_SIZE_BYTES);
 
             int footerOffset = record.length - FOOTER_SIZE_BYTES;

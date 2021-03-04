@@ -324,6 +324,8 @@ public class GsmCdmaPhone extends Phone {
                 EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED, null, false);
 
         loadTtyMode();
+
+        CallManager.getInstance().registerPhone(this);
         logd("GsmCdmaPhone: constructor: sub = " + mPhoneId);
     }
 
@@ -399,6 +401,8 @@ public class GsmCdmaPhone extends Phone {
         mCi.registerForRilConnected(this, EVENT_RIL_CONNECTED, null);
         mCi.registerForVoiceRadioTechChanged(this, EVENT_VOICE_RADIO_TECH_CHANGED, null);
         mCi.registerForLceInfo(this, EVENT_LINK_CAPACITY_CHANGED, null);
+        mCi.registerForCarrierInfoForImsiEncryption(this,
+                EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION, null);
         IntentFilter filter = new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(TelecomManager.ACTION_CURRENT_TTY_MODE_CHANGED);
@@ -689,7 +693,7 @@ public class GsmCdmaPhone extends Phone {
             ret = PhoneConstants.DataState.DISCONNECTED;
         } else if (mSST.getCurrentDataConnectionState() != ServiceState.STATE_IN_SERVICE
                 && (isPhoneTypeCdma() || isPhoneTypeCdmaLte() ||
-                (isPhoneTypeGsm() && !apnType.equals(PhoneConstants.APN_TYPE_EMERGENCY)))) {
+                (isPhoneTypeGsm() && !apnType.equals(ApnSetting.TYPE_EMERGENCY_STRING)))) {
             // If we're out of service, open TCP sockets may still work
             // but no data will flow
 
@@ -1872,6 +1876,7 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public void setCarrierInfoForImsiEncryption(ImsiEncryptionInfo imsiEncryptionInfo) {
         CarrierInfoManager.setCarrierInfoForImsiEncryption(imsiEncryptionInfo, mContext, mPhoneId);
+        mCi.setCarrierInfoForImsiEncryption(imsiEncryptionInfo, null);
     }
 
     @Override
@@ -2782,6 +2787,11 @@ public class GsmCdmaPhone extends Phone {
                 mImeiSv = respId[1];
                 mEsn  =  respId[2];
                 mMeid =  respId[3];
+                // some modems return all 0's instead of null/empty string when MEID is unavailable
+                if (!TextUtils.isEmpty(mMeid) && mMeid.matches("^0*$")) {
+                    logd("EVENT_GET_DEVICE_IDENTITY_DONE: set mMeid to null");
+                    mMeid = null;
+                }
             }
             break;
 
@@ -3226,6 +3236,10 @@ public class GsmCdmaPhone extends Phone {
                     postDelayed(()->reapplyUiccAppsEnablementIfNeeded(retries - 1),
                             REAPPLY_UICC_APPS_SETTING_RETRY_TIME_GAP_IN_MS);
                 }
+                break;
+            }
+            case EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION: {
+                resetCarrierKeysForImsiEncryption();
                 break;
             }
             default:
@@ -4070,7 +4084,7 @@ public class GsmCdmaPhone extends Phone {
                         .setSignalMeasurementType(signalStrengthMeasure)
                         .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
                         .setHysteresisDb(REPORTING_HYSTERESIS_DB)
-                        .setThresholdsUnlimited(consolidatedThresholds)
+                        .setThresholds(consolidatedThresholds, true /*isSystem*/)
                         .setIsEnabled(isEnabled)
                         .build(),
                 ran, null);

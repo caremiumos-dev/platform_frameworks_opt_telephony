@@ -52,6 +52,7 @@ import android.telephony.data.DataServiceCallback;
 import android.telephony.data.IDataService;
 import android.telephony.data.IDataServiceCallback;
 import android.telephony.data.SliceInfo;
+import android.telephony.data.TrafficDescriptor;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.Phone;
@@ -112,6 +113,9 @@ public class DataServiceManager extends Handler {
 
     private CellularDataServiceConnection mServiceConnection;
 
+    private final UUID mAnomalyUUID = UUID.fromString("fc1956de-c080-45de-8431-a1faab687110");
+    private String mLastBoundPackageName;
+
     /**
      * Helpful for logging
      * @return the tag name
@@ -142,8 +146,10 @@ public class DataServiceManager extends Handler {
         @Override
         public void binderDied() {
             // TODO: try to rebind the service.
-            loge("DataService " + mTargetBindingPackageName +  ", transport type " + mTransportType
-                    + " died.");
+            String message = "Data service " + mLastBoundPackageName +  " for transport type "
+                    + AccessNetworkConstants.transportTypeToString(mTransportType) + " died.";
+            loge(message);
+            AnomalyReporter.reportAnomaly(mAnomalyUUID, message);
         }
     }
 
@@ -215,6 +221,7 @@ public class DataServiceManager extends Handler {
             mIDataService = IDataService.Stub.asInterface(service);
             mDeathRecipient = new DataServiceManagerDeathRecipient();
             mBound = true;
+            mLastBoundPackageName = getDataServicePackageName();
 
             try {
                 service.linkToDeath(mDeathRecipient, 0);
@@ -613,16 +620,20 @@ public class DataServiceManager extends Handler {
      *        is the link properties of the existing data connection, otherwise null.
      * @param pduSessionId The pdu session id to be used for this data call.  A value of -1 means
      *                     no pdu session id was attached to this call.
-     *                     Reference: 3GPP TS 24.007 section 11.2.3.1b
+     *                     Reference: 3GPP TS 24.007 Section 11.2.3.1b
      * @param sliceInfo The slice that represents S-NSSAI.
      *                  Reference: 3GPP TS 24.501
+     * @param trafficDescriptor The traffic descriptor for this data call, used for URSP matching.
+     *                          Reference: 3GPP TS TS 24.526 Section 5.2
+     * @param matchAllRuleAllowed True if using the default match-all URSP rule for this request is
+     *                            allowed.
      * @param onCompleteMessage The result message for this request. Null if the client does not
      *        care about the result.
      */
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, @Nullable  SliceInfo sliceInfo,
-                              Message onCompleteMessage) {
+            boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
+            @Nullable  SliceInfo sliceInfo, @Nullable TrafficDescriptor trafficDescriptor,
+            boolean matchAllRuleAllowed, Message onCompleteMessage) {
         if (DBG) log("setupDataCall");
         if (!mBound) {
             loge("setupDataCall: Data service not bound.");
@@ -639,7 +650,7 @@ public class DataServiceManager extends Handler {
                     REQUEST_UNRESPONDED_TIMEOUT);
             mIDataService.setupDataCall(mPhone.getPhoneId(), accessNetworkType, dataProfile,
                     isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo,
-                    callback);
+                    trafficDescriptor, matchAllRuleAllowed, callback);
         } catch (RemoteException e) {
             loge("setupDataCall: Cannot invoke setupDataCall on data service.");
             mMessageMap.remove(callback.asBinder());
@@ -939,6 +950,7 @@ public class DataServiceManager extends Handler {
      *
      * @return
      */
+    @TransportType
     public int getTransportType() {
         return mTransportType;
     }
