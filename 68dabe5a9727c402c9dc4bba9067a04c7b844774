@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008706316",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1432875?revision\u003d10",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "dedde036_b7d7da44",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-05T10:10:12Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 104
+      },
+      "revId": "68dabe5a9727c402c9dc4bba9067a04c7b844774",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
