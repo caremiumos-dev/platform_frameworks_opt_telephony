@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3e2a86_bd6a4c4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1308560
+      },
+      "writtenOn": "2021-03-05T13:37:54Z",
+      "side": 1,
+      "message": "It will cause allowedNetworkTypesListener nullPointerException. So submit it.\nThe test fail is not related this cl. I add bypass-presubmit+1.\njava.lang.UnsupportedOperationException\n\tat android.test.mock.MockContext.createConfigurationContext(MockContext.java:811)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat com.android.dx.stock.ProxyBuilder.callSuper(ProxyBuilder.java:664)\n\tat android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:2480)\n\tat android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:2436)\n\tat com.android.internal.telephony.CarrierServiceStateTracker$PrefNetworkNotification.getNotificationBuilder(CarrierServiceStateTracker.java:511)\n\tat com.android.internal.telephony.CarrierServiceStateTracker.getNotificationBuilder(CarrierServiceStateTracker.java:341)\n\tat com.android.internal.telephony.CarrierServiceStateTracker.sendNotification(CarrierServiceStateTracker.java:377)\n\tat com.android.internal.telephony.CarrierServiceStateTracker.handleMessage(CarrierServiceStateTracker.java:187)\n\tat android.os.Handler.dispatchMessage(Handler.java:106)\n\tat android.os.Looper.loop(Looper.java:223)\n\tat android.os.HandlerThread.run(HandlerThread.java:67)",
+      "revId": "a4a16131ef6e3f00e78a1280c636bab95ed1fde3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
