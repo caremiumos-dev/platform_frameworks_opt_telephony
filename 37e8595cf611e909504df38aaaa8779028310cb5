@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5463679_07902326",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "We added a method earlier to notify preferred data subid change with an intent. This DdsSwitchState was added to trigger notify when phoneid changes in SIM hotswap without DDS change. Malcolm shared a comment to remove the notify method with intent, for which method was deleted. Will remove this DdsSwitchState as well",
+      "parentUuid": "d166be26_430e953b",
+      "range": {
+        "startLine": 298,
+        "startChar": 0,
+        "endLine": 300,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dd62036_bd5ec1a6",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "This is deprecated.",
+      "range": {
+        "startLine": 459,
+        "startChar": 47,
+        "endLine": 459,
+        "endChar": 71
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "455aa9d5_68bb366c",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "Replaced with ACTION_SIM_CARD_STATE_CHANGED",
+      "parentUuid": "0dd62036_bd5ec1a6",
       "range": {
         "startLine": 459,
         "startChar": 47,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0041813_bfc6f994",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "Added event EVENT_PROCESS_SIM_STATE_CHANGE to check for sim not ready and send retry DDS",
+      "parentUuid": "426c4e16_c4a69fef",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 17
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ec09054_6492ff19",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "You don\u0027t need this method. Just use ACTION_SIM_APPLICATION_STATE_CHANGED along with ACTION_SIM_CARD_STATE_CHANGED above.",
+      "range": {
+        "startLine": 474,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21bfcd8_1bd9b9c7",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "In this method we are checking for SIM state, icc card profile, and SIM applications state. These checks are added as per Malcolm\u0027s comments in patch6",
+      "parentUuid": "3ec09054_6492ff19",
       "range": {
         "startLine": 474,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40a8fcae_9ec44c04",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "This is a corner case where sometimes RADIO_AVAILABLE event is received after subid change, due to which HAL command for DDS switch request is not updated and DDS request is not sent. As a result internet request is not processed blocking data call request.\n\nThis method is executed only if hal command is UNKNOWN",
+      "parentUuid": "45aba199_4665ed4d",
+      "range": {
+        "startLine": 512,
+        "startChar": 20,
+        "endLine": 512,
+        "endChar": 44
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a2bf2dc_3f91b189",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "You are using a single failure flag for all different failures, and then blindly retry when one of the condition changes. As I mentioned below, you should change the design to return a specific failure, then only retry when that failure condition is gone.",
+      "range": {
+        "startLine": 574,
+        "startChar": 28,
+        "endLine": 574,
+        "endChar": 54
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7492750e_8b4347c8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "As discussed, we are tracking DDS switch failures to schedule retry from Telephony, the possible cases are active voice call and sim absent. So, using a flag to track DDS failure per sub and schedule retry",
+      "parentUuid": "6a2bf2dc_3f91b189",
       "range": {
         "startLine": 574,
         "startChar": 28,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b40fc7d_331f477f",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "onDdsSwitchResponse checks for ar.exception to process failure. Will remove the check for else case.",
+      "parentUuid": "0c7687f3_99ba090f",
+      "range": {
+        "startLine": 635,
+        "startChar": 27,
+        "endLine": 635,
+        "endChar": 37
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aebc5ef3_a6b9ab8c",
@@ -175,6 +343,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "Could you please clarify how this could happen?",
+      "range": {
+        "startLine": 1057,
+        "startChar": 57,
+        "endLine": 1057,
+        "endChar": 88
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3565ce91_75daa4d0",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "This check is not applicable, removed it",
+      "parentUuid": "aebc5ef3_a6b9ab8c",
       "range": {
         "startLine": 1057,
         "startChar": 57,
@@ -208,6 +400,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3d12009_b1b7463a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "Agree, replaced this check",
+      "parentUuid": "7f509ee6_5f96c1c2",
+      "range": {
+        "startLine": 1496,
+        "startChar": 0,
+        "endLine": 1496,
+        "endChar": 90
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c356def_510b773f",
@@ -221,6 +437,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "You are guessing what the error might cause switch failure. In fact, there could be other reasons that caused the setPreferredDataModem or setAllowedData failed.\n\nThe right design is expanding the error codes in IRadioConfigResponse::setPreferredDataModemResponse, and returns an explicit error code indicating why the switch was failed. And then using the exception type to determine if you want to retry, or just wait for call inactive/sim ready event.",
+      "range": {
+        "startLine": 1505,
+        "startChar": 0,
+        "endLine": 1515,
+        "endChar": 13
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "895884a3_9342d117",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "As discussed, setPreferredDataModemResponse doesnt return exact failure cause. Here we are guessing the possible source for DDS switch failures like active call, SIM not ready etc and scheduling retry.",
+      "parentUuid": "1c356def_510b773f",
       "range": {
         "startLine": 1505,
         "startChar": 0,
@@ -254,6 +494,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af860ac1_f3050216",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff210c3_ab68e39d",
+      "range": {
+        "startLine": 1530,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 5
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "244b7b82_a9b20ef4",
@@ -277,6 +541,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2e0a29_5eb5f5ca",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "For DDS switch triggered by user, valid subid and phoneid checks are already done in SubscriptionManager::setDefaultDataSubId. So we dont need this method for normal DDS switch.\n\nHere in this method we check for phoneid validity to trigger retry. While we hold DDS retry during call there can be a change in DDS with SIM hotswap or network requests, we ensure that DDS is set to the appropriate sub",
+      "parentUuid": "244b7b82_a9b20ef4",
+      "range": {
+        "startLine": 1548,
+        "startChar": 0,
+        "endLine": 1548,
+        "endChar": 57
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0ec5605_6c799b92",
@@ -290,6 +578,30 @@
       "writtenOn": "2021-03-02T09:18:32Z",
       "side": 1,
       "message": "I think you should not use if there is any network request to determine if retry is needed or not. We should be able to switch DDS even if there is no network request.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 0,
+        "endLine": 1557,
+        "endChar": 13
+      },
+      "revId": "37e8595cf611e909504df38aaaa8779028310cb5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d87b6a5_69751721",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-05T10:03:05Z",
+      "side": 1,
+      "message": "Ideally default network request will exist on both subs. Here we determine phone id to retry DDS based from DcRequest\u0027s present in this list. Just in case if there is no network request we stop DDS retry",
+      "parentUuid": "c0ec5605_6c799b92",
       "range": {
         "startLine": 1555,
         "startChar": 0,
