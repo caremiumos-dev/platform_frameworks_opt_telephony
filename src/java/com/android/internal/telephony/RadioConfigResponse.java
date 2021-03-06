@@ -194,6 +194,30 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
     }
 
     /**
+     * Response function for IRadioConfig.setPreferredDataModem_1_3().
+     */
+    public void setPreferredDataModemResponse_1_3(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo) {
+        RILRequest rr = mRadioConfig.processResponse_1_6(responseInfo);
+
+        if (rr != null) {
+            if (responseInfo.error == RadioError.NONE) {
+                // send response
+                RadioResponse.sendMessageResponse(rr.mResult, null);
+                Rlog.d(TAG, rr.serialString() + "< "
+                        + mRadioConfig.requestToString(rr.mRequest));
+            } else {
+                rr.onError(responseInfo.error, null);
+                Rlog.e(TAG, rr.serialString() + "< "
+                        + mRadioConfig.requestToString(rr.mRequest) + " error "
+                        + responseInfo.error);
+            }
+        } else {
+            Rlog.e(TAG, "setPreferredDataModemResponse_1_3: Error " + responseInfo.toString());
+        }
+    }
+
+    /**
      * Response function for IRadioConfig.setModemsConfigResponse()
      * Currently this is being used as the callback for RadioConfig.setModemsConfig() method
      */
