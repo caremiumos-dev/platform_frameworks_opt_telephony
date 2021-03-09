@@ -706,6 +706,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7834bc23_31a9aa6e",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-09T17:37:47Z",
+      "side": 1,
+      "message": "It\u0027s nothing about the log, sorry I marked the wrong place. It\u0027s about the internal state of PhoneSwitcher is out of sync of the current modem state.",
+      "parentUuid": "b4954519_7f1de3a8",
+      "range": {
+        "startLine": 646,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 17
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd062ca1_2482e1c5",
