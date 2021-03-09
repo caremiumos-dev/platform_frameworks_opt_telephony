@@ -45,6 +45,30 @@
       },
       "revId": "94810d55840b1531d925063a1fe5a5e0d8f8f3ff",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4955e741_cee2b289",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ContextFixture.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-03-09T18:18:35Z",
+      "side": 1,
+      "message": "It makes sense to simply return mContext here.",
+      "parentUuid": "98ac8288_0eab7538",
+      "range": {
+        "startLine": 330,
+        "startChar": 19,
+        "endLine": 330,
+        "endChar": 41
+      },
+      "revId": "94810d55840b1531d925063a1fe5a5e0d8f8f3ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
