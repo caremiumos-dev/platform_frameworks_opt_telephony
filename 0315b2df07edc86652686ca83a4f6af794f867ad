@@ -405,6 +405,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de7cad6_94ec086e",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T14:20:56Z",
+      "side": 1,
+      "message": "This bug has no update since long time, not sure if it will be fixed anytime soon",
+      "parentUuid": "9f6029da_c30b3b33",
+      "range": {
+        "startLine": 1563,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 87
+      },
+      "revId": "0315b2df07edc86652686ca83a4f6af794f867ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9304470_916a5164",
