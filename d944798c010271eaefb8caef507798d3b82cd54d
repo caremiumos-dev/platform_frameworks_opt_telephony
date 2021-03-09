@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf29ae5d_454ce671",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1308560
+      },
+      "writtenOn": "2021-03-09T08:34:56Z",
+      "side": 1,
+      "message": "The test case apct/telephony/unit_test-cloud-tf fail is not related this part, so skip it.\nThe test cases fails are tracking on b/181932317.",
+      "revId": "d944798c010271eaefb8caef507798d3b82cd54d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
