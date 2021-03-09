@@ -119,7 +119,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-
+@Ignore
 public class ServiceStateTrackerTest extends TelephonyTest {
     @Mock
     private ProxyController mProxyController;
