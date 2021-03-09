@@ -63,6 +63,30 @@
       },
       "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab16191_791c0f00",
+        "filename": "src/java/com/android/internal/telephony/metrics/InProgressSmsSession.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-03-09T00:23:43Z",
+      "side": 1,
+      "message": "The SmsSession is a sequence of events and the delay tracks the (rounded) time between one event and the next one. If we apply a different formula only for some events, we would end up with values that might not be valid and consistent.\n\nEven assuming that SCTS and SystemClock.elapsedRealtime() are aligned (which I doubt is true in general), this formula would lead to much larger delay values (SCTS is much older), as they account for delays that are outside the control of the device.\n\nThe goal is to track the relative delay of events between each other.",
+      "parentUuid": "0d3ed15f_628e4541",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "e1a0f0c806ee0ee4af6a93b35e0dac203aed5503",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
