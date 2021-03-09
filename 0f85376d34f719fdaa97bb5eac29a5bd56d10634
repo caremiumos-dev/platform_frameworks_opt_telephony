@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "510aa333_d2a3b3b0",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done, defined a list mCurrentDdsSwitchFailure to store error and process it",
+      "parentUuid": "bf109055_273b4d54",
+      "range": {
+        "startLine": 297,
+        "startChar": 4,
+        "endLine": 297,
+        "endChar": 34
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0d9bd88_66d475cc",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "ACTION_SIM_APPLICATION_STATE_CHANGED",
+      "range": {
+        "startLine": 378,
+        "startChar": 42,
+        "endLine": 378,
+        "endChar": 71
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d6a8450_988b306a",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0d9bd88_66d475cc",
       "range": {
         "startLine": 378,
         "startChar": 42,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1934e0f2_16d8bbdb",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e036519f_e0ae645d",
+      "range": {
+        "startLine": 457,
+        "startChar": 47,
+        "endLine": 457,
+        "endChar": 76
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dc276d2_e202b76e",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "SubscriptionManager.EXTRA_SLOT_INDEX. PhoneConstants.PHONE_KEY is deprecated.",
+      "range": {
+        "startLine": 460,
+        "startChar": 49,
+        "endLine": 460,
+        "endChar": 73
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "243ea6d3_6c17d353",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dc276d2_e202b76e",
       "range": {
         "startLine": 460,
         "startChar": 49,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e49c3b6_2f631adf",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cb11d1f_e256a02c",
+      "range": {
+        "startLine": 461,
+        "startChar": 44,
+        "endLine": 461,
+        "endChar": 63
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bd06ced_95f1c382",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "Do not do this in the main thread. This causes race condition. You should include state in the message below and change mSimStates[] when you process EVENT_PROCESS_SIM_STATE_CHANGE in the handler thread.\n\nIn fact, you don\u0027t even store it in mSimStates[]. Explained below.",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 465,
+        "endChar": 17
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f18f9651_442aa07b",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bd06ced_95f1c382",
       "range": {
         "startLine": 463,
         "startChar": 0,
@@ -185,6 +329,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "792b3a1e_7a070fec",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59f7d282_41eb834d",
+      "range": {
+        "startLine": 467,
+        "startChar": 16,
+        "endLine": 467,
+        "endChar": 27
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d4d7046_4cde54f1",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8c48594_c4d9b787",
+      "range": {
+        "startLine": 467,
+        "startChar": 30,
+        "endLine": 467,
+        "endChar": 49
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5e6b67a_5b34be92",
@@ -231,6 +423,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d708c0db_43712c41",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "We were checking for SIM_LOADED/SIM_READY events initially with isSimReady method. Had to rename this method as per Malcolm\u0027s comment in Patchset#7 of this CL.",
+      "parentUuid": "af718825_02393585",
+      "range": {
+        "startLine": 475,
+        "startChar": 25,
+        "endLine": 475,
+        "endChar": 28
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c05a75e5_f01e7a49",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5e6b67a_5b34be92",
+      "range": {
+        "startLine": 475,
+        "startChar": 38,
+        "endLine": 475,
+        "endChar": 45
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bc6fb0d_5bdeae22",
@@ -244,6 +484,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "SLOT",
+      "range": {
+        "startLine": 476,
+        "startChar": 51,
+        "endLine": 476,
+        "endChar": 56
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eccb93a2_e4b09de6",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bc6fb0d_5bdeae22",
       "range": {
         "startLine": 476,
         "startChar": 51,
@@ -277,6 +541,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51bac67a_a5bb3279",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e987161_82824cfb",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 485,
+        "endChar": 79
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9031684_2e15ae3a",
@@ -290,6 +578,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "You don\u0027t need to store sim application state in mSimStates[]. In fact, you should rename this method to isSimApplicationReady(), and only call it when SIM application state is loaded.",
+      "range": {
+        "startLine": 489,
+        "startChar": 12,
+        "endLine": 489,
+        "endChar": 71
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d808d25_46e8d1f4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done, removed mSimStates and renamed this method. It will be executed whenever SIM is loaded/ready",
+      "parentUuid": "e9031684_2e15ae3a",
       "range": {
         "startLine": 489,
         "startChar": 12,
@@ -323,6 +635,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4aba7c6_6e948aa9",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done, moved updateHalCommandToUse() to constructor",
+      "parentUuid": "f436e546_d0b22841",
+      "range": {
+        "startLine": 512,
+        "startChar": 20,
+        "endLine": 512,
+        "endChar": 44
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48d6f914_e2a595cb",
@@ -336,6 +672,30 @@
       "writtenOn": "2021-03-09T01:56:40Z",
       "side": 1,
       "message": "You can\u0027t just abandon retry. This leaves phone switcher completely out of sync with the modem because mPhoneStates[], mPreferredDataPhoneId, etc... already switched to the new sub in onEvalulate.\n\nYou have few options.\n1. You should only change mPhoneStates[], mPreferredDataPhoneId to the new state when DDS switch succeeds, but this requires much larger architectural changes.\n2. Revert mPhoneStates[], mPreferredDataPhoneId back to its original values when failed, but it\u0027s very ugly. I would not recommend it.\n3. Just keep retrying as is for now, and we go with option 1 in next Android release. I think this is a better option.",
+      "range": {
+        "startLine": 646,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 17
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4954519_7f1de3a8",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "The log print has created confusion here.\nWe skip retry when this phoneid doesnt match dds phone id or the case where phoneIdForrequest is different, which basically means DDS has changed. We must skip if phoneid is not valid for retry, the flag tracked for failure is reset here\n\nCorrected the log print",
+      "parentUuid": "48d6f914_e2a595cb",
       "range": {
         "startLine": 646,
         "startChar": 0,
@@ -360,6 +720,30 @@
       "side": 1,
       "message": "\u003e Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.\n\nPlease fix.",
       "parentUuid": "27c846f6_ebaef125",
+      "range": {
+        "startLine": 1512,
+        "startChar": 0,
+        "endLine": 1512,
+        "endChar": 101
+      },
+      "revId": "0f85376d34f719fdaa97bb5eac29a5bd56d10634",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33ff8cfa_8437cf1b",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-09T13:00:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd062ca1_2482e1c5",
       "range": {
         "startLine": 1512,
         "startChar": 0,
