@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000008804542",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1612293?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "22892194_3eeda260",
+        "filename": "src/java/com/android/internal/telephony/MultiSimSettingController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-09T09:05:04Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 766,
+        "startChar": 0,
+        "endLine": 766,
+        "endChar": 107
+      },
+      "revId": "c876cc199825b2781d8d81aa4f5fbaed343f19d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
