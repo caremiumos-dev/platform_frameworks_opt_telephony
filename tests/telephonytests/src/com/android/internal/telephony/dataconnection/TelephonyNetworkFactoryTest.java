@@ -146,14 +146,6 @@ public class TelephonyNetworkFactoryTest extends TelephonyTest {
         super.setUp(getClass().getSimpleName());
         replaceInstance(RadioConfig.class, "sRadioConfig", null, mMockRadioConfig);
 
-        mContextFixture.putStringArrayResource(com.android.internal.R.array.networkAttributes,
-                new String[]{"wifi,1,1,1,-1,true", "mobile,0,0,0,-1,true",
-                        "mobile_mms,2,0,2,60000,true", "mobile_supl,3,0,2,60000,true",
-                        "mobile_dun,4,0,2,60000,true", "mobile_hipri,5,0,3,60000,true",
-                        "mobile_fota,10,0,2,60000,true", "mobile_ims,11,0,2,60000,true",
-                        "mobile_cbs,12,0,2,60000,true", "wifi_p2p,13,1,0,-1,true",
-                        "mobile_ia,14,0,2,-1,true", "mobile_emergency,15,0,2,-1,true"});
-
         doAnswer(invocation -> {
             mNetworkRequestList.add((NetworkRequest) invocation.getArguments()[0]);
             return null;
