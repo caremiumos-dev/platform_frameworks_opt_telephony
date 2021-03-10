@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0e0675_d09abacd",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2445,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-10T02:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e45a353_1e17eb17",
+      "range": {
+        "startLine": 2441,
+        "startChar": 24,
+        "endLine": 2445,
+        "endChar": 72
+      },
+      "revId": "6c759ec698c43fc860c4c56cf3efe1981ecf154d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0bf0801_c3ca5468",
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "972ddbdd_56598fcc",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-10T02:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0bf0801_c3ca5468",
+      "range": {
+        "startLine": 2527,
+        "startChar": 30,
+        "endLine": 2527,
+        "endChar": 79
+      },
+      "revId": "6c759ec698c43fc860c4c56cf3efe1981ecf154d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f4052c5_470a4904",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-03-10T01:08:45Z",
       "side": 1,
       "message": "If smsSource is SOURCE_INJECTED_FROM_UNKNOWN, can we set tech \u003d SMS_UNKNOWN?\n\nThe current code would show all injected messages (not from IMS) as coming over cellular, which is not necessarily correct.",
+      "range": {
+        "startLine": 2525,
+        "startChar": 21,
+        "endLine": 2529,
+        "endChar": 68
+      },
+      "revId": "6c759ec698c43fc860c4c56cf3efe1981ecf154d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db912965_103579f3",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2529,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-10T02:19:08Z",
+      "side": 1,
+      "message": "PS2 takes care of SOURCE_INJECTED_FROM_UNKNOWN/SMS_UNKNOWN also.",
+      "parentUuid": "8f4052c5_470a4904",
       "range": {
         "startLine": 2525,
         "startChar": 21,
