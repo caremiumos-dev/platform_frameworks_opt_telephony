@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f888a5d_564d4dba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-03-10T13:40:43Z",
+      "side": 1,
+      "message": "Self +2\u0027d since it\u0027s a CP.",
+      "revId": "435df1d42a9089850189adfc273a1335e9f90a38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
