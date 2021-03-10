@@ -208,7 +208,8 @@ public class TelephonyMetrics {
      *
      * TODO: initialize the enabled modem bitmap when it's possible to get the modem state.
      */
-    private int mLastEnabledModemBitmap = (1 << TelephonyManager.getDefault().getPhoneCount()) - 1;
+    private int mLastEnabledModemBitmap =
+            (1 << TelephonyManager.getDefault().getActiveModemCount()) - 1;
 
     /**
      * Last carrier id matching.
@@ -715,6 +716,7 @@ public class TelephonyMetrics {
      * @return Telephony proto
      */
     private synchronized TelephonyLog buildProto() {
+        int phoneCount = TelephonyManager.getDefault().getActiveModemCount();
 
         TelephonyLog log = new TelephonyLog();
         // Build telephony events
@@ -727,8 +729,14 @@ public class TelephonyMetrics {
         mCompletedCallSessions.toArray(log.callSessions);
 
         // Build SMS sessions
-        log.smsSessions = new SmsSession[mCompletedSmsSessions.size()];
-        mCompletedSmsSessions.toArray(log.smsSessions);
+        Deque<SmsSession> smsSessions = ((ArrayDeque) mCompletedSmsSessions).clone();
+        for (int i = 0; i < phoneCount; i++) {
+            InProgressSmsSession smsSession = mInProgressSmsSessions.get(i);
+            if (smsSession != null) {
+                smsSessions.add(buildSmsSession(smsSession));
+            }
+        }
+        log.smsSessions = smsSessions.toArray(new SmsSession[0]);
 
         // Build histogram. Currently we only support RIL histograms.
         List<TelephonyHistogram> rilHistograms = RIL.getTelephonyRILTimingHistograms();
@@ -767,7 +775,6 @@ public class TelephonyMetrics {
         log.endTime.elapsedTimestampMillis = SystemClock.elapsedRealtime();
 
         // Log the last active subscription information.
-        int phoneCount = TelephonyManager.getDefault().getPhoneCount();
         ActiveSubscriptionInfo[] activeSubscriptionInfo =
                 new ActiveSubscriptionInfo[phoneCount];
         for (int i = 0; i < mLastActiveSubscriptionInfos.size(); i++) {
@@ -1127,25 +1134,27 @@ public class TelephonyMetrics {
      */
     private synchronized void finishSmsSessionIfNeeded(InProgressSmsSession inProgressSmsSession) {
         if (inProgressSmsSession.getNumExpectedResponses() == 0) {
-            SmsSession smsSession = finishSmsSession(inProgressSmsSession);
+            finishSmsSession(inProgressSmsSession);
 
             mInProgressSmsSessions.remove(inProgressSmsSession.phoneId);
             logv("SMS session finished");
         }
     }
 
-    private SmsSession finishSmsSession(InProgressSmsSession inProgressSmsSession) {
+    private void finishSmsSession(InProgressSmsSession inProgressSmsSession) {
+        if (mCompletedSmsSessions.size() >= MAX_COMPLETED_SMS_SESSIONS) {
+            mCompletedSmsSessions.removeFirst();
+        }
+        mCompletedSmsSessions.add(buildSmsSession(inProgressSmsSession));
+    }
+
+    private SmsSession buildSmsSession(InProgressSmsSession inProgressSmsSession) {
         SmsSession smsSession = new SmsSession();
         smsSession.events = new SmsSession.Event[inProgressSmsSession.events.size()];
         inProgressSmsSession.events.toArray(smsSession.events);
         smsSession.startTimeMinutes = inProgressSmsSession.startSystemTimeMin;
         smsSession.phoneId = inProgressSmsSession.phoneId;
         smsSession.eventsDropped = inProgressSmsSession.isEventsDropped();
-
-        if (mCompletedSmsSessions.size() >= MAX_COMPLETED_SMS_SESSIONS) {
-            mCompletedSmsSessions.removeFirst();
-        }
-        mCompletedSmsSessions.add(smsSession);
         return smsSession;
     }
 
