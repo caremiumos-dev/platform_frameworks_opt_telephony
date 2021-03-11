@@ -148,6 +148,7 @@ import android.telephony.CellSignalStrengthNr;
 import android.telephony.CellSignalStrengthTdscdma;
 import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.NetworkScanRequest;
+import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -157,8 +158,9 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.EpsQos;
-import android.telephony.data.QosFilter;
-import android.telephony.data.QosSession;
+import android.telephony.data.QosBearerFilter;
+import android.telephony.data.QosBearerSession;
+import android.telephony.data.TrafficDescriptor;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
@@ -276,7 +278,7 @@ public class RILTest extends TelephonyTest {
     private static final int MAX_CONNS = 3;
     private static final int WAIT_TIME = 10;
     private static final boolean APN_ENABLED = true;
-    private static final int SUPPORTED_APNT_YPES_BITMAK = 123456;
+    private static final int SUPPORTED_APN_TYPES_BITMASK = 123456;
     private static final int ROAMING_PROTOCOL = ApnSetting.PROTOCOL_IPV6;
     private static final int BEARER_BITMASK = 123123;
     private static final int MTU = 1234;
@@ -308,7 +310,8 @@ public class RILTest extends TelephonyTest {
         doReturn(powerManager).when(context).getSystemService(Context.POWER_SERVICE);
         doReturn(new ApplicationInfo()).when(context).getApplicationInfo();
 
-        mRILInstance = new RIL(context, RILConstants.PREFERRED_NETWORK_MODE,
+        mRILInstance = new RIL(context,
+                RadioAccessFamily.getRafFromNetworkType(RILConstants.PREFERRED_NETWORK_MODE),
             Phone.PREFERRED_CDMA_SUBSCRIPTION, 0);
         mRILUnderTest = spy(mRILInstance);
         doReturn(mRadioProxy).when(mRILUnderTest).getRadioProxy(any());
@@ -2178,7 +2181,8 @@ public class RILTest extends TelephonyTest {
                 .setMtu(1500)
                 .setMtuV4(1500)
                 .setMtuV6(1500)
-                .setQosSessions(new ArrayList<>())
+                .setQosBearerSessions(new ArrayList<>())
+                .setTrafficDescriptors(new ArrayList<>())
                 .build();
 
         assertEquals(response, RIL.convertDataCallResult(result10));
@@ -2252,7 +2256,8 @@ public class RILTest extends TelephonyTest {
                 .setMtu(3000)
                 .setMtuV4(1500)
                 .setMtuV6(3000)
-                .setQosSessions(new ArrayList<>())
+                .setQosBearerSessions(new ArrayList<>())
+                .setTrafficDescriptors(new ArrayList<>())
                 .build();
 
         assertEquals(response, RIL.convertDataCallResult(result15));
@@ -2320,19 +2325,39 @@ public class RILTest extends TelephonyTest {
         result16.qosSessions = new ArrayList<>(Arrays.asList(halQosSession));
 
         EpsQos epsQos = new EpsQos(halEpsQos);
-        QosFilter qosFilter = new QosFilter(
+        QosBearerFilter qosFilter = new QosBearerFilter(
                 Arrays.asList(
                         new LinkAddress(InetAddresses.parseNumericAddress("122.22.22.22"), 32)),
                 Arrays.asList(
                         new LinkAddress(InetAddresses.parseNumericAddress("144.44.44.44"), 32)),
-                new QosFilter.PortRange(123, 123), new QosFilter.PortRange(223, 223),
-                QosFilter.QOS_PROTOCOL_UDP, 7, 987, 678,
-                QosFilter.QOS_FILTER_DIRECTION_BIDIRECTIONAL, 45);
-        ArrayList<QosFilter> qosFilters = new ArrayList<>();
-        ArrayList<QosSession> qosSessions = new ArrayList<>();
+                new QosBearerFilter.PortRange(123, 123), new QosBearerFilter.PortRange(223, 223),
+                QosBearerFilter.QOS_PROTOCOL_UDP, 7, 987, 678,
+                QosBearerFilter.QOS_FILTER_DIRECTION_BIDIRECTIONAL, 45);
+        ArrayList<QosBearerFilter> qosFilters = new ArrayList<>();
+        ArrayList<QosBearerSession> qosSessions = new ArrayList<>();
         qosFilters.add(qosFilter);
-        QosSession qosSession = new QosSession(1234, epsQos, qosFilters);
+        QosBearerSession qosSession = new QosBearerSession(1234, epsQos, qosFilters);
         qosSessions.add(qosSession);
+
+        // android.hardware.radio.V1_6.TrafficDescriptor
+        android.hardware.radio.V1_6.TrafficDescriptor halTrafficDescriptor =
+                new android.hardware.radio.V1_6.TrafficDescriptor();
+        android.hardware.radio.V1_6.OptionalDnn halDnn =
+                new android.hardware.radio.V1_6.OptionalDnn();
+        halDnn.value("DNN");
+
+        android.hardware.radio.V1_6.OptionalOsAppId halOsAppId =
+                new android.hardware.radio.V1_6.OptionalOsAppId();
+        android.hardware.radio.V1_6.OsAppId osAppId = new android.hardware.radio.V1_6.OsAppId();
+        osAppId.osAppId = mRILUnderTest.primitiveArrayToArrayList("OS_APP_ID".getBytes());
+        halOsAppId.value(osAppId);
+
+        halTrafficDescriptor.dnn = halDnn;
+        halTrafficDescriptor.osAppId = halOsAppId;
+        result16.trafficDescriptors = new ArrayList<>(Arrays.asList(halTrafficDescriptor));
+
+        List<TrafficDescriptor> trafficDescriptors = Arrays.asList(
+                new TrafficDescriptor("DNN", "OS_APP_ID"));
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
@@ -2356,7 +2381,8 @@ public class RILTest extends TelephonyTest {
                 .setMtuV6(3000)
                 .setHandoverFailureMode(DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY)
                 .setDefaultQos(epsQos)
-                .setQosSessions(qosSessions)
+                .setQosBearerSessions(qosSessions)
+                .setTrafficDescriptors(trafficDescriptors)
                 .build();
 
         assertEquals(response, RIL.convertDataCallResult(result16));
@@ -2605,7 +2631,7 @@ public class RILTest extends TelephonyTest {
                 .setMaxConnections(MAX_CONNS)
                 .setWaitTime(WAIT_TIME)
                 .enable(APN_ENABLED)
-                .setSupportedApnTypesBitmask(SUPPORTED_APNT_YPES_BITMAK)
+                .setSupportedApnTypesBitmask(SUPPORTED_APN_TYPES_BITMASK)
                 .setRoamingProtocolType(ROAMING_PROTOCOL)
                 .setBearerBitmask(BEARER_BITMASK)
                 .setMtu(MTU)
@@ -2615,7 +2641,7 @@ public class RILTest extends TelephonyTest {
 
         mRILUnderTest.setupDataCall(AccessNetworkConstants.AccessNetworkType.EUTRAN, dp, false,
                 false, 0, null,
-                DataCallResponse.PDU_SESSION_ID_NOT_SET, null, obtainMessage());
+                DataCallResponse.PDU_SESSION_ID_NOT_SET, null, null, true, obtainMessage());
         ArgumentCaptor<DataProfileInfo> dpiCaptor = ArgumentCaptor.forClass(DataProfileInfo.class);
         verify(mRadioProxy).setupDataCall(
                 mSerialNumberCaptor.capture(), eq(AccessNetworkConstants.AccessNetworkType.EUTRAN),
@@ -2634,7 +2660,7 @@ public class RILTest extends TelephonyTest {
         assertEquals(MAX_CONNS, dpi.maxConns);
         assertEquals(WAIT_TIME, dpi.waitTime);
         assertEquals(APN_ENABLED, dpi.enabled);
-        assertEquals(SUPPORTED_APNT_YPES_BITMAK, dpi.supportedApnTypesBitmap);
+        assertEquals(SUPPORTED_APN_TYPES_BITMASK, dpi.supportedApnTypesBitmap);
         assertEquals(ROAMING_PROTOCOL, ApnSetting.getProtocolIntFromString(dpi.protocol));
         assertEquals(
                 BEARER_BITMASK,
