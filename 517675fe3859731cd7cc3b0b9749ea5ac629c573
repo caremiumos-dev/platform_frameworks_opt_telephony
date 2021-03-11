@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e417c3b_f0b5ce05",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-03-11T18:24:39Z",
+      "side": 1,
+      "message": "I left my comments about this change in the bug.\n\nI have a few concerns with this:\n - it can lead to including the same SMS session into multiple proto buffers, if the dumpsys command is invoked multiple times. This might not be desirable.\n - it could be confusing to have some incomplete SMS sessions in the dumpsys (e.g. was this a bug or just a timing issue?)\n - the behavior for SMS would become inconsistent with the behavior of voice calls (currently the proto buffer only includes completed calls).\n\nPlease, provide more details in the bug. If there is a need to include in-progress sessions, I think we can find a different solution (e.g. a new repeated SmsSession in_progress_sms_sessions field inside TelephonyLog message).",
+      "range": {
+        "startLine": 732,
+        "startChar": 8,
+        "endLine": 738,
+        "endChar": 9
+      },
+      "revId": "517675fe3859731cd7cc3b0b9749ea5ac629c573",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
