@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b25591d7_33e88fe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-11T01:40:59Z",
+      "side": 1,
+      "message": "Sorry. It is updated for TelephonyCallback changes.",
+      "revId": "2c6d4d65a4d5e091cfdf5eabe9324e186678ce87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
