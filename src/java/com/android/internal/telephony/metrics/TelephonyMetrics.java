@@ -273,7 +273,7 @@ public class TelephonyMetrics {
      * @param pw Print writer
      * @param args Arguments
      */
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+    public synchronized void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (args != null && args.length > 0) {
             boolean reset = true;
             if (args.length > 1 && "--keep".equals(args[1])) {
@@ -1125,7 +1125,7 @@ public class TelephonyMetrics {
      *
      * @param inProgressSmsSession The in progress SMS session
      */
-    private synchronized void finishSmsSessionIfNeeded(InProgressSmsSession inProgressSmsSession) {
+    private void finishSmsSessionIfNeeded(InProgressSmsSession inProgressSmsSession) {
         if (inProgressSmsSession.getNumExpectedResponses() == 0) {
             SmsSession smsSession = finishSmsSession(inProgressSmsSession);
 
@@ -1816,12 +1816,10 @@ public class TelephonyMetrics {
      */
     private synchronized void writeOnSmsSolicitedResponse(int phoneId, int rilSerial, int rilError,
                                                           SmsResponse response) {
-
         InProgressSmsSession smsSession = mInProgressSmsSessions.get(phoneId);
         if (smsSession == null) {
             Rlog.e(TAG, "SMS session is missing");
         } else {
-
             int errorCode = SmsResponse.NO_ERROR_CODE;
             long messageId = 0L;
             if (response != null) {
@@ -2332,7 +2330,7 @@ public class TelephonyMetrics {
      * @param receivedCount Number of received parts.
      * @param totalCount Total number of parts of the SMS.
      */
-    public void writeDroppedIncomingMultipartSms(int phoneId, String format,
+    public synchronized void writeDroppedIncomingMultipartSms(int phoneId, String format,
             int receivedCount, int totalCount) {
         logv("Logged dropped multipart SMS: received " + receivedCount
                 + " out of " + totalCount);
@@ -2358,7 +2356,8 @@ public class TelephonyMetrics {
      * @param format SMS format. Either 3GPP or 3GPP2.
      * @param success Indicates if the SMS-PP was successfully delivered to the USIM.
      */
-    private void writeIncomingSmsWithType(int phoneId, int type, String format, boolean success) {
+    private synchronized void writeIncomingSmsWithType(int phoneId, int type, String format,
+            boolean success) {
         InProgressSmsSession smsSession = startNewSmsSession(phoneId);
         smsSession.addEvent(new SmsSessionEventBuilder(SmsSession.Event.Type.SMS_RECEIVED)
                 .setFormat(convertSmsFormat(format))
@@ -2417,7 +2416,7 @@ public class TelephonyMetrics {
      * @param success Indicates if the SMS-PP was successfully delivered to the USIM.
      * @param messageId Unique id for this message.
      */
-    private void writeIncomingSmsSessionWithType(int phoneId, int type,
+    private synchronized void writeIncomingSmsSessionWithType(int phoneId, int type,
             @InboundSmsHandler.SmsSource int smsSource, String format, long[] timestamps,
             boolean blocked, boolean success, long messageId) {
         logv("Logged SMS session consisting of " + timestamps.length
@@ -2483,8 +2482,8 @@ public class TelephonyMetrics {
      * @param smsSource the source of the SMS message
      * @param result Indicates the reason of the failure.
      */
-    public void writeIncomingSmsError(int phoneId, @InboundSmsHandler.SmsSource int smsSource,
-            int result) {
+    public synchronized void writeIncomingSmsError(int phoneId,
+            @InboundSmsHandler.SmsSource int smsSource, int result) {
         logv("Incoming SMS error = " + result);
 
         int smsError = SmsManager.RESULT_ERROR_GENERIC_FAILURE;
