@@ -2435,4 +2435,9 @@ public class DcTrackerTest extends TelephonyTest {
         }
         waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
     }
+
+    @Test
+    public void testProvisioningNotification() {
+        mDct.showProvisioningNotification();
+    }
 }
