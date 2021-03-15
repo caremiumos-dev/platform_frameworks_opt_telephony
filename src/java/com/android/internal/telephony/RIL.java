@@ -56,7 +56,10 @@ import android.hardware.radio.V1_5.AccessNetwork;
 import android.hardware.radio.V1_5.IndicationFilter;
 import android.hardware.radio.V1_5.PersoSubstate;
 import android.hardware.radio.V1_5.RadioAccessNetworks;
+import android.hardware.radio.V1_6.OptionalDnn;
+import android.hardware.radio.V1_6.OptionalOsAppId;
 import android.hardware.radio.V1_6.OptionalSliceInfo;
+import android.hardware.radio.V1_6.OptionalTrafficDescriptor;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.InetAddresses;
 import android.net.KeepalivePacketData;
@@ -106,8 +109,9 @@ import android.telephony.data.DataCallResponse.HandoverFailureMode;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.Qos;
-import android.telephony.data.QosSession;
+import android.telephony.data.QosBearerSession;
 import android.telephony.data.SliceInfo;
+import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -655,22 +659,22 @@ public class RIL extends BaseCommands implements CommandsInterface {
     //***** Constructors
 
     @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType, int cdmaSubscription) {
-        this(context, preferredNetworkType, cdmaSubscription, null);
+    public RIL(Context context, int allowedNetworkTypes, int cdmaSubscription) {
+        this(context, allowedNetworkTypes, cdmaSubscription, null);
     }
 
     @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType,
+    public RIL(Context context, int allowedNetworkTypes,
             int cdmaSubscription, Integer instanceId) {
         super(context);
         if (RILJ_LOGD) {
-            riljLog("RIL: init preferredNetworkType=" + preferredNetworkType
+            riljLog("RIL: init allowedNetworkTypes=" + allowedNetworkTypes
                     + " cdmaSubscription=" + cdmaSubscription + ")");
         }
 
         mContext = context;
         mCdmaSubscription  = cdmaSubscription;
-        mPreferredNetworkType = preferredNetworkType;
+        mAllowedNetworkTypesBitmask = allowedNetworkTypes;
         mPhoneType = RILConstants.NO_PHONE;
         mPhoneId = instanceId == null ? 0 : instanceId;
         if (isRadioBugDetectionEnabled()) {
@@ -1903,7 +1907,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return dpi;
     }
 
-    private OptionalSliceInfo convertToHalSliceInfo16(@Nullable SliceInfo sliceInfo) {
+    private static OptionalSliceInfo convertToHalSliceInfo(@Nullable SliceInfo sliceInfo) {
         OptionalSliceInfo optionalSliceInfo = new OptionalSliceInfo();
         if (sliceInfo == null) {
             return optionalSliceInfo;
@@ -1918,7 +1922,35 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return optionalSliceInfo;
     }
 
-    private ArrayList<android.hardware.radio.V1_5.LinkAddress> convertToHalLinkProperties15(
+    private static OptionalTrafficDescriptor convertToHalTrafficDescriptor(
+            @Nullable TrafficDescriptor trafficDescriptor) {
+        OptionalTrafficDescriptor optionalTrafficDescriptor = new OptionalTrafficDescriptor();
+        if (trafficDescriptor == null) {
+            return optionalTrafficDescriptor;
+        }
+
+        android.hardware.radio.V1_6.TrafficDescriptor td =
+                new android.hardware.radio.V1_6.TrafficDescriptor();
+
+        OptionalDnn optionalDnn = new OptionalDnn();
+        if (trafficDescriptor.getDnn() != null) {
+            optionalDnn.value(trafficDescriptor.getDnn());
+        }
+        td.dnn = optionalDnn;
+
+        OptionalOsAppId optionalOsAppId = new OptionalOsAppId();
+        if (trafficDescriptor.getOsAppId() != null) {
+            android.hardware.radio.V1_6.OsAppId osAppId = new android.hardware.radio.V1_6.OsAppId();
+            osAppId.osAppId = primitiveArrayToArrayList(trafficDescriptor.getOsAppId().getBytes());
+            optionalOsAppId.value(osAppId);
+        }
+        td.osAppId = optionalOsAppId;
+
+        optionalTrafficDescriptor.value(td);
+        return optionalTrafficDescriptor;
+    }
+
+    private static ArrayList<android.hardware.radio.V1_5.LinkAddress> convertToHalLinkProperties15(
             LinkProperties linkProperties) {
         ArrayList<android.hardware.radio.V1_5.LinkAddress> addresses15 = new ArrayList<>();
         if (linkProperties != null) {
@@ -1995,8 +2027,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, SliceInfo sliceInfo, Message result) {
+            boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
+            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
+            Message result) {
         IRadio radioProxy = getRadioProxy(result);
 
         if (radioProxy != null) {
@@ -2025,11 +2058,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     android.hardware.radio.V1_5.DataProfileInfo dpi =
                             convertToHalDataProfile15(dataProfile);
 
-                    android.hardware.radio.V1_6.OptionalSliceInfo sliceInfo16 =
-                            convertToHalSliceInfo16(sliceInfo);
+                    OptionalSliceInfo si = convertToHalSliceInfo(sliceInfo);
 
                     ArrayList<android.hardware.radio.V1_5.LinkAddress> addresses15 =
                             convertToHalLinkProperties15(linkProperties);
+
+                    OptionalTrafficDescriptor td = convertToHalTrafficDescriptor(trafficDescriptor);
 
                     if (RILJ_LOGD) {
                         riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
@@ -2037,11 +2071,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
                                 + AccessNetworkType.toString(accessNetworkType) + ",isRoaming="
                                 + isRoaming + ",allowRoaming=" + allowRoaming + "," + dataProfile
                                 + ",addresses=" + addresses15 + ",dnses=" + dnses
-                                + ",pduSessionId=" + pduSessionId + ",sliceInfo=" + sliceInfo16);
+                                + ",pduSessionId=" + pduSessionId + ",sliceInfo=" + si
+                                + ",trafficDescriptor=" + td + ",matchAllRuleAllowed="
+                                + matchAllRuleAllowed);
                     }
 
                     radioProxy16.setupDataCall_1_6(rr.mSerial, accessNetworkType, dpi, allowRoaming,
-                            reason, addresses15, dnses, pduSessionId, sliceInfo16);
+                            reason, addresses15, dnses, pduSessionId, si, td, matchAllRuleAllowed);
                 } else if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
                     // IRadio V1.5
                     android.hardware.radio.V1_5.IRadio radioProxy15 =
@@ -3283,7 +3319,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                         + " networkType = " + networkType);
             }
-            mPreferredNetworkType = networkType;
+            mAllowedNetworkTypesBitmask = RadioAccessFamily.getRafFromNetworkType(networkType);
             mMetrics.writeSetPreferredNetworkType(mPhoneId, networkType);
 
             if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_4)) {
@@ -3291,8 +3327,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         (android.hardware.radio.V1_4.IRadio) radioProxy;
                 try {
                     radioProxy14.setPreferredNetworkTypeBitmap(
-                            rr.mSerial, convertToHalRadioAccessFamily(
-                                    RadioAccessFamily.getRafFromNetworkType(networkType)));
+                            rr.mSerial, convertToHalRadioAccessFamily(mAllowedNetworkTypesBitmask));
                 } catch (RemoteException | RuntimeException e) {
                     handleRadioProxyExceptionForRR(rr, "setPreferredNetworkTypeBitmap", e);
                 }
@@ -3473,30 +3508,29 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void setAllowedNetworkTypeBitmask(
+    public void setAllowedNetworkTypesBitmap(
             @TelephonyManager.NetworkTypeBitMask int networkTypeBitmask, Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
-                if (result != null) {
-                    AsyncResult.forMessage(result, null,
-                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
-                    result.sendToTarget();
-                }
+                // For older HAL, redirects the call to setPreferredNetworkType.
+                setPreferredNetworkType(
+                        RadioAccessFamily.getNetworkTypeFromRaf(networkTypeBitmask), result);
                 return;
             }
 
             android.hardware.radio.V1_6.IRadio radioProxy16 =
                     (android.hardware.radio.V1_6.IRadio) radioProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP, result,
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_NETWORK_TYPES_BITMAP, result,
                     mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
-
+            mAllowedNetworkTypesBitmask = networkTypeBitmask;
             try {
-                radioProxy16.setAllowedNetworkTypeBitmap(rr.mSerial, networkTypeBitmask);
+                radioProxy16.setAllowedNetworkTypesBitmap(rr.mSerial,
+                        convertToHalRadioAccessFamily(mAllowedNetworkTypesBitmask));
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "setAllowedNetworkTypeBitmask", e);
             }
@@ -3504,7 +3538,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     }
 
     @Override
-    public void getAllowedNetworkTypeBitmask(Message result) {
+    public void getAllowedNetworkTypesBitmap(Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
@@ -3518,7 +3552,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
             android.hardware.radio.V1_6.IRadio radioProxy16 =
                     (android.hardware.radio.V1_6.IRadio) radioProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP, result,
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP, result,
                     mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
@@ -3526,7 +3560,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
 
             try {
-                radioProxy16.getAllowedNetworkTypeBitmap(rr.mSerial);
+                radioProxy16.getAllowedNetworkTypesBitmap(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getAllowedNetworkTypeBitmask", e);
             }
@@ -4366,7 +4400,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setInitialAttachApn(DataProfile dataProfile, boolean isRoaming, Message result) {
-
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             RILRequest rr = obtainRequest(RIL_REQUEST_SET_INITIAL_ATTACH_APN, result,
@@ -4780,19 +4813,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setDataProfile(DataProfile[] dps, boolean isRoaming, Message result) {
-
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
-
-            RILRequest rr = null;
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_DATA_PROFILE, result,
+                    mRILDefaultWorkSource);
             try {
                 if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
                     // V1.5
                     android.hardware.radio.V1_5.IRadio radioProxy15 =
                             (android.hardware.radio.V1_5.IRadio) radioProxy;
-
-                    rr = obtainRequest(RIL_REQUEST_SET_DATA_PROFILE, result,
-                            mRILDefaultWorkSource);
 
                     ArrayList<android.hardware.radio.V1_5.DataProfileInfo> dpis = new ArrayList<>();
                     for (DataProfile dp : dps) {
@@ -4812,9 +4841,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     // V1.4
                     android.hardware.radio.V1_4.IRadio radioProxy14 =
                             (android.hardware.radio.V1_4.IRadio) radioProxy;
-
-                    rr = obtainRequest(RIL_REQUEST_SET_DATA_PROFILE, result,
-                            mRILDefaultWorkSource);
 
                     ArrayList<android.hardware.radio.V1_4.DataProfileInfo> dpis = new ArrayList<>();
                     for (DataProfile dp : dps) {
@@ -4842,9 +4868,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     }
 
                     if (!dpis.isEmpty()) {
-                        rr = obtainRequest(RIL_REQUEST_SET_DATA_PROFILE, result,
-                                mRILDefaultWorkSource);
-
                         if (RILJ_LOGD) {
                             riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                                     + " with data profiles : ");
@@ -6907,6 +6930,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_CANCEL_HANDOVER";
             case RIL_REQUEST_SET_DATA_THROTTLING:
                 return "RIL_REQUEST_SET_DATA_THROTTLING";
+            case RIL_REQUEST_SET_ALLOWED_NETWORK_TYPES_BITMAP:
+                return "RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP";
+            case RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP:
+                return "RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP";
             default: return "<unknown request>";
         }
     }
@@ -7428,8 +7455,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
         int pduSessionId = DataCallResponse.PDU_SESSION_ID_NOT_SET;
 
         List<LinkAddress> laList = new ArrayList<>();
-        List<QosSession> qosSessions = new ArrayList<>();
+        List<QosBearerSession> qosSessions = new ArrayList<>();
         SliceInfo sliceInfo = null;
+        List<TrafficDescriptor> trafficDescriptors = new ArrayList<>();
 
         if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
             final android.hardware.radio.V1_0.SetupDataCallResult result =
@@ -7518,8 +7546,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
             pduSessionId = result.pduSessionId;
             defaultQos = Qos.create(result.defaultQos);
             qosSessions = result.qosSessions.stream().map(session ->
-                    QosSession.create(session)).collect(Collectors.toList());
+                    QosBearerSession.create(session)).collect(Collectors.toList());
             sliceInfo = convertToSliceInfo(result.sliceInfo);
+            trafficDescriptors = result.trafficDescriptors.stream().map(td ->
+                    convertToTrafficDescriptor(td)).collect(Collectors.toList());
         } else {
             Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
             return null;
@@ -7587,8 +7617,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .setHandoverFailureMode(handoverFailureMode)
                 .setPduSessionId(pduSessionId)
                 .setDefaultQos(defaultQos)
-                .setQosSessions(qosSessions)
+                .setQosBearerSessions(qosSessions)
                 .setSliceInfo(sliceInfo)
+                .setTrafficDescriptors(trafficDescriptors)
                 .build();
     }
 
@@ -7608,6 +7639,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .setMappedHplmnSliceDifferentiator(si.mappedHplmnSD);
         }
         return builder.build();
+    }
+
+    private static TrafficDescriptor convertToTrafficDescriptor(
+            android.hardware.radio.V1_6.TrafficDescriptor td) {
+        String dnn = td.dnn.getDiscriminator() == OptionalDnn.hidl_discriminator.noinit
+                ? null : td.dnn.value();
+        String osAppId = td.osAppId.getDiscriminator() == OptionalOsAppId.hidl_discriminator.noinit
+                ? null : new String(arrayListToPrimitiveArray(td.osAppId.value().osAppId));
+        return new TrafficDescriptor(dnn, osAppId);
     }
 
     /**

@@ -102,7 +102,7 @@ public class ApnContext {
      * @param priority Priority of APN type
      */
     public ApnContext(Phone phone, int typeId, String logTag, DcTracker tracker, int priority) {
-        this(phone, ApnSetting.getApnTypeString(typeId), logTag, tracker, priority);
+        this(phone, ApnSetting.getApnTypeStringInternal(typeId), logTag, tracker, priority);
     }
 
     /**
@@ -588,6 +588,10 @@ public class ApnContext {
         if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)) {
             if (apnType != ApnSetting.TYPE_NONE) error = true;
             apnType = ApnSetting.TYPE_XCAP;
+        }
+        if (nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)) {
+            if (apnType != ApnSetting.TYPE_NONE) error = true;
+            apnType = ApnSetting.TYPE_ENTERPRISE;
         }
         if (error) {
             // TODO: If this error condition is removed, the framework's handling of

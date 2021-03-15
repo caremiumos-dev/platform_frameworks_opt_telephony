@@ -51,6 +51,7 @@ import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.SliceInfo;
+import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -1178,11 +1179,13 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
-                              boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, SliceInfo sliceInfo, Message result) {
+            boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
+            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
+            Message result) {
 
         SimulatedCommandsVerifier.getInstance().setupDataCall(accessNetworkType, dataProfile,
-                isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo, result);
+                isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo,
+                trafficDescriptor, matchAllRuleAllowed, result);
 
         if (mSetupDataCallResult == null) {
             try {
@@ -1243,17 +1246,17 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void setAllowedNetworkTypeBitmask(
+    public void setAllowedNetworkTypesBitmap(
             @TelephonyManager.NetworkTypeBitMask int networkTypeBitmask, Message response) {
         SimulatedCommandsVerifier.getInstance()
-            .setAllowedNetworkTypeBitmask(networkTypeBitmask, response);
+            .setAllowedNetworkTypesBitmap(networkTypeBitmask, response);
         mAllowedNetworkType = networkTypeBitmask;
         resultSuccess(response, null);
     }
 
     @Override
-    public void getAllowedNetworkTypeBitmask(Message response) {
-        SimulatedCommandsVerifier.getInstance().getAllowedNetworkTypeBitmask(response);
+    public void getAllowedNetworkTypesBitmap(Message response) {
+        SimulatedCommandsVerifier.getInstance().getAllowedNetworkTypesBitmap(response);
         int[] ret = new int[1];
 
         ret[0] = mAllowedNetworkType;
