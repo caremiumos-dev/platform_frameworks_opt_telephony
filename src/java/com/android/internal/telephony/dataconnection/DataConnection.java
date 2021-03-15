@@ -40,7 +40,7 @@ import android.net.RouteInfo;
 import android.net.SocketKeepalive;
 import android.net.TelephonyNetworkSpecifier;
 import android.net.vcn.VcnManager;
-import android.net.vcn.VcnManager.VcnNetworkPolicyListener;
+import android.net.vcn.VcnManager.VcnNetworkPolicyChangeListener;
 import android.net.vcn.VcnNetworkPolicyResult;
 import android.os.AsyncResult;
 import android.os.HandlerExecutor;
@@ -69,8 +69,9 @@ import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
 import android.telephony.data.DataServiceCallback;
 import android.telephony.data.Qos;
-import android.telephony.data.QosSession;
+import android.telephony.data.QosBearerSession;
 import android.telephony.data.SliceInfo;
+import android.telephony.data.TrafficDescriptor;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Pair;
@@ -307,8 +308,9 @@ public class DataConnection extends StateMachine {
     private int mDownlinkBandwidth = 14;
     private int mUplinkBandwidth = 14;
     private Qos mDefaultQos = null;
-    private List<QosSession> mQosSessions = new ArrayList<>();
+    private List<QosBearerSession> mQosBearerSessions = new ArrayList<>();
     private SliceInfo mSliceInfo;
+    private List<TrafficDescriptor> mTrafficDescriptors = new ArrayList<>();
 
     /** The corresponding network agent for this data connection. */
     private DcNetworkAgent mNetworkAgent;
@@ -332,8 +334,8 @@ public class DataConnection extends StateMachine {
     PendingIntent mReconnectIntent = null;
 
     /** Class used to track VCN-defined Network policies for this DcNetworkAgent. */
-    private final VcnNetworkPolicyListener mVcnPolicyListener =
-            new DataConnectionVcnNetworkPolicyListener();
+    private final VcnNetworkPolicyChangeListener mVcnPolicyChangeListener =
+            new DataConnectionVcnNetworkPolicyChangeListener();
 
     // ***** Event codes for driving the state machine, package visible for Dcc
     static final int BASE = Protocol.BASE_DATA_CONNECTION;
@@ -616,9 +618,43 @@ public class DataConnection extends StateMachine {
         return mSliceInfo;
     }
 
-    public void updateQosParameters(DataCallResponse response) {
+    public List<TrafficDescriptor> getTrafficDescriptors() {
+        return mTrafficDescriptors;
+    }
+
+    /**
+     * Update DC fields based on a new DataCallResponse
+     * @param response the response to use to update DC fields
+     */
+    public void updateResponseFields(DataCallResponse response) {
+        updateQosParameters(response);
+        updateSliceInfo(response);
+        updateTrafficDescriptors(response);
+    }
+
+    public void updateQosParameters(final @Nullable DataCallResponse response) {
+        if (response == null) {
+            mDefaultQos = null;
+            mQosBearerSessions = null;
+            return;
+        }
+
         mDefaultQos = response.getDefaultQos();
-        mQosSessions = response.getQosSessions();
+        mQosBearerSessions = response.getQosBearerSessions();
+
+        if (mNetworkAgent != null) {
+            syncQosToNetworkAgent();
+        }
+    }
+
+    private void syncQosToNetworkAgent() {
+        final DcNetworkAgent networkAgent = mNetworkAgent;
+        final List<QosBearerSession> qosBearerSessions = mQosBearerSessions;
+        if (qosBearerSessions == null) {
+            networkAgent.updateQosBearerSessions(new ArrayList<>());
+            return;
+        }
+        networkAgent.updateQosBearerSessions(qosBearerSessions);
     }
 
     /**
@@ -627,6 +663,14 @@ public class DataConnection extends StateMachine {
      */
     public void updateSliceInfo(DataCallResponse response) {
         mSliceInfo = response.getSliceInfo();
+    }
+
+    /**
+     * Update the latest traffic descriptor on this data connection with
+     * {@link DataCallResponse#getTrafficDescriptors}.
+     */
+    public void updateTrafficDescriptors(DataCallResponse response) {
+        mTrafficDescriptors = response.getTrafficDescriptors();
     }
 
     @VisibleForTesting
@@ -831,6 +875,18 @@ public class DataConnection extends StateMachine {
                 || (isModemRoaming && (!mPhone.getServiceState().getDataRoaming()
                 || isUnmeteredApnType));
 
+        String dnn = null;
+        String osAppId = null;
+        if (cp.mApnContext.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE) {
+            // TODO: update osAppId to use NetworkCapability API once it's available
+            osAppId = ApnSetting.getApnTypesStringFromBitmask(mApnSetting.getApnTypeBitmask());
+        } else {
+            dnn = mApnSetting.getApnName();
+        }
+        final TrafficDescriptor td = osAppId == null && dnn == null ? null
+                : new TrafficDescriptor(dnn, osAppId);
+        final boolean matchAllRuleAllowed = td == null || td.getOsAppId() == null;
+
         if (DBG) {
             log("allowRoaming=" + allowRoaming
                     + ", mPhone.getDataRoamingEnabled()=" + mPhone.getDataRoamingEnabled()
@@ -838,6 +894,8 @@ public class DataConnection extends StateMachine {
                     + ", mPhone.getServiceState().getDataRoaming()="
                     + mPhone.getServiceState().getDataRoaming()
                     + ", isUnmeteredApnType=" + isUnmeteredApnType
+                    + ", trafficDescriptor=" + td
+                    + ", matchAllRuleAllowed=" + matchAllRuleAllowed
             );
         }
 
@@ -897,7 +955,9 @@ public class DataConnection extends StateMachine {
                     reason,
                     linkProperties,
                     psi,
-                    null,
+                    null, //slice info is null since this is not a handover
+                    td,
+                    matchAllRuleAllowed,
                     msg);
             TelephonyMetrics.getInstance().writeSetupDataCall(mPhone.getPhoneId(), cp.mRilRat,
                     dp.getProfileId(), dp.getApn(), dp.getProtocolType());
@@ -977,6 +1037,10 @@ public class DataConnection extends StateMachine {
 
         reason = DataService.REQUEST_REASON_HANDOVER;
 
+        TrafficDescriptor td = dp.getApn() == null ? null
+                : new TrafficDescriptor(dp.getApn(), null);
+        boolean matchAllRuleAllowed = true;
+
         mDataServiceManager.setupDataCall(
                 ServiceState.rilRadioTechnologyToAccessNetworkType(cp.mRilRat),
                 dp,
@@ -986,6 +1050,8 @@ public class DataConnection extends StateMachine {
                 linkProperties,
                 srcDc.getPduSessionId(),
                 srcDc.getSliceInfo(),
+                td,
+                matchAllRuleAllowed,
                 msg);
         TelephonyMetrics.getInstance().writeSetupDataCall(mPhone.getPhoneId(), cp.mRilRat,
                 dp.getProfileId(), dp.getApn(), dp.getProtocolType());
@@ -1301,6 +1367,7 @@ public class DataConnection extends StateMachine {
             }
 
             updatePcscfAddr(response);
+            updateResponseFields(response);
             result = updateLinkProperty(response).setupResult;
         }
 
@@ -1323,7 +1390,7 @@ public class DataConnection extends StateMachine {
             if (!isIpAddress(mApnSetting.getMmsProxyAddressAsString())) {
                 log(String.format(
                         "isDnsOk: return false apn.types=%d APN_TYPE_MMS=%s isIpAddress(%s)=%s",
-                        mApnSetting.getApnTypeBitmask(), PhoneConstants.APN_TYPE_MMS,
+                        mApnSetting.getApnTypeBitmask(), ApnSetting.TYPE_MMS_STRING,
                         mApnSetting.getMmsProxyAddressAsString(),
                         isIpAddress(mApnSetting.getMmsProxyAddressAsString())));
                 return false;
@@ -1635,7 +1702,7 @@ public class DataConnection extends StateMachine {
 
         if (mApnSetting != null) {
             final String[] types = ApnSetting.getApnTypesStringFromBitmask(
-                mApnSetting.getApnTypeBitmask() & ~mDisabledApnTypeBitMask).split(",");
+                    mApnSetting.getApnTypeBitmask() & ~mDisabledApnTypeBitMask).split(",");
             for (String type : types) {
                 if (!mRestrictedNetworkOverride && mUnmeteredUseOnly
                         && ApnSettingUtils.isMeteredApnType(
@@ -1644,7 +1711,7 @@ public class DataConnection extends StateMachine {
                     continue;
                 }
                 switch (type) {
-                    case PhoneConstants.APN_TYPE_ALL: {
+                    case ApnSetting.TYPE_ALL_STRING: {
                         hasInternet = true;
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_MMS);
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_SUPL);
@@ -1655,47 +1722,47 @@ public class DataConnection extends StateMachine {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_DEFAULT: {
+                    case ApnSetting.TYPE_DEFAULT_STRING: {
                         hasInternet = true;
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_MMS: {
+                    case ApnSetting.TYPE_MMS_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_MMS);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_SUPL: {
+                    case ApnSetting.TYPE_SUPL_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_SUPL);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_DUN: {
+                    case ApnSetting.TYPE_DUN_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_DUN);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_FOTA: {
+                    case ApnSetting.TYPE_FOTA_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_FOTA);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_IMS: {
+                    case ApnSetting.TYPE_IMS_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_IMS);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_CBS: {
+                    case ApnSetting.TYPE_CBS_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_CBS);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_IA: {
+                    case ApnSetting.TYPE_IA_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_IA);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_EMERGENCY: {
+                    case ApnSetting.TYPE_EMERGENCY_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_MCX: {
+                    case ApnSetting.TYPE_MCX_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_MCX);
                         break;
                     }
-                    case PhoneConstants.APN_TYPE_XCAP: {
+                    case ApnSetting.TYPE_XCAP_STRING: {
                         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP);
                         break;
                     }
@@ -1720,6 +1787,12 @@ public class DataConnection extends StateMachine {
             // TODO: Need to remove the use of hidden API deduceRestrictedCapability
             if (builder.build().deduceRestrictedCapability()) {
                 builder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
+            }
+        }
+
+        for (ApnContext ctx : mApnContexts.keySet()) {
+            if (ctx.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE) {
+                builder.addCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE);
             }
         }
 
@@ -1967,7 +2040,8 @@ public class DataConnection extends StateMachine {
             // only NOT be set only if we're in DcInactiveState.
             mApnSetting = apnContext.getApnSetting();
         }
-        if (mApnSetting == null || !mApnSetting.canHandleType(apnContext.getApnTypeBitmask())) {
+        if (mApnSetting == null || (!mApnSetting.canHandleType(apnContext.getApnTypeBitmask())
+                && apnContext.getApnTypeBitmask() != ApnSetting.TYPE_ENTERPRISE)) {
             if (DBG) {
                 log("initConnection: incompatible apnSetting in ConnectionParams cp=" + cp
                         + " dc=" + DataConnection.this);
@@ -2588,10 +2662,11 @@ public class DataConnection extends StateMachine {
                         + ", mUnmeteredUseOnly = " + mUnmeteredUseOnly);
             }
 
-            // Always register a VcnNetworkPolicyListener, regardless of whether this is a handover
+            // Always register a VcnNetworkPolicyChangeListener, regardless of whether this is a
+            // handover
             // or new Network.
-            mVcnManager.addVcnNetworkPolicyListener(
-                    new HandlerExecutor(getHandler()), mVcnPolicyListener);
+            mVcnManager.addVcnNetworkPolicyChangeListener(
+                    new HandlerExecutor(getHandler()), mVcnPolicyChangeListener);
 
             if (mConnectionParams != null
                     && mConnectionParams.mRequestType == REQUEST_TYPE_HANDOVER) {
@@ -2667,6 +2742,9 @@ public class DataConnection extends StateMachine {
                 sendMessage(obtainMessage(EVENT_UPDATE_SUSPENDED_STATE));
             }
 
+            // The qos parameters are set when the call is connected
+            syncQosToNetworkAgent();
+
             if (mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 mPhone.mCi.registerForNattKeepaliveStatus(
                         getHandler(), DataConnection.EVENT_KEEPALIVE_STATUS, null);
@@ -2695,6 +2773,7 @@ public class DataConnection extends StateMachine {
             // which is when IWLAN handover is ongoing. Instead of unregistering, the agent will
             // be transferred to the new data connection on the other transport.
             if (mNetworkAgent != null) {
+                syncQosToNetworkAgent();
                 if (mHandoverState == HANDOVER_STATE_IDLE) {
                     mNetworkAgent.unregister(DataConnection.this);
                 }
@@ -2706,7 +2785,7 @@ public class DataConnection extends StateMachine {
                     mCid, mApnSetting.getApnTypeBitmask(), RilDataCall.State.DISCONNECTED);
             mDataCallSessionStats.onDataCallDisconnected();
 
-            mVcnManager.removeVcnNetworkPolicyListener(mVcnPolicyListener);
+            mVcnManager.removeVcnNetworkPolicyChangeListener(mVcnPolicyChangeListener);
 
             mPhone.getCarrierPrivilegesTracker().unregisterCarrierPrivilegesListener(getHandler());
         }
@@ -3119,6 +3198,9 @@ public class DataConnection extends StateMachine {
 
                     if (DBG) log(str);
                     if (dp.mApnContext != null) dp.mApnContext.requestLog(str);
+
+                    // Clear out existing qos sessions
+                    updateQosParameters(null);
 
                     if (dp.mTag == mTag) {
                         // Transition to inactive but send notifications after
@@ -3693,7 +3775,7 @@ public class DataConnection extends StateMachine {
         pw.println("mDownlinkBandwidth" + mDownlinkBandwidth);
         pw.println("mUplinkBandwidth=" + mUplinkBandwidth);
         pw.println("mDefaultQos=" + mDefaultQos);
-        pw.println("mQosSessions=" + mQosSessions);
+        pw.println("mQosBearerSessions=" + mQosBearerSessions);
         pw.println("disallowedApnTypes="
                 + ApnSetting.getApnTypesStringFromBitmask(getDisallowedApnTypes()));
         pw.println("mInstanceNumber=" + mInstanceNumber);
@@ -3716,7 +3798,8 @@ public class DataConnection extends StateMachine {
      *
      * <p>MUST be registered with the associated DataConnection's Handler.
      */
-    private class DataConnectionVcnNetworkPolicyListener implements VcnNetworkPolicyListener {
+    private class DataConnectionVcnNetworkPolicyChangeListener
+            implements VcnNetworkPolicyChangeListener {
         @Override
         public void onPolicyChanged() {
             // Poll the current underlying Network policy from VcnManager and send to NetworkAgent.
