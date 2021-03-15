@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6176f3a3_ea6a8abc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-03-15T20:32:33Z",
+      "side": 1,
+      "message": "All test pass locally and the only failure in TH is tracked by b/181892680.",
+      "revId": "071c3cccf46148d2865854d0728661e2ecc7259f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
