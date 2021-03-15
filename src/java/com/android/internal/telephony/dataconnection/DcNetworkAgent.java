@@ -37,6 +37,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.data.EpsBearerQosSessionAttributes;
+import android.telephony.data.NrQosSessionAttributes;
 import android.telephony.data.QosBearerSession;
 import android.util.ArrayMap;
 import android.util.LocalLog;
@@ -377,13 +378,19 @@ public class DcNetworkAgent extends NetworkAgent {
         mQosCallbackExecutor.execute(() -> mQosCallbackTracker.updateSessions(qosBearerSessions));
     }
 
-    public void notifyQosSessionAvailable(final int qosCallbackId, final int sessionId,
+    public void notifyEpsQosSessionAvailable(final int qosCallbackId, final int sessionId,
             @NonNull final EpsBearerQosSessionAttributes attributes) {
-        super.sendQosSessionAvailable(qosCallbackId, sessionId, attributes);
+        super.sendEpsQosSessionAvailable(qosCallbackId, sessionId, attributes);
     }
 
-    public void notifyQosSessionLost(final int qosCallbackId, final int sessionId) {
-        super.sendQosSessionLost(qosCallbackId, sessionId);
+    public void notifyNrQosSessionAvailable(final int qosCallbackId, final int sessionId,
+            @NonNull final NrQosSessionAttributes attributes) {
+        super.sendNrQosSessionAvailable(qosCallbackId, sessionId, attributes);
+    }
+
+    public void notifyQosSessionLost(final int qosCallbackId,
+            final int sessionId, final int qosSessionType) {
+        super.sendQosSessionLost(qosCallbackId, sessionId, qosSessionType);
     }
 
     @Override

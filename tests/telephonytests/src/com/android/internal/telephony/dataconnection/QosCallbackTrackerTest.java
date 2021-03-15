@@ -136,7 +136,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
 
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, never()).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, never()).notifyEpsQosSessionAvailable(eq(1),
                 eq(1234), any(EpsBearerQosSessionAttributes.class));
 
         // Matching QosBearerFilter
@@ -148,7 +148,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
 
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
     }
@@ -180,7 +180,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
                 InetAddresses.parseNumericAddress("122.22.22.22"), 2222));
         mQosCallbackTracker.addFilter(1, filter);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
     }
@@ -204,7 +204,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
 
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, never()).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, never()).notifyEpsQosSessionAvailable(eq(1),
                 eq(1234), any(EpsBearerQosSessionAttributes.class));
 
         // Remove the filter
@@ -219,8 +219,8 @@ public class QosCallbackTrackerTest extends TelephonyTest {
 
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        // Verify that notifyQosSessionAvailable is not invoked as the filter is already removed
-        verify(mDcNetworkAgent, never()).notifyQosSessionAvailable(eq(1),
+        // Verify that notifyEpsQosSessionAvailable is not invoked as the filter is already removed
+        verify(mDcNetworkAgent, never()).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
     }
@@ -251,14 +251,14 @@ public class QosCallbackTrackerTest extends TelephonyTest {
                 InetAddresses.parseNumericAddress("122.22.22.22"), 2222));
         mQosCallbackTracker.addFilter(1, filter);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
         // Remove the matching QosBearerFilter
         qosSessions.remove(1);
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1235));
+        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1235), eq(1));
     }
 
     @Test
@@ -287,7 +287,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
                 InetAddresses.parseNumericAddress("122.22.22.22"), 2222));
         mQosCallbackTracker.addFilter(1, filter);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
         reset(mDcNetworkAgent);
@@ -297,7 +297,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
         qosSessions.add(new QosBearerSession(1235, createEpsQos(10, 12, 14, 16), qosFilters2));
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
     }
 
@@ -327,7 +327,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
                 InetAddresses.parseNumericAddress("122.22.22.22"), 2222));
         mQosCallbackTracker.addFilter(1, filter);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
         reset(mDcNetworkAgent);
@@ -337,7 +337,7 @@ public class QosCallbackTrackerTest extends TelephonyTest {
         qosSessions.add(new QosBearerSession(1235, createEpsQos(5, 6, 7, 8), qosFilters2));
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, never()).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, never()).notifyEpsQosSessionAvailable(eq(1),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
     }
 
@@ -372,16 +372,16 @@ public class QosCallbackTrackerTest extends TelephonyTest {
                 InetAddresses.parseNumericAddress("122.22.22.22"), 2222));
         mQosCallbackTracker.addFilter(2, filter2);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1234), any(EpsBearerQosSessionAttributes.class));
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(2),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(2),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
         // Update empty QOS sessions list
         mQosCallbackTracker.updateSessions(new ArrayList<>());
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1234));
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(2), eq(1235));
+        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1234), eq(1));
+        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(2), eq(1235), eq(1));
     }
 
     @Test
@@ -415,16 +415,16 @@ public class QosCallbackTrackerTest extends TelephonyTest {
 
         mQosCallbackTracker.updateSessions(qosSessions);
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(1),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(1),
                 eq(1234), any(EpsBearerQosSessionAttributes.class));
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionAvailable(eq(2),
+        verify(mDcNetworkAgent, times(1)).notifyEpsQosSessionAvailable(eq(2),
                 eq(1235), any(EpsBearerQosSessionAttributes.class));
 
         // Update empty QOS sessions list
         mQosCallbackTracker.updateSessions(new ArrayList<>());
 
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1234));
-        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(2), eq(1235));
+        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(1), eq(1234), eq(1));
+        verify(mDcNetworkAgent, times(1)).notifyQosSessionLost(eq(2), eq(1235), eq(1));
     }
 }
 
