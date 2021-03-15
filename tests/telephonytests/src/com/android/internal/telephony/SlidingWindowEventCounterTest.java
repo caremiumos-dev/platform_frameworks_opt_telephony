@@ -24,12 +24,11 @@ import android.os.SystemClock;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SlidingWindowEventCounterTest extends TelephonyTest {
+public class SlidingWindowEventCounterTest {
     long mInitialTime;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(getClass().getSimpleName());
         mInitialTime = SystemClock.elapsedRealtime();
     }
 
