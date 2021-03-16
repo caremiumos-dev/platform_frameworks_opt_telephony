@@ -16,6 +16,23 @@
       "message": "Sorry. It is updated for TelephonyCallback changes.",
       "revId": "2c6d4d65a4d5e091cfdf5eabe9324e186678ce87",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1745a82f_8d1986c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-03-16T20:01:49Z",
+      "side": 1,
+      "message": "There\u0027s a build failure for which https://googleplex-android-review.git.corp.google.com/c/platform/frameworks/opt/telephony/+/12050059 needs to be CP\u0027d to aosp first.",
+      "revId": "2c6d4d65a4d5e091cfdf5eabe9324e186678ce87",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
