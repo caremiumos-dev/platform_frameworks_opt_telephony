@@ -42,6 +42,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b830c040_89faf35a",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1355299
+      },
+      "writtenOn": "2021-03-16T00:59:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d23ba41_435f5ba0",
+      "range": {
+        "startLine": 1454,
+        "startChar": 0,
+        "endLine": 1454,
+        "endChar": 109
+      },
+      "revId": "dd475f00b78216b7c69cef5120a12d1f23ea57c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0181ead_1af01ee3",
@@ -56,6 +80,30 @@
       "side": 1,
       "message": "\u003e Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.\n\nPlease fix.",
       "parentUuid": "26d24d28_f7268407",
+      "range": {
+        "startLine": 1620,
+        "startChar": 0,
+        "endLine": 1620,
+        "endChar": 104
+      },
+      "revId": "dd475f00b78216b7c69cef5120a12d1f23ea57c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a12f72e_08dd806c",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1355299
+      },
+      "writtenOn": "2021-03-16T00:59:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f0181ead_1af01ee3",
       "range": {
         "startLine": 1620,
         "startChar": 0,
