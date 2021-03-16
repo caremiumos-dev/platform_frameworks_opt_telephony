@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c9c204_fd01229f",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 0,
+      "message": "if you\u0027re deleting this call, you should delete the function",
+      "range": {
+        "startLine": 337,
+        "startChar": 26,
+        "endLine": 337,
+        "endChar": 47
+      },
+      "revId": "66aef20f2367b866bdc81ab38c40c1ccf9aaba12",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

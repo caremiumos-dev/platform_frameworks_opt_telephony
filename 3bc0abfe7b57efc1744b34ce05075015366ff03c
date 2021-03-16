@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7afd0f8_295ea33d",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 16
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "don\u0027t add this form.  If needed the calling side can chose a default sub and use the function below.",
+      "range": {
+        "startLine": 194,
+        "startChar": 10,
+        "endLine": 194,
+        "endChar": 31
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c04175a_1b160556",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 16
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "please make a structure to make this well typed.",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 7
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f05c8391_820b8883",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "why is this changed?  I didn\u0027t see anybody using it.",
+      "range": {
+        "startLine": 398,
+        "startChar": 4,
+        "endLine": 398,
+        "endChar": 13
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "567b9f8c_72132735",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "this needs to be changed to a class for type-safety.",
+      "range": {
+        "startLine": 431,
+        "startChar": 11,
+        "endLine": 431,
+        "endChar": 16
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ea2921_c5bdba6f",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "if you rewrite this to use the new form then this old form can be removed.",
+      "range": {
+        "startLine": 479,
+        "startChar": 33,
+        "endLine": 479,
+        "endChar": 74
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a985154_825db5e3",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "if you\u0027re removing the only reference to this, please delete this too",
+      "range": {
+        "startLine": 518,
+        "startChar": 20,
+        "endLine": 518,
+        "endChar": 41
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40b1d878_e4276c48",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "don\u0027t add these default methods.  The are a legacy form from before we supported multi-sim and we\u0027d delete them if we didn\u0027t have to keep them for legacy purposes.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 5
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e207fa9c_93cb655e",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 5
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c3dbea_d1baaee0",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "don\u0027t add this for a new function",
+      "range": {
+        "startLine": 176,
+        "startChar": 5,
+        "endLine": 176,
+        "endChar": 24
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9696008_5357b35c",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-16T23:51:50Z",
+      "side": 1,
+      "message": "inefficient.\n\nBetter to \n asList both outside of forloops\n return false if their lengths are different\n and then return s1List.containsAll(s2List)",
+      "range": {
+        "startLine": 301,
+        "startChar": 8,
+        "endLine": 323,
+        "endChar": 9
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
