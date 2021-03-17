@@ -2637,6 +2637,9 @@ public class DataConnection extends StateMachine {
             final NetworkAgentConfig.Builder configBuilder = new NetworkAgentConfig.Builder();
             configBuilder.setLegacyType(ConnectivityManager.TYPE_MOBILE);
             configBuilder.setLegacyTypeName(NETWORK_TYPE);
+            int networkType = getNetworkType();
+            configBuilder.setLegacySubType(networkType);
+            configBuilder.setLegacySubTypeName(TelephonyManager.getNetworkTypeName(networkType));
             configBuilder.setLegacyExtraInfo(mApnSetting.getApnName());
             final CarrierSignalAgent carrierSignalAgent = mPhone.getCarrierSignalAgent();
             if (carrierSignalAgent.hasRegisteredReceivers(TelephonyManager
@@ -2696,7 +2699,6 @@ public class DataConnection extends StateMachine {
                     // do it now because connectivity service does not support dynamically removing
                     // immutable capabilities.
 
-                    mNetworkAgent.updateLegacySubtype(DataConnection.this);
                     // Update the capability after handover
                     mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
                             DataConnection.this);
@@ -2889,7 +2891,6 @@ public class DataConnection extends StateMachine {
                     }
                     updateSuspendState();
                     if (mNetworkAgent != null) {
-                        mNetworkAgent.updateLegacySubtype(DataConnection.this);
                         // The new suspended state will be passed through connectivity service
                         // through NET_CAPABILITY_NOT_SUSPENDED.
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
@@ -2920,7 +2921,6 @@ public class DataConnection extends StateMachine {
                     }
                     mUnmeteredOverride = isUnmetered;
                     if (mNetworkAgent != null) {
-                        mNetworkAgent.updateLegacySubtype(DataConnection.this);
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
                                 DataConnection.this);
                     }
@@ -2934,7 +2934,6 @@ public class DataConnection extends StateMachine {
                     }
                     mCongestedOverride = isCongested;
                     if (mNetworkAgent != null) {
-                        mNetworkAgent.updateLegacySubtype(DataConnection.this);
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
                                 DataConnection.this);
                     }
@@ -2943,7 +2942,6 @@ public class DataConnection extends StateMachine {
                 case EVENT_DATA_CONNECTION_ROAM_ON:
                 case EVENT_DATA_CONNECTION_ROAM_OFF: {
                     if (mNetworkAgent != null) {
-                        mNetworkAgent.updateLegacySubtype(DataConnection.this);
                         mNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),
                                 DataConnection.this);
                     }

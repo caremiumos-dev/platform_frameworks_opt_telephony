@@ -106,9 +106,6 @@ public class DcNetworkAgent extends NetworkAgent {
         mNetworkCapabilities = dc.getNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
-        int networkType = getNetworkType();
-        setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
-        setLegacyExtraInfo(dc.getApnSetting().getApnName());
         if (dc.getLinkProperties() != null) {
             checkDuplicateInterface(mId, dc.getLinkProperties().getInterfaceName());
             logd("created for data connection " + dc.getName() + ", "
@@ -244,18 +241,6 @@ public class DcNetworkAgent extends NetworkAgent {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Update the legacy sub type (i.e. data network type).
-     *
-     * @param dc The data connection that invokes this method.
-     */
-    public synchronized void updateLegacySubtype(DataConnection dc) {
-        if (!isOwned(dc, "updateLegacySubtype")) return;
-
-        int networkType = getNetworkType();
-        setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
     }
 
     /**
