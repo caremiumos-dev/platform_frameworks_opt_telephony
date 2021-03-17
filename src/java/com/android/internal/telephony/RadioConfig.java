@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import static android.content.pm.PackageManager.FEATURE_TELEPHONY;
+
 import static com.android.internal.telephony.RILConstants.RADIO_NOT_AVAILABLE;
 import static com.android.internal.telephony.RILConstants.REQUEST_NOT_SUPPORTED;
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_GET_HAL_DEVICE_CAPABILITIES;
@@ -26,11 +28,11 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_PREFER
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SWITCH_DUAL_SIM_CONFIG;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.radio.V1_0.RadioResponseInfo;
 import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.config.V1_0.IRadioConfig;
 import android.hardware.radio.config.V1_1.ModemsConfig;
-import android.net.ConnectivityManager;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HwBinder;
@@ -72,6 +74,7 @@ public class RadioConfig extends Handler {
     private HalVersion mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_UNKNOWN;
     private final ServiceDeathRecipient mServiceDeathRecipient;
     private final AtomicLong mRadioConfigProxyCookie = new AtomicLong(0);
+    private final PackageManager mPackageManager;
     private final RadioConfigResponse mRadioConfigResponse;
     private final RadioConfigIndication mRadioConfigIndication;
     private final SparseArray<RILRequest> mRequestList = new SparseArray<RILRequest>();
@@ -92,9 +95,8 @@ public class RadioConfig extends Handler {
     }
 
     private RadioConfig(Context context, HalVersion radioHalVersion) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        mIsMobileNetworkSupported = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
+        mPackageManager = context.getPackageManager();
+        mIsMobileNetworkSupported = mPackageManager.hasSystemFeature(FEATURE_TELEPHONY);
 
         mRadioConfigResponse = new RadioConfigResponse(this, radioHalVersion);
         mRadioConfigIndication = new RadioConfigIndication(this);
