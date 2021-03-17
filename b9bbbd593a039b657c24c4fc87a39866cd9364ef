@@ -1,0 +1,515 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76567d6f_8b09a2d2",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "make match the new function names",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 58
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a75d5e99_f735661a",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "update with new funciton names",
+      "range": {
+        "startLine": 1094,
+        "startChar": 16,
+        "endLine": 1094,
+        "endChar": 44
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e111f0c7_7d2b3f42",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need to add the getSimPhonebookCapacities getter",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e44de66_57dea193",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "updateSimPhonebookRecord",
+      "range": {
+        "startLine": 2653,
+        "startChar": 16,
+        "endLine": 2653,
+        "endChar": 37
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af127658_93f536a8",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2663,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "needs update to registerForSimPhonebookChanged",
+      "range": {
+        "startLine": 2663,
+        "startChar": 16,
+        "endLine": 2663,
+        "endChar": 44
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52d0b5d4_f2b20925",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2671,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2671,
+        "startChar": 16,
+        "endLine": 2671,
+        "endChar": 46
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e2a00fc_d3eb4176",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "registerForSimPhonebookRecordsChunk?",
+      "range": {
+        "startLine": 2681,
+        "startChar": 16,
+        "endLine": 2681,
+        "endChar": 46
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efdda88a_9d2e1d01",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "should populate a class for type safety",
+      "range": {
+        "startLine": 463,
+        "startChar": 15,
+        "endLine": 472,
+        "endChar": 63
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a68a3228_028c342b",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 5945,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need update to the new function names",
+      "range": {
+        "startLine": 5945,
+        "startChar": 16,
+        "endLine": 5945,
+        "endChar": 35
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17123d8_ab2da786",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 5974,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need the getSimPhonebookCapacities function",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35334623_c45bd922",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "This should be conditional - you had a config resource before and that\u0027s a fine way to drive this.  Our default should be false.",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 56
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d22da75b_95d9bd17",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "is this being used?",
+      "range": {
+        "startLine": 122,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 23
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26ba6b0b_bae5d0f3",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "names need to be updated",
+      "range": {
+        "startLine": 1082,
+        "startChar": 16,
+        "endLine": 1082,
+        "endChar": 33
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "087f4a11_77e046d4",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need to update the function names",
+      "range": {
+        "startLine": 2003,
+        "startChar": 16,
+        "endLine": 2003,
+        "endChar": 43
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27d7640b_4b2bdbf3",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need getSimPhonebookRecordCapacitiesResponse",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4814a8_dbd32347",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need a file header:\n/*\n * Copyright (C) 2021 The Android Open Source Project\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *      http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 7
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b3ef1e_815eec51",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "these need to be alphabetized",
+      "range": {
+        "startLine": 3,
+        "startChar": 7,
+        "endLine": 4,
+        "endChar": 42
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dae2a27a_a6660258",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "These should be private.",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112c9e35_da953ccb",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "need the header",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 6
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9f373c6_a067d676",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "alphabetize",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5725937_251877da",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "this needs to be rethought.  You don\u0027t need to wait until it\u0027s loaded but we may need to notify folks when contacts are updated: we get a notification from the ril, reload into a parallel data structure and when the last chunk is read we swap in the new data (atomically) and send a broadcast that sim contacts have changed..  something like that.\n\nThen we don\u0027t need to block folks for initial load or updates.",
+      "range": {
+        "startLine": 67,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11bec430_f5fadab9",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "you should get the new RIL unsol that phonebook has changed and that should be all you need to listen to.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 73
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78db00d9_65a1ddb4",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-17T02:25:55Z",
+      "side": 1,
+      "message": "are these used?",
+      "range": {
+        "startLine": 486,
+        "startChar": 4,
+        "endLine": 523,
+        "endChar": 26
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
