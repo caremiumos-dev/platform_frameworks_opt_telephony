@@ -106,9 +106,6 @@ public class DcNetworkAgent extends NetworkAgent {
         mNetworkCapabilities = dc.getNetworkCapabilities();
         mTransportType = transportType;
         mDataConnection = dc;
-        int networkType = getNetworkType();
-        setLegacySubtype(networkType, TelephonyManager.getNetworkTypeName(networkType));
-        setLegacyExtraInfo(dc.getApnSetting().getApnName());
         if (dc.getLinkProperties() != null) {
             checkDuplicateInterface(mId, dc.getLinkProperties().getInterfaceName());
             logd("created for data connection " + dc.getName() + ", "
@@ -204,7 +201,6 @@ public class DcNetworkAgent extends NetworkAgent {
                 DcTracker.RELEASE_TYPE_DETACH, null);
     }
 
-    @Override
     public synchronized void onBandwidthUpdateRequested() {
         if (mDataConnection == null) {
             loge("onBandwidthUpdateRequested called on no-owner DcNetworkAgent!");
