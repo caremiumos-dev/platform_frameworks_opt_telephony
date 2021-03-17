@@ -2779,8 +2779,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /** Notify {@link PhysicalChannelConfig} changes. */
     public void notifyPhysicalChannelConfig(List<PhysicalChannelConfig> configs) {
-        mPhysicalChannelConfigRegistrants.notifyRegistrants(new AsyncResult(null, configs, null));
-        mNotifier.notifyPhysicalChannelConfig(this, configs);
+        // Remove location info from PhysicalChannelConfig before notification
+        List<PhysicalChannelConfig> sanitizedConfigs = new ArrayList<>(configs.size());
+        for (PhysicalChannelConfig config : configs) {
+            sanitizedConfigs.add(sanitizeLocationInfo(config));
+        }
+
+        mPhysicalChannelConfigRegistrants.notifyRegistrants(
+                new AsyncResult(null, sanitizedConfigs, null));
+        mNotifier.notifyPhysicalChannelConfig(this, sanitizedConfigs);
     }
 
     public List<PhysicalChannelConfig> getPhysicalChannelConfigList() {
@@ -4926,5 +4933,23 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.flush();
             pw.println("++++++++++++++++++++++++++++++++");
         }
+    }
+
+    /**
+     * Remove all the location info from the PhysicalChannelConfig object.
+     */
+    @VisibleForTesting
+    public static PhysicalChannelConfig sanitizeLocationInfo(PhysicalChannelConfig config) {
+        return new PhysicalChannelConfig.Builder()
+                .setNetworkType(config.getNetworkType())
+                .setFrequencyRange(config.getFrequencyRange())
+                .setDownlinkChannelNumber(config.getDownlinkChannelNumber())
+                .setUplinkChannelNumber(config.getUplinkChannelNumber())
+                .setCellBandwidthDownlinkKhz(config.getCellBandwidthDownlinkKhz())
+                .setCellBandwidthUplinkKhz(config.getCellBandwidthUplinkKhz())
+                .setCellConnectionStatus(config.getConnectionStatus())
+                .setContextIds(config.getContextIds())
+                .setBand(config.getBand())
+                .build();
     }
 }

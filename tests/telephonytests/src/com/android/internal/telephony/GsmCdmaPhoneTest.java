@@ -16,11 +16,15 @@
 
 package com.android.internal.telephony;
 
+import static android.telephony.PhysicalChannelConfig.PHYSICAL_CELL_ID_UNKNOWN;
+import static android.telephony.ServiceState.FREQUENCY_RANGE_LOW;
+
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
 import static com.android.internal.telephony.Phone.EVENT_ICC_CHANGED;
 import static com.android.internal.telephony.Phone.EVENT_SRVCC_STATE_CHANGED;
 import static com.android.internal.telephony.Phone.EVENT_UICC_APPS_ENABLEMENT_STATUS_CHANGED;
+import static com.android.internal.telephony.Phone.sanitizeLocationInfo;
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
 
 import static org.junit.Assert.assertEquals;
@@ -62,6 +66,7 @@ import android.telephony.CellIdentity;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.NetworkRegistrationInfo;
+import android.telephony.PhysicalChannelConfig;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -1553,5 +1558,16 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         assertEquals(bandwidth.getPrimaryUplinkCapacityKbps(), 450);
         assertEquals(bandwidth.getSecondaryDownlinkCapacityKbps(), 100);
         assertEquals(bandwidth.getSecondaryUplinkCapacityKbps(), 50);
+    }
+
+    @Test
+    public void testSanitizePhysicalChannelConfig() {
+        PhysicalChannelConfig config = new PhysicalChannelConfig.Builder()
+                .setFrequencyRange(FREQUENCY_RANGE_LOW) // IAE throws if not set
+                .setBand(1) // IAE throws if not set
+                .setPhysicalCellId(2)
+                .build();
+        PhysicalChannelConfig sanitizedConfig = sanitizeLocationInfo(config);
+        assertEquals(PHYSICAL_CELL_ID_UNKNOWN, sanitizedConfig.getPhysicalCellId());
     }
 }
