@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13395080_14a76135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-03-17T16:30:17Z",
+      "side": 1,
+      "message": "This naive solution will remove the physical cell id (or other location related info if present) from the PhysicalChannelConfig before sending to apps which register either by\n1. Phone#registerForPhysicalChannelConfig. (Settings/Car apps) or\n2. TelephonyCallback.PhysicalChannelConfigListener\n\nBut the concern is that no apps (no matter which permission or carrier privilege they have) will be able to take advantage of physical cell id info in S.\nNathan, is this the expected behavior?\nThanks",
+      "revId": "1dc98fb0fc14791b7bf6510963b08db0a91697eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
