@@ -118,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9bccc61_b70bbc2e",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T09:00:20Z",
+      "side": 1,
+      "message": "yeah, will correct it",
+      "parentUuid": "f05c8391_820b8883",
+      "range": {
+        "startLine": 398,
+        "startChar": 4,
+        "endLine": 398,
+        "endChar": 13
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "567b9f8c_72132735",
@@ -131,6 +155,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "this needs to be changed to a class for type-safety.",
+      "range": {
+        "startLine": 431,
+        "startChar": 11,
+        "endLine": 431,
+        "endChar": 16
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19f52c82_1bdd8150",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T09:00:20Z",
+      "side": 1,
+      "message": "yes, will define a new class",
+      "parentUuid": "567b9f8c_72132735",
       "range": {
         "startLine": 431,
         "startChar": 11,
@@ -177,6 +225,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "if you\u0027re removing the only reference to this, please delete this too",
+      "range": {
+        "startLine": 518,
+        "startChar": 20,
+        "endLine": 518,
+        "endChar": 41
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611f426c_4b98b173",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T09:00:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "4a985154_825db5e3",
       "range": {
         "startLine": 518,
         "startChar": 20,
