@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009112497",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440474?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "6eb4df0c_e706b0d9",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-18T08:58:15Z",
+      "side": 1,
+      "message": "Disapproved license (NOT_A_CONTRIBUTION) :\nNot a Contribution.\n",
+      "range": {
+        "startLine": 4,
+        "startChar": 4,
+        "endLine": 4,
+        "endChar": 23
+      },
+      "revId": "020d1fa1931ae93ce45deb37a1a16e8aef6f0397",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
