@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b87f8b_5adc0a6a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-03-18T18:21:45Z",
+      "side": 1,
+      "message": "this feels like a bug, but not a problem for this test case.",
+      "range": {
+        "startLine": 438,
+        "startChar": 28,
+        "endLine": 438,
+        "endChar": 52
+      },
+      "revId": "2d430291a45c5d149a575c528d1ad7a2e1170814",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
