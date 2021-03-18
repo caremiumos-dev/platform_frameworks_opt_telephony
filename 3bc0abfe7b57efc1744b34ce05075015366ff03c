@@ -212,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e5d6fe4_d216127f",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T09:05:35Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "10ea2921_c5bdba6f",
+      "range": {
+        "startLine": 479,
+        "startChar": 33,
+        "endLine": 479,
+        "endChar": 74
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a985154_825db5e3",
