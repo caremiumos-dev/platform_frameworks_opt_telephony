@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83089872_4f330d1c",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 16
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "d7afd0f8_295ea33d",
+      "range": {
+        "startLine": 194,
+        "startChar": 10,
+        "endLine": 194,
+        "endChar": 31
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c04175a_1b160556",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "please make a structure to make this well typed.",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 7
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57171ae1_ade7c8bb",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 16
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "7c04175a_1b160556",
       "range": {
         "startLine": 212,
         "startChar": 4,
@@ -162,6 +210,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5cae7b4_8f9e02e1",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "ok, got it",
+      "parentUuid": "40b1d878_e4276c48",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 5
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e207fa9c_93cb655e",
@@ -175,6 +247,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 5
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f75d79_b6d5b051",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "e207fa9c_93cb655e",
       "range": {
         "startLine": 150,
         "startChar": 0,
@@ -208,6 +304,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c67d47bc_9a32c906",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "16c3dbea_d1baaee0",
+      "range": {
+        "startLine": 176,
+        "startChar": 5,
+        "endLine": 176,
+        "endChar": 24
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9696008_5357b35c",
@@ -221,6 +341,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "inefficient.\n\nBetter to \n asList both outside of forloops\n return false if their lengths are different\n and then return s1List.containsAll(s2List)",
+      "range": {
+        "startLine": 301,
+        "startChar": 8,
+        "endLine": 323,
+        "endChar": 9
+      },
+      "revId": "3bc0abfe7b57efc1744b34ce05075015366ff03c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46cd830_4ba212a0",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "yeah, it is bad",
+      "parentUuid": "b9696008_5357b35c",
       "range": {
         "startLine": 301,
         "startChar": 8,

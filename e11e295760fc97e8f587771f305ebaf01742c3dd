@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "174b47ae_577fd970",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "yes, will cleanup it",
+      "parentUuid": "25cbd8c4_e7c7755a",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 32
+      },
+      "revId": "e11e295760fc97e8f587771f305ebaf01742c3dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6226fa1d_005294a4",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "shouldn\u0027t this function also support email and anr?",
+      "range": {
+        "startLine": 280,
+        "startChar": 4,
+        "endLine": 280,
+        "endChar": 31
+      },
+      "revId": "e11e295760fc97e8f587771f305ebaf01742c3dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57452675_4bcb5b9e",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "yes, will cleanup it",
+      "parentUuid": "6226fa1d_005294a4",
       "range": {
         "startLine": 280,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b474be5_4931f6cd",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "yes, will cleanup it",
+      "parentUuid": "07ec7423_c32cff89",
+      "range": {
+        "startLine": 62,
+        "startChar": 32,
+        "endLine": 62,
+        "endChar": 60
+      },
+      "revId": "e11e295760fc97e8f587771f305ebaf01742c3dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57ab077a_4d26dc6e",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-03-16T23:51:50Z",
       "side": 1,
       "message": "I don\u0027t think you should add this for a new function",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 87
+      },
+      "revId": "e11e295760fc97e8f587771f305ebaf01742c3dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "201c074e_3390aa01",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnRecord.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-03-18T08:52:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "57ab077a_4d26dc6e",
       "range": {
         "startLine": 149,
         "startChar": 0,
