@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b90977b_2b14f3e5",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2021-03-19T05:42:26Z",
+      "side": 1,
+      "message": "I think here you want TelephonyManager#isDataCapable(). I\u0027m not sure I understand this file 100%, but it sounds to me like there would be no need for a radio config at all if there was no FEATURE_TELEPHONY to begin with, so this member can only be about whether the radio is data capable. The member is also named tha way.",
+      "range": {
+        "startLine": 99,
+        "startChar": 36,
+        "endLine": 99,
+        "endChar": 88
+      },
+      "revId": "7f0220be1464065ae2946960ae1650a4b6c27e3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
