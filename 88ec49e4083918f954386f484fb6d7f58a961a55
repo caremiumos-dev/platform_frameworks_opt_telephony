@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184d2994_0d300f03",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2021-03-19T12:19:14Z",
+      "side": 0,
+      "message": "Ouch. Unfortunately it looks like this can change dynamically.\n\nWe probably have to expose NetworkAgent#setLegacySubtype :(\n\nIt should be exposed as @Deprecated.",
+      "range": {
+        "startLine": 2892,
+        "startChar": 38,
+        "endLine": 2892,
+        "endChar": 57
+      },
+      "revId": "88ec49e4083918f954386f484fb6d7f58a961a55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
