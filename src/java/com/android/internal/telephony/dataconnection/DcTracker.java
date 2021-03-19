@@ -2982,9 +2982,7 @@ public class DcTracker extends Handler {
                     mProvisionBroadcastReceiver = null;
                 }
                 if ((!isProvApn) || mIsProvisioning) {
-                    // Hide any provisioning notification.
-                    cm.setProvisioningNotificationVisible(false, ConnectivityManager.TYPE_MOBILE,
-                            INTENT_PROVISION + ":" + mPhone.getPhoneId());
+                    // TODO : Hide any provisioning notification.
                     // Complete the connection normally notifying the world we're connected.
                     // We do this if this isn't a special provisioning apn or if we've been
                     // told its time to provision.
@@ -3008,9 +3006,7 @@ public class DcTracker extends Handler {
                             mTelephonyManager.getNetworkOperatorName());
                     mPhone.getContext().registerReceiver(mProvisionBroadcastReceiver,
                             new IntentFilter(INTENT_PROVISION));
-                    // Put up user notification that sign-in is required.
-                    cm.setProvisioningNotificationVisible(true, ConnectivityManager.TYPE_MOBILE,
-                            INTENT_PROVISION + ":" + mPhone.getPhoneId());
+                    // TODO : Put up user notification that sign-in is required.
                     // Turn off radio to save battery and avoid wasting carrier resources.
                     // The network isn't usable and network validation will just fail anyhow.
                     setRadio(false);
