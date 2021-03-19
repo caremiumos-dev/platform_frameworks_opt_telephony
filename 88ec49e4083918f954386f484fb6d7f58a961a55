@@ -46,6 +46,29 @@
       },
       "revId": "88ec49e4083918f954386f484fb6d7f58a961a55",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9519d7f5_db9a4013",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcNetworkAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2021-03-19T13:31:20Z",
+      "side": 0,
+      "message": "No, unfortunately this is still necessary. I think you\u0027ll need to expose onBandwidthUpdateRequested.",
+      "range": {
+        "startLine": 207,
+        "startChar": 5,
+        "endLine": 207,
+        "endChar": 13
+      },
+      "revId": "88ec49e4083918f954386f484fb6d7f58a961a55",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
