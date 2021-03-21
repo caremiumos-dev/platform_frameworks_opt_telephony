@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec5c0c3_afccc455",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c002f99_4dea96dc",
+      "range": {
+        "startLine": 296,
+        "startChar": 46,
+        "endLine": 296,
+        "endChar": 70
+      },
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8892aac_e21b35d7",
@@ -58,6 +82,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dd8d75d_e7d62301",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8892aac_e21b35d7",
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efcfd701_5b120324",
@@ -71,6 +113,30 @@
       "writtenOn": "2021-03-19T00:22:15Z",
       "side": 1,
       "message": "SubscriptionManager.isValidSlotIndex()",
+      "range": {
+        "startLine": 471,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 9
+      },
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0806c8_eb0491b3",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efcfd701_5b120324",
       "range": {
         "startLine": 471,
         "startChar": 0,
@@ -104,6 +170,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc19d7d6_bbeb736d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ee22160_e8745339",
+      "range": {
+        "startLine": 632,
+        "startChar": 0,
+        "endLine": 643,
+        "endChar": 17
+      },
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2d5938b_092e1e60",
@@ -127,6 +217,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff5d9a46_fe2790f7",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2d5938b_092e1e60",
+      "range": {
+        "startLine": 705,
+        "startChar": 0,
+        "endLine": 707,
+        "endChar": 39
+      },
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9adeb80a_79148a75",
@@ -140,6 +254,30 @@
       "writtenOn": "2021-03-19T00:22:15Z",
       "side": 1,
       "message": "This is not a possible SIM application state.",
+      "range": {
+        "startLine": 711,
+        "startChar": 27,
+        "endLine": 711,
+        "endChar": 59
+      },
+      "revId": "bd9fb435e57a4d7b2222d0fdb302609869c5f1b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cee2755b_67b3d76d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-03-21T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9adeb80a_79148a75",
       "range": {
         "startLine": 711,
         "startChar": 27,
