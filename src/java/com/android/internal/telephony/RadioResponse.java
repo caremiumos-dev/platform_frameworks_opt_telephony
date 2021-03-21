@@ -46,6 +46,7 @@ import android.telephony.AnomalyReporter;
 import android.telephony.BarringInfo;
 import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellInfo;
+import android.telephony.LinkCapacityEstimate;
 import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.NetworkScanRequest;
@@ -650,17 +651,19 @@ public class RadioResponse extends IRadioResponse.Stub {
     }
 
     @Override
-    public void setAllowedNetworkTypeBitmapResponse(
+    public void setAllowedNetworkTypesBitmapResponse(
             android.hardware.radio.V1_6.RadioResponseInfo info) {
         /* This method was missing a response, will let the owner know */
         responseVoid_1_6(info);
     }
 
     @Override
-    public void getAllowedNetworkTypeBitmapResponse(
+    public void getAllowedNetworkTypesBitmapResponse(
             android.hardware.radio.V1_6.RadioResponseInfo info,
             int halRadioAccessFamilyBitmap) {
-        responseInts_1_6(info, halRadioAccessFamilyBitmap);
+        int networkTypeBitmask = RIL.convertToNetworkTypeBitMask(halRadioAccessFamilyBitmap);
+        mRil.mAllowedNetworkTypesBitmask = networkTypeBitmask;
+        responseInts_1_6(info, networkTypeBitmask);
     }
 
     /**
@@ -1047,7 +1050,7 @@ public class RadioResponse extends IRadioResponse.Stub {
      * @param nwType RadioPreferredNetworkType defined in types.hal
      */
     public void getPreferredNetworkTypeResponse(RadioResponseInfo responseInfo, int nwType) {
-        mRil.mPreferredNetworkType = nwType;
+        mRil.mAllowedNetworkTypesBitmask = RadioAccessFamily.getRafFromNetworkType(nwType);
         responseInts(responseInfo, RadioAccessFamily.getRafFromNetworkType(nwType));
     }
 
@@ -1061,7 +1064,7 @@ public class RadioResponse extends IRadioResponse.Stub {
             RadioResponseInfo responseInfo, int halRadioAccessFamilyBitmap) {
 
         int networkTypeBitmask = RIL.convertToNetworkTypeBitMask(halRadioAccessFamilyBitmap);
-        mRil.mPreferredNetworkType = RadioAccessFamily.getNetworkTypeFromRaf(networkTypeBitmask);
+        mRil.mAllowedNetworkTypesBitmask = networkTypeBitmask;
         responseInts(responseInfo, networkTypeBitmask);
     }
 
@@ -2837,7 +2840,7 @@ public class RadioResponse extends IRadioResponse.Stub {
         RILRequest rr = mRil.processResponse(responseInfo);
 
         if (rr != null) {
-            LinkCapacityEstimate ret = RIL.convertHalLceData(lceInfo, mRil);
+            List<LinkCapacityEstimate> ret = RIL.convertHalLceData(lceInfo, mRil);
             if (responseInfo.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
             }

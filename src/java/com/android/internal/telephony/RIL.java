@@ -89,6 +89,7 @@ import android.telephony.CellSignalStrengthTdscdma;
 import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
+import android.telephony.LinkCapacityEstimate;
 import android.telephony.ModemActivityInfo;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.NetworkScanRequest;
@@ -659,22 +660,22 @@ public class RIL extends BaseCommands implements CommandsInterface {
     //***** Constructors
 
     @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType, int cdmaSubscription) {
-        this(context, preferredNetworkType, cdmaSubscription, null);
+    public RIL(Context context, int allowedNetworkTypes, int cdmaSubscription) {
+        this(context, allowedNetworkTypes, cdmaSubscription, null);
     }
 
     @UnsupportedAppUsage
-    public RIL(Context context, int preferredNetworkType,
+    public RIL(Context context, int allowedNetworkTypes,
             int cdmaSubscription, Integer instanceId) {
         super(context);
         if (RILJ_LOGD) {
-            riljLog("RIL: init preferredNetworkType=" + preferredNetworkType
+            riljLog("RIL: init allowedNetworkTypes=" + allowedNetworkTypes
                     + " cdmaSubscription=" + cdmaSubscription + ")");
         }
 
         mContext = context;
         mCdmaSubscription  = cdmaSubscription;
-        mPreferredNetworkType = preferredNetworkType;
+        mAllowedNetworkTypesBitmask = allowedNetworkTypes;
         mPhoneType = RILConstants.NO_PHONE;
         mPhoneId = instanceId == null ? 0 : instanceId;
         if (isRadioBugDetectionEnabled()) {
@@ -1594,7 +1595,18 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) {
                 riljLog("getVoiceRegistrationState: overrideHalVersion=" + overrideHalVersion);
             }
+
             if ((overrideHalVersion == null
+                        || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6))
+                    && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                final android.hardware.radio.V1_6.IRadio radioProxy16 =
+                        (android.hardware.radio.V1_6.IRadio) radioProxy;
+                try {
+                    radioProxy16.getVoiceRegistrationState_1_6(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getVoiceRegistrationState_1_6", e);
+                }
+            } else if ((overrideHalVersion == null
                         || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5))
                     && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
                 final android.hardware.radio.V1_5.IRadio radioProxy15 =
@@ -1627,7 +1639,18 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (RILJ_LOGD) {
                 riljLog("getDataRegistrationState: overrideHalVersion=" + overrideHalVersion);
             }
+
             if ((overrideHalVersion == null
+                        || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6))
+                    && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_6)) {
+                final android.hardware.radio.V1_6.IRadio radioProxy16 =
+                        (android.hardware.radio.V1_6.IRadio) radioProxy;
+                try {
+                    radioProxy16.getDataRegistrationState_1_6(rr.mSerial);
+                } catch (RemoteException | RuntimeException e) {
+                    handleRadioProxyExceptionForRR(rr, "getDataRegistrationState_1_6", e);
+                }
+            } else if ((overrideHalVersion == null
                         || overrideHalVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5))
                     && mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_5)) {
                 final android.hardware.radio.V1_5.IRadio radioProxy15 =
@@ -3319,7 +3342,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                         + " networkType = " + networkType);
             }
-            mPreferredNetworkType = networkType;
+            mAllowedNetworkTypesBitmask = RadioAccessFamily.getRafFromNetworkType(networkType);
             mMetrics.writeSetPreferredNetworkType(mPhoneId, networkType);
 
             if (mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_4)) {
@@ -3327,8 +3350,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         (android.hardware.radio.V1_4.IRadio) radioProxy;
                 try {
                     radioProxy14.setPreferredNetworkTypeBitmap(
-                            rr.mSerial, convertToHalRadioAccessFamily(
-                                    RadioAccessFamily.getRafFromNetworkType(networkType)));
+                            rr.mSerial, convertToHalRadioAccessFamily(mAllowedNetworkTypesBitmask));
                 } catch (RemoteException | RuntimeException e) {
                     handleRadioProxyExceptionForRR(rr, "setPreferredNetworkTypeBitmap", e);
                 }
@@ -3522,15 +3544,16 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
             android.hardware.radio.V1_6.IRadio radioProxy16 =
                     (android.hardware.radio.V1_6.IRadio) radioProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP, result,
+            RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_NETWORK_TYPES_BITMAP, result,
                     mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
-
+            mAllowedNetworkTypesBitmask = networkTypeBitmask;
             try {
-                radioProxy16.setAllowedNetworkTypeBitmap(rr.mSerial, networkTypeBitmask);
+                radioProxy16.setAllowedNetworkTypesBitmap(rr.mSerial,
+                        convertToHalRadioAccessFamily(mAllowedNetworkTypesBitmask));
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "setAllowedNetworkTypeBitmask", e);
             }
@@ -3542,17 +3565,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
             if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
-                if (result != null) {
-                    AsyncResult.forMessage(result, null,
-                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
-                    result.sendToTarget();
-                }
+                // For older HAL, redirects the call to getPreferredNetworkType.
+                getPreferredNetworkType(result);
                 return;
             }
 
             android.hardware.radio.V1_6.IRadio radioProxy16 =
                     (android.hardware.radio.V1_6.IRadio) radioProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP, result,
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP, result,
                     mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
@@ -3560,7 +3580,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
 
             try {
-                radioProxy16.getAllowedNetworkTypeBitmap(rr.mSerial);
+                radioProxy16.getAllowedNetworkTypesBitmap(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(rr, "getAllowedNetworkTypeBitmask", e);
             }
@@ -6930,9 +6950,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "RIL_REQUEST_CANCEL_HANDOVER";
             case RIL_REQUEST_SET_DATA_THROTTLING:
                 return "RIL_REQUEST_SET_DATA_THROTTLING";
-            case RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP:
+            case RIL_REQUEST_SET_ALLOWED_NETWORK_TYPES_BITMAP:
                 return "RIL_REQUEST_SET_ALLOWED_NETWORK_TYPE_BITMAP";
-            case RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP:
+            case RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP:
                 return "RIL_REQUEST_GET_ALLOWED_NETWORK_TYPE_BITMAP";
             default: return "<unknown request>";
         }
@@ -7227,35 +7247,49 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return rc;
     }
 
-    static LinkCapacityEstimate convertHalLceData(LceDataInfo halData, RIL ril) {
-        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+    static List<LinkCapacityEstimate> convertHalLceData(LceDataInfo halData, RIL ril) {
+        final List<LinkCapacityEstimate> lceList = new ArrayList<>();
+        lceList.add(new LinkCapacityEstimate(LinkCapacityEstimate.LCE_TYPE_COMBINED,
                 halData.lastHopCapacityKbps,
-                Byte.toUnsignedInt(halData.confidenceLevel),
-                halData.lceSuspended ? LinkCapacityEstimate.STATUS_SUSPENDED
-                        : LinkCapacityEstimate.STATUS_ACTIVE);
-
-        ril.riljLog("LCE capacity information received:" + lce);
-        return lce;
+                LinkCapacityEstimate.INVALID));
+        ril.riljLog("LCE capacity information received:" + lceList);
+        return lceList;
     }
 
-    static LinkCapacityEstimate convertHalLceData(
+    static List<LinkCapacityEstimate> convertHalLceData(
             android.hardware.radio.V1_2.LinkCapacityEstimate halData, RIL ril) {
-        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
+        final List<LinkCapacityEstimate> lceList = new ArrayList<>();
+        lceList.add(new LinkCapacityEstimate(LinkCapacityEstimate.LCE_TYPE_COMBINED,
                 halData.downlinkCapacityKbps,
-                halData.uplinkCapacityKbps);
-        ril.riljLog("LCE capacity information received:" + lce);
-        return lce;
+                halData.uplinkCapacityKbps));
+        ril.riljLog("LCE capacity information received:" + lceList);
+        return lceList;
     }
 
-    static LinkCapacityEstimate convertHalLceData(
+    static List<LinkCapacityEstimate> convertHalLceData(
             android.hardware.radio.V1_6.LinkCapacityEstimate halData, RIL ril) {
-        final LinkCapacityEstimate lce = new LinkCapacityEstimate(
-                halData.downlinkCapacityKbps,
-                halData.uplinkCapacityKbps,
+        final List<LinkCapacityEstimate> lceList = new ArrayList<>();
+        int primaryDownlinkCapacityKbps = halData.downlinkCapacityKbps;
+        int primaryUplinkCapacityKbps = halData.uplinkCapacityKbps;
+        if (primaryDownlinkCapacityKbps != LinkCapacityEstimate.INVALID
+                && halData.secondaryDownlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+            primaryDownlinkCapacityKbps =
+                    halData.downlinkCapacityKbps - halData.secondaryDownlinkCapacityKbps;
+        }
+        if (primaryUplinkCapacityKbps != LinkCapacityEstimate.INVALID
+                && halData.secondaryUplinkCapacityKbps != LinkCapacityEstimate.INVALID) {
+            primaryUplinkCapacityKbps =
+                    halData.uplinkCapacityKbps - halData.secondaryUplinkCapacityKbps;
+        }
+
+        lceList.add(new LinkCapacityEstimate(LinkCapacityEstimate.LCE_TYPE_PRIMARY,
+                primaryDownlinkCapacityKbps,
+                primaryUplinkCapacityKbps));
+        lceList.add(new LinkCapacityEstimate(LinkCapacityEstimate.LCE_TYPE_SECONDARY,
                 halData.secondaryDownlinkCapacityKbps,
-                halData.secondaryUplinkCapacityKbps);
-        ril.riljLog("LCE capacity information received:" + lce);
-        return lce;
+                halData.secondaryUplinkCapacityKbps));
+        ril.riljLog("LCE capacity information received:" + lceList);
+        return lceList;
     }
 
     /**

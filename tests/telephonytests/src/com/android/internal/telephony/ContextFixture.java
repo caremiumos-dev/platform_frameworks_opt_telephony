@@ -326,6 +326,11 @@ public class ContextFixture implements TestFixture<Context> {
         }
 
         @Override
+        public Context createConfigurationContext(Configuration overrideConfiguration) {
+            return spy(new FakeContext());
+        }
+
+        @Override
         public ApplicationInfo getApplicationInfo() {
             return mApplicationInfo;
         }
@@ -700,7 +705,7 @@ public class ContextFixture implements TestFixture<Context> {
         doReturn(mBundle).when(mCarrierConfigManager).getConfig();
 
         doReturn(mock(Network.class)).when(mConnectivityManager).registerNetworkAgent(
-                any(), any(), any(), any(), anyInt(), any(), anyInt());
+                any(), any(), any(), any(), any(), any(), anyInt());
 
         doReturn(true).when(mEuiccManager).isEnabled();
 

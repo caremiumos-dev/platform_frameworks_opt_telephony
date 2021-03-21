@@ -100,6 +100,7 @@ public class PhoneFactory {
 
     static private final HashMap<String, LocalLog>sLocalLogs = new HashMap<String, LocalLog>();
     private static MetricsCollector sMetricsCollector;
+    private static RadioInterfaceCapabilityController sRadioHalCapabilities;
 
     //***** Class Methods
 
@@ -171,13 +172,23 @@ public class PhoneFactory {
                     networkModes[i] = RILConstants.PREFERRED_NETWORK_MODE;
 
                     Rlog.i(LOG_TAG, "Network Mode set to " + Integer.toString(networkModes[i]));
-                    sCommandsInterfaces[i] = new RIL(context, networkModes[i],
+                    sCommandsInterfaces[i] = new RIL(context,
+                            RadioAccessFamily.getRafFromNetworkType(networkModes[i]),
                             cdmaSubscription, i);
                 }
-                HalVersion radioHalVersion;
-                if (numPhones > 0) radioHalVersion = sCommandsInterfaces[0].getHalVersion();
-                else radioHalVersion = HalVersion.UNKNOWN;
-                RadioConfig.make(context, radioHalVersion);
+
+
+                if (numPhones > 0) {
+                    final RadioConfig radioConfig = RadioConfig.make(context,
+                            sCommandsInterfaces[0].getHalVersion());
+                    sRadioHalCapabilities = RadioInterfaceCapabilityController.init(radioConfig,
+                            sCommandsInterfaces[0]);
+                } else {
+                    // There is no command interface to go off of
+                    final RadioConfig radioConfig = RadioConfig.make(context, HalVersion.UNKNOWN);
+                    sRadioHalCapabilities = RadioInterfaceCapabilityController.init(
+                            radioConfig, null);
+                }
 
                 // Instantiate UiccController so that all other classes can just
                 // call getInstance()
@@ -288,7 +299,8 @@ public class PhoneFactory {
 
             int cdmaSubscription = CdmaSubscriptionSourceManager.getDefault(context);
             for (int i = prevActiveModemCount; i < activeModemCount; i++) {
-                sCommandsInterfaces[i] = new RIL(context, RILConstants.PREFERRED_NETWORK_MODE,
+                sCommandsInterfaces[i] = new RIL(context, RadioAccessFamily.getRafFromNetworkType(
+                        RILConstants.PREFERRED_NETWORK_MODE),
                         cdmaSubscription, i);
                 sPhones[i] = createPhone(context, i);
                 if (context.getPackageManager().hasSystemFeature(

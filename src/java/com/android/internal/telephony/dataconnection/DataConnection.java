@@ -40,7 +40,7 @@ import android.net.RouteInfo;
 import android.net.SocketKeepalive;
 import android.net.TelephonyNetworkSpecifier;
 import android.net.vcn.VcnManager;
-import android.net.vcn.VcnManager.VcnNetworkPolicyListener;
+import android.net.vcn.VcnManager.VcnNetworkPolicyChangeListener;
 import android.net.vcn.VcnNetworkPolicyResult;
 import android.os.AsyncResult;
 import android.os.HandlerExecutor;
@@ -57,6 +57,7 @@ import android.telephony.Annotation.DataState;
 import android.telephony.Annotation.NetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.DataFailCause;
+import android.telephony.LinkCapacityEstimate;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
@@ -80,7 +81,6 @@ import android.util.TimeUtils;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.CarrierSignalAgent;
 import com.android.internal.telephony.DctConstants;
-import com.android.internal.telephony.LinkCapacityEstimate;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
@@ -334,8 +334,8 @@ public class DataConnection extends StateMachine {
     PendingIntent mReconnectIntent = null;
 
     /** Class used to track VCN-defined Network policies for this DcNetworkAgent. */
-    private final VcnNetworkPolicyListener mVcnPolicyListener =
-            new DataConnectionVcnNetworkPolicyListener();
+    private final VcnNetworkPolicyChangeListener mVcnPolicyChangeListener =
+            new DataConnectionVcnNetworkPolicyChangeListener();
 
     // ***** Event codes for driving the state machine, package visible for Dcc
     static final int BASE = Protocol.BASE_DATA_CONNECTION;
@@ -1540,19 +1540,20 @@ public class DataConnection extends StateMachine {
     }
 
 
-    private void updateLinkBandwidthsFromModem(LinkCapacityEstimate lce) {
-        if (DBG) log("updateLinkBandwidthsFromModem: lce=" + lce);
+    private void updateLinkBandwidthsFromModem(List<LinkCapacityEstimate> lceList) {
+        if (DBG) log("updateLinkBandwidthsFromModem: lceList=" + lceList);
         boolean downlinkUpdated = false;
         boolean uplinkUpdated = false;
+        LinkCapacityEstimate lce = lceList.get(0);
         // LCE status deprecated in IRadio 1.2, so only check for IRadio < 1.2
         if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_2)
                 || mPhone.getLceStatus() == RILConstants.LCE_ACTIVE) {
-            if (lce.downlinkCapacityKbps != LinkCapacityEstimate.INVALID) {
-                mDownlinkBandwidth = lce.downlinkCapacityKbps;
+            if (lce.getDownlinkCapacityKbps() != LinkCapacityEstimate.INVALID) {
+                mDownlinkBandwidth = lce.getDownlinkCapacityKbps();
                 downlinkUpdated = true;
             }
-            if (lce.uplinkCapacityKbps != LinkCapacityEstimate.INVALID) {
-                mUplinkBandwidth = lce.uplinkCapacityKbps;
+            if (lce.getUplinkCapacityKbps() != LinkCapacityEstimate.INVALID) {
+                mUplinkBandwidth = lce.getUplinkCapacityKbps();
                 uplinkUpdated = true;
             }
         }
@@ -2662,10 +2663,11 @@ public class DataConnection extends StateMachine {
                         + ", mUnmeteredUseOnly = " + mUnmeteredUseOnly);
             }
 
-            // Always register a VcnNetworkPolicyListener, regardless of whether this is a handover
+            // Always register a VcnNetworkPolicyChangeListener, regardless of whether this is a
+            // handover
             // or new Network.
-            mVcnManager.addVcnNetworkPolicyListener(
-                    new HandlerExecutor(getHandler()), mVcnPolicyListener);
+            mVcnManager.addVcnNetworkPolicyChangeListener(
+                    new HandlerExecutor(getHandler()), mVcnPolicyChangeListener);
 
             if (mConnectionParams != null
                     && mConnectionParams.mRequestType == REQUEST_TYPE_HANDOVER) {
@@ -2784,7 +2786,7 @@ public class DataConnection extends StateMachine {
                     mCid, mApnSetting.getApnTypeBitmask(), RilDataCall.State.DISCONNECTED);
             mDataCallSessionStats.onDataCallDisconnected();
 
-            mVcnManager.removeVcnNetworkPolicyListener(mVcnPolicyListener);
+            mVcnManager.removeVcnNetworkPolicyChangeListener(mVcnPolicyChangeListener);
 
             mPhone.getCarrierPrivilegesTracker().unregisterCarrierPrivilegesListener(getHandler());
         }
@@ -2967,7 +2969,7 @@ public class DataConnection extends StateMachine {
                         log("EVENT_BW_REFRESH_RESPONSE: error ignoring, e=" + ar.exception);
                     } else {
                         if (isBandwidthSourceKey(DctConstants.BANDWIDTH_SOURCE_MODEM_KEY)) {
-                            updateLinkBandwidthsFromModem((LinkCapacityEstimate) ar.result);
+                            updateLinkBandwidthsFromModem((List<LinkCapacityEstimate>) ar.result);
                         }
                     }
                     retVal = HANDLED;
@@ -3074,7 +3076,7 @@ public class DataConnection extends StateMachine {
                         loge("EVENT_LINK_CAPACITY_CHANGED e=" + ar.exception);
                     } else {
                         if (isBandwidthSourceKey(DctConstants.BANDWIDTH_SOURCE_MODEM_KEY)) {
-                            updateLinkBandwidthsFromModem((LinkCapacityEstimate) ar.result);
+                            updateLinkBandwidthsFromModem((List<LinkCapacityEstimate>) ar.result);
                         }
                     }
                     retVal = HANDLED;
@@ -3797,7 +3799,8 @@ public class DataConnection extends StateMachine {
      *
      * <p>MUST be registered with the associated DataConnection's Handler.
      */
-    private class DataConnectionVcnNetworkPolicyListener implements VcnNetworkPolicyListener {
+    private class DataConnectionVcnNetworkPolicyChangeListener
+            implements VcnNetworkPolicyChangeListener {
         @Override
         public void onPolicyChanged() {
             // Poll the current underlying Network policy from VcnManager and send to NetworkAgent.

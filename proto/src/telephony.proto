@@ -706,7 +706,7 @@ message RilDataCall {
   optional PdpType type = 2;
 
   // The network interface name e.g. wlan0, rmnet_data0.
-  optional string iframe = 3;
+  optional string ifname = 3;
 
   // State of the Data Call connection
   optional State state = 4;
@@ -2457,7 +2457,7 @@ message SmsSession {
     // Formats used to encode SMS messages
     enum Format {
 
-      // State is unknown.
+      // Format is unknown.
       SMS_FORMAT_UNKNOWN = 0;
 
       // GSM, WCDMA

@@ -43,13 +43,13 @@ import android.sysprop.TelephonyProperties;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation.ApnType;
-import android.telephony.CarrierBandwidth;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellIdentity;
 import android.telephony.CellInfo;
 import android.telephony.ClientRequestStats;
 import android.telephony.ImsiEncryptionInfo;
+import android.telephony.LinkCapacityEstimate;
 import android.telephony.PhoneStateListener;
 import android.telephony.PhysicalChannelConfig;
 import android.telephony.PreciseDataConnectionState;
@@ -446,6 +446,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private static final String ALLOWED_NETWORK_TYPES_TEXT_USER = "user";
     private static final String ALLOWED_NETWORK_TYPES_TEXT_POWER = "power";
     private static final String ALLOWED_NETWORK_TYPES_TEXT_CARRIER = "carrier";
+    private static final String ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G = "enable_2g";
     private static final int INVALID_ALLOWED_NETWORK_TYPES = -1;
 
     private boolean mUnitTestMode;
@@ -2225,7 +2226,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         List<Integer> listOfAllowedNetworkTypesForReasons = new ArrayList<>(
                 Arrays.asList(TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER,
                         TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER,
-                        TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_CARRIER));
+                        TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_CARRIER,
+                        TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G));
         Map<Integer, Long> allowedNetworkTypeList = new HashMap<>();
         for (Integer reasonItem : listOfAllowedNetworkTypesForReasons) {
             allowedNetworkTypeList.put(reasonItem, getAllowedNetworkTypes(reasonItem));
@@ -2239,14 +2241,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void isNrDualConnectivityEnabled(Message message, WorkSource workSource) {
         mCi.isNrDualConnectivityEnabled(message, workSource);
-    }
-
-    /**
-     * get carrier bandwidth per primary and secondary carrier
-     * @return CarrierBandwidth with bandwidth of both primary and secondary carrier.
-     */
-    public CarrierBandwidth getCarrierBandwidth() {
-        return new CarrierBandwidth();
     }
 
     /**
@@ -2342,6 +2336,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 return TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_POWER;
             case ALLOWED_NETWORK_TYPES_TEXT_CARRIER:
                 return TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_CARRIER;
+            case ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G:
+                return TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G;
             default:
                 return INVALID_ALLOWED_NETWORK_TYPES;
         }
@@ -2355,6 +2351,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 return ALLOWED_NETWORK_TYPES_TEXT_POWER;
             case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_CARRIER:
                 return ALLOWED_NETWORK_TYPES_TEXT_CARRIER;
+            case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G:
+                return ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G;
             default:
                 return Integer.toString(INVALID_ALLOWED_NETWORK_TYPES);
         }
@@ -2428,8 +2426,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         Rlog.d(LOG_TAG, "setAllowedNetworkTypes: modemRaf = " + modemRaf
                 + " filteredRaf = " + filteredRaf);
-        //TODO: Change to setAllowedNetworkTypeBitmap after 1.6 HAL is ready.
-        mCi.setPreferredNetworkType(RadioAccessFamily.getNetworkTypeFromRaf(filteredRaf), response);
+        mCi.setAllowedNetworkTypesBitmap(filteredRaf, response);
         mPreferredNetworkTypeRegistrants.notifyRegistrants();
     }
 
@@ -2439,8 +2436,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @param response is callback message to report network types bitmask
      */
     public void getAllowedNetworkTypesBitmask(Message response) {
-        //TODO: Change to getAllowedNetworkTypesBitmap after 1.6 HAL ready.
-        mCi.getPreferredNetworkType(response);
+        mCi.getAllowedNetworkTypesBitmap(response);
     }
 
     /**
@@ -2467,11 +2463,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Get the cached value of the preferred network type setting
      */
-    public int getCachedPreferredNetworkType() {
+    public int getCachedAllowedNetworkTypesBitmask() {
         if (mCi != null && mCi instanceof BaseCommands) {
-            return ((BaseCommands) mCi).mPreferredNetworkType;
+            return ((BaseCommands) mCi).mAllowedNetworkTypesBitmask;
         } else {
-            return RILConstants.PREFERRED_NETWORK_MODE;
+            return RadioAccessFamily.getRafFromNetworkType(RILConstants.PREFERRED_NETWORK_MODE);
         }
     }
 
@@ -2808,6 +2804,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void notifyDataEnabled(boolean enabled,
             @TelephonyManager.DataEnabledReason int reason) {
         mNotifier.notifyDataEnabled(this, enabled, reason);
+    }
+
+    /** Notify link capacity estimate has changed. */
+    public void notifyLinkCapacityEstimateChanged(
+            List<LinkCapacityEstimate> linkCapacityEstimateList) {
+        mNotifier.notifyLinkCapacityEstimateChanged(this, linkCapacityEstimateList);
     }
 
     /**
