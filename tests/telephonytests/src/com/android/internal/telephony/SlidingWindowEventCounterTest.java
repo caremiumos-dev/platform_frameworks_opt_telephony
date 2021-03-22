@@ -21,18 +21,15 @@ import static org.junit.Assert.assertTrue;
 
 import android.os.SystemClock;
 
-import androidx.test.runner.AndroidJUnit4;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(AndroidJUnit4.class)
-public class SlidingWindowEventCounterTest {
+public class SlidingWindowEventCounterTest extends TelephonyTest {
     long mInitialTime;
 
     @Before
     public void setUp() throws Exception {
+        super.setUp(getClass().getSimpleName());
         mInitialTime = SystemClock.elapsedRealtime();
     }
 
