@@ -22,6 +22,30 @@
       },
       "revId": "2d430291a45c5d149a575c528d1ad7a2e1170814",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a7c4b60_25279aa4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-03-22T19:56:01Z",
+      "side": 1,
+      "message": "PhysicalChannelConfig does not allow to construct object with default values. The frequencyRange and band check throws IAE.\n\nAdd a bit more comments to explain why we have to set frequencyRange and band with physicalCellId here.",
+      "parentUuid": "c1b87f8b_5adc0a6a",
+      "range": {
+        "startLine": 438,
+        "startChar": 28,
+        "endLine": 438,
+        "endChar": 52
+      },
+      "revId": "2d430291a45c5d149a575c528d1ad7a2e1170814",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
