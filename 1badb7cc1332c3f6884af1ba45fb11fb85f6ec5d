@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c91e97f0_a5a6bb3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-22T20:51:03Z",
+      "side": 1,
+      "message": "A lot of tests in PhoneSwitcherTest are failing. Please fix them.",
+      "revId": "1badb7cc1332c3f6884af1ba45fb11fb85f6ec5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
