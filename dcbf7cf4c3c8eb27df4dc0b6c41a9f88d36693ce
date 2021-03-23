@@ -1,0 +1,116 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009243608",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d19",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "594a6b01_52994382",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 6042,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-23T01:39:46Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 6042,
+        "startChar": 0,
+        "endLine": 6042,
+        "endChar": 101
+      },
+      "revId": "dcbf7cf4c3c8eb27df4dc0b6c41a9f88d36693ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009243612",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d19",
+      "fixSuggestions": [
+        {
+          "fixId": "2e222773_91a0ff65",
+          "description": "Change to \"src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+              "range": {
+                "startLine": 418,
+                "startChar": 31,
+                "endLine": 418,
+                "endChar": 38
+              },
+              "replacement": "Records"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "1a4de2a5_578ba0c1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-23T01:39:46Z",
+      "side": 1,
+      "message": "Common typo found: \"Recrods\" -- should it be \"Records\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 418,
+        "startChar": 31,
+        "endLine": 418,
+        "endChar": 38
+      },
+      "revId": "dcbf7cf4c3c8eb27df4dc0b6c41a9f88d36693ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009243612",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d19",
+      "fixSuggestions": [
+        {
+          "fixId": "e22e9a4f_888d041c",
+          "description": "Change to \"src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+              "range": {
+                "startLine": 424,
+                "startChar": 36,
+                "endLine": 424,
+                "endChar": 43
+              },
+              "replacement": "Records"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "c585d4fe_5ca85062",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-03-23T01:39:46Z",
+      "side": 1,
+      "message": "Common typo found: \"Recrods\" -- should it be \"Records\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 424,
+        "startChar": 36,
+        "endLine": 424,
+        "endChar": 43
+      },
+      "revId": "dcbf7cf4c3c8eb27df4dc0b6c41a9f88d36693ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
