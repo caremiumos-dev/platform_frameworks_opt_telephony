@@ -85,6 +85,10 @@ public class AdnCapacity implements Parcelable {
         return mUsedAdnCount;
     }
 
+    public void setUsedAdnCount(int count) {
+        mUsedAdnCount = count;
+    }
+
     public int getMaxEmailCount() {
         return mMaxEmailCount;
     }
@@ -93,8 +97,16 @@ public class AdnCapacity implements Parcelable {
         return mUsedEmailCount;
     }
 
+    public void setUsedEmailCount(int count) {
+        mUsedEmailCount = count;
+    }
+
     public int getMaxAnrCount() {
         return mMaxAnrCount;
+    }
+
+    public void setUsedAnrCount(int count) {
+        mUsedAnrCount = count;
     }
 
     public int getUsedAnrCount() {
@@ -115,6 +127,10 @@ public class AdnCapacity implements Parcelable {
 
     public int getMaxAnrLength() {
         return mMaxAnrLength;
+    }
+
+    public boolean isSimFull() {
+        return mMaxAdnCount == mUsedAdnCount;
     }
 
     @Override

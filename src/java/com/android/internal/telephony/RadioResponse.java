@@ -59,6 +59,7 @@ import android.text.TextUtils;
 
 import com.android.internal.telephony.dataconnection.KeepaliveStatus;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
+import com.android.internal.telephony.uicc.AdnCapacity;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccIoResult;
@@ -1995,6 +1996,56 @@ public class RadioResponse extends IRadioResponse.Stub {
             mRil.riljLog("IccCardApplicationStatus " + i + ":" + appStatus.toString());
         }
         return iccCardStatus;
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     */
+    public void getSimPhonebookRecordsResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo) {
+        responseVoid_1_6(responseInfo);
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param pbCapacity Contains the adn,email,anr capacities in the sim card
+     */
+    public void getSimPhonebookCapacityResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            android.hardware.radio.V1_6.PhonebookCapacity pbCapacity) {
+        AdnCapacity capacity = new AdnCapacity(pbCapacity.maxAdnRecords,
+                pbCapacity.usedAdnRecords,
+                pbCapacity.maxEmailRecords,
+                pbCapacity.usedEmailRecords,
+                pbCapacity.maxAdditionalNumberRecords,
+                pbCapacity.usedAdditionalNumberRecords,
+                pbCapacity.maxNameLen,
+                pbCapacity.maxNumberLen,
+                pbCapacity.maxEmailLen,
+                pbCapacity.maxAdditionalNumberLen);
+        responseAdnCapacity(responseInfo, capacity);
+    }
+
+    /**
+     * @param info Response info struct containing response type, serial no. and error
+     * @param updatedRecordIndex The index of the updated record
+     */
+    public void updateSimPhonebookRecordsResponse(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            int updatedRecordIndex) {
+        responseInts_1_6(responseInfo, updatedRecordIndex);
+    }
+
+    private void responseAdnCapacity(
+            android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
+            AdnCapacity capacity) {
+        RILRequest rr = mRil.processResponse_1_6(responseInfo);
+        if (rr != null) {
+            if (responseInfo.error == RadioError.NONE) {
+                sendMessageResponse(rr.mResult, capacity);
+            }
+             mRil.processResponseDone_1_6(rr, responseInfo, capacity);
+        }
     }
 
     private void responseIccCardStatus(RadioResponseInfo responseInfo, CardStatus cardStatus) {

@@ -509,6 +509,8 @@ public class IccProvider extends ContentProvider {
                 contact[2] = emailString.toString();
             }
 
+            contact[3] = id;
+
             String[] anrs = record.getAdditionalNumbers();
             if (anrs != null) {
                 StringBuilder anrString = new StringBuilder();
@@ -517,10 +519,9 @@ public class IccProvider extends ContentProvider {
                     anrString.append(anr);
                     anrString.append(":");
                 }
-                contact[3] = anrString.toString();
+                contact[4] = anrString.toString();
             }
 
-            contact[4] = id;
             cursor.addRow(contact);
         }
     }
