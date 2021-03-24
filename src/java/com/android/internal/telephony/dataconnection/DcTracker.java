@@ -80,6 +80,7 @@ import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
@@ -1630,6 +1631,14 @@ public class DcTracker extends Handler {
                 apnContext.requestLog(str);
                 sendHandoverCompleteMessages(apnContext.getApnTypeBitmask(), false,
                         false);
+                mPhone.notifyMissingUnknownApn(
+                        new PreciseDataConnectionState.Builder()
+                                .setApnSetting(
+                                        new ApnSetting.Builder()
+                                                .setApnTypeBitmask(apnContext.getApnTypeBitmask())
+                                                .buildWithoutCheck())
+                                .setFailCause(DataFailCause.MISSING_UNKNOWN_APN)
+                                .build());
                 return;
             } else {
                 apnContext.setWaitingApns(waitingApns);

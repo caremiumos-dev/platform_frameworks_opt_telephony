@@ -3845,6 +3845,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Send a notification that a particular data connection has failed due to missing or unknown
+     * apn.
+     */
+    public void notifyMissingUnknownApn(@NonNull PreciseDataConnectionState preciseState) {
+        mNotifier.notifyMissingUnknownApn(this, preciseState);
+    }
+
+    /**
      * Sets the SIM voice message waiting indicator records.
      * @param line GSM Subscriber Profile Number, one-based. Only '1' is supported
      * @param countWaiting The number of messages waiting, if known. Use
