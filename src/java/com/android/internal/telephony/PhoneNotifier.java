@@ -84,6 +84,8 @@ public interface PhoneNotifier {
 
     void notifyImsDisconnectCause(Phone sender, ImsReasonInfo imsReasonInfo);
 
+    void notifyMissingUnknownApn(Phone sender, @NonNull PreciseDataConnectionState preciseState);
+
     /** Send a notification that the SRVCC state has changed.*/
     void notifySrvccStateChanged(Phone sender, @SrvccState int state);
 

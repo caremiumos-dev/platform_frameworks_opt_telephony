@@ -168,6 +168,12 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     @Override
+    public void notifyMissingUnknownApn(Phone sender, PreciseDataConnectionState preciseState) {
+        mTelephonyRegistryMgr.notifyMissingUnknownApn(
+                sender.getPhoneId(), sender.getSubId(), preciseState);
+    }
+
+    @Override
     public void notifySrvccStateChanged(Phone sender, @SrvccState int state) {
         mTelephonyRegistryMgr.notifySrvccStateChanged(sender.getSubId(), state);
     }
