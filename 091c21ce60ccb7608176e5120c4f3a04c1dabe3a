@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0761c18d_5f92bebb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-03-24T20:32:48Z",
+      "side": 1,
+      "message": "Bypassing presubmit as it\u0027s already passed once.  I incorrectly re-checked presubmit-ready kicking off another test we don\u0027t want.",
+      "revId": "091c21ce60ccb7608176e5120c4f3a04c1dabe3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
