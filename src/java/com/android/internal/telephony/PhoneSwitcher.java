@@ -267,6 +267,7 @@ public class PhoneSwitcher extends Handler {
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED        = 117;
     private static final int EVENT_NETWORK_AVAILABLE              = 118;
+    private final int EVENT_ALLOW_DATA_FALSE_RESPONSE             = 119;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -286,6 +287,9 @@ public class PhoneSwitcher extends Handler {
     private Boolean mHasRegisteredDefaultNetworkChangeCallback = false;
 
     private ConnectivityManager mConnectivityManager;
+
+    private boolean mWaitForDetachResponse = false;
+    private List<Integer> mNewActivePhones;
 
     private class DefaultNetworkCallback extends ConnectivityManager.NetworkCallback {
         public int mExpectedSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -549,6 +553,18 @@ public class PhoneSwitcher extends Handler {
                 removeDefaultNetworkChangeCallback();
                 break;
             }
+            case EVENT_ALLOW_DATA_FALSE_RESPONSE: {
+                log("EVENT_ALLOW_DATA_FALSE_RESPONSE");
+                mWaitForDetachResponse = false;
+                if (mNewActivePhones != null) {
+                    for (int phoneId : mNewActivePhones) {
+                        activate(phoneId);
+                    }
+                } else {
+                    log("mNewActivePhones is NULL");
+                }
+                break;
+            }
             case EVENT_MODEM_COMMAND_DONE: {
                 AsyncResult ar = (AsyncResult) msg.obj;
                 boolean commandSuccess = ar != null && ar.exception == null;
@@ -798,6 +814,7 @@ public class PhoneSwitcher extends Handler {
 
         // Check if user setting of default non-opportunistic data sub is changed.
         final int primaryDataSubId = mSubscriptionController.getDefaultDataSubId();
+        final int ddsPhoneId = mSubscriptionController.getPhoneId(primaryDataSubId);
         if (primaryDataSubId != mPrimaryDataSubId) {
             sb.append(" mPrimaryDataSubId ").append(mPrimaryDataSubId).append("->")
                 .append(primaryDataSubId);
@@ -898,15 +915,22 @@ public class PhoneSwitcher extends Handler {
                     for (Integer i : newActivePhones) log("  " + i);
                 }
 
+                mNewActivePhones = newActivePhones;
                 for (int phoneId = 0; phoneId < mActiveModemCount; phoneId++) {
                     if (!newActivePhones.contains(phoneId)) {
                         deactivate(phoneId);
                     }
                 }
 
-                // only activate phones up to the limit
-                for (int phoneId : newActivePhones) {
-                    activate(phoneId);
+               if (!mWaitForDetachResponse) {
+                    // only activate phones up to the limit
+                    if (mNewActivePhones.contains(ddsPhoneId)) {
+                        activate(ddsPhoneId);
+                    } else {
+                        for (int phoneId : newActivePhones) {
+                            activate(phoneId);
+                        }
+                    }
                 }
             }
 
@@ -931,6 +955,7 @@ public class PhoneSwitcher extends Handler {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected void deactivate(int phoneId) {
         switchPhone(phoneId, false);
+        mWaitForDetachResponse = true;
     }
 
     private void switchPhone(int phoneId, boolean active) {
@@ -939,6 +964,7 @@ public class PhoneSwitcher extends Handler {
         state.active = active;
         log((active ? "activate " : "deactivate ") + phoneId);
         state.lastRequested = System.currentTimeMillis();
+        mPhoneStates[phoneId] = state;
         sendRilCommands(phoneId);
     }
 
@@ -989,6 +1015,9 @@ public class PhoneSwitcher extends Handler {
         if (mHalCommandToUse == HAL_COMMAND_ALLOW_DATA || mHalCommandToUse == HAL_COMMAND_UNKNOWN) {
             // Skip ALLOW_DATA for single SIM device
             if (mActiveModemCount > 1) {
+                if (!isPhoneActive(phoneId)) {
+                    message = Message.obtain(this, EVENT_ALLOW_DATA_FALSE_RESPONSE, phoneId);
+                }
                 PhoneFactory.getPhone(phoneId).mCi.setDataAllowed(isPhoneActive(phoneId), message);
             }
         } else if (phoneId == mPreferredDataPhoneId) {
