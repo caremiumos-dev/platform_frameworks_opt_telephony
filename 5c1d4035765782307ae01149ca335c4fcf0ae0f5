@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829c4633_30fde8bb",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-03-25T02:33:27Z",
+      "side": 1,
+      "message": "dpi.base.apn, same with all the others except for dpi.supportedApnTypesBitmap",
+      "range": {
+        "startLine": 2018,
+        "startChar": 8,
+        "endLine": 2018,
+        "endChar": 15
+      },
+      "revId": "5c1d4035765782307ae01149ca335c4fcf0ae0f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
