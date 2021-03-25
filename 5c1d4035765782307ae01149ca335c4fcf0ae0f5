@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90b33a7a_0c89f080",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-03-25T02:55:49Z",
+      "side": 1,
+      "message": "TYPE_VSIM and TYPE_BIP might need to be added to ApnConfigTypeRepository#apnTypeMap\nAlso, can you please add tests for VSIM/BIP in ApnSettingTest and DcTrackerTest?",
+      "revId": "5c1d4035765782307ae01149ca335c4fcf0ae0f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "829c4633_30fde8bb",
@@ -19,6 +36,52 @@
         "startChar": 8,
         "endLine": 2018,
         "endChar": 15
+      },
+      "revId": "5c1d4035765782307ae01149ca335c4fcf0ae0f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfea8eaa_604c6224",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-03-25T02:55:49Z",
+      "side": 1,
+      "message": "please use ApnSetting.TYPE_VSIM_STRING",
+      "range": {
+        "startLine": 1771,
+        "startChar": 25,
+        "endLine": 1771,
+        "endChar": 53
+      },
+      "revId": "5c1d4035765782307ae01149ca335c4fcf0ae0f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d4ad198_a1865818",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-03-25T02:55:49Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 1775,
+        "startChar": 25,
+        "endLine": 1775,
+        "endChar": 39
       },
       "revId": "5c1d4035765782307ae01149ca335c4fcf0ae0f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
