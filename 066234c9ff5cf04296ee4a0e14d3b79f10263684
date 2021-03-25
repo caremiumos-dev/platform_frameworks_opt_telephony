@@ -52,6 +52,24 @@
       "parentUuid": "15b0b9b2_cfeec563",
       "revId": "066234c9ff5cf04296ee4a0e14d3b79f10263684",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f4253c9_43946bbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1355299
+      },
+      "writtenOn": "2021-03-25T06:12:33Z",
+      "side": 1,
+      "message": "@Robert, actually Bug: 130871087 has 2 CLs, and the build error has been fixed at another patch, https://android-review.googlesource.com/c/platform/frameworks/base/+/1540920.",
+      "parentUuid": "57752a22_3e7c8bc9",
+      "revId": "066234c9ff5cf04296ee4a0e14d3b79f10263684",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
