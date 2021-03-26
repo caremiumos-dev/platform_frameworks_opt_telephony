@@ -16,6 +16,23 @@
       "message": "A lot of tests in PhoneSwitcherTest are failing. Please fix them.",
       "revId": "1badb7cc1332c3f6884af1ba45fb11fb85f6ec5d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "868c1cc7_1c5e26b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-26T01:20:47Z",
+      "side": 1,
+      "message": "The phone switcher test is still failing. Please run it locally.",
+      "revId": "1badb7cc1332c3f6884af1ba45fb11fb85f6ec5d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
