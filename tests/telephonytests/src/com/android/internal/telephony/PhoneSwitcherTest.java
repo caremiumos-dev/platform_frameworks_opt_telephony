@@ -654,8 +654,8 @@ public class PhoneSwitcherTest extends TelephonyTest {
         processAllMessages();
         verify(mFuturePhone).complete(true);
 
-        // Emergency override result sent this, onDdsSwitchResponse won't be invoked
-        verify(mTelephonyRegistryManager, never()).notifyActiveDataSubIdChanged(eq(1));
+        // Make sure the correct broadcast is sent out for the overridden phone ID
+        verify(mTelephonyRegistryManager).notifyActiveDataSubIdChanged(eq(2));
     }
 
     @Test
