@@ -891,6 +891,9 @@ public class PhoneSwitcher extends Handler {
         // Check to see if there is any active subscription on any phone
         boolean hasAnyActiveSubscription = false;
 
+        // Check if subid has changed on preferred phone
+        boolean hasSubRefreshedOnThePreferredPhone = false;
+
         // Check if phoneId to subId mapping is changed.
         for (int i = 0; i < mActiveModemCount; i++) {
             int sub = mSubscriptionController.getSubIdUsingPhoneId(i);
@@ -902,6 +905,11 @@ public class PhoneSwitcher extends Handler {
                 sb.append("->").append(sub);
                 mPhoneSubscriptions[i] = sub;
                 diffDetected = true;
+                if (SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get())
+                        && mPhoneSubscriptions[i] == mPreferredDataSubId.get()) {
+                    sb.append("subid refreshed");
+                    hasSubRefreshedOnThePreferredPhone = true;
+                }
             }
         }
 
@@ -925,6 +933,9 @@ public class PhoneSwitcher extends Handler {
             sb.append(" preferred phoneId ").append(oldPreferredDataPhoneId)
                     .append("->").append(mPreferredDataPhoneId);
             diffDetected = true;
+        } else if (hasSubRefreshedOnThePreferredPhone) {
+            // Inform connectivity about the active data phone
+            notifyPreferredDataSubIdChanged();
         }
 
         if (diffDetected) {
@@ -1074,7 +1085,8 @@ public class PhoneSwitcher extends Handler {
                 PhoneFactory.getPhone(phoneId).mCi.setDataAllowed(isPhoneActive(phoneId), message);
             }
         } else if (phoneId == mPreferredDataPhoneId) {
-            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId.
+            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId
+            log("sendRilCommands: setPreferredDataModem - phoneId: " + phoneId);
             mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
         }
     }
