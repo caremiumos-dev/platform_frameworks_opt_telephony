@@ -267,6 +267,7 @@ public class PhoneSwitcher extends Handler {
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED        = 117;
     private static final int EVENT_NETWORK_AVAILABLE              = 118;
+    private final int EVENT_PREFERRED_SUB_VALID                   = 120;
 
     // Depending on version of IRadioConfig, we need to send either RIL_REQUEST_ALLOW_DATA if it's
     // 1.0, or RIL_REQUEST_SET_PREFERRED_DATA if it's 1.1 or later. So internally mHalCommandToUse
@@ -286,6 +287,8 @@ public class PhoneSwitcher extends Handler {
     private Boolean mHasRegisteredDefaultNetworkChangeCallback = false;
 
     private ConnectivityManager mConnectivityManager;
+
+    private boolean[] mDdsRequestSent;
 
     private class DefaultNetworkCallback extends ConnectivityManager.NetworkCallback {
         public int mExpectedSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -358,6 +361,7 @@ public class PhoneSwitcher extends Handler {
         mPhoneStates = new PhoneState[mActiveModemCount];
         mMaxDataAttachModemCount = maxActivePhones;
         mLocalLog = new LocalLog(MAX_LOCAL_LOG_LINES);
+        mDdsRequestSent = new boolean[mActiveModemCount];
 
         mSubscriptionController = SubscriptionController.getInstance();
         mRadioConfig = RadioConfig.getInstance();
@@ -379,6 +383,7 @@ public class PhoneSwitcher extends Handler {
                 PhoneFactory.getPhone(i).getDataEnabledSettings().registerForDataEnabledChanged(
                         this, EVENT_DATA_ENABLED_CHANGED, null);
             }
+            mDdsRequestSent[i] = false;
         }
 
         if (mActiveModemCount > 0) {
@@ -560,6 +565,7 @@ public class PhoneSwitcher extends Handler {
                 } else if (!commandSuccess) {
                     int phoneId = (int) ar.userObj;
                     log("Modem command failed. with exception " + ar.exception);
+                    mDdsRequestSent[phoneId] = false;
                     sendMessageDelayed(Message.obtain(this, EVENT_MODEM_COMMAND_RETRY,
                             phoneId), MODEM_COMMAND_RETRY_PERIOD_MS);
                 }
@@ -624,6 +630,13 @@ public class PhoneSwitcher extends Handler {
             case EVENT_MULTI_SIM_CONFIG_CHANGED: {
                 int activeModemCount = (int) ((AsyncResult) msg.obj).result;
                 onMultiSimConfigChanged(activeModemCount);
+                break;
+            }
+            case EVENT_PREFERRED_SUB_VALID: {
+                log("EVENT_PREFERRED_SUB_VALID");
+                // Notify all registrants
+                mActivePhoneRegistrants.notifyRegistrants();
+                notifyPreferredDataSubIdChanged();
                 break;
             }
         }
@@ -807,6 +820,9 @@ public class PhoneSwitcher extends Handler {
         // Check to see if there is any active subscription on any phone
         boolean hasAnyActiveSubscription = false;
 
+        // Check if subid has changed on preferred phone
+        boolean hasSubRefreshedOnThePreferredPhone = false;
+
         // Check if phoneId to subId mapping is changed.
         for (int i = 0; i < mActiveModemCount; i++) {
             int sub = mSubscriptionController.getSubIdUsingPhoneId(i);
@@ -818,8 +834,16 @@ public class PhoneSwitcher extends Handler {
                 sb.append("->").append(sub);
                 mPhoneSubscriptions[i] = sub;
                 diffDetected = true;
+                if (SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get())
+                        && mPhoneSubscriptions[i] == mPreferredDataSubId.get()) {
+                    sb.append("subid refreshed");
+                    hasSubRefreshedOnThePreferredPhone = true;
+                }
             }
         }
+
+        final boolean isOldPreferredDataSubValid =
+                SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get());
 
         if (!hasAnyActiveSubscription) {
             transitionToEmergencyPhone();
@@ -837,10 +861,25 @@ public class PhoneSwitcher extends Handler {
         // this logic in the no-SIM case.
         if (hasAnyActiveSubscription) updatePreferredDataPhoneId();
 
+        final boolean isPreferredDataSubValid =
+                SubscriptionManager.isValidSubscriptionId(mPreferredDataSubId.get());
+        if (!isOldPreferredDataSubValid && isPreferredDataSubValid) {
+            // To avoid race condition, send a msg in OnEvaluate
+            // This is used to ensure informing active phones again after the preferred
+            // SUB is changed
+            sendEmptyMessage(EVENT_PREFERRED_SUB_VALID);
+        }
+
         if (oldPreferredDataPhoneId != mPreferredDataPhoneId) {
             sb.append(" preferred phoneId ").append(oldPreferredDataPhoneId)
                     .append("->").append(mPreferredDataPhoneId);
+            if (SubscriptionManager.isValidPhoneId(oldPreferredDataPhoneId)) {
+                mDdsRequestSent[oldPreferredDataPhoneId] = false;
+            }
             diffDetected = true;
+        } else if (hasSubRefreshedOnThePreferredPhone) {
+            // Inform connectivity about the active data phone
+            notifyPreferredDataSubIdChanged();
         }
 
         if (diffDetected) {
@@ -992,8 +1031,15 @@ public class PhoneSwitcher extends Handler {
                 PhoneFactory.getPhone(phoneId).mCi.setDataAllowed(isPhoneActive(phoneId), message);
             }
         } else if (phoneId == mPreferredDataPhoneId) {
-            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId.
-            mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
+            if (!mDdsRequestSent[phoneId]) {
+                // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId
+                log("sendRilCommands: setPreferredDataModem - phoneId: " + phoneId);
+                mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
+                mDdsRequestSent[phoneId] = true;
+            } else {
+                log("sendRilCommands: setPreferredDataModem request already sent on phoneId: " +
+                        phoneId);
+            }
         }
     }
 
