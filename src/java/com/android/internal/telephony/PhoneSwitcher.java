@@ -914,6 +914,9 @@ public class PhoneSwitcher extends Handler {
         // Check if phoneId for preferred data is changed.
         int oldPreferredDataPhoneId = mPreferredDataPhoneId;
 
+        // Check if subId for preferred data is changed.
+        int oldPreferredDataSubId = mPreferredDataSubId.get();
+
         // When there are no subscriptions, the preferred data phone ID is invalid, but we want
         // to keep a valid phoneId for Emergency, so skip logic that updates for preferred data
         // phone ID. Ideally there should be a single set of checks that evaluate the correct
@@ -925,6 +928,10 @@ public class PhoneSwitcher extends Handler {
             sb.append(" preferred phoneId ").append(oldPreferredDataPhoneId)
                     .append("->").append(mPreferredDataPhoneId);
             diffDetected = true;
+        } else if (oldPreferredDataSubId != mPreferredDataSubId.get()) {
+            log("SIM refresh, notify dds change");
+            // Inform connectivity about the active data phone
+            notifyPreferredDataSubIdChanged();
         }
 
         if (diffDetected) {
@@ -1074,7 +1081,8 @@ public class PhoneSwitcher extends Handler {
                 PhoneFactory.getPhone(phoneId).mCi.setDataAllowed(isPhoneActive(phoneId), message);
             }
         } else if (phoneId == mPreferredDataPhoneId) {
-            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId.
+            // Only setPreferredDataModem if the phoneId equals to current mPreferredDataPhoneId
+            log("sendRilCommands: setPreferredDataModem - phoneId: " + phoneId);
             mRadioConfig.setPreferredDataModem(mPreferredDataPhoneId, message);
         }
     }
