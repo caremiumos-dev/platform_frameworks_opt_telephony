@@ -255,6 +255,8 @@ public abstract class Connection {
     protected float mAudioCodecBitrateKbps;
     // audio codec bandwidth in kHz
     protected float mAudioCodecBandwidthKhz;
+    //Audio Quality HD Plus
+    protected boolean mIsAudioQualityHdPlus = false;
 
     @UnsupportedAppUsage
     private static String LOG_TAG = "Connection";
@@ -1473,6 +1475,14 @@ public abstract class Connection {
      */
     public float getAudioCodecBandwidthKhz() {
         return mAudioCodecBandwidthKhz;
+    }
+
+    /**
+     * @return {@code true} if the audio qualty reaches the HD plus level
+     * or {@code false} otherwise.
+     */
+    public boolean isAudioQualityHdPlus() {
+        return mIsAudioQualityHdPlus;
     }
 
     /**

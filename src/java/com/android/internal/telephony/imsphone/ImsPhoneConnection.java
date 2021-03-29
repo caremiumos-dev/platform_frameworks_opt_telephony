@@ -1081,6 +1081,13 @@ public class ImsPhoneConnection extends Connection implements
             }
 
             if (localCallProfile != null
+                    && localCallProfile.mMediaProfile.isAudioQualityHdPlus()
+                    != mIsAudioQualityHdPlus) {
+                mIsAudioQualityHdPlus = localCallProfile.mMediaProfile.isAudioQualityHdPlus();
+                changed = true;
+            }
+
+            if (localCallProfile != null
                     && localCallProfile.mMediaProfile.getAudioCodecAttributes() != null) {
                 AudioCodecAttributes audioCodecAttributes =
                         localCallProfile.mMediaProfile.getAudioCodecAttributes();
