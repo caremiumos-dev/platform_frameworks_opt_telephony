@@ -16,6 +16,24 @@
       "message": "Hi Junyu / Jack,\n\nAs mentioned in the issuetracker. Could you please help to merge the CL? (presubmit passed already)",
       "revId": "de386ed2bfb0ad7c13b6ae7cf3ff64b9c5c48806",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf79d2d7_4b14609f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-03-29T06:41:15Z",
+      "side": 1,
+      "message": "Pinging Jack for owner vote.",
+      "parentUuid": "f9028122_cd6b58ab",
+      "revId": "de386ed2bfb0ad7c13b6ae7cf3ff64b9c5c48806",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
