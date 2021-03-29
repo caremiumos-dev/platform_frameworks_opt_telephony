@@ -16,6 +16,52 @@
       "message": "Jack, could you pls review",
       "revId": "e6a98257390aa9f8417ff4781b605d725d8789dd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3969b6c_e4bff0ec",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-29T07:56:55Z",
+      "side": 1,
+      "message": "This is not the way you make it serialized, this is a hack.\n\nIf you really want to make setDataAllowed serialized, I would suggest you follow the pattern used in PhoneInterfaceManager, for example, getAllowedNetworkTypesBitmask. The example shows you how to send RIL request and wait until the result comes back.\n\nIn fact, I would suggest you abandon the CL because\n1. setDataAllowed is a legacy command which was deprecated few years ago.\n2. If you want to do the approach I suggest above, you probably need to completely rewrite the CL, not making change on top of this CL.\n3. This is a really corner case that I think not worth to make architectural changes like this.",
+      "range": {
+        "startLine": 291,
+        "startChar": 20,
+        "endLine": 291,
+        "endChar": 42
+      },
+      "revId": "e6a98257390aa9f8417ff4781b605d725d8789dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15e9e6ec_1826e0f0",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-03-29T07:56:55Z",
+      "side": 1,
+      "message": "This completely does not make sense and destroyed the original design. See the comment above, \"If all phones can have PS attached, activate all.\".",
+      "range": {
+        "startLine": 926,
+        "startChar": 0,
+        "endLine": 933,
+        "endChar": 21
+      },
+      "revId": "e6a98257390aa9f8417ff4781b605d725d8789dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
