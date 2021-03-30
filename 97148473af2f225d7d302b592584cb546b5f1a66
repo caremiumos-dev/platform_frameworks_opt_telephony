@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e346852_e88b0cd8",
+        "filename": "src/java/com/android/internal/telephony/uicc/PhonebookStatus.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2021-03-30T08:48:58Z",
+      "side": 1,
+      "message": "I think it should be fixed considering below PbReceivedStatus.\n\nenum PbReceivedStatus : int32_t {\n    PB_RECEIVED_OK \u003d 1,\n    PB_RECEIVED_ERROR \u003d 2,\n    PB_RECEIVED_ABORT \u003d 3,\n    PB_RECEIVED_FINAL \u003d 4,\n};",
+      "range": {
+        "startLine": 59,
+        "startChar": 25,
+        "endLine": 59,
+        "endChar": 37
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "918acfab_6c49c390",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2021-03-30T08:48:58Z",
+      "side": 1,
+      "message": "I think it needs to be changed to \"getSimPhonebookCapacity\"",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 34
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b44ae6e_8136430e",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2021-03-30T08:48:58Z",
+      "side": 1,
+      "message": "I think it needs to be changed to iccRefreshResponse.",
+      "range": {
+        "startLine": 422,
+        "startChar": 12,
+        "endLine": 422,
+        "endChar": 23
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
