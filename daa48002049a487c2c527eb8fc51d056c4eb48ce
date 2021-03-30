@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb65bda_797e9324",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1364839
+      },
+      "writtenOn": "2021-03-30T03:56:27Z",
+      "side": 1,
+      "message": "It\u0027s a clean cherry-pick.\n\nag/13945530 is cherry-pick from aosp/1640162 without any changes",
+      "revId": "daa48002049a487c2c527eb8fc51d056c4eb48ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
