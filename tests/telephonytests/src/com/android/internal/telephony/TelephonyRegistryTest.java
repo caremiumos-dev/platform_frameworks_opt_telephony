@@ -636,14 +636,14 @@ public class TelephonyRegistryTest extends TelephonyTest {
         processAllMessages();
         assertEquals(cellIdentity.asCellLocation(), mCellLocation);
 
-        // Broadcast ACTION_USER_SWITCHED for the current user Id + 1. Callback shouldn't be
+        // Broadcast ACTION_USER_SWITCHED for the current user Id + 1. Callback should still be
         // triggered.
         userInfo.id++;
         mCellLocation = null;
         mContext.sendBroadcast(new Intent(Intent.ACTION_USER_SWITCHED));
 
         processAllMessages();
-        assertEquals(null, mCellLocation);
+        assertEquals(cellIdentity.asCellLocation(), mCellLocation);
     }
 
     private void assertSecurityExceptionThrown(int[] event) {
