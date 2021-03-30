@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632fd092_f7f3ab14",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-03-30T22:15:23Z",
+      "side": 1,
+      "message": "Taesu, this isn\u0027t really correct, right? There\u0027s no userid specific handling in TelephonyRegistry. The assert at line 646 is failing in the test.",
+      "range": {
+        "startLine": 639,
+        "startChar": 8,
+        "endLine": 640,
+        "endChar": 21
+      },
+      "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
