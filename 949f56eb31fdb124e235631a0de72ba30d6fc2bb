@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1d57d61_32ee3e34",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1306837
+      },
+      "writtenOn": "2021-03-31T11:55:45Z",
+      "side": 1,
+      "message": "nit: redundant line?",
+      "revId": "949f56eb31fdb124e235631a0de72ba30d6fc2bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
