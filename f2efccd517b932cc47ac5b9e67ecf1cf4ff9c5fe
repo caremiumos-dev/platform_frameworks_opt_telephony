@@ -94,6 +94,30 @@
       },
       "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58049abb_38651188",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-03-31T05:53:46Z",
+      "side": 1,
+      "message": "Thanks for checking that.",
+      "parentUuid": "02e06eb3_b23b3c7b",
+      "range": {
+        "startLine": 639,
+        "startChar": 8,
+        "endLine": 640,
+        "endChar": 21
+      },
+      "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
