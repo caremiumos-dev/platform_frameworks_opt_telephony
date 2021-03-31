@@ -46,6 +46,30 @@
       },
       "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe50996f_4b6310a3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-03-31T01:09:00Z",
+      "side": 1,
+      "message": "Hmm.. then it looks like the test is correct but it is failing on internal branch:\n\njava.lang.AssertionError: expected:\u003cnull\u003e but was:\u003c[-1,-1,-1]\u003e\n\tat org.junit.Assert.fail(Assert.java:89)\n\tat org.junit.Assert.failNotEquals(Assert.java:835)\n\tat org.junit.Assert.assertEquals(Assert.java:120)\n\tat org.junit.Assert.assertEquals(Assert.java:146)\n\tat com.android.internal.telephony.TelephonyRegistryTest.testNotifyCellLocationForSubscriberByUserSwitched(TelephonyRegistryTest.java:669)",
+      "parentUuid": "f6d3c617_d38fe48c",
+      "range": {
+        "startLine": 639,
+        "startChar": 8,
+        "endLine": 640,
+        "endChar": 21
+      },
+      "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
