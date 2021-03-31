@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c061f27_46f5955a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-31T05:59:08Z",
+      "side": 1,
+      "message": "Need to CP below CL and stub getCurrentUserId() instead.\nhttps://partner-android.googlesource.com/platform/frameworks/base/+/ffa04d25c79dcec472d70a0d2ccfedbcb9565a9a",
+      "range": {
+        "startLine": 618,
+        "startChar": 51,
+        "endLine": 618,
+        "endChar": 67
+      },
+      "revId": "2caa525f9b8b89b542316eef59bcbab40a43f9e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
