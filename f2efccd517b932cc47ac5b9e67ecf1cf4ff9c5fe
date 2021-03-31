@@ -22,6 +22,30 @@
       },
       "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6d3c617_d38fe48c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-03-31T00:53:54Z",
+      "side": 1,
+      "message": "https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/core/java/com/android/server/TelephonyRegistry.java;l\u003d2939\n\nI will double-check this UTC again.",
+      "parentUuid": "632fd092_f7f3ab14",
+      "range": {
+        "startLine": 639,
+        "startChar": 8,
+        "endLine": 640,
+        "endChar": 21
+      },
+      "revId": "f2efccd517b932cc47ac5b9e67ecf1cf4ff9c5fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
