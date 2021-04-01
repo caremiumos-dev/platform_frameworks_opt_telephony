@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36913ac8_9e5b2202",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T19:39:31Z",
+      "side": 1,
+      "message": "The other option here to keep CarrierPrivsTracker final and use it even when phoneType \u003d\u003d IMS would be to always initialize Phone#mUiccController. Not 100% sure of the consequences of that, so will leave this unresolved for a telephony reviewer to comment on.",
+      "parentUuid": "9e9c227d_14a77b57",
+      "range": {
+        "startLine": 445,
+        "startChar": 12,
+        "endLine": 445,
+        "endChar": 63
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf98ddac_39b90842",
         "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
         "patchSetId": 3
