@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "647859a5_2c10f4a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "LGTM with a few nits / suggestions",
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6f1235_61f19225",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "is this worth logging?",
+      "range": {
+        "startLine": 356,
+        "startChar": 12,
+        "endLine": 356,
+        "endChar": 65
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2014861a_2f83c053",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 361,
+        "startChar": 12,
+        "endLine": 361,
+        "endChar": 65
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ad70b8_5c693527",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "I think we can return uiccRules directly here since getCarrierPrivilegeAccessRules() is nonnull now",
+      "range": {
+        "startLine": 365,
+        "startChar": 15,
+        "endLine": 365,
+        "endChar": 70
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c63260cf_318ffd8f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "the nested looping seems a little slow - could you file + add a TODO for speeding this up in T? Maybe we can consider providing a hashCode() impl for UiccAccessRule",
+      "range": {
+        "startLine": 494,
+        "startChar": 8,
+        "endLine": 505,
+        "endChar": 9
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "372f0ff1_7b106262",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "if we want this to match the current behavior of UiccProfile, I think we can unconditionally use Arrays.asList(certHashes)",
+      "range": {
+        "startLine": 144,
+        "startChar": 41,
+        "endLine": 144,
+        "endChar": 98
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f62a6177_db715c8c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1463964
+      },
+      "writtenOn": "2021-04-01T21:17:04Z",
+      "side": 1,
+      "message": "nit: suggest using return ruleWithHashAndPackage(certHash, null)",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 37
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
