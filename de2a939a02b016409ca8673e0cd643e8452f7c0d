@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "447caa76_79dc3a32",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-01T21:58:51Z",
+      "side": 1,
+      "message": "First, I think this line is enough to block the duplicate request.\n\nSecond, RIL/modem should be robust enough. From the HAL definition, there is nothing preventing frameworks to do this. Just like other API setPreferrNetworkMode, if frameworks call 1000 times a second, RIL/modem should treat the rest 999 requests as no-op. This is a very basic design pattern that callee should follow.",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 43
+      },
+      "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
