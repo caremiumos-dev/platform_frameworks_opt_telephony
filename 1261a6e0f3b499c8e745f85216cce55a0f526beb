@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "895a4b15_3e44de6d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-04-01T00:58:45Z",
+      "side": 1,
+      "message": "They are soft-banned. See hackbod email in Chatty.",
+      "parentUuid": "5ef19e49_6be45729",
+      "range": {
+        "startLine": 495,
+        "startChar": 16,
+        "endLine": 496,
+        "endChar": 88
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b8d572f_36a96b3d",
