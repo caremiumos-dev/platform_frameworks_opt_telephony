@@ -65,6 +65,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ebdc47_9eb09c01",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T18:30:03Z",
+      "side": 1,
+      "message": "Sigh - the platform should really be using the tools to de-sugar streams back into the underlying for loops. Replaced with equivalent iterative code.",
+      "parentUuid": "895a4b15_3e44de6d",
+      "range": {
+        "startLine": 495,
+        "startChar": 16,
+        "endLine": 496,
+        "endChar": 88
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b8d572f_36a96b3d",
@@ -78,6 +102,30 @@
       "writtenOn": "2021-03-03T02:51:34Z",
       "side": 1,
       "message": "is there a reason this can\u0027t stay final?",
+      "range": {
+        "startLine": 445,
+        "startChar": 12,
+        "endLine": 445,
+        "endChar": 63
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e9c227d_14a77b57",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T18:30:03Z",
+      "side": 1,
+      "message": "I was hitting crashes because now to get the SIM rules, we need to go through UiccController, which isn\u0027t initialized until lower in the ctor. There\u0027s also an early return when getPhoneType \u003d\u003d IMS, which was resulting in NPEs in the phone process when the CarrierPrivsTracker was initialized with that phone type but still trying to access the SIM rules.",
+      "parentUuid": "0b8d572f_36a96b3d",
       "range": {
         "startLine": 445,
         "startChar": 12,
@@ -111,6 +159,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82d76f6c_51e4effe",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T18:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf98ddac_39b90842",
+      "range": {
+        "startLine": 1706,
+        "startChar": 8,
+        "endLine": 1706,
+        "endChar": 46
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe62c066_f5fb4f71",
@@ -134,6 +206,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d2cb8c_04fd9535",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T18:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe62c066_f5fb4f71",
+      "range": {
+        "startLine": 144,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 34
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a5fd4c3_d8297660",
@@ -147,6 +243,30 @@
       "writtenOn": "2021-03-03T02:51:34Z",
       "side": 1,
       "message": "nit: may be worth breaking this out to a helper method for readability\n\n```\nString getFormattedCarrierConfigRule(String cert, String... pkgs)\n```\n\n(I\u0027ll defer to your judgement on this though)",
+      "range": {
+        "startLine": 341,
+        "startChar": 16,
+        "endLine": 341,
+        "endChar": 49
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7dd955_b239a413",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-01T18:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a5fd4c3_d8297660",
       "range": {
         "startLine": 341,
         "startChar": 16,
