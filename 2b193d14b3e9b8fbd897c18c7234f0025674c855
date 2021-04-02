@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009556770",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1432875?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "3a971b61_49e8b16d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-04-02T16:12:05Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1018,
+        "startChar": 0,
+        "endLine": 1018,
+        "endChar": 117
+      },
+      "revId": "2b193d14b3e9b8fbd897c18c7234f0025674c855",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009556770",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1432875?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "106077ad_e8827665",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-04-02T16:12:05Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 117
+      },
+      "revId": "2b193d14b3e9b8fbd897c18c7234f0025674c855",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
