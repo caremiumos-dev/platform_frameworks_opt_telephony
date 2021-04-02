@@ -70,6 +70,30 @@
       },
       "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c38df4_f4ef6be2",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-04-02T08:07:46Z",
+      "side": 1,
+      "message": "Serialization doesnt fix the issue here. The cause of concern is the duplicate setPreferredDataModem requests. When DDS is already set to a SIM, it is not proper to send setPreferredDataModem request on the same SIM multiple times right?\n\nFor legacy setDataAllowed requests, there is a active flag check to block duplicate requests. We should have a similar check for setPreferredDataModem requests too.\nThe CL uploaded is doing the same. It sets the flag when setPreferredDataModem is success, and resets flag wherever that request must be sent again",
+      "parentUuid": "889f974e_80ac0dd1",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 43
+      },
+      "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
