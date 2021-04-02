@@ -16,6 +16,23 @@
       "message": "I think the conflicts are due to ag/13991558 which is missing on aosp. Will try this again once that gets CP\u0027d to aosp.",
       "revId": "93578a30b1055d69d9433461b3731657903fb229",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4351c04_c2e0764b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-04-02T16:32:36Z",
+      "side": 1,
+      "message": "Takeshi, can you please rebase this on top of aosp/1661996?",
+      "revId": "93578a30b1055d69d9433461b3731657903fb229",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
