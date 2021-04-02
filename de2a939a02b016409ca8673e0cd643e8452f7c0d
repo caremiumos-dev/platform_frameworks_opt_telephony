@@ -46,6 +46,30 @@
       },
       "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "889f974e_80ac0dd1",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-02T07:59:22Z",
+      "side": 1,
+      "message": "If you really want to fix, then you should follow what I suggest in the serialized RIL commands CL. All should be queued as setPreferredDataModemRequest, setPreferredDataModemResponse, setPreferredDataModemRequest, setPreferredDataModemResponse....\n\nAs I said, you should ignore the duplicate request on your side, and not saying this causes so many issue on your side. From API\u0027s design perspective, calling the same set-preference-function should not cause issues.\n\nIf you don\u0027t want to serialize all the request/response, fixing this on RIL would be easier for you.",
+      "parentUuid": "f4ba8b2d_15e184d3",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 43
+      },
+      "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
