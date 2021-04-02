@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5071426_9dd8ca03",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c6f1235_61f19225",
+      "range": {
+        "startLine": 356,
+        "startChar": 12,
+        "endLine": 356,
+        "endChar": 65
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2014861a_2f83c053",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-04-01T21:17:04Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 361,
+        "startChar": 12,
+        "endLine": 361,
+        "endChar": 65
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3cbe370_0c341676",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2014861a_2f83c053",
       "range": {
         "startLine": 361,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2f6e08c_8e605e97",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ad70b8_5c693527",
+      "range": {
+        "startLine": 365,
+        "startChar": 15,
+        "endLine": 365,
+        "endChar": 70
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c63260cf_318ffd8f",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-04-01T21:17:04Z",
       "side": 1,
       "message": "the nested looping seems a little slow - could you file + add a TODO for speeding this up in T? Maybe we can consider providing a hashCode() impl for UiccAccessRule",
+      "range": {
+        "startLine": 494,
+        "startChar": 8,
+        "endLine": 505,
+        "endChar": 9
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97664797_3f9c9c7f",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "In general, each of these collections will have just 1-2 elements each, and rule#matches is more or less just doing string equality (though it does call hexStringToBytes, which has the potential to become wasteful with excessive repeated calls). But fair point - double-nested for loops can always be problematic; leaving a TODO.",
+      "parentUuid": "c63260cf_318ffd8f",
       "range": {
         "startLine": 494,
         "startChar": 8,
@@ -133,6 +229,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fec7feb_6aa90d7b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "372f0ff1_7b106262",
+      "range": {
+        "startLine": 144,
+        "startChar": 41,
+        "endLine": 144,
+        "endChar": 98
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f62a6177_db715c8c",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-04-01T21:17:04Z",
       "side": 1,
       "message": "nit: suggest using return ruleWithHashAndPackage(certHash, null)",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 37
+      },
+      "revId": "28d2287e9cca68546d5eec1da9520dca89921f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0365b48a_910ccb11",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/CarrierPrivilegesTrackerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-04-02T21:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f62a6177_db715c8c",
       "range": {
         "startLine": 149,
         "startChar": 8,
