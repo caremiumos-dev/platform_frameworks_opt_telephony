@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0968bbe_656134a9",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecord.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2021-04-05T06:48:47Z",
+      "side": 1,
+      "message": "mEmails or mAdditionalNumbers can be \"null\". So, this part can generate NullPointerException. I think these variables shoule be handled like mNumber.",
+      "range": {
+        "startLine": 114,
+        "startChar": 61,
+        "endLine": 114,
+        "endChar": 68
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "918acfab_6c49c390",
         "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
         "patchSetId": 20
