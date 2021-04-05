@@ -950,6 +950,8 @@ public class DcTracker extends Handler {
         final ApnContext apnContext = mApnContextsByType.get(apnType);
         if (apnContext != null) {
             apnContext.requestNetwork(networkRequest, type, onCompleteMsg);
+        } else {
+            log("amit: apnContext null for " + apnType);
         }
     }
 
@@ -1368,10 +1370,10 @@ public class DcTracker extends Handler {
         }
 
         // If device is not on NR, don't allow enterprise
-        if (apnContext != null && requestApnType == ApnSetting.TYPE_ENTERPRISE
+        /*if (apnContext != null && requestApnType == ApnSetting.TYPE_ENTERPRISE
                 && dataRat != ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
             reasons.add(DataDisallowedReasonType.NOT_ON_NR);
-        }
+        }*/
 
         if (shouldRestrictDataForEcbm() || mPhone.isInEmergencyCall()) {
             reasons.add(DataDisallowedReasonType.IN_ECBM);
