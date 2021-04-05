@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c90a3bf7_36615fad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-04-05T17:27:39Z",
+      "side": 1,
+      "message": "Hey Nazanin, could you please help review?\nI think you have more context than I do because of your work on the carrier certificates in SubscriptionInfo. ",
+      "revId": "2fde259f8d33622569c0cbe6329282bcbc2cb8d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
