@@ -65,6 +65,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5292317_19054abc",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T02:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cbb6603_f2dfff7a",
+      "range": {
+        "startLine": 1989,
+        "startChar": 16,
+        "endLine": 1989,
+        "endChar": 32
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e610da4_cc0bde71",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "I will add comments based on your advice.",
       "parentUuid": "7e610da4_cc0bde71",
+      "range": {
+        "startLine": 2579,
+        "startChar": 12,
+        "endLine": 2579,
+        "endChar": 43
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ccaa2df_65e634bd",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2579,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T02:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc8a7e07_b7259357",
       "range": {
         "startLine": 2579,
         "startChar": 12,
@@ -159,6 +207,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a20a3766_61053f75",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5141,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T02:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceffed37_c9e4d075",
+      "range": {
+        "startLine": 5141,
+        "startChar": 9,
+        "endLine": 5141,
+        "endChar": 40
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89438919_41a185cc",
@@ -196,6 +268,30 @@
       "side": 1,
       "message": "I will do that.",
       "parentUuid": "89438919_41a185cc",
+      "range": {
+        "startLine": 5148,
+        "startChar": 17,
+        "endLine": 5148,
+        "endChar": 33
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f84ff70_aa93bbd3",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5148,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T02:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b359bd36_419d1221",
       "range": {
         "startLine": 5148,
         "startChar": 17,
