@@ -261,6 +261,9 @@ public class DcTracker extends Handler {
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE =
             "data_stall_alarm_extra_transport_type";
 
+    // Unique id for no data notification on setup data permanently failed.
+    private static final int NO_DATA_NOTIFICATION = 1001;
+
     /** The higher index has higher priority. */
     private static final DctConstants.State[] DATA_CONNECTION_STATE_PRIORITIES = {
             DctConstants.State.IDLE,
@@ -1921,11 +1924,18 @@ public class DcTracker extends Handler {
         }
 
         int preferredApnSetId = getPreferredApnSetId();
+        ApnSetting preferredApn = getPreferredApnFromDB();
         for (ApnSetting dunSetting : dunCandidates) {
             if (dunSetting.canSupportNetworkType(
                     ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
                 if (preferredApnSetId == dunSetting.getApnSetId()) {
-                    retDunSettings.add(dunSetting);
+                    if (preferredApn != null && preferredApn.equals(dunSetting)) {
+                        // If there is a preferred APN can handled DUN type, prepend it to list to
+                        // use it preferred.
+                        retDunSettings.add(0, dunSetting);
+                    } else {
+                        retDunSettings.add(dunSetting);
+                    }
                 }
             }
         }
@@ -2049,8 +2059,10 @@ public class DcTracker extends Handler {
         // a dun-profiled connection so we can't share an existing one
         // On GSM/LTE we can share existing apn connections provided they support
         // this type.
-        if (!apnContext.getApnType().equals(ApnSetting.TYPE_DUN_STRING)
-                || ServiceState.isGsm(getDataRat())) {
+        // If asking for ENTERPRISE, there are no compatible data connections, so skip this check
+        if ((apnContext.getApnTypeBitmask() != ApnSetting.TYPE_DUN
+                || ServiceState.isGsm(getDataRat()))
+                && apnContext.getApnTypeBitmask() != ApnSetting.TYPE_ENTERPRISE) {
             dataConnection = checkForCompatibleDataConnection(apnContext, apnSetting);
             if (dataConnection != null) {
                 // Get the apn setting used by the data connection
@@ -2475,7 +2487,7 @@ public class DcTracker extends Handler {
                             }
                         }
                     }
-                } else if (apnSetting != null && apnSetting.canHandleType(apnType)) {
+                } else if (isApnSettingCompatible(curDc, apnType)) {
                     if (curDc.isActive()) {
                         if (DBG) {
                             log("checkForCompatibleDataConnection:"
@@ -2493,6 +2505,20 @@ public class DcTracker extends Handler {
             log("checkForCompatibleDataConnection: potential dc=" + potentialDc);
         }
         return potentialDc;
+    }
+
+    private boolean isApnSettingCompatible(DataConnection dc, int apnType) {
+        ApnSetting apnSetting = dc.getApnSetting();
+        if (apnSetting == null) return false;
+
+        // Nothing can be compatible with type ENTERPRISE
+        for (ApnContext apnContext : dc.getApnContexts()) {
+            if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE) {
+                return false;
+            }
+        }
+
+        return apnSetting.canHandleType(apnType);
     }
 
     private void addRequestNetworkCompleteMsg(Message onCompleteMsg,
@@ -2905,6 +2931,16 @@ public class DcTracker extends Handler {
 
         startNetStatPoll();
         startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
+
+        PersistableBundle b = getCarrierConfig();
+        if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_DEFAULT
+                && b.getBoolean(CarrierConfigManager
+                .KEY_DISPLAY_NO_DATA_NOTIFICATION_ON_PERMANENT_FAILURE_BOOL)) {
+            NotificationManager notificationManager = (NotificationManager)
+                    mPhone.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(Integer.toString(mPhone.getSubId()),
+                    NO_DATA_NOTIFICATION);
+        }
     }
 
     /**
@@ -3082,6 +3118,34 @@ public class DcTracker extends Handler {
                 log("cause=" + DataFailCause.toString(cause)
                         + ", mark apn as permanent failed. apn = " + apn);
                 apnContext.markApnPermanentFailed(apn);
+
+                PersistableBundle b = getCarrierConfig();
+                if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_DEFAULT
+                        && b.getBoolean(CarrierConfigManager
+                        .KEY_DISPLAY_NO_DATA_NOTIFICATION_ON_PERMANENT_FAILURE_BOOL)) {
+                    NotificationManager notificationManager = (NotificationManager)
+                            mPhone.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    CharSequence title = mPhone.getContext().getText(
+                            com.android.internal.R.string.RestrictedOnDataTitle);
+                    CharSequence details = mPhone.getContext().getText(
+                            com.android.internal.R.string.RestrictedStateContent);
+
+                    Notification notification = new Notification.Builder(mPhone.getContext(),
+                            NotificationChannelController.CHANNEL_ID_MOBILE_DATA_STATUS)
+                            .setWhen(System.currentTimeMillis())
+                            .setAutoCancel(true)
+                            .setSmallIcon(com.android.internal.R.drawable.stat_sys_warning)
+                            .setTicker(title)
+                            .setColor(mPhone.getContext().getResources().getColor(
+                                    com.android.internal.R.color.system_notification_accent_color))
+                            .setContentTitle(title)
+                            .setStyle(new Notification.BigTextStyle().bigText(details))
+                            .setContentText(details)
+                            .build();
+                    notificationManager.notify(Integer.toString(mPhone.getSubId()),
+                            NO_DATA_NOTIFICATION, notification);
+                }
             }
 
             int newRequestType = calculateNewRetryRequestType(handoverFailureMode, requestType,
@@ -5232,10 +5296,14 @@ public class DcTracker extends Handler {
 
         if (networkTypeBitmask == 0) {
             profileType = DataProfile.TYPE_COMMON;
-        } else if (ServiceState.bearerBitmapHasCdma(networkTypeBitmask)) {
+        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP2)
+                == networkTypeBitmask) {
             profileType = DataProfile.TYPE_3GPP2;
-        } else {
+        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP)
+                == networkTypeBitmask) {
             profileType = DataProfile.TYPE_3GPP;
+        } else {
+            profileType = DataProfile.TYPE_COMMON;
         }
 
         return new DataProfile.Builder()
