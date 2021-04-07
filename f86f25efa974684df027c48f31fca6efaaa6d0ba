@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8cbb6603_f2dfff7a",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T01:54:42Z",
+      "side": 1,
+      "message": "I agree with you. I update the name of the method.",
+      "parentUuid": "0c116c3b_6e94ffa5",
+      "range": {
+        "startLine": 1989,
+        "startChar": 16,
+        "endLine": 1989,
+        "endChar": 32
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e610da4_cc0bde71",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2021-04-02T23:29:34Z",
       "side": 1,
       "message": "add a comment that on single-pdn RATs we have to set the initial-attach-apn to the apn we want to connect to and when we have no connection switch it back to the default - doing that here.",
+      "range": {
+        "startLine": 2579,
+        "startChar": 12,
+        "endLine": 2579,
+        "endChar": 43
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc8a7e07_b7259357",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2579,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T01:54:42Z",
+      "side": 1,
+      "message": "I will add comments based on your advice.",
+      "parentUuid": "7e610da4_cc0bde71",
       "range": {
         "startLine": 2579,
         "startChar": 12,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ceffed37_c9e4d075",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5141,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T01:54:42Z",
+      "side": 1,
+      "message": "I will do that.",
+      "parentUuid": "ba49e525_8ae5cca9",
+      "range": {
+        "startLine": 5141,
+        "startChar": 9,
+        "endLine": 5141,
+        "endChar": 40
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89438919_41a185cc",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 3
@@ -100,6 +172,30 @@
       "writtenOn": "2021-04-02T23:29:34Z",
       "side": 1,
       "message": "move this to be near the setInitialAttachApn function and see my rename suggestion above.",
+      "range": {
+        "startLine": 5148,
+        "startChar": 17,
+        "endLine": 5148,
+        "endChar": 33
+      },
+      "revId": "f86f25efa974684df027c48f31fca6efaaa6d0ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b359bd36_419d1221",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5148,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T01:54:42Z",
+      "side": 1,
+      "message": "I will do that.",
+      "parentUuid": "89438919_41a185cc",
       "range": {
         "startLine": 5148,
         "startChar": 17,
