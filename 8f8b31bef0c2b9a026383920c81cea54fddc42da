@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba18a1d_ec1f0f27",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-04-07T16:38:27Z",
+      "side": 1,
+      "message": "You are not considering this? You should set the reason based on mDesiredPowerState, not airplaneMode.",
+      "range": {
+        "startLine": 705,
+        "startChar": 32,
+        "endLine": 705,
+        "endChar": 55
+      },
+      "revId": "8f8b31bef0c2b9a026383920c81cea54fddc42da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
