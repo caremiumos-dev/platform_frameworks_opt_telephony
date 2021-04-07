@@ -33,6 +33,24 @@
       "message": "Takeshi, can you please rebase this on top of aosp/1661996?",
       "revId": "93578a30b1055d69d9433461b3731657903fb229",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49e752cb_638c384c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-07T01:48:09Z",
+      "side": 1,
+      "message": "I update the patch. Could you please review this again?",
+      "parentUuid": "c4351c04_c2e0764b",
+      "revId": "93578a30b1055d69d9433461b3731657903fb229",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
