@@ -46,6 +46,30 @@
       },
       "revId": "8f8b31bef0c2b9a026383920c81cea54fddc42da",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a467852_98671081",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-04-07T17:45:04Z",
+      "side": 1,
+      "message": "If APM is off and ENABLE_CELLULAR_ON_BOOT is false, radio should be off but with the current code you will not set any radio off reason. Then thermal will turn radio on which it should not.",
+      "parentUuid": "2958b0a4_b0eb3716",
+      "range": {
+        "startLine": 705,
+        "startChar": 32,
+        "endLine": 705,
+        "endChar": 55
+      },
+      "revId": "8f8b31bef0c2b9a026383920c81cea54fddc42da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
