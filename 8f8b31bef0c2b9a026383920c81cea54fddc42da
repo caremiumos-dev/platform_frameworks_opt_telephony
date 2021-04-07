@@ -22,6 +22,30 @@
       },
       "revId": "8f8b31bef0c2b9a026383920c81cea54fddc42da",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2958b0a4_b0eb3716",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1707895
+      },
+      "writtenOn": "2021-04-07T16:53:19Z",
+      "side": 1,
+      "message": "If user sets airplaneMode but doesn\u0027t have enableCellularOnBoot and then reboots, then radio should be off since cellular is disabled. If APM and does have enableCellularOnBoot then reboot, then radio should be off since user had set APM. \n\ni.e It is independent of state of enableCellularOnBoot. In fact mDesiredPowerState will always be false if airplaneMode \u003e 0. APM only feels like a tighter condition than conditioning on both",
+      "parentUuid": "fba18a1d_ec1f0f27",
+      "range": {
+        "startLine": 705,
+        "startChar": 32,
+        "endLine": 705,
+        "endChar": 55
+      },
+      "revId": "8f8b31bef0c2b9a026383920c81cea54fddc42da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
