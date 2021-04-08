@@ -517,8 +517,8 @@ public class IccProvider extends ContentProvider {
                 }
                 contact[3] = anrString.toString();
             }
-
             contact[4] = id;
+
             cursor.addRow(contact);
         }
     }
