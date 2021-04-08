@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.uicc;
 
+import android.hardware.radio.V1_6.PhonebookCapacity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -50,6 +51,21 @@ public class AdnCapacity implements Parcelable {
         mMaxNumberLength = maxNumberLength;
         mMaxEmailLength = maxEmailLength;
         mMaxAnrLength = maxAnrLength;
+    }
+
+    public AdnCapacity(PhonebookCapacity pbCap) {
+        if (pbCap != null) {
+            mMaxAdnCount = pbCap.maxAdnRecords;
+            mUsedAdnCount = pbCap.usedAdnRecords;
+            mMaxEmailCount = pbCap.maxEmailRecords;
+            mUsedEmailCount = pbCap.usedEmailRecords;
+            mMaxAnrCount = pbCap.maxAdditionalNumberRecords;
+            mUsedAnrCount = pbCap.usedAdditionalNumberRecords;
+            mMaxNameLength = pbCap.maxNameLen;
+            mMaxNumberLength = pbCap.maxNumberLen;
+            mMaxEmailLength = pbCap.maxEmailLen;
+            mMaxAnrLength = pbCap.maxAdditionalNumberLen;
+        }
     }
 
     public int getMaxAdnCount() {
@@ -90,6 +106,10 @@ public class AdnCapacity implements Parcelable {
 
     public int getMaxAnrLength() {
         return mMaxAnrLength;
+    }
+
+    public boolean isSimFull() {
+        return mMaxAdnCount == mUsedAdnCount;
     }
 
     public static final Parcelable.Creator<AdnCapacity> CREATOR
@@ -134,5 +154,24 @@ public class AdnCapacity implements Parcelable {
         dest.writeInt(mMaxNumberLength);
         dest.writeInt(mMaxEmailLength);
         dest.writeInt(mMaxAnrLength);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AdnCapacity) {
+            AdnCapacity capacity = (AdnCapacity)obj;
+            return capacity.getMaxAdnCount() == mMaxAdnCount
+                    && capacity.getUsedAdnCount() == mUsedAdnCount
+                    && capacity.getMaxEmailCount() == mMaxEmailCount
+                    && capacity.getUsedEmailCount() == mUsedEmailCount
+                    && capacity.getMaxAnrCount() == mMaxAnrCount
+                    && capacity.getUsedAnrCount() == mUsedAnrCount
+                    && capacity.getMaxNameLength() == mMaxNameLength
+                    && capacity.getMaxNumberLength() == mMaxNumberLength
+                    && capacity.getMaxEmailLength() == mMaxEmailLength
+                    && capacity.getMaxAnrLength() == mMaxAnrLength;
+        } else {
+            return false;
+        }
     }
 }
