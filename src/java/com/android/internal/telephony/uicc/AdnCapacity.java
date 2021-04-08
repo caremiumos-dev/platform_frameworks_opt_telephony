@@ -117,6 +117,10 @@ public class AdnCapacity implements Parcelable {
         return mMaxAnrLength;
     }
 
+    public boolean isSimFull() {
+        return mMaxAdnCount == mUsedAdnCount;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -134,5 +138,24 @@ public class AdnCapacity implements Parcelable {
         dest.writeInt(mMaxNumberLength);
         dest.writeInt(mMaxEmailLength);
         dest.writeInt(mMaxAnrLength);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AdnCapacity) {
+            AdnCapacity capacity = (AdnCapacity)obj;
+            return capacity.getMaxAdnCount() == mMaxAdnCount
+                    && capacity.getUsedAdnCount() == mUsedAdnCount
+                    && capacity.getMaxEmailCount() == mMaxEmailCount
+                    && capacity.getUsedEmailCount() == mUsedEmailCount
+                    && capacity.getMaxAnrCount() == mMaxAnrCount
+                    && capacity.getUsedAnrCount() == mUsedAnrCount
+                    && capacity.getMaxNameLength() == mMaxNameLength
+                    && capacity.getMaxNumberLength() == mMaxNumberLength
+                    && capacity.getMaxEmailLength() == mMaxEmailLength
+                    && capacity.getMaxAnrLength() == mMaxAnrLength;
+        } else {
+            return false;
+        }
     }
 }
