@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57491826_ff92a7b5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-04-09T19:31:27Z",
+      "side": 1,
+      "message": "Should this be \u003d\u003d or apnSetting.hasApnType()? Typically I guess ims apns do not support other apn types, but I am not sure.",
+      "range": {
+        "startLine": 2209,
+        "startChar": 65,
+        "endLine": 2209,
+        "endChar": 67
+      },
+      "revId": "26326e35310aea7b35af2ca8395aa188427149c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
