@@ -202,6 +202,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efd641a_010eddbc",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 5945,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T03:41:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a68a3228_028c342b",
+      "range": {
+        "startLine": 5945,
+        "startChar": 16,
+        "endLine": 5945,
+        "endChar": 35
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d17123d8_ab2da786",
@@ -215,6 +239,24 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "need the getSimPhonebookCapacities function",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2906f86b_7f83cd67",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 5974,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T03:41:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d17123d8_ab2da786",
       "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -255,6 +297,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "is this being used?",
+      "range": {
+        "startLine": 122,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 23
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beb2ef3a_b1f966bf",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T03:41:49Z",
+      "side": 1,
+      "message": "I still don\u0027t see this used.  Please don\u0027t add unused imports",
+      "parentUuid": "d22da75b_95d9bd17",
       "range": {
         "startLine": 122,
         "startChar": 17,
@@ -311,6 +377,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bf81b18_184cf509",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T03:41:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "087f4a11_77e046d4",
+      "range": {
+        "startLine": 2003,
+        "startChar": 16,
+        "endLine": 2003,
+        "endChar": 43
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27d7640b_4b2bdbf3",
@@ -324,6 +414,24 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "need getSimPhonebookRecordCapacitiesResponse",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc37cef_2a978978",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T03:41:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27d7640b_4b2bdbf3",
       "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
