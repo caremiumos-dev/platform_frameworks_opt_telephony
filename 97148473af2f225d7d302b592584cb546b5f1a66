@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bc20794_86ae8370",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-09T02:40:21Z",
+      "side": 1,
+      "message": "Please correct the lint comments shown in the comment history.  They are general formatting issues that should be resolved before submitting.",
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e346852_e88b0cd8",
