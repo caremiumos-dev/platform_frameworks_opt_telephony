@@ -60,6 +60,7 @@ import android.os.SystemClock;
 import android.os.TimestampedValue;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentity;
@@ -362,6 +363,20 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         if (TextUtils.isEmpty(mcc) || TextUtils.isEmpty(mnc)) return "";
 
         return mcc + mnc;
+    }
+
+    @Test
+    @SmallTest
+    public void testRadioOffReasonIsUserWhenApmOrCellularOnBoot() {
+        ContentResolver contentResolver = mPhone.getContext().getContentResolver();
+        Settings.Global.putInt(contentResolver, Settings.Global.ENABLE_CELLULAR_ON_BOOT, 1);
+        Settings.Global.putInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 1);
+
+        ServiceStateTracker ssTracker = new ServiceStateTracker(mPhone, mSimulatedCommands);
+
+        assertTrue(ssTracker.getRadioPowerOffReasonsForTest().contains(
+                Phone.RADIO_POWER_REASON_USER));
+
     }
 
     @Test
