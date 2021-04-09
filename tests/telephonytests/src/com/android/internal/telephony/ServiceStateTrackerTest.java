@@ -41,6 +41,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -60,6 +61,7 @@ import android.os.SystemClock;
 import android.os.TimestampedValue;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentity;
@@ -362,6 +364,28 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         if (TextUtils.isEmpty(mcc) || TextUtils.isEmpty(mnc)) return "";
 
         return mcc + mnc;
+    }
+
+    @Test
+    @SmallTest
+    public void testRadioOffReasonIsUserWhenApmOrCellularOnBoot() {
+        ContentResolver contentResolver = mPhone.getContext().getContentResolver();
+        int originalAirplaneMode = Settings.Global.getInt(mCr, Settings.Global.AIRPLANE_MODE_ON, 0);
+        int originalEnableCellularOnBoot = Settings.Global.getInt(mCr,
+                Settings.Global.ENABLE_CELLULAR_ON_BOOT, 0);
+
+        Settings.Global.putInt(contentResolver, Settings.Global.ENABLE_CELLULAR_ON_BOOT, 1);
+        Settings.Global.putInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 1);
+
+        sst.setDesiredPowerStateOnConstruction();
+        sst.setRadioPowerReasonsOnConstruction();
+
+        assertTrue(sst.getRadioPowerOffReasonsForTest().contains(Phone.RADIO_POWER_REASON_USER));
+
+        Settings.Global.putInt(contentResolver, Settings.Global.ENABLE_CELLULAR_ON_BOOT,
+                originalAirplaneMode);
+        Settings.Global.putInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON,
+                originalEnableCellularOnBoot);
     }
 
     @Test
