@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009754397",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d22",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "e597f80f_cea4df35",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 6062,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-04-09T11:46:22Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 6062,
+        "startChar": 0,
+        "endLine": 6062,
+        "endChar": 101
+      },
+      "revId": "58da839f14a5a0786bedff544eccba1254e0bbf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000009754395",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1440475?revision\u003d22",
+      "fixSuggestions": [
+        {
+          "fixId": "0a19a904_7821ec09",
+          "description": "Change to \"src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+              "range": {
+                "startLine": 110,
+                "startChar": 7,
+                "endLine": 110,
+                "endChar": 13
+              },
+              "replacement": "because"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "c418f650_2b99df09",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-04-09T11:46:22Z",
+      "side": 1,
+      "message": "Common typo found: \"becase\" -- should it be \"because\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 110,
+        "startChar": 7,
+        "endLine": 110,
+        "endChar": 13
+      },
+      "revId": "58da839f14a5a0786bedff544eccba1254e0bbf6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
