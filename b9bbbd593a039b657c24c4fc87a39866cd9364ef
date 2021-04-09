@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7637521f_20f0c45c",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "76567d6f_8b09a2d2",
+      "range": {
+        "startLine": 114,
+        "startChar": 29,
+        "endLine": 114,
+        "endChar": 58
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a75d5e99_f735661a",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "update with new funciton names",
+      "range": {
+        "startLine": 1094,
+        "startChar": 16,
+        "endLine": 1094,
+        "endChar": 44
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec344900_ccb01079",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "a75d5e99_f735661a",
       "range": {
         "startLine": 1094,
         "startChar": 16,
@@ -64,6 +112,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a12a91b_c1f59f20",
+        "filename": "src/java/com/android/internal/telephony/BaseCommands.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "added",
+      "parentUuid": "e111f0c7_7d2b3f42",
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e44de66_57dea193",
@@ -87,6 +153,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a7068c2_74cb1a25",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "yeah",
+      "parentUuid": "5e44de66_57dea193",
+      "range": {
+        "startLine": 2653,
+        "startChar": 16,
+        "endLine": 2653,
+        "endChar": 37
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af127658_93f536a8",
@@ -100,6 +190,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "needs update to registerForSimPhonebookChanged",
+      "range": {
+        "startLine": 2663,
+        "startChar": 16,
+        "endLine": 2663,
+        "endChar": 44
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa43868b_480f47e5",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2663,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "af127658_93f536a8",
       "range": {
         "startLine": 2663,
         "startChar": 16,
@@ -156,6 +270,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58272c84_7c23f1fc",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "7e2a00fc_d3eb4176",
+      "range": {
+        "startLine": 2681,
+        "startChar": 16,
+        "endLine": 2681,
+        "endChar": 46
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efdda88a_9d2e1d01",
@@ -169,6 +307,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "should populate a class for type safety",
+      "range": {
+        "startLine": 463,
+        "startChar": 15,
+        "endLine": 472,
+        "endChar": 63
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "486ec5ac_a65f7d8e",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "efdda88a_9d2e1d01",
       "range": {
         "startLine": 463,
         "startChar": 15,
@@ -284,6 +446,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f9f473_9778794e",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "35334623_c45bd922",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 56
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d22da75b_95d9bd17",
@@ -331,6 +517,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86fc6dfa_be98a53d",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "will remove it",
+      "parentUuid": "beb2ef3a_b1f966bf",
+      "range": {
+        "startLine": 122,
+        "startChar": 17,
+        "endLine": 122,
+        "endChar": 23
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26ba6b0b_bae5d0f3",
@@ -344,6 +554,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "names need to be updated",
+      "range": {
+        "startLine": 1082,
+        "startChar": 16,
+        "endLine": 1082,
+        "endChar": 33
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af5fad0b_3a700913",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "26ba6b0b_bae5d0f3",
       "range": {
         "startLine": 1082,
         "startChar": 16,
@@ -459,6 +693,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a75a4687_be3ff391",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "fe4814a8_dbd32347",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 7
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6b3ef1e_815eec51",
@@ -482,6 +740,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea82e94_135f9fad",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b6b3ef1e_815eec51",
+      "range": {
+        "startLine": 3,
+        "startChar": 7,
+        "endLine": 4,
+        "endChar": 42
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dae2a27a_a6660258",
@@ -495,6 +777,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "These should be private.",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a8a1a34_219c65b0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecord.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "dae2a27a_a6660258",
       "range": {
         "startLine": 21,
         "startChar": 4,
@@ -551,6 +857,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf07a99_1f52fe33",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b9f373c6_a067d676",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5725937_251877da",
@@ -564,6 +894,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "this needs to be rethought.  You don\u0027t need to wait until it\u0027s loaded but we may need to notify folks when contacts are updated: we get a notification from the ril, reload into a parallel data structure and when the last chunk is read we swap in the new data (atomically) and send a broadcast that sim contacts have changed..  something like that.\n\nThen we don\u0027t need to block folks for initial load or updates.",
+      "range": {
+        "startLine": 67,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef49cfa_914929d7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "c5725937_251877da",
       "range": {
         "startLine": 67,
         "startChar": 1,
@@ -597,6 +951,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61e78e7d_a2bf7a84",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "11bec430_f5fadab9",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 73
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78db00d9_65a1ddb4",
@@ -610,6 +988,30 @@
       "writtenOn": "2021-03-17T02:25:55Z",
       "side": 1,
       "message": "are these used?",
+      "range": {
+        "startLine": 486,
+        "startChar": 4,
+        "endLine": 523,
+        "endChar": 26
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4149f9e4_7c964c89",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T05:56:35Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "78db00d9_65a1ddb4",
       "range": {
         "startLine": 486,
         "startChar": 4,
