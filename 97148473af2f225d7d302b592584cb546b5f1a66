@@ -94,6 +94,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14850030_3aa19cf2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T06:33:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "e228037a_55b13a82",
+      "range": {
+        "startLine": 6059,
+        "startChar": 16,
+        "endLine": 6059,
+        "endChar": 28
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d310592a_50fe7992",
@@ -107,6 +131,30 @@
       "writtenOn": "2021-04-09T03:41:49Z",
       "side": 1,
       "message": "This needs to be conditional.  Perhaps read a config resource?",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 314,
+        "endChar": 60
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be5a1e2_b9d51335",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T06:33:13Z",
+      "side": 1,
+      "message": "ideally it isn\u0027t proper here to use a config resource.\n\nQC RIL makes modemReducedFeatureSet1 true, by default, this feature isn\u0027t enabled on QC platform.\n\nif we use a config, whether such cap config doesn\u0027t make sense?\n\ncurrently, i thougth it can be self-driven by mInitialzation from phonebook cache\n\nso whether we need to remove this here?",
+      "parentUuid": "d310592a_50fe7992",
       "range": {
         "startLine": 314,
         "startChar": 0,
@@ -140,6 +188,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7595cc76_d1ec62cd",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T06:33:13Z",
+      "side": 1,
+      "message": "fine",
+      "parentUuid": "d671ccc3_ca04a200",
+      "range": {
+        "startLine": 1103,
+        "startChar": 33,
+        "endLine": 1103,
+        "endChar": 57
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7169de5_a47d3f2a",
@@ -153,6 +225,30 @@
       "writtenOn": "2021-04-09T03:41:49Z",
       "side": 1,
       "message": "it may be safer to have a AdnCapacity constructor that takes a android.hardware.radio.V1_6.PhonebookCapacity argument).  That way the assigning code will be something like:\nusedAdnRecords \u003d pbCapacity.usedAdnRecords\nand misalignment is easy to spot.",
+      "range": {
+        "startLine": 2017,
+        "startChar": 32,
+        "endLine": 2017,
+        "endChar": 68
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c11b165_02c2ff6b",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T06:33:13Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "d7169de5_a47d3f2a",
       "range": {
         "startLine": 2017,
         "startChar": 32,
