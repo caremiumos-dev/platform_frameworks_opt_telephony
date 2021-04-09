@@ -247,6 +247,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "586e0334_8dad8377",
+        "filename": "src/java/com/android/internal/telephony/CommandsInterface.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 2671,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-09T06:13:31Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "52d0b5d4_f2b20925",
+      "range": {
+        "startLine": 2671,
+        "startChar": 16,
+        "endLine": 2671,
+        "endChar": 46
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e2a00fc_d3eb4176",
