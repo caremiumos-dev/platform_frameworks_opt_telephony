@@ -699,17 +699,8 @@ public class ServiceStateTracker extends Handler {
         mCi.setOnNITZTime(this, EVENT_NITZ_TIME, null);
 
         mCr = phone.getContext().getContentResolver();
-        // system setting property AIRPLANE_MODE_ON is set in Settings.
-        int airplaneMode = Settings.Global.getInt(mCr, Settings.Global.AIRPLANE_MODE_ON, 0);
-        int enableCellularOnBoot = Settings.Global.getInt(mCr,
-                Settings.Global.ENABLE_CELLULAR_ON_BOOT, 1);
-        mDesiredPowerState = (enableCellularOnBoot > 0) && ! (airplaneMode > 0);
-        if (!mDesiredPowerState) {
-            sRadioPowerOffReasons.add(Phone.RADIO_POWER_REASON_USER);
-        }
-        mRadioPowerLog.log("init : airplane mode = " + airplaneMode + " enableCellularOnBoot = " +
-                enableCellularOnBoot);
-
+        setDesiredPowerStateOnConstruction();
+        setRadioPowerReasonsOnConstruction();
 
         setSignalStrengthDefaultValues();
         mPhone.getCarrierActionAgent().registerForCarrierAction(CARRIER_ACTION_SET_RADIO_ENABLED,
@@ -747,6 +738,25 @@ public class ServiceStateTracker extends Handler {
                 CarrierServiceStateTracker.CARRIER_EVENT_DATA_DEREGISTRATION, null);
         registerForImsCapabilityChanged(mCSST,
                 CarrierServiceStateTracker.CARRIER_EVENT_IMS_CAPABILITIES_CHANGED, null);
+    }
+
+    @VisibleForTesting
+    public void setDesiredPowerStateOnConstruction() {
+        // system setting property AIRPLANE_MODE_ON is set in Settings.
+        int airplaneMode = Settings.Global.getInt(mCr, Settings.Global.AIRPLANE_MODE_ON, 0);
+        int enableCellularOnBoot = Settings.Global.getInt(mCr,
+                Settings.Global.ENABLE_CELLULAR_ON_BOOT, 1);
+        mDesiredPowerState = (enableCellularOnBoot > 0) && ! (airplaneMode > 0);
+
+        mRadioPowerLog.log("init : airplane mode = " + airplaneMode + " enableCellularOnBoot = " +
+                enableCellularOnBoot);
+    }
+
+    @VisibleForTesting
+    public void setRadioPowerReasonsOnConstruction() {
+        if (!mDesiredPowerState) {
+            sRadioPowerOffReasons.add(Phone.RADIO_POWER_REASON_USER);
+        }
     }
 
     @VisibleForTesting
