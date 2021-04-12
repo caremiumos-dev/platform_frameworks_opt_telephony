@@ -160,6 +160,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10137a39_d9059b01",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-04-12T17:59:34Z",
+      "side": 1,
+      "message": "Nazanin and I had a conversation about this - CarrierPrivilegesTracker shouldnt be in Phone.java at all if it is not usable in IMS, in fact it is only used in DcTracker and and should only be defined in GsmCdmaPhone. Not sure why CarrierPrivsTracker was even defined in Phone.java...\n\nThis is fine for now, Nazanin is looking at refactoring this code to refactor CarrierPrivilegesTracker and move it into GsmCdmaPhone in a different CL.",
+      "parentUuid": "36913ac8_9e5b2202",
+      "range": {
+        "startLine": 445,
+        "startChar": 12,
+        "endLine": 445,
+        "endChar": 63
+      },
+      "revId": "1261a6e0f3b499c8e745f85216cce55a0f526beb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf98ddac_39b90842",
