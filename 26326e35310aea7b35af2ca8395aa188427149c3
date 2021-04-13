@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5607cf77_ad1cf0a4",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcNetworkAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-13T23:01:54Z",
+      "side": 1,
+      "message": "Please do not do this in DcNetworkAgent. Also why would sending the initial attach request again can prevent modem try to reattach? This sounds like a bug to me.",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 9
+      },
+      "revId": "26326e35310aea7b35af2ca8395aa188427149c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57491826_ff92a7b5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 4
