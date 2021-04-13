@@ -282,6 +282,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa102796_57de78f7",
+        "filename": "src/java/com/android/internal/telephony/uicc/PhonebookStatus.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-13T06:22:30Z",
+      "side": 1,
+      "message": "yes, not needed, and use IntDef instead",
+      "parentUuid": "d4f5f5ee_68101727",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 28
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed5684b7_931067c8",
@@ -484,6 +508,30 @@
       "side": 1,
       "message": "will check",
       "parentUuid": "69a02594_5a6f3de7",
+      "range": {
+        "startLine": 84,
+        "startChar": 25,
+        "endLine": 84,
+        "endChar": 52
+      },
+      "revId": "97148473af2f225d7d302b592584cb546b5f1a66",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afca351e_9fe0f7c6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecord.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-13T06:22:30Z",
+      "side": 1,
+      "message": "used in constructor",
+      "parentUuid": "b9021534_41bd785e",
       "range": {
         "startLine": 84,
         "startChar": 25,
