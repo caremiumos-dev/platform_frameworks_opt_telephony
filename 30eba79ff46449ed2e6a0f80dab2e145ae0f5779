@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37571242_2331757a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081223
+      },
+      "writtenOn": "2021-04-13T14:12:36Z",
+      "side": 1,
+      "message": "This used to be a standard in old modems ( as far as I can remember ) and after the HIDL radio interface was introduced the field was enforced to be MCCMNC only, yet some modems were never updated to reflect this change.\n\nThis can be seen on sm8250 modems, the Q BSP appends \"+$(ratmap[tech])\" and we\u0027ve seen the same on sm8250 modems shipped with R.\n\nI think we should add a vts case to prevent further modems to have the same issues.",
+      "revId": "30eba79ff46449ed2e6a0f80dab2e145ae0f5779",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
