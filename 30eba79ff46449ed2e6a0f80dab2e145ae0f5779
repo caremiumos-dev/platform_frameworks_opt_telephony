@@ -33,6 +33,23 @@
       "message": "We should add VTS tests that fail rather than adding code to allow this. The OEMs/SoC vendors are violating a very clear and obvious specification. It\u0027s documented as \"a 5 or 6 digit numeric code\". If it\u0027s longer than 6 digits, then please fail VTS.",
       "revId": "30eba79ff46449ed2e6a0f80dab2e145ae0f5779",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d23351_64e00ca0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081223
+      },
+      "writtenOn": "2021-04-13T17:14:56Z",
+      "side": 1,
+      "message": "Will keep this around until a VTS test is ready, I\u0027ll follow up the other change",
+      "revId": "30eba79ff46449ed2e6a0f80dab2e145ae0f5779",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
