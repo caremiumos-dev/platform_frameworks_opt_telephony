@@ -2720,7 +2720,6 @@ public class GsmCdmaPhone extends Phone {
         // If this is on APM off, SIM may already be loaded. Send setPreferredNetworkType
         // request to RIL to preserve user setting across APM toggling
         setPreferredNetworkTypeIfSimLoaded();
-        notifyAllowedNetworkTypesChanged();
     }
 
     private void handleRadioOffOrNotAvailable() {
@@ -2869,8 +2868,9 @@ public class GsmCdmaPhone extends Phone {
 
                 updateCdmaRoamingSettingsAfterCarrierConfigChanged(b);
 
-                updateNrSettingsAfterCarrierConfigChanged();
-
+                updateNrSettingsAfterCarrierConfigChanged(b);
+                loadAllowedNetworksFromSubscriptionDatabase();
+                updateAllowedNetworkTypes(null);
                 break;
 
             case EVENT_SET_ROAMING_PREFERENCE_DONE:
@@ -3719,9 +3719,9 @@ public class GsmCdmaPhone extends Phone {
             // Get how many number of system selection code ranges
             int selRc = Integer.parseInt(sch[1]);
             for (int i = 0; i < selRc; i++) {
-                if (!TextUtils.isEmpty(sch[i+2]) && !TextUtils.isEmpty(sch[i+3])) {
-                    int selMin = Integer.parseInt(sch[i+2]);
-                    int selMax = Integer.parseInt(sch[i+3]);
+                if (!TextUtils.isEmpty(sch[i*2+2]) && !TextUtils.isEmpty(sch[i*2+3])) {
+                    int selMin = Integer.parseInt(sch[i*2+2]);
+                    int selMax = Integer.parseInt(sch[i*2+3]);
                     // Check if the selection code extracted from the dial string falls
                     // within any of the range pairs specified in the schema.
                     if ((sysSelCodeInt >= selMin) && (sysSelCodeInt <= selMax)) {
@@ -4566,8 +4566,14 @@ public class GsmCdmaPhone extends Phone {
         setBroadcastEmergencyCallStateChanges(broadcastEmergencyCallStateChanges);
     }
 
-    private void updateNrSettingsAfterCarrierConfigChanged() {
-        updateAllowedNetworkTypes(null);
+    private void updateNrSettingsAfterCarrierConfigChanged(PersistableBundle config) {
+        if (config == null) {
+            loge("didn't get the carrier_nr_availability_int from the carrier config.");
+            return;
+        }
+        int[] nrAvailabilities = config.getIntArray(
+                CarrierConfigManager.KEY_CARRIER_NR_AVAILABILITIES_INT_ARRAY);
+        mIsCarrierNrSupported = !ArrayUtils.isEmpty(nrAvailabilities);
     }
 
     private void updateCdmaRoamingSettingsAfterCarrierConfigChanged(PersistableBundle config) {

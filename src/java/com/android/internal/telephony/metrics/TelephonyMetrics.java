@@ -57,6 +57,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyHistogram;
 import android.telephony.TelephonyManager;
+import android.telephony.TelephonyManager.PrefNetworkMode;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataService;
 import android.telephony.emergency.EmergencyNumber;
@@ -487,10 +488,12 @@ public class TelephonyMetrics {
             pw.print("Start time in minutes: " + callSession.startTimeMinutes);
             pw.print(", phone: " + callSession.phoneId);
             if (callSession.eventsDropped) {
-                pw.println(" Events dropped: " + callSession.eventsDropped);
+                pw.println(", events dropped: " + callSession.eventsDropped);
+            } else {
+                pw.println("");
             }
 
-            pw.println(" Events: ");
+            pw.println("Events: ");
             pw.increaseIndent();
             for (TelephonyCallSession.Event event : callSession.events) {
                 pw.print(event.delay);
@@ -543,9 +546,16 @@ public class TelephonyMetrics {
             for (SmsSession.Event event : smsSession.events) {
                 pw.print(event.delay);
                 pw.print(" T=");
-                pw.println(smsSessionEventToString(event.type));
-                // Only show more info for tx/rx sms
-                if (event.type == SmsSession.Event.Type.SMS_RECEIVED) {
+                if (event.type == SmsSession.Event.Type.RIL_SERVICE_STATE_CHANGED) {
+                    pw.println(smsSessionEventToString(event.type)
+                            + "(" + "Data RAT " + event.serviceState.dataRat
+                            + " Voice RAT " + event.serviceState.voiceRat
+                            + " Channel Number " + event.serviceState.channelNumber
+                            + " NR Frequency Range " + event.serviceState.nrFrequencyRange
+                            + " NR State " + event.serviceState.nrState
+                            + ")");
+                } else if (event.type == SmsSession.Event.Type.SMS_RECEIVED) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     switch (event.smsType) {
                         case SmsSession.Event.SmsType.SMS_TYPE_SMS_PP:
@@ -569,6 +579,7 @@ public class TelephonyMetrics {
                     pw.decreaseIndent();
                 } else if (event.type == SmsSession.Event.Type.SMS_SEND
                         || event.type == SmsSession.Event.Type.SMS_SEND_RESULT) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     pw.println("ReqId=" + event.rilRequestId);
                     pw.println("E=" + event.errorCode);
@@ -576,6 +587,7 @@ public class TelephonyMetrics {
                     pw.println("ImsE=" + event.imsError);
                     pw.decreaseIndent();
                 } else if (event.type == SmsSession.Event.Type.INCOMPLETE_SMS_RECEIVED) {
+                    pw.println(smsSessionEventToString(event.type));
                     pw.increaseIndent();
                     pw.println("Received: " + event.incompleteSms.receivedParts + "/"
                             + event.incompleteSms.totalParts);
@@ -1081,7 +1093,7 @@ public class TelephonyMetrics {
         TelephonyServiceState serviceState = mLastServiceState.get(phoneId);
         if (serviceState != null) {
             smsSession.addEvent(smsSession.startElapsedTimeMs, new SmsSessionEventBuilder(
-                    TelephonyCallSession.Event.Type.RIL_SERVICE_STATE_CHANGED)
+                    SmsSession.Event.Type.RIL_SERVICE_STATE_CHANGED)
                     .setServiceState(serviceState));
         }
 
@@ -1216,6 +1228,20 @@ public class TelephonyMetrics {
                 .setSignalStrength(signalStrength).build());
     }
 
+    private TelephonySettings cloneCurrentTelephonySettings(int phoneId) {
+        TelephonySettings newSettings = new TelephonySettings();
+        TelephonySettings lastSettings = mLastSettings.get(phoneId);
+        if (lastSettings != null) {
+            // No clone method available, so each relevant field is copied individually.
+            newSettings.preferredNetworkMode = lastSettings.preferredNetworkMode;
+            newSettings.isEnhanced4GLteModeEnabled = lastSettings.isEnhanced4GLteModeEnabled;
+            newSettings.isVtOverLteEnabled = lastSettings.isVtOverLteEnabled;
+            newSettings.isWifiCallingEnabled = lastSettings.isWifiCallingEnabled;
+            newSettings.isVtOverWifiEnabled = lastSettings.isVtOverWifiEnabled;
+        }
+        return newSettings;
+    }
+
     /**
      * Write IMS feature settings changed event
      *
@@ -1224,8 +1250,9 @@ public class TelephonyMetrics {
      * @param network The IMS network type
      * @param value The settings. 0 indicates disabled, otherwise enabled.
      */
-    public void writeImsSetFeatureValue(int phoneId, int feature, int network, int value) {
-        TelephonySettings s = new TelephonySettings();
+    public synchronized void writeImsSetFeatureValue(int phoneId, int feature, int network,
+            int value) {
+        TelephonySettings s = cloneCurrentTelephonySettings(phoneId);
         if (network == ImsRegistrationImplBase.REGISTRATION_TECH_LTE) {
             switch (feature) {
                 case MmTelFeature.MmTelCapabilities.CAPABILITY_TYPE_VOICE:
@@ -1245,7 +1272,6 @@ public class TelephonyMetrics {
                     break;
             }
         }
-
 
         // If the settings don't change, we don't log the event.
         if (mLastSettings.get(phoneId) != null &&
@@ -1273,8 +1299,9 @@ public class TelephonyMetrics {
      * @param phoneId Phone id
      * @param networkType The preferred network
      */
-    public void writeSetPreferredNetworkType(int phoneId, int networkType) {
-        TelephonySettings s = new TelephonySettings();
+    public synchronized void writeSetPreferredNetworkType(int phoneId,
+            @PrefNetworkMode int networkType) {
+        TelephonySettings s = cloneCurrentTelephonySettings(phoneId);
         s.preferredNetworkMode = networkType + 1;
 
         // If the settings don't change, we don't log the event.
@@ -2438,7 +2465,9 @@ public class TelephonyMetrics {
         int smsTech = getSmsTech(smsSource, smsFormat == SmsSession.Event.Format.SMS_FORMAT_3GPP2);
 
         InProgressSmsSession smsSession = startNewSmsSession(phoneId);
-        for (long time : timestamps) {
+
+        long startElapsedTimeMillis = SystemClock.elapsedRealtime();
+        for (int i = 0; i < timestamps.length; i++) {
             SmsSessionEventBuilder eventBuilder =
                     new SmsSessionEventBuilder(SmsSession.Event.Type.SMS_RECEIVED)
                         .setFormat(smsFormat)
@@ -2447,7 +2476,8 @@ public class TelephonyMetrics {
                         .setSmsType(type)
                         .setBlocked(blocked)
                         .setMessageId(messageId);
-            smsSession.addEvent(time, eventBuilder);
+            long interval = (i > 0) ? timestamps[i] - timestamps[i - 1] : 0;
+            smsSession.addEvent(startElapsedTimeMillis + interval, eventBuilder);
         }
         finishSmsSession(smsSession);
     }

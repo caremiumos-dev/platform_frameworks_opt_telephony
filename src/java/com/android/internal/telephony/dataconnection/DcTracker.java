@@ -32,6 +32,8 @@ import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -62,6 +64,7 @@ import android.os.PersistableBundle;
 import android.os.RegistrantList;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -99,6 +102,7 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.view.WindowManager;
 
+import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.EventLogTags;
@@ -118,6 +122,7 @@ import com.android.internal.telephony.dataconnection.DataEnabledSettings.DataEna
 import com.android.internal.telephony.metrics.DataStallRecoveryStats;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.util.ArrayUtils;
+import com.android.internal.telephony.util.NotificationChannelController;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.AsyncChannel;
 import com.android.telephony.Rlog;
@@ -149,6 +154,7 @@ public class DcTracker extends Handler {
     private static final boolean VDBG = false; // STOPSHIP if true
     private static final boolean VDBG_STALL = false; // STOPSHIP if true
     private static final boolean RADIO_TESTS = false;
+    private static final String NOTIFICATION_TAG = DcTracker.class.getSimpleName();
 
     @IntDef(value = {
             REQUEST_TYPE_NORMAL,
@@ -254,6 +260,9 @@ public class DcTracker extends Handler {
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TAG = "data_stall_alarm_extra_tag";
     private static final String INTENT_DATA_STALL_ALARM_EXTRA_TRANSPORT_TYPE =
             "data_stall_alarm_extra_transport_type";
+
+    // Unique id for no data notification on setup data permanently failed.
+    private static final int NO_DATA_NOTIFICATION = 1001;
 
     /** The higher index has higher priority. */
     private static final DctConstants.State[] DATA_CONNECTION_STATE_PRIORITIES = {
@@ -1915,11 +1924,18 @@ public class DcTracker extends Handler {
         }
 
         int preferredApnSetId = getPreferredApnSetId();
+        ApnSetting preferredApn = getPreferredApnFromDB();
         for (ApnSetting dunSetting : dunCandidates) {
             if (dunSetting.canSupportNetworkType(
                     ServiceState.rilRadioTechnologyToNetworkType(bearer))) {
                 if (preferredApnSetId == dunSetting.getApnSetId()) {
-                    retDunSettings.add(dunSetting);
+                    if (preferredApn != null && preferredApn.equals(dunSetting)) {
+                        // If there is a preferred APN can handled DUN type, prepend it to list to
+                        // use it preferred.
+                        retDunSettings.add(0, dunSetting);
+                    } else {
+                        retDunSettings.add(dunSetting);
+                    }
                 }
             }
         }
@@ -2043,8 +2059,10 @@ public class DcTracker extends Handler {
         // a dun-profiled connection so we can't share an existing one
         // On GSM/LTE we can share existing apn connections provided they support
         // this type.
-        if (!apnContext.getApnType().equals(ApnSetting.TYPE_DUN_STRING)
-                || ServiceState.isGsm(getDataRat())) {
+        // If asking for ENTERPRISE, there are no compatible data connections, so skip this check
+        if ((apnContext.getApnTypeBitmask() != ApnSetting.TYPE_DUN
+                || ServiceState.isGsm(getDataRat()))
+                && apnContext.getApnTypeBitmask() != ApnSetting.TYPE_ENTERPRISE) {
             dataConnection = checkForCompatibleDataConnection(apnContext, apnSetting);
             if (dataConnection != null) {
                 // Get the apn setting used by the data connection
@@ -2469,7 +2487,7 @@ public class DcTracker extends Handler {
                             }
                         }
                     }
-                } else if (apnSetting != null && apnSetting.canHandleType(apnType)) {
+                } else if (isApnSettingCompatible(curDc, apnType)) {
                     if (curDc.isActive()) {
                         if (DBG) {
                             log("checkForCompatibleDataConnection:"
@@ -2487,6 +2505,20 @@ public class DcTracker extends Handler {
             log("checkForCompatibleDataConnection: potential dc=" + potentialDc);
         }
         return potentialDc;
+    }
+
+    private boolean isApnSettingCompatible(DataConnection dc, int apnType) {
+        ApnSetting apnSetting = dc.getApnSetting();
+        if (apnSetting == null) return false;
+
+        // Nothing can be compatible with type ENTERPRISE
+        for (ApnContext apnContext : dc.getApnContexts()) {
+            if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE) {
+                return false;
+            }
+        }
+
+        return apnSetting.canHandleType(apnType);
     }
 
     private void addRequestNetworkCompleteMsg(Message onCompleteMsg,
@@ -2899,6 +2931,16 @@ public class DcTracker extends Handler {
 
         startNetStatPoll();
         startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
+
+        PersistableBundle b = getCarrierConfig();
+        if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_DEFAULT
+                && b.getBoolean(CarrierConfigManager
+                .KEY_DISPLAY_NO_DATA_NOTIFICATION_ON_PERMANENT_FAILURE_BOOL)) {
+            NotificationManager notificationManager = (NotificationManager)
+                    mPhone.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(Integer.toString(mPhone.getSubId()),
+                    NO_DATA_NOTIFICATION);
+        }
     }
 
     /**
@@ -2981,10 +3023,13 @@ public class DcTracker extends Handler {
                     mPhone.getContext().unregisterReceiver(mProvisionBroadcastReceiver);
                     mProvisionBroadcastReceiver = null;
                 }
+
                 if ((!isProvApn) || mIsProvisioning) {
-                    // Hide any provisioning notification.
-                    cm.setProvisioningNotificationVisible(false, ConnectivityManager.TYPE_MOBILE,
-                            INTENT_PROVISION + ":" + mPhone.getPhoneId());
+                    if (mIsProvisioning) {
+                        // Hide any notification that was showing previously
+                        hideProvisioningNotification();
+                    }
+
                     // Complete the connection normally notifying the world we're connected.
                     // We do this if this isn't a special provisioning apn or if we've been
                     // told its time to provision.
@@ -3008,9 +3053,10 @@ public class DcTracker extends Handler {
                             mTelephonyManager.getNetworkOperatorName());
                     mPhone.getContext().registerReceiver(mProvisionBroadcastReceiver,
                             new IntentFilter(INTENT_PROVISION));
+
                     // Put up user notification that sign-in is required.
-                    cm.setProvisioningNotificationVisible(true, ConnectivityManager.TYPE_MOBILE,
-                            INTENT_PROVISION + ":" + mPhone.getPhoneId());
+                    showProvisioningNotification();
+
                     // Turn off radio to save battery and avoid wasting carrier resources.
                     // The network isn't usable and network validation will just fail anyhow.
                     setRadio(false);
@@ -3072,6 +3118,34 @@ public class DcTracker extends Handler {
                 log("cause=" + DataFailCause.toString(cause)
                         + ", mark apn as permanent failed. apn = " + apn);
                 apnContext.markApnPermanentFailed(apn);
+
+                PersistableBundle b = getCarrierConfig();
+                if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_DEFAULT
+                        && b.getBoolean(CarrierConfigManager
+                        .KEY_DISPLAY_NO_DATA_NOTIFICATION_ON_PERMANENT_FAILURE_BOOL)) {
+                    NotificationManager notificationManager = (NotificationManager)
+                            mPhone.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    CharSequence title = mPhone.getContext().getText(
+                            com.android.internal.R.string.RestrictedOnDataTitle);
+                    CharSequence details = mPhone.getContext().getText(
+                            com.android.internal.R.string.RestrictedStateContent);
+
+                    Notification notification = new Notification.Builder(mPhone.getContext(),
+                            NotificationChannelController.CHANNEL_ID_MOBILE_DATA_STATUS)
+                            .setWhen(System.currentTimeMillis())
+                            .setAutoCancel(true)
+                            .setSmallIcon(com.android.internal.R.drawable.stat_sys_warning)
+                            .setTicker(title)
+                            .setColor(mPhone.getContext().getResources().getColor(
+                                    com.android.internal.R.color.system_notification_accent_color))
+                            .setContentTitle(title)
+                            .setStyle(new Notification.BigTextStyle().bigText(details))
+                            .setContentText(details)
+                            .build();
+                    notificationManager.notify(Integer.toString(mPhone.getSubId()),
+                            NO_DATA_NOTIFICATION, notification);
+                }
             }
 
             int newRequestType = calculateNewRetryRequestType(handoverFailureMode, requestType,
@@ -5222,10 +5296,14 @@ public class DcTracker extends Handler {
 
         if (networkTypeBitmask == 0) {
             profileType = DataProfile.TYPE_COMMON;
-        } else if (ServiceState.bearerBitmapHasCdma(networkTypeBitmask)) {
+        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP2)
+                == networkTypeBitmask) {
             profileType = DataProfile.TYPE_3GPP2;
-        } else {
+        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP)
+                == networkTypeBitmask) {
             profileType = DataProfile.TYPE_3GPP;
+        } else {
+            profileType = DataProfile.TYPE_COMMON;
         }
 
         return new DataProfile.Builder()
@@ -5391,5 +5469,50 @@ public class DcTracker extends Handler {
      */
     public @NonNull DataThrottler getDataThrottler() {
         return mDataThrottler;
+    }
+
+    private void showProvisioningNotification() {
+        final Intent intent = new Intent(DcTracker.INTENT_PROVISION);
+        intent.putExtra(DcTracker.EXTRA_PROVISION_PHONE_ID, mPhone.getPhoneId());
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                mPhone.getContext(), 0 /* requestCode */, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        final Resources r = mPhone.getContext().getResources();
+        final String title = r.getString(R.string.network_available_sign_in, 0);
+        final String details = mTelephonyManager.getNetworkOperator(mPhone.getSubId());
+        final Notification.Builder builder = new Notification.Builder(mPhone.getContext())
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.stat_notify_rssi_in_range)
+                .setChannelId(NotificationChannelController.CHANNEL_ID_MOBILE_DATA_STATUS)
+                .setAutoCancel(true)
+                .setTicker(title)
+                .setColor(mPhone.getContext().getColor(
+                        com.android.internal.R.color.system_notification_accent_color))
+                .setContentTitle(title)
+                .setContentText(details)
+                .setContentIntent(pendingIntent)
+                .setLocalOnly(true)
+                .setOnlyAlertOnce(true);
+
+        final Notification notification = builder.build();
+        try {
+            getNotificationManager().notify(NOTIFICATION_TAG, mPhone.getPhoneId(), notification);
+        } catch (final NullPointerException npe) {
+            Log.e(mLogTag, "showProvisioningNotification: error showing notification", npe);
+        }
+    }
+
+    private void hideProvisioningNotification() {
+        try {
+            getNotificationManager().cancel(NOTIFICATION_TAG, mPhone.getPhoneId());
+        } catch (final NullPointerException npe) {
+            Log.e(mLogTag, "hideProvisioningNotification: error hiding notification", npe);
+        }
+    }
+
+    private NotificationManager getNotificationManager() {
+        return (NotificationManager) mPhone.getContext()
+                .createContextAsUser(UserHandle.ALL, 0 /* flags */)
+                .getSystemService(Context.NOTIFICATION_SERVICE);
     }
 }

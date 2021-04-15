@@ -1585,6 +1585,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                             cleanseInstantLetteringMessage(intentExtras.getString(
                                     android.telecom.TelecomManager.EXTRA_CALL_SUBJECT))
                     );
+                    intentExtras.putString(ImsCallProfile.EXTRA_CALL_SUBJECT,
+                            intentExtras.getString(TelecomManager.EXTRA_CALL_SUBJECT));
                 }
 
                 if (intentExtras.containsKey(android.telecom.TelecomManager.EXTRA_PRIORITY)) {
@@ -4259,7 +4261,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         // the only thing we can do here is splitting the usage into half rx and half tx.
         // Uid -1 indicates this is for the overall device data usage.
         vtDataUsageSnapshot.combineValues(new NetworkStats.Entry(
-                NetworkStats.IFACE_VT, -1, NetworkStats.SET_FOREGROUND,
+                getVtInterface(), -1, NetworkStats.SET_FOREGROUND,
                 NetworkStats.TAG_NONE, NetworkStats.METERED_YES, isRoaming,
                 NetworkStats.DEFAULT_NETWORK_YES, delta / 2, 0, delta / 2, 0, 0));
         mVtDataUsageSnapshot = vtDataUsageSnapshot;
@@ -4282,10 +4284,15 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         // Since the modem only reports the total vt data usage rather than rx/tx separately,
         // the only thing we can do here is splitting the usage into half rx and half tx.
         vtDataUsageUidSnapshot.combineValues(new NetworkStats.Entry(
-                NetworkStats.IFACE_VT, mDefaultDialerUid.get(),
+                getVtInterface(), mDefaultDialerUid.get(),
                 NetworkStats.SET_FOREGROUND, NetworkStats.TAG_NONE, NetworkStats.METERED_YES,
                 isRoaming, NetworkStats.DEFAULT_NETWORK_YES, delta / 2, 0, delta / 2, 0, 0));
         mVtDataUsageUidSnapshot = vtDataUsageUidSnapshot;
+    }
+
+    @VisibleForTesting(visibility = PRIVATE)
+    public String getVtInterface() {
+        return NetworkStats.IFACE_VT + mPhone.getSubId();
     }
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)

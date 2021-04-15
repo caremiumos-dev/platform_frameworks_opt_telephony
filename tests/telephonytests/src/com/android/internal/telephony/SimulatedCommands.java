@@ -47,7 +47,6 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
-import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
 import android.telephony.data.SliceInfo;
@@ -163,6 +162,9 @@ public class SimulatedCommands extends BaseCommands
     private IccSlotStatus mIccSlotStatus;
     private IccIoResult mIccIoResultForApduLogicalChannel;
     private int mChannelId = IccOpenLogicalChannelResponse.INVALID_CHANNEL;
+
+    private Object mDataRegStateResult;
+    private Object mVoiceRegStateResult;
 
     int mPausedResponseCount;
     ArrayList<Message> mPausedResponses = new ArrayList<Message>();
@@ -1002,14 +1004,17 @@ public class SimulatedCommands extends BaseCommands
     public void getVoiceRegistrationState(Message result) {
         mGetVoiceRegistrationStateCallCount.incrementAndGet();
 
-        VoiceRegStateResult ret = new VoiceRegStateResult();
-        ret.regState = mVoiceRegState;
-        ret.rat = mVoiceRadioTech;
-        ret.cssSupported = mCssSupported;
-        ret.roamingIndicator = mRoamingIndicator;
-        ret.systemIsInPrl = mSystemIsInPrl;
-        ret.defaultRoamingIndicator = mDefaultRoamingIndicator;
-        ret.reasonForDenial = mReasonForDenial;
+        Object ret = mVoiceRegStateResult;
+        if (ret == null) {
+            ret = new VoiceRegStateResult();
+            ((VoiceRegStateResult) ret).regState = mVoiceRegState;
+            ((VoiceRegStateResult) ret).rat = mVoiceRadioTech;
+            ((VoiceRegStateResult) ret).cssSupported = mCssSupported;
+            ((VoiceRegStateResult) ret).roamingIndicator = mRoamingIndicator;
+            ((VoiceRegStateResult) ret).systemIsInPrl = mSystemIsInPrl;
+            ((VoiceRegStateResult) ret).defaultRoamingIndicator = mDefaultRoamingIndicator;
+            ((VoiceRegStateResult) ret).reasonForDenial = mReasonForDenial;
+        }
 
         resultSuccess(result, ret);
     }
@@ -1030,14 +1035,17 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
-    public void getDataRegistrationState (Message result) {
+    public void getDataRegistrationState(Message result) {
         mGetDataRegistrationStateCallCount.incrementAndGet();
 
-        DataRegStateResult ret = new DataRegStateResult();
-        ret.regState = mDataRegState;
-        ret.rat = mDataRadioTech;
-        ret.maxDataCalls = mMaxDataCalls;
-        ret.reasonDataDenied = mReasonForDenial;
+        Object ret = mDataRegStateResult;
+        if (ret == null) {
+            ret = new DataRegStateResult();
+            ((DataRegStateResult) ret).regState = mDataRegState;
+            ((DataRegStateResult) ret).rat = mDataRadioTech;
+            ((DataRegStateResult) ret).maxDataCalls = mMaxDataCalls;
+            ((DataRegStateResult) ret).reasonDataDenied = mReasonForDenial;
+        }
 
         resultSuccess(result, ret);
     }
@@ -1205,14 +1213,6 @@ public class SimulatedCommands extends BaseCommands
             } catch (Exception e) {
 
             }
-        }
-
-        // Store different cids to simulate concurrent IMS and default data calls
-        if ((dataProfile.getSupportedApnTypesBitmask() & ApnSetting.TYPE_IMS)
-            == ApnSetting.TYPE_IMS) {
-            mSetupDataCallResult.cid = 0;
-        } else {
-            mSetupDataCallResult.cid = 1;
         }
 
         DataCallResponse response = RIL.convertDataCallResult(mSetupDataCallResult);
@@ -2434,5 +2434,15 @@ public class SimulatedCommands extends BaseCommands
     public void releasePduSessionId(Message message, int pduSessionId) {
         SimulatedCommandsVerifier.getInstance().releasePduSessionId(message, pduSessionId);
         resultSuccess(message, null);
+    }
+
+    @VisibleForTesting
+    public void setDataRegStateResult(Object regStateResult) {
+        mDataRegStateResult = regStateResult;
+    }
+
+    @VisibleForTesting
+    public void setVoiceRegStateResult(Object regStateResult) {
+        mVoiceRegStateResult = regStateResult;
     }
 }
