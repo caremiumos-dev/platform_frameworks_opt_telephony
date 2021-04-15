@@ -858,6 +858,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70576c18_c5ee47ca",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhoneBookRecordCache.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-15T01:16:38Z",
+      "side": 1,
+      "message": "added that",
+      "parentUuid": "112c9e35_da953ccb",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 6
+      },
+      "revId": "b9bbbd593a039b657c24c4fc87a39866cd9364ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9f373c6_a067d676",
