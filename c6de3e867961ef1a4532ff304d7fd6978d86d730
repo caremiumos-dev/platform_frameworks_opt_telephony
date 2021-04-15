@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec58d9c3_dcf98c85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-15T16:29:50Z",
+      "side": 1,
+      "message": "Handle",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "c6de3e867961ef1a4532ff304d7fd6978d86d730",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84179887_bcc592cf",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-15T16:29:50Z",
+      "side": 1,
+      "message": "Should we try to re-populate it also in case of -1 ?",
+      "range": {
+        "startLine": 450,
+        "startChar": 31,
+        "endLine": 450,
+        "endChar": 32
+      },
+      "revId": "c6de3e867961ef1a4532ff304d7fd6978d86d730",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
