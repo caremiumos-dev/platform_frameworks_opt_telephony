@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0643f0b0_9b27ae3b",
+        "filename": "src/java/com/android/internal/telephony/CarrierResolver.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-15T19:22:51Z",
+      "side": 1,
+      "message": "Should we use \u003c\u003d 0 ? I assume -2 is just as invalid, isn\u0027t it?",
+      "range": {
+        "startLine": 151,
+        "startChar": 26,
+        "endLine": 151,
+        "endChar": 82
+      },
+      "revId": "d9d57419b0f52c494c073fd1e4622cf788fc1c85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
