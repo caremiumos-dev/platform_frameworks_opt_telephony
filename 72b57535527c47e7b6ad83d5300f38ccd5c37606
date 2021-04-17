@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36d58882_b375d15e",
+        "filename": "proto/src/persist_atoms.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-17T00:33:05Z",
+      "side": 1,
+      "message": "See discussion in PersistAtomsStorage: maybe Fingerprint instead of build_id?\n\nAlso, I suggest to remove the word \"android\". Only last_build_fingerprint or simply build_fingerprint.",
+      "range": {
+        "startLine": 89,
+        "startChar": 20,
+        "endLine": 89,
+        "endChar": 41
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf377a0a_d3665dee",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-17T00:33:05Z",
+      "side": 1,
+      "message": "My two cents.\n\nI think it\u0027s preferable to have both int\u0027s start with the same prefix, to highlight that they are used for similar purposes. This prefix can be SAVE_TO_FILE_DELAY.\n\nAlso \"add\" seems to imply an addition (since this is an int). And apparently not all method have \"add\" in the name (e.g. setCarrierIdTableVersion).\n\nSo how about:\n - SAVE_TO_FILE_DELAY_FOR_UPDATE_MILLIS\n - SAVE_TO_FILE_DELAY_FOR_GET_MILLIS",
+      "range": {
+        "startLine": 62,
+        "startChar": 29,
+        "endLine": 62,
+        "endChar": 32
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b046c9d6_79e47962",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-17T00:33:05Z",
+      "side": 1,
+      "message": "I would update the comment to indicate why. Something like this:\n// Mixing atoms from different builds can lead to strange results.\n// If the build ID changed, erase previous atoms to avoid mixing them.",
+      "range": {
+        "startLine": 474,
+        "startChar": 15,
+        "endLine": 474,
+        "endChar": 86
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04fa6428_5f8aecb7",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-17T00:33:05Z",
+      "side": 1,
+      "message": "Should we rather use Build.FINGERPRINT ?",
+      "range": {
+        "startLine": 475,
+        "startChar": 17,
+        "endLine": 475,
+        "endChar": 25
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
