@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "effcceff_45341061",
+        "filename": "proto/src/persist_atoms.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-19T20:45:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36d58882_b375d15e",
+      "range": {
+        "startLine": 89,
+        "startChar": 20,
+        "endLine": 89,
+        "endChar": 41
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf377a0a_d3665dee",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-17T00:33:05Z",
       "side": 1,
       "message": "My two cents.\n\nI think it\u0027s preferable to have both int\u0027s start with the same prefix, to highlight that they are used for similar purposes. This prefix can be SAVE_TO_FILE_DELAY.\n\nAlso \"add\" seems to imply an addition (since this is an int). And apparently not all method have \"add\" in the name (e.g. setCarrierIdTableVersion).\n\nSo how about:\n - SAVE_TO_FILE_DELAY_FOR_UPDATE_MILLIS\n - SAVE_TO_FILE_DELAY_FOR_GET_MILLIS",
+      "range": {
+        "startLine": 62,
+        "startChar": 29,
+        "endLine": 62,
+        "endChar": 32
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "882031c6_93498942",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-19T20:45:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf377a0a_d3665dee",
       "range": {
         "startLine": 62,
         "startChar": 29,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6146c127_fa8cb608",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-19T20:45:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b046c9d6_79e47962",
+      "range": {
+        "startLine": 474,
+        "startChar": 15,
+        "endLine": 474,
+        "endChar": 86
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04fa6428_5f8aecb7",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-04-17T00:33:05Z",
       "side": 1,
       "message": "Should we rather use Build.FINGERPRINT ?",
+      "range": {
+        "startLine": 475,
+        "startChar": 17,
+        "endLine": 475,
+        "endChar": 25
+      },
+      "revId": "72b57535527c47e7b6ad83d5300f38ccd5c37606",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c404eafa_96263338",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-19T20:45:52Z",
+      "side": 1,
+      "message": "Done. FINGERPRINT should be more universal.",
+      "parentUuid": "04fa6428_5f8aecb7",
       "range": {
         "startLine": 475,
         "startChar": 17,
