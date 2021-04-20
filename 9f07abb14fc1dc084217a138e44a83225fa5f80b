@@ -45,6 +45,30 @@
       },
       "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d9b00a_69eaef56",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2021-04-20T22:11:22Z",
+      "side": 1,
+      "message": "Jack, from a previous discussion, you mentioned the root cause is that ServiceState is \"hacked\" to be IN_SERVICE when in Airplane Mode + Wi-Fi, and suggested to check isRadioOn() to tell if cellular is really in service.\n\nWe can discuss more offline.\n\n--------\n\nisInServiceAndRadioOn - agree. Will move this check into if ().",
+      "parentUuid": "5ae559fd_c04582f8",
+      "range": {
+        "startLine": 2318,
+        "startChar": 16,
+        "endLine": 2318,
+        "endChar": 27
+      },
+      "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
