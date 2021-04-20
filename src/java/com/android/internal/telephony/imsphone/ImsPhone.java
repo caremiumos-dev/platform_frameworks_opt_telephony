@@ -2319,8 +2319,8 @@ public class ImsPhone extends ImsPhoneBase {
                 || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
         // If we are not IN_SERVICE for voice or data, ignore change roaming state, as we always
         // move to home in this case.
-        if (!isInService) {
-            logi("updateRoamingState: we are OUT_OF_SERVICE, ignoring roaming change.");
+        if (!isInService || !mDefaultPhone.isRadioOn()) {
+            logi("updateRoamingState: we are not IN_SERVICE, ignoring roaming change.");
             return;
         }
         // We ignore roaming changes when moving to IWLAN because it always sets the roaming
