@@ -22,6 +22,29 @@
       },
       "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae559fd_c04582f8",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2318,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-20T21:59:03Z",
+      "side": 1,
+      "message": "This is not isInService anymore. It\u0027s isInServiceAndRadioOn. Why not just get rid of this flag? Just wrap the checks in if(). And the debug message should be modified as well.\n\nBut the fundamental question is, why would ss.getRoaming() return true when radio is off, wouldn\u0027t that be a more fundamental issue we should look into?",
+      "range": {
+        "startLine": 2318,
+        "startChar": 16,
+        "endLine": 2318,
+        "endChar": 27
+      },
+      "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
