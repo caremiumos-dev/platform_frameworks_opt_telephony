@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b65dcd9_0ac0b700",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2021-04-20T22:16:26Z",
+      "side": 1,
+      "message": "Since this CL doesn\u0027t hit merge conflict, I will abandon the sc-dev version and submit here.",
+      "parentUuid": "54ff7364_5ba8be4e",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 52
+      },
+      "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ae559fd_c04582f8",
