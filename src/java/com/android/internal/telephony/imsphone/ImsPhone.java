@@ -2315,8 +2315,10 @@ public class ImsPhone extends ImsPhoneBase {
         if (mRoaming == newRoamingState) {
             return;
         }
-        boolean isInService = (ss.getState() == ServiceState.STATE_IN_SERVICE
-                || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
+        boolean isInService =
+                ((ss.getState() == ServiceState.STATE_IN_SERVICE
+                || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE)
+                && mDefaultPhone.isRadioOn());
         // If we are not IN_SERVICE for voice or data, ignore change roaming state, as we always
         // move to home in this case.
         if (!isInService) {
