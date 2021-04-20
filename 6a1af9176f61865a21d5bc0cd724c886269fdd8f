@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963f6537_76fd7157",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnCapacity.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-20T23:41:34Z",
+      "side": 1,
+      "message": "generally we try to put the Parcel function together (Creator, describeContents and writeToParcel).",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 55
+      },
+      "revId": "6a1af9176f61865a21d5bc0cd724c886269fdd8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25f7121a_8f07f258",
+        "filename": "src/java/com/android/internal/telephony/UiccPhoneBookController.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-20T23:41:34Z",
+      "side": 0,
+      "message": "we can\u0027t delete UnsupportedAppUsage functions - even though this was supposed to be internal only somebody is using it and if we delete it we break things when we push the OTA.  The TargetSdk and tracking bug tell us when we can remove this..",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 53
+      },
+      "revId": "564f7029ac7f1581d203e90dbc052ad0b68b2f99",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

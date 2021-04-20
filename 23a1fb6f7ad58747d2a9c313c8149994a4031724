@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e7db651_7d4834c0",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-20T23:41:34Z",
+      "side": 0,
+      "message": "can\u0027t remove this",
+      "range": {
+        "startLine": 33,
+        "startChar": 5,
+        "endLine": 33,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b81bf7c_98ad9694",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-20T23:41:34Z",
+      "side": 0,
+      "message": "I\u0027m sorry - I think I gave bad advice.  This can\u0027t be deleted due to the UnsupportedAppUsage.  Somebody out there is referencing it and will break if we remove.",
+      "range": {
+        "startLine": 65,
+        "startChar": 5,
+        "endLine": 65,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc2250a_3e9ead02",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-20T23:41:34Z",
+      "side": 0,
+      "message": "can\u0027t remove this",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
