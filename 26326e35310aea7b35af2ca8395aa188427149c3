@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c1f4979_09265c3e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcNetworkAgent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-20T06:43:53Z",
+      "side": 1,
+      "message": "We need to reset initial attach apn here because DcTracker#onDisableApn is not called when #onNetworkUnwanted is called.\n\nIA apn which Modem has is updated every setup data call to support single PDN carrier and Modem reattaches with the updated IA apn by itself. Modem may reattach with wrong IA apn if we reset it here.",
+      "parentUuid": "5607cf77_ad1cf0a4",
+      "range": {
+        "startLine": 198,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 9
+      },
+      "revId": "26326e35310aea7b35af2ca8395aa188427149c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57491826_ff92a7b5",
         "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-09T19:31:27Z",
       "side": 1,
       "message": "Should this be \u003d\u003d or apnSetting.hasApnType()? Typically I guess ims apns do not support other apn types, but I am not sure.",
+      "range": {
+        "startLine": 2209,
+        "startChar": 65,
+        "endLine": 2209,
+        "endChar": 67
+      },
+      "revId": "26326e35310aea7b35af2ca8395aa188427149c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc2d344c_9cc6feb5",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2021-04-20T06:43:53Z",
+      "side": 1,
+      "message": "Reasons:\n1. There are some operators which allow Multi PDN only for IMS APN.\n2. Those operators have IMS dedicated APN.\n3. So, we must suppress updating IA apn only when setup call for IMS APN\n4. There are similar existing code for single PDN at DcTracker#seupData\n\nI reconsidered this condition to move to #setupData because it has similar code for this exception. Could you please check the latest patch?",
+      "parentUuid": "57491826_ff92a7b5",
       "range": {
         "startLine": 2209,
         "startChar": 65,
