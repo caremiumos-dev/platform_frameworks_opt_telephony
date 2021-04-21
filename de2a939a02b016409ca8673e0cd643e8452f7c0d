@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c280c6_4c33f580",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-04-21T12:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "840b65ee_457ebefa",
+      "range": {
+        "startLine": 860,
+        "startChar": 0,
+        "endLine": 863,
+        "endChar": 9
+      },
+      "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "447caa76_79dc3a32",
@@ -181,6 +205,30 @@
       "side": 1,
       "message": "You keep saying the same thing. Please answer the question, can you block/ignore the duplicate request in RIL/modem?",
       "parentUuid": "87c38df4_f4ef6be2",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 43
+      },
+      "revId": "de2a939a02b016409ca8673e0cd643e8452f7c0d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81032b98_7fff12f5",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-04-21T12:45:54Z",
+      "side": 1,
+      "message": "Will remove the checks added for duplicate DDS requests",
+      "parentUuid": "834a50c0_8ab81122",
       "range": {
         "startLine": 957,
         "startChar": 0,
