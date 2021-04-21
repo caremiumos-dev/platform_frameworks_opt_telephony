@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "609e5ba3_090f8e00",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-21T07:25:54Z",
+      "side": 0,
+      "message": "got it",
+      "parentUuid": "5e7db651_7d4834c0",
+      "range": {
+        "startLine": 33,
+        "startChar": 5,
+        "endLine": 33,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b81bf7c_98ad9694",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0caa95df_6358feb0",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-21T07:25:54Z",
+      "side": 0,
+      "message": "got it",
+      "parentUuid": "7b81bf7c_98ad9694",
+      "range": {
+        "startLine": 65,
+        "startChar": 5,
+        "endLine": 65,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cc2250a_3e9ead02",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-04-20T23:41:34Z",
       "side": 0,
       "message": "can\u0027t remove this",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 24
+      },
+      "revId": "23a1fb6f7ad58747d2a9c313c8149994a4031724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a76ea82_053350ef",
+        "filename": "src/java/com/android/internal/telephony/IIccPhoneBook.aidl",
+        "patchSetId": 20
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-21T07:25:54Z",
+      "side": 0,
+      "message": "got it",
+      "parentUuid": "8cc2250a_3e9ead02",
       "range": {
         "startLine": 144,
         "startChar": 5,

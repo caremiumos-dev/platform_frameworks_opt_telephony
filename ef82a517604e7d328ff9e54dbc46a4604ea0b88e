@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03240952_81a29a4d",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-21T07:25:54Z",
+      "side": 1,
+      "message": "ya",
+      "parentUuid": "bd5bc9bf_c0ae48e7",
+      "range": {
+        "startLine": 218,
+        "startChar": 6,
+        "endLine": 221,
+        "endChar": 33
+      },
+      "revId": "ef82a517604e7d328ff9e54dbc46a4604ea0b88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ceb7679_bf86d8fe",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-20T23:41:34Z",
       "side": 1,
       "message": "You shouldn\u0027t add these.\n\nThe reader of the content values must assume these thing may not be present..  we have no control over all call sites so we have to handle nulls properly.  if we do that then these lines aren\u0027t needed here.",
+      "range": {
+        "startLine": 357,
+        "startChar": 6,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "ef82a517604e7d328ff9e54dbc46a4604ea0b88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d612894a_4582ff15",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-21T07:25:54Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "2ceb7679_bf86d8fe",
       "range": {
         "startLine": 357,
         "startChar": 6,
