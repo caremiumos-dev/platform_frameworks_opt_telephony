@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d57f5dcf_0c1dc8cb",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-21T21:23:14Z",
+      "side": 1,
+      "message": "I understand what you want to do, but now I think this is not the right check. You should do what is mentioned below.",
+      "range": {
+        "startLine": 894,
+        "startChar": 0,
+        "endLine": 912,
+        "endChar": 17
+      },
+      "revId": "f14ff1f1aed9e36093831950d45d4dd08e3880b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42892860_dc82c37d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-21T21:23:14Z",
+      "side": 1,
+      "message": "The preferred data sub id gets updated inside updatePreferredDataPhoneId().\n\nSo the right algorithm should be like this,\n\n        int oldPreferredDataSubId \u003d mPreferredDataSubId.get();\n        if (hasAnyActiveSubscription) updatePreferredDataPhoneId();\n        if (oldPreferredDataPhoneId !\u003d mPreferredDataPhoneId) {\n            diffDetected \u003d true;\n        } else if (oldPreferredDataSubId !\u003d mPreferredDataSubId.get()) {\n            // The case where preferred phone id not changed, but sub id changed.\n            notifyPreferredDataSubIdChanged();\n        }",
+      "range": {
+        "startLine": 922,
+        "startChar": 0,
+        "endLine": 939,
+        "endChar": 9
+      },
+      "revId": "f14ff1f1aed9e36093831950d45d4dd08e3880b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
