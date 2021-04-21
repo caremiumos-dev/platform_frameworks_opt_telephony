@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cee04b7c_ef56c058",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2021-04-21T23:10:15Z",
+      "side": 1,
+      "message": "Submitted on sc-dev first and added Merged-In here.",
+      "parentUuid": "2b65dcd9_0ac0b700",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 52
+      },
+      "revId": "9f07abb14fc1dc084217a138e44a83225fa5f80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ae559fd_c04582f8",
