@@ -16,6 +16,24 @@
       "message": "Need to resolve the merge conflict, but LGTM so far",
       "revId": "63fa99fe004c1fac522932643f7b346a37adde4a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8b74a6_af5592de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-23T03:29:07Z",
+      "side": 1,
+      "message": "resloved the conflicts from RIL.java",
+      "parentUuid": "1caa44b5_5b5c58ea",
+      "revId": "63fa99fe004c1fac522932643f7b346a37adde4a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
