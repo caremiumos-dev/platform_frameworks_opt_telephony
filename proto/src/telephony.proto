@@ -365,6 +365,9 @@ message TelephonyServiceState {
 
   // Network registration info
   repeated NetworkRegistrationInfo networkRegistrationInfo = 10;
+
+  // Whether modem is powered off
+  optional bool modem_off = 11;
 }
 
 // Radio access families
