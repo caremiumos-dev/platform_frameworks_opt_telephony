@@ -199,6 +199,11 @@ public class TelephonyMetrics {
     private final SparseArray<Integer> mLastSimState = new SparseArray<>();
 
     /**
+     * Last radio state, indexed by phone id.
+     */
+    private final SparseArray<Integer> mLastRadioState = new SparseArray<>();
+
+    /**
      * Last active subscription information, indexed by phone id.
      */
     private final SparseArray<ActiveSubscriptionInfo> mLastActiveSubscriptionInfos =
@@ -719,6 +724,13 @@ public class TelephonyMetrics {
                 addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, key)
                         .setDataCalls(dataCalls).build());
             }
+        }
+
+        for (int i = 0; i < mLastRadioState.size(); i++) {
+            final int key = mLastRadioState.keyAt(i);
+            TelephonyEvent event = new TelephonyEventBuilder(mStartElapsedTimeMs, key)
+                    .setRadioState(mLastRadioState.get(key)).build();
+            addTelephonyEvent(event);
         }
     }
 
@@ -2678,6 +2690,13 @@ public class TelephonyMetrics {
         TelephonyEvent event = new TelephonyEventBuilder(phoneId)
                 .setNetworkCapabilities(caps).build();
         mLastNetworkCapabilitiesInfos.put(phoneId, caps);
+        addTelephonyEvent(event);
+    }
+
+    /** Write radio state changed event */
+    public void writeRadioState(int phoneId, int state) {
+        TelephonyEvent event = new TelephonyEventBuilder(phoneId).setRadioState(state).build();
+        mLastRadioState.put(phoneId, state);
         addTelephonyEvent(event);
     }
 
