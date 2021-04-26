@@ -47,6 +47,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.Annotation.RadioPowerState;
 import android.telephony.CallQuality;
 import android.telephony.DisconnectCause;
 import android.telephony.NetworkRegistrationInfo;
@@ -177,8 +178,7 @@ public class TelephonyMetrics {
     private final SparseArray<TelephonyServiceState> mLastServiceState = new SparseArray<>();
 
     /**
-     * Last ims capabilities. This is for injecting the base of a new log or a new call/sms
-     * session
+     * Last ims capabilities. This is for injecting the base of a new log or a new call/sms session
      */
     private final SparseArray<ImsCapabilities> mLastImsCapabilities = new SparseArray<>();
 
@@ -188,19 +188,16 @@ public class TelephonyMetrics {
      */
     private final SparseArray<ImsConnectionState> mLastImsConnectionState = new SparseArray<>();
 
-    /**
-     * Last settings state. This is for deduping same settings event logged.
-     */
+    /** Last settings state. This is for deduping same settings event logged. */
     private final SparseArray<TelephonySettings> mLastSettings = new SparseArray<>();
 
-    /**
-     * Last sim state, indexed by phone id.
-     */
+    /** Last sim state, indexed by phone id. */
     private final SparseArray<Integer> mLastSimState = new SparseArray<>();
 
-    /**
-     * Last active subscription information, indexed by phone id.
-     */
+    /** Last radio state, indexed by phone id. */
+    private final SparseArray<Integer> mLastRadioState = new SparseArray<>();
+
+    /** Last active subscription information, indexed by phone id. */
     private final SparseArray<ActiveSubscriptionInfo> mLastActiveSubscriptionInfos =
             new SparseArray<>();
 
@@ -212,20 +209,14 @@ public class TelephonyMetrics {
      */
     private int mLastEnabledModemBitmap = (1 << TelephonyManager.getDefault().getPhoneCount()) - 1;
 
-    /**
-     * Last carrier id matching.
-     */
+    /** Last carrier id matching. */
     private final SparseArray<CarrierIdMatching> mLastCarrierId = new SparseArray<>();
 
-    /**
-     * Last NetworkCapabilitiesInfo, indexed by phone id.
-     */
+    /** Last NetworkCapabilitiesInfo, indexed by phone id. */
     private final SparseArray<NetworkCapabilitiesInfo> mLastNetworkCapabilitiesInfos =
             new SparseArray<>();
 
-    /**
-     * Last RilDataCall Events (indexed by cid), indexed by phone id
-     */
+    /** Last RilDataCall Events (indexed by cid), indexed by phone id */
     private final SparseArray<SparseArray<RilDataCall>> mLastRilDataCallEvents =
             new SparseArray<>();
 
@@ -719,6 +710,13 @@ public class TelephonyMetrics {
                 addTelephonyEvent(new TelephonyEventBuilder(mStartElapsedTimeMs, key)
                         .setDataCalls(dataCalls).build());
             }
+        }
+
+        for (int i = 0; i < mLastRadioState.size(); i++) {
+            final int key = mLastRadioState.keyAt(i);
+            TelephonyEvent event = new TelephonyEventBuilder(mStartElapsedTimeMs, key)
+                    .setRadioState(mLastRadioState.get(key)).build();
+            addTelephonyEvent(event);
         }
     }
 
@@ -2678,6 +2676,13 @@ public class TelephonyMetrics {
         TelephonyEvent event = new TelephonyEventBuilder(phoneId)
                 .setNetworkCapabilities(caps).build();
         mLastNetworkCapabilitiesInfos.put(phoneId, caps);
+        addTelephonyEvent(event);
+    }
+
+    /** Write radio state changed event */
+    public void writeRadioState(int phoneId, @RadioPowerState int state) {
+        TelephonyEvent event = new TelephonyEventBuilder(phoneId).setRadioState(state).build();
+        mLastRadioState.put(phoneId, state);
         addTelephonyEvent(event);
     }
 

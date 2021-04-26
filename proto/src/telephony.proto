@@ -836,6 +836,9 @@ message TelephonyEvent {
 
     // Signal strength
     SIGNAL_STRENGTH = 23;
+
+    // Radio state change event
+    RADIO_STATE_CHANGED = 24;
   }
 
   enum ApnType {
@@ -1828,6 +1831,9 @@ message TelephonyEvent {
   //  (datapol.semantic_type) = ST_SOFTWARE_ID,
   //  (datapol.qualifier) = { is_public: true }
   //]
+
+  // Radio state for the given phone_id (-1 if unknown).
+  optional int32 radio_state = 29 [default = -1];
 }
 
 message ActiveSubscriptionInfo {
