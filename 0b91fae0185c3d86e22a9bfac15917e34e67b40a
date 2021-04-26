@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7777a354_ab4cd6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-26T20:12:35Z",
+      "side": 1,
+      "message": "Please fix the unit test\n\norg.mockito.exceptions.verification.NeverWantedButInvoked:\norg.mockito.exceptions.verification.NeverWantedButInvoked: \nmTelephonyRegistryManager.notifyActiveDataSubIdChanged(\n    1\n);\nNever wanted here:\n-\u003e at com.android.internal.telephony.PhoneSwitcherTest.testEmergencyOverrideSuccessBeforeCallStarts(PhoneSwitcherTest.java:763)\nBut invoked here:\n-\u003e at com.android.internal.telephony.PhoneSwitcher.notifyPreferredDataSubIdChanged(PhoneSwitcher.java:1588)\n\n\tat com.android.internal.telephony.PhoneSwitcherTest.testEmergencyOverrideSuccessBeforeCallStarts(PhoneSwitcherTest.java:763)",
+      "revId": "0b91fae0185c3d86e22a9bfac15917e34e67b40a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
