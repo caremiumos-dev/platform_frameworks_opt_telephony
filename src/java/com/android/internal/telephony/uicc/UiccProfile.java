@@ -617,7 +617,8 @@ public class UiccProfile extends IccCard {
         // If SIM is locked, broadcast state as NOT_READY/LOCKED depending on if records are loaded
         if (cardLocked) {
             if (mIccRecords != null && (mIccRecords.getLockedRecordsLoaded()
-                    || mIccRecords.getNetworkLockedRecordsLoaded())) { // locked records loaded
+                    || mIccRecords.getNetworkLockedRecordsLoaded())
+                    && areCarrierPriviligeRulesLoaded()) { // locked records loaded
                 if (VDBG) {
                     log("updateExternalState: card locked and records loaded; "
                             + "setting state to locked");
