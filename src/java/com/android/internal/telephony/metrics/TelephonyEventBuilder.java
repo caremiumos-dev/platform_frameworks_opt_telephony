@@ -33,6 +33,7 @@ import static com.android.internal.telephony.nano.TelephonyProto.TelephonyServic
 import static com.android.internal.telephony.nano.TelephonyProto.TelephonySettings;
 
 import android.os.SystemClock;
+import android.telephony.Annotation.RadioPowerState;
 import android.telephony.TelephonyManager;
 import android.util.SparseArray;
 
@@ -224,6 +225,13 @@ public class TelephonyEventBuilder {
             NetworkCapabilitiesInfo networkCapabilities) {
         mEvent.type = TelephonyEvent.Type.NETWORK_CAPABILITIES_CHANGED;
         mEvent.networkCapabilities = networkCapabilities;
+        return this;
+    }
+
+    /** Set radio state. */
+    public TelephonyEventBuilder setRadioState(@RadioPowerState int radioState) {
+        mEvent.type = TelephonyEvent.Type.RADIO_STATE_CHANGED;
+        mEvent.radioState = radioState;
         return this;
     }
 }
