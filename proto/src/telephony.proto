@@ -365,6 +365,9 @@ message TelephonyServiceState {
 
   // Network registration info
   repeated NetworkRegistrationInfo networkRegistrationInfo = 10;
+
+  // Whether modem radio is powered off (e.g. in airplane mode, but not just out of service)
+  optional bool modem_radio_off = 11;
 }
 
 // Radio access families

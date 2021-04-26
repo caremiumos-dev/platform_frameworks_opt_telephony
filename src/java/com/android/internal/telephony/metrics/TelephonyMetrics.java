@@ -467,6 +467,7 @@ public class TelephonyMetrics {
                         + " Channel Number " + event.serviceState.channelNumber
                         + " NR Frequency Range " + event.serviceState.nrFrequencyRange
                         + " NR State " + event.serviceState.nrState
+                        + " Modem Radio Off " + event.serviceState.modemRadioOff
                         + ")");
                 for (int i = 0; i < event.serviceState.networkRegistrationInfo.length; i++) {
                     pw.print("reg info: domain="
@@ -991,6 +992,12 @@ public class TelephonyMetrics {
         ssProto.channelNumber = serviceState.getChannelNumber();
         ssProto.nrFrequencyRange = serviceState.getNrFrequencyRange();
         ssProto.nrState = serviceState.getNrState();
+        ssProto.modemRadioOff =
+                (serviceState.getVoiceRegState() == serviceState.STATE_POWER_OFF
+                        && serviceState.getDataRegState() == serviceState.STATE_POWER_OFF)
+                || (serviceState.getVoiceRegState() == serviceState.STATE_POWER_OFF
+                        && serviceState.getRilDataRadioTechnology()
+                                == ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN);
         return ssProto;
     }
 
