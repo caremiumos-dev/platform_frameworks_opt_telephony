@@ -1,0 +1,47 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000010250675",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1687088?revision\u003d1",
+      "fixSuggestions": [
+        {
+          "fixId": "cea7b7a3_92137aea",
+          "description": "Change to \"src/java/com/android/internal/telephony/uicc/UiccProfile.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+              "range": {
+                "startLine": 621,
+                "startChar": 33,
+                "endLine": 621,
+                "endChar": 42
+              },
+              "replacement": "Privilege"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "71c90483_4e22e7fb",
+        "filename": "src/java/com/android/internal/telephony/uicc/UiccProfile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-04-26T21:23:36Z",
+      "side": 1,
+      "message": "Common typo found: \"Privilige\" -- should it be \"Privilege\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 621,
+        "startChar": 33,
+        "endLine": 621,
+        "endChar": 42
+      },
+      "revId": "78c9a5ba6d1c3c369c26d15bab7289ca4b93fc62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
