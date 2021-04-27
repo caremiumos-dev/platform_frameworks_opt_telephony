@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7811f96_5c939dd6",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-27T22:58:11Z",
+      "side": 1,
+      "message": "This condition is the same for both sides of the ||. Can you move it out to avoid duplication?",
+      "range": {
+        "startLine": 998,
+        "startChar": 20,
+        "endLine": 998,
+        "endChar": 83
+      },
+      "revId": "4bdb0bad0116c63f2fb1257ea6341dd8704a6c1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
