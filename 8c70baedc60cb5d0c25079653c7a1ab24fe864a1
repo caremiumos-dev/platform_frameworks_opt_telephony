@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9f737a0_b0d766e8",
+        "filename": "src/java/com/android/internal/telephony/uicc/AdnCapacity.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-27T00:42:21Z",
+      "side": 1,
+      "message": "if you do this you\u0027re also suppose to update the hash function:\n\nhttps://www.journaldev.com/21095/java-equals-hashcode",
+      "range": {
+        "startLine": 160,
+        "startChar": 19,
+        "endLine": 160,
+        "endChar": 25
+      },
+      "revId": "8c70baedc60cb5d0c25079653c7a1ab24fe864a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
