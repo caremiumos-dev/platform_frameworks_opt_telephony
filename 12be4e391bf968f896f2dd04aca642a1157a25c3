@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c599abd_2202bdec",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-27T00:35:42Z",
+      "side": 1,
+      "message": "getEmailStringArray?",
+      "revId": "12be4e391bf968f896f2dd04aca642a1157a25c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
