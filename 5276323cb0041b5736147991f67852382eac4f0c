@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2bc9b1f_729eae34",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-27T17:16:15Z",
+      "side": 1,
+      "message": "Maybe worth expanding the comment to provide example when this would apply? (e.g. in airplane mode, but not in out of service)",
+      "range": {
+        "startLine": 369,
+        "startChar": 22,
+        "endLine": 369,
+        "endChar": 33
+      },
+      "revId": "5276323cb0041b5736147991f67852382eac4f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b97819_e53607ba",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-04-27T17:16:15Z",
+      "side": 1,
+      "message": "Minor. This might be interpreted as if the entire modem needs to be off. Maybe modem_radio_off might be preferable (and same for the description above).",
+      "range": {
+        "startLine": 370,
+        "startChar": 16,
+        "endLine": 370,
+        "endChar": 25
+      },
+      "revId": "5276323cb0041b5736147991f67852382eac4f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
