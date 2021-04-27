@@ -45,6 +45,30 @@
       },
       "revId": "5276323cb0041b5736147991f67852382eac4f0c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb2a7962_d6568e56",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-27T17:36:52Z",
+      "side": 1,
+      "message": "Should we just call it radio_off?\n\nNote this will be false if APM is on but WFC is available. Let me know if we expect it to be true in this case.",
+      "parentUuid": "a8b97819_e53607ba",
+      "range": {
+        "startLine": 370,
+        "startChar": 16,
+        "endLine": 370,
+        "endChar": 25
+      },
+      "revId": "5276323cb0041b5736147991f67852382eac4f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
