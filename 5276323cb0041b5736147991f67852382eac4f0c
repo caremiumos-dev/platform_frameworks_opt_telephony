@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b6d6df2_6449c147",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-27T21:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2bc9b1f_729eae34",
+      "range": {
+        "startLine": 369,
+        "startChar": 22,
+        "endLine": 369,
+        "endChar": 33
+      },
+      "revId": "5276323cb0041b5736147991f67852382eac4f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8b97819_e53607ba",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "My worry with \"radio_off\" only is that the device contains many radios (WiFi, BT, cellular) and I think it was a good idea to make it more explicit.\n\nRegarding the WFC case. Isn\u0027t the goal to capture when cellular radio is off?",
       "parentUuid": "eb2a7962_d6568e56",
+      "range": {
+        "startLine": 370,
+        "startChar": 16,
+        "endLine": 370,
+        "endChar": 25
+      },
+      "revId": "5276323cb0041b5736147991f67852382eac4f0c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4729ad80_5f19ddb1",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-04-27T21:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "082cda05_48070fb0",
       "range": {
         "startLine": 370,
         "startChar": 16,
