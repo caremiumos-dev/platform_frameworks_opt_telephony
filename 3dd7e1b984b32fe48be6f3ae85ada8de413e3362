@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5655decd_4bb89bc8",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-27T06:12:44Z",
+      "side": 1,
+      "message": "no, these constant variables can be used by other packages like *.uicc",
+      "parentUuid": "8293379a_70cb3e19",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "3dd7e1b984b32fe48be6f3ae85ada8de413e3362",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1442938_0465ee2f",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-27T00:35:42Z",
       "side": 1,
       "message": "please add a comment that we\u0027re not using the incoming initialValues so we can check/gate the arguments.",
+      "range": {
+        "startLine": 217,
+        "startChar": 8,
+        "endLine": 217,
+        "endChar": 21
+      },
+      "revId": "3dd7e1b984b32fe48be6f3ae85ada8de413e3362",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5095694e_fb979a8c",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-27T06:12:44Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "f1442938_0465ee2f",
       "range": {
         "startLine": 217,
         "startChar": 8,
