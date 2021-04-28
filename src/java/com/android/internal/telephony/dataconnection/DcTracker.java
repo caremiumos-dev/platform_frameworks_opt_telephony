@@ -80,6 +80,7 @@ import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
@@ -1821,8 +1822,29 @@ public class DcTracker extends Handler {
                 }
             }
         } else {
-            // force clean up the data connection.
-            if (dataConnection != null) dataConnection.reset();
+            // Force clean up the data connection.
+            if (dataConnection == null) {
+                if (apnContext.getApnTypeBitmask() == ApnSetting.TYPE_DEFAULT) {
+                    ApnSetting apnSetting = apnContext.getApnSetting();
+                    if (apnSetting == null) {
+                        // b/186507152: In case of phone process crash, ApnSetting will be null.
+                        // Create a fake ApnSetting to notify data disconnected.
+                        // TODO: PreciseDataConnectionState should be able to take in APN type
+                        // bitmask instead of have to create a fake ApnSetting
+                        apnSetting = new ApnSetting.Builder().setApnTypeBitmask(
+                                apnContext.getApnTypeBitmask()).buildWithoutCheck();
+                    }
+                    mPhone.notifyDataConnection(new PreciseDataConnectionState.Builder()
+                            .setTransportType(mTransportType)
+                            .setState(TelephonyManager.DATA_DISCONNECTED)
+                            .setApnSetting(apnSetting)
+                            .setNetworkType(getDataRat())
+                            .build());
+                }
+            } else {
+                // If data connection exists, reset will notify data disconnected.
+                dataConnection.reset();
+            }
             apnContext.setState(DctConstants.State.IDLE);
             apnContext.setDataConnection(null);
         }

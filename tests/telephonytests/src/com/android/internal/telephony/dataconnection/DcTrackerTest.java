@@ -69,6 +69,7 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.NetworkRegistrationInfo;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
@@ -2664,5 +2665,31 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mDataConnection).bringUp(any(ApnContext.class), anyInt(), anyInt(),
                 any(Message.class), anyInt(), eq(DcTracker.REQUEST_TYPE_HANDOVER), anyInt(),
                 anyBoolean());
+    }
+
+    @Test
+    public void testNotifyDataDisconnected() {
+        // Set up default data
+        mApnSettingContentProvider.setFakeApn1Types("default");
+        mDct.enableApn(ApnSetting.TYPE_DEFAULT, DcTracker.REQUEST_TYPE_NORMAL, null);
+        sendInitializationEvents();
+
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), any(DataProfile.class),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                anyInt(), any(), any(), anyBoolean(), any(Message.class));
+
+        // ApnSetting null on phone process crash
+        clearInvocations(mPhone);
+        doReturn(null).when(mApnContext).getApnSetting();
+        mDct.sendMessage(mDct.obtainMessage(DctConstants.EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null));
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        ArgumentCaptor<PreciseDataConnectionState> captor =
+                ArgumentCaptor.forClass(PreciseDataConnectionState.class);
+        verify(mPhone).notifyDataConnection(captor.capture());
+        assertEquals(ApnSetting.TYPE_DEFAULT,
+                captor.getValue().getApnSetting().getApnTypeBitmask());
+        assertEquals(TelephonyManager.DATA_DISCONNECTED, captor.getValue().getState());
     }
 }
