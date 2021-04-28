@@ -80,6 +80,7 @@ import android.telephony.CellLocation;
 import android.telephony.DataFailCause;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.PcoData;
+import android.telephony.PreciseDataConnectionState;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
 import android.telephony.SubscriptionManager;
@@ -1821,8 +1822,21 @@ public class DcTracker extends Handler {
                 }
             }
         } else {
-            // force clean up the data connection.
-            if (dataConnection != null) dataConnection.reset();
+            // Force clean up the data connection.
+            if (dataConnection == null) {
+                if (apnContext.getApnSetting() != null) {
+                    // Notify data disconnected if data connection is null and ApnSetting exists
+                    mPhone.notifyDataConnection(new PreciseDataConnectionState.Builder()
+                            .setTransportType(mTransportType)
+                            .setState(TelephonyManager.DATA_DISCONNECTED)
+                            .setApnSetting(apnContext.getApnSetting())
+                            .setNetworkType(getDataRat())
+                            .build());
+                }
+            } else {
+                // If data connection exists, reset will notify data disconnected.
+                dataConnection.reset();
+            }
             apnContext.setState(DctConstants.State.IDLE);
             apnContext.setDataConnection(null);
         }
