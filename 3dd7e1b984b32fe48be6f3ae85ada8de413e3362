@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1928f51f_93a3fab7",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-04-28T16:22:10Z",
+      "side": 1,
+      "message": "Where are these used?  They were locked down before and I don\u0027t see them being used externally in these patches (I could be wrong..).\n\nIf you\u0027re adding API that\u0027s a different scope than this bug is supposed to handle and we should discuss separately.\n\nAs a matter of principle we try to make scoping as tight as possible just to simplify the technical complexity.",
+      "parentUuid": "5655decd_4bb89bc8",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "3dd7e1b984b32fe48be6f3ae85ada8de413e3362",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1442938_0465ee2f",
