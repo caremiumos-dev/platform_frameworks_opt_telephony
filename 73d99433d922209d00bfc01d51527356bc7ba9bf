@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bceb1b2_fe9c552c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-04-29T22:19:01Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be 2? It\u0027s the sub id, not the phone id.\n\nI was looking at what the code look like before your change aosp/1432875. I think the testing procedure is like this. overrideDefaultDataForEmergency with phone id 1. since phone id 1 is associated with sub id 2, it is expected to get notifyActiveDataSubIdChanged(2) here.",
+      "range": {
+        "startLine": 658,
+        "startChar": 74,
+        "endLine": 658,
+        "endChar": 75
+      },
+      "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
