@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3f0345e_a50535ea",
+        "filename": "src/java/com/android/internal/telephony/IccProvider.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-29T01:24:01Z",
+      "side": 1,
+      "message": "ya, you are right, these are used to test packages only, @VisibleForTest is needed",
+      "parentUuid": "1928f51f_93a3fab7",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "3dd7e1b984b32fe48be6f3ae85ada8de413e3362",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1442938_0465ee2f",
