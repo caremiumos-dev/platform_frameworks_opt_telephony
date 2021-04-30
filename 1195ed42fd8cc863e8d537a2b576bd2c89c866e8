@@ -16,6 +16,24 @@
       "message": "This apparently needs to be rebased.",
       "revId": "1195ed42fd8cc863e8d537a2b576bd2c89c866e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6712b65_f622eabc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2021-04-30T01:32:10Z",
+      "side": 1,
+      "message": "rebased it",
+      "parentUuid": "c358758b_a45f105b",
+      "revId": "1195ed42fd8cc863e8d537a2b576bd2c89c866e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
