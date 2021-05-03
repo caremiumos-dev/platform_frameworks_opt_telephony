@@ -46,6 +46,30 @@
       },
       "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f10f55a_a3ca21c6",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-03T22:34:15Z",
+      "side": 1,
+      "message": "We had an internal discussion and we think this is not correct. aosp/1432875 probably has a bug. The original comment \"Emergency override result sent this, onDdsSwitchResponse won\u0027t be invoked\" does not make sense as well.\n\nIf you are switching DDS to sub id 2 for emergency reason, you should expect to see notifyActiveDataSubIdChanged(2). Note that notifyActiveDataSubIdChanged should always reflect the active data sub id, regardless it\u0027s caused by emergency call override or not.\n\nI think you failed to call notifyActiveDataSubIdChanged for the emergency call override case.\n\nWhen emergency override switching DDS succeeds, onDdsSwitchResponse was not even called, and this is not right.\n\n            case EVENT_MODEM_COMMAND_DONE: {\n                AsyncResult ar \u003d (AsyncResult) msg.obj;\n                boolean commandSuccess \u003d ar !\u003d null \u0026\u0026 ar.exception \u003d\u003d null;\n                if (mEmergencyOverride !\u003d null) {\n                    log(\"Emergency override result sent \u003d \" + commandSuccess);\n                    mEmergencyOverride.sendOverrideCompleteCallbackResultAndClear(commandSuccess);\n                    // Do not retry , as we do not allow changes in onEvaluate during an emergency\n                    // call. When the call ends, we will start the countdown to remove the override.\n                } else {\n                    int phoneId \u003d (int) ar.userObj;\n                    onDdsSwitchResponse(ar, phoneId);\n                }",
+      "parentUuid": "fbea8fbe_e8007b7b",
+      "range": {
+        "startLine": 658,
+        "startChar": 74,
+        "endLine": 658,
+        "endChar": 75
+      },
+      "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
