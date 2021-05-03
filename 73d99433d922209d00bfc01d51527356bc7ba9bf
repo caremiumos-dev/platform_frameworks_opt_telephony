@@ -22,6 +22,30 @@
       },
       "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbea8fbe_e8007b7b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-03T05:24:48Z",
+      "side": 1,
+      "message": "Hi Jack,\n\nWith this fix, notifyActiveDataSubIdChanged is executed in onEvaluate method ony if there is a change in mPreferredDataSubId. Yes, we are passing phoneid 1 with overrideDefaultDataForEmergency whose subid is 2, but notifyActiveDataSubIdChanged  will be called for subid 1",
+      "parentUuid": "5bceb1b2_fe9c552c",
+      "range": {
+        "startLine": 658,
+        "startChar": 74,
+        "endLine": 658,
+        "endChar": 75
+      },
+      "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
