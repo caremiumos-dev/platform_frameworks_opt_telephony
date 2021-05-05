@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e8042c5_751dc19d",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-05T21:34:53Z",
+      "side": 1,
+      "message": "This comments give a very detailed explanation why we are doing this. You changes are completely out of sync with this logic.",
+      "range": {
+        "startLine": 1425,
+        "startChar": 0,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "ebd997c3c573aef9e0b0e051f6bd9162235a997f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33016863_b37d5a59",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-05T21:34:53Z",
+      "side": 1,
+      "message": "Please do NOT hack isPhoneInVoiceCall to return false when the call is emergency and in dialing state. This can create more bugs in the future unless you want to name it isPhoneInVoiceCallButNotEmergencyInDialing. I am sure you don\u0027t want to use that strange name.",
+      "range": {
+        "startLine": 1420,
+        "startChar": 0,
+        "endLine": 1447,
+        "endChar": 0
+      },
+      "revId": "ebd997c3c573aef9e0b0e051f6bd9162235a997f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47db39cf_0c0bb1e4",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-05T21:34:53Z",
+      "side": 1,
+      "message": "This needs to be removed completely. If DDS switch happens between request and response, onEvaluate should handle the new DDS switch.",
+      "range": {
+        "startLine": 1528,
+        "startChar": 0,
+        "endLine": 1543,
+        "endChar": 21
+      },
+      "revId": "ebd997c3c573aef9e0b0e051f6bd9162235a997f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
