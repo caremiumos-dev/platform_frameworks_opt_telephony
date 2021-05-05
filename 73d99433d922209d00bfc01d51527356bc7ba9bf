@@ -70,6 +70,30 @@
       },
       "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d9cfc3a_e7914888",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-05T22:36:47Z",
+      "side": 1,
+      "message": "Updated the logic to call onDdsSwitchResponse for EmergencyOverride case as well, and modified UT accordingly. Please review latest patch",
+      "parentUuid": "4f10f55a_a3ca21c6",
+      "range": {
+        "startLine": 658,
+        "startChar": 74,
+        "endLine": 658,
+        "endChar": 75
+      },
+      "revId": "73d99433d922209d00bfc01d51527356bc7ba9bf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
