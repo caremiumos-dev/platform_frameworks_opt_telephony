@@ -16,6 +16,24 @@
       "message": "if updating IIccPhoneBook.aidl, changes must also be made to packages/services/Telephony/tests/src/com/android/phone/SimPhonebookproviderTest.java (class FakeIccPhoneBook extends IIccPhoneBook)",
       "revId": "1993ba206d007f6beb3e46aed81eab2be71c8efa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1318548b_46ad1ca0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-05-05T23:35:27Z",
+      "side": 1,
+      "message": "After making the changes, these commands can be run to catch additional errors instead of waiting for TH to run:\n```\nlunch aosp_cf_x86_phone-userdebug\nmake checkbuild\n```\n\nNote that make checkbuild may take up more space/take more time than a normal build (`make` without the checkbuild), but it catches errors that a normal build misses.",
+      "parentUuid": "7f3400bf_cf928c1f",
+      "revId": "1993ba206d007f6beb3e46aed81eab2be71c8efa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
