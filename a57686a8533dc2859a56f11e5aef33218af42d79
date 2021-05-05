@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd8c2b1a_fc1c6c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-05T22:03:42Z",
+      "side": 1,
+      "message": "1. You didn\u0027t address my last comment. You need to fix the bug in PhoneSwitcher where it didn\u0027t notify active data sub id changed in case of temporary DDS switch for emergency call.\n2. The unit test obviously will not pass. Please run it locally before you upload the CL.",
+      "revId": "a57686a8533dc2859a56f11e5aef33218af42d79",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
