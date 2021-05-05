@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f3400bf_cf928c1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-05-05T19:51:42Z",
+      "side": 1,
+      "message": "if updating IIccPhoneBook.aidl, changes must also be made to packages/services/Telephony/tests/src/com/android/phone/SimPhonebookproviderTest.java (class FakeIccPhoneBook extends IIccPhoneBook)",
+      "revId": "1993ba206d007f6beb3e46aed81eab2be71c8efa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
