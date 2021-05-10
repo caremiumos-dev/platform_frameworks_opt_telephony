@@ -1333,7 +1333,7 @@ public abstract class SMSDispatcher extends Handler {
             }
         }
 
-        if (mTelephonyManager.isEmergencyNumber(trackers[0].mDestAddress)) {
+        if (PhoneNumberUtils.isLocalEmergencyNumber(mContext, trackers[0].mDestAddress)) {
             new AsyncEmergencyContactNotifier(mContext).execute();
         }
     }

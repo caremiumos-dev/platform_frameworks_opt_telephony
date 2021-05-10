@@ -37,7 +37,6 @@ import android.os.PersistableBundle;
 import android.os.ResultReceiver;
 import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.text.BidiFormatter;
 import android.text.SpannableStringBuilder;
 import android.text.TextDirectionHeuristics;
@@ -776,9 +775,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             return false;
         }
 
-        TelephonyManager tm =
-                (TelephonyManager) phone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.isEmergencyNumber(dialString)) {
+        if (PhoneNumberUtils.isLocalEmergencyNumber(phone.getContext(), dialString)) {
             return false;
         } else {
             return isShortCodeUSSD(dialString, phone);

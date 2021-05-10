@@ -22,6 +22,7 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
@@ -315,14 +316,14 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     public boolean isEmergencySmsSupport(String destAddr) {
         PersistableBundle b;
         boolean eSmsCarrierSupport = false;
-        if (!mTelephonyManager.isEmergencyNumber(destAddr)) {
-            logi(Rlog.pii(TAG, destAddr) + " is not emergency number");
+        if (!PhoneNumberUtils.isLocalEmergencyNumber(mContext, mPhone.getSubId(), destAddr)) {
+            loge("Emergency Sms is not supported for: " + Rlog.pii(TAG, destAddr));
             return false;
         }
 
         final long identity = Binder.clearCallingIdentity();
         try {
-            CarrierConfigManager configManager = (CarrierConfigManager) mContext
+            CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
                     .getSystemService(Context.CARRIER_CONFIG_SERVICE);
             if (configManager == null) {
                 loge("configManager is null");

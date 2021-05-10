@@ -1271,8 +1271,7 @@ public class GsmCdmaPhone extends Phone {
                     + possibleEmergencyNumber);
             dialString = possibleEmergencyNumber;
         }
-        TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
-        boolean isEmergency = tm.isEmergencyNumber(dialString);
+        boolean isEmergency = PhoneNumberUtils.isEmergencyNumber(getSubId(), dialString);
         Phone imsPhone = mImsPhone;
         mDialArgs = dialArgs;
 
@@ -1415,8 +1414,7 @@ public class GsmCdmaPhone extends Phone {
         }
 
         Phone imsPhone = mImsPhone;
-        TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
-        boolean isEmergency = tm.isEmergencyNumber(dialString);
+        boolean isEmergency = PhoneNumberUtils.isEmergencyNumber(getSubId(), dialString);
         boolean shouldConfirmCall =
                         // Using IMS
                         isImsUseEnabled()

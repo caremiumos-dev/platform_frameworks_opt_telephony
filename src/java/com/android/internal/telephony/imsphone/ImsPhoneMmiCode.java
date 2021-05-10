@@ -37,7 +37,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallForwardInfo;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsSsData;
@@ -666,9 +665,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
             return false;
         }
 
-        TelephonyManager tm =
-                (TelephonyManager) phone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.isEmergencyNumber(dialString)) {
+        if (PhoneNumberUtils.isLocalEmergencyNumber(phone.getContext(), dialString)) {
             return false;
         } else {
             return isShortCodeUSSD(dialString, phone);

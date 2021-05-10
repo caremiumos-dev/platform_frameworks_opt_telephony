@@ -281,9 +281,8 @@ public class GsmCdmaCallTracker extends CallTracker {
         clearDisconnected();
 
         // Check for issues which would preclude dialing and throw a CallStateException.
-        TelephonyManager tm =
-                (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        boolean isEmergencyCall = tm.isEmergencyNumber(dialString);
+        boolean isEmergencyCall = PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(),
+                dialString);
         checkForDialIssues(isEmergencyCall);
 
         String origNumber = dialString;
@@ -375,9 +374,7 @@ public class GsmCdmaCallTracker extends CallTracker {
      */
     @UnsupportedAppUsage
     private void disableDataCallInEmergencyCall(String dialString) {
-        TelephonyManager tm =
-                (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.isEmergencyNumber(dialString)) {
+        if (PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(), dialString)) {
             if (Phone.DEBUG_PHONE) log("disableDataCallInEmergencyCall");
             setIsInEmergencyCall();
         }
@@ -400,13 +397,14 @@ public class GsmCdmaCallTracker extends CallTracker {
         // note that this triggers call state changed notif
         clearDisconnected();
 
-        TelephonyManager tm =
-                (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        boolean isEmergencyCall = tm.isEmergencyNumber(dialString);
+        boolean isEmergencyCall =
+                PhoneNumberUtils.isLocalEmergencyNumber(mPhone.getContext(), dialString);
 
         // Check for issues which would preclude dialing and throw a CallStateException.
         checkForDialIssues(isEmergencyCall);
 
+        TelephonyManager tm =
+                (TelephonyManager) mPhone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String origNumber = dialString;
         String operatorIsoContry = tm.getNetworkCountryIso(mPhone.getPhoneId());
         String simIsoContry = tm.getSimCountryIsoForPhone(mPhone.getPhoneId());
