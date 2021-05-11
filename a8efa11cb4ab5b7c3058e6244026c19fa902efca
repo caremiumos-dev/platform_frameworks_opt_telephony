@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8624b6_2597ee04",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-11T09:58:45Z",
+      "side": 0,
+      "message": "Need to iterate over mPrioritizedDcRequests list, this check for mMaxDataAttachModemCount is not required",
+      "range": {
+        "startLine": 1549,
+        "startChar": 12,
+        "endLine": 1549,
+        "endChar": 16
+      },
+      "revId": "a8efa11cb4ab5b7c3058e6244026c19fa902efca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
