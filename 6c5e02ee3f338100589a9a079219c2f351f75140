@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "398e2bde_68c82d36",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-11T09:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3da39d9_74c8c007",
+      "range": {
+        "startLine": 619,
+        "startChar": 0,
+        "endLine": 621,
+        "endChar": 1
+      },
+      "revId": "6c5e02ee3f338100589a9a079219c2f351f75140",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b0fc1ec_b119c498",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-05-06T00:31:34Z",
       "side": 1,
       "message": "Why do we want to notify active sub id change to 2 twice? Isn\u0027t that redundant?\n\nPlease look into the code and log and figure out what\u0027s going on. I think we should pay attention to those details instead of just trying to make tests match the new behavior.",
+      "range": {
+        "startLine": 662,
+        "startChar": 42,
+        "endLine": 662,
+        "endChar": 50
+      },
+      "revId": "6c5e02ee3f338100589a9a079219c2f351f75140",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "336be9df_9b6621a4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-11T09:17:14Z",
+      "side": 1,
+      "message": "Sorry for confusion. Will correct this",
+      "parentUuid": "9b0fc1ec_b119c498",
       "range": {
         "startLine": 662,
         "startChar": 42,
