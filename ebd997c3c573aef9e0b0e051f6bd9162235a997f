@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae8a779d_2885fcdd",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-11T18:03:39Z",
+      "side": 1,
+      "message": "I suggest you drop the changes. Whether it\u0027s an optimization or not really depends on which perspective you are from. For example, with your fix, an user watching Youtube on SIM1, and suddenly got a scam robot call he wants to reject on SIM2, can interrupt his watching experience. From this perspective, it\u0027s disrupting rather than optimization.\n\nWhen we designed this, we involved modem folks and telecom folks to review which states should be included here. We believe including active, alerting, and holding state can have the optimized user experience.",
+      "parentUuid": "69e6d63d_7c264c3f",
+      "range": {
+        "startLine": 1425,
+        "startChar": 0,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "ebd997c3c573aef9e0b0e051f6bd9162235a997f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "33016863_b37d5a59",
         "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
         "patchSetId": 7
