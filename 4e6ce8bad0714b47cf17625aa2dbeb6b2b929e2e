@@ -22,6 +22,30 @@
       },
       "revId": "4e6ce8bad0714b47cf17625aa2dbeb6b2b929e2e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5f354cd_0ea3f7e3",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmInboundSmsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-05-11T20:32:27Z",
+      "side": 0,
+      "message": "Already done in CbTestBroadcastReceiver.",
+      "parentUuid": "99842af1_702fcf2b",
+      "range": {
+        "startLine": 108,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 13
+      },
+      "revId": "4e6ce8bad0714b47cf17625aa2dbeb6b2b929e2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
