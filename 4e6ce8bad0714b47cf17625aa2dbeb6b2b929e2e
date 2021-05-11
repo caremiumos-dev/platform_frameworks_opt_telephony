@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99842af1_702fcf2b",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmInboundSmsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2021-05-11T17:08:16Z",
+      "side": 0,
+      "message": "any reason delete this?",
+      "range": {
+        "startLine": 108,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 13
+      },
+      "revId": "4e6ce8bad0714b47cf17625aa2dbeb6b2b929e2e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
