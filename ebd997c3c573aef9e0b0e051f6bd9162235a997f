@@ -72,6 +72,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15765b67_b1ee6712",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1040179
+      },
+      "writtenOn": "2021-05-12T08:34:18Z",
+      "side": 1,
+      "message": "Thanks for the suggestion Jack. We will drop this change and continue with aosp behavior",
+      "parentUuid": "ae8a779d_2885fcdd",
+      "range": {
+        "startLine": 1425,
+        "startChar": 0,
+        "endLine": 1430,
+        "endChar": 44
+      },
+      "revId": "ebd997c3c573aef9e0b0e051f6bd9162235a997f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33016863_b37d5a59",
