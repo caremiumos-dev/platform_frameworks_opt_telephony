@@ -246,6 +246,8 @@ public class DcTrackerTest extends TelephonyTest {
 
         private int mRowIdOffset = 0;
 
+        private boolean mIsEmpty;
+
         public void setFakeApn1Types(String apnTypes) {
             mFakeApn1Types = apnTypes;
         }
@@ -264,6 +266,10 @@ public class DcTrackerTest extends TelephonyTest {
 
         public void setFakePreferredApn(Object[] fakeApn) {
             mPreferredApn = fakeApn;
+        }
+
+        public void setEmpty(boolean isEmpty) {
+            mIsEmpty = isEmpty;
         }
 
         public Object[] getFakeApn1() {
@@ -591,6 +597,11 @@ public class DcTrackerTest extends TelephonyTest {
             logd("   selectionArgs = " + Arrays.toString(selectionArgs));
             logd("   sortOrder = " + sortOrder);
 
+            if (mIsEmpty) {
+                logd("Empty apn settings");
+                return null;
+            }
+
             if (uri.compareTo(Telephony.Carriers.CONTENT_URI) == 0
                     || uri.toString().startsWith(Uri.withAppendedPath(
                             Telephony.Carriers.CONTENT_URI, "filtered").toString())
@@ -737,6 +748,7 @@ public class DcTrackerTest extends TelephonyTest {
         mDcTrackerTestHandler.quit();
         mDcTrackerTestHandler.join();
         mCellularDataService.onDestroy();
+        mApnSettingContentProvider.setEmpty(false);
         waitForMs(100);
         super.tearDown();
     }
@@ -759,22 +771,30 @@ public class DcTrackerTest extends TelephonyTest {
     }
 
     private void verifyDataProfile(DataProfile dp, String apn, int profileId,
-                                   int supportedApnTypesBitmap, int type, int bearerBitmask) {
+            int supportedApnTypesBitmap, int type, int bearerBitmask) {
+        verifyDataProfile(dp, apn, profileId, ApnSetting.PROTOCOL_IP, ApnSetting.PROTOCOL_IP,
+                0, "", "", 0, true, 0, supportedApnTypesBitmap, type, bearerBitmask, true, false);
+    }
+
+    private void verifyDataProfile(DataProfile dp, String apn, int profileId, int protocol,
+            int roamingProtocol, int authType, String user, String password, int waitTime,
+            boolean enabled, int mtu, int supportedApnTypesBitmap, int type, int bearerBitmask,
+            boolean isPersistent, boolean isPreferred) {
         assertEquals(profileId, dp.getProfileId());
         assertEquals(apn, dp.getApn());
-        assertEquals(ApnSetting.PROTOCOL_IP, dp.getProtocolType());
-        assertEquals(0, dp.getAuthType());
-        assertEquals("", dp.getUserName());
-        assertEquals("", dp.getPassword());
+        assertEquals(protocol, dp.getProtocolType());
+        assertEquals(authType, dp.getAuthType());
+        assertEquals(user, dp.getUserName());
+        assertEquals(password, dp.getPassword());
         assertEquals(type, dp.getType());
-        assertEquals(0, dp.getWaitTime());
-        assertTrue(dp.isEnabled());
+        assertEquals(waitTime, dp.getWaitTime());
+        assertEquals(enabled, dp.isEnabled());
         assertEquals(supportedApnTypesBitmap, dp.getSupportedApnTypesBitmask());
-        assertEquals(ApnSetting.PROTOCOL_IP, dp.getRoamingProtocolType());
+        assertEquals(roamingProtocol, dp.getRoamingProtocolType());
         assertEquals(bearerBitmask, dp.getBearerBitmask());
-        assertEquals(0, dp.getMtu());
-        assertTrue(dp.isPersistent());
-        assertFalse(dp.isPreferred());
+        assertEquals(mtu, dp.getMtu());
+        assertEquals(isPersistent, dp.isPersistent());
+        assertEquals(isPreferred, dp.isPreferred());
     }
 
     private void verifyDataConnected(final String apnSetting) {
@@ -2664,5 +2684,58 @@ public class DcTrackerTest extends TelephonyTest {
         verify(mDataConnection).bringUp(any(ApnContext.class), anyInt(), anyInt(),
                 any(Message.class), anyInt(), eq(DcTracker.REQUEST_TYPE_HANDOVER), anyInt(),
                 anyBoolean());
+    }
+
+    private void verifySetupDataWithDefaultApnSetting(ApnSetting apn, int apnType) {
+        int profileType = DcTracker.getProfileType(apn.getNetworkTypeBitmask());
+        // Set apn settings as empty to create default apn settings
+        mApnSettingContentProvider.setEmpty(true);
+        DataConnectionReasons dataConnectionReasons = new DataConnectionReasons();
+        boolean allowed = isDataAllowed(dataConnectionReasons);
+        assertFalse(dataConnectionReasons.toString(), allowed);
+
+        mDct.enableApn(apnType, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+
+        sendInitializationEvents();
+
+        dataConnectionReasons = new DataConnectionReasons();
+        allowed = isDataAllowed(dataConnectionReasons);
+        assertTrue(dataConnectionReasons.toString(), allowed);
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        // Verify if RIL command was sent properly.
+        verify(mSimulatedCommandsVerifier, times(1)).setupDataCall(
+                eq(AccessNetworkType.EUTRAN), dpCaptor.capture(),
+                eq(false), eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                anyInt(), any(), any(), anyBoolean(), any(Message.class));
+        verifyDataProfile(dpCaptor.getValue(), apn.getApnName(), -1, apn.getProtocol(),
+                apn.getRoamingProtocol(), apn.getAuthType(), "", "", apn.getWaitTime(),
+                apn.isEnabled(), apn.getMtu(), apn.getApnTypeBitmask(), profileType,
+                apn.getNetworkTypeBitmask(), false, false);
+    }
+
+    @Test
+    @SmallTest
+    public void testBuildDefaultEmergencyApn() {
+        ApnSetting apn = DcTracker.buildDefaultApnSetting(
+                "DEFAULT EIMS", "sos", ApnSetting.TYPE_EMERGENCY);
+        verifySetupDataWithDefaultApnSetting(apn, ApnSetting.TYPE_EMERGENCY);
+    }
+
+    @Test
+    @SmallTest
+    public void testBuildDefaultImsApn() {
+        ApnSetting apn = DcTracker.buildDefaultApnSetting(
+                "DEFAULT IMS", "ims", ApnSetting.TYPE_IMS);
+        verifySetupDataWithDefaultApnSetting(apn, ApnSetting.TYPE_IMS);
+    }
+
+    @Test
+    @SmallTest
+    public void testBuildDefaultInternetApn() {
+        ApnSetting apn = DcTracker.buildDefaultApnSetting(
+                "DEFAULT internet", "", ApnSetting.TYPE_DEFAULT);
+        verifySetupDataWithDefaultApnSetting(apn, ApnSetting.TYPE_DEFAULT);
     }
 }
