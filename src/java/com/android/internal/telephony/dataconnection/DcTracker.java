@@ -4658,7 +4658,8 @@ public class DcTracker extends Handler {
     /**
      * Create default apn settings for the apn type like emergency, and ims
      */
-    private ApnSetting buildDefaultApnSetting(@NonNull String entry,
+    @VisibleForTesting
+    public static ApnSetting buildDefaultApnSetting(@NonNull String entry,
             @NonNull String apn, @ApnType int apnTypeBitmask) {
         return new ApnSetting.Builder()
                 .setEntryName(entry)
@@ -4675,34 +4676,37 @@ public class DcTracker extends Handler {
      * Add default APN settings to APN settings list as needed
      */
     private void addDefaultApnSettingsAsNeeded() {
-        boolean isEmergencyApnConfigured = false;
-        boolean isImsApnConfigured = false;
+        int missingDefaultApnTypes = ApnSetting.TYPE_EMERGENCY
+                | ApnSetting.TYPE_IMS | ApnSetting.TYPE_DEFAULT;
 
         for (ApnSetting apn : mAllApnSettings) {
-            if (apn.canHandleType(ApnSetting.TYPE_EMERGENCY)) {
-                isEmergencyApnConfigured = true;
-            }
-            if (apn.canHandleType(ApnSetting.TYPE_IMS)) {
-                isImsApnConfigured = true;
-            }
-            if (isEmergencyApnConfigured && isImsApnConfigured) {
-                log("Both emergency and ims apn setting are already present");
+            missingDefaultApnTypes ^= (missingDefaultApnTypes & apn.getApnTypeBitmask());
+            if (missingDefaultApnTypes == 0) {
+                log("No default apn setting needed.");
                 return;
             }
         }
 
         // Add default apn setting for emergency service if it is not present
-        if (!isEmergencyApnConfigured) {
+        if ((missingDefaultApnTypes & ApnSetting.TYPE_EMERGENCY) != 0) {
             mAllApnSettings.add(buildDefaultApnSetting(
                     "DEFAULT EIMS", "sos", ApnSetting.TYPE_EMERGENCY));
             log("default emergency apn is created");
         }
 
         // Only add default apn setting for ims when it is not present and sim is loaded
-        if (!isImsApnConfigured && mSimState == TelephonyManager.SIM_STATE_LOADED) {
-            mAllApnSettings.add(buildDefaultApnSetting(
-                    "DEFAULT IMS", "ims", ApnSetting.TYPE_IMS));
-            log("default ims apn is created");
+        if (mSimState == TelephonyManager.SIM_STATE_LOADED) {
+            if ((missingDefaultApnTypes & ApnSetting.TYPE_IMS) != 0) {
+                mAllApnSettings.add(buildDefaultApnSetting(
+                        "DEFAULT IMS", "ims", ApnSetting.TYPE_IMS));
+                log("default ims apn is created");
+            }
+
+            if ((missingDefaultApnTypes & ApnSetting.TYPE_DEFAULT) != 0) {
+                mAllApnSettings.add(buildDefaultApnSetting(
+                        "DEFAULT internet", "", ApnSetting.TYPE_DEFAULT));
+                log("default internet apn is created");
+            }
         }
     }
 
@@ -5340,23 +5344,31 @@ public class DcTracker extends Handler {
     }
 
     @VisibleForTesting
+    public static int getProfileType(int networkTypeBitmask) {
+        if (networkTypeBitmask == 0) {
+            return DataProfile.TYPE_COMMON;
+        }
+        if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP2)
+                == networkTypeBitmask) {
+            return DataProfile.TYPE_3GPP2;
+        }
+        if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP)
+                == networkTypeBitmask) {
+            return DataProfile.TYPE_3GPP;
+        }
+
+        return DataProfile.TYPE_COMMON;
+    }
+
+    /**
+     * Create data profile from apn setting
+     */
+    @VisibleForTesting
     public static DataProfile createDataProfile(ApnSetting apn, int profileId,
                                                 boolean isPreferred) {
-        int profileType;
-
         int networkTypeBitmask = apn.getNetworkTypeBitmask();
 
-        if (networkTypeBitmask == 0) {
-            profileType = DataProfile.TYPE_COMMON;
-        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP2)
-                == networkTypeBitmask) {
-            profileType = DataProfile.TYPE_3GPP2;
-        } else if ((networkTypeBitmask & TelephonyManager.NETWORK_STANDARDS_FAMILY_BITMASK_3GPP)
-                == networkTypeBitmask) {
-            profileType = DataProfile.TYPE_3GPP;
-        } else {
-            profileType = DataProfile.TYPE_COMMON;
-        }
+        int profileType = getProfileType(networkTypeBitmask);
 
         return new DataProfile.Builder()
                 .setProfileId(profileId)
