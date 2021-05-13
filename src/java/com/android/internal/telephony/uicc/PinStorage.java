@@ -40,6 +40,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources.NotFoundException;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -937,11 +938,15 @@ public class PinStorage extends Handler {
 
     /** Returns if the PIN cache is allowed for a given slot. */
     private boolean isCacheAllowed(int slotId) {
-        // Check overall device support
-        if (!mContext.getResources().getBoolean(
-                R.bool.config_allow_pin_storage_for_unattended_reboot)) {
-            logv("Pin caching disabled in resources");
-            return false;
+        // Check overall device support from resources
+        try {
+            if (!mContext.getResources().getBoolean(
+                    R.bool.config_allow_pin_storage_for_unattended_reboot)) {
+                logv("Pin caching disabled in resources");
+                return false;
+            }
+        } catch (NotFoundException ignored) {
+            // If the resource is missing, the default value true is used.
         }
         // Check carrier configuration
         PersistableBundle config = null;
