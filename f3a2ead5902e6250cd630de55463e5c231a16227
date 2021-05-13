@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8244d24_cd45321e",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4707,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-13T22:20:29Z",
+      "side": 1,
+      "message": "I don\u0027t think there is any carrier missing default APN.",
+      "range": {
+        "startLine": 4706,
+        "startChar": 0,
+        "endLine": 4707,
+        "endChar": 74
+      },
+      "revId": "f3a2ead5902e6250cd630de55463e5c231a16227",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
