@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4767079_fe978d60",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-14T23:31:24Z",
+      "side": 1,
+      "message": "We have a default resource defined in frameworks base. How was this hit? Is there a bug for this? Or just speculation.",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 950,
+        "endChar": 9
+      },
+      "revId": "e8f8c8729dbd06e096b5a55cdefe8dc361a6e57d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
