@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e43ec5_89d186ca",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2767,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-05-15T00:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd74678a_f477c17a",
+      "range": {
+        "startLine": 2767,
+        "startChar": 8,
+        "endLine": 2767,
+        "endChar": 11
+      },
+      "revId": "5ead3513370e9f0470161a4ae99e347f276f84e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93cafc4f_ec6f517b",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-05-14T23:20:13Z",
       "side": 1,
       "message": "Annotate",
+      "range": {
+        "startLine": 231,
+        "startChar": 47,
+        "endLine": 231,
+        "endChar": 50
+      },
+      "revId": "5ead3513370e9f0470161a4ae99e347f276f84e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bc85402_70fce6be",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyEventBuilder.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-05-15T00:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93cafc4f_ec6f517b",
       "range": {
         "startLine": 231,
         "startChar": 47,
@@ -87,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77f233d7_9d5a7773",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-05-15T00:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18d10e6d_5a24ed37",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 7
+      },
+      "revId": "5ead3513370e9f0470161a4ae99e347f276f84e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "027ac61e_f5ec52d3",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-05-14T23:20:13Z",
       "side": 1,
       "message": "Annotate",
+      "range": {
+        "startLine": 2697,
+        "startChar": 45,
+        "endLine": 2697,
+        "endChar": 48
+      },
+      "revId": "5ead3513370e9f0470161a4ae99e347f276f84e0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f80dceb6_879b05dd",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 2697,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-05-15T00:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "027ac61e_f5ec52d3",
       "range": {
         "startLine": 2697,
         "startChar": 45,
