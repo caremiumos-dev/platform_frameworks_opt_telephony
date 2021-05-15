@@ -46,6 +46,30 @@
       },
       "revId": "e8f8c8729dbd06e096b5a55cdefe8dc361a6e57d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5165b39_7baae6a2",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-15T01:16:15Z",
+      "side": 1,
+      "message": "It could throw NotFoundException only if we input a random integer into getBoolean(). But in this case the input is R.bool.config_allow_pin_storage_for_unattended_reboot, which is guaranteed to be valid, so I don\u0027t think we need to catch that.\n\nChecking doesn\u0027t hurt I understand, but I think consistency is also important. We don\u0027t do this check in other places in telephony. Plus, let it crash rather than silently failed can help us catch a bigger problem in the future.",
+      "parentUuid": "b428254e_19b46e88",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 950,
+        "endChar": 9
+      },
+      "revId": "e8f8c8729dbd06e096b5a55cdefe8dc361a6e57d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
