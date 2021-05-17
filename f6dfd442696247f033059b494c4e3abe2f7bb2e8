@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb501a45_50725d41",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 8
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-17T23:26:02Z",
+      "side": 1,
+      "message": "1. You can consider using a boolean by only logging radio on and everything else.\n2. If you still want to use a tri-state integer, that\u0027s fine too. But you should avoid using the value 0 because this is Android uses nano proto. (RADIO_POWER_OFF \u003d 0).",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 34
+      },
+      "revId": "f6dfd442696247f033059b494c4e3abe2f7bb2e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
