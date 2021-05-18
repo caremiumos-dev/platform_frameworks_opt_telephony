@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c33c4312_9bdc685c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2021-05-18T19:24:20Z",
+      "side": 1,
+      "message": "getApnSetting returns null for default type on phone process restart, so notifyDataConncetion will not be invoked",
+      "range": {
+        "startLine": 1827,
+        "startChar": 31,
+        "endLine": 1827,
+        "endChar": 44
+      },
+      "revId": "72d1b27d4b6e099995c9a70223f0f9c044a22854",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
