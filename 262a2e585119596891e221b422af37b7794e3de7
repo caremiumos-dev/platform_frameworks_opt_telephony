@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cccc281a_9d3aa4ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1601882
+      },
+      "writtenOn": "2021-05-18T12:03:34Z",
+      "side": 1,
+      "message": "Taken care with change https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1511375/",
+      "revId": "262a2e585119596891e221b422af37b7794e3de7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
