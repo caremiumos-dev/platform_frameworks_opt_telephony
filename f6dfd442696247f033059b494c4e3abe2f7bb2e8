@@ -46,6 +46,30 @@
       },
       "revId": "f6dfd442696247f033059b494c4e3abe2f7bb2e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed65bace_31e099cb",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 8
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-05-18T00:29:28Z",
+      "side": 1,
+      "message": "proto3 has removed the option to define default and in general, I don\u0027t think it\u0027s a good practice to do it. I think it might be preferable to re-map the values.",
+      "parentUuid": "b6a92613_335721a4",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 34
+      },
+      "revId": "f6dfd442696247f033059b494c4e3abe2f7bb2e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
