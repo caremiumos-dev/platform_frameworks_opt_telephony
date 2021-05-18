@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0a1d65_95c3b5fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-05-18T23:16:26Z",
+      "side": 1,
+      "message": "Remapped the values by offsetting by 1.",
+      "revId": "163ad91d86ad86f4d02412cb1aab188ddf8e66ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
