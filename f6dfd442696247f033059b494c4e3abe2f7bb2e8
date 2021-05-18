@@ -70,6 +70,30 @@
       },
       "revId": "f6dfd442696247f033059b494c4e3abe2f7bb2e8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ce81fb_4d6e0cde",
+        "filename": "proto/src/telephony.proto",
+        "patchSetId": 8
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-18T01:13:37Z",
+      "side": 1,
+      "message": "Isn\u0027t telephony still on proto2? syntax \u003d \"proto2\"; Remapping is always more clear.\n\nand BTW, this CL does not auto merge to sc-dev anymore.",
+      "parentUuid": "ed65bace_31e099cb",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 34
+      },
+      "revId": "f6dfd442696247f033059b494c4e3abe2f7bb2e8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
