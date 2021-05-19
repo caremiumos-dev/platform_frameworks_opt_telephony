@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e78367_6b46196d",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-19T21:52:16Z",
+      "side": 1,
+      "message": "We use the term \"slotIndex\" and \"subId\" (although it should be index as well) in telephony. This was a miss in previous code review so it\u0027s fine, but just keep in mind the future we should use slotIndex.\n\nBTW, you should merge to sc-dev if you intend to land this in S. Generally we allow logging/metrics CLs before P1 ZBB.",
+      "range": {
+        "startLine": 954,
+        "startChar": 48,
+        "endLine": 954,
+        "endChar": 54
+      },
+      "revId": "b711a4d769d2ba6c803136c283dbe802f8b9ccf0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
