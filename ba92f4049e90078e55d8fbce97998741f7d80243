@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69017caa_16645d90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-05-19T16:50:19Z",
+      "side": 1,
+      "message": "We checked this in internally so the merge conflict problem should be resolved, but we also had to indicate in the commit message that it was merged internally (the Merged-In line) and kick off the presubmit check again.",
+      "revId": "ba92f4049e90078e55d8fbce97998741f7d80243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
