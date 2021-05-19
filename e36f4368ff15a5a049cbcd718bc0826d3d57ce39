@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ea0542_268ba4ec",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-05-19T09:09:09Z",
+      "side": 1,
+      "message": "Minor. Most of the other conversion methods in the file have names that are either toXxxx or convertXxxx. It might be good to be consistent.",
+      "range": {
+        "startLine": 2691,
+        "startChar": 23,
+        "endLine": 2691,
+        "endChar": 26
+      },
+      "revId": "e36f4368ff15a5a049cbcd718bc0826d3d57ce39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
