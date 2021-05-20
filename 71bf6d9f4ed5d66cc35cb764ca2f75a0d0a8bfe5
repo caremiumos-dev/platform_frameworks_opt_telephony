@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10135d2_05bf3239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-20T20:41:32Z",
+      "side": 1,
+      "message": "QC is working on deleting VendorXxx completely in b/188618890. Please do not make further changes. Plus we already support multisim dynamic change without reboot.",
+      "revId": "71bf6d9f4ed5d66cc35cb764ca2f75a0d0a8bfe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6eb1bb3_bc0b5a38",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-05-20T20:41:32Z",
+      "side": 1,
+      "message": "we intended to use \"\" for backward compatibility reason.",
+      "range": {
+        "startLine": 53,
+        "startChar": 39,
+        "endLine": 53,
+        "endChar": 43
+      },
+      "revId": "71bf6d9f4ed5d66cc35cb764ca2f75a0d0a8bfe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
