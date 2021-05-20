@@ -281,7 +281,7 @@ public class DataConnection extends StateMachine {
         }
     }
 
-    private ApnSetting mApnSetting;
+    private volatile ApnSetting mApnSetting;
     private ConnectionParams mConnectionParams;
     private DisconnectParams mDisconnectParams;
     @DataFailureCause
@@ -1853,7 +1853,7 @@ public class DataConnection extends StateMachine {
 
         builder.setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
                 .setSubscriptionId(mSubId).build());
-        builder.setSubIds(Collections.singleton(mSubId));
+        builder.setSubscriptionIds(Collections.singleton(mSubId));
 
         if (!mPhone.getServiceState().getDataRoaming()) {
             builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
@@ -3365,6 +3365,11 @@ public class DataConnection extends StateMachine {
         if (DBG) {
             log("bringUp: apnContext=" + apnContext + " onCompletedMsg=" + onCompletedMsg);
         }
+
+        if (mApnSetting == null) {
+            mApnSetting = apnContext.getApnSetting();
+        }
+
         sendMessage(DataConnection.EVENT_CONNECT,
                 new ConnectionParams(apnContext, profileId, rilRadioTechnology, onCompletedMsg,
                         connectionGeneration, requestType, subId, isApnPreferred));

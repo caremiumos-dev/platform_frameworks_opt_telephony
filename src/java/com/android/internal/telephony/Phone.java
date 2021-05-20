@@ -4160,15 +4160,24 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /**
      * Get Volte Feature Availability
+     * @deprecated Use {@link #isVoiceOverCellularImsEnabled} instead.
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @Deprecated
     public boolean isVolteEnabled() {
+        return isVoiceOverCellularImsEnabled();
+    }
+
+    /**
+     * @return {@code true} if voice over IMS on cellular is enabled, {@code false} otherwise.
+     */
+    public boolean isVoiceOverCellularImsEnabled() {
         Phone imsPhone = mImsPhone;
         boolean isVolteEnabled = false;
         if (imsPhone != null) {
-            isVolteEnabled = imsPhone.isVolteEnabled();
+            isVolteEnabled = imsPhone.isVoiceOverCellularImsEnabled();
         }
-        Rlog.d(LOG_TAG, "isVolteEnabled=" + isVolteEnabled);
+        Rlog.d(LOG_TAG, "isVoiceOverCellularImsEnabled=" + isVolteEnabled);
         return isVolteEnabled;
     }
 
@@ -4362,20 +4371,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void unregisterForRadioCapabilityChanged(Handler h) {
         mCi.unregisterForRadioCapabilityChanged(this);
-    }
-
-    /**
-     * Determines if  IMS is enabled for call.
-     *
-     * @return {@code true} if IMS calling is enabled.
-     */
-    public boolean isImsUseEnabled() {
-        ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-        boolean imsUseEnabled = ((imsManager.isVolteEnabledByPlatform()
-                && imsManager.isEnhanced4gLteModeSettingEnabledByUser())
-                || (imsManager.isWfcEnabledByPlatform() && imsManager.isWfcEnabledByUser())
-                && imsManager.isNonTtyOrTtyOnVolteEnabled());
-        return imsUseEnabled;
     }
 
     /**
