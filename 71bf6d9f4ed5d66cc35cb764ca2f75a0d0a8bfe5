@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71dcd9aa_6b404862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106833
+      },
+      "writtenOn": "2021-05-20T20:48:15Z",
+      "side": 1,
+      "message": "I can remove the changes for PhoneSwitcher/VendorPhoneSwitcher. Yes, I know that the support is already there, however, could you check the change within PhoneFactory for when the second RIL is created? Thanks.",
+      "parentUuid": "a10135d2_05bf3239",
+      "revId": "71bf6d9f4ed5d66cc35cb764ca2f75a0d0a8bfe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6eb1bb3_bc0b5a38",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-05-20T20:41:32Z",
       "side": 1,
       "message": "we intended to use \"\" for backward compatibility reason.",
+      "range": {
+        "startLine": 53,
+        "startChar": 39,
+        "endLine": 53,
+        "endChar": 43
+      },
+      "revId": "71bf6d9f4ed5d66cc35cb764ca2f75a0d0a8bfe5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ef14685_bc7620e6",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1106833
+      },
+      "writtenOn": "2021-05-20T20:48:15Z",
+      "side": 1,
+      "message": "I see. Okay, we can modify our script then to react on an empty string as well then. Thanks.",
+      "parentUuid": "d6eb1bb3_bc0b5a38",
       "range": {
         "startLine": 53,
         "startChar": 39,
