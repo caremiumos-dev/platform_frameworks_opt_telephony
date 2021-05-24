@@ -578,13 +578,4 @@ public class CarrierDisplayNameResolver {
             return String.format(mDataFormat, name.trim());
         }
     }
-
-    /**
-     * Consider dataRegState if voiceRegState is OOS to determine SPN to be displayed.
-     * @param ss service state.
-     */
-    private static int getCombinedRegState(ServiceState ss) {
-        if (ss.getState() != ServiceState.STATE_IN_SERVICE) return ss.getDataRegistrationState();
-        return ss.getState();
-    }
 }
