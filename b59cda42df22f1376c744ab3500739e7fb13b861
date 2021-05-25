@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e84d315_20350df3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2021-05-25T18:18:56Z",
+      "side": 1,
+      "message": "This is a clean cherry-pick from internal to AOSP, applying +2",
+      "revId": "b59cda42df22f1376c744ab3500739e7fb13b861",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
