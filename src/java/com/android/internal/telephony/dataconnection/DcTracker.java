@@ -2489,14 +2489,17 @@ public class DcTracker extends Handler {
     private void onApnUnthrottled(Message msg) {
         String apn = (String) msg.obj;
         if (apn != null) {
-            ApnContext ac = mApnContexts.get(apn);
-            if (ac != null) {
-                @ApnType int apnTypes = ac.getApnTypeBitmask();
+            ApnSetting apnSetting = mAllApnSettings.stream()
+                    .filter(as -> apn.equals(as.getApnName()))
+                    .findFirst()
+                    .orElse(null);
+            if (apnSetting != null) {
+                @ApnType int apnTypes = apnSetting.getApnTypeBitmask();
                 mDataThrottler.setRetryTime(apnTypes, RetryManager.NO_SUGGESTED_RETRY_DELAY,
                         REQUEST_TYPE_NORMAL);
                 // After data unthrottled, we should see if it's possible to bring up the data
                 // again.
-                trySetupData(ac, REQUEST_TYPE_NORMAL, null);
+                setupDataOnAllConnectableApns(Phone.REASON_DATA_UNTHROTTLED, RetryFailures.ALWAYS);
             } else {
                 loge("EVENT_APN_UNTHROTTLED: Invalid APN passed: " + apn);
             }
