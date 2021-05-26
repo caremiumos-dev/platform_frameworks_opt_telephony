@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb7ad30_7f34cb1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2021-05-26T06:11:43Z",
+      "side": 1,
+      "message": "Yes, removed other vendor class files in latest patch",
+      "parentUuid": "48d33017_a8f17bb1",
+      "revId": "c7c95685ef58839214e18a6bf7bed83cd31c4085",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "855b3d7d_4f422b05",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-05-25T22:44:55Z",
       "side": 1,
       "message": "What\u0027s the reason of changing it to protected?",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 13
+      },
+      "revId": "c7c95685ef58839214e18a6bf7bed83cd31c4085",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d2e66e_f7de2e66",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1140927
+      },
+      "writtenOn": "2021-05-26T06:11:43Z",
+      "side": 1,
+      "message": "Since we dont have support for dds switch failures in 1.6 IRadio, we are extending onDdsSwitchResponse method in proprietary class to detect dds failures due to active call and retry them on call end.",
+      "parentUuid": "855b3d7d_4f422b05",
       "range": {
         "startLine": 95,
         "startChar": 4,
