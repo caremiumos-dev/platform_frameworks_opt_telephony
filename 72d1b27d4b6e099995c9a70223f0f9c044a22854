@@ -22,6 +22,30 @@
       },
       "revId": "72d1b27d4b6e099995c9a70223f0f9c044a22854",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b45c48_49b53dbb",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-05-27T02:15:38Z",
+      "side": 1,
+      "message": "Updated the change to handle for the case when ApnSetting is null.",
+      "parentUuid": "c33c4312_9bdc685c",
+      "range": {
+        "startLine": 1827,
+        "startChar": 31,
+        "endLine": 1827,
+        "endChar": 44
+      },
+      "revId": "72d1b27d4b6e099995c9a70223f0f9c044a22854",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
