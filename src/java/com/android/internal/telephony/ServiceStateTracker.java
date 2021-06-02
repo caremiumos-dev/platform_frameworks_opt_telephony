@@ -192,7 +192,7 @@ public class ServiceStateTracker extends Handler {
     private List<CellInfo> mLastCellInfoList = null;
     private List<PhysicalChannelConfig> mLastPhysicalChannelConfigList = null;
 
-    private static final Set<Integer> sRadioPowerOffReasons = new HashSet();
+    private final Set<Integer> mRadioPowerOffReasons = new HashSet();
 
     @UnsupportedAppUsage
     private SignalStrength mSignalStrength;
@@ -710,7 +710,7 @@ public class ServiceStateTracker extends Handler {
                 Settings.Global.ENABLE_CELLULAR_ON_BOOT, 1);
         mDesiredPowerState = (enableCellularOnBoot > 0) && ! (airplaneMode > 0);
         if (!mDesiredPowerState) {
-            sRadioPowerOffReasons.add(Phone.RADIO_POWER_REASON_USER);
+            mRadioPowerOffReasons.add(Phone.RADIO_POWER_REASON_USER);
         }
         mRadioPowerLog.log("init : airplane mode = " + airplaneMode + " enableCellularOnBoot = " +
                 enableCellularOnBoot);
@@ -1093,6 +1093,14 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * Clear all the radio off reasons. This should be done when turning radio off for genuine or
+     * test emergency calls.
+     */
+    public void clearAllRadioOffReasons() {
+        mRadioPowerOffReasons.clear();
+    }
+
+    /**
      * Turn on or off radio power.
      */
     public final void setRadioPower(boolean power) {
@@ -1125,21 +1133,21 @@ public class ServiceStateTracker extends Handler {
             if (forEmergencyCall) {
                 sRadioPowerOffReasons.clear();
             } else {
-                sRadioPowerOffReasons.remove(reason);
+                mRadioPowerOffReasons.remove(reason);
             }
         } else {
-            sRadioPowerOffReasons.add(reason);
+            mRadioPowerOffReasons.add(reason);
         }
         if (power == mDesiredPowerState && !forceApply) {
             log("setRadioPower mDesiredPowerState is already " + power + " Do nothing.");
             return;
         }
-        if (power && !sRadioPowerOffReasons.isEmpty()) {
+        if (power && !mRadioPowerOffReasons.isEmpty()) {
             log("setRadioPowerForReason " + "power: " + power + " forEmergencyCall= "
                     + forEmergencyCall + " isSelectedPhoneForEmergencyCall: "
                     + isSelectedPhoneForEmergencyCall + " forceApply " + forceApply + "reason:"
                     + reason + " will not power on the radio as it is powered off for the "
-                    + "following reasons: " + sRadioPowerOffReasons + ".");
+                    + "following reasons: " + mRadioPowerOffReasons + ".");
             return;
         }
 
