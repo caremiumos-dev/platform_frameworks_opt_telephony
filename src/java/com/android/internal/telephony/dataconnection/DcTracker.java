@@ -2400,7 +2400,6 @@ public class DcTracker extends Handler {
         }
 
         mAutoAttachEnabled.set(false);
-        setDefaultDataRoamingEnabled();
         setDefaultPreferredApnIfNeeded();
         read5GConfiguration();
         registerSettingsObserver();
@@ -2440,6 +2439,7 @@ public class DcTracker extends Handler {
         readConfiguration();
 
         if (mSimState == TelephonyManager.SIM_STATE_LOADED) {
+            setDefaultDataRoamingEnabled();
             createAllApnList();
             setDataProfilesAsNeeded();
             setInitialAttachApn();
