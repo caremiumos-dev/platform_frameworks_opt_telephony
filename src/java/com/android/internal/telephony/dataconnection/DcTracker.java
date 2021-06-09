@@ -3361,9 +3361,13 @@ public class DcTracker extends Handler {
                 resetPollStats();
             }
         }
-        // reset reconnect timer
-        setupDataOnAllConnectableApns(Phone.REASON_VOICE_CALL_ENDED, RetryFailures.ALWAYS);
+        //Allow data call retry only on DDS sub
+        if (mPhone.getSubId() == SubscriptionManager.getDefaultDataSubscriptionId()) {
+            // reset reconnect timer
+            setupDataOnAllConnectableApns(Phone.REASON_VOICE_CALL_ENDED, RetryFailures.ALWAYS);
+        }
     }
+
     /**
      * @return {@code true} if there is any data in connected state.
      */
