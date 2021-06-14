@@ -90,7 +90,15 @@ public class DataCallSessionStats {
             loge("onSetupDataCallResponse: no DataCallSession atom has been initiated.");
             return;
         }
-        mDataCallSession.ratAtEnd = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+
+        @NetworkType int currentRat = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+        if (currentRat != TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            mDataCallSession.ratAtEnd = currentRat;
+            mDataCallSession.bandAtEnd =
+                    (currentRat == TelephonyManager.NETWORK_TYPE_IWLAN)
+                            ? 0
+                            : ServiceStateStats.getBand(mPhone);
+        }
 
         // only set if apn hasn't been set during setup
         if (mDataCallSession.apnTypeBitmask == 0) {
@@ -105,6 +113,7 @@ public class DataCallSessionStats {
             // If setup has failed, then store the atom
             if (failureCause != DataFailCause.NONE) {
                 mDataCallSession.failureCause = failureCause;
+                mDataCallSession.oosAtEnd = getIsOos();
                 mDataCallSession.setupFailed = true;
                 mDataCallSession.ongoing = false;
                 mAtomsStorage.addDataCallSession(mDataCallSession);
@@ -145,9 +154,11 @@ public class DataCallSessionStats {
         }
     }
 
-    /** Stores the atom when DataConnection reaches DISCONNECTED state.
-     *  @param failureCause failure cause as per android.telephony.DataFailCause
-     **/
+    /**
+     * Stores the atom when DataConnection reaches DISCONNECTED state.
+     *
+     * @param failureCause failure cause as per android.telephony.DataFailCause
+     */
     public synchronized void onDataCallDisconnected(@DataFailureCause int failureCause) {
         // there should've been another call to initiate the atom,
         // so this method is being called out of order -> no atom will be saved
@@ -172,14 +183,17 @@ public class DataCallSessionStats {
      * registration state change.
      */
     public synchronized void onDrsOrRatChanged(@RilRadioTechnology int radioTechnology) {
-        @NetworkType int currentRat =
-                ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
-        if (mDataCallSession != null
-                && currentRat != TelephonyManager.NETWORK_TYPE_UNKNOWN
-                && mDataCallSession.ratAtEnd != currentRat) {
-            mDataCallSession.ratSwitchCount++;
-            mDataCallSession.ratAtEnd = currentRat;
-            mDataCallSession.bandAtEnd = ServiceStateStats.getBand(mPhone, currentRat);
+        @NetworkType int currentRat = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+        if (mDataCallSession != null && currentRat != TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            if (mDataCallSession.ratAtEnd != currentRat) {
+                mDataCallSession.ratSwitchCount++;
+                mDataCallSession.ratAtEnd = currentRat;
+            }
+            // band may have changed even if RAT was the same
+            mDataCallSession.bandAtEnd =
+                    (currentRat == TelephonyManager.NETWORK_TYPE_IWLAN)
+                            ? 0
+                            : ServiceStateStats.getBand(mPhone);
         }
     }
 
