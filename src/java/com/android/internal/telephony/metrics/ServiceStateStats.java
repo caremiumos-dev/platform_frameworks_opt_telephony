@@ -132,25 +132,25 @@ public class ServiceStateStats {
     }
 
     /**
-     * Returns the band used from the given phone and RAT, or {@code 0} if it is invalid or cannot
-     * be determined.
+     * Returns the band used from the given phone, or {@code 0} if it is invalid or cannot be
+     * determined.
      */
-    static int getBand(Phone phone, @NetworkType int rat) {
+    static int getBand(Phone phone) {
         ServiceState serviceState = getServiceStateForPhone(phone);
-        return getBand(serviceState, rat);
+        return getBand(serviceState);
     }
 
     /**
-     * Returns the band used from the given service state and RAT, or {@code 0} if it is invalid or
-     * cannot be determined.
+     * Returns the band used from the given service state, or {@code 0} if it is invalid or cannot
+     * be determined.
      */
-    static int getBand(@Nullable ServiceState serviceState, @NetworkType int rat) {
+    static int getBand(@Nullable ServiceState serviceState) {
         if (serviceState == null) {
             return 0; // Band unknown
         }
         int chNumber = serviceState.getChannelNumber();
         int band;
-        switch (rat) {
+        switch (getRat(serviceState)) {
             case TelephonyManager.NETWORK_TYPE_GSM:
             case TelephonyManager.NETWORK_TYPE_GPRS:
             case TelephonyManager.NETWORK_TYPE_EDGE:
@@ -196,7 +196,14 @@ public class ServiceStateStats {
                 && state.getDataRegState() == ServiceState.STATE_POWER_OFF;
     }
 
-    private static @NetworkType int getVoiceRat(Phone phone, ServiceState state) {
+    /**
+     * Returns the current voice RAT from the service state, or {@link
+     * TelephonyManager#NETWORK_TYPE_IWLAN} if the phone has Wifi calling in use.
+     */
+    public static @NetworkType int getVoiceRat(Phone phone, @Nullable ServiceState state) {
+        if (state == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
         boolean isWifiCall =
                 phone.getImsPhone() != null
                         && phone.getImsPhone().isWifiCallingEnabled()
@@ -204,6 +211,20 @@ public class ServiceStateStats {
         return isWifiCall ? TelephonyManager.NETWORK_TYPE_IWLAN : state.getVoiceNetworkType();
     }
 
+    /**
+     * Returns RAT used by WWAN.
+     *
+     * <p>Returns PS WWAN RAT, or CS WWAN RAT if PS WWAN RAT is unavailable.
+     */
+    private static @NetworkType int getRat(ServiceState state) {
+        @NetworkType int rat = getDataRat(state);
+        if (rat == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            rat = state.getVoiceNetworkType();
+        }
+        return rat;
+    }
+
+    /** Returns PS (data) RAT used by WWAN. */
     private static @NetworkType int getDataRat(ServiceState state) {
         final NetworkRegistrationInfo wwanRegInfo =
                 state.getNetworkRegistrationInfo(
