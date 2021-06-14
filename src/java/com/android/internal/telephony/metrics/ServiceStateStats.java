@@ -132,25 +132,25 @@ public class ServiceStateStats {
     }
 
     /**
-     * Returns the band used from the given phone and RAT, or {@code 0} if it is invalid or cannot
-     * be determined.
+     * Returns the band used from the given phone, or {@code 0} if it is invalid or cannot be
+     * determined.
      */
-    static int getBand(Phone phone, @NetworkType int rat) {
+    static int getBand(Phone phone) {
         ServiceState serviceState = getServiceStateForPhone(phone);
-        return getBand(serviceState, rat);
+        return getBand(serviceState);
     }
 
     /**
-     * Returns the band used from the given service state and RAT, or {@code 0} if it is invalid or
-     * cannot be determined.
+     * Returns the band used from the given service state, or {@code 0} if it is invalid or cannot
+     * be determined.
      */
-    static int getBand(@Nullable ServiceState serviceState, @NetworkType int rat) {
+    static int getBand(@Nullable ServiceState serviceState) {
         if (serviceState == null) {
             return 0; // Band unknown
         }
         int chNumber = serviceState.getChannelNumber();
         int band;
-        switch (rat) {
+        switch (getDataRat(serviceState)) {
             case TelephonyManager.NETWORK_TYPE_GSM:
             case TelephonyManager.NETWORK_TYPE_GPRS:
             case TelephonyManager.NETWORK_TYPE_EDGE:
@@ -196,7 +196,14 @@ public class ServiceStateStats {
                 && state.getDataRegState() == ServiceState.STATE_POWER_OFF;
     }
 
-    private static @NetworkType int getVoiceRat(Phone phone, ServiceState state) {
+    /**
+     * Returns the current voice RAT from the service state, or {@link
+     * TelephonyManager#NETWORK_TYPE_IWLAN} if the phone has Wifi calling in use.
+     */
+    public static @NetworkType int getVoiceRat(Phone phone, @Nullable ServiceState state) {
+        if (state == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
         boolean isWifiCall =
                 phone.getImsPhone() != null
                         && phone.getImsPhone().isWifiCallingEnabled()
