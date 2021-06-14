@@ -145,9 +145,11 @@ public class DataCallSessionStats {
         }
     }
 
-    /** Stores the atom when DataConnection reaches DISCONNECTED state.
-     *  @param failureCause failure cause as per android.telephony.DataFailCause
-     **/
+    /**
+     * Stores the atom when DataConnection reaches DISCONNECTED state.
+     *
+     * @param failureCause failure cause as per android.telephony.DataFailCause
+     */
     public synchronized void onDataCallDisconnected(@DataFailureCause int failureCause) {
         // there should've been another call to initiate the atom,
         // so this method is being called out of order -> no atom will be saved
@@ -172,14 +174,16 @@ public class DataCallSessionStats {
      * registration state change.
      */
     public synchronized void onDrsOrRatChanged(@RilRadioTechnology int radioTechnology) {
-        @NetworkType int currentRat =
-                ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+        @NetworkType int currentRat = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
         if (mDataCallSession != null
                 && currentRat != TelephonyManager.NETWORK_TYPE_UNKNOWN
                 && mDataCallSession.ratAtEnd != currentRat) {
             mDataCallSession.ratSwitchCount++;
             mDataCallSession.ratAtEnd = currentRat;
-            mDataCallSession.bandAtEnd = ServiceStateStats.getBand(mPhone, currentRat);
+            mDataCallSession.bandAtEnd =
+                    (currentRat == TelephonyManager.NETWORK_TYPE_IWLAN)
+                            ? 0
+                            : ServiceStateStats.getBand(mPhone);
         }
     }
 
