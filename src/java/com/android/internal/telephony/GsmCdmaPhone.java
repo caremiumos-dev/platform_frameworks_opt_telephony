@@ -4044,12 +4044,14 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void setSignalStrengthReportingCriteria(
-            int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
+            int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabledForSystem) {
         int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
                 ran,
                 signalStrengthMeasure,
                 mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
                 REPORTING_HYSTERESIS_DB);
+        boolean isEnabledForAppRequest = mSST.shouldEnableSignalThresholdForAppRequest(ran,
+                signalStrengthMeasure);
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
                         .setRadioAccessNetworkType(ran)
@@ -4057,7 +4059,7 @@ public class GsmCdmaPhone extends Phone {
                         .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
                         .setHysteresisDb(REPORTING_HYSTERESIS_DB)
                         .setThresholds(consolidatedThresholds, true /*isSystem*/)
-                        .setIsEnabled(isEnabled)
+                        .setIsEnabled(isEnabledForSystem || isEnabledForAppRequest)
                         .build(),
                 ran, null);
     }
