@@ -6275,6 +6275,24 @@ public class ServiceStateTracker extends Handler {
         sendMessage(obtainMessage(EVENT_ON_DEVICE_IDLE_STATE_CHANGED, isDeviceIdle));
     }
 
+    boolean shouldEnableSignalThresholdForAppRequest(int ran, int measurement) {
+        for (SignalRequestRecord record : mSignalRequestRecords) {
+            if (mPhone.getSubId() != record.mSubId) {
+                continue;
+            }
+            for (SignalThresholdInfo info : record.mRequest.getSignalThresholdInfos()) {
+                if (ran == info.getRadioAccessNetworkType()
+                        && measurement == info.getSignalMeasurementType()
+                        && (!mPhone.isDeviceIdle()
+                        || record.mRequest.isReportingRequestedWhileIdle()
+                        || record.mRequest.isSystemThresholdReportingRequestedWhileIdle())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private class SignalRequestRecord implements IBinder.DeathRecipient {
         final int mSubId; // subId the request originally applied to
         final int mCallingUid;
