@@ -6275,6 +6275,14 @@ public class ServiceStateTracker extends Handler {
         sendMessage(obtainMessage(EVENT_ON_DEVICE_IDLE_STATE_CHANGED, isDeviceIdle));
     }
 
+    // Return true if any signalRequestRecord has the matching {@code ran} and {@code measurement}.
+    boolean shouldEnableSignalThresholdForAppRequest(int ran, int measurement) {
+        return mSignalRequestRecords.stream()
+                .flatMap(record -> record.mRequest.getSignalThresholdInfos().stream())
+                .anyMatch(info -> ran == info.getRadioAccessNetworkType()
+                        && measurement == info.getSignalMeasurementType());
+    }
+
     private class SignalRequestRecord implements IBinder.DeathRecipient {
         final int mSubId; // subId the request originally applied to
         final int mCallingUid;
