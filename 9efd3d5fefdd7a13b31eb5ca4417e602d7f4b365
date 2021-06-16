@@ -109,6 +109,30 @@
       },
       "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f905d3_fbdb9b5c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6280,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-16T01:17:45Z",
+      "side": 1,
+      "message": "The reason not to use streams is that they have poor performance. I shouldn\u0027t have called it a style nit. It\u0027s a functional problem of using a non-Android-approved style. You can refer to the thread for more details.",
+      "parentUuid": "710b9156_bfdb76fd",
+      "range": {
+        "startLine": 6280,
+        "startChar": 37,
+        "endLine": 6280,
+        "endChar": 43
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
