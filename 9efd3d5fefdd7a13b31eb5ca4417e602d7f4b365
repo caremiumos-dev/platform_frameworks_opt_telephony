@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31d44ca9_5e5e0548",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-16T00:54:54Z",
+      "side": 1,
+      "message": "is this value being properly accounted when the device is in a low-power state?\n\nIn a \"screen off\" state, system thresholds should be ignored, but app thresholds should be honored IF they have requested this specifically... Thus, in low-power, the thresholds that are system-only should be disabled.",
+      "range": {
+        "startLine": 4047,
+        "startChar": 74,
+        "endLine": 4047,
+        "endChar": 92
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b68ddc53_9e35fc61",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
