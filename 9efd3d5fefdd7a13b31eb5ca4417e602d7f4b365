@@ -39,6 +39,30 @@
       },
       "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "710b9156_bfdb76fd",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6280,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-16T00:47:42Z",
+      "side": 1,
+      "message": "Understand. This stream version is actually converted from the raw version (for loop one). We already have streams usage for other cases in the same file (e.g. #shouldHonorSystemThresholds above). I argue that streams usage here does help on readability. Thanks",
+      "parentUuid": "b68ddc53_9e35fc61",
+      "range": {
+        "startLine": 6280,
+        "startChar": 37,
+        "endLine": 6280,
+        "endChar": 43
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
