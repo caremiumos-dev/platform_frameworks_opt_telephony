@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6efd161b_e8b411da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-16T00:42:17Z",
+      "side": 1,
+      "message": "patch makes sense to me.",
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b68ddc53_9e35fc61",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6280,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-16T00:42:17Z",
+      "side": 1,
+      "message": "style nit: hackbod says no to streams.\n\nhttps://groups.google.com/a/google.com/g/android-chatty-eng/c/JMlZzm__iFs/m/qqlCZx3aAgAJ",
+      "range": {
+        "startLine": 6280,
+        "startChar": 37,
+        "endLine": 6280,
+        "endChar": 43
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
