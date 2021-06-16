@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6efa035c_fc0e95cb",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-16T22:01:18Z",
+      "side": 1,
+      "message": "Yeah. This is the other side of the issue.\n\nIn both case (either high power or idle), isEnabledForSystem should be involved in the consolidation fo the thresholds.  Only when it is true firstly then we start to consider if system threshold should be honored (true in two cases, high power or app explicitly request in idle).\n\nFor example, when RSRNR is disabled for EUTRAN, then the consolidatedThresholds should not take system threshold of RSRNR at all.\n\nNow in idle mode, system threshold are consolidated only when all condition are true:\n1. isEnabledForSystem is true AND\n2. Device is in hight power mode OR in idle mode but app explicitly request to report system thresholds",
+      "parentUuid": "31d44ca9_5e5e0548",
+      "range": {
+        "startLine": 4047,
+        "startChar": 74,
+        "endLine": 4047,
+        "endChar": 92
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3f5a487_8803fceb",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-06-16T01:10:27Z",
       "side": 1,
       "message": "Nit: we have @IntDefs we can annotate both of these params with, right? (I realize this is internal code and not SDK API surface, but never hurts to be more specific)",
+      "range": {
+        "startLine": 6279,
+        "startChar": 53,
+        "endLine": 6279,
+        "endChar": 56
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f2adae_6a0c1326",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6279,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-16T22:01:18Z",
+      "side": 1,
+      "message": "Thanks. Agree. I add the annotation in the new method. Will add the same for other similar cases in the future update ( to keep this patch minimum in this sensitive phase).",
+      "parentUuid": "b3f5a487_8803fceb",
       "range": {
         "startLine": 6279,
         "startChar": 53,
@@ -125,6 +173,30 @@
       "side": 1,
       "message": "The reason not to use streams is that they have poor performance. I shouldn\u0027t have called it a style nit. It\u0027s a functional problem of using a non-Android-approved style. You can refer to the thread for more details.",
       "parentUuid": "710b9156_bfdb76fd",
+      "range": {
+        "startLine": 6280,
+        "startChar": 37,
+        "endLine": 6280,
+        "endChar": 43
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a37b7c23_67d94fd7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6280,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-16T22:01:18Z",
+      "side": 1,
+      "message": "Ok, got the point. The streams API replaced in the new logic. Thanks",
+      "parentUuid": "e8f905d3_fbdb9b5c",
       "range": {
         "startLine": 6280,
         "startChar": 37,
