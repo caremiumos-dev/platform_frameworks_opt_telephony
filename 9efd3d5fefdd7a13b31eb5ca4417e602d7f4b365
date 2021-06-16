@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3f5a487_8803fceb",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 6279,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-06-16T01:10:27Z",
+      "side": 1,
+      "message": "Nit: we have @IntDefs we can annotate both of these params with, right? (I realize this is internal code and not SDK API surface, but never hurts to be more specific)",
+      "range": {
+        "startLine": 6279,
+        "startChar": 53,
+        "endLine": 6279,
+        "endChar": 56
+      },
+      "revId": "9efd3d5fefdd7a13b31eb5ca4417e602d7f4b365",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b68ddc53_9e35fc61",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 2
