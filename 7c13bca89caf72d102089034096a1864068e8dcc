@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6cb8cc3_404aa166",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6282,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-17T21:24:51Z",
+      "side": 1,
+      "message": "SignalRequestRecord is private data class here. So record.mSubId is private access for this class. We actually get style lint failure if we change it to subId.",
+      "parentUuid": "c1c144be_30909367",
+      "range": {
+        "startLine": 6282,
+        "startChar": 44,
+        "endLine": 6282,
+        "endChar": 50
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1faff0f6_de41e4f5",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-06-17T00:41:26Z",
       "side": 1,
       "message": "This is actually a red flag. In theory, something that\u0027s publicly visible shouldn\u0027t be mFoo but should be .foo.\n\nSecond concern here is to please confirm that mRequest is @nonnull since this is a double-dereference. :-) Also, if mRequest is actually visible, please ensure that it\u0027s final.",
+      "range": {
+        "startLine": 6285,
+        "startChar": 44,
+        "endLine": 6285,
+        "endChar": 59
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d00f21e_cde85719",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6285,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-17T21:24:51Z",
+      "side": 1,
+      "message": "Again, SignalRequestRecord is private data class. We did follow the style rule thhat \"Non-public, non-static field names start with m\":\nhttps://source.android.com/setup/contribute/code-style\n\nmRequest is already final and the only source is from TM#setSignalStrengthUpdateRequest which marked the request @NonNull. To remove the same concern, I add the @NonNull to the constructor of SignalRequestRecord.\nthanks",
+      "parentUuid": "1faff0f6_de41e4f5",
       "range": {
         "startLine": 6285,
         "startChar": 44,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f84b15df_3d0ec61a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6287,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-17T21:24:51Z",
+      "side": 1,
+      "message": "Good idea. A util method with a good name serves as good doc for the logic.",
+      "parentUuid": "f22dc983_631f71cc",
+      "range": {
+        "startLine": 6286,
+        "startChar": 20,
+        "endLine": 6287,
+        "endChar": 73
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6392017c_e2d7b0e1",
@@ -93,6 +165,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3112056a_58434da3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6288,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-17T21:24:51Z",
+      "side": 1,
+      "message": "Done. Have to pass param of both subId and device idle state to achieve the goal, thought.",
+      "parentUuid": "6392017c_e2d7b0e1",
+      "range": {
+        "startLine": 6288,
+        "startChar": 36,
+        "endLine": 6288,
+        "endChar": 48
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eac9285_45724625",
@@ -106,6 +202,30 @@
       "writtenOn": "2021-06-17T00:41:26Z",
       "side": 1,
       "message": "also might be nice to break this out into a little helper to check for shouldReportForIdleMode() or something. This is just style, but complicated if statements like this can be easily misconstrued.",
+      "range": {
+        "startLine": 6288,
+        "startChar": 28,
+        "endLine": 6290,
+        "endChar": 90
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe3c86b_e33c5bc9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6290,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-17T21:24:51Z",
+      "side": 1,
+      "message": "isSignalReportRequestedWhileIdle() utility method used to replace the two cases with better documentation (I don\u0027t have to provide comments).",
+      "parentUuid": "4eac9285_45724625",
       "range": {
         "startLine": 6288,
         "startChar": 28,
