@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1c144be_30909367",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6282,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-17T00:41:26Z",
+      "side": 1,
+      "message": "style question. record.subId?",
+      "range": {
+        "startLine": 6282,
+        "startChar": 44,
+        "endLine": 6282,
+        "endChar": 50
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1faff0f6_de41e4f5",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6285,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-17T00:41:26Z",
+      "side": 1,
+      "message": "This is actually a red flag. In theory, something that\u0027s publicly visible shouldn\u0027t be mFoo but should be .foo.\n\nSecond concern here is to please confirm that mRequest is @nonnull since this is a double-dereference. :-) Also, if mRequest is actually visible, please ensure that it\u0027s final.",
+      "range": {
+        "startLine": 6285,
+        "startChar": 44,
+        "endLine": 6285,
+        "endChar": 59
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22dc983_631f71cc",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6287,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-17T00:41:26Z",
+      "side": 1,
+      "message": "should this matching be done by some little function like getMatchingThreshold() or something?",
+      "range": {
+        "startLine": 6286,
+        "startChar": 20,
+        "endLine": 6287,
+        "endChar": 73
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6392017c_e2d7b0e1",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6288,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-17T00:41:26Z",
+      "side": 1,
+      "message": "I\u0027d prefer if this were passed in as a parameter, which would allow this method to not rely on any overall system state.",
+      "range": {
+        "startLine": 6288,
+        "startChar": 36,
+        "endLine": 6288,
+        "endChar": 48
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eac9285_45724625",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6290,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-17T00:41:26Z",
+      "side": 1,
+      "message": "also might be nice to break this out into a little helper to check for shouldReportForIdleMode() or something. This is just style, but complicated if statements like this can be easily misconstrued.",
+      "range": {
+        "startLine": 6288,
+        "startChar": 28,
+        "endLine": 6290,
+        "endChar": 90
+      },
+      "revId": "7c13bca89caf72d102089034096a1864068e8dcc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
