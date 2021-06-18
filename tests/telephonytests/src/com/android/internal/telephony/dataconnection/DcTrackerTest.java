@@ -2966,4 +2966,16 @@ public class DcTrackerTest extends TelephonyTest {
         // Ensure handover is not completed yet
         verify(handler, never()).sendMessageDelayed(any(), anyLong());
     }
+
+    @Test
+    public void testNormalRequestDoesNotFailHandoverRequest() {
+        Handler handler = Mockito.mock(Handler.class);
+        Message handoverCompleteMessage = Message.obtain(handler);
+        addHandoverCompleteMsg(handoverCompleteMessage, ApnSetting.TYPE_IMS);
+        initApns(ApnSetting.TYPE_IMS_STRING, new String[]{ApnSetting.TYPE_IMS_STRING});
+        mDct.enableApn(ApnSetting.TYPE_IMS, DcTracker.REQUEST_TYPE_NORMAL, null);
+        waitForLastHandlerAction(mDcTrackerTestHandler.getThreadHandler());
+        // Ensure handover is not completed yet
+        verify(handler, never()).sendMessageDelayed(any(), anyLong());
+    }
 }
