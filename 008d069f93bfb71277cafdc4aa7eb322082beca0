@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b914b54_47a5baed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-18T22:38:56Z",
+      "side": 1,
+      "message": "Jack, would you please help to review the fix the S Signal Strength feature?\n\nThe issue is revealed by Robert in b/176961228#21. It is targeted to be fixed for S (I will cherry-pick once this one is approved).\nThanks",
+      "revId": "008d069f93bfb71277cafdc4aa7eb322082beca0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
