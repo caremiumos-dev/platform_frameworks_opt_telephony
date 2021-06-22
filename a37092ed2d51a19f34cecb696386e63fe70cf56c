@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854aa6af_b967e9b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-06-22T17:09:12Z",
+      "side": 1,
+      "message": "LGTM but you need to rebase the CL.",
+      "revId": "a37092ed2d51a19f34cecb696386e63fe70cf56c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
