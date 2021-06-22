@@ -627,6 +627,11 @@ public class ImsPhone extends ImsPhoneBase {
         return mCT.isImsServiceReady();
     }
 
+    @Override
+    public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
+        return mDefaultPhone.getCarrierPrivilegesTracker();
+    }
+
     /**
      * Hold the currently active call, possibly unholding a currently held call.
      * @throws CallStateException
