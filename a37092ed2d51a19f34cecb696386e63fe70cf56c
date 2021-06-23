@@ -16,6 +16,24 @@
       "message": "LGTM but you need to rebase the CL.",
       "revId": "a37092ed2d51a19f34cecb696386e63fe70cf56c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d4da70_229d1514",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-06-23T05:19:12Z",
+      "side": 1,
+      "message": "I changed the title and code since it has been fixed by other CL.",
+      "parentUuid": "854aa6af_b967e9b1",
+      "revId": "a37092ed2d51a19f34cecb696386e63fe70cf56c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
