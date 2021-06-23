@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b237b64f_5b6e9862",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4707,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-06-23T16:57:13Z",
+      "side": 1,
+      "message": "Can this throw? Then getCPT() can be @NonNull. Or it can be a method on PhoneInternalInterface and have no instance here, same result.",
+      "range": {
+        "startLine": 4707,
+        "startChar": 15,
+        "endLine": 4707,
+        "endChar": 19
+      },
+      "revId": "d2a7f8eb290e54c81c4ee25ed4f490164270b095",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
