@@ -22,6 +22,30 @@
       },
       "revId": "d2a7f8eb290e54c81c4ee25ed4f490164270b095",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8c00af_4a08c9ac",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4707,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-06-23T20:40:07Z",
+      "side": 1,
+      "message": "3 classes extend Phone: GsmCdmaPhone, ImsPhone and SipPhone.\nThe first 2 override the method, so not an issue. I don\u0027t know if the 3rd one is still used.\n\ngetCarrierPrivilegesTracker() is only used in Phone (where null is already checked) and in DataConnection. So, I prefer to handle it gracefully in DataConnection than adding a throw.",
+      "parentUuid": "b237b64f_5b6e9862",
+      "range": {
+        "startLine": 4707,
+        "startChar": 15,
+        "endLine": 4707,
+        "endChar": 19
+      },
+      "revId": "d2a7f8eb290e54c81c4ee25ed4f490164270b095",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
