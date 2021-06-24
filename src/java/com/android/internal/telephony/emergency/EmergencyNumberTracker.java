@@ -396,22 +396,32 @@ public class EmergencyNumberTracker extends Handler {
         for (int typeData : eccInfo.types) {
             switch (typeData) {
                 case EccInfo.Type.POLICE:
-                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
-                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE
-                            : emergencyServiceCategoryBitmask
-                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE;
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_POLICE;
                     break;
                 case EccInfo.Type.AMBULANCE:
-                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
-                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE
-                            : emergencyServiceCategoryBitmask
-                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE;
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AMBULANCE;
                     break;
                 case EccInfo.Type.FIRE:
-                    emergencyServiceCategoryBitmask = emergencyServiceCategoryBitmask == 0
-                            ? EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE
-                            : emergencyServiceCategoryBitmask
-                            | EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE;
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_FIRE_BRIGADE;
+                    break;
+                case EccInfo.Type.MARINE_GUARD:
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MARINE_GUARD;
+                    break;
+                case EccInfo.Type.MOUNTAIN_RESCUE:
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MOUNTAIN_RESCUE;
+                    break;
+                case EccInfo.Type.MIEC:
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_MIEC;
+                    break;
+                case EccInfo.Type.AIEC:
+                    emergencyServiceCategoryBitmask |=
+                            EmergencyNumber.EMERGENCY_SERVICE_CATEGORY_AIEC;
                     break;
                 default:
                     // Ignores unknown types.
@@ -709,7 +719,16 @@ public class EmergencyNumberTracker extends Handler {
         if (number == null) {
             return false;
         }
-        number = PhoneNumberUtils.stripSeparators(number);
+
+        // Do not treat SIP address as emergency number
+        if (PhoneNumberUtils.isUriNumber(number)) {
+            return false;
+        }
+
+        // Strip the separators from the number before comparing it
+        // to the list.
+        number = PhoneNumberUtils.extractNetworkPortionAlt(number);
+
         if (!mEmergencyNumberListFromRadio.isEmpty()) {
             for (EmergencyNumber num : mEmergencyNumberList) {
                 // According to com.android.i18n.phonenumbers.ShortNumberInfo, in
@@ -935,6 +954,9 @@ public class EmergencyNumberTracker extends Handler {
         // If the number passed in is null, just return false:
         if (number == null) return false;
 
+        /// M: preprocess number for emergency check @{
+        // Move following logic to isEmergencyNumber()
+
         // If the number passed in is a SIP address, return false, since the
         // concept of "emergency numbers" is only meaningful for calls placed
         // over the cell network.
@@ -942,13 +964,14 @@ public class EmergencyNumberTracker extends Handler {
         // since the whole point of extractNetworkPortionAlt() is to filter out
         // any non-dialable characters (which would turn 'abc911def@example.com'
         // into '911', for example.))
-        if (PhoneNumberUtils.isUriNumber(number)) {
-            return false;
-        }
+        //if (PhoneNumberUtils.isUriNumber(number)) {
+        //    return false;
+        //}
 
         // Strip the separators from the number before comparing it
         // to the list.
-        number = PhoneNumberUtils.extractNetworkPortionAlt(number);
+        //number = PhoneNumberUtils.extractNetworkPortionAlt(number);
+        /// @}
 
         String emergencyNumbers = "";
         int slotId = SubscriptionController.getInstance().getSlotIndex(mPhone.getSubId());

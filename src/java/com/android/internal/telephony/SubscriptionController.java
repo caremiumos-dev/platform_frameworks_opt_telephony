@@ -31,6 +31,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -63,6 +64,7 @@ import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.Log;
 
+import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.dataconnection.DataEnabledOverride;
@@ -358,6 +360,29 @@ public class SubscriptionController extends ISub.Stub {
         invalidateDefaultSmsSubIdCaches();
         invalidateActiveDataSubIdCaches();
         invalidateSlotIndexCaches();
+
+        mContext.getContentResolver().registerContentObserver(
+                SubscriptionManager.SIM_INFO_SUW_RESTORE_CONTENT_URI, false,
+                new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                        if (uri.equals(SubscriptionManager.SIM_INFO_SUW_RESTORE_CONTENT_URI)) {
+                            refreshCachedActiveSubscriptionInfoList();
+                            notifySubscriptionInfoChanged();
+
+                            SubscriptionManager subManager = SubscriptionManager.from(mContext);
+                            for (SubscriptionInfo subInfo : getActiveSubscriptionInfoList(
+                                    mContext.getOpPackageName(), mContext.getAttributionTag())) {
+                                if (SubscriptionController.getInstance()
+                                        .isActiveSubId(subInfo.getSubscriptionId())) {
+                                    ImsManager imsManager = ImsManager.getInstance(mContext,
+                                            subInfo.getSimSlotIndex());
+                                    imsManager.updateImsServiceConfig();
+                                }
+                            }
+                        }
+                    }
+                });
 
         if (DBG) logdl("[SubscriptionController] init by Context");
     }
@@ -2074,6 +2099,82 @@ public class SubscriptionController extends ISub.Stub {
         }
     }
 
+    /**
+     * Set device to device status sharing preference
+     * @param sharing the sharing preference to set
+     * @param subId
+     * @return the number of records updated
+     */
+    @Override
+    public int setDeviceToDeviceStatusSharing(int sharing, int subId) {
+        if (DBG) logd("[setDeviceToDeviceStatusSharing]- sharing:" + sharing + " subId:" + subId);
+
+        enforceModifyPhoneState("setDeviceToDeviceStatusSharing");
+
+        // Now that all security checks passes, perform the operation as ourselves.
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            validateSubId(subId);
+            if (sharing < 0) {
+                if (DBG) logd("[setDeviceToDeviceStatusSharing]- fail");
+                return -1;
+            }
+            ContentValues value = new ContentValues(1);
+            value.put(SubscriptionManager.D2D_STATUS_SHARING, sharing);
+            if (DBG) logd("[setDeviceToDeviceStatusSharing]- sharing:" + sharing + " set");
+
+            int result = updateDatabase(value, subId, true);
+
+            // Refresh the Cache of Active Subscription Info List
+            refreshCachedActiveSubscriptionInfoList();
+
+            notifySubscriptionInfoChanged();
+
+            return result;
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
+    /**
+     * Set contacts that allow device to device status sharing.
+     * @param contacts contacts to set
+     * @param subscriptionId
+     * @return the number of records updated
+     */
+    @Override
+    public int setDeviceToDeviceStatusSharingContacts(String contacts, int subscriptionId) {
+        if (DBG) {
+            logd("[setDeviceToDeviceStatusSharingContacts]- contacts:" + contacts
+                    + " subId:" + subscriptionId);
+        }
+
+        enforceModifyPhoneState("setDeviceToDeviceStatusSharingContacts");
+
+        // Now that all security checks passes, perform the operation as ourselves.
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            validateSubId(subscriptionId);
+            ContentValues value = new ContentValues(1);
+            value.put(SubscriptionManager.D2D_STATUS_SHARING_SELECTED_CONTACTS, contacts);
+            if (DBG) {
+                logd("[setDeviceToDeviceStatusSharingContacts]- contacts:" + contacts
+                        + " set");
+            }
+
+            int result = updateDatabase(value, subscriptionId, true);
+
+            // Refresh the Cache of Active Subscription Info List
+            refreshCachedActiveSubscriptionInfoList();
+
+            notifySubscriptionInfoChanged();
+
+            return result;
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
     public void syncGroupedSetting(int refSubId) {
         logd("syncGroupedSetting");
         try (Cursor cursor = mContext.getContentResolver().query(
@@ -3012,6 +3113,7 @@ public class SubscriptionController extends ISub.Stub {
             case SubscriptionManager.WFC_IMS_ROAMING_ENABLED:
             case SubscriptionManager.IMS_RCS_UCE_ENABLED:
             case SubscriptionManager.CROSS_SIM_CALLING_ENABLED:
+            case SubscriptionManager.VOIMS_OPT_IN_STATUS:
                 value.put(propKey, Integer.parseInt(propValue));
                 break;
             case SubscriptionManager.ALLOWED_NETWORK_TYPES:
@@ -3089,6 +3191,9 @@ public class SubscriptionController extends ISub.Stub {
                         case SubscriptionManager.GROUP_UUID:
                         case SubscriptionManager.DATA_ENABLED_OVERRIDE_RULES:
                         case SubscriptionManager.ALLOWED_NETWORK_TYPES:
+                        case SubscriptionManager.VOIMS_OPT_IN_STATUS:
+                        case SubscriptionManager.D2D_STATUS_SHARING:
+                        case SubscriptionManager.D2D_STATUS_SHARING_SELECTED_CONTACTS:
                             resultValue = cursor.getString(0);
                             break;
                         default:

@@ -149,7 +149,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public static final String DATA_DISABLED_ON_BOOT_KEY = "disabled_on_boot_key";
 
     // Key used to read/write data_roaming_is_user_setting pref
-    public static final String DATA_ROAMING_IS_USER_SETTING_KEY = "data_roaming_is_user_setting_key";
+    public static final String DATA_ROAMING_IS_USER_SETTING_KEY =
+            "data_roaming_is_user_setting_key";
 
     // Default value when there has been no last emergency SMS time recorded yet.
     private static final int EMERGENCY_SMS_NO_TIME_RECORDED = -1;
@@ -186,7 +187,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_RUIM_RECORDS_LOADED            = 22;
     protected static final int EVENT_NV_READY                       = 23;
     private static final int EVENT_SET_ENHANCED_VP                  = 24;
-    protected static final int EVENT_EMERGENCY_CALLBACK_MODE_ENTER  = 25;
+    @VisibleForTesting
+    public static final int EVENT_EMERGENCY_CALLBACK_MODE_ENTER  = 25;
     protected static final int EVENT_EXIT_EMERGENCY_CALLBACK_RESPONSE = 26;
     protected static final int EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED = 27;
     // other
@@ -451,7 +453,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected boolean mIsCarrierNrSupported = false;
 
     private boolean mUnitTestMode;
-    private final CarrierPrivilegesTracker mCarrierPrivilegesTracker;
+    private CarrierPrivilegesTracker mCarrierPrivilegesTracker = null;
 
     protected VoiceCallSessionStats mVoiceCallSessionStats;
     protected SmsStats mSmsStats;
@@ -577,8 +579,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mIsVoiceCapable = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE))
                 .isVoiceCapable();
 
-        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
-
         /**
          *  Some RIL's don't always send RIL_UNSOL_CALL_RING so it needs
          *  to be generated locally. Ideally all ring tones should be loops
@@ -614,6 +614,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mSimActivationTracker = mTelephonyComponentFactory
                 .inject(SimActivationTracker.class.getName())
                 .makeSimActivationTracker(this);
+        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
         if (getPhoneType() != PhoneConstants.PHONE_TYPE_SIP) {
             mCi.registerForSrvccStateChanged(this, EVENT_SRVCC_STATE_CHANGED, null);
         }
@@ -1841,6 +1842,17 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public ServiceStateTracker getServiceStateTracker() {
         return null;
+    }
+
+    /**
+     * Check whether the radio is off for thermal reason.
+     *
+     * @return {@code true} only if thermal mitigation is one of the reason for which radio is off.
+     */
+    public boolean isRadioOffForThermalMitigation() {
+        ServiceStateTracker sst = getServiceStateTracker();
+        return sst != null && sst.getRadioPowerOffReasons()
+                .contains(Phone.RADIO_POWER_REASON_THERMAL);
     }
 
     /**
@@ -4160,15 +4172,24 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /**
      * Get Volte Feature Availability
+     * @deprecated Use {@link #isVoiceOverCellularImsEnabled} instead.
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @Deprecated
     public boolean isVolteEnabled() {
+        return isVoiceOverCellularImsEnabled();
+    }
+
+    /**
+     * @return {@code true} if voice over IMS on cellular is enabled, {@code false} otherwise.
+     */
+    public boolean isVoiceOverCellularImsEnabled() {
         Phone imsPhone = mImsPhone;
         boolean isVolteEnabled = false;
         if (imsPhone != null) {
-            isVolteEnabled = imsPhone.isVolteEnabled();
+            isVolteEnabled = imsPhone.isVoiceOverCellularImsEnabled();
         }
-        Rlog.d(LOG_TAG, "isVolteEnabled=" + isVolteEnabled);
+        Rlog.d(LOG_TAG, "isVoiceOverCellularImsEnabled=" + isVolteEnabled);
         return isVolteEnabled;
     }
 
@@ -4362,20 +4383,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public void unregisterForRadioCapabilityChanged(Handler h) {
         mCi.unregisterForRadioCapabilityChanged(this);
-    }
-
-    /**
-     * Determines if  IMS is enabled for call.
-     *
-     * @return {@code true} if IMS calling is enabled.
-     */
-    public boolean isImsUseEnabled() {
-        ImsManager imsManager = ImsManager.getInstance(mContext, mPhoneId);
-        boolean imsUseEnabled = ((imsManager.isVolteEnabledByPlatform()
-                && imsManager.isEnhanced4gLteModeSettingEnabledByUser())
-                || (imsManager.isWfcEnabledByPlatform() && imsManager.isWfcEnabledByUser())
-                && imsManager.isNonTtyOrTtyOnVolteEnabled());
-        return imsUseEnabled;
     }
 
     /**
@@ -4624,10 +4631,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         boolean isEmergencyCallOnly = false;
         for (Phone phone : PhoneFactory.getPhones()) {
             if (phone != null) {
-                ServiceState ss = phone.getServiceStateTracker().getServiceState();
-                // One of the phone is in service, hence the device is not emergency call only.
-                if (ss.getState() == ServiceState.STATE_IN_SERVICE
-                        || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                ServiceStateTracker sst = phone.getServiceStateTracker();
+                ServiceState ss = sst.getServiceState();
+                // Combined reg state is in service, hence the device is not emergency call only.
+                if (sst.getCombinedRegState(ss) == ServiceState.STATE_IN_SERVICE) {
                     return false;
                 }
                 isEmergencyCallOnly |= ss.isEmergencyOnly();
