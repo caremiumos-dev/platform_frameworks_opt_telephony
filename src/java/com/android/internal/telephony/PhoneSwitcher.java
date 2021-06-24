@@ -1425,13 +1425,15 @@ public class PhoneSwitcher extends Handler {
         }
 
         // A phone in voice call might trigger data being switched to it.
-        // We only report true if its precise call state is ACTIVE, ALERTING or HOLDING.
+        // We only report true if its precise call state is ACTIVE, ALERTING, HOLDING or
+        // DISCONNECTING.
         // The reason is data switching is interrupting, so we only switch when necessary and
         // acknowledged by the users. For incoming call, we don't switch until answered
         // (RINGING -> ACTIVE), for outgoing call we don't switch until call is connected
         // in network (DIALING -> ALERTING).
         return (phone.getForegroundCall().getState() == Call.State.ACTIVE
                 || phone.getForegroundCall().getState() == Call.State.ALERTING
+                || phone.getForegroundCall().getState() == Call.State.DISCONNECTING
                 || phone.getBackgroundCall().getState() == Call.State.HOLDING);
     }
 
