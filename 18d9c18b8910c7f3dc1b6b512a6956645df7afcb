@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbfcd27b_0f6cab7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-06-24T18:43:51Z",
+      "side": 1,
+      "message": "The null check in DataConnection is unnecessary.",
+      "revId": "18d9c18b8910c7f3dc1b6b512a6956645df7afcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
