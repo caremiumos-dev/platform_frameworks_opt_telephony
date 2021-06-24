@@ -16,6 +16,24 @@
       "message": "The null check in DataConnection is unnecessary.",
       "revId": "18d9c18b8910c7f3dc1b6b512a6956645df7afcb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd9675a3_ece00847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-06-24T19:26:01Z",
+      "side": 1,
+      "message": "True. But it\u0027s preferable considering that someone might extend Phone object and the method could eventually return null. Unlikely now, but future proof.",
+      "parentUuid": "dbfcd27b_0f6cab7e",
+      "revId": "18d9c18b8910c7f3dc1b6b512a6956645df7afcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
