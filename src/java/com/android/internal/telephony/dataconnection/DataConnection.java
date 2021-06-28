@@ -859,7 +859,7 @@ public class DataConnection extends StateMachine {
                 + "' APN='" + mApnSetting.getApnName()
                 + "' proxy='" + mApnSetting.getProxyAddressAsString()
                 + "' port='" + mApnSetting.getProxyPort() + "'");
-        if (cp.mApnContext != null) cp.mApnContext.requestLog("DataConnection.connect");
+        ApnContext.requestLog(cp.mApnContext, "DataConnection.connect");
 
         // Check if we should fake an error.
         if (mDcTesterFailBringUpAll.getDcFailBringUp().mCounter  > 0) {
@@ -1169,7 +1169,7 @@ public class DataConnection extends StateMachine {
 
         String str = "tearDownData. mCid=" + mCid + ", reason=" + discReason;
         if (DBG) log(str);
-        if (apnContext != null) apnContext.requestLog(str);
+        ApnContext.requestLog(apnContext, str);
 
 
         //Needed to be final to work in a closure
@@ -2615,9 +2615,8 @@ public class DataConnection extends StateMachine {
                         log("DcActivatingState onSetupConnectionCompleted result=" + result
                                 + " dc=" + DataConnection.this);
                     }
-                    if (cp.mApnContext != null) {
-                        cp.mApnContext.requestLog("onSetupConnectionCompleted result=" + result);
-                    }
+                    ApnContext.requestLog(
+                            cp.mApnContext, "onSetupConnectionCompleted result=" + result);
                     switch (result) {
                         case SUCCESS:
                             // All is well
@@ -2646,7 +2645,7 @@ public class DataConnection extends StateMachine {
                                     + DataFailCause.toString(result.mFailCause)
                                     + " retry=" + retry;
                             if (DBG) log(logStr);
-                            if (cp.mApnContext != null) cp.mApnContext.requestLog(logStr);
+                            ApnContext.requestLog(cp.mApnContext, logStr);
                             mInactiveState.setEnterNotificationParams(cp, result.mFailCause,
                                     DataCallResponse.HANDOVER_FAILURE_MODE_UNKNOWN);
                             transitionTo(mInactiveState);
@@ -2689,7 +2688,7 @@ public class DataConnection extends StateMachine {
                                     + " isPermanentFailure=" +
                                     mDct.isPermanentFailure(result.mFailCause);
                             if (DBG) log(str);
-                            if (cp.mApnContext != null) cp.mApnContext.requestLog(str);
+                            ApnContext.requestLog(cp.mApnContext, str);
 
                             // Save the cause. DcTracker.onDataSetupComplete will check this
                             // failure cause and determine if we need to retry this APN later
@@ -3338,7 +3337,7 @@ public class DataConnection extends StateMachine {
                             + mApnContexts.size();
 
                     if (DBG) log(str);
-                    if (dp.mApnContext != null) dp.mApnContext.requestLog(str);
+                    ApnContext.requestLog(dp.mApnContext, str);
 
                     // Clear out existing qos sessions
                     updateQosParameters(null);
@@ -3394,7 +3393,7 @@ public class DataConnection extends StateMachine {
                         String str = "DcDisconnectionErrorCreatingConnection" +
                                 " msg.what=EVENT_DEACTIVATE_DONE";
                         if (DBG) log(str);
-                        if (cp.mApnContext != null) cp.mApnContext.requestLog(str);
+                        ApnContext.requestLog(cp.mApnContext, str);
 
                         // Transition to inactive but send notifications after
                         // we've entered the mInactive state.
