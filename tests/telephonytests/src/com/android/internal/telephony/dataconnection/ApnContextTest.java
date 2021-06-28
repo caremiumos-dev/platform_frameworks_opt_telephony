@@ -126,11 +126,13 @@ public class ApnContextTest extends TelephonyTest {
         verify(mDcTracker, times(2)).enableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.REQUEST_TYPE_NORMAL), eq(null));
 
-        mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_NORMAL);
+        remainingRequests = mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_NORMAL);
+        assertEquals(remainingRequests, 1);
         verify(mDcTracker, never()).disableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.RELEASE_TYPE_NORMAL));
 
-        mApnContext.releaseNetwork(nr2, DcTracker.RELEASE_TYPE_NORMAL);
+        remainingRequests = mApnContext.releaseNetwork(nr2, DcTracker.RELEASE_TYPE_NORMAL);
+        assertEquals(remainingRequests, 0);
         verify(mDcTracker, times(1)).disableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.RELEASE_TYPE_NORMAL));
     }
@@ -153,11 +155,13 @@ public class ApnContextTest extends TelephonyTest {
         verify(mDcTracker, times(2)).enableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.REQUEST_TYPE_NORMAL), eq(null));
 
-        mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_DETACH);
+        remainingRequests = mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_DETACH);
+        assertEquals(remainingRequests, 1);
         verify(mDcTracker, times(1)).disableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.RELEASE_TYPE_DETACH));
 
-        mApnContext.releaseNetwork(nr2, DcTracker.RELEASE_TYPE_NORMAL);
+        remainingRequests = mApnContext.releaseNetwork(nr2, DcTracker.RELEASE_TYPE_NORMAL);
+        assertEquals(remainingRequests, 0);
         verify(mDcTracker, times(1)).disableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.RELEASE_TYPE_NORMAL));
     }
@@ -170,7 +174,8 @@ public class ApnContextTest extends TelephonyTest {
         verify(mDcTracker, times(1)).enableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.REQUEST_TYPE_HANDOVER), eq(null));
 
-        mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_HANDOVER);
+        remainingRequests = mApnContext.releaseNetwork(nr1, DcTracker.RELEASE_TYPE_HANDOVER);
+        assertEquals(remainingRequests, 0);
         verify(mDcTracker, times(1)).disableApn(eq(ApnSetting.TYPE_DEFAULT),
                 eq(DcTracker.RELEASE_TYPE_HANDOVER));
     }
@@ -249,8 +254,8 @@ public class ApnContextTest extends TelephonyTest {
                 new String[]{"36,2"});
         mApnContext.resetErrorCodeRetries();
 
-        assertFalse(mApnContext.restartOnError(36));
-        assertTrue(mApnContext.restartOnError(36));
-        assertFalse(mApnContext.restartOnError(37));
+        assertEquals(mApnContext.restartOnError(36), 1);
+        assertEquals(mApnContext.restartOnError(36), 0);
+        assertEquals(mApnContext.restartOnError(37), -1);
     }
 }
