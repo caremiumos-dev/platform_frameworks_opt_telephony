@@ -187,7 +187,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_RUIM_RECORDS_LOADED            = 22;
     protected static final int EVENT_NV_READY                       = 23;
     private static final int EVENT_SET_ENHANCED_VP                  = 24;
-    protected static final int EVENT_EMERGENCY_CALLBACK_MODE_ENTER  = 25;
+    @VisibleForTesting
+    public static final int EVENT_EMERGENCY_CALLBACK_MODE_ENTER  = 25;
     protected static final int EVENT_EXIT_EMERGENCY_CALLBACK_RESPONSE = 26;
     protected static final int EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED = 27;
     // other
@@ -452,7 +453,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected boolean mIsCarrierNrSupported = false;
 
     private boolean mUnitTestMode;
-    private CarrierPrivilegesTracker mCarrierPrivilegesTracker = null;
 
     protected VoiceCallSessionStats mVoiceCallSessionStats;
     protected SmsStats mSmsStats;
@@ -613,7 +613,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mSimActivationTracker = mTelephonyComponentFactory
                 .inject(SimActivationTracker.class.getName())
                 .makeSimActivationTracker(this);
-        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(mLooper, this, mContext);
         if (getPhoneType() != PhoneConstants.PHONE_TYPE_SIP) {
             mCi.registerForSrvccStateChanged(this, EVENT_SRVCC_STATE_CHANGED, null);
         }
@@ -1841,6 +1840,17 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     public ServiceStateTracker getServiceStateTracker() {
         return null;
+    }
+
+    /**
+     * Check whether the radio is off for thermal reason.
+     *
+     * @return {@code true} only if thermal mitigation is one of the reason for which radio is off.
+     */
+    public boolean isRadioOffForThermalMitigation() {
+        ServiceStateTracker sst = getServiceStateTracker();
+        return sst != null && sst.getRadioPowerOffReasons()
+                .contains(Phone.RADIO_POWER_REASON_THERMAL);
     }
 
     /**
@@ -4619,10 +4629,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         boolean isEmergencyCallOnly = false;
         for (Phone phone : PhoneFactory.getPhones()) {
             if (phone != null) {
-                ServiceState ss = phone.getServiceStateTracker().getServiceState();
-                // One of the phone is in service, hence the device is not emergency call only.
-                if (ss.getState() == ServiceState.STATE_IN_SERVICE
-                        || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                ServiceStateTracker sst = phone.getServiceStateTracker();
+                ServiceState ss = sst.getServiceState();
+                // Combined reg state is in service, hence the device is not emergency call only.
+                if (sst.getCombinedRegState(ss) == ServiceState.STATE_IN_SERVICE) {
                     return false;
                 }
                 isEmergencyCallOnly |= ss.isEmergencyOnly();
@@ -4706,7 +4716,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /** @hide */
     public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
-        return mCarrierPrivilegesTracker;
+        return null;
     }
 
     public boolean useSsOverIms(Message onComplete) {
