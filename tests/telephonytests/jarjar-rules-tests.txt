@@ -9,4 +9,5 @@ rule android.net.NetworkFactory* android.net.services.NetworkFactory@1
 # the package name. FrameworksTelephonyTests also includes net-utils-framework-common
 # via net-tests-utils and tries to jarjar it again. Rename the package name with
 # differnt prefix in the test jarjar rule to avoid duplicate jar entries.
+rule com.android.net.module.annotation.** com.android.internal.telephony.annotation.test.@1
 rule com.android.net.module.util.** com.android.internal.telephony.util.test.@1

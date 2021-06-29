@@ -22,3 +22,4 @@ rule com.google.i18n.phonenumbers.** com.android.internal.telephony.phonenumbers
 
 # Module library in frameworks/libs/net
 rule com.android.net.module.util.** com.android.internal.telephony.util.@1
+rule com.android.net.module.annotation.** com.android.internal.telephony.annotation.@1
