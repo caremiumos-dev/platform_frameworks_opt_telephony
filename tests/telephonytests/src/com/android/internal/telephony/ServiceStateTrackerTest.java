@@ -82,6 +82,7 @@ import android.telephony.NetworkRegistrationInfo;
 import android.telephony.NetworkService;
 import android.telephony.NrVopsSupportInfo;
 import android.telephony.PhysicalChannelConfig;
+import android.telephony.RadioAccessFamily;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
@@ -263,6 +264,17 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         int dds = SubscriptionManager.getDefaultDataSubscriptionId();
         doReturn(dds).when(mPhone).getSubId();
         doReturn(true).when(mPhone).areAllDataDisconnected();
+
+        doReturn(
+                RadioAccessFamily.RAF_GSM
+                | RadioAccessFamily.RAF_UMTS
+                | RadioAccessFamily.RAF_HSPA
+                | RadioAccessFamily.RAF_HSPAP
+                | RadioAccessFamily.RAF_1xRTT
+                | RadioAccessFamily.RAF_EVDO_0
+                | RadioAccessFamily.RAF_EVDO_A
+                | RadioAccessFamily.RAF_EVDO_B
+                | RadioAccessFamily.RAF_LTE).when(mPhone).getRadioAccessFamily();
 
         mSSTTestHandler = new ServiceStateTrackerTestHandler(getClass().getSimpleName());
         mSSTTestHandler.start();
