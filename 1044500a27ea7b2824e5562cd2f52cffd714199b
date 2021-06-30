@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30fc6a9b_e1ca589f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-06-30T00:25:44Z",
+      "side": 1,
+      "message": "Can you move this into a method isCdmaSupported() to avoid details of how we determine it here?\n\nAlso, how about this:\n  packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_CDMA)\n\nI see this logic is used in the UiccController.",
+      "range": {
+        "startLine": 668,
+        "startChar": 13,
+        "endLine": 675,
+        "endChar": 52
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb55733_40b14934",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-06-30T00:25:44Z",
+      "side": 1,
+      "message": "This variable can also go inside the if (mEriManager !\u003d null) block.",
+      "range": {
+        "startLine": 2161,
+        "startChar": 20,
+        "endLine": 2161,
+        "endChar": 36
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c38ae0_1432c1c3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-06-30T00:25:44Z",
+      "side": 1,
+      "message": "Not sure about this text here. Is it needed or can we return \"\" ?",
+      "range": {
+        "startLine": 5991,
+        "startChar": 88,
+        "endLine": 5991,
+        "endChar": 94
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
