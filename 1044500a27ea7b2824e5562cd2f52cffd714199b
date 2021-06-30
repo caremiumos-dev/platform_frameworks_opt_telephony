@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "057c480f_66ae7047",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-06-30T23:56:41Z",
+      "side": 1,
+      "message": "Good point. Directly calling UiccController.isCdmaSupported().",
+      "parentUuid": "30fc6a9b_e1ca589f",
+      "range": {
+        "startLine": 668,
+        "startChar": 13,
+        "endLine": 675,
+        "endChar": 52
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bb55733_40b14934",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd157f6e_bcd8701b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2161,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-06-30T23:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bb55733_40b14934",
+      "range": {
+        "startLine": 2161,
+        "startChar": 20,
+        "endLine": 2161,
+        "endChar": 36
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97c38ae0_1432c1c3",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-06-30T00:25:44Z",
       "side": 1,
       "message": "Not sure about this text here. Is it needed or can we return \"\" ?",
+      "range": {
+        "startLine": 5991,
+        "startChar": 88,
+        "endLine": 5991,
+        "endChar": 94
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04f0ee3_59b991c2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-06-30T23:56:41Z",
+      "side": 1,
+      "message": "I am not sure either. I tried to make it similar to Phone.getCdmaEriText(). I want to see what\u0027s Android team\u0027s opinion.",
+      "parentUuid": "97c38ae0_1432c1c3",
       "range": {
         "startLine": 5991,
         "startChar": 88,
