@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012559029",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1753205?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "486dd0bd_af82212d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/ApnContext.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-06-30T21:28:13Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 424,
+        "startChar": 6,
+        "endLine": 424,
+        "endChar": 7
+      },
+      "revId": "1e668f8a7a58a6f25aa11b4ceb8a376a3d7339ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012559029",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1753205?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "82b29a8a_5c9ad412",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3169,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-06-30T21:28:13Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 3169,
+        "startChar": 0,
+        "endLine": 3169,
+        "endChar": 101
+      },
+      "revId": "1e668f8a7a58a6f25aa11b4ceb8a376a3d7339ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
