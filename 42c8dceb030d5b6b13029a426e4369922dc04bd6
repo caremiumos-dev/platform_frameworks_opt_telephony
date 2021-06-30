@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a32b865a_f6f9d4f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-06-30T17:04:58Z",
+      "side": 1,
+      "message": "Jack, \n\nI saw Amit is OOO till July 7. Would you please help to approve those clean cherry-pick from sc-dev to aosp-master, to unlobck TH failure of merge-conflict.\n\nThanks",
+      "revId": "42c8dceb030d5b6b13029a426e4369922dc04bd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
