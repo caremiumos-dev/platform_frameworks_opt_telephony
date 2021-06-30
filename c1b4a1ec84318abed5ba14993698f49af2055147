@@ -16,6 +16,23 @@
       "message": "Removing the R8 roll topic as the test failures are likely the roll if related. This should land regardless of R8.",
       "revId": "c1b4a1ec84318abed5ba14993698f49af2055147",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7614fb38_95658263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1241761
+      },
+      "writtenOn": "2021-06-30T10:40:06Z",
+      "side": 1,
+      "message": "Rerun does not fail: https://android-build.googleplex.com/builds/abtd/run/L47600000936300348?referrer\u003demail\n\nAppears to be a flaky test.",
+      "revId": "c1b4a1ec84318abed5ba14993698f49af2055147",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
