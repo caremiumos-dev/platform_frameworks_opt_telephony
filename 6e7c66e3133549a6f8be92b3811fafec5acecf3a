@@ -1,0 +1,108 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012673591",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545049?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "03725ec1_9b19d49e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-07-02T05:20:30Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 102
+      },
+      "revId": "6e7c66e3133549a6f8be92b3811fafec5acecf3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012673591",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545049?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "52fc4ce5_edf1d254",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-07-02T05:20:30Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 106
+      },
+      "revId": "6e7c66e3133549a6f8be92b3811fafec5acecf3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012673591",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545049?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "fa40914f_1c2ec6be",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-07-02T05:20:30Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 103
+      },
+      "revId": "6e7c66e3133549a6f8be92b3811fafec5acecf3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012673591",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1545049?revision\u003d17",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "6d654225_ac7cdcb8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-07-02T05:20:30Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 109
+      },
+      "revId": "6e7c66e3133549a6f8be92b3811fafec5acecf3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
