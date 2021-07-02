@@ -28,6 +28,7 @@ import static org.mockito.Matchers.nullable;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import static java.util.Arrays.asList;
 
@@ -58,7 +59,7 @@ import java.util.Map;
 public class DeviceStateMonitorTest extends TelephonyTest {
     private static final int INDICATION_FILTERS_MINIMUM = IndicationFilter.REGISTRATION_FAILURE;
 
-    // All implemented indiation filters set so far
+    // All implemented indication filters set so far
     // which is a subset of IndicationFilter.ALL
     private static final int INDICATION_FILTERS_ALL =
             IndicationFilter.SIGNAL_STRENGTH
@@ -89,7 +90,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
     @Retention(RetentionPolicy.SOURCE)
     private @interface StateType {}
 
-    // Keep the same value as correspoinding event
+    // Keep the same value as corresponding event
     // See state2Event() for detail
     private static final int STATE_TYPE_RIL_CONNECTED = 0;
     // EVENT_UPDATE_NODE_CHANGED is not here, it will be removed in aosp soon
@@ -128,6 +129,8 @@ public class DeviceStateMonitorTest extends TelephonyTest {
                 STATE_TYPE_CHARGING, STATE_TYPE_SCREEN, STATE_TYPE_TETHERING}
     );
 
+    private SignalStrengthController mSignalStrengthController;
+
     private DeviceStateMonitor mDSM;
     // Given a stateType, return the event type that can change the state
     private int state2Event(@StateType int stateType) {
@@ -156,11 +159,13 @@ public class DeviceStateMonitorTest extends TelephonyTest {
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
         mDSM = new DeviceStateMonitor(mPhone);
+        mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
+        when(mPhone.getSignalStrengthController()).thenReturn(mSignalStrengthController);
 
         // Initialize with ALL states off
         updateAllStatesToOff();
 
-        // eliminate the accumuted impact on Mockito.verify()
+        // eliminate the accumulated impact on Mockito.verify()
         reset(mSimulatedCommandsVerifier);
     }
 
