@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "248903db_4652f11f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-07-03T08:35:32Z",
+      "side": 1,
+      "message": "Typo",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "e245ac46801113f644f69d985cc45828d74b4037",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7157128_a4b8dbbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-07-03T08:35:32Z",
+      "side": 1,
+      "message": "The CL seems to be doing more than just fixing the band in various atoms. Either split the CL into multiple one or update the CL description to reflect what it\u0027s done.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "e245ac46801113f644f69d985cc45828d74b4037",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d1ae8b_1bfc2bb5",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-07-03T08:35:32Z",
+      "side": 1,
+      "message": "getBand() retrieves the band for the data. Do we need to worry about a device that is in 2G network without DATA?",
+      "range": {
+        "startLine": 524,
+        "startChar": 67,
+        "endLine": 524,
+        "endChar": 99
+      },
+      "revId": "e245ac46801113f644f69d985cc45828d74b4037",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
