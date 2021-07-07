@@ -1274,8 +1274,10 @@ public class DataConnection extends StateMachine {
             // Get the completed message but only use it once
             Message msg = dp.mOnCompletedMsg;
             dp.mOnCompletedMsg = null;
-            if (msg.obj instanceof ApnContext) {
-                alreadySent = (ApnContext)msg.obj;
+            Pair<ApnContext, Integer> pair;
+            pair = (Pair<ApnContext, Integer>) msg.obj;
+            if (pair.first instanceof ApnContext) {
+                alreadySent = (ApnContext)pair.first;
             }
             reason = dp.mReason;
             if (VDBG) {
