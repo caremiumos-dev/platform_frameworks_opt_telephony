@@ -141,8 +141,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
     // SST now delegates all signal strength operations to SSC
     // Add Mock SSC as the dependency to avoid NPE
-    @Mock
-    private SignalStrengthController mSignalStrengthController;
+    private SignalStrengthController mSsc;
 
     private ServiceStateTracker sst;
     private ServiceStateTrackerTestHandler mSSTTestHandler;
@@ -192,8 +191,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
 
         @Override
         public void onLooperPrepared() {
-            mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
-            doReturn(mSignalStrengthController).when(mPhone).getSignalStrengthController();
+            mSsc = new SignalStrengthController(mPhone, mSimulatedCommands);
+            doReturn(mSsc).when(mPhone).getSignalStrengthController();
 
             sst = new ServiceStateTracker(mPhone, mSimulatedCommands);
             sst.setServiceStateStats(mServiceStateStats);
@@ -718,8 +717,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 new CellSignalStrengthNr());
 
         sendSignalStrength(ss);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().isGsm(), true);
+        assertEquals(mSsc.getSignalStrength(), ss);
+        assertEquals(mSsc.getSignalStrength().isGsm(), true);
 
         // Send in CDMA+LTE Signal Strength Info and expect isGsm == true
         ss = new SignalStrength(
@@ -733,8 +732,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 new CellSignalStrengthNr());
 
         sendSignalStrength(ss);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().isGsm(), true);
+        assertEquals(mSsc.getSignalStrength(), ss);
+        assertEquals(mSsc.getSignalStrength().isGsm(), true);
 
         // Send in CDMA-only Signal Strength Info and expect isGsm == false
         ss = new SignalStrength(
@@ -747,8 +746,8 @@ public class ServiceStateTrackerTest extends TelephonyTest {
                 new CellSignalStrengthNr());
 
         sendSignalStrength(ss);
-        assertEquals(sst.getSignalStrength(), ss);
-        assertEquals(sst.getSignalStrength().isGsm(), false);
+        assertEquals(mSsc.getSignalStrength(), ss);
+        assertEquals(mSsc.getSignalStrength().isGsm(), false);
     }
 
     private void sendCarrierConfigUpdate() {
@@ -788,7 +787,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         // Default thresholds are POOR=-115 MODERATE=-105 GOOD=-95 GREAT=-85
-        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_POOR, sst.getSignalStrength().getLevel());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_POOR, mSsc.getSignalStrength().getLevel());
 
         int[] lteThresholds = {
                 -130, // SIGNAL_STRENGTH_POOR
@@ -803,7 +802,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
-        assertEquals(sst.getSignalStrength().getLevel(),
+        assertEquals(mSsc.getSignalStrength().getLevel(),
                 CellSignalStrength.SIGNAL_STRENGTH_MODERATE);
     }
 
@@ -831,7 +830,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
-        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, sst.getSignalStrength().getLevel());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, mSsc.getSignalStrength().getLevel());
     }
 
     @Test
@@ -859,7 +858,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         assertEquals(CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN,
-                sst.getSignalStrength().getLevel());
+                mSsc.getSignalStrength().getLevel());
     }
 
     @Test
@@ -886,7 +885,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
-        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, sst.getSignalStrength().getLevel());
+        assertEquals(CellSignalStrength.SIGNAL_STRENGTH_GREAT, mSsc.getSignalStrength().getLevel());
 
         int[] nrSsRsrpThresholds = {
                 -45, // SIGNAL_STRENGTH_POOR
@@ -903,7 +902,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
         assertEquals(CellSignalStrength.SIGNAL_STRENGTH_POOR,
-                sst.getSignalStrength().getLevel());
+                mSsc.getSignalStrength().getLevel());
     }
 
     @Test
@@ -919,7 +918,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
-        assertEquals(sst.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
+        assertEquals(mSsc.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
 
         int[] wcdmaThresholds = {
                 -110, // SIGNAL_STRENGTH_POOR
@@ -936,7 +935,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         mSimulatedCommands.setSignalStrength(ss);
         mSimulatedCommands.notifySignalStrength();
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
-        assertEquals(sst.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
+        assertEquals(mSsc.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
     }
 
     @Test
@@ -2497,6 +2496,7 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         doReturn(true).when(mPhone).isPhoneTypeCdmaLte();
         doReturn(CdmaSubscriptionSourceManager.SUBSCRIPTION_FROM_RUIM).when(mCdmaSSM)
                 .getCdmaSubscriptionSource();
+        doReturn(PHONE_ID).when(mPhone).getPhoneId();
 
         logd("Calling updatePhoneType");
         // switch to CDMA
