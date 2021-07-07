@@ -18,8 +18,10 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -27,23 +29,39 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
+import android.telephony.CellIdentity;
+import android.telephony.CellIdentityLte;
+import android.telephony.CellIdentityNr;
+import android.telephony.CellInfo;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthNr;
+import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Pair;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * SignalStrengthController handles signal polling request and unsolicited signal strength update.
@@ -52,23 +70,63 @@ public class SignalStrengthController extends Handler {
     protected static final boolean DBG = false; /* STOPSHIP if true */
     protected static final String TAG = SignalStrengthController.class.getSimpleName();
 
-    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST = 1;
-    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST = 2;
-    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED        = 3;
+    private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
+            TimeUnit.SECONDS.toMillis(10);
+
+    /** Signal strength poll rate. */
+    private static final int POLL_PERIOD_MILLIS = 20 * 1000;
+
+    /**
+     * By default, strength polling is enabled.  However, if we're
+     * getting unsolicited signal strength updates from the radio, set
+     * value to true and don't bother polling any more.
+     */
+    private boolean mDontPollSignalStrength = false;
+
+    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST       = 1;
+    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST     = 2;
+    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED             = 3;
+    protected static final int EVENT_GET_SIGNAL_STRENGTH                    = 4;
+    protected static final int EVENT_POLL_SIGNAL_STRENGTH                   = 5;
+    protected static final int EVENT_SIGNAL_STRENGTH_UPDATE                 = 6;
+
+    @UnsupportedAppUsage
+    private SignalStrength mSignalStrength;
+    private long mSignalStrengthUpdatedTime;
 
     private final GsmCdmaPhone mPhone;
     private final CommandsInterface mCi;
 
     private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
+    /* list of LTE EARFCNs (E-UTRA Absolute Radio Frequency Channel Number,
+     * Reference: 3GPP TS 36.104 5.4.3)
+     * inclusive ranges for which the lte rsrp boost is applied */
+    private ArrayList<Pair<Integer, Integer>> mEarfcnPairListForRsrpBoost = null;
+    private int mLteRsrpBoost = 0; // offset which is reduced from the rsrp threshold
+    // while calculating signal strength level.
+
+    /* Ranges of NR ARFCNs (5G Absolute Radio Frequency Channel Number,
+     * Reference: 3GPP TS 38.104)
+     * inclusive ranges for which the corresponding nr rsrp boost is applied */
+    private ArrayList<Pair<Integer, Integer>> mNrarfcnRangeListForRsrpBoost = null;
+    private int[] mNrRsrpBoost;
+
+    private final Object mRsrpBoostLock = new Object();
+    private static final int INVALID_ARFCN = -1;
+
     public SignalStrengthController(GsmCdmaPhone phone, CommandsInterface ci) {
         mPhone = phone;
         mCi = ci;
+
+        mCi.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
+        setSignalStrengthDefaultValues();
     }
 
     @Override
     public void handleMessage(Message msg) {
         if (DBG) log("received event " + msg.what);
+        AsyncResult ar;
 
         switch (msg.what) {
             case EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST: {
@@ -137,10 +195,157 @@ public class SignalStrengthController extends Handler {
                 break;
             }
 
+            case EVENT_GET_SIGNAL_STRENGTH: {
+                // This callback is called when signal strength is polled
+                // all by itself
+
+                if (!(mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
+                    // Polling will continue when radio turns back on
+                    return;
+                }
+                ar = (AsyncResult) msg.obj;
+                onSignalStrengthResult(ar);
+                queueNextSignalStrengthPoll();
+
+                break;
+            }
+
+            case EVENT_POLL_SIGNAL_STRENGTH: {
+                // Just poll signal strength...not part of pollState()
+
+                mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+                break;
+            }
+
+            case EVENT_SIGNAL_STRENGTH_UPDATE: {
+                // This is a notification from CommandsInterface.setOnSignalStrengthUpdate
+
+                ar = (AsyncResult) msg.obj;
+
+                // The radio is telling us about signal strength changes
+                // we don't have to ask it
+                mDontPollSignalStrength = true;
+
+                onSignalStrengthResult(ar);
+                break;
+            }
+
             default:
                 log("Unhandled message with number: " + msg.what);
                 break;
         }
+    }
+
+    void dispose() {
+        mCi.unSetOnSignalStrengthUpdate(this);
+    }
+
+    void getSignalStrengthFromCi() {
+        // Query signal strength from the modem after service tracker is created (i.e. boot up,
+        // switching between GSM and CDMA phone), because the unsolicited signal strength
+        // information might come late or even never come. This will get the accurate signal
+        // strength information displayed on the UI.
+        mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+    }
+
+    /**
+     * send signal-strength-changed notification if changed Called both for
+     * solicited and unsolicited signal strength updates
+     *
+     * @return true if the signal strength changed and a notification was sent.
+     */
+    protected boolean onSignalStrengthResult(AsyncResult ar) {
+
+        // This signal is used for both voice and data radio signal so parse
+        // all fields
+
+        if ((ar.exception == null) && (ar.result != null)) {
+            mSignalStrength = (SignalStrength) ar.result;
+
+            PersistableBundle config = getCarrierConfig();
+            if (mPhone.getServiceStateTracker() != null) {
+                mSignalStrength.updateLevel(config, mPhone.getServiceStateTracker().mSS);
+            }
+        } else {
+            log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
+            mSignalStrength = new SignalStrength();
+        }
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
+
+        boolean ssChanged = notifySignalStrength();
+
+        return ssChanged;
+    }
+
+    /**
+     * @return signal strength
+     */
+    public SignalStrength getSignalStrength() {
+        if (shouldRefreshSignalStrength()) {
+            log("SST.getSignalStrength() refreshing signal strength.");
+            obtainMessage(EVENT_POLL_SIGNAL_STRENGTH).sendToTarget();
+        }
+        return mSignalStrength;
+    }
+
+    private boolean shouldRefreshSignalStrength() {
+        long curTime = System.currentTimeMillis();
+
+        // If last signal strength is older than 10 seconds, or somehow if curTime is smaller
+        // than mSignalStrengthUpdatedTime (system time update), it's considered stale.
+        boolean isStale = (mSignalStrengthUpdatedTime > curTime)
+                || (curTime - mSignalStrengthUpdatedTime > SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS);
+        if (!isStale) return false;
+
+        List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
+                .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
+                        mPhone.getContext().getAttributionTag());
+
+        if (!ArrayUtils.isEmpty(subInfoList)) {
+            for (SubscriptionInfo info : subInfoList) {
+                // If we have an active opportunistic subscription whose data is IN_SERVICE,
+                // we need to get signal strength to decide data switching threshold. In this case,
+                // we poll latest signal strength from modem.
+                if (info.isOpportunistic()) {
+                    TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                            .createForSubscriptionId(info.getSubscriptionId());
+                    ServiceState ss = tm.getServiceState();
+                    if (ss != null
+                            && ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    void queueNextSignalStrengthPoll() {
+        if (mDontPollSignalStrength) {
+            // The radio is telling us about signal strength changes
+            // we don't have to ask it
+            return;
+        }
+
+        // if there is no SIM present, do not poll signal strength
+        UiccCard uiccCard = UiccController.getInstance().getUiccCard(
+                mPhone != null ? mPhone.getPhoneId() : SubscriptionManager.DEFAULT_PHONE_INDEX);
+        if (uiccCard == null
+                || uiccCard.getCardState() == IccCardStatus.CardState.CARDSTATE_ABSENT) {
+            log("Not polling signal strength due to absence of SIM");
+            return;
+        }
+
+        Message msg;
+
+        msg = obtainMessage();
+        msg.what = EVENT_POLL_SIGNAL_STRENGTH;
+
+        long nextTime;
+
+        // TODO Don't poll signal strength if screen is off
+        sendMessageDelayed(msg, POLL_PERIOD_MILLIS);
     }
 
     /**
@@ -213,6 +418,29 @@ public class SignalStrengthController extends Handler {
         }
     }
 
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    void setSignalStrengthDefaultValues() {
+        mSignalStrength = new SignalStrength();
+        mSignalStrengthUpdatedTime = System.currentTimeMillis();
+    }
+
+    private SignalStrength mLastSignalStrength = null;
+    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    protected boolean notifySignalStrength() {
+        boolean notified = false;
+        if (!mSignalStrength.equals(mLastSignalStrength)) {
+            try {
+                mPhone.notifySignalStrength();
+                notified = true;
+                mLastSignalStrength = mSignalStrength;
+            } catch (NullPointerException ex) {
+                log("updateSignalStrength() Phone already destroyed: " + ex
+                        + "SignalStrength not notified");
+            }
+        }
+        return notified;
+    }
+
     /**
      * Print the SignalStrengthController states into the given stream.
      *
@@ -224,8 +452,34 @@ public class SignalStrengthController extends Handler {
         final IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ");
         ipw.increaseIndent();
         pw.println("mSignalRequestRecords" + mSignalRequestRecords);
+        pw.println(" mLastSignalStrength=" + mLastSignalStrength);
+        pw.println(" mSignalStrength=" + mSignalStrength);
+        pw.println(" mDontPollSignalStrength=" + mDontPollSignalStrength);
+        pw.println(" mLteRsrpBoost=" + mLteRsrpBoost);
+        pw.println(" mNrRsrpBoost=" + Arrays.toString(mNrRsrpBoost));
+        dumpEarfcnPairList(pw, mEarfcnPairListForRsrpBoost, "mEarfcnPairListForRsrpBoost");
+        dumpEarfcnPairList(pw, mNrarfcnRangeListForRsrpBoost, "mNrarfcnRangeListForRsrpBoost");
         ipw.decreaseIndent();
         ipw.flush();
+    }
+
+    private void dumpEarfcnPairList(PrintWriter pw, ArrayList<Pair<Integer, Integer>> pairList,
+            String name) {
+        pw.print(" " + name + "={");
+        if (pairList != null) {
+            int i = pairList.size();
+            for (Pair<Integer, Integer> earfcnPair : pairList) {
+                pw.print("(");
+                pw.print(earfcnPair.first);
+                pw.print(",");
+                pw.print(earfcnPair.second);
+                pw.print(")");
+                if ((--i) != 0) {
+                    pw.print(",");
+                }
+            }
+        }
+        pw.println("}");
     }
 
     /**
@@ -546,7 +800,140 @@ public class SignalStrengthController extends Handler {
         mPhone.setAlwaysReportSignalStrength(alwaysReport);
     }
 
-    private void log(String msg) {
+    void updateArfcnLists(PersistableBundle config) {
+        synchronized (mRsrpBoostLock) {
+            mLteRsrpBoost = config.getInt(CarrierConfigManager.KEY_LTE_EARFCNS_RSRP_BOOST_INT, 0);
+            String[] earfcnsStringArrayForRsrpBoost = config.getStringArray(
+                    CarrierConfigManager.KEY_BOOSTED_LTE_EARFCNS_STRING_ARRAY);
+            mEarfcnPairListForRsrpBoost = convertEarfcnStringArrayToPairList(
+                    earfcnsStringArrayForRsrpBoost);
+
+            mNrRsrpBoost = config.getIntArray(
+                    CarrierConfigManager.KEY_NRARFCNS_RSRP_BOOST_INT_ARRAY);
+            String[] nrarfcnsStringArrayForRsrpBoost = config.getStringArray(
+                    CarrierConfigManager.KEY_BOOSTED_NRARFCNS_STRING_ARRAY);
+            mNrarfcnRangeListForRsrpBoost = convertEarfcnStringArrayToPairList(
+                    nrarfcnsStringArrayForRsrpBoost);
+
+            if ((mNrRsrpBoost == null && mNrarfcnRangeListForRsrpBoost != null)
+                    || (mNrRsrpBoost != null && mNrarfcnRangeListForRsrpBoost == null)
+                    || (mNrRsrpBoost != null && mNrarfcnRangeListForRsrpBoost != null
+                    && mNrRsrpBoost.length != mNrarfcnRangeListForRsrpBoost.size())) {
+                loge("Invalid parameters for NR RSRP boost");
+                mNrRsrpBoost = null;
+                mNrarfcnRangeListForRsrpBoost = null;
+            }
+        }
+    }
+
+    void updateServiceStateArfcnRsrpBoost(ServiceState serviceState,
+            CellIdentity cellIdentity) {
+        int rsrpBoost = 0;
+        int arfcn;
+
+        synchronized (mRsrpBoostLock) {
+            switch (cellIdentity.getType()) {
+                case CellInfo.TYPE_LTE:
+                    arfcn = ((CellIdentityLte) cellIdentity).getEarfcn();
+                    if (arfcn != INVALID_ARFCN
+                            && containsEarfcnInEarfcnRange(mEarfcnPairListForRsrpBoost,
+                            arfcn) != -1) {
+                        rsrpBoost = mLteRsrpBoost;
+                    }
+                    break;
+                case CellInfo.TYPE_NR:
+                    arfcn = ((CellIdentityNr) cellIdentity).getNrarfcn();
+                    if (arfcn != INVALID_ARFCN) {
+                        int index = containsEarfcnInEarfcnRange(mNrarfcnRangeListForRsrpBoost,
+                                arfcn);
+                        if (index != -1) {
+                            rsrpBoost = mNrRsrpBoost[index];
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        serviceState.setArfcnRsrpBoost(rsrpBoost);
+    }
+
+    /**
+     * Checks if the provided earfcn falls withing the range of earfcns.
+     *
+     * return int index in earfcnPairList if earfcn falls within the provided range; -1 otherwise.
+     */
+    private static int containsEarfcnInEarfcnRange(ArrayList<Pair<Integer, Integer>> earfcnPairList,
+            int earfcn) {
+        int index = 0;
+        if (earfcnPairList != null) {
+            for (Pair<Integer, Integer> earfcnPair : earfcnPairList) {
+                if ((earfcn >= earfcnPair.first) && (earfcn <= earfcnPair.second)) {
+                    return index;
+                }
+                index++;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Convert the earfcnStringArray to list of pairs.
+     *
+     * Format of the earfcnsList is expected to be {"erafcn1_start-earfcn1_end",
+     * "earfcn2_start-earfcn2_end" ... }
+     */
+    private static ArrayList<Pair<Integer, Integer>> convertEarfcnStringArrayToPairList(
+            String[] earfcnsList) {
+        ArrayList<Pair<Integer, Integer>> earfcnPairList = new ArrayList<Pair<Integer, Integer>>();
+
+        if (earfcnsList != null) {
+            int earfcnStart;
+            int earfcnEnd;
+            for (int i = 0; i < earfcnsList.length; i++) {
+                try {
+                    String[] earfcns = earfcnsList[i].split("-");
+                    if (earfcns.length != 2) {
+                        if (DBG) {
+                            log("Invalid earfcn range format");
+                        }
+                        return null;
+                    }
+
+                    earfcnStart = Integer.parseInt(earfcns[0]);
+                    earfcnEnd = Integer.parseInt(earfcns[1]);
+
+                    if (earfcnStart > earfcnEnd) {
+                        if (DBG) {
+                            log("Invalid earfcn range format");
+                        }
+                        return null;
+                    }
+
+                    earfcnPairList.add(new Pair<Integer, Integer>(earfcnStart, earfcnEnd));
+                } catch (PatternSyntaxException pse) {
+                    if (DBG) {
+                        log("Invalid earfcn range format");
+                    }
+                    return null;
+                } catch (NumberFormatException nfe) {
+                    if (DBG) {
+                        log("Invalid earfcn number format");
+                    }
+                    return null;
+                }
+            }
+        }
+
+        return earfcnPairList;
+    }
+
+    private static void log(String msg) {
         if (DBG) Rlog.d(TAG, msg);
+    }
+
+    private static void loge(String msg) {
+        Rlog.e(TAG, msg);
     }
 }
