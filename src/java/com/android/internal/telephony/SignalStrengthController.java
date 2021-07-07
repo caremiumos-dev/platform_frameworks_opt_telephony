@@ -177,7 +177,7 @@ public class SignalStrengthController extends Handler {
                 // This callback is called when signal strength is polled
                 // all by itself
 
-                if (!(mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
+                if (!(getCommandInterface().getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
                     // Polling will continue when radio turns back on
                     return;
                 }
@@ -191,7 +191,7 @@ public class SignalStrengthController extends Handler {
             case EVENT_POLL_SIGNAL_STRENGTH: {
                 // Just poll signal strength...not part of pollState()
 
-                mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+                getCommandInterface().getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
                 break;
             }
 
@@ -215,7 +215,7 @@ public class SignalStrengthController extends Handler {
     }
 
     void dispose() {
-        mCi.unSetOnSignalStrengthUpdate(this);
+        getCommandInterface().unSetOnSignalStrengthUpdate(this);
     }
 
     void getSignalStrengthFromCi() {
@@ -223,7 +223,7 @@ public class SignalStrengthController extends Handler {
         // switching between GSM and CDMA phone), because the unsolicited signal strength
         // information might come late or even never come. This will get the accurate signal
         // strength information displayed on the UI.
-        mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+        getCommandInterface().getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
     }
 
     /**
@@ -241,8 +241,8 @@ public class SignalStrengthController extends Handler {
             mSignalStrength = (SignalStrength) ar.result;
 
             PersistableBundle config = getCarrierConfig();
-            if (mPhone.getServiceStateTracker() != null) {
-                mSignalStrength.updateLevel(config, mPhone.getServiceStateTracker().mSS);
+            if (getPhone().getServiceStateTracker() != null) {
+                mSignalStrength.updateLevel(config, getPhone().getServiceStateTracker().mSS);
             }
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
@@ -276,8 +276,8 @@ public class SignalStrengthController extends Handler {
         if (!isStale) return false;
 
         List<SubscriptionInfo> subInfoList = SubscriptionController.getInstance()
-                .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
-                        mPhone.getContext().getAttributionTag());
+                .getActiveSubscriptionInfoList(getPhone().getContext().getOpPackageName(),
+                        getPhone().getContext().getAttributionTag());
 
         if (!ArrayUtils.isEmpty(subInfoList)) {
             for (SubscriptionInfo info : subInfoList) {
@@ -285,7 +285,7 @@ public class SignalStrengthController extends Handler {
                 // we need to get signal strength to decide data switching threshold. In this case,
                 // we poll latest signal strength from modem.
                 if (info.isOpportunistic()) {
-                    TelephonyManager tm = TelephonyManager.from(mPhone.getContext())
+                    TelephonyManager tm = TelephonyManager.from(getPhone().getContext())
                             .createForSubscriptionId(info.getSubscriptionId());
                     ServiceState ss = tm.getServiceState();
                     if (ss != null
@@ -308,7 +308,8 @@ public class SignalStrengthController extends Handler {
 
         // if there is no SIM present, do not poll signal strength
         UiccCard uiccCard = UiccController.getInstance().getUiccCard(
-                mPhone != null ? mPhone.getPhoneId() : SubscriptionManager.DEFAULT_PHONE_INDEX);
+                getPhone() != null ? getPhone().getPhoneId()
+                        : SubscriptionManager.DEFAULT_PHONE_INDEX);
         if (uiccCard == null
                 || uiccCard.getCardState() == IccCardStatus.CardState.CARDSTATE_ABSENT) {
             log("Not polling signal strength due to absence of SIM");
@@ -353,24 +354,27 @@ public class SignalStrengthController extends Handler {
     public void updateReportingCriteria(PersistableBundle config) {
         int lteMeasurementEnabled = config.getInt(CarrierConfigManager
                 .KEY_PARAMETERS_USED_FOR_LTE_SIGNAL_BAR_INT, CellSignalStrengthLte.USE_RSRP);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP,
                 config.getIntArray(CarrierConfigManager.KEY_LTE_RSRP_THRESHOLDS_INT_ARRAY),
                 AccessNetworkConstants.AccessNetworkType.EUTRAN,
                 (lteMeasurementEnabled & CellSignalStrengthLte.USE_RSRP) != 0);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSCP,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSCP,
                 config.getIntArray(CarrierConfigManager.KEY_WCDMA_RSCP_THRESHOLDS_INT_ARRAY),
                 AccessNetworkConstants.AccessNetworkType.UTRAN, true);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
                 config.getIntArray(CarrierConfigManager.KEY_GSM_RSSI_THRESHOLDS_INT_ARRAY),
                 AccessNetworkConstants.AccessNetworkType.GERAN, true);
 
-        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
-            mPhone.setSignalStrengthReportingCriteria(
+        if (getPhone().getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRQ,
                     config.getIntArray(CarrierConfigManager.KEY_LTE_RSRQ_THRESHOLDS_INT_ARRAY),
                     AccessNetworkConstants.AccessNetworkType.EUTRAN,
                     (lteMeasurementEnabled & CellSignalStrengthLte.USE_RSRQ) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSNR,
                     config.getIntArray(CarrierConfigManager.KEY_LTE_RSSNR_THRESHOLDS_INT_ARRAY),
                     AccessNetworkConstants.AccessNetworkType.EUTRAN,
@@ -378,17 +382,17 @@ public class SignalStrengthController extends Handler {
 
             int measurementEnabled = config.getInt(CarrierConfigManager
                     .KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT, CellSignalStrengthNr.USE_SSRSRP);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRP,
                     config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY),
                     AccessNetworkConstants.AccessNetworkType.NGRAN,
                     (measurementEnabled & CellSignalStrengthNr.USE_SSRSRP) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRQ,
                     config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY),
                     AccessNetworkConstants.AccessNetworkType.NGRAN,
                     (measurementEnabled & CellSignalStrengthNr.USE_SSRSRQ) != 0);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSSINR,
                     config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY),
                     AccessNetworkConstants.AccessNetworkType.NGRAN,
@@ -408,7 +412,7 @@ public class SignalStrengthController extends Handler {
         boolean notified = false;
         if (!mSignalStrength.equals(mLastSignalStrength)) {
             try {
-                mPhone.notifySignalStrength();
+                getPhone().notifySignalStrength();
                 notified = true;
                 mLastSignalStrength = mSignalStrength;
             } catch (NullPointerException ex) {
@@ -464,8 +468,8 @@ public class SignalStrengthController extends Handler {
             target.add(systemThreshold);
         }
 
-        final boolean isDeviceIdle = mPhone.isDeviceIdle();
-        final int curSubId = mPhone.getSubId();
+        final boolean isDeviceIdle = getPhone().isDeviceIdle();
+        final int curSubId = getPhone().getSubId();
         // The total number of record is small (10~15 tops). With each request has at most 5
         // SignalThresholdInfo which has at most 8 thresholds arrays. So the nested loop should
         // not be a concern here.
@@ -496,11 +500,11 @@ public class SignalStrengthController extends Handler {
      */
     @VisibleForTesting
     public boolean shouldHonorSystemThresholds() {
-        if (!mPhone.isDeviceIdle()) {
+        if (!getPhone().isDeviceIdle()) {
             return true;
         }
 
-        final int curSubId = mPhone.getSubId();
+        final int curSubId = getPhone().getSubId();
         return mSignalRequestRecords.stream().anyMatch(
                 srr -> curSubId == srr.mSubId
                         && srr.mRequest.isSystemThresholdReportingRequestedWhileIdle());
@@ -533,39 +537,48 @@ public class SignalStrengthController extends Handler {
         return false;
     }
 
-    void setDefaultSignalStrengthReportingCriteria() {
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
+    /**
+     * Set default signal strength reporting criteria when RIL is connected during boot up or
+     * radio becomes available after modem restart.
+     */
+    @VisibleForTesting
+    public void setDefaultSignalStrengthReportingCriteria() {
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
                 AccessNetworkThresholds.GERAN, AccessNetworkConstants.AccessNetworkType.GERAN,
                 true);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSCP,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSCP,
                 AccessNetworkThresholds.UTRAN, AccessNetworkConstants.AccessNetworkType.UTRAN,
                 true);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP,
                 AccessNetworkThresholds.EUTRAN_RSRP,
                 AccessNetworkConstants.AccessNetworkType.EUTRAN, true);
-        mPhone.setSignalStrengthReportingCriteria(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
+        getPhone().setSignalStrengthReportingCriteria(
+                SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSI,
                 AccessNetworkThresholds.CDMA2000, AccessNetworkConstants.AccessNetworkType.CDMA2000,
                 true);
-        if (mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
-            mPhone.setSignalStrengthReportingCriteria(
+        if (getPhone().getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_1_5)) {
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRQ,
                     AccessNetworkThresholds.EUTRAN_RSRQ,
                     AccessNetworkConstants.AccessNetworkType.EUTRAN, false);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSSNR,
                     AccessNetworkThresholds.EUTRAN_RSSNR,
                     AccessNetworkConstants.AccessNetworkType.EUTRAN, true);
 
             // Defaultly we only need SSRSRP for NGRAN signal criteria reporting
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRP,
                     AccessNetworkThresholds.NGRAN_RSRSRP,
                     AccessNetworkConstants.AccessNetworkType.NGRAN, true);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSRSRQ,
                     AccessNetworkThresholds.NGRAN_RSRSRQ,
                     AccessNetworkConstants.AccessNetworkType.NGRAN, false);
-            mPhone.setSignalStrengthReportingCriteria(
+            getPhone().setSignalStrengthReportingCriteria(
                     SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_SSSINR,
                     AccessNetworkThresholds.NGRAN_SSSINR,
                     AccessNetworkConstants.AccessNetworkType.NGRAN, false);
@@ -706,11 +719,11 @@ public class SignalStrengthController extends Handler {
      */
     @NonNull
     private PersistableBundle getCarrierConfig() {
-        CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
+        CarrierConfigManager configManager = (CarrierConfigManager) getPhone().getContext()
                 .getSystemService(Context.CARRIER_CONFIG_SERVICE);
         if (configManager != null) {
             // If an invalid subId is used, this bundle will contain default values.
-            PersistableBundle config = configManager.getConfigForSubId(mPhone.getSubId());
+            PersistableBundle config = configManager.getConfigForSubId(getPhone().getSubId());
             if (config != null) {
                 return config;
             }
@@ -746,16 +759,24 @@ public class SignalStrengthController extends Handler {
     }
 
     private void updateAlwaysReportSignalStrength() {
-        final int curSubId = mPhone.getSubId();
+        final int curSubId = getPhone().getSubId();
         boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
                 srr -> srr.mSubId == curSubId && isSignalReportRequestedWhileIdle(srr.mRequest));
 
         // TODO(b/177924721): TM#setAlwaysReportSignalStrength will be removed and we will not
         // worry about unset flag which was set by other client.
-        mPhone.setAlwaysReportSignalStrength(alwaysReport);
+        getPhone().setAlwaysReportSignalStrength(alwaysReport);
     }
 
     private void log(String msg) {
         if (DBG) Rlog.d(TAG, msg);
+    }
+
+    public Phone getPhone() {
+        return mPhone;
+    }
+
+    public CommandsInterface getCommandInterface() {
+        return mCi;
     }
 }

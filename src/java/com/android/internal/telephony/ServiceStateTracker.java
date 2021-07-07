@@ -73,7 +73,6 @@ import android.telephony.PhysicalChannelConfig;
 import android.telephony.RadioAccessFamily;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RilRadioTechnology;
-import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
@@ -1289,7 +1288,7 @@ public class ServiceStateTracker extends Handler {
                 mIsSimReady = true;
                 pollStateInternal(false);
                 // Signal strength polling stops when radio is off
-                queueNextSignalStrengthPoll();
+                mPhone.getSignalStrengthController().queueNextSignalStrengthPoll();
                 break;
 
             case EVENT_RADIO_STATE_CHANGED:
@@ -1299,7 +1298,7 @@ public class ServiceStateTracker extends Handler {
                     handleCdmaSubscriptionSource(mCdmaSSM.getCdmaSubscriptionSource());
 
                     // Signal strength polling stops when radio is off.
-                    queueNextSignalStrengthPoll();
+                    mPhone.getSignalStrengthController().queueNextSignalStrengthPoll();
                 }
                 // This will do nothing in the 'radio not available' case
                 setPowerStateToDesired();
@@ -4542,10 +4541,6 @@ public class ServiceStateTracker extends Handler {
         }
     }
 
-    private void queueNextSignalStrengthPoll() {
-        mPhone.getSignalStrengthController().queueNextSignalStrengthPoll();
-    }
-
     private void notifyCdmaSubscriptionInfoReady() {
         if (mCdmaForSubscriptionInfoReadyRegistrants != null) {
             if (DBG) log("CDMA_SUBSCRIPTION: call notifyRegistrants()");
@@ -5152,13 +5147,6 @@ public class ServiceStateTracker extends Handler {
             sendMessageDelayed(
                     obtainMessage(EVENT_GET_CELL_INFO_LIST), CELL_INFO_LIST_QUERY_TIMEOUT);
         }
-    }
-
-    /**
-     * @return signal strength
-     */
-    public SignalStrength getSignalStrength() {
-        return mPhone.getSignalStrengthController().getSignalStrength();
     }
 
     /**

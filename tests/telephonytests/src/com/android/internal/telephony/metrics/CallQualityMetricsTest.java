@@ -264,7 +264,7 @@ public class CallQualityMetricsTest extends TelephonyTest {
                 new CellSignalStrengthTdscdma(),
                 lteSs1,
                 new CellSignalStrengthNr());
-        when(mSST.getSignalStrength()).thenReturn(ss1);
+        when(mSSC.getSignalStrength()).thenReturn(ss1);
         mCallQualityMetrics.saveCallQuality(cq1);
 
         // save good quality with low rssnr
@@ -280,7 +280,7 @@ public class CallQualityMetricsTest extends TelephonyTest {
                 new CellSignalStrengthTdscdma(),
                 lteSs2,
                 new CellSignalStrengthNr());
-        when(mSST.getSignalStrength()).thenReturn(ss2);
+        when(mSSC.getSignalStrength()).thenReturn(ss2);
         mCallQualityMetrics.saveCallQuality(cq1);
 
         CallQualitySummary dlSummary = mCallQualityMetrics.getCallQualitySummaryDl();
