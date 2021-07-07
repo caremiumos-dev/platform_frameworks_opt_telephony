@@ -140,6 +140,30 @@
       },
       "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e08247_2637111a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1054648
+      },
+      "writtenOn": "2021-07-07T19:02:51Z",
+      "side": 1,
+      "message": "It doesn\u0027t really matter. This is fine since Phone returns a similar string for GSM.",
+      "parentUuid": "d04f0ee3_59b991c2",
+      "range": {
+        "startLine": 5991,
+        "startChar": 88,
+        "endLine": 5991,
+        "endChar": 94
+      },
+      "revId": "1044500a27ea7b2824e5562cd2f52cffd714199b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
