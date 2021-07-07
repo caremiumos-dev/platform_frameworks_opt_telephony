@@ -25,10 +25,10 @@ import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.nullable;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import static java.util.Arrays.asList;
 
@@ -130,7 +130,6 @@ public class DeviceStateMonitorTest extends TelephonyTest {
     );
 
     private DeviceStateMonitor mDSM;
-    private SignalStrengthController mSignalStrengthController;
 
     // Given a stateType, return the event type that can change the state
     private int state2Event(@StateType int stateType) {
@@ -159,8 +158,6 @@ public class DeviceStateMonitorTest extends TelephonyTest {
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
         mDSM = new DeviceStateMonitor(mPhone);
-        mSignalStrengthController = new SignalStrengthController(mPhone, mSimulatedCommands);
-        when(mPhone.getSignalStrengthController()).thenReturn(mSignalStrengthController);
 
         // Initialize with ALL states off
         updateAllStatesToOff();
@@ -312,6 +309,7 @@ public class DeviceStateMonitorTest extends TelephonyTest {
                 anyBoolean(), nullable(Message.class));
         verify(mSimulatedCommandsVerifier).setUnsolResponseFilter(anyInt(),
                 nullable(Message.class));
+        verify(mSSC, atLeastOnce()).setDefaultSignalStrengthReportingCriteria();
     }
 
     @Test

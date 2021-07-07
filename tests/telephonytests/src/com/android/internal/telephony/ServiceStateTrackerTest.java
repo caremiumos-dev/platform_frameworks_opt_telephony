@@ -139,7 +139,6 @@ public class ServiceStateTrackerTest extends TelephonyTest {
     private ServiceStateStats mServiceStateStats;
 
     // SST now delegates all signal strength operation to SSC
-    @Mock
     private SignalStrengthController mSsc;
 
     private ServiceStateTracker sst;
