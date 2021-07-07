@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7ebe4c_2271a411",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-07T16:50:22Z",
+      "side": 1,
+      "message": "One pager for the planned work is at go/SignalStrengthController. Will send to Jack again to refresh when he is back on Jul 12. Before that, review internally.\nThanks",
+      "revId": "87e40570824c7f7ae2e3abc0f22f2c220ca35bf9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
