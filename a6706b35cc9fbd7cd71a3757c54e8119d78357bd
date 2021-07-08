@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e4e18ef_08173677",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1660152
+      },
+      "writtenOn": "2021-07-08T23:35:59Z",
+      "side": 1,
+      "message": "DataConnection only recevive dp\nDcTracker will receive pair from DataConnection.notifyAllWithEvent()\nPair\u003c\u003e is not expected payload for DataConnection.",
+      "range": {
+        "startLine": 1277,
+        "startChar": 2,
+        "endLine": 1280,
+        "endChar": 53
+      },
+      "revId": "a6706b35cc9fbd7cd71a3757c54e8119d78357bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
