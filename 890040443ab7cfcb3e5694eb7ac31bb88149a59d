@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e49b1b8f_4910e689",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2021-07-08T10:11:00Z",
+      "side": 1,
+      "message": "This is a CP of ag/14309298, which was approved some time ago",
+      "revId": "890040443ab7cfcb3e5694eb7ac31bb88149a59d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
