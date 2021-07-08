@@ -16,6 +16,24 @@
       "message": "Add Merged-In",
       "revId": "ec6b1b458fcabd8bb70e0e21673d406f673b78ed",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b5733a_99a302f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1707895
+      },
+      "writtenOn": "2021-07-08T18:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e687b675_79886691",
+      "revId": "ec6b1b458fcabd8bb70e0e21673d406f673b78ed",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
