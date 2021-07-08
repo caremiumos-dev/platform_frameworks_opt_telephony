@@ -1,0 +1,47 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000012954428",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1573541?revision\u003d13",
+      "fixSuggestions": [
+        {
+          "fixId": "e5e179aa_066bfc27",
+          "description": "Change to \"src/java/com/android/internal/telephony/SignalStrengthController.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+              "range": {
+                "startLine": 862,
+                "startChar": 43,
+                "endLine": 862,
+                "endChar": 50
+              },
+              "replacement": "within"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "17845386_9a06780e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-07-08T21:40:56Z",
+      "side": 1,
+      "message": "Common typo found: \"withing\" -- should it be \"within\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 862,
+        "startChar": 43,
+        "endLine": 862,
+        "endChar": 50
+      },
+      "revId": "c56d81539fe0c5861577a10418c2dd6dfa43ec3b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
