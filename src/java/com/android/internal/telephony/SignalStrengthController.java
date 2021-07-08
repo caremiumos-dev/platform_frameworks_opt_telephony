@@ -199,7 +199,7 @@ public class SignalStrengthController extends Handler {
                 // This callback is called when signal strength is polled
                 // all by itself
 
-                if (!(mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
+                if (!(getCommandsInterface().getRadioState() == TelephonyManager.RADIO_POWER_ON)) {
                     // Polling will continue when radio turns back on
                     return;
                 }
@@ -213,7 +213,7 @@ public class SignalStrengthController extends Handler {
             case EVENT_POLL_SIGNAL_STRENGTH: {
                 // Just poll signal strength...not part of pollState()
 
-                mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+                getCommandsInterface().getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
                 break;
             }
 
@@ -237,7 +237,7 @@ public class SignalStrengthController extends Handler {
     }
 
     void dispose() {
-        mCi.unSetOnSignalStrengthUpdate(this);
+        getCommandsInterface().unSetOnSignalStrengthUpdate(this);
     }
 
     void getSignalStrengthFromCi() {
@@ -245,7 +245,7 @@ public class SignalStrengthController extends Handler {
         // switching between GSM and CDMA phone), because the unsolicited signal strength
         // information might come late or even never come. This will get the accurate signal
         // strength information displayed on the UI.
-        mCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
+        getCommandsInterface().getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));
     }
 
     /**
@@ -801,7 +801,7 @@ public class SignalStrengthController extends Handler {
     }
 
     void updateArfcnLists(PersistableBundle config) {
-        synchronized (mRsrpBoostLock) {
+        synchronized (getRsrpBoostLock()) {
             mLteRsrpBoost = config.getInt(CarrierConfigManager.KEY_LTE_EARFCNS_RSRP_BOOST_INT, 0);
             String[] earfcnsStringArrayForRsrpBoost = config.getStringArray(
                     CarrierConfigManager.KEY_BOOSTED_LTE_EARFCNS_STRING_ARRAY);
@@ -831,7 +831,7 @@ public class SignalStrengthController extends Handler {
         int rsrpBoost = 0;
         int arfcn;
 
-        synchronized (mRsrpBoostLock) {
+        synchronized (getRsrpBoostLock()) {
             switch (cellIdentity.getType()) {
                 case CellInfo.TYPE_LTE:
                     arfcn = ((CellIdentityLte) cellIdentity).getEarfcn();
@@ -927,6 +927,16 @@ public class SignalStrengthController extends Handler {
         }
 
         return earfcnPairList;
+    }
+
+    @VisibleForTesting
+    public CommandsInterface getCommandsInterface() {
+        return mCi;
+    }
+
+    @VisibleForTesting
+    public Object getRsrpBoostLock() {
+        return mRsrpBoostLock;
     }
 
     private static void log(String msg) {

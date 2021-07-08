@@ -356,6 +356,8 @@ public class ServiceStateTracker extends Handler {
 
     private Pattern mOperatorNameStringPattern;
 
+    private SignalStrengthController mSsc;
+
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
 
         /**
@@ -613,6 +615,8 @@ public class ServiceStateTracker extends Handler {
         mPhone = phone;
         mCi = ci;
 
+        mSsc = mPhone.getSignalStrengthController();
+
         mServiceStateStats = new ServiceStateStats(mPhone);
 
         mCdnr = new CarrierDisplayNameResolver(mPhone);
@@ -745,7 +749,7 @@ public class ServiceStateTracker extends Handler {
         mLastNitzData = null;
         mNitzState.handleNetworkUnavailable();
         mCellIdentity = null;
-        mPhone.getSignalStrengthController().setSignalStrengthDefaultValues();
+        mSsc.setSignalStrengthDefaultValues();
 
         //cancel any pending pollstate request on voice tech switching
         cancelPollState();
@@ -780,7 +784,7 @@ public class ServiceStateTracker extends Handler {
         onUpdateIccAvailability();
 
         setDataNetworkTypeForPhone(ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN);
-        mPhone.getSignalStrengthController().getSignalStrengthFromCi();
+        mSsc.getSignalStrengthFromCi();
         sendMessage(obtainMessage(EVENT_PHONE_TYPE_SWITCHED));
 
         logPhoneTypeChange();
@@ -801,7 +805,7 @@ public class ServiceStateTracker extends Handler {
     }
 
     public void dispose() {
-        mPhone.getSignalStrengthController().dispose();
+        mSsc.dispose();
         mUiccController.unregisterForIccChanged(this);
         mCi.unregisterForCellInfoList(this);
         mCi.unregisterForPhysicalChannelConfiguration(this);
@@ -2248,7 +2252,7 @@ public class ServiceStateTracker extends Handler {
                             && ServiceState.isPsOnlyTech(newDataRat))
                             || (ServiceState.isPsOnlyTech(oldDataRAT)
                             && ServiceState.isCdma(newDataRat))) {
-                        mPhone.getSignalStrengthController().getSignalStrengthFromCi();
+                        mSsc.getSignalStrengthFromCi();
                     }
 
                     // voice roaming state in done while handling EVENT_POLL_STATE_REGISTRATION_CDMA
@@ -2259,7 +2263,7 @@ public class ServiceStateTracker extends Handler {
                     mNewSS.setDataRoamingFromRegistration(isDataRoaming);
                 }
 
-                mPhone.getSignalStrengthController().updateServiceStateArfcnRsrpBoost(mNewSS,
+                mSsc.updateServiceStateArfcnRsrpBoost(mNewSS,
                         networkRegState.getCellIdentity());
                 break;
             }
@@ -3180,7 +3184,7 @@ public class ServiceStateTracker extends Handler {
         switch (mCi.getRadioState()) {
             case TelephonyManager.RADIO_POWER_UNAVAILABLE:
                 mNewSS.setStateOutOfService();
-                mPhone.getSignalStrengthController().setSignalStrengthDefaultValues();
+                mSsc.setSignalStrengthDefaultValues();
                 mLastNitzData = null;
                 mNitzState.handleNetworkUnavailable();
                 pollStateDone();
@@ -3188,7 +3192,7 @@ public class ServiceStateTracker extends Handler {
 
             case TelephonyManager.RADIO_POWER_OFF:
                 mNewSS.setStateOff();
-                mPhone.getSignalStrengthController().setSignalStrengthDefaultValues();
+                mSsc.setSignalStrengthDefaultValues();
                 mLastNitzData = null;
                 mNitzState.handleNetworkUnavailable();
                 // don't poll when device is shutting down or the poll was not modemTrigged
@@ -3633,13 +3637,13 @@ public class ServiceStateTracker extends Handler {
 
         if (hasRilVoiceRadioTechnologyChanged) {
             shouldLogRatChange = true;
-            mPhone.getSignalStrengthController().notifySignalStrength();
+            mSsc.notifySignalStrength();
         }
 
         for (int transport : mTransportManager.getAvailableTransports()) {
             if (hasRilDataRadioTechnologyChanged.get(transport)) {
                 shouldLogRatChange = true;
-                mPhone.getSignalStrengthController().notifySignalStrength();
+                mSsc.notifySignalStrength();
             }
 
             if (hasDataRegStateChanged.get(transport)
@@ -3670,7 +3674,7 @@ public class ServiceStateTracker extends Handler {
         // because the signal strength might come earlier RAT and radio state
         // changed.
         if (hasAirplaneModeOffChanged) {
-            mPhone.getSignalStrengthController().getSignalStrengthFromCi();
+            mSsc.getSignalStrengthFromCi();
         }
 
         if (shouldLogAttachedChange) {
@@ -4525,7 +4529,7 @@ public class ServiceStateTracker extends Handler {
     }
 
     private void queueNextSignalStrengthPoll() {
-        mPhone.getSignalStrengthController().queueNextSignalStrengthPoll();
+        mSsc.queueNextSignalStrengthPoll();
     }
 
     private void notifyCdmaSubscriptionInfoReady() {
@@ -4875,8 +4879,8 @@ public class ServiceStateTracker extends Handler {
         mEriManager.loadEriFile();
         mCdnr.updateEfForEri(getOperatorNameFromEri());
 
-        mPhone.getSignalStrengthController().updateArfcnLists(config);
-        mPhone.getSignalStrengthController().updateReportingCriteria(config);
+        mSsc.updateArfcnLists(config);
+        mSsc.updateReportingCriteria(config);
 
         updateOperatorNamePattern(config);
         mCdnr.updateEfFromCarrierConfig(config);
