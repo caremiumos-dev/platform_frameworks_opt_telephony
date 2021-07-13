@@ -22,6 +22,30 @@
       },
       "revId": "a6706b35cc9fbd7cd71a3757c54e8119d78357bd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d1fa03_38e1541c",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1693365
+      },
+      "writtenOn": "2021-07-13T04:56:08Z",
+      "side": 1,
+      "message": "1.\nnotifyAllWithEvent is checking for connection parameters (mApnContexts)\n\n\nDuring initConnection, mApnContext map is updated like below:\n\n// always update the ConnectionParams with the latest or the\n        // connectionGeneration gets stale\n        mApnContexts.put(apnContext, cp);\n\t\t\nor if DataConnection is already in active state then it will add new entry here\n\ncase EVENT_CONNECT: {\n\t\tConnectionParams cp \u003d (ConnectionParams) msg.obj;\n\t\t// either add this new apn context to our set or\n\t\t// update the existing cp with the latest connection generation number\n\t\tmApnContexts.put(cp.mApnContext, cp);\n\t\t\t\t\t\n\t\t\t\t\t\nso mApnContext size will remain 1 untill same dataConnection is not used by multiple kind of APNs.\n\nand now when any APN request for deactivation for same data connection then it checked for size of mApnContext like below code and clears the map so there will not be any entry when notifyAllWithEvent is called\nfrom notifyDisconnectCompleted.\n\nnotifyAllWithEvent can only notify DCT when there are multiple PDN connections by using same data connection but in most of the cases it won\u0027t be called due to dedicated APN types uses different APN settings.\n\nif (mApnContexts.size() \u003d\u003d 1) {\n\tmApnContexts.clear();\n\tmDisconnectParams \u003d dp;\n\tmConnectionParams \u003d null;\n\tdp.mTag \u003d mTag;\n\ttearDownData(dp);\n\ttransitionTo(mDisconnectingState);\n} else {\n\tmApnContexts.remove(dp.mApnContext);\n\t// TODO (b/118347948): evaluate if it\u0027s still needed after assigning\n\t// different scores to different Cellular network.\n\tmDisabledApnTypeBitMask |\u003d dp.mApnContext.getApnTypeBitmask();\n\tmNetworkAgent.sendNetworkCapabilities(getNetworkCapabilities(),\n\t\t\tDataConnection.this);\n\tnotifyDisconnectCompleted(dp, false);\n}\n\n\n2. Now if notifyAllWithEvent is not notifying then who is notifying to DCT.\n\nInside notifyDisconnectCompleted, before calling notifyAllWithEvent we are already notifying DCT using messages object receied from Data disconnection parameters.\n\nif (dp !\u003d null \u0026\u0026 dp.mOnCompletedMsg !\u003d null) {\n\t// Get the completed message but only use it once\n\tMessage msg \u003d dp.mOnCompletedMsg;\n\tdp.mOnCompletedMsg \u003d null;\n\tif (msg.obj instanceof ApnContext) {\n\t\talreadySent \u003d (ApnContext)msg.obj;\n\t}\n\treason \u003d dp.mReason;\n\t\n\t\n\tAsyncResult.forMessage(msg);\n\tmsg.sendToTarget();  //Here we are notifying DCT about disconnection is completed.\n}\n\n\n3.\nWhy message object is kind of pair ? (From DcTracker.java)\n\nWhen requesting for deactivaiton we are making message obj using pair of ApnContext and DataConnection Generation.\n\nprivate void cleanUpConnectionInternal(boolean detach, @ReleaseNetworkType int releaseType,\n                                           ApnContext apnContext) {\n.\n.\n.    \n\t\tPair\u003cApnContext, Integer\u003e pair \u003d new Pair\u003c\u003e(apnContext, generation);\n\t\tMessage msg \u003d obtainMessage(DctConstants.EVENT_DISCONNECT_DONE, pair);\n\n\t\tif (disconnectAll || releaseType \u003d\u003d RELEASE_TYPE_HANDOVER) {\n\t\t\tdataConnection.tearDownAll(apnContext.getReason(), releaseType, msg);\n\t\t} else {\n\t\t\tdataConnection.tearDown(apnContext, apnContext.getReason(), msg);\n\t\t}\n\n\t\tapnContext.setState(DctConstants.State.DISCONNECTING);\n.\n.\n.\n.\n}",
+      "parentUuid": "3e4e18ef_08173677",
+      "range": {
+        "startLine": 1277,
+        "startChar": 2,
+        "endLine": 1280,
+        "endChar": 53
+      },
+      "revId": "a6706b35cc9fbd7cd71a3757c54e8119d78357bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
