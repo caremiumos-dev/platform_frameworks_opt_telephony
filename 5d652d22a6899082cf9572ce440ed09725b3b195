@@ -36,6 +36,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10883f55_76450a9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-14T23:57:45Z",
+      "side": 1,
+      "message": "Talked online with Nathan and we confirm that when DSDS-\u003eSS, the carrier config for the obsoleted phoneId (value 1 from the log in b/192050148) did get clear-up (in CarrierConfigLoader).\nAnd further analysis confirm that CCloader did perform the clean-up in the main thread of phone process and it is safe (we have no race here).",
+      "parentUuid": "b497a5c2_57035e93",
+      "revId": "5d652d22a6899082cf9572ce440ed09725b3b195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cae69225_a3e3385f",
