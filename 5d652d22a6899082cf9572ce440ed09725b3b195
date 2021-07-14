@@ -39,6 +39,30 @@
       },
       "revId": "5d652d22a6899082cf9572ce440ed09725b3b195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d87eca38_c8496ef3",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-14T18:11:30Z",
+      "side": 1,
+      "message": "The purpose of the introducing IAE in CCLoader is to detect the silent failure of client which did not check the validation of phoneId. If we \"protect\" inside CCLoader (or CCManager), we are going back.\n\nLike CSBindHelper, most of the path here (SIM event handling in SubInfoUpdater) did validate phoneId, we are just fix one missing case.\n\nI would prefer to keeping the loud failure (throw IAE) as the ALARM and fix any similar cases that may crash phone due to usage of invalid phoneId.\n\nDo that make sense to you?\nThanks",
+      "parentUuid": "cae69225_a3e3385f",
+      "range": {
+        "startLine": 610,
+        "startChar": 34,
+        "endLine": 610,
+        "endChar": 50
+      },
+      "revId": "5d652d22a6899082cf9572ce440ed09725b3b195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
