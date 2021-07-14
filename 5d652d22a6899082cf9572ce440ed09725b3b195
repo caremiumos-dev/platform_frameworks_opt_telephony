@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cae69225_a3e3385f",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-07-14T17:54:59Z",
+      "side": 1,
+      "message": "CSBindHelper internally already validates phoneId, should we also have a similar protection inside CCLoader? Even if we keep the check here, since technically any system app with READ_PHONE_STATE can call updateConfigForPhoneId(-1) and cause the same crash",
+      "range": {
+        "startLine": 610,
+        "startChar": 34,
+        "endLine": 610,
+        "endChar": 50
+      },
+      "revId": "5d652d22a6899082cf9572ce440ed09725b3b195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
