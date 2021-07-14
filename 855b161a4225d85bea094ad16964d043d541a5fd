@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeef16ef_6bcefe98",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "why defined here as opposed to GsmCdmaPhone?",
+      "range": {
+        "startLine": 344,
+        "startChar": 14,
+        "endLine": 344,
+        "endChar": 38
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d1bf3df_77fd7124",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 1896,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "If someone calls \"get\" on a Phone that doesn\u0027t override this method, AIUI it should probably log a WTF.\n\nBtw, why here as opposed to PhoneInternalInterface?",
+      "range": {
+        "startLine": 1896,
+        "startChar": 11,
+        "endLine": 1896,
+        "endChar": 35
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6fb7e08_6fb06fe4",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "if getSignalStrengthController() !\u003d null?",
+      "range": {
+        "startLine": 4929,
+        "startChar": 12,
+        "endLine": 4929,
+        "endChar": 37
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f5cd5a_097fef03",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "In SST we were quite limited because \"style of the file\" and of course the SST is handling both control messages (like this) and also things in the critical path of the pollState() procedure where performance is absolutely paramount. In this file, we are only handling a control path, so performance isn\u0027t quite as critical and I think we can prioritize readability.\n\nThus, I\u0027d like to suggest that we move away from using posted messages and pairs. Instead, there are many other patterns that we can use, but one simple option is to simply post runnables. That way you don\u0027t have to spend the code creating a pair and posting the message then un-tangling in the handleMessage(). You can simply use Handler::post(Runnable).\n\nIf you want to be slightly fancier, then rather than using capturing lambdas, you can move one step closer to a statemachine and declare a class for each event that implements runnable, use the constructor to accept the arguments for that event, and then just post the instance of that class. :-) So many options for cleaner code now that we\u0027re not in SST!",
+      "range": {
+        "startLine": 75,
+        "startChar": 16,
+        "endLine": 75,
+        "endChar": 20
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e16b2939_5d9cb01e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "grumble. It\u0027s fine.",
+      "range": {
+        "startLine": 82,
+        "startChar": 59,
+        "endLine": 82,
+        "endChar": 65
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7173fbe8_713da88b",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "Why do we send the response message to a dead target? Does this clean up something in PhoneInterfaceManager? (Maybe a comment explaining why?)",
+      "range": {
+        "startLine": 97,
+        "startChar": 32,
+        "endLine": 97,
+        "endChar": 44
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6217a9f6_9f76c9ea",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "Is it possible to have more than one match? Otherwise, you can iterate, grab a reference and break, then remove. Should be slightly shorter and avoid the iterator.",
+      "range": {
+        "startLine": 121,
+        "startChar": 27,
+        "endLine": 121,
+        "endChar": 33
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "033a2f31_81e5da56",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "I notice that the assumptions and ordering are a little different here. Is it possible for onCompleted to be null for this case and not for the request case? Why is it nullable here?",
+      "range": {
+        "startLine": 128,
+        "startChar": 20,
+        "endLine": 128,
+        "endChar": 31
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8362104a_c611b321",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T02:25:56Z",
+      "side": 1,
+      "message": "I didn\u0027t re-review beyond here in detail. The logic is very complex and I believe it was copied over verbatim. If that\u0027s not the case, please LMK.",
+      "range": {
+        "startLine": 242,
+        "startChar": 17,
+        "endLine": 242,
+        "endChar": 48
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
