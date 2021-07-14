@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "615628a8_38b689c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-14T18:06:36Z",
+      "side": 1,
+      "message": "How does this handle \"flushing\" the carrierconfig service when we go from dual SIM to single SIM to remove the old carrier config info that has been cached? I recall looking through the code and thinking we needed some small changes peppered throughout in few places.",
+      "revId": "5d652d22a6899082cf9572ce440ed09725b3b195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cae69225_a3e3385f",
