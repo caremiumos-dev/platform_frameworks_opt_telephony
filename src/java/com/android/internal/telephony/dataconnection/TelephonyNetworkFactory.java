@@ -342,11 +342,11 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private void onDataHandoverNeeded(@ApnType int apnType, int targetTransport,
                                       HandoverParams handoverParams) {
-        log("onDataHandoverNeeded: apnType=" + ApnSetting.getApnTypeStringInternal(apnType)
+        log("onDataHandoverNeeded: apnType=" + ApnSetting.getApnTypeString(apnType)
                 + ", target transport="
                 + AccessNetworkConstants.transportTypeToString(targetTransport));
         if (mTransportManager.getCurrentTransport(apnType) == targetTransport) {
-            log("APN type " + ApnSetting.getApnTypeStringInternal(apnType) + " is already on "
+            log("APN type " + ApnSetting.getApnTypeString(apnType) + " is already on "
                     + AccessNetworkConstants.transportTypeToString(targetTransport));
             return;
         }
@@ -362,7 +362,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 DcTracker dcTracker = mPhone.getDcTracker(currentTransport);
                 if (dcTracker != null) {
                     DataConnection dc = dcTracker.getDataConnectionByApnType(
-                            ApnSetting.getApnTypeStringInternal(apnType));
+                            ApnSetting.getApnTypeString(apnType));
                     if (dc != null && (dc.isActive())) {
                         Message onCompleteMsg = mInternalHandler.obtainMessage(
                                 EVENT_DATA_HANDOVER_COMPLETED);
@@ -371,9 +371,10 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                         mPendingHandovers.put(onCompleteMsg, handoverParams);
                         requestNetworkInternal(networkRequest, DcTracker.REQUEST_TYPE_HANDOVER,
                                 targetTransport, onCompleteMsg);
-                        log("Requested handover " + ApnSetting.getApnTypeStringInternal(apnType)
+                        log("Requested handover " + ApnSetting.getApnTypeString(apnType)
                                 + " to "
-                                + AccessNetworkConstants.transportTypeToString(targetTransport));
+                                + AccessNetworkConstants.transportTypeToString(targetTransport)
+                                + ". " + networkRequest);
                         handoverPending = true;
                     } else {
                         // Request is there, but no actual data connection. In this case, just move
@@ -429,7 +430,22 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                     // connection can be re-established on the other transport.
                     : DcTracker.RELEASE_TYPE_DETACH;
             releaseNetworkInternal(networkRequest, releaseType, originTransport);
-            mNetworkRequests.put(networkRequest, targetTransport);
+
+            // Before updating the network request with the target transport, make sure the request
+            // is still there because it's possible that connectivity service has already released
+            // the network while handover is ongoing. If connectivity service already released
+            // the network request, we need to tear down the just-handovered data connection on the
+            // target transport.
+            if (mNetworkRequests.containsKey(networkRequest)) {
+                // Update it with the target transport.
+                mNetworkRequests.put(networkRequest, targetTransport);
+            } else {
+                log("Network request was released before handover is completed. Now"
+                        + " we need to release this network request. "
+                        + networkRequest);
+                releaseNetworkInternal(networkRequest, DcTracker.RELEASE_TYPE_NORMAL,
+                        targetTransport);
+            }
         } else {
             // If handover fails and requires to fallback, the context of target transport needs to
             // be released
