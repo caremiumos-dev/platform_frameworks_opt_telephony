@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15125d06_0dae678e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "SignalStrengthController is designed to be in the same level as SST/DSM which are both defined here.\n\nAlthough for now only GsmCdmaPhone create them, there is no reason that other phone instance should not. \n\nMany of the getXXX operation are performed on phone interface (with actual GsmCdmaPhone instance), we don\u0027t need a \"instanceOf\" check/cast since we know it indeed a GsmCdmaPhone.",
+      "parentUuid": "aeef16ef_6bcefe98",
+      "range": {
+        "startLine": 344,
+        "startChar": 14,
+        "endLine": 344,
+        "endChar": 38
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d1bf3df_77fd7124",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-07-14T02:25:56Z",
       "side": 1,
       "message": "If someone calls \"get\" on a Phone that doesn\u0027t override this method, AIUI it should probably log a WTF.\n\nBtw, why here as opposed to PhoneInternalInterface?",
+      "range": {
+        "startLine": 1896,
+        "startChar": 11,
+        "endLine": 1896,
+        "endChar": 35
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9ee749_00eba8bc",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 1896,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Log.wtf is added.\n\nAgain, I follow the same rules to get sibling components (SST/DSM...), so the the refactoring will be minimized, although phone implement PhoneInternalInterface and can also guarantee that :-).",
+      "parentUuid": "9d1bf3df_77fd7124",
       "range": {
         "startLine": 1896,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f21a73_b349067e",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6fb7e08_6fb06fe4",
+      "range": {
+        "startLine": 4929,
+        "startChar": 12,
+        "endLine": 4929,
+        "endChar": 37
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7f5cd5a_097fef03",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-07-14T02:25:56Z",
       "side": 1,
       "message": "In SST we were quite limited because \"style of the file\" and of course the SST is handling both control messages (like this) and also things in the critical path of the pollState() procedure where performance is absolutely paramount. In this file, we are only handling a control path, so performance isn\u0027t quite as critical and I think we can prioritize readability.\n\nThus, I\u0027d like to suggest that we move away from using posted messages and pairs. Instead, there are many other patterns that we can use, but one simple option is to simply post runnables. That way you don\u0027t have to spend the code creating a pair and posting the message then un-tangling in the handleMessage(). You can simply use Handler::post(Runnable).\n\nIf you want to be slightly fancier, then rather than using capturing lambdas, you can move one step closer to a statemachine and declare a class for each event that implements runnable, use the constructor to accept the arguments for that event, and then just post the instance of that class. :-) So many options for cleaner code now that we\u0027re not in SST!",
+      "range": {
+        "startLine": 75,
+        "startChar": 16,
+        "endLine": 75,
+        "endChar": 20
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de1c521_cd09159c",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Excellent. This is a good example to demo the benefit of dedicated SSC class. It removes the restriction when handling logic in SST and brings space to improvements in various ways (readability, performance, maintenance...).\n\nI\u0027ve record the idea in https://b.corp.google.com/issues/178429976#comment4 and plan to do it in a separate CL.\n\nStrategically, I planned to firstly land SSC with no functional change to minimize the risk and review burden. \nThanks!",
+      "parentUuid": "b7f5cd5a_097fef03",
       "range": {
         "startLine": 75,
         "startChar": 16,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a06b7c2f_52edd401",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e16b2939_5d9cb01e",
+      "range": {
+        "startLine": 82,
+        "startChar": 59,
+        "endLine": 82,
+        "endChar": 65
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7173fbe8_713da88b",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-07-14T02:25:56Z",
       "side": 1,
       "message": "Why do we send the response message to a dead target? Does this clean up something in PhoneInterfaceManager? (Maybe a comment explaining why?)",
+      "range": {
+        "startLine": 97,
+        "startChar": 32,
+        "endLine": 97,
+        "endChar": 44
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1aca6a_a35cdf90",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "The msg is not for client but for PIM. PIM is waiting for the result (no matter if it success or not) to notifyRequester to wakes up and continue. Without the msg sending back, the original request will wait forever (..actually, 2 seconds timeout now after we fixed the bug in b/176239119).",
+      "parentUuid": "7173fbe8_713da88b",
       "range": {
         "startLine": 97,
         "startChar": 32,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05225d8b_fdba8c15",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Yes, in theory, we do have cases to have multiple SignalRequestRecord that have same live token: for example, when the same client call twice #setSignalStrengthUpdateRequest with same SignalStrengthUpdateRequest but with different subId.\n\nSince subId is different, we store both request in mSignalRequestRecords. They share the same SSURequest, the token is the same. Calling clearSignalStrengthUpdateRequest will clean both of them.",
+      "parentUuid": "6217a9f6_9f76c9ea",
+      "range": {
+        "startLine": 121,
+        "startChar": 27,
+        "endLine": 121,
+        "endChar": 33
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "033a2f31_81e5da56",
@@ -185,6 +353,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ac0d3e_a0375542",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Yeah. onCompleted Message in method setSignalStrengthUpdateRequest is @NonNull while @Nullable in method clearSignalStrengthUpdateRequest.\n\nWhen client died, clearSignalStrengthUpdateRequest is called with null onCompleted Message in SignalRequestRecord#binderDied. Since the request is not from client/PIM, we don\u0027t need a onCompleted msg to notify the requester.",
+      "parentUuid": "033a2f31_81e5da56",
+      "range": {
+        "startLine": 128,
+        "startChar": 20,
+        "endLine": 128,
+        "endChar": 31
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8362104a_c611b321",
@@ -198,6 +390,30 @@
       "writtenOn": "2021-07-14T02:25:56Z",
       "side": 1,
       "message": "I didn\u0027t re-review beyond here in detail. The logic is very complex and I believe it was copied over verbatim. If that\u0027s not the case, please LMK.",
+      "range": {
+        "startLine": 242,
+        "startChar": 17,
+        "endLine": 242,
+        "endChar": 48
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a41d454c_c20c66d1",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-16T03:40:03Z",
+      "side": 1,
+      "message": "Exactly. As the commit msg high-lighted, ALL logic in SignalStrengthController are moved from SerivceStateTracker where the S signal strength feature was landed.\n\nWe strategically keep the original logic to minimize risk and review burden. \n\nAny significant change will land in following CLs.",
+      "parentUuid": "8362104a_c611b321",
       "range": {
         "startLine": 242,
         "startChar": 17,
