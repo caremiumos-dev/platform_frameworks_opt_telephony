@@ -236,11 +236,7 @@ public class SmsDispatchersController extends Handler {
                 break;
 
             default:
-                if (isCdmaMo()) {
-                    mCdmaDispatcher.handleMessage(msg);
-                } else {
-                    mGsmDispatcher.handleMessage(msg);
-                }
+                Rlog.e(TAG, "handleMessage() ignoring message of unexpected type " + msg.what);
         }
     }
 
@@ -589,7 +585,7 @@ public class SmsDispatchersController extends Handler {
      * @return true if format given is CDMA format, false otherwise.
      */
     public boolean isCdmaFormat(String format) {
-        return (mCdmaDispatcher.getFormat().equals(format));
+        return SmsConstants.FORMAT_3GPP2.equals(format);
     }
 
     /**

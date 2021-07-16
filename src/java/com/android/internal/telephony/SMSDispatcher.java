@@ -137,7 +137,6 @@ public abstract class SMSDispatcher extends Handler {
     // other
     protected static final int EVENT_NEW_ICC_SMS = 14;
     protected static final int EVENT_ICC_CHANGED = 15;
-    protected static final int EVENT_GET_IMS_SERVICE = 16;
 
     @UnsupportedAppUsage
     protected Phone mPhone;
@@ -1397,7 +1396,7 @@ public abstract class SMSDispatcher extends Handler {
             AtomicInteger unsentPartCount, AtomicBoolean anyPartFailed, Uri messageUri,
             String fullMessageText, int priority, boolean expectMore, int validityPeriod,
             long messageId) {
-        if (isCdmaMo()) {
+        if (SmsConstants.FORMAT_3GPP2.equals(getFormat())) {
             UserData uData = new UserData();
             uData.payloadStr = message;
             uData.userDataHeader = smsHeader;
@@ -2444,10 +2443,6 @@ public abstract class SMSDispatcher extends Handler {
         } catch (PackageManager.NameNotFoundException re) {
             throw new SecurityException("Caller is not phone or carrier app!");
         }
-    }
-
-    protected boolean isCdmaMo() {
-        return mSmsDispatchersController.isCdmaMo();
     }
 
     private boolean isAscii7bitSupportedForLongMessage() {

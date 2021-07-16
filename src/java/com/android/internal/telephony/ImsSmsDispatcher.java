@@ -401,20 +401,33 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
             String message, boolean statusReportRequested, SmsHeader smsHeader, int priority,
             int validityPeriod) {
-        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(), scAddr, destAddr, message,
-                statusReportRequested, smsHeader, priority, validityPeriod);
+        return SMSDispatcherUtil.getSubmitPdu(
+                SmsConstants.FORMAT_3GPP2.equals(getFormat()),
+                scAddr,
+                destAddr,
+                message,
+                statusReportRequested,
+                smsHeader,
+                priority,
+                validityPeriod);
     }
 
     @Override
     protected SmsMessageBase.SubmitPduBase getSubmitPdu(String scAddr, String destAddr,
             int destPort, byte[] message, boolean statusReportRequested) {
-        return SMSDispatcherUtil.getSubmitPdu(isCdmaMo(), scAddr, destAddr, destPort, message,
+        return SMSDispatcherUtil.getSubmitPdu(
+                SmsConstants.FORMAT_3GPP2.equals(getFormat()),
+                scAddr,
+                destAddr,
+                destPort,
+                message,
                 statusReportRequested);
     }
 
     @Override
     protected TextEncodingDetails calculateLength(CharSequence messageBody, boolean use7bitOnly) {
-        return SMSDispatcherUtil.calculateLength(isCdmaMo(), messageBody, use7bitOnly);
+        return SMSDispatcherUtil.calculateLength(
+                SmsConstants.FORMAT_3GPP2.equals(getFormat()), messageBody, use7bitOnly);
     }
 
     @Override
@@ -486,11 +499,6 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     @VisibleForTesting
     public void fallbackToPstn(SmsTracker tracker) {
         mSmsDispatchersController.sendRetrySms(tracker);
-    }
-
-    @Override
-    protected boolean isCdmaMo() {
-        return mSmsDispatchersController.isCdmaFormat(getFormat());
     }
 
     @VisibleForTesting
