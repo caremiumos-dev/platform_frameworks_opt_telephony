@@ -113,7 +113,15 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
 
         // if sms over IMS is not supported on data and voice is not available...
         if (!isIms() && ss != ServiceState.STATE_IN_SERVICE) {
-            tracker.onFailed(mContext, getNotInServiceError(ss), NO_ERROR_CODE);
+            int error = getNotInServiceError(ss);
+            tracker.onFailed(mContext, error, NO_ERROR_CODE);
+            mPhone.getSmsStats().onOutgoingSms(
+                    false /* isOverIms */,
+                    true /* is3gpp2 */,
+                    false /* fallbackToCs */,
+                    error,
+                    tracker.mMessageId,
+                    tracker.isFromDefaultSmsApplication(mContext));
             return;
         }
 

@@ -745,9 +745,12 @@ public abstract class SMSDispatcher extends Handler {
         SmsTracker tracker = (SmsTracker) ar.userObj;
         PendingIntent sentIntent = tracker.mSentIntent;
         SmsResponse smsResponse = (SmsResponse) ar.result;
+        int error = SmsManager.RESULT_ERROR_NONE;
+        int errorCode = NO_ERROR_CODE;
 
         if (smsResponse != null) {
             tracker.mMessageRef = smsResponse.mMessageRef;
+            errorCode = smsResponse.mErrorCode;
         } else {
             Rlog.d(TAG, "SmsResponse was null");
         }
@@ -764,83 +767,30 @@ public abstract class SMSDispatcher extends Handler {
             }
             tracker.onSent(mContext);
             mPhone.notifySmsSent(tracker.mDestAddress);
-
-            mPhone.getSmsStats().onOutgoingSms(
-                    tracker.mImsRetry > 0 /* isOverIms */,
-                    SmsConstants.FORMAT_3GPP2.equals(getFormat()),
-                    false /* fallbackToCs */,
-                    SmsManager.RESULT_ERROR_NONE,
-                    tracker.mMessageId,
-                    tracker.isFromDefaultSmsApplication(mContext));
         } else {
             if (DBG) {
                 Rlog.d(TAG, "SMS send failed id: " + tracker.mMessageId);
             }
-
-            int ss = mPhone.getServiceState().getState();
-            int error = rilErrorToSmsManagerResult(
+            error = rilErrorToSmsManagerResult(
                     ((CommandException) (ar.exception)).getCommandError());
 
-            if (tracker.mImsRetry > 0 && ss != ServiceState.STATE_IN_SERVICE) {
-                // This is retry after failure over IMS but voice is not available.
-                // Set retry to max allowed, so no retry is sent and cause
-                // SmsManager.RESULT_ERROR_GENERIC_FAILURE to be returned to app.
-                tracker.mRetryCount = MAX_SEND_RETRIES;
-
-                Rlog.d(TAG, "handleSendComplete: Skipping retry: "
-                        + " isIms()=" + isIms()
-                        + " mRetryCount=" + tracker.mRetryCount
-                        + " mImsRetry=" + tracker.mImsRetry
-                        + " mMessageRef=" + tracker.mMessageRef
-                        + " SS= " + mPhone.getServiceState().getState()
-                        + " id=" + tracker.mMessageId);
-            }
-
-            // if sms over IMS is not supported on data and voice is not available...
-            if (!isIms() && ss != ServiceState.STATE_IN_SERVICE) {
-                tracker.onFailed(mContext, getNotInServiceError(ss), NO_ERROR_CODE);
-                mPhone.getSmsStats().onOutgoingSms(
-                        tracker.mImsRetry > 0 /* isOverIms */,
-                        SmsConstants.FORMAT_3GPP2.equals(getFormat()),
-                        false /* fallbackToCs */,
-                        getNotInServiceError(ss),
-                        tracker.mMessageId,
-                        tracker.isFromDefaultSmsApplication(mContext));
-            } else if (error == SmsManager.RESULT_RIL_SMS_SEND_FAIL_RETRY
+            if (error == SmsManager.RESULT_RIL_SMS_SEND_FAIL_RETRY
                     && tracker.mRetryCount < MAX_SEND_RETRIES) {
-                // Retry after a delay if needed.
-                // TODO: According to TS 23.040, 9.2.3.6, we should resend
-                //       with the same TP-MR as the failed message, and
-                //       TP-RD set to 1.  However, we don't have a means of
-                //       knowing the MR for the failed message (EF_SMSstatus
-                //       may or may not have the MR corresponding to this
-                //       message, depending on the failure).  Also, in some
-                //       implementations this retry is handled by the baseband.
                 tracker.mRetryCount++;
-                int errorCode = (smsResponse != null) ? smsResponse.mErrorCode : NO_ERROR_CODE;
                 Message retryMsg = obtainMessage(EVENT_SEND_RETRY, tracker);
                 sendMessageDelayed(retryMsg, SEND_RETRY_DELAY);
-                mPhone.getSmsStats().onOutgoingSms(
-                        tracker.mImsRetry > 0 /* isOverIms */,
-                        SmsConstants.FORMAT_3GPP2.equals(getFormat()),
-                        false /* fallbackToCs */,
-                        SmsManager.RESULT_RIL_SMS_SEND_FAIL_RETRY,
-                        errorCode,
-                        tracker.mMessageId,
-                        tracker.isFromDefaultSmsApplication(mContext));
             } else {
-                int errorCode = (smsResponse != null) ? smsResponse.mErrorCode : NO_ERROR_CODE;
                 tracker.onFailed(mContext, error, errorCode);
-                mPhone.getSmsStats().onOutgoingSms(
-                        tracker.mImsRetry > 0 /* isOverIms */,
-                        SmsConstants.FORMAT_3GPP2.equals(getFormat()),
-                        false /* fallbackToCs */,
-                        error,
-                        errorCode,
-                        tracker.mMessageId,
-                        tracker.isFromDefaultSmsApplication(mContext));
             }
         }
+        mPhone.getSmsStats().onOutgoingSms(
+                tracker.mImsRetry > 0 /* isOverIms */,
+                SmsConstants.FORMAT_3GPP2.equals(getFormat()),
+                false /* fallbackToCs */,
+                error,
+                errorCode,
+                tracker.mMessageId,
+                tracker.isFromDefaultSmsApplication(mContext));
     }
 
     @SmsManager.Result
