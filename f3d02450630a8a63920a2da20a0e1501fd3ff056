@@ -16,6 +16,24 @@
       "message": "Is this just a clean up or is there a bug fix as well?",
       "revId": "f3d02450630a8a63920a2da20a0e1501fd3ff056",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9302aa7_5caaf02e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-07-22T06:18:47Z",
+      "side": 1,
+      "message": "We don\u0027t need isCdmaMo() for GSM/CDMA disaptchers.\nAnd I think this CL will fix below corner case issue.\n\nIMS de-reg -\u003e GSM dispatcher is selected -\u003e IMS reg -\u003e IMS SMS format is used in GSM dispatcher.\n\nSmsDispatchersController.sendMultipartText()-\u003eGsmDispatcher.sendMultipartText()-\u003eSMSDispatcher.getNewSubmitPduTracker()-\u003eSMSDispatcher.isCdmaMo()-\u003eSmsDispatchersController.isCdmaMo()",
+      "parentUuid": "b2d08843_3087154e",
+      "revId": "f3d02450630a8a63920a2da20a0e1501fd3ff056",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
