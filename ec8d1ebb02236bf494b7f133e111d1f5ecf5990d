@@ -22,6 +22,30 @@
       },
       "revId": "ec8d1ebb02236bf494b7f133e111d1f5ecf5990d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f95f5a36_aac15b21",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-07-23T03:47:03Z",
+      "side": 1,
+      "message": "As SSC becomes the hub for all SS logic, SST actually depends on SSC to e.g. updateReportingCriteria:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1545049/21/src/java/com/android/internal/telephony/ServiceStateTracker.java#5074\n```\nmPhone.getSignalStrengthController().updateReportingCriteria(config);\n```\n\nAnd we have to inject the mock SSC into SSTTest. Otherwise, it will cause a NPE.\n\nWhen more classes depends on SSC, we can move the mock SSC into TelephonyBase (just like the mock SST/DSM...) and remove the mock SSC here.\n\nI add one more line comment here to provide more context.\nThanks",
+      "parentUuid": "c7b361e0_497219f5",
+      "range": {
+        "startLine": 144,
+        "startChar": 12,
+        "endLine": 144,
+        "endChar": 36
+      },
+      "revId": "ec8d1ebb02236bf494b7f133e111d1f5ecf5990d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
