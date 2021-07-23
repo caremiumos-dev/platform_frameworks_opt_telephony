@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b361e0_497219f5",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-23T01:51:28Z",
+      "side": 1,
+      "message": "unclear why we need this in SSTTest. Since it\u0027s brand new, none of the tests could have been referencing it, could they? Possible that I\u0027ve missed something.",
+      "range": {
+        "startLine": 144,
+        "startChar": 12,
+        "endLine": 144,
+        "endChar": 36
+      },
+      "revId": "ec8d1ebb02236bf494b7f133e111d1f5ecf5990d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

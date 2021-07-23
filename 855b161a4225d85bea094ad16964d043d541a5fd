@@ -142,6 +142,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09401bd0_efdcc294",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-07-23T01:51:28Z",
+      "side": 1,
+      "message": "Combined with the change above, this will now log a WTF each time DUMP is called on a non-GsmCdmaPhone object. We can\u0027t do both changes",
+      "parentUuid": "66f21a73_b349067e",
+      "range": {
+        "startLine": 4929,
+        "startChar": 12,
+        "endLine": 4929,
+        "endChar": 37
+      },
+      "revId": "855b161a4225d85bea094ad16964d043d541a5fd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7f5cd5a_097fef03",
