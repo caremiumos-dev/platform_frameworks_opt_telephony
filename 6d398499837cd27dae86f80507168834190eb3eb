@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9134cb6f_78fd35e6",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-07-30T16:37:49Z",
+      "side": 1,
+      "message": "if this is required why include a boolean?  It seems to complicate the code for no purpose.  Would it ever be FALSE?",
+      "range": {
+        "startLine": 63,
+        "startChar": 25,
+        "endLine": 63,
+        "endChar": 58
+      },
+      "revId": "6d398499837cd27dae86f80507168834190eb3eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7efa2d1_fc493374",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-07-30T16:37:49Z",
+      "side": 1,
+      "message": "I don\u0027t think this is efficient.  collect is useful when you\u0027re performing an operation on each while collecting.  Making a deep copy can be done more simply (result \u003d new List(mSimPbRcords.values())).\n\nIs there a reason why this is needed in this patch set?",
+      "range": {
+        "startLine": 156,
+        "startChar": 44,
+        "endLine": 157,
+        "endChar": 65
+      },
+      "revId": "6d398499837cd27dae86f80507168834190eb3eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d06ecba6_257510c5",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-07-30T16:37:49Z",
+      "side": 1,
+      "message": "is this value an index or an Id?  If under the covers it\u0027s an index we should keep it as index.  If it\u0027s really an id and not 0-based indicator into the array then this set function name is wrong.  Right now it\u0027s confusing.",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 41
+      },
+      "revId": "6d398499837cd27dae86f80507168834190eb3eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39974393_e22a325f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/SimPhonebookRecordCacheTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2021-07-30T16:37:49Z",
+      "side": 1,
+      "message": "This feels wrong.  Can you explain what\u0027s going on here and why the difference in size?",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 72
+      },
+      "revId": "6d398499837cd27dae86f80507168834190eb3eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
