@@ -25,6 +25,7 @@ import com.android.internal.telephony.util.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Represents a Phonebook entry from the SIM.
@@ -33,16 +34,16 @@ import java.util.List;
  */
 public class SimPhonebookRecord {
     // Instance variables
-    private int mRecordIndex = 0;
+    private int mRecordId = 0;
     private String mAlphaTag;
     private String mNumber;
     private String[] mEmails;
     private String[] mAdditionalNumbers;
 
     // Instance methods
-    public SimPhonebookRecord (int recordIndex, String alphaTag, String number,
+    public SimPhonebookRecord (int recordId, String alphaTag, String number,
                String[] emails, String[] adNumbers) {
-        mRecordIndex = recordIndex;
+        mRecordId = recordId;
         mAlphaTag = alphaTag;
         mNumber = convertRecordFormatToNumber(number);
         mEmails = emails;
@@ -56,27 +57,27 @@ public class SimPhonebookRecord {
     }
 
     public SimPhonebookRecord(PhonebookRecordInfo recInfo) {
-        mRecordIndex = recInfo.recordId;
-        mAlphaTag = recInfo.name;
-        mNumber = recInfo.number;
-        mEmails = recInfo.emails == null ? null
-                : recInfo.emails.toArray(new String[recInfo.emails.size()]);
-        mAdditionalNumbers = recInfo.additionalNumbers == null ? null
-                : recInfo.additionalNumbers.toArray(
-                        new String[recInfo.additionalNumbers.size()]);
+        if (recInfo != null) {
+            mRecordId = recInfo.recordId;
+            mAlphaTag = recInfo.name;
+            mNumber = recInfo.number;
+            mEmails = recInfo.emails == null ? null
+                    : recInfo.emails.toArray(new String[recInfo.emails.size()]);
+            mAdditionalNumbers = recInfo.additionalNumbers == null ? null
+                    : recInfo.additionalNumbers.toArray(
+                            new String[recInfo.additionalNumbers.size()]);
+        }
     }
 
     public SimPhonebookRecord() {}
 
     public PhonebookRecordInfo toPhonebookRecordInfo() {
         PhonebookRecordInfo pbRecordInfo = new PhonebookRecordInfo();
-        pbRecordInfo.recordId = mRecordIndex;
+        pbRecordInfo.recordId = mRecordId;
         pbRecordInfo.name = convertNullToEmptyString(mAlphaTag);
         pbRecordInfo.number = convertNullToEmptyString(convertNumberToRecordFormat(mNumber));
         if (mEmails != null) {
-            for (String email : mEmails) {
-                pbRecordInfo.emails.add(email);
-            }
+            pbRecordInfo.emails = new ArrayList<>(Arrays.asList(mEmails));
         }
         if (mAdditionalNumbers != null) {
             for (String addNum : mAdditionalNumbers) {
@@ -85,8 +86,9 @@ public class SimPhonebookRecord {
         }
         return pbRecordInfo;
     }
-    public int getRecordIndex() {
-        return mRecordIndex;
+
+    public int getRecordId() {
+        return mRecordId;
     }
 
     public String getAlphaTag() {
@@ -105,26 +107,32 @@ public class SimPhonebookRecord {
         return mAdditionalNumbers;
     }
 
-    /**
-     * convert phone number in the SIM phonebook record format to GSM pause/wild/wait character
-     */
-    private static String convertRecordFormatToNumber(String input) {
-        return input == null ? null : input.replace( 'e', PhoneNumberUtils.WAIT )
-                .replace( 'T', PhoneNumberUtils.PAUSE )
-                .replace( '?', PhoneNumberUtils.WILD );
+    /** Convert null to an empty String */
+    private String convertNullToEmptyString(String str) {
+        return str != null ? str : "";
     }
 
     /**
-     * convert the GSM pause/wild/wait character to the phone number in the SIM pb record format
+     * Convert the SIM PhonebookRecordInfo number to the GSM pause/wild/wait number
+     * @param input the SIM PhonebookRecordInfo number
+     * @return The converted GSM pause/wild/wait number
      */
-    private static String convertNumberToRecordFormat(String input) {
+    private String convertRecordFormatToNumber(String input) {
+        return input == null ? null : input.replace('e', PhoneNumberUtils.WAIT)
+                .replace('T', PhoneNumberUtils.PAUSE)
+                .replace('?', PhoneNumberUtils.WILD);
+    }
+
+    /**
+     * Convert the GSM pause/wild/wait characters to the phone number in the SIM PhonebookRecordInfo
+     * number format
+     * @param input GSM pause/wild/wait character
+     * @return The converted PhonebookRecordInfo number
+     */
+    private String convertNumberToRecordFormat(String input) {
         return input == null ? null : input.replace(PhoneNumberUtils.WAIT, 'e')
                 .replace(PhoneNumberUtils.PAUSE, 'T')
                 .replace(PhoneNumberUtils.WILD, '?');
-    }
-
-    private static String convertNullToEmptyString(String string) {
-        return string != null ? string : "";
     }
 
     public boolean isEmpty() {
@@ -137,8 +145,8 @@ public class SimPhonebookRecord {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SimPhoneBookRecord{").append("index =")
-                .append(mRecordIndex).append(", name = ")
+        sb.append("SimPhoneBookRecord{").append("ID =")
+                .append(mRecordId).append(", name = ")
                 .append(mAlphaTag == null ? "null" : mAlphaTag)
                 .append(", number = ").append(mNumber == null ? "null" : mNumber)
                 .append(", email count = ").append(mEmails == null ? 0 : mEmails.length)
@@ -151,7 +159,7 @@ public class SimPhonebookRecord {
     }
 
     public final static class Builder {
-        private int mRecordIndex = 0;
+        private int mRecordId = 0;
         private String mAlphaTag = null;
         private String mNumber = null;
         private String[] mEmails;
@@ -160,7 +168,7 @@ public class SimPhonebookRecord {
         public SimPhonebookRecord build() {
             SimPhonebookRecord record = new SimPhonebookRecord();
             record.mAlphaTag = mAlphaTag;
-            record.mRecordIndex = mRecordIndex;
+            record.mRecordId = mRecordId;
             record.mNumber = mNumber;
             if (mEmails != null) {
                 record.mEmails = mEmails;
@@ -171,8 +179,8 @@ public class SimPhonebookRecord {
             return record;
         }
 
-        public Builder setRecordIndex(int index) {
-            mRecordIndex = index;
+        public Builder setRecordId(int recordId) {
+            mRecordId = recordId;
             return this;
         }
 

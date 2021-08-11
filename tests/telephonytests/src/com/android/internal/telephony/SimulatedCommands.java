@@ -2474,7 +2474,7 @@ public class SimulatedCommands extends BaseCommands
 
     @Override
     public void updateSimPhonebookRecord(SimPhonebookRecord phonebookRecord, Message result) {
-        resultSuccess(result, new int[]{phonebookRecord.getRecordIndex()});
+        resultSuccess(result, new int[]{phonebookRecord.getRecordId()});
         notifySimPhonebookChanged();
     }
 
