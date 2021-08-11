@@ -30,15 +30,16 @@ import java.util.Arrays;
  */
 public class SimPhonebookRecord {
     // Instance variables
-    private int mRecordIndex = 0;
+    private int mRecordId = 0;
     private String mAlphaTag;
     private String mNumber;
     private String[] mEmails;
     private String[] mAdditionalNumbers;
 
-    public SimPhonebookRecord (int recordIndex, String alphaTag, String number,
+    // Instance methods
+    public SimPhonebookRecord (int recordId, String alphaTag, String number,
                String[] emails, String[] adNumbers) {
-        mRecordIndex = recordIndex;
+        mRecordId = recordId;
         mAlphaTag = alphaTag;
         mNumber = convertRecordFormatToNumber(number);
         mEmails = emails;
@@ -50,8 +51,38 @@ public class SimPhonebookRecord {
         }
     }
 
-    public int getRecordIndex() {
-        return mRecordIndex;
+    public SimPhonebookRecord(PhonebookRecordInfo recInfo) {
+        mRecordId = recInfo.recordId;
+        mAlphaTag = recInfo.name;
+        mNumber = recInfo.number;
+        mEmails = recInfo.emails == null ? null
+                : recInfo.emails.toArray(new String[recInfo.emails.size()]);
+        mAdditionalNumbers = recInfo.additionalNumbers == null ? null
+                : recInfo.additionalNumbers.toArray(
+                        new String[recInfo.additionalNumbers.size()]);
+    }
+
+    public SimPhonebookRecord() {}
+
+    public PhonebookRecordInfo toPhonebookRecordInfo() {
+        PhonebookRecordInfo pbRecordInfo = new PhonebookRecordInfo();
+        pbRecordInfo.recordId = mRecordId;
+        pbRecordInfo.name = convertNullToEmptyString(mAlphaTag);
+        pbRecordInfo.number = convertNullToEmptyString(convertNumberToRecordFormat(mNumber));
+        if (mEmails != null) {
+            for (String email : mEmails) {
+                pbRecordInfo.emails.add(email);
+            }
+        }
+        if (mAdditionalNumbers != null) {
+            for (String addNum : mAdditionalNumbers) {
+                pbRecordInfo.additionalNumbers.add(convertNumberToRecordFormat(addNum));
+            }
+        }
+        return pbRecordInfo;
+    }
+    public int getRecordId() {
+        return mRecordId;
     }
 
     public String getAlphaTag() {
@@ -89,8 +120,8 @@ public class SimPhonebookRecord {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SimPhoneBookRecord{").append("index =")
-                .append(mRecordIndex).append(", name = ")
+        sb.append("SimPhoneBookRecord{").append("ID =")
+                .append(mRecordId).append(", name = ")
                 .append(mAlphaTag == null ? "null" : mAlphaTag)
                 .append(", number = ").append(mNumber == null ? "null" : mNumber)
                 .append(", email count = ").append(mEmails == null ? 0 : mEmails.length)
@@ -103,19 +134,28 @@ public class SimPhonebookRecord {
     }
 
     public final static class Builder {
-        private int mRecordIndex = 0;
+        private int mRecordId = 0;
         private String mAlphaTag = null;
         private String mNumber = null;
         private String[] mEmails;
         private String[] mAdditionalNumbers;
 
         public SimPhonebookRecord build() {
-            return new SimPhonebookRecord(mRecordIndex, mAlphaTag, mNumber, mEmails,
-                    mAdditionalNumbers);
+            SimPhonebookRecord record = new SimPhonebookRecord();
+            record.mAlphaTag = mAlphaTag;
+            record.mRecordId = mRecordId;
+            record.mNumber = mNumber;
+            if (mEmails != null) {
+                record.mEmails = mEmails;
+            }
+            if (mAdditionalNumbers != null) {
+                record.mAdditionalNumbers = mAdditionalNumbers;
+            }
+            return record;
         }
 
-        public Builder setRecordIndex(int index) {
-            mRecordIndex = index;
+        public Builder setRecordId(int recordId) {
+            mRecordId = recordId;
             return this;
         }
 
