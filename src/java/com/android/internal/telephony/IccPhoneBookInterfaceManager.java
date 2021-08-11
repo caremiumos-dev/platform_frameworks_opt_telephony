@@ -219,12 +219,14 @@ public class IccPhoneBookInterfaceManager {
         synchronized (updateRequest) {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
             AdnRecord oldAdn = generateAdnRecordWithOldTagByContentValues(values);
-            AdnRecord newAdn = generateAdnRecordWithNewTagByContentValues(values);
             if (usesPbCache(efid)) {
+                AdnRecord newAdn =
+                        generateAdnRecordWithNewTagByContentValues(IccConstants.EF_ADN, values);
                 mSimPbRecordCache.updateSimPbAdnBySearch(oldAdn, newAdn, response);
                 waitForResult(updateRequest);
                 return (boolean) updateRequest.mResult;
             } else {
+                AdnRecord newAdn = generateAdnRecordWithNewTagByContentValues(0, values);
                 if (mAdnCache != null) {
                     mAdnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
                     waitForResult(updateRequest);
@@ -274,10 +276,13 @@ public class IccPhoneBookInterfaceManager {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, updateRequest);
             AdnRecord newAdn = generateAdnRecordWithNewTagByContentValues(efid, index, values);
             if (usesPbCache(efid)) {
+                AdnRecord newAdn =
+                        generateAdnRecordWithNewTagByContentValues(IccConstants.EF_ADN, values);
                 mSimPbRecordCache.updateSimPbAdnByRecordId(index, newAdn, response);
                 waitForResult(updateRequest);
                 return (boolean) updateRequest.mResult;
             } else {
+                AdnRecord newAdn = generateAdnRecordWithNewTagByContentValues(0, values);
                 if (mAdnCache != null) {
                     mAdnCache.updateAdnByIndex(efid, newAdn, index, pin2, response);
                     waitForResult(updateRequest);
