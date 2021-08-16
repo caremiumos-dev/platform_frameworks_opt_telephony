@@ -1,0 +1,4 @@
+# Keep public members
+-keep class * {
+public *;
+}
