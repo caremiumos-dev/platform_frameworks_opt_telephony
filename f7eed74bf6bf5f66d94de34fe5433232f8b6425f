@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae872166_c33bee71",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-08-16T22:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f63d148_197bc911",
+      "range": {
+        "startLine": 131,
+        "startChar": 23,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "f7eed74bf6bf5f66d94de34fe5433232f8b6425f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2da7a13_2570a3a1",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-08-16T17:49:29Z",
       "side": 1,
       "message": "Minor. I would keep this a bit larger. This should not be an issue for wearables, where eUICC is unlikely to change frequently, but might be more problematic for low-memory devices. How about 8?",
+      "range": {
+        "startLine": 136,
+        "startChar": 41,
+        "endLine": 136,
+        "endChar": 42
+      },
+      "revId": "f7eed74bf6bf5f66d94de34fe5433232f8b6425f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb4013c_fde40333",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-08-16T22:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2da7a13_2570a3a1",
       "range": {
         "startLine": 136,
         "startChar": 41,
