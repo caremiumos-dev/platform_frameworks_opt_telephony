@@ -1,0 +1,9 @@
+# Keep deprecated GSM SMS API
+-keepclasseswithmembers class android.telephony.gsm.* {
+public *;
+}
+
+# Keep public classes and members
+-keepclasseswithmembers class com.android.internal.telephony.** {
+public *;
+}
