@@ -33,8 +33,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -61,6 +59,7 @@ import android.telephony.UiccAccessRule;
 import android.telephony.UiccSlotInfo;
 import android.telephony.euicc.EuiccManager;
 import android.text.TextUtils;
+import android.util.EventLog;
 import android.util.LocalLog;
 import android.util.Log;
 
@@ -545,9 +544,6 @@ public class SubscriptionController extends ISub.Stub {
                 SubscriptionManager.NUMBER));
         int dataRoaming = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.DATA_ROAMING));
-        // Get the blank bitmap for this SubInfoRecord
-        Bitmap iconBitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                com.android.internal.R.drawable.ic_sim_card_multi_24px_clr);
         String mcc = cursor.getString(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.MCC_STRING));
         String mnc = cursor.getString(cursor.getColumnIndexOrThrow(
@@ -615,10 +611,10 @@ public class SubscriptionController extends ISub.Stub {
             number = line1Number;
         }
         SubscriptionInfo info = new SubscriptionInfo(id, iccId, simSlotIndex, displayName,
-                carrierName, nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc,
-                countryIso, isEmbedded, accessRules, cardId, publicCardId, isOpportunistic,
-                groupUUID, false /* isGroupDisabled */, carrierId, profileClass, subType,
-                groupOwner, carrierConfigAccessRules, areUiccApplicationsEnabled);
+                carrierName, nameSource, iconTint, number, dataRoaming, /* icon= */ null,
+                mcc, mnc, countryIso, isEmbedded, accessRules, cardId, publicCardId,
+                isOpportunistic, groupUUID, /* isGroupDisabled= */ false , carrierId, profileClass,
+                subType, groupOwner, carrierConfigAccessRules, areUiccApplicationsEnabled);
         info.setAssociatedPlmns(ehplmns, hplmns);
         return info;
     }
@@ -919,6 +915,10 @@ public class SubscriptionController extends ISub.Stub {
             subList = getSubInfo(null, null);
             if (subList != null) {
                 if (VDBG) logd("[getAllSubInfoList]- " + subList.size() + " infos return");
+                subList.stream().map(
+                        subscriptionInfo -> conditionallyRemoveIdentifiers(subscriptionInfo,
+                                callingPackage, callingFeatureId, "getAllSubInfoList"))
+                        .collect(Collectors.toList());
             } else {
                 if (VDBG) logd("[getAllSubInfoList]- no info return");
             }
@@ -1079,12 +1079,18 @@ public class SubscriptionController extends ISub.Stub {
     @Override
     public List<SubscriptionInfo> getAvailableSubscriptionInfoList(String callingPackage,
             String callingFeatureId) {
-        // This API isn't public, so no need to provide a valid subscription ID - we're not worried
-        // about carrier-privileged callers not having access.
-        if (!TelephonyPermissions.checkCallingOrSelfReadPhoneState(
-                mContext, SubscriptionManager.INVALID_SUBSCRIPTION_ID, callingPackage,
-                callingFeatureId, "getAvailableSubscriptionInfoList")) {
-            throw new SecurityException("Need READ_PHONE_STATE to call "
+        try {
+            enforceReadPrivilegedPhoneState("getAvailableSubscriptionInfoList");
+        } catch (SecurityException e) {
+            try {
+                mContext.enforceCallingOrSelfPermission(Manifest.permission.READ_PHONE_STATE, null);
+                // If caller doesn't have READ_PRIVILEGED_PHONE_STATE permission but only
+                // has READ_PHONE_STATE permission, log this event.
+                EventLog.writeEvent(0x534e4554, "185235454", Binder.getCallingUid());
+            } catch (SecurityException ex) {
+                // Ignore
+            }
+            throw new SecurityException("Need READ_PRIVILEGED_PHONE_STATE to call "
                     + " getAvailableSubscriptionInfoList");
         }
 
@@ -4210,6 +4216,7 @@ public class SubscriptionController extends ISub.Stub {
         if (!hasIdentifierAccess) {
             result.clearIccId();
             result.clearCardString();
+            result.clearGroupUuid();
         }
         if (!hasPhoneNumberAccess) {
             result.clearNumber();
