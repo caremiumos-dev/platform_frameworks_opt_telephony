@@ -257,6 +257,14 @@ public class SubscriptionInfoUpdater extends Handler {
                 break;
 
             case EVENT_SIM_ABSENT:
+                // The state of removable eSIM card can be absent when removing it from the device,
+                // so we need to trigger the embedded subscriptions update here.
+                cardIds.add(getCardIdFromPhoneId(msg.arg1));
+                updateEmbeddedSubscriptions(cardIds, (hasChanges) -> {
+                    if (hasChanges) {
+                        mSubscriptionController.notifySubscriptionInfoChanged();
+                    }
+                });
                 handleSimAbsent(msg.arg1);
                 break;
 
