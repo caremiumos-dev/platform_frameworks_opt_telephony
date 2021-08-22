@@ -22,8 +22,10 @@ import static com.android.internal.telephony.TelephonyStatsLog.DATA_CALL_SESSION
 import static com.android.internal.telephony.TelephonyStatsLog.DATA_CALL_SESSION__DEACTIVATE_REASON__DEACTIVATE_REASON_UNKNOWN;
 import static com.android.internal.telephony.TelephonyStatsLog.DATA_CALL_SESSION__IP_TYPE__APN_PROTOCOL_IPV4;
 
+import android.annotation.Nullable;
 import android.os.SystemClock;
 import android.telephony.Annotation.ApnType;
+import android.telephony.Annotation.DataFailureCause;
 import android.telephony.Annotation.NetworkType;
 import android.telephony.DataFailCause;
 import android.telephony.ServiceState;
@@ -50,8 +52,7 @@ public class DataCallSessionStats {
 
     private final Phone mPhone;
     private long mStartTime;
-    private boolean mOnRatChangedCalledBeforeSetup = false;
-    DataCallSession mOngoingDataCall;
+    @Nullable private DataCallSession mDataCallSession;
 
     private final PersistAtomsStorage mAtomsStorage =
             PhoneFactory.getMetricsCollector().getAtomsStorage();
@@ -64,22 +65,8 @@ public class DataCallSessionStats {
 
     /** Creates a new ongoing atom when data call is set up. */
     public synchronized void onSetupDataCall(@ApnType int apnTypeBitMask) {
-        if (!mOnRatChangedCalledBeforeSetup) {
-            // there shouldn't be an ongoing data call here, if that's the case, it means that
-            // deactivateDataCall hasn't been processed properly, so we save the previous atom here
-            // and move on to create a new atom.
-            if (mOngoingDataCall != null) {
-                mOngoingDataCall.failureCause = DataFailCause.UNKNOWN;
-                onDataCallDisconnected();
-            }
-            mOngoingDataCall = getDefaultProto(apnTypeBitMask);
-            mStartTime = getTimeMillis();
-        } else {
-            // if onRatChanged was called before onSetupDataCall, the atom is already initialized
-            // but apnTypeBitMask is initialized to 0, so we need to update it
-            mOngoingDataCall.apnTypeBitmask = apnTypeBitMask;
-        }
-        mOnRatChangedCalledBeforeSetup = false;
+        mDataCallSession = getDefaultProto(apnTypeBitMask);
+        mStartTime = getTimeMillis();
     }
 
     /**
@@ -92,89 +79,90 @@ public class DataCallSessionStats {
      * @param failureCause failure cause as per android.telephony.DataFailCause
      */
     public synchronized void onSetupDataCallResponse(
-            DataCallResponse response,
+            @Nullable DataCallResponse response,
             @RilRadioTechnology int radioTechnology,
             @ApnType int apnTypeBitmask,
             @ProtocolType int protocol,
-            int failureCause) {
-        // there should've been another call to initiate the atom,
+            @DataFailureCause int failureCause) {
+        // there should've been a call to onSetupDataCall to initiate the atom,
         // so this method is being called out of order -> no metric will be logged
-        if (mOngoingDataCall == null) {
+        if (mDataCallSession == null) {
             loge("onSetupDataCallResponse: no DataCallSession atom has been initiated.");
             return;
         }
-        mOngoingDataCall.ratAtEnd = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+        mDataCallSession.ratAtEnd = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
 
         // only set if apn hasn't been set during setup
-        if (mOngoingDataCall.apnTypeBitmask == 0) {
-            mOngoingDataCall.apnTypeBitmask = apnTypeBitmask;
+        if (mDataCallSession.apnTypeBitmask == 0) {
+            mDataCallSession.apnTypeBitmask = apnTypeBitmask;
         }
 
-        mOngoingDataCall.ipType = protocol;
-        mOngoingDataCall.failureCause = failureCause;
+        mDataCallSession.ipType = protocol;
+        mDataCallSession.failureCause = failureCause;
         if (response != null) {
-            mOngoingDataCall.suggestedRetryMillis =
+            mDataCallSession.suggestedRetryMillis =
                     (int) Math.min(response.getRetryDurationMillis(), Integer.MAX_VALUE);
+            // If setup has failed, then store the atom
             if (failureCause != DataFailCause.NONE) {
-                mOngoingDataCall.failureCause = failureCause;
-                mOngoingDataCall.setupFailed = true;
-                // set dataCall as inactive
-                mOngoingDataCall.ongoing = false;
-                // store it only if setup has failed
-                mAtomsStorage.addDataCallSession(mOngoingDataCall);
-                mOngoingDataCall = null;
+                mDataCallSession.failureCause = failureCause;
+                mDataCallSession.setupFailed = true;
+                mDataCallSession.ongoing = false;
+                mAtomsStorage.addDataCallSession(mDataCallSession);
+                mDataCallSession = null;
             }
         }
     }
 
     /**
-     * Updates the ongoing dataCall's atom when data call is deactivated.
+     * Updates the dataCall atom when data call is deactivated.
      *
      * @param reason Deactivate reason
      */
     public synchronized void setDeactivateDataCallReason(@DeactivateDataReason int reason) {
         // there should've been another call to initiate the atom,
         // so this method is being called out of order -> no metric will be logged
-        if (mOngoingDataCall == null) {
-            loge("onSetupDataCallResponse: no DataCallSession atom has been initiated.");
+        if (mDataCallSession == null) {
+            loge("setDeactivateDataCallReason: no DataCallSession atom has been initiated.");
             return;
         }
         switch (reason) {
             case DataService.REQUEST_REASON_NORMAL:
-                mOngoingDataCall.deactivateReason =
+                mDataCallSession.deactivateReason =
                         DATA_CALL_SESSION__DEACTIVATE_REASON__DEACTIVATE_REASON_NORMAL;
                 break;
             case DataService.REQUEST_REASON_SHUTDOWN:
-                mOngoingDataCall.deactivateReason =
+                mDataCallSession.deactivateReason =
                         DATA_CALL_SESSION__DEACTIVATE_REASON__DEACTIVATE_REASON_RADIO_OFF;
                 break;
             case DataService.REQUEST_REASON_HANDOVER:
-                mOngoingDataCall.deactivateReason =
+                mDataCallSession.deactivateReason =
                         DATA_CALL_SESSION__DEACTIVATE_REASON__DEACTIVATE_REASON_HANDOVER;
                 break;
             default:
-                mOngoingDataCall.deactivateReason =
+                mDataCallSession.deactivateReason =
                         DATA_CALL_SESSION__DEACTIVATE_REASON__DEACTIVATE_REASON_UNKNOWN;
                 break;
         }
-
-        mOngoingDataCall.oosAtEnd = getIsOos();
     }
 
-    /** Stores the atom when DataConnection reaches DISCONNECTED state. */
-    public synchronized void onDataCallDisconnected() {
+    /** Stores the atom when DataConnection reaches DISCONNECTED state.
+     *  @param failureCause failure cause as per android.telephony.DataFailCause
+     **/
+    public synchronized void onDataCallDisconnected(@DataFailureCause int failureCause) {
         // there should've been another call to initiate the atom,
         // so this method is being called out of order -> no atom will be saved
-        if (mOngoingDataCall == null) {
-            loge("onSetupDataCallResponse: no DataCallSession atom has been initiated.");
+        if (mDataCallSession == null) {
+            loge("onDataCallDisconnected: no DataCallSession atom has been initiated.");
             return;
         }
-        mOngoingDataCall.ongoing = false;
-        mOngoingDataCall.durationMinutes = convertMillisToMinutes(getTimeMillis() - mStartTime);
+        mDataCallSession.failureCause = failureCause;
+        mDataCallSession.oosAtEnd = getIsOos();
+        mDataCallSession.ongoing = false;
+        mDataCallSession.durationMinutes = convertMillisToMinutes(getTimeMillis() - mStartTime);
         // store for the data call list event, after DataCall is disconnected and entered into
         // inactive mode
-        mAtomsStorage.addDataCallSession(mOngoingDataCall);
-        mOngoingDataCall = null;
+        mAtomsStorage.addDataCallSession(mDataCallSession);
+        mDataCallSession = null;
     }
 
     /**
@@ -184,24 +172,19 @@ public class DataCallSessionStats {
      * registration state change.
      */
     public synchronized void onDrsOrRatChanged(@RilRadioTechnology int radioTechnology) {
-        @NetworkType int rat = ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
-        // if no data call is initiated, or we have a new data call while the last one has ended
-        // because onRatChanged might be called before onSetupDataCall
-        if (mOngoingDataCall == null) {
-            mOngoingDataCall = getDefaultProto(0);
-            mOngoingDataCall.ratAtEnd = rat;
-            mStartTime = getTimeMillis();
-            mOnRatChangedCalledBeforeSetup = true;
+        @NetworkType int currentRat =
+                ServiceState.rilRadioTechnologyToNetworkType(radioTechnology);
+        if (mDataCallSession != null
+                && currentRat != TelephonyManager.NETWORK_TYPE_UNKNOWN
+                && mDataCallSession.ratAtEnd != currentRat) {
+            mDataCallSession.ratSwitchCount++;
+            mDataCallSession.ratAtEnd = currentRat;
+            mDataCallSession.bandAtEnd = ServiceStateStats.getBand(mPhone, currentRat);
         }
-        if (rat != TelephonyManager.NETWORK_TYPE_UNKNOWN && mOngoingDataCall.ratAtEnd != rat) {
-            mOngoingDataCall.ratSwitchCount++;
-            mOngoingDataCall.ratAtEnd = rat;
-        }
-        mOngoingDataCall.bandAtEnd = ServiceStateStats.getBand(mPhone, rat);
     }
 
     private static long convertMillisToMinutes(long millis) {
-        return Math.round(millis / 60000);
+        return Math.round(millis / 60000.0);
     }
 
     /** Creates a proto for a normal {@code DataCallSession} with default values. */

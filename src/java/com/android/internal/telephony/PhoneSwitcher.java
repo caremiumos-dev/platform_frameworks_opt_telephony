@@ -282,7 +282,7 @@ public class PhoneSwitcher extends Handler {
 
     protected RadioConfig mRadioConfig;
 
-    private final static int MAX_LOCAL_LOG_LINES = 30;
+    private static final int MAX_LOCAL_LOG_LINES = 32;
 
     // Default timeout value of network validation in millisecond.
     private final static int DEFAULT_VALIDATION_EXPIRATION_TIME = 2000;
@@ -433,8 +433,7 @@ public class PhoneSwitcher extends Handler {
         NetworkFactory networkFactory = new PhoneSwitcherNetworkRequestListener(looper, context,
                 builder.build(), this);
         // we want to see all requests
-        networkFactory.setScoreFilter(101);
-        networkFactory.register();
+        networkFactory.registerIgnoringScore();
 
         updateHalCommandToUse();
 
@@ -707,10 +706,13 @@ public class PhoneSwitcher extends Handler {
 
         mPhoneSubscriptions = copyOf(mPhoneSubscriptions, mActiveModemCount);
         mPhoneStates = copyOf(mPhoneStates, mActiveModemCount);
-        //clear the list in case of multisim config change
-        mCurrentDdsSwitchFailure.clear();
 
-        // Single SIM -> dual SIM switch.
+        // Dual SIM -> Single SIM switch.
+        for (int phoneId = oldActiveModemCount - 1; phoneId >= mActiveModemCount; phoneId--) {
+            mCurrentDdsSwitchFailure.remove(phoneId);
+        }
+
+        // Single SIM -> Dual SIM switch.
         for (int phoneId = oldActiveModemCount; phoneId < mActiveModemCount; phoneId++) {
             mPhoneStates[phoneId] = new PhoneState();
             Phone phone = PhoneFactory.getPhone(phoneId);

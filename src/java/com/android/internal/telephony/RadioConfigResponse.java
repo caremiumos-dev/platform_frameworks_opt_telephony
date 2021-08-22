@@ -19,7 +19,9 @@ package com.android.internal.telephony;
 import static android.telephony.TelephonyManager.CAPABILITY_ALLOWED_NETWORK_TYPES_USED;
 import static android.telephony.TelephonyManager
         .CAPABILITY_NR_DUAL_CONNECTIVITY_CONFIGURATION_AVAILABLE;
+import static android.telephony.TelephonyManager.CAPABILITY_PHYSICAL_CHANNEL_CONFIG_1_6_SUPPORTED;
 import static android.telephony.TelephonyManager.CAPABILITY_SECONDARY_LINK_BANDWIDTH_VISIBLE;
+import static android.telephony.TelephonyManager.CAPABILITY_SIM_PHONEBOOK_IN_MODEM;
 import static android.telephony.TelephonyManager.CAPABILITY_THERMAL_MITIGATION_DATA_THROTTLING;
 import static android.telephony.TelephonyManager.RadioInterfaceCapability;
 
@@ -132,7 +134,6 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
         // TODO b/121394331: clean up V1_1.PhoneCapability fields.
         int maxActiveVoiceCalls = 0;
         int maxActiveData = phoneCapability.maxActiveData;
-        int max5G = 0;
         boolean validationBeforeSwitchSupported = phoneCapability.isInternetLingeringSupported;
         List<ModemInfo> logicalModemList = new ArrayList();
 
@@ -141,8 +142,8 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
             logicalModemList.add(new ModemInfo(modemInfo.modemId));
         }
 
-        return new PhoneCapability(maxActiveVoiceCalls, maxActiveData, max5G, logicalModemList,
-                validationBeforeSwitchSupported);
+        return new PhoneCapability(maxActiveVoiceCalls, maxActiveData, logicalModemList,
+                validationBeforeSwitchSupported, mRadioConfig.getDeviceNrCapabilities());
     }
     /**
      * Response function for IRadioConfig.getPhoneCapability().
@@ -308,6 +309,10 @@ public class RadioConfigResponse extends IRadioConfigResponse.Stub {
                 Rlog.d(TAG, "CAPABILITY_NR_DUAL_CONNECTIVITY_CONFIGURATION_AVAILABLE");
                 caps.add(CAPABILITY_THERMAL_MITIGATION_DATA_THROTTLING);
                 Rlog.d(TAG, "CAPABILITY_THERMAL_MITIGATION_DATA_THROTTLING");
+                caps.add(CAPABILITY_SIM_PHONEBOOK_IN_MODEM);
+                Rlog.d(TAG, "CAPABILITY_SIM_PHONEBOOK_IN_MODEM");
+                caps.add(CAPABILITY_PHYSICAL_CHANNEL_CONFIG_1_6_SUPPORTED);
+                Rlog.d(TAG, "CAPABILITY_PHYSICAL_CHANNEL_CONFIG_1_6_SUPPORTED");
             }
         }
         return caps;

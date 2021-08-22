@@ -44,6 +44,7 @@ import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.os.PowerManager;
@@ -62,6 +63,7 @@ import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.Annotation.RadioPowerState;
 import android.telephony.BarringInfo;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellIdentity;
@@ -96,6 +98,7 @@ import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhoneMmiCode;
+import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.metrics.VoiceCallSessionStats;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
@@ -263,6 +266,7 @@ public class GsmCdmaPhone extends Phone {
     private final SettingsObserver mSettingsObserver;
 
     private final ImsManagerFactory mImsManagerFactory;
+    private final CarrierPrivilegesTracker mCarrierPrivilegesTracker;
 
     // Constructors
 
@@ -327,6 +331,7 @@ public class GsmCdmaPhone extends Phone {
 
         mCarrierResolver = mTelephonyComponentFactory.inject(CarrierResolver.class.getName())
                 .makeCarrierResolver(this);
+        mCarrierPrivilegesTracker = new CarrierPrivilegesTracker(Looper.myLooper(), this, context);
 
         getCarrierActionAgent().registerForCarrierAction(
                 CarrierActionAgent.CARRIER_ACTION_SET_METERED_APNS_ENABLED, this,
@@ -1049,6 +1054,11 @@ public class GsmCdmaPhone extends Phone {
         return mCT.mRingingCall;
     }
 
+    @Override
+    public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
+        return mCarrierPrivilegesTracker;
+    }
+
     /**
      * ImsService reports "IN_SERVICE" for its voice registration state even if the device
      * has lost the physical link to the tower. This helper method merges the IMS and modem
@@ -1387,7 +1397,11 @@ public class GsmCdmaPhone extends Phone {
                     + ((imsPhone != null) ? imsPhone.getServiceState().getState() : "N/A"));
         }
 
-        Phone.checkWfcWifiOnlyModeBeforeDial(mImsPhone, mPhoneId, mContext);
+        // Bypass WiFi Only WFC check if this is an emergency call - we should still try to
+        // place over cellular if possible.
+        if (!isEmergency) {
+            Phone.checkWfcWifiOnlyModeBeforeDial(mImsPhone, mPhoneId, mContext);
+        }
         if (imsPhone != null && !allowWpsOverIms && !useImsForCall && isWpsCall
                 && imsPhone.getCallTracker() instanceof ImsPhoneCallTracker) {
             logi("WPS call placed over CS; disconnecting all IMS calls..");
@@ -1661,6 +1675,16 @@ public class GsmCdmaPhone extends Phone {
                 mCi.sendBurstDtmf(dtmfString, on, off, onComplete);
             }
         }
+    }
+
+    @Override
+    public void setRadioPowerOnForTestEmergencyCall(boolean isSelectedPhoneForEmergencyCall) {
+        mSST.clearAllRadioOffReasons();
+
+        // We don't want to have forEmergency call be true to prevent radio emergencyDial command
+        // from being called for a test emergency number because the network may not be able to
+        // find emergency routing for it and dial it do the default emergency services line.
+        setRadioPower(true, false, isSelectedPhoneForEmergencyCall, false);
     }
 
     @Override
@@ -2763,8 +2787,10 @@ public class GsmCdmaPhone extends Phone {
     }
 
     private void handleRadioPowerStateChange() {
-        Rlog.d(LOG_TAG, "handleRadioPowerStateChange, state= " + mCi.getRadioState());
-        mNotifier.notifyRadioPowerStateChanged(this, mCi.getRadioState());
+        @RadioPowerState int newState = mCi.getRadioState();
+        Rlog.d(LOG_TAG, "handleRadioPowerStateChange, state= " + newState);
+        mNotifier.notifyRadioPowerStateChanged(this, newState);
+        TelephonyMetrics.getInstance().writeRadioState(mPhoneId, newState);
     }
 
     @Override
@@ -2874,8 +2900,6 @@ public class GsmCdmaPhone extends Phone {
                 break;
 
             case EVENT_CARRIER_CONFIG_CHANGED:
-                // Obtain new radio capabilities from the modem, since some are SIM-dependent
-                mCi.getRadioCapability(obtainMessage(EVENT_GET_RADIO_CAPABILITY));
                 // Only check for the voice radio tech if it not going to be updated by the voice
                 // registration changes.
                 if (!mContext.getResources().getBoolean(
@@ -2894,7 +2918,8 @@ public class GsmCdmaPhone extends Phone {
 
                 updateNrSettingsAfterCarrierConfigChanged(b);
                 loadAllowedNetworksFromSubscriptionDatabase();
-                updateAllowedNetworkTypes(null);
+                // Obtain new radio capabilities from the modem, since some are SIM-dependent
+                mCi.getRadioCapability(obtainMessage(EVENT_GET_RADIO_CAPABILITY));
                 break;
 
             case EVENT_SET_ROAMING_PREFERENCE_DONE:
@@ -4035,13 +4060,19 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(
-            int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
+    public void setSignalStrengthReportingCriteria(int signalStrengthMeasure,
+            int[] systemThresholds, int ran, boolean isEnabledForSystem) {
         int[] consolidatedThresholds = mSST.getConsolidatedSignalThresholds(
                 ran,
                 signalStrengthMeasure,
-                mSST.shouldHonorSystemThresholds() ? thresholds : new int[]{},
+                isEnabledForSystem && mSST.shouldHonorSystemThresholds() ? systemThresholds
+                        : new int[]{},
                 REPORTING_HYSTERESIS_DB);
+        boolean isEnabledForAppRequest = mSST.shouldEnableSignalThresholdForAppRequest(
+                ran,
+                signalStrengthMeasure,
+                getSubId(),
+                isDeviceIdle());
         mCi.setSignalStrengthReportingCriteria(
                 new SignalThresholdInfo.Builder()
                         .setRadioAccessNetworkType(ran)
@@ -4049,7 +4080,7 @@ public class GsmCdmaPhone extends Phone {
                         .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
                         .setHysteresisDb(REPORTING_HYSTERESIS_DB)
                         .setThresholds(consolidatedThresholds, true /*isSystem*/)
-                        .setIsEnabled(isEnabled)
+                        .setIsEnabled(isEnabledForSystem || isEnabledForAppRequest)
                         .build(),
                 ran, null);
     }

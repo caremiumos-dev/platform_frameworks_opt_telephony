@@ -82,6 +82,8 @@ public class MultiSimSettingController extends Handler {
     private static final int EVENT_DEFAULT_DATA_SUBSCRIPTION_CHANGED = 6;
     private static final int EVENT_CARRIER_CONFIG_CHANGED            = 7;
     private static final int EVENT_MULTI_SIM_CONFIG_CHANGED          = 8;
+    @VisibleForTesting
+    public static final int EVENT_RADIO_STATE_CHANGED                = 9;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(prefix = {"PRIMARY_SUB_"},
@@ -294,6 +296,16 @@ public class MultiSimSettingController extends Handler {
             case EVENT_MULTI_SIM_CONFIG_CHANGED:
                 int activeModems = (int) ((AsyncResult) msg.obj).result;
                 onMultiSimConfigChanged(activeModems);
+                break;
+            case EVENT_RADIO_STATE_CHANGED:
+                for (Phone phone : PhoneFactory.getPhones()) {
+                    if (phone.mCi.getRadioState() == TelephonyManager.RADIO_POWER_UNAVAILABLE) {
+                        if (DBG) log("Radio unavailable. Clearing sub info initialized flag.");
+                        mSubInfoInitialized = false;
+                        break;
+                    }
+                }
+                break;
         }
     }
 
@@ -329,13 +341,18 @@ public class MultiSimSettingController extends Handler {
     }
 
     /**
-     * Upon initialization, update defaults and mobile data enabling.
+     * Upon initialization or radio available, update defaults and mobile data enabling.
      * Should only be triggered once.
      */
     private void onAllSubscriptionsLoaded() {
-        if (DBG) log("onAllSubscriptionsLoaded");
-        mSubInfoInitialized = true;
-        reEvaluateAll();
+        if (DBG) log("onAllSubscriptionsLoaded: mSubInfoInitialized=" + mSubInfoInitialized);
+        if (!mSubInfoInitialized) {
+            mSubInfoInitialized = true;
+            for (Phone phone : PhoneFactory.getPhones()) {
+                phone.mCi.registerForRadioStateChanged(this, EVENT_RADIO_STATE_CHANGED, null);
+            }
+            reEvaluateAll();
+        }
     }
 
     /**
@@ -424,14 +441,22 @@ public class MultiSimSettingController extends Handler {
         for (int phoneId = activeModems; phoneId < mCarrierConfigLoadedSubIds.length; phoneId++) {
             mCarrierConfigLoadedSubIds[phoneId] = INVALID_SUBSCRIPTION_ID;
         }
+        for (Phone phone : PhoneFactory.getPhones()) {
+            phone.mCi.registerForRadioStateChanged(this, EVENT_RADIO_STATE_CHANGED, null);
+        }
     }
 
     /**
-     * Wait for subInfo initialization (after boot up) and carrier config load for all active
-     * subscriptions before re-evaluate multi SIM settings.
+     * Wait for subInfo initialization (after boot up or radio unavailable) and carrier config load
+     * for all active subscriptions before re-evaluate multi SIM settings.
      */
     private boolean isReadyToReevaluate() {
-        return mSubInfoInitialized && isCarrierConfigLoadedForAllSub();
+        boolean carrierConfigsLoaded = isCarrierConfigLoadedForAllSub();
+        if (DBG) {
+            log("isReadyToReevaluate: subInfoInitialized=" + mSubInfoInitialized
+                    + ", carrierConfigsLoaded=" + carrierConfigsLoaded);
+        }
+        return mSubInfoInitialized && carrierConfigsLoaded;
     }
 
     private void reEvaluateAll() {

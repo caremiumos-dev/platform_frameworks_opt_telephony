@@ -104,7 +104,7 @@ public class ApnContext {
      * @param priority Priority of APN type
      */
     public ApnContext(Phone phone, int typeId, String logTag, DcTracker tracker, int priority) {
-        this(phone, ApnSetting.getApnTypeStringInternal(typeId), logTag, tracker, priority);
+        this(phone, ApnSetting.getApnTypeString(typeId), logTag, tracker, priority);
     }
 
     /**
@@ -394,9 +394,9 @@ public class ApnContext {
         }
     }
 
-    private final LocalLog mLocalLog = new LocalLog(150);
+    private final LocalLog mLocalLog = new LocalLog(128);
     private final ArraySet<NetworkRequest> mNetworkRequests = new ArraySet<>();
-    private final LocalLog mStateLocalLog = new LocalLog(50);
+    private final LocalLog mStateLocalLog = new LocalLog(32);
 
     public void requestLog(String str) {
         synchronized (mLocalLog) {

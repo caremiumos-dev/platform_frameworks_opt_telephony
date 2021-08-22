@@ -64,6 +64,8 @@ import android.provider.DeviceConfig;
 import android.provider.Settings;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
+import android.telephony.CellIdentity;
+import android.telephony.CellLocation;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -323,6 +325,10 @@ public abstract class TelephonyTest {
     protected PinStorage mPinStorage;
     @Mock
     protected LocationManager mLocationManager;
+    @Mock
+    protected CellIdentity mCellIdentity;
+    @Mock
+    protected CellLocation mCellLocation;
 
     protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
@@ -564,6 +570,8 @@ public abstract class TelephonyTest {
         doReturn(mSmsStats).when(mPhone).getSmsStats();
         doReturn(mImsStats).when(mImsPhone).getImsStats();
         mIccSmsInterfaceManager.mDispatchersController = mSmsDispatchersController;
+        doReturn(mCellIdentity).when(mPhone).getCurrentCellIdentity();
+        doReturn(mCellLocation).when(mCellIdentity).asCellLocation();
 
         //mUiccController
         doReturn(mUiccCardApplication3gpp).when(mUiccController).getUiccCardApplication(anyInt(),
@@ -900,6 +908,19 @@ public abstract class TelephonyTest {
         doReturn(hasCarrierPrivileges ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS
                 : TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS).when(
                 mockTelephonyManager).getCarrierPrivilegeStatus(anyInt());
+    }
+
+    protected final void waitForDelayedHandlerAction(Handler h, long delayMillis,
+            long timeoutMillis) {
+        final CountDownLatch lock = new CountDownLatch(1);
+        h.postDelayed(lock::countDown, delayMillis);
+        while (lock.getCount() > 0) {
+            try {
+                lock.await(delayMillis + timeoutMillis, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+        }
     }
 
     protected final void waitForHandlerAction(Handler h, long timeoutMillis) {

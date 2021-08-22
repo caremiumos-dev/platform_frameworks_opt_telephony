@@ -68,6 +68,8 @@ import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UICC_SUBSCRI
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_UNTHROTTLE_APN;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOL_VOICE_RADIO_TECH_CHANGED;
 import static com.android.internal.telephony.RILConstants.RIL_UNSOl_CDMA_PRL_CHANGED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_SIM_PHONEBOOK_RECORDS_RECEIVED;
+import static com.android.internal.telephony.RILConstants.RIL_UNSOL_RESPONSE_SIM_PHONEBOOK_CHANGED;
 
 import android.hardware.radio.V1_0.CdmaCallWaiting;
 import android.hardware.radio.V1_0.CdmaInformationRecord;
@@ -114,8 +116,10 @@ import com.android.internal.telephony.cdma.SmsMessageConverter;
 import com.android.internal.telephony.dataconnection.KeepaliveStatus;
 import com.android.internal.telephony.gsm.SsData;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
+import com.android.internal.telephony.uicc.ReceivedPhonebookRecords;
 import com.android.internal.telephony.uicc.IccRefreshResponse;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.uicc.SimPhonebookRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1078,18 +1082,39 @@ public class RadioIndication extends IRadioIndication.Stub {
      * @param indicationType RadioIndicationType
      */
     public void simPhonebookChanged(int indicationType) {
+        mRil.processIndication(indicationType);
 
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLog(RIL_UNSOL_RESPONSE_SIM_PHONEBOOK_CHANGED);
+        }
+
+        mRil.mSimPhonebookChangedRegistrants.notifyRegistrants();
     }
 
     /**
-     * Indicates the content of all the used records in the SIM phonebook.
-     *
+     * Indicates the content of all the used records in the SIM phonebook..
      * @param indicationType RadioIndicationType
      * @param records Content of the SIM phonebook records
      */
     public void simPhonebookRecordsReceived(int indicationType, byte status,
             ArrayList<PhonebookRecordInfo> records) {
+        mRil.processIndication(indicationType);
 
+        List<SimPhonebookRecord> simPhonebookRecords = new ArrayList<SimPhonebookRecord>();
+
+        for (PhonebookRecordInfo record : records) {
+            simPhonebookRecords.add(new SimPhonebookRecord(record));
+        }
+
+        if (RIL.RILJ_LOGD) {
+            mRil.unsljLogRet(RIL_UNSOL_RESPONSE_SIM_PHONEBOOK_RECORDS_RECEIVED,
+                    "status = " + status +
+                    " received " + records.size() + " records");
+        }
+
+        mRil.mSimPhonebookRecordsReceivedRegistrants.notifyRegistrants(
+                new AsyncResult(null,
+                new ReceivedPhonebookRecords(status, simPhonebookRecords), null));
     }
 
     /**
@@ -1107,8 +1132,8 @@ public class RadioIndication extends IRadioIndication.Stub {
             @NetworkRegistrationInfo.Domain int domain,
             int causeCode, int additionalCauseCode) {
         mRil.processIndication(indicationType);
-
-        if (cellIdentity == null
+        CellIdentity ci = CellIdentity.create(cellIdentity);
+        if (ci == null
                 || TextUtils.isEmpty(chosenPlmn)
                 || (domain & NetworkRegistrationInfo.DOMAIN_CS_PS) == 0
                 || (domain & ~NetworkRegistrationInfo.DOMAIN_CS_PS) != 0
@@ -1121,8 +1146,6 @@ public class RadioIndication extends IRadioIndication.Stub {
             mRil.riljLoge("Invalid registrationFailed indication");
             return;
         }
-
-        CellIdentity ci = CellIdentity.create(cellIdentity);
 
         mRil.mRegistrationFailedRegistrant.notifyRegistrant(
                 new AsyncResult(
@@ -1250,46 +1273,56 @@ public class RadioIndication extends IRadioIndication.Stub {
 
     private void physicalChannelConfigsIndication(List<? extends Object> configs) {
         List<PhysicalChannelConfig> response = new ArrayList<>(configs.size());
-        for (Object obj : configs) {
-            if (obj instanceof android.hardware.radio.V1_2.PhysicalChannelConfig) {
-                android.hardware.radio.V1_2.PhysicalChannelConfig config =
-                        (android.hardware.radio.V1_2.PhysicalChannelConfig) obj;
+        try {
+            for (Object obj : configs) {
+                if (obj instanceof android.hardware.radio.V1_2.PhysicalChannelConfig) {
+                    android.hardware.radio.V1_2.PhysicalChannelConfig config =
+                            (android.hardware.radio.V1_2.PhysicalChannelConfig) obj;
 
-                response.add(new PhysicalChannelConfig.Builder()
-                        .setCellConnectionStatus(
-                                convertConnectionStatusFromCellConnectionStatus(config.status))
-                        .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlink)
-                        .build());
-            } else if (obj instanceof android.hardware.radio.V1_4.PhysicalChannelConfig) {
-                android.hardware.radio.V1_4.PhysicalChannelConfig config =
-                        (android.hardware.radio.V1_4.PhysicalChannelConfig) obj;
-                PhysicalChannelConfig.Builder builder = new PhysicalChannelConfig.Builder();
-                setFrequencyRangeOrChannelNumber(builder, config);
-                response.add(builder.setCellConnectionStatus(
-                        convertConnectionStatusFromCellConnectionStatus(config.base.status))
-                        .setCellBandwidthDownlinkKhz(config.base.cellBandwidthDownlink)
-                        .setNetworkType(ServiceState.rilRadioTechnologyToNetworkType(config.rat))
-                        .setPhysicalCellId(config.physicalCellId)
-                        .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
-                        .build());
-            } else if (obj instanceof android.hardware.radio.V1_6.PhysicalChannelConfig) {
-                android.hardware.radio.V1_6.PhysicalChannelConfig config =
-                        (android.hardware.radio.V1_6.PhysicalChannelConfig) obj;
-                PhysicalChannelConfig.Builder builder = new PhysicalChannelConfig.Builder();
-                setBandToBuilder(builder, config);
-                response.add(builder.setCellConnectionStatus(
-                        convertConnectionStatusFromCellConnectionStatus(config.status))
-                        .setDownlinkChannelNumber(config.downlinkChannelNumber)
-                        .setUplinkChannelNumber(config.uplinkChannelNumber)
-                        .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlinkKhz)
-                        .setCellBandwidthUplinkKhz(config.cellBandwidthUplinkKhz)
-                        .setNetworkType(ServiceState.rilRadioTechnologyToNetworkType(config.rat))
-                        .setPhysicalCellId(config.physicalCellId)
-                        .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
-                        .build());
-            } else {
-                mRil.riljLoge("Unsupported PhysicalChannelConfig " + obj);
+                    response.add(new PhysicalChannelConfig.Builder()
+                            .setCellConnectionStatus(
+                                    convertConnectionStatusFromCellConnectionStatus(config.status))
+                            .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlink)
+                            .build());
+                } else if (obj instanceof android.hardware.radio.V1_4.PhysicalChannelConfig) {
+                    android.hardware.radio.V1_4.PhysicalChannelConfig config =
+                            (android.hardware.radio.V1_4.PhysicalChannelConfig) obj;
+                    PhysicalChannelConfig.Builder builder = new PhysicalChannelConfig.Builder();
+                    setFrequencyRangeOrChannelNumber(builder, config);
+                    response.add(builder.setCellConnectionStatus(
+                            convertConnectionStatusFromCellConnectionStatus(config.base.status))
+                            .setCellBandwidthDownlinkKhz(config.base.cellBandwidthDownlink)
+                            .setNetworkType(
+                                    ServiceState.rilRadioTechnologyToNetworkType(config.rat))
+                            .setPhysicalCellId(config.physicalCellId)
+                            .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
+                            .build());
+                } else if (obj instanceof android.hardware.radio.V1_6.PhysicalChannelConfig) {
+                    android.hardware.radio.V1_6.PhysicalChannelConfig config =
+                            (android.hardware.radio.V1_6.PhysicalChannelConfig) obj;
+                    PhysicalChannelConfig.Builder builder = new PhysicalChannelConfig.Builder();
+                    setBandToBuilder(builder, config);
+                    response.add(builder.setCellConnectionStatus(
+                            convertConnectionStatusFromCellConnectionStatus(config.status))
+                            .setDownlinkChannelNumber(config.downlinkChannelNumber)
+                            .setUplinkChannelNumber(config.uplinkChannelNumber)
+                            .setCellBandwidthDownlinkKhz(config.cellBandwidthDownlinkKhz)
+                            .setCellBandwidthUplinkKhz(config.cellBandwidthUplinkKhz)
+                            .setNetworkType(
+                                    ServiceState.rilRadioTechnologyToNetworkType(config.rat))
+                            .setPhysicalCellId(config.physicalCellId)
+                            .setContextIds(config.contextIds.stream().mapToInt(x -> x).toArray())
+                            .build());
+                } else {
+                    mRil.riljLoge("Unsupported PhysicalChannelConfig " + obj);
+                }
             }
+        } catch (IllegalArgumentException iae) {
+            AnomalyReporter.reportAnomaly(
+                    UUID.fromString("918f0970-9aa9-4bcd-a28e-e49a83fe77d5"),
+                    "Invalid PhysicalChannelConfig reported by HAL");
+            mRil.riljLoge("Invalid PhysicalChannelConfig " + iae);
+            return;
         }
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_PHYSICAL_CHANNEL_CONFIG, response);
