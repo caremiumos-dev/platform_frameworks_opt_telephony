@@ -22,6 +22,30 @@
       },
       "revId": "7689812edd5392b85825a553973a6b42acb8426e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e81761_c1bfb212",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-08-26T17:42:50Z",
+      "side": 1,
+      "message": "I was thinking to limit the scope of the change, but it seems that at the moment it does no harm to include both IMS and CS.",
+      "parentUuid": "787543a1_e16be621",
+      "range": {
+        "startLine": 419,
+        "startChar": 12,
+        "endLine": 419,
+        "endChar": 78
+      },
+      "revId": "7689812edd5392b85825a553973a6b42acb8426e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
