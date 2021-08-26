@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787543a1_e16be621",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-08-26T16:50:50Z",
+      "side": 1,
+      "message": "Minor. Is this condition needed? I\u0027m wondering if something might change in future leading to also IMS calls to similar situation. What do you think?",
+      "range": {
+        "startLine": 419,
+        "startChar": 12,
+        "endLine": 419,
+        "endChar": 78
+      },
+      "revId": "7689812edd5392b85825a553973a6b42acb8426e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
