@@ -1542,6 +1542,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             mUssdMethod = carrierConfig.getInt(CarrierConfigManager.KEY_CARRIER_USSD_METHOD_INT);
         }
 
+        if (!mImsReasonCodeMap.isEmpty()) {
+            mImsReasonCodeMap.clear();
+        }
         String[] mappings = carrierConfig
                 .getStringArray(CarrierConfigManager.KEY_IMS_REASONINFO_MAPPING_STRING_ARRAY);
         if (mappings != null && mappings.length > 0) {
@@ -1566,7 +1569,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
                     addReasonCodeRemapping(fromCode, message, toCode);
                     log("Loaded ImsReasonInfo mapping : fromCode = " +
-                            fromCode == null ? "any" : fromCode + " ; message = " +
+                            (fromCode == null ? "any" : fromCode) + " ; message = " +
                             message + " ; toCode = " + toCode);
                 } catch (NumberFormatException nfe) {
                     loge("Invalid ImsReasonInfo mapping found: " + mapping);
@@ -1574,9 +1577,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             }
         } else {
             log("No carrier ImsReasonInfo mappings defined.");
-            if (!mImsReasonCodeMap.isEmpty()) {
-                mImsReasonCodeMap.clear();
-            }
         }
     }
 
@@ -2665,6 +2665,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 + reason);
         Pair<Integer, String> toCheck = new Pair<>(code, reason);
         Pair<Integer, String> wildcardToCheck = new Pair<>(null, reason);
+        Pair<Integer, String> wildcardMessageToCheck = new Pair<>(code, "*");
         if (mImsReasonCodeMap.containsKey(toCheck)) {
             int toCode = mImsReasonCodeMap.get(toCheck);
 
@@ -2680,6 +2681,19 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             log("maybeRemapReasonCode : fromCode(wildcard) = " + reasonInfo.getCode() +
                     " ; message = " + reason + " ; toCode = " + toCode);
+            return toCode;
+        }
+        else if (mImsReasonCodeMap.containsKey(wildcardMessageToCheck)) {
+            // Handle the case where a wildcard is specified for the reason.
+            // For example, we can set these two strings in
+            // CarrierConfigManager.KEY_IMS_REASONINFO_MAPPING_STRING_ARRAY:
+            //   - "1014|call completed elsewhere|1014"
+            //   - "1014|*|510"
+            // to remap CODE_ANSWERED_ELSEWHERE to CODE_USER_TERMINATED_BY_REMOTE
+            // when reason is NOT "call completed elsewhere".
+            int toCode = mImsReasonCodeMap.get(wildcardMessageToCheck);
+            log("maybeRemapReasonCode : fromCode = " + reasonInfo.getCode() +
+                    " ; message(wildcard) = " + reason + " ; toCode = " + toCode);
             return toCode;
         }
         return code;
@@ -3128,7 +3142,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                     getNetworkCountryIso(), emergencyNumberTracker != null
                     ? emergencyNumberTracker.getEmergencyNumberDbVersion()
                     : TelephonyManager.INVALID_EMERGENCY_NUMBER_DB_VERSION);
-            mPhone.getVoiceCallSessionStats().onImsCallTerminated(conn, reasonInfo);
+            mPhone.getVoiceCallSessionStats().onImsCallTerminated(conn, new ImsReasonInfo(
+                    maybeRemapReasonCode(reasonInfo),
+                    reasonInfo.mExtraCode, reasonInfo.mExtraMessage));
             // Remove info for the callId from the current calls and add it to the history
             CallQualityMetrics lastCallMetrics = mCallQualityMetrics.remove(callId);
             if (lastCallMetrics != null) {
