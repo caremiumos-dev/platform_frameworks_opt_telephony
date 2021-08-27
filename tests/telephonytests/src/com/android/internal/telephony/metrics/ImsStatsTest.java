@@ -76,6 +76,7 @@ public class ImsStatsTest extends TelephonyTest {
     @Mock private UiccSlot mPhysicalSlot1;
     @Mock private Phone mSecondPhone;
     @Mock private ImsPhone mSecondImsPhone;
+    @Mock private ServiceStateStats mServiceStateStats;
 
     private TestableImsStats mImsStats;
 
@@ -109,6 +110,7 @@ public class ImsStatsTest extends TelephonyTest {
         doReturn(CARRIER1_ID).when(mPhone).getCarrierId();
         doReturn(mImsPhone).when(mPhone).getImsPhone();
         doReturn(mSST).when(mImsPhone).getServiceStateTracker();
+        doReturn(mServiceStateStats).when(mSST).getServiceStateStats();
 
         // WWAN PS RAT is LTE
         doReturn(
@@ -338,6 +340,7 @@ public class ImsStatsTest extends TelephonyTest {
         assertEquals(0L, stats.smsCapableMillis);
         assertEquals(0L, stats.smsAvailableMillis);
         verifyNoMoreInteractions(mPersistAtomsStorage);
+        verify(mServiceStateStats).onImsVoiceRegistrationChanged();
     }
 
     @Test
@@ -721,5 +724,62 @@ public class ImsStatsTest extends TelephonyTest {
         assertEquals(999, termination.extraCode);
         assertEquals("Timeout", termination.extraMessage);
         verifyNoMoreInteractions(mPersistAtomsStorage);
+    }
+
+    @Test
+    @SmallTest
+    public void getImsVoiceRadioTech_noRegistration() throws Exception {
+        // Do nothing
+
+        assertEquals(TelephonyManager.NETWORK_TYPE_UNKNOWN, mImsStats.getImsVoiceRadioTech());
+    }
+
+    @Test
+    @SmallTest
+    public void getImsVoiceRadioTech_noVoiceRegistration() throws Exception {
+        mImsStats.onImsRegistered(TRANSPORT_TYPE_WWAN);
+        mImsStats.onImsCapabilitiesChanged(
+                REGISTRATION_TECH_LTE, new MmTelCapabilities(CAPABILITY_TYPE_SMS));
+
+        assertEquals(TelephonyManager.NETWORK_TYPE_UNKNOWN, mImsStats.getImsVoiceRadioTech());
+    }
+
+    @Test
+    @SmallTest
+    public void getImsVoiceRadioTech_cellularRegistration() throws Exception {
+        mImsStats.onImsRegistered(TRANSPORT_TYPE_WWAN);
+        mImsStats.onImsCapabilitiesChanged(
+                REGISTRATION_TECH_LTE, new MmTelCapabilities(CAPABILITY_TYPE_VOICE));
+
+        assertEquals(TelephonyManager.NETWORK_TYPE_LTE, mImsStats.getImsVoiceRadioTech());
+    }
+
+    @Test
+    @SmallTest
+    public void getImsVoiceRadioTech_wifiRegistration() throws Exception {
+        mImsStats.onImsRegistered(TRANSPORT_TYPE_WLAN);
+        mImsStats.onImsCapabilitiesChanged(
+                REGISTRATION_TECH_IWLAN, new MmTelCapabilities(CAPABILITY_TYPE_VOICE));
+
+        assertEquals(TelephonyManager.NETWORK_TYPE_IWLAN, mImsStats.getImsVoiceRadioTech());
+    }
+
+    @Test
+    @SmallTest
+    public void getImsVoiceRadioTech_unregistered() throws Exception {
+        mImsStats.onImsRegistered(TRANSPORT_TYPE_WWAN);
+        mImsStats.onImsCapabilitiesChanged(
+                REGISTRATION_TECH_LTE, new MmTelCapabilities(CAPABILITY_TYPE_VOICE));
+        mImsStats.onImsUnregistered(
+                new ImsReasonInfo(ImsReasonInfo.CODE_REGISTRATION_ERROR, 999, "Timeout"));
+        doReturn(
+                        new NetworkRegistrationInfo.Builder()
+                                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_UMTS)
+                                .build())
+                .when(mServiceState)
+                .getNetworkRegistrationInfo(DOMAIN_PS, TRANSPORT_TYPE_WWAN);
+
+
+        assertEquals(TelephonyManager.NETWORK_TYPE_UNKNOWN, mImsStats.getImsVoiceRadioTech());
     }
 }

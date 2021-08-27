@@ -35,8 +35,6 @@ import android.os.SystemClock;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.Annotation.NetworkType;
-import android.telephony.NetworkRegistrationInfo;
-import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ProvisioningManager;
@@ -269,6 +267,9 @@ public class ImsStats {
             mLastRegistrationStats.rat = convertRegistrationTechToNetworkType(radioTech);
         }
         mLastAvailableFeatures = capabilities;
+
+        mPhone.getDefaultPhone().getServiceStateTracker().getServiceStateStats()
+                .onImsVoiceRegistrationChanged();
     }
 
     /** Updates the stats when capable features changed. */
@@ -335,6 +336,20 @@ public class ImsStats {
         mLastAvailableFeatures = new MmTelCapabilities();
     }
 
+    /**
+     * Returns the current RAT used for IMS voice registration, or {@link
+     * TelephonyManager#NETWORK_TYPE_UNKNOWN} if there isn't any.
+     */
+    @NetworkType
+    @VisibleForTesting
+    public synchronized int getImsVoiceRadioTech() {
+        if (mLastRegistrationStats == null
+                || !mLastAvailableFeatures.isCapable(CAPABILITY_TYPE_VOICE)) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mLastRegistrationStats.rat;
+    }
+
     @NetworkType
     private int getRatAtEnd(@NetworkType int lastStateRat) {
         return lastStateRat == TelephonyManager.NETWORK_TYPE_IWLAN ? lastStateRat : getWwanPsRat();
@@ -354,14 +369,7 @@ public class ImsStats {
 
     @NetworkType
     private int getWwanPsRat() {
-        ServiceState state = mPhone.getServiceStateTracker().getServiceState();
-        final NetworkRegistrationInfo wwanRegInfo =
-                state.getNetworkRegistrationInfo(
-                        NetworkRegistrationInfo.DOMAIN_PS,
-                        AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
-        return wwanRegInfo != null
-                ? wwanRegInfo.getAccessNetworkTechnology()
-                : TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        return ServiceStateStats.getDataRat(mPhone.getServiceStateTracker().getServiceState());
     }
 
     private ImsRegistrationStats getDefaultImsRegistrationStats() {
