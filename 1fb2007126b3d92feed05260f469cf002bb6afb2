@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8fe29b2_94289a78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1890690
+      },
+      "writtenOn": "2021-08-30T15:28:06Z",
+      "side": 1,
+      "message": "\u0027Manual\u0027 cherry pick : https://googleplex-android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/15639116",
+      "revId": "1fb2007126b3d92feed05260f469cf002bb6afb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
