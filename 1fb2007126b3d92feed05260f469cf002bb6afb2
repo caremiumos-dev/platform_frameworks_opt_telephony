@@ -16,6 +16,29 @@
       "message": "\u0027Manual\u0027 cherry pick : https://googleplex-android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/15639116",
       "revId": "1fb2007126b3d92feed05260f469cf002bb6afb2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f34564b_e8703505",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-08-30T23:20:57Z",
+      "side": 1,
+      "message": "1. You are logging extra stuffs. Was this approved by PWG?\n2. Assume (1) is cleared, we normally don\u0027t pass package name all the way down to that deep and just for logging purposes. There is no need to do that. You can copy the logic from SmsController.getCallingPackage().",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 36
+      },
+      "revId": "1fb2007126b3d92feed05260f469cf002bb6afb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
