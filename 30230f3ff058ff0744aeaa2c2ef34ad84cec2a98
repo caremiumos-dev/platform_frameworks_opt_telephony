@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a29b6f59_842bca88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2021-09-01T17:24:27Z",
+      "side": 1,
+      "message": "how can we automatically send n/w type to modem after APM off if we remove  setPreferredNetworkTypeIfSimLoaded();. After APM off, carrier config might not be loaded again.",
+      "revId": "30230f3ff058ff0744aeaa2c2ef34ad84cec2a98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
