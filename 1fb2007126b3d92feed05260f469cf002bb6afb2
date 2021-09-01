@@ -63,6 +63,30 @@
       },
       "revId": "1fb2007126b3d92feed05260f469cf002bb6afb2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd39117_c1f0305d",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-01T00:12:30Z",
+      "side": 1,
+      "message": "Regarding approval: the Eldar is already updated and is pending approval. Generally speaking, I don\u0027t expect issues here, as the API is protected, so only 2 clients will effectively call it.\nThe CL has dependency on Westworld approval, which will enforce Eldar aproval.",
+      "parentUuid": "61bc9510_d1d81b59",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 36
+      },
+      "revId": "1fb2007126b3d92feed05260f469cf002bb6afb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
