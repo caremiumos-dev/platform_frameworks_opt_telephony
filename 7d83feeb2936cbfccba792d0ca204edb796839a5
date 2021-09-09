@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b6babd_e0a9c044",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2021-09-09T22:47:31Z",
+      "side": 1,
+      "message": "why is this change needed?\nthis change causing settings UI not able to display eSIM cards after disabling them.\nplease refer bug/198509790 for details.",
+      "range": {
+        "startLine": 935,
+        "startChar": 0,
+        "endLine": 935,
+        "endChar": 42
+      },
+      "revId": "7d83feeb2936cbfccba792d0ca204edb796839a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
