@@ -22,6 +22,30 @@
       },
       "revId": "4aed3cb6c4408b472a12d35bddb2305d782423cf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b70ef63_3068b08b",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/PinStorageTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1890690
+      },
+      "writtenOn": "2021-09-14T22:53:58Z",
+      "side": 1,
+      "message": "Done, extracted them as constants for future references.",
+      "parentUuid": "a0702ebb_77a6124e",
+      "range": {
+        "startLine": 54,
+        "startChar": 64,
+        "endLine": 54,
+        "endChar": 66
+      },
+      "revId": "4aed3cb6c4408b472a12d35bddb2305d782423cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
