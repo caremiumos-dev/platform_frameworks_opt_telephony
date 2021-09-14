@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0486c2_39c36ec6",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-14T18:05:24Z",
+      "side": 1,
+      "message": "Minor. I think we should also check workSource.size() \u003e 0",
+      "range": {
+        "startLine": 345,
+        "startChar": 69,
+        "endLine": 345,
+        "endChar": 87
+      },
+      "revId": "875e214f05ea6fa0522d5242a6c3766ffba77035",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31273cf_eebc8438",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/PinStorageTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-14T18:05:24Z",
+      "side": 1,
+      "message": "Instead of passing null, would it make sense to pass a fake workSource?\nYou could define static one at the beginning of the class and re-use that for each call.",
+      "range": {
+        "startLine": 141,
+        "startChar": 57,
+        "endLine": 141,
+        "endChar": 61
+      },
+      "revId": "875e214f05ea6fa0522d5242a6c3766ffba77035",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c7b9d5_7e30ab55",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/uicc/PinStorageTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-14T18:05:24Z",
+      "side": 1,
+      "message": "Don\u0027t you need to add WorkSource argument here?",
+      "range": {
+        "startLine": 161,
+        "startChar": 33,
+        "endLine": 161,
+        "endChar": 59
+      },
+      "revId": "875e214f05ea6fa0522d5242a6c3766ffba77035",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
