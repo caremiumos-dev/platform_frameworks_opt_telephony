@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550c56e0_4afbf6ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-09-14T23:35:30Z",
+      "side": 1,
+      "message": "This was a clean cherry-pick of an internal CL.",
+      "revId": "fb3919b00b4fade10458cf8d4181f19fe0cadcb1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
