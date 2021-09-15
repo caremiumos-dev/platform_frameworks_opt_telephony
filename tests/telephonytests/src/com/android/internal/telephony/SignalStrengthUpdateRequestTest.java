@@ -46,6 +46,18 @@ public class SignalStrengthUpdateRequestTest extends TestCase {
             .setThresholds(new int[]{-115, -105, -95, -85})
             .build();
 
+    private SignalThresholdInfo mRsrpInfo = new SignalThresholdInfo.Builder()
+            .setRadioAccessNetworkType(AccessNetworkConstants.AccessNetworkType.EUTRAN)
+            .setSignalMeasurementType(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRP)
+            .setThresholds(new int[]{-115, -105, -95, -85})
+            .build();
+
+    private SignalThresholdInfo mRsrqInfo = new SignalThresholdInfo.Builder()
+            .setRadioAccessNetworkType(AccessNetworkConstants.AccessNetworkType.EUTRAN)
+            .setSignalMeasurementType(SignalThresholdInfo.SIGNAL_MEASUREMENT_TYPE_RSRQ)
+            .setThresholds(new int[]{-30, -20, -10, -1})
+            .build();
+
     @Test
     @SmallTest
     public void testPublicConstructorWithInvalidParam() {
@@ -112,6 +124,18 @@ public class SignalStrengthUpdateRequestTest extends TestCase {
 
         // return false if the object is not SignalStrengthUpdateRequest
         assertFalse(request1.equals("test"));
+    }
+
+    @Test
+    @SmallTest
+    public void testMultipleSignalMeasurementTypeWithSameRan() {
+        Collection<SignalThresholdInfo> infos = List.of(mRsrpInfo, mRsrqInfo);
+        SignalStrengthUpdateRequest request = new SignalStrengthUpdateRequest.Builder()
+                .setSignalThresholdInfos(infos).build();
+
+        assertFalse(request.isReportingRequestedWhileIdle());
+        assertFalse(request.isSystemThresholdReportingRequestedWhileIdle());
+        assertEquals(infos, request.getSignalThresholdInfos());
     }
 
     private void validateBuilderWithInvalidParam(Collection<SignalThresholdInfo> infos) {
