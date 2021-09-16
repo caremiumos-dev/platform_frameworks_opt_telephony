@@ -691,6 +691,8 @@ public class DataConnection extends StateMachine {
      */
     public void updateTrafficDescriptors(DataCallResponse response) {
         mTrafficDescriptors = response.getTrafficDescriptors();
+        mDcController.updateTrafficDescriptorsForCid(response.getId(),
+                response.getTrafficDescriptors());
     }
 
     @VisibleForTesting
@@ -1404,6 +1406,11 @@ public class DataConnection extends StateMachine {
             }
         } else if (cp.mApnContext.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE
                 && mDcController.getActiveDcByCid(response.getId()) != null) {
+            if (!mDcController.getTrafficDescriptorsForCid(response.getId())
+                    .equals(response.getTrafficDescriptors())) {
+                if (DBG) log("Updating traffic descriptors: " + response.getTrafficDescriptors());
+                mDcController.getActiveDcByCid(response.getId()).updateTrafficDescriptors(response);
+            }
             if (DBG) log("DataConnection already exists for cid: " + response.getId());
             result = SetupResult.ERROR_DUPLICATE_CID;
             result.mFailCause = DataFailCause.DUPLICATE_CID;
