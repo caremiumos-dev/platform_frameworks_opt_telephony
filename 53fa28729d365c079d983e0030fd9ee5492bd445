@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac440a92_75673b42",
+        "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-17T20:01:30Z",
+      "side": 1,
+      "message": "I\u0027m not clear about this change. Is this applicable in all cases, regardless of which capability changed inside MmTelCapabilities?",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 48
+      },
+      "revId": "53fa28729d365c079d983e0030fd9ee5492bd445",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "371f1a2e_aa9f6a40",
+        "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-17T20:01:30Z",
+      "side": 1,
+      "message": "Minor: isn\u0027t",
+      "range": {
+        "startLine": 341,
+        "startChar": 55,
+        "endLine": 341,
+        "endChar": 61
+      },
+      "revId": "53fa28729d365c079d983e0030fd9ee5492bd445",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
