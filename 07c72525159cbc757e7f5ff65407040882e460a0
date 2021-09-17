@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e683c2fe_94f37e06",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthUpdateRequestTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-09-17T01:59:46Z",
+      "side": 1,
+      "message": "Would it be ok to add a test where the ONLY thing that the two requests have in common is the measurementtype+ran (ensure that they are different requests with different values and different references)?",
+      "range": {
+        "startLine": 74,
+        "startChar": 66,
+        "endLine": 74,
+        "endChar": 82
+      },
+      "revId": "07c72525159cbc757e7f5ff65407040882e460a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
