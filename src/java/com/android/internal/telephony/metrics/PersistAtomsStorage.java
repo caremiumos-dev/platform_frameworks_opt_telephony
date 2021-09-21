@@ -233,9 +233,24 @@ public class PersistAtomsStorage {
 
     /** Adds a data call session to the storage. */
     public synchronized void addDataCallSession(DataCallSession dataCall) {
-        mAtoms.dataCallSession =
-                insertAtRandomPlace(mAtoms.dataCallSession, dataCall, mMaxNumDataCallSessions);
-        saveAtomsToFile(SAVE_TO_FILE_DELAY_FOR_UPDATE_MILLIS);
+        DataCallSession existingCall = find(dataCall);
+        if (existingCall != null) {
+            existingCall.ratAtEnd = dataCall.ratAtEnd;
+            existingCall.oosAtEnd = dataCall.oosAtEnd;
+            existingCall.ipType = dataCall.ipType; // populated when setup response is received
+            existingCall.setupFailed = dataCall.setupFailed;
+            existingCall.failureCause = dataCall.failureCause;
+            existingCall.suggestedRetryMillis = dataCall.suggestedRetryMillis;
+            existingCall.deactivateReason = dataCall.deactivateReason;
+            existingCall.bandAtEnd = dataCall.bandAtEnd;
+            existingCall.ongoing = dataCall.ongoing;
+            existingCall.ratSwitchCount += dataCall.ratSwitchCount;
+            existingCall.durationMinutes += dataCall.durationMinutes;
+        } else {
+            mAtoms.dataCallSession =
+                    insertAtRandomPlace(mAtoms.dataCallSession, dataCall, mMaxNumDataCallSessions);
+            saveAtomsToFile(SAVE_TO_FILE_DELAY_FOR_UPDATE_MILLIS);
+        }
     }
 
     /**
@@ -723,6 +738,19 @@ public class PersistAtomsStorage {
     private @Nullable NetworkRequests find(NetworkRequests key) {
         for (NetworkRequests item : mAtoms.networkRequests) {
             if (item.carrierId == key.carrierId) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the data call session that has the same random dimension as the given one, or {@code
+     * null} if it does not exist.
+     */
+    private @Nullable DataCallSession find(DataCallSession key) {
+        for (DataCallSession item : mAtoms.dataCallSession) {
+            if (item.dimension == key.dimension) {
                 return item;
             }
         }
