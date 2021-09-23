@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dcd8267_6c324c9c",
+        "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-09-23T18:28:52Z",
+      "side": 1,
+      "message": "Yes, as RAT might have changed (e.g. LTE -\u003e IWLAN).",
+      "parentUuid": "ac440a92_75673b42",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 48
+      },
+      "revId": "53fa28729d365c079d983e0030fd9ee5492bd445",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "371f1a2e_aa9f6a40",
         "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-17T20:01:30Z",
       "side": 1,
       "message": "Minor: isn\u0027t",
+      "range": {
+        "startLine": 341,
+        "startChar": 55,
+        "endLine": 341,
+        "endChar": 61
+      },
+      "revId": "53fa28729d365c079d983e0030fd9ee5492bd445",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e12e2c2_e7b1a0c7",
+        "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-09-23T18:28:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "371f1a2e_aa9f6a40",
       "range": {
         "startLine": 341,
         "startChar": 55,
