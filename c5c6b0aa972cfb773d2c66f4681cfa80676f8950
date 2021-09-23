@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e7aff81_7dc54070",
+        "filename": "src/java/com/android/internal/telephony/metrics/DataCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-23T00:24:45Z",
+      "side": 1,
+      "message": "Minor. Should this be done before calling mAtomsStorage.addDataCallSession() ?\nOtherwise there is a risk that we add it to storage and then also invoke conclude(). WDYT?",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 79
+      },
+      "revId": "c5c6b0aa972cfb773d2c66f4681cfa80676f8950",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bed8e5e0_b90fc2db",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-23T00:24:45Z",
+      "side": 1,
+      "message": "All other find() methods return the found object... this is the only one that returns the index. The inconsistency makes it harder to read.\nCan\u0027t we pass the reference to the found object and then re-use that?\n(I see that you have defined a copyOf() for DataCallSession and we could use that)",
+      "range": {
+        "startLine": 741,
+        "startChar": 12,
+        "endLine": 741,
+        "endChar": 15
+      },
+      "revId": "c5c6b0aa972cfb773d2c66f4681cfa80676f8950",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
