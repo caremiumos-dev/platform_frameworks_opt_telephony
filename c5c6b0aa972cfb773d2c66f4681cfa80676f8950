@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77a64ea2_be275668",
+        "filename": "src/java/com/android/internal/telephony/metrics/DataCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-09-23T23:51:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e7aff81_7dc54070",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 79
+      },
+      "revId": "c5c6b0aa972cfb773d2c66f4681cfa80676f8950",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bed8e5e0_b90fc2db",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-23T00:24:45Z",
       "side": 1,
       "message": "All other find() methods return the found object... this is the only one that returns the index. The inconsistency makes it harder to read.\nCan\u0027t we pass the reference to the found object and then re-use that?\n(I see that you have defined a copyOf() for DataCallSession and we could use that)",
+      "range": {
+        "startLine": 741,
+        "startChar": 12,
+        "endLine": 741,
+        "endChar": 15
+      },
+      "revId": "c5c6b0aa972cfb773d2c66f4681cfa80676f8950",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9e5155_9e2f7ca6",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-09-23T23:51:00Z",
+      "side": 1,
+      "message": "Done. Also, since we split data call into segments, I thought maybe it makes sense to segment RAT switch counts as well.",
+      "parentUuid": "bed8e5e0_b90fc2db",
       "range": {
         "startLine": 741,
         "startChar": 12,
