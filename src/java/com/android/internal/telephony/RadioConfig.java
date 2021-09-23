@@ -29,16 +29,17 @@ import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SET_PREFER
 import static com.android.internal.telephony.RILConstants.RIL_REQUEST_SWITCH_DUAL_SIM_CONFIG;
 
 import android.content.Context;
-import android.hardware.radio.V1_0.RadioResponseInfo;
-import android.hardware.radio.V1_0.RadioResponseType;
-import android.hardware.radio.config.V1_0.IRadioConfig;
-import android.hardware.radio.config.V1_1.ModemsConfig;
+import android.hardware.radio.RadioResponseInfo;
+import android.hardware.radio.RadioResponseType;
+import android.hardware.radio.config.IRadioConfig;
+import android.hardware.radio.config.SimSlotStatus;
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.HwBinder;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.WorkSource;
 import android.telephony.TelephonyManager;
 import android.util.SparseArray;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class provides wrapper APIs for IRadioConfig interface.
@@ -62,20 +63,11 @@ public class RadioConfig extends Handler {
 
     private static final int EVENT_SERVICE_DEAD = 1;
 
-    private static final HalVersion RADIO_CONFIG_HAL_VERSION_UNKNOWN = new HalVersion(-1, -1);
-
-    private static final HalVersion RADIO_CONFIG_HAL_VERSION_1_0 = new HalVersion(1, 0);
-
-    private static final HalVersion RADIO_CONFIG_HAL_VERSION_1_1 = new HalVersion(1, 1);
-
-    private static final HalVersion RADIO_CONFIG_HAL_VERSION_1_3 = new HalVersion(1, 3);
-
     private final boolean mIsMobileNetworkSupported;
     private volatile IRadioConfig mRadioConfigProxy = null;
     // IRadioConfig version
-    private HalVersion mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_UNKNOWN;
-    private final ServiceDeathRecipient mServiceDeathRecipient;
-    private final AtomicLong mRadioConfigProxyCookie = new AtomicLong(0);
+    private final RadioConfigDeathRecipient mRadioConfigDeathRecipient;
+    private final AtomicInteger mRadioConfigProxyCookie = new AtomicInteger(0);
     private final RadioConfigResponse mRadioConfigResponse;
     private final RadioConfigIndication mRadioConfigIndication;
     private final SparseArray<RILRequest> mRequestList = new SparseArray<RILRequest>();
@@ -87,13 +79,29 @@ public class RadioConfig extends Handler {
 
     protected Registrant mSimSlotStatusRegistrant;
 
-    final class ServiceDeathRecipient implements HwBinder.DeathRecipient {
-        @Override
-        public void serviceDied(long cookie) {
-            // Deal with service going away
-            logd("serviceDied");
-            sendMessage(obtainMessage(EVENT_SERVICE_DEAD, cookie));
+    private final class RadioConfigDeathRecipient implements IBinder.DeathRecipient {
+        private IBinder mBinder;
+
+        public void linkToDeath(IBinder service) throws RemoteException {
+            if (service != null) {
+                mBinder = service;
+                mBinder.linkToDeath(this, mRadioConfigProxyCookie.incrementAndGet());
+            }
         }
+
+        public synchronized void unlinkToDeath() {
+            if (mBinder != null) {
+                mBinder.unlinkToDeath(this, 0);
+                mBinder = null;
+            }
+        }
+
+        @Override
+        public void binderDied() {
+            logd("RadioConfigService has died.");
+            unlinkToDeath();
+        }
+
     }
 
     private boolean isMobileDataCapable(Context context) {
@@ -109,7 +117,7 @@ public class RadioConfig extends Handler {
 
         mRadioConfigResponse = new RadioConfigResponse(this, radioHalVersion);
         mRadioConfigIndication = new RadioConfigIndication(this);
-        mServiceDeathRecipient = new ServiceDeathRecipient();
+        mRadioConfigDeathRecipient = new RadioConfigDeathRecipient();
 
         mDefaultWorkSource = new WorkSource(context.getApplicationInfo().uid,
                 context.getPackageName());
@@ -242,49 +250,25 @@ public class RadioConfig extends Handler {
 
     private void updateRadioConfigProxy() {
         try {
-
-            // Try to get service from different versions.
-            try {
-                mRadioConfigProxy = android.hardware.radio.config.V1_3.IRadioConfig.getService(
-                        true);
-                mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_3;
-            } catch (NoSuchElementException e) {
-            }
-
-
-            if (mRadioConfigProxy == null) {
-                // Try to get service from different versions.
-                try {
-                    mRadioConfigProxy = android.hardware.radio.config.V1_1.IRadioConfig.getService(
-                            true);
-                    mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_1;
-                } catch (NoSuchElementException e) {
-                }
-            }
-
-            if (mRadioConfigProxy == null) {
-                try {
-                    mRadioConfigProxy = android.hardware.radio.config.V1_0
-                            .IRadioConfig.getService(true);
-                    mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_0;
-                } catch (NoSuchElementException e) {
-                }
-            }
-
-            if (mRadioConfigProxy == null) {
+            // Try to get service binder
+            IBinder service = ServiceManager.waitForDeclaredService(
+                    IRadioConfig.DESCRIPTOR + "/default");
+            if (service == null) {
                 loge("getRadioConfigProxy: mRadioConfigProxy == null");
                 return;
             }
 
-            // Link to death recipient and set response. If fails, set proxy to null and return.
-            mRadioConfigProxy.linkToDeath(mServiceDeathRecipient,
-                    mRadioConfigProxyCookie.incrementAndGet());
-            mRadioConfigProxy.setResponseFunctions(mRadioConfigResponse,
-                    mRadioConfigIndication);
-        } catch (RemoteException | RuntimeException e) {
+            // Convert to proxy
+            mRadioConfigProxy = IRadioConfig.Stub.asInterface(service);
+
+            // Link to death
+            mRadioConfigDeathRecipient.linkToDeath(service);
+
+            // Set response. If fails, set proxy to null and return.
+            mRadioConfigProxy.setResponseFunctions(mRadioConfigResponse, mRadioConfigIndication);
+        } catch (NoSuchElementException | RemoteException e) {
             mRadioConfigProxy = null;
             loge("getRadioConfigProxy: RadioConfigProxy setResponseFunctions: " + e);
-            return;
         }
     }
 
@@ -315,31 +299,6 @@ public class RadioConfig extends Handler {
      * @return RILRequest corresponding to the response
      */
     public RILRequest processResponse(RadioResponseInfo responseInfo) {
-        int serial = responseInfo.serial;
-        int error = responseInfo.error;
-        int type = responseInfo.type;
-
-        if (type != RadioResponseType.SOLICITED) {
-            loge("processResponse: Unexpected response type " + type);
-        }
-
-        RILRequest rr = findAndRemoveRequestFromList(serial);
-        if (rr == null) {
-            loge("processResponse: Unexpected response! serial: " + serial + " error: " + error);
-            return null;
-        }
-
-        return rr;
-    }
-
-    /**
-     * This is a helper function to be called when a RadioConfigResponse callback is called.
-     * It finds and returns RILRequest corresponding to the response if one is found.
-     * @param responseInfo RadioResponseInfo received in response callback
-     * @return RILRequest corresponding to the response
-     */
-    public RILRequest processResponse_1_6(
-            android.hardware.radio.V1_6.RadioResponseInfo responseInfo) {
         int serial = responseInfo.serial;
         int error = responseInfo.error;
         int type = responseInfo.type;
@@ -398,8 +357,7 @@ public class RadioConfig extends Handler {
         }
 
         try {
-            ((android.hardware.radio.config.V1_1.IRadioConfig) mRadioConfigProxy)
-                    .setPreferredDataModem(rr.mSerial, (byte) modemId);
+            mRadioConfigProxy.setPreferredDataModem(rr.mSerial, (byte) modemId);
         } catch (RemoteException | RuntimeException e) {
             resetProxyAndRequestList("setPreferredDataModem", e);
         }
@@ -409,8 +367,7 @@ public class RadioConfig extends Handler {
      * Wrapper function for IRadioConfig.getPhoneCapability().
      */
     public void getPhoneCapability(Message result) {
-        IRadioConfig radioConfigProxy = getRadioConfigProxy(null);
-        if (radioConfigProxy == null || mRadioConfigVersion.less(RADIO_CONFIG_HAL_VERSION_1_1)) {
+        if (getRadioConfigProxy(null) == null) {
             if (result != null) {
                 AsyncResult.forMessage(result, null,
                         CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
@@ -426,8 +383,7 @@ public class RadioConfig extends Handler {
         }
 
         try {
-            ((android.hardware.radio.config.V1_1.IRadioConfig) mRadioConfigProxy)
-                    .getPhoneCapability(rr.mSerial);
+            mRadioConfigProxy.getPhoneCapability(rr.mSerial);
         } catch (RemoteException | RuntimeException e) {
             resetProxyAndRequestList("getPhoneCapability", e);
         }
@@ -440,9 +396,7 @@ public class RadioConfig extends Handler {
      * See PhoneSwitcher for more details.
      */
     public boolean isSetPreferredDataCommandSupported() {
-        IRadioConfig radioConfigProxy = getRadioConfigProxy(null);
-        return radioConfigProxy != null && mRadioConfigVersion
-                .greaterOrEqual(RADIO_CONFIG_HAL_VERSION_1_1);
+        return getRadioConfigProxy(null) != null;
     }
 
     /**
@@ -451,8 +405,8 @@ public class RadioConfig extends Handler {
     public void setSimSlotsMapping(int[] physicalSlots, Message result) {
         IRadioConfig radioConfigProxy = getRadioConfigProxy(result);
         if (radioConfigProxy != null) {
-            RILRequest rr = obtainRequest(RIL_REQUEST_SET_LOGICAL_TO_PHYSICAL_SLOT_MAPPING, result,
-                    mDefaultWorkSource);
+            RILRequest rr = obtainRequest(
+                    RIL_REQUEST_SET_LOGICAL_TO_PHYSICAL_SLOT_MAPPING, result, mDefaultWorkSource);
 
             if (DBG) {
                 logd(rr.serialString() + "> " + requestToString(rr.mRequest)
@@ -460,20 +414,11 @@ public class RadioConfig extends Handler {
             }
 
             try {
-                radioConfigProxy.setSimSlotsMapping(rr.mSerial,
-                        primitiveArrayToArrayList(physicalSlots));
+                radioConfigProxy.setSimSlotsMapping(rr.mSerial, physicalSlots);
             } catch (RemoteException | RuntimeException e) {
                 resetProxyAndRequestList("setSimSlotsMapping", e);
             }
         }
-    }
-
-    private static ArrayList<Integer> primitiveArrayToArrayList(int[] arr) {
-        ArrayList<Integer> arrayList = new ArrayList<>(arr.length);
-        for (int i : arr) {
-            arrayList.add(i);
-        }
-        return arrayList;
     }
 
     static String requestToString(int request) {
@@ -496,17 +441,14 @@ public class RadioConfig extends Handler {
     }
 
     /**
-     * Wrapper function for using IRadioConfig.setModemsConfig(int32_t serial,
-     * ModemsConfig modemsConfig) to switch between single-sim and multi-sim.
+     * Wrapper function for using IRadioConfig.setNumOfLiveModems(int32_t serial,
+     * byte numOfLiveModems) to switch between single-sim and multi-sim.
      */
-    public void setModemsConfig(int numOfLiveModems, Message result) {
+    public void setNumOfLiveModems(int numOfLiveModems, Message result) {
         IRadioConfig radioConfigProxy = getRadioConfigProxy(result);
-        if (radioConfigProxy != null
-                && mRadioConfigVersion.greaterOrEqual(RADIO_CONFIG_HAL_VERSION_1_1)) {
-            android.hardware.radio.config.V1_1.IRadioConfig radioConfigProxy11 =
-                    (android.hardware.radio.config.V1_1.IRadioConfig) radioConfigProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_SWITCH_DUAL_SIM_CONFIG,
-                    result, mDefaultWorkSource);
+        if (radioConfigProxy != null) {
+            RILRequest rr = obtainRequest(
+                    RIL_REQUEST_SWITCH_DUAL_SIM_CONFIG, result, mDefaultWorkSource);
 
             if (DBG) {
                 logd(rr.serialString() + "> " + requestToString(rr.mRequest)
@@ -514,17 +456,12 @@ public class RadioConfig extends Handler {
             }
 
             try {
-                ModemsConfig modemsConfig = new ModemsConfig();
-                modemsConfig.numOfLiveModems = (byte) numOfLiveModems;
-                radioConfigProxy11.setModemsConfig(rr.mSerial, modemsConfig);
+                radioConfigProxy.setNumOfLiveModems(rr.mSerial, (byte) numOfLiveModems);
             } catch (RemoteException | RuntimeException e) {
-                resetProxyAndRequestList("setModemsConfig", e);
+                resetProxyAndRequestList("setNumOfLiveModems", e);
             }
         }
     }
-
-    // TODO: not needed for now, but if we don't want to use System Properties any more,
-    // we need to implement a wrapper function for getModemsConfig as well
 
     /**
      * Register a handler to get SIM slot status changed notifications.
@@ -548,21 +485,16 @@ public class RadioConfig extends Handler {
      */
     public void getHalDeviceCapabilities(Message result) {
         IRadioConfig radioConfigProxy = getRadioConfigProxy(Message.obtain(result));
-        if (radioConfigProxy != null
-                && mRadioConfigVersion.greaterOrEqual(RADIO_CONFIG_HAL_VERSION_1_3)) {
-            android.hardware.radio.config.V1_3.IRadioConfig radioConfigProxy13 =
-                    (android.hardware.radio.config.V1_3.IRadioConfig) radioConfigProxy;
-            RILRequest rr = obtainRequest(RIL_REQUEST_GET_HAL_DEVICE_CAPABILITIES,
-                    result, mDefaultWorkSource);
+        if (radioConfigProxy != null) {
+            RILRequest rr = obtainRequest(
+                    RIL_REQUEST_GET_HAL_DEVICE_CAPABILITIES, result, mDefaultWorkSource);
 
             if (DBG) {
                 logd(rr.serialString() + "> " + requestToString(rr.mRequest));
             }
 
             try {
-                mRadioConfigVersion = RADIO_CONFIG_HAL_VERSION_1_3;
-                radioConfigProxy13.getHalDeviceCapabilities(rr.mSerial);
-
+                radioConfigProxy.getHalDeviceCapabilities(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
                 resetProxyAndRequestList("getHalDeviceCapabilities", e);
             }
@@ -593,31 +525,15 @@ public class RadioConfig extends Handler {
         return mDeviceNrCapabilities;
     }
 
-    static ArrayList<IccSlotStatus> convertHalSlotStatus(
-            ArrayList<android.hardware.radio.config.V1_0.SimSlotStatus> halSlotStatusList) {
-        ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
-        for (android.hardware.radio.config.V1_0.SimSlotStatus slotStatus : halSlotStatusList) {
+    static ArrayList<IccSlotStatus> convertHalSlotStatus(SimSlotStatus[] halSlotStatusList) {
+        ArrayList<IccSlotStatus> response = new ArrayList<>(halSlotStatusList.length);
+        for (SimSlotStatus slotStatus : halSlotStatusList) {
             IccSlotStatus iccSlotStatus = new IccSlotStatus();
             iccSlotStatus.setCardState(slotStatus.cardState);
             iccSlotStatus.setSlotState(slotStatus.slotState);
             iccSlotStatus.logicalSlotIndex = slotStatus.logicalSlotId;
             iccSlotStatus.atr = slotStatus.atr;
             iccSlotStatus.iccid = slotStatus.iccid;
-            response.add(iccSlotStatus);
-        }
-        return response;
-    }
-
-    static ArrayList<IccSlotStatus> convertHalSlotStatus_1_2(
-            ArrayList<android.hardware.radio.config.V1_2.SimSlotStatus> halSlotStatusList) {
-        ArrayList<IccSlotStatus> response = new ArrayList<IccSlotStatus>(halSlotStatusList.size());
-        for (android.hardware.radio.config.V1_2.SimSlotStatus slotStatus : halSlotStatusList) {
-            IccSlotStatus iccSlotStatus = new IccSlotStatus();
-            iccSlotStatus.setCardState(slotStatus.base.cardState);
-            iccSlotStatus.setSlotState(slotStatus.base.slotState);
-            iccSlotStatus.logicalSlotIndex = slotStatus.base.logicalSlotId;
-            iccSlotStatus.atr = slotStatus.base.atr;
-            iccSlotStatus.iccid = slotStatus.base.iccid;
             iccSlotStatus.eid = slotStatus.eid;
             response.add(iccSlotStatus);
         }
