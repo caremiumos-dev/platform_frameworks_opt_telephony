@@ -109,9 +109,9 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataCallResponse.HandoverFailureMode;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.NetworkSliceInfo;
 import android.telephony.data.Qos;
 import android.telephony.data.QosBearerSession;
-import android.telephony.data.SliceInfo;
 import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
@@ -431,7 +431,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         switch(rr.mRequest) {
             case RIL_REQUEST_GET_ACTIVITY_INFO:
                 timeoutResponse = new ModemActivityInfo(
-                        0, 0, 0, new int [ModemActivityInfo.TX_POWER_LEVELS], 0);
+                        0, 0, 0, new int [ModemActivityInfo.getNumTxPowerLevels()], 0);
                 break;
         };
         return timeoutResponse;
@@ -1931,7 +1931,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return dpi;
     }
 
-    private static OptionalSliceInfo convertToHalSliceInfo(@Nullable SliceInfo sliceInfo) {
+    private static OptionalSliceInfo convertToHalSliceInfo(@Nullable NetworkSliceInfo sliceInfo) {
         OptionalSliceInfo optionalSliceInfo = new OptionalSliceInfo();
         if (sliceInfo == null) {
             return optionalSliceInfo;
@@ -1957,8 +1957,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 new android.hardware.radio.V1_6.TrafficDescriptor();
 
         OptionalDnn optionalDnn = new OptionalDnn();
-        if (trafficDescriptor.getDnn() != null) {
-            optionalDnn.value(trafficDescriptor.getDnn());
+        if (trafficDescriptor.getDataNetworkName() != null) {
+            optionalDnn.value(trafficDescriptor.getDataNetworkName());
         }
         td.dnn = optionalDnn;
 
@@ -2052,8 +2052,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
             boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
-            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
-            Message result) {
+            NetworkSliceInfo sliceInfo, TrafficDescriptor trafficDescriptor,
+            boolean matchAllRuleAllowed, Message result) {
         IRadio radioProxy = getRadioProxy(result);
 
         if (radioProxy != null) {
@@ -6058,18 +6058,44 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 android.hardware.radio.V1_6.PhonebookRecordInfo pbRecordInfo =
                         phonebookRecord.toPhonebookRecordInfo();
                 try {
-                     radioProxy16.updateSimPhonebookRecords(rr.mSerial, pbRecordInfo);
+                    radioProxy16.updateSimPhonebookRecords(rr.mSerial, pbRecordInfo);
                 } catch (RemoteException | RuntimeException e) {
                     handleRadioProxyExceptionForRR(rr, "updatePhonebookRecord", e);
                 }
             } else {
-                riljLog("Unsupported API in lower than version 1.6 radio HAL" );
+                riljLog("Unsupported API in lower than version 1.6 radio HAL");
                 if (result != null) {
                     AsyncResult.forMessage(result, null,
-                    CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+                            CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
                     result.sendToTarget();
                 }
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void getSlicingConfig(Message result) {
+        android.hardware.radio.V1_6.IRadio radioProxy16 = getRadioV16(result);
+
+        if (radioProxy16 != null) {
+            RILRequest rr = obtainRequest(RIL_REQUEST_GET_SLICING_CONFIG, result,
+                    mRILDefaultWorkSource);
+
+            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+            try {
+                radioProxy16.getSlicingConfig(rr.mSerial);
+            } catch (RemoteException | RuntimeException e) {
+                handleRadioProxyExceptionForRR(rr, "getSlicingConfig", e);
+            }
+        } else {
+            if (RILJ_LOGD) Rlog.d(RILJ_LOG_TAG, "getSlicingConfig: REQUEST_NOT_SUPPORTED");
+            AsyncResult.forMessage(result, null,
+                    CommandException.fromRilErrno(REQUEST_NOT_SUPPORTED));
+            result.sendToTarget();
         }
     }
 
@@ -7069,6 +7095,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 return "SET_ALLOWED_NETWORK_TYPES_BITMAP";
             case RIL_REQUEST_GET_ALLOWED_NETWORK_TYPES_BITMAP:
                 return "GET_ALLOWED_NETWORK_TYPES_BITMAP";
+            case RIL_REQUEST_GET_SLICING_CONFIG:
+                return "GET_SLICING_CONFIG";
             default: return "<unknown request>";
         }
     }
@@ -7613,7 +7641,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         List<LinkAddress> laList = new ArrayList<>();
         List<QosBearerSession> qosSessions = new ArrayList<>();
-        SliceInfo sliceInfo = null;
+        NetworkSliceInfo sliceInfo = null;
         List<TrafficDescriptor> trafficDescriptors = new ArrayList<>();
 
         if (dcResult instanceof android.hardware.radio.V1_0.SetupDataCallResult) {
@@ -7780,17 +7808,17 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .build();
     }
 
-    private static SliceInfo convertToSliceInfo(OptionalSliceInfo optionalSliceInfo) {
+    private static NetworkSliceInfo convertToSliceInfo(OptionalSliceInfo optionalSliceInfo) {
         if (optionalSliceInfo.getDiscriminator() == OptionalSliceInfo.hidl_discriminator.noinit) {
             return null;
         }
 
         android.hardware.radio.V1_6.SliceInfo si = optionalSliceInfo.value();
-        SliceInfo.Builder builder =
-                new SliceInfo.Builder()
+        NetworkSliceInfo.Builder builder =
+                new NetworkSliceInfo.Builder()
                 .setSliceServiceType(si.sst)
                 .setMappedHplmnSliceServiceType(si.mappedHplmnSst);
-        if (si.sliceDifferentiator != SliceInfo.SLICE_DIFFERENTIATOR_NO_SLICE) {
+        if (si.sliceDifferentiator != NetworkSliceInfo.SLICE_DIFFERENTIATOR_NO_SLICE) {
             builder
                 .setSliceDifferentiator(si.sliceDifferentiator)
                 .setMappedHplmnSliceDifferentiator(si.mappedHplmnSD);
@@ -7804,7 +7832,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 ? null : td.dnn.value();
         String osAppId = td.osAppId.getDiscriminator() == OptionalOsAppId.hidl_discriminator.noinit
                 ? null : new String(arrayListToPrimitiveArray(td.osAppId.value().osAppId));
-        return new TrafficDescriptor(dnn, osAppId);
+        TrafficDescriptor.Builder builder = new TrafficDescriptor.Builder();
+        if (dnn != null) {
+            builder.setDataNetworkName(dnn);
+        }
+        if (osAppId != null) {
+            builder.setOsAppId(osAppId);
+        }
+        return builder.build();
     }
 
     /**

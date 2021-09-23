@@ -49,7 +49,7 @@ import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
-import android.telephony.data.SliceInfo;
+import android.telephony.data.NetworkSliceInfo;
 import android.telephony.data.TrafficDescriptor;
 import android.telephony.emergency.EmergencyNumber;
 
@@ -1191,8 +1191,8 @@ public class SimulatedCommands extends BaseCommands
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
             boolean allowRoaming, int reason, LinkProperties linkProperties, int pduSessionId,
-            SliceInfo sliceInfo, TrafficDescriptor trafficDescriptor, boolean matchAllRuleAllowed,
-            Message result) {
+            NetworkSliceInfo sliceInfo, TrafficDescriptor trafficDescriptor,
+            boolean matchAllRuleAllowed, Message result) {
 
         SimulatedCommandsVerifier.getInstance().setupDataCall(accessNetworkType, dataProfile,
                 isRoaming, allowRoaming, reason, linkProperties, pduSessionId, sliceInfo,
@@ -2474,5 +2474,11 @@ public class SimulatedCommands extends BaseCommands
     @VisibleForTesting
     public void notifySimPhonebookChanged() {
         mSimPhonebookChangedRegistrants.notifyRegistrants();
+    }
+
+    @Override
+    public void getSlicingConfig(Message result) {
+        SimulatedCommandsVerifier.getInstance().getSlicingConfig(result);
+        resultSuccess(result, null);
     }
 }

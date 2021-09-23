@@ -1722,7 +1722,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * version scoped to their packages
      */
     protected void notifyServiceStateChangedP(ServiceState ss) {
-        AsyncResult ar = new AsyncResult(null, ss, null);
+        AsyncResult ar = new AsyncResult(null, new ServiceState(ss), null);
         mServiceStateRegistrants.notifyRegistrants(ar);
 
         mNotifier.notifyServiceState(this);
@@ -4367,13 +4367,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
     }
 
-    protected void setPreferredNetworkTypeIfSimLoaded() {
-        int subId = getSubId();
-        if (SubscriptionManager.isValidSubscriptionId(subId)) {
-            updateAllowedNetworkTypes(null);
-        }
-    }
-
     /**
      * Registers the handler when phone radio  capability is changed.
      *
@@ -4772,6 +4765,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public @NonNull List<String> getEquivalentHomePlmns() {
         return Collections.emptyList();
+    }
+
+    /**
+     * Request to get the current slicing configuration including URSP rules and
+     * NSSAIs (configured, allowed and rejected).
+     */
+    public void getSlicingConfig(Message response) {
+        mCi.getSlicingConfig(response);
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
