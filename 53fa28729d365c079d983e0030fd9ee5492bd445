@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51e61b9f_60b86c08",
+        "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-24T00:00:59Z",
+      "side": 1,
+      "message": "Sure... RAT can change. But we should be able to handle RAT change independently from MmTelCapabilities change, isn\u0027t it?\nWhy informing of ImsVoiceRegistration if CAPABILITY_TYPE_SMS changes?",
+      "parentUuid": "0dcd8267_6c324c9c",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 48
+      },
+      "revId": "53fa28729d365c079d983e0030fd9ee5492bd445",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "371f1a2e_aa9f6a40",
         "filename": "src/java/com/android/internal/telephony/metrics/ImsStats.java",
         "patchSetId": 1
