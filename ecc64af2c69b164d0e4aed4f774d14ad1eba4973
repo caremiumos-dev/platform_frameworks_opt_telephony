@@ -16,6 +16,24 @@
       "message": "LGTM but do we need to add locallog everywhere, or just be more selective on the logs which might be useful for debugging?",
       "revId": "ecc64af2c69b164d0e4aed4f774d14ad1eba4973",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8bf65f1_2c9c6df6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-09-24T18:24:19Z",
+      "side": 1,
+      "message": "Chen, thanks for the review. As you see, this will be target on aosp/master for T only.\n\nThe issue was reproduced with low rate and without locallog, bugreport only contains very little info (the dumpsys only). So far there is no clue on the root cause. We really don\u0027t want to guess and turn on partial path.\n\nSince the class is triggered with only few scenarios (mainly SIM state changes), the actually local log is small (as you see we limited to maximum 100 lines).",
+      "parentUuid": "c98666ca_9f6d0e11",
+      "revId": "ecc64af2c69b164d0e4aed4f774d14ad1eba4973",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
