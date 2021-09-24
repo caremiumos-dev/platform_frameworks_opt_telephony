@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bb1b44d_4dfab1aa",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-24T19:48:07Z",
+      "side": 1,
+      "message": "Thinking about it... the idea of copying one by one is not great.\nHow about:\n - remove old entry from storage\n - insert the new entry?\n \n Or go back to patchset #2, but rename find() with findIndex() ?",
+      "range": {
+        "startLine": 238,
+        "startChar": 12,
+        "endLine": 248,
+        "endChar": 69
+      },
+      "revId": "af2c67543337a61137be033c85edd965901416c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
