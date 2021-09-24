@@ -18,21 +18,14 @@ package com.android.internal.telephony;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyChar;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.os.Handler;
-import android.os.Message;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -92,9 +85,8 @@ public class CallManagerTest extends TelephonyTest {
     }
 
     @SmallTest @Test
-    public void testSanity() {
+    public void testCorrectness() {
         assertEquals(mPhone, CallManager.getInstance().getDefaultPhone());
-        assertFalse(CallManager.getInstance().hasActiveBgCall());
         assertFalse(CallManager.getInstance().hasActiveRingingCall());
         assertFalse(CallManager.getInstance().hasActiveFgCall());
         /* return the default phone if there is no any active call */
@@ -118,83 +110,11 @@ public class CallManagerTest extends TelephonyTest {
     }
 
     @SmallTest @Test
-    public void testBasicRejectCall() throws Exception {
-        //verify can dial and dial function of the phone is being triggered
-        CallManager.getInstance().rejectCall(mRingingCall);
-        verify(mPhone, times(1)).rejectCall();
-    }
-
-    @SmallTest @Test
-    public void testSendDtmf() throws Exception {
-        CallManager.getInstance().sendDtmf('a');
-        verify(mPhone, times(0)).sendDtmf(eq('a'));
-
-        //has active fg Call
-        doReturn(false).when(mFgCall).isIdle();
-        assertEquals(mFgCall, CallManager.getInstance().getActiveFgCall());
-        CallManager.getInstance().sendDtmf('a');
-        verify(mPhone, times(1)).sendDtmf(eq('a'));
-    }
-
-    @SmallTest @Test
-    public void testStartDtmf() throws Exception {
-        doReturn(true).when(mFgCall).isIdle();
-        assertFalse(CallManager.getInstance().startDtmf('a'));
-        verify(mPhone, times(0)).startDtmf(anyChar());
-
-        //has active fg Call
-        doReturn(false).when(mFgCall).isIdle();
-        assertEquals(mFgCall, CallManager.getInstance().getActiveFgCall());
-        assertTrue(CallManager.getInstance().startDtmf('a'));
-        verify(mPhone, times(1)).startDtmf('a');
-    }
-
-    @SmallTest @Test
-    public void testStopDtmf() throws Exception {
-        doReturn(true).when(mFgCall).isIdle();
-        CallManager.getInstance().stopDtmf();
-        verify(mPhone, times(0)).stopDtmf();
-
-        //has active fg Call
-        doReturn(false).when(mFgCall).isIdle();
-        assertEquals(mPhone, CallManager.getInstance().getFgPhone());
-        CallManager.getInstance().stopDtmf();
-        verify(mPhone, times(1)).stopDtmf();
-    }
-
-    @SmallTest @Test
-    public void testSendBurstDtmf() throws Exception {
-        doReturn(true).when(mFgCall).isIdle();
-        assertFalse(CallManager.getInstance().sendBurstDtmf("12*#", 0, 0, null));
-        verify(mPhone, times(0)).sendBurstDtmf(anyString(), anyInt(), anyInt(), (Message) any());
-
-        //has active fg Call
-        doReturn(false).when(mFgCall).isIdle();
-        assertTrue(CallManager.getInstance().sendBurstDtmf("12*#", 0, 0, null));
-        verify(mPhone, times(1)).sendBurstDtmf("12*#", 0, 0, null);
-    }
-
-    @SmallTest @Test
-    public void testSetGetMute() throws Exception {
-        CallManager.getInstance().setMute(false);
-        verify(mPhone, times(0)).setMute(anyBoolean());
-
-        //has active fg Call
-        doReturn(false).when(mFgCall).isIdle();
-        CallManager.getInstance().setMute(false);
-        verify(mPhone, times(1)).setMute(false);
-
-        CallManager.getInstance().setMute(true);
-        verify(mPhone, times(1)).setMute(true);
-    }
-
-    @SmallTest @Test
     public void testFgCallActiveDial() throws Exception {
         /* set Fg/Bg Call state to active, verify CallManager Logical */
         doReturn(false).when(mFgCall).isIdle();
         doReturn(false).when(mBgCall).isIdle();
         assertTrue(CallManager.getInstance().hasActiveFgCall());
-        assertTrue(CallManager.getInstance().hasActiveBgCall());
         assertTrue(CallManager.getInstance().hasActiveFgCall(mPhone.getSubId()));
         assertFalse(CallManager.getInstance().hasDisconnectedFgCall());
         /* try dial with non-idle foreground call and background call */
@@ -229,46 +149,5 @@ public class CallManagerTest extends TelephonyTest {
         mEvent = (Integer) field.get(CallManager.getInstance());
         verify(mPhone, times(1)).registerForRingbackTone(isA(Handler.class),
                 eq(mEvent), isA(Object.class));
-    }
-
-    @Test @SmallTest
-    public void testGetServiceState() throws Exception {
-        // register for another phone
-        ServiceState mSecondServiceState = mock(ServiceState.class);
-        doReturn(mSecondServiceState).when(mSecondPhone).getServiceState();
-
-        logd("Phone registered with CallManager");
-        CallManager.getInstance().registerPhone(mSecondPhone);
-        processAllMessages();
-
-        // mPhone: STATE_IN_SERVICE > mPhoneSecond: state STATE_OUT_OF_SERVICE
-        doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mSecondServiceState).getState();
-        assertEquals(ServiceState.STATE_IN_SERVICE, CallManager.getInstance().getServiceState());
-
-        // mPhone: STATE_IN_SERVICE > mPhoneSecond: state STATE_EMERGENCY_ONLY
-        doReturn(ServiceState.STATE_EMERGENCY_ONLY).when(mSecondServiceState).getState();
-        assertEquals(ServiceState.STATE_IN_SERVICE, CallManager.getInstance().getServiceState());
-
-        // mPhone: STATE_IN_SERVICE > mPhoneSecond: state STATE_POWER_OFF
-        doReturn(ServiceState.STATE_POWER_OFF).when(mSecondServiceState).getState();
-        assertEquals(ServiceState.STATE_IN_SERVICE, CallManager.getInstance().getServiceState());
-
-        // mPhone: STATE_EMERGENCY_ONLY < mPhoneSecond: state STATE_OUT_OF_SERVICE
-        doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mSecondServiceState).getState();
-        doReturn(ServiceState.STATE_EMERGENCY_ONLY).when(mServiceState).getState();
-        assertEquals(ServiceState.STATE_OUT_OF_SERVICE,
-                CallManager.getInstance().getServiceState());
-
-        // mPhone: STATE_POWER_OFF < mPhoneSecond: state STATE_OUT_OF_SERVICE
-        doReturn(ServiceState.STATE_POWER_OFF).when(mServiceState).getState();
-        assertEquals(ServiceState.STATE_OUT_OF_SERVICE,
-                CallManager.getInstance().getServiceState());
-
-        /* mPhone: STATE_POWER_OFF < mPhoneSecond: state STATE_EMERGENCY_ONLY
-           but OUT_OF_SERVICE will replaces EMERGENCY_ONLY and POWER_OFF */
-        doReturn(ServiceState.STATE_EMERGENCY_ONLY).when(mSecondServiceState).getState();
-        assertEquals(ServiceState.STATE_OUT_OF_SERVICE,
-                CallManager.getInstance().getServiceState());
-        CallManager.getInstance().unregisterPhone(mSecondPhone);
     }
 }
