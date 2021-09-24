@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c98666ca_9f6d0e11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2021-09-24T17:48:05Z",
+      "side": 1,
+      "message": "LGTM but do we need to add locallog everywhere, or just be more selective on the logs which might be useful for debugging?",
+      "revId": "ecc64af2c69b164d0e4aed4f774d14ad1eba4973",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
