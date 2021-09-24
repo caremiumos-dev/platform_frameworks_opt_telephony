@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb0e9ff0_23f36fa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-09-24T16:40:01Z",
+      "side": 1,
+      "message": "Just cleaning up some dead code in Telephony.",
+      "revId": "b3c2c3066f513689aaaaa0d6750784532c3b0c3f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
