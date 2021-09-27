@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc5b589b_b748ae1e",
+        "filename": "src/java/com/android/internal/telephony/uicc/PinStorage.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-09-27T20:22:37Z",
+      "side": 1,
+      "message": "workSource \u003d\u003d null || workSource.size() \u003d\u003d 0",
+      "range": {
+        "startLine": 343,
+        "startChar": 32,
+        "endLine": 343,
+        "endChar": 75
+      },
+      "revId": "a1cdb05c3bc03958ab758b29dc60fcc6e2dbe500",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
