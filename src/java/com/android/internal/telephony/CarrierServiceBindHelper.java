@@ -128,7 +128,7 @@ public class CarrierServiceBindHelper {
     };
 
     public CarrierServiceBindHelper(Context context) {
-        mContext = context;
+        mContext = mContext.createContextAsUser(Process.myUserHandle(), 0);
 
         updateBindingsAndSimStates();
 
@@ -283,13 +283,13 @@ public class CarrierServiceBindHelper {
 
             String error;
             try {
-                if (mContext.createContextAsUser(Process.myUserHandle(), 0)
-                        .bindService(carrierService,
-                                Context.BIND_AUTO_CREATE
+                if (mContext.bindService(
+                        carrierService,
+                        Context.BIND_AUTO_CREATE
                                 | Context.BIND_FOREGROUND_SERVICE
                                 | Context.BIND_INCLUDE_CAPABILITIES,
-                                (r) -> mHandler.post(r),
-                                connection)) {
+                        (r) -> mHandler.post(r),
+                        connection)) {
                     logdWithLocalLog("service bound");
                     mServiceBound = true;
                     return;
