@@ -60,7 +60,13 @@ import android.hardware.radio.V1_6.OptionalDnn;
 import android.hardware.radio.V1_6.OptionalOsAppId;
 import android.hardware.radio.V1_6.OptionalSliceInfo;
 import android.hardware.radio.V1_6.OptionalTrafficDescriptor;
+import android.hardware.radio.data.IRadioData;
 import android.hardware.radio.deprecated.V1_0.IOemHook;
+import android.hardware.radio.messaging.IRadioMessaging;
+import android.hardware.radio.modem.IRadioModem;
+import android.hardware.radio.network.IRadioNetwork;
+import android.hardware.radio.sim.IRadioSim;
+import android.hardware.radio.voice.IRadioVoice;
 import android.net.InetAddresses;
 import android.net.KeepalivePacketData;
 import android.net.LinkAddress;
@@ -109,10 +115,16 @@ import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataCallResponse.HandoverFailureMode;
 import android.telephony.data.DataProfile;
 import android.telephony.data.DataService;
+import android.telephony.data.EpsQos;
 import android.telephony.data.NetworkSliceInfo;
+import android.telephony.data.NrQos;
 import android.telephony.data.Qos;
+import android.telephony.data.QosBearerFilter;
 import android.telephony.data.QosBearerSession;
+import android.telephony.data.RouteSelectionDescriptor;
+import android.telephony.data.SlicingConfig;
 import android.telephony.data.TrafficDescriptor;
+import android.telephony.data.UrspRule;
 import android.telephony.emergency.EmergencyNumber;
 import android.text.TextUtils;
 import android.util.Log;
@@ -123,6 +135,7 @@ import com.android.internal.telephony.cat.ComprehensionTlv;
 import com.android.internal.telephony.cat.ComprehensionTlvTag;
 import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
+import com.android.internal.telephony.dataconnection.KeepaliveStatus;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.metrics.ModemRestartStats;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
@@ -283,6 +296,24 @@ public class RIL extends BaseCommands implements CommandsInterface {
     RadioResponse mRadioResponse;
     RadioIndication mRadioIndication;
     volatile IRadio mRadioProxy = null;
+    DataResponse mDataResponse;
+    DataIndication mDataIndication;
+    volatile IRadioData mDataProxy = null;
+    //MessagingResponse mMessagingResponse;
+    //MessagingIndication mMessagingIndication;
+    volatile IRadioMessaging mMessagingProxy = null;
+    //ModemResponse mModemResponse;
+    //ModemIndication mModemIndication;
+    volatile IRadioModem mModemProxy = null;
+    //NetworkResponse mNetworkResponse;
+    //NetworkIndication mNetworkIndication;
+    volatile IRadioNetwork mNetworkProxy = null;
+    //SimResponse mSimResponse;
+    //SimIndication mSimIndication;
+    volatile IRadioSim mSimProxy = null;
+    //VoiceResponse mVoiceResponse;
+    //VoiceIndication mVoiceIndication;
+    volatile IRadioVoice mVoiceProxy = null;
     OemHookResponse mOemHookResponse;
     OemHookIndication mOemHookIndication;
     volatile IOemHook mOemHookProxy = null;
@@ -6167,6 +6198,19 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return processResponseInternal(responseInfo.serial, responseInfo.error, responseInfo.type);
     }
 
+    /**
+     * This is a helper function for an AIDL RadioResponseInfo to be called when a RadioResponse
+     * callback is called.
+     * It takes care of acks, wakelocks, and finds and returns RILRequest corresponding to the
+     * response if one is found.
+     * @param responseInfo RadioResponseInfo received in response callback
+     * @return RILRequest corresponding to the response
+     */
+    @VisibleForTesting
+    public RILRequest processResponse(android.hardware.radio.RadioResponseInfo responseInfo) {
+        return processResponseInternal(responseInfo.serial, responseInfo.error, responseInfo.type);
+    }
+
     private RILRequest processResponseInternal(int serial, int error, int type) {
         RILRequest rr = null;
 
@@ -6287,6 +6331,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public void processResponseDone_1_6(
                     RILRequest rr, android.hardware.radio.V1_6.RadioResponseInfo responseInfo,
                     Object ret) {
+        processResponseDoneInternal(rr, responseInfo.error, responseInfo.type, ret);
+    }
+
+    /**
+     * This is a helper function to be called at the end of the RadioResponse callbacks using for
+     * RadioResponseInfo AIDL.
+     * It takes care of sending error response, logging, decrementing wakelock if needed, and
+     * releases the request from memory pool.
+     * @param rr RILRequest for which response callback was called
+     * @param responseInfo RadioResponseInfo received in the callback
+     * @param ret object to be returned to request sender
+     */
+    @VisibleForTesting
+    public void processResponseDone(RILRequest rr,
+            android.hardware.radio.RadioResponseInfo responseInfo, Object ret) {
         processResponseDoneInternal(rr, responseInfo.error, responseInfo.type, ret);
     }
 
@@ -7313,6 +7372,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    /** Convert a primitive byte array to an ArrayList<Integer>. */
     public static ArrayList<Byte> primitiveArrayToArrayList(byte[] arr) {
         ArrayList<Byte> arrayList = new ArrayList<>(arr.length);
         for (byte b : arr) {
@@ -7325,6 +7385,15 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public static ArrayList<Integer> primitiveArrayToArrayList(int[] arr) {
         ArrayList<Integer> arrayList = new ArrayList<>(arr.length);
         for (int i : arr) {
+            arrayList.add(i);
+        }
+        return arrayList;
+    }
+
+    /** Convert a primitive String array to an ArrayList<String>. */
+    public static ArrayList<String> primitiveArrayToArrayList(String[] arr) {
+        ArrayList<String> arrayList = new ArrayList<>(arr.length);
+        for (String i : arr) {
             arrayList.add(i);
         }
         return arrayList;
@@ -7702,7 +7771,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
             laList = result.addresses.stream().map(la -> createLinkAddressFromString(
                     la.address, la.properties, la.deprecationTime, la.expirationTime))
                     .collect(Collectors.toList());
-
             dnses = result.dnses.stream().toArray(String[]::new);
             gateways = result.gateways.stream().toArray(String[]::new);
             pcscfs = result.pcscf.stream().toArray(String[]::new);
@@ -7729,12 +7797,43 @@ public class RIL extends BaseCommands implements CommandsInterface {
             mtuV6 = result.mtuV6;
             handoverFailureMode = result.handoverFailureMode;
             pduSessionId = result.pduSessionId;
-            defaultQos = Qos.create(result.defaultQos);
+            defaultQos = convertToQos(result.defaultQos);
             qosSessions = result.qosSessions.stream().map(session ->
-                    QosBearerSession.create(session)).collect(Collectors.toList());
-            sliceInfo = convertToSliceInfo(result.sliceInfo);
+                    convertToQosBearerSession(session)).collect(Collectors.toList());
+            sliceInfo = result.sliceInfo.getDiscriminator()
+                    == OptionalSliceInfo.hidl_discriminator.noinit ? null
+                    : convertToSliceInfo(result.sliceInfo.value());
             trafficDescriptors = result.trafficDescriptors.stream().map(td ->
                     convertToTrafficDescriptor(td)).collect(Collectors.toList());
+        } else if (dcResult instanceof android.hardware.radio.data.SetupDataCallResult) {
+            final android.hardware.radio.data.SetupDataCallResult result =
+                    (android.hardware.radio.data.SetupDataCallResult) dcResult;
+            cause = result.cause;
+            suggestedRetryTime = result.suggestedRetryTime;
+            cid = result.cid;
+            active = result.active;
+            protocolType = result.type;
+            ifname = result.ifname;
+            for (android.hardware.radio.data.LinkAddress la : result.addresses) {
+                laList.add(createLinkAddressFromString(la.address, la.addressProperties,
+                        la.deprecationTime, la.expirationTime));
+            }
+            dnses = result.dnses;
+            gateways = result.gateways;
+            pcscfs = result.pcscf;
+            mtu = Math.max(result.mtuV4, result.mtuV6);
+            mtuV4 = result.mtuV4;
+            mtuV6 = result.mtuV6;
+            handoverFailureMode = result.handoverFailureMode;
+            pduSessionId = result.pduSessionId;
+            defaultQos = convertToQosAidl(result.defaultQos);
+            for (android.hardware.radio.data.QosSession session : result.qosSessions) {
+                qosSessions.add(convertToQosBearerSessionAidl(session));
+            }
+            sliceInfo = convertToSliceInfoAidl(result.sliceInfo);
+            for (android.hardware.radio.data.TrafficDescriptor td : result.trafficDescriptors) {
+                trafficDescriptors.add(convertToTrafficDescriptorAidl(td));
+            }
         } else {
             Rlog.e(RILJ_LOG_TAG, "Unsupported SetupDataCallResult " + dcResult);
             return null;
@@ -7808,20 +7907,25 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 .build();
     }
 
-    private static NetworkSliceInfo convertToSliceInfo(OptionalSliceInfo optionalSliceInfo) {
-        if (optionalSliceInfo.getDiscriminator() == OptionalSliceInfo.hidl_discriminator.noinit) {
-            return null;
-        }
-
-        android.hardware.radio.V1_6.SliceInfo si = optionalSliceInfo.value();
-        NetworkSliceInfo.Builder builder =
-                new NetworkSliceInfo.Builder()
+    private static NetworkSliceInfo convertToSliceInfo(android.hardware.radio.V1_6.SliceInfo si) {
+        NetworkSliceInfo.Builder builder = new NetworkSliceInfo.Builder()
                 .setSliceServiceType(si.sst)
                 .setMappedHplmnSliceServiceType(si.mappedHplmnSst);
         if (si.sliceDifferentiator != NetworkSliceInfo.SLICE_DIFFERENTIATOR_NO_SLICE) {
-            builder
-                .setSliceDifferentiator(si.sliceDifferentiator)
-                .setMappedHplmnSliceDifferentiator(si.mappedHplmnSD);
+            builder.setSliceDifferentiator(si.sliceDifferentiator)
+                    .setMappedHplmnSliceDifferentiator(si.mappedHplmnSD);
+        }
+        return builder.build();
+    }
+
+    private static NetworkSliceInfo convertToSliceInfoAidl(
+            android.hardware.radio.data.SliceInfo si) {
+        NetworkSliceInfo.Builder builder = new NetworkSliceInfo.Builder()
+                .setSliceServiceType(si.sliceServiceType)
+                .setMappedHplmnSliceServiceType(si.mappedHplmnSst);
+        if (si.sliceDifferentiator != NetworkSliceInfo.SLICE_DIFFERENTIATOR_NO_SLICE) {
+            builder.setSliceDifferentiator(si.sliceDifferentiator)
+                    .setMappedHplmnSliceDifferentiator(si.mappedHplmnSD);
         }
         return builder.build();
     }
@@ -7842,6 +7946,247 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return builder.build();
     }
 
+    private static TrafficDescriptor convertToTrafficDescriptorAidl(
+            android.hardware.radio.data.TrafficDescriptor td) {
+        String dnn = td.dnn;
+        String osAppId = td.osAppId == null ? null : new String(td.osAppId.osAppId);
+        TrafficDescriptor.Builder builder = new TrafficDescriptor.Builder();
+        if (dnn != null) {
+            builder.setDataNetworkName(dnn);
+        }
+        if (osAppId != null) {
+            builder.setOsAppId(osAppId);
+        }
+        return builder.build();
+    }
+
+    /**
+     * Convert SlicingConfig defined in 1.6/types.hal into SlicingConfig
+     * @param sc SlicingConfig defined in 1.6/types.hal
+     * @return Converted SlicingConfig object
+     */
+    public static SlicingConfig convertToSlicingConfig(
+            android.hardware.radio.V1_6.SlicingConfig sc) {
+        List<UrspRule> urspRules = sc.urspRules.stream().map(ur -> new UrspRule(ur.precedence,
+                ur.trafficDescriptors.stream().map(
+                        td -> convertToTrafficDescriptor(td)).collect(Collectors.toList()),
+                ur.routeSelectionDescriptor.stream().map(
+                        rsd -> new RouteSelectionDescriptor(rsd.precedence, rsd.sessionType.value(),
+                                rsd.sscMode.value(), rsd.sliceInfo.stream().map(
+                                        si -> convertToSliceInfo(si)).collect(Collectors.toList()),
+                                rsd.dnn)).collect(Collectors.toList())))
+                .collect(Collectors.toList());
+        return new SlicingConfig(urspRules,
+                sc.sliceInfo.stream().map(
+                        si -> convertToSliceInfo(si)).collect(Collectors.toList()));
+    }
+
+    /**
+     * Convert SlicingConfig defined in SlicingConfig.aidl into SlicingConfig
+     * @param sc SlicingConfig defined in SlicingConfig.aidl
+     * @return Converted SlicingConfig object
+     */
+    public static SlicingConfig convertToSlicingConfigAidl(
+            android.hardware.radio.data.SlicingConfig sc) {
+        List<UrspRule> urspRules = new ArrayList<>();
+        for (android.hardware.radio.data.UrspRule ur : sc.urspRules) {
+            List<TrafficDescriptor> tds = new ArrayList<>();
+            for (android.hardware.radio.data.TrafficDescriptor td : ur.trafficDescriptors) {
+                tds.add(convertToTrafficDescriptorAidl(td));
+            }
+            List<RouteSelectionDescriptor> rsds = new ArrayList<>();
+            for (android.hardware.radio.data.RouteSelectionDescriptor rsd
+                    : ur.routeSelectionDescriptor) {
+                List<NetworkSliceInfo> sliceInfo = new ArrayList<>();
+                for (android.hardware.radio.data.SliceInfo si : rsd.sliceInfo) {
+                    sliceInfo.add(convertToSliceInfoAidl(si));
+                }
+                rsds.add(new RouteSelectionDescriptor(rsd.precedence, rsd.sessionType, rsd.sscMode,
+                        sliceInfo, primitiveArrayToArrayList(rsd.dnn)));
+            }
+            urspRules.add(new UrspRule(ur.precedence, tds, rsds));
+        }
+        List<NetworkSliceInfo> sliceInfo = new ArrayList<>();
+        for (android.hardware.radio.data.SliceInfo si : sc.sliceInfo) {
+            sliceInfo.add(convertToSliceInfoAidl(si));
+        }
+        return new SlicingConfig(urspRules, sliceInfo);
+    }
+
+    private static Qos.QosBandwidth convertToQosBandwidth(
+            android.hardware.radio.V1_6.QosBandwidth bandwidth) {
+        return new Qos.QosBandwidth(bandwidth.maxBitrateKbps, bandwidth.guaranteedBitrateKbps);
+    }
+
+    private static Qos.QosBandwidth convertToQosBandwidthAidl(
+            android.hardware.radio.data.QosBandwidth bandwidth) {
+        return new Qos.QosBandwidth(bandwidth.maxBitrateKbps, bandwidth.guaranteedBitrateKbps);
+    }
+
+    private static Qos convertToQos(android.hardware.radio.V1_6.Qos qos) {
+        switch (qos.getDiscriminator()) {
+            case android.hardware.radio.V1_6.Qos.hidl_discriminator.eps:
+                android.hardware.radio.V1_6.EpsQos eps = qos.eps();
+                return new EpsQos(convertToQosBandwidth(eps.downlink),
+                        convertToQosBandwidth(eps.uplink), eps.qci);
+            case android.hardware.radio.V1_6.Qos.hidl_discriminator.nr:
+                android.hardware.radio.V1_6.NrQos nr = qos.nr();
+                return new NrQos(convertToQosBandwidth(nr.downlink),
+                        convertToQosBandwidth(nr.uplink), nr.qfi, nr.fiveQi, nr.averagingWindowMs);
+            default:
+                return null;
+        }
+    }
+
+    private static Qos convertToQosAidl(android.hardware.radio.data.Qos qos) {
+        switch (qos.getTag()) {
+            case android.hardware.radio.data.Qos.eps:
+                android.hardware.radio.data.EpsQos eps = qos.getEps();
+                return new EpsQos(convertToQosBandwidthAidl(eps.downlink),
+                        convertToQosBandwidthAidl(eps.uplink), eps.qci);
+            case android.hardware.radio.data.Qos.nr:
+                android.hardware.radio.data.NrQos nr = qos.getNr();
+                return new NrQos(convertToQosBandwidthAidl(nr.downlink),
+                        convertToQosBandwidthAidl(nr.uplink), nr.qfi, nr.fiveQi,
+                        nr.averagingWindowMs);
+            default:
+                return null;
+        }
+    }
+
+    private static QosBearerFilter convertToQosBearerFilter(
+            android.hardware.radio.V1_6.QosFilter qosFilter) {
+        List<LinkAddress> localAddressList = new ArrayList<>();
+        String[] localAddresses = qosFilter.localAddresses.stream().toArray(String[]::new);
+        if (localAddresses != null) {
+            for (String address : localAddresses) {
+                localAddressList.add(createLinkAddressFromString(address));
+            }
+        }
+        List<LinkAddress> remoteAddressList = new ArrayList<>();
+        String[] remoteAddresses = qosFilter.remoteAddresses.stream().toArray(String[]::new);
+        if (remoteAddresses != null) {
+            for (String address : remoteAddresses) {
+                remoteAddressList.add(createLinkAddressFromString(address));
+            }
+        }
+        QosBearerFilter.PortRange localPort = null;
+        if (qosFilter.localPort != null) {
+            if (qosFilter.localPort.getDiscriminator()
+                    == android.hardware.radio.V1_6.MaybePort.hidl_discriminator.range) {
+                final android.hardware.radio.V1_6.PortRange portRange = qosFilter.localPort.range();
+                localPort = new QosBearerFilter.PortRange(portRange.start, portRange.end);
+            }
+        }
+        QosBearerFilter.PortRange remotePort = null;
+        if (qosFilter.remotePort != null) {
+            if (qosFilter.remotePort.getDiscriminator()
+                    == android.hardware.radio.V1_6.MaybePort.hidl_discriminator.range) {
+                final android.hardware.radio.V1_6.PortRange portRange =
+                        qosFilter.remotePort.range();
+                remotePort = new QosBearerFilter.PortRange(portRange.start, portRange.end);
+            }
+        }
+        int tos = -1;
+        if (qosFilter.tos != null) {
+            if (qosFilter.tos.getDiscriminator() == android.hardware.radio.V1_6.QosFilter
+                    .TypeOfService.hidl_discriminator.value) {
+                tos = qosFilter.tos.value();
+            }
+        }
+        long flowLabel = -1;
+        if (qosFilter.flowLabel != null) {
+            if (qosFilter.flowLabel.getDiscriminator() == android.hardware.radio.V1_6.QosFilter
+                    .Ipv6FlowLabel.hidl_discriminator.value) {
+                flowLabel = qosFilter.flowLabel.value();
+            }
+        }
+        long spi = -1;
+        if (qosFilter.spi != null) {
+            if (qosFilter.spi.getDiscriminator()
+                    == android.hardware.radio.V1_6.QosFilter.IpsecSpi.hidl_discriminator.value) {
+                spi = qosFilter.spi.value();
+            }
+        }
+        return new QosBearerFilter(localAddressList, remoteAddressList, localPort, remotePort,
+                qosFilter.protocol, tos, flowLabel, spi, qosFilter.direction, qosFilter.precedence);
+    }
+
+    private static QosBearerFilter convertToQosBearerFilterAidl(
+            android.hardware.radio.data.QosFilter qosFilter) {
+        List<LinkAddress> localAddressList = new ArrayList<>();
+        String[] localAddresses = qosFilter.localAddresses;
+        if (localAddresses != null) {
+            for (String address : localAddresses) {
+                localAddressList.add(RIL.createLinkAddressFromString(address));
+            }
+        }
+        List<LinkAddress> remoteAddressList = new ArrayList<>();
+        String[] remoteAddresses = qosFilter.remoteAddresses;
+        if (remoteAddresses != null) {
+            for (String address : remoteAddresses) {
+                remoteAddressList.add(RIL.createLinkAddressFromString(address));
+            }
+        }
+        QosBearerFilter.PortRange localPort = null;
+        if (qosFilter.localPort != null) {
+            localPort = new QosBearerFilter.PortRange(
+                    qosFilter.localPort.start, qosFilter.localPort.end);
+        }
+        QosBearerFilter.PortRange remotePort = null;
+        if (qosFilter.remotePort != null) {
+            remotePort = new QosBearerFilter.PortRange(
+                    qosFilter.remotePort.start, qosFilter.remotePort.end);
+        }
+        int tos = -1;
+        if (qosFilter.tos != null) {
+            if (qosFilter.tos.getTag()
+                    == android.hardware.radio.data.QosFilterTypeOfService.value) {
+                tos = qosFilter.tos.value;
+            }
+        }
+        long flowLabel = -1;
+        if (qosFilter.flowLabel != null) {
+            if (qosFilter.flowLabel.getTag()
+                    == android.hardware.radio.data.QosFilterIpv6FlowLabel.value) {
+                flowLabel = qosFilter.flowLabel.value;
+            }
+        }
+        long spi = -1;
+        if (qosFilter.spi != null) {
+            if (qosFilter.spi.getTag()
+                    == android.hardware.radio.data.QosFilterIpsecSpi.value) {
+                spi = qosFilter.spi.value;
+            }
+        }
+        return new QosBearerFilter(localAddressList, remoteAddressList, localPort, remotePort,
+                qosFilter.protocol, tos, flowLabel, spi, qosFilter.direction, qosFilter.precedence);
+    }
+
+    private static QosBearerSession convertToQosBearerSession(
+            android.hardware.radio.V1_6.QosSession qosSession) {
+        List<QosBearerFilter> qosBearerFilters = new ArrayList<>();
+        if (qosSession.qosFilters != null) {
+            for (android.hardware.radio.V1_6.QosFilter filter : qosSession.qosFilters) {
+                qosBearerFilters.add(convertToQosBearerFilter(filter));
+            }
+        }
+        return new QosBearerSession(qosSession.qosSessionId, convertToQos(qosSession.qos),
+                qosBearerFilters);
+    }
+
+    private static QosBearerSession convertToQosBearerSessionAidl(
+            android.hardware.radio.data.QosSession qosSession) {
+        List<QosBearerFilter> qosBearerFilters = new ArrayList<>();
+        if (qosSession.qosFilters != null) {
+            for (android.hardware.radio.data.QosFilter filter : qosSession.qosFilters) {
+                qosBearerFilters.add(convertToQosBearerFilterAidl(filter));
+            }
+        }
+        return new QosBearerSession(qosSession.qosSessionId, convertToQosAidl(qosSession.qos),
+                qosBearerFilters);
+    }
+
     /**
      * Convert SetupDataCallResult defined in 1.0 or 1.4/types.hal into DataCallResponse
      * @param dataCallResultList List of SetupDataCallResult defined in 1.0 or 1.4/types.hal
@@ -7850,13 +8195,47 @@ public class RIL extends BaseCommands implements CommandsInterface {
     @VisibleForTesting
     public static ArrayList<DataCallResponse> convertDataCallResultList(
             List<? extends Object> dataCallResultList) {
-        ArrayList<DataCallResponse> response =
-                new ArrayList<DataCallResponse>(dataCallResultList.size());
+        ArrayList<DataCallResponse> response = new ArrayList<>(dataCallResultList.size());
 
         for (Object obj : dataCallResultList) {
             response.add(convertDataCallResult(obj));
         }
         return response;
+    }
+
+    /**
+     * Convert SetupDataCallResult defined in SetupDataCallResult.aidl into DataCallResponse
+     * @param dataCallResultList Array of SetupDataCallResult
+     * @return List of converted DataCallResponse object
+     */
+    @VisibleForTesting
+    public static ArrayList<DataCallResponse> convertDataCallResultList(
+            Object[] dataCallResultList) {
+        ArrayList<DataCallResponse> response = new ArrayList<>(dataCallResultList.length);
+
+        for (Object obj : dataCallResultList) {
+            response.add(convertDataCallResult(obj));
+        }
+        return response;
+    }
+
+    /**
+     * Convert KeepaliveStatusCode defined in 1.1/types.hal and KeepaliveStatus.aidl
+     * into KeepaliveStatus
+     * @param halCode KeepaliveStatus code
+     * @return KeepaliveStatus
+     */
+    public static int convertHalKeepaliveStatusCode(int halCode) {
+        switch (halCode) {
+            case android.hardware.radio.V1_1.KeepaliveStatusCode.ACTIVE:
+                return KeepaliveStatus.STATUS_ACTIVE;
+            case android.hardware.radio.V1_1.KeepaliveStatusCode.INACTIVE:
+                return KeepaliveStatus.STATUS_INACTIVE;
+            case android.hardware.radio.V1_1.KeepaliveStatusCode.PENDING:
+                return KeepaliveStatus.STATUS_PENDING;
+            default:
+                return -1;
+        }
     }
 
     /**
