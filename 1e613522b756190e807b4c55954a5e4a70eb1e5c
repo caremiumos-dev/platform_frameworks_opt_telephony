@@ -16,6 +16,29 @@
       "message": "Clone from ag/15644038. Thanks, Jeff.\n\nLeave TODO in b/201423849 for 1. revert ag/10651315 and 2. Refactor to be more testable with more UT cases.",
       "revId": "1e613522b756190e807b4c55954a5e4a70eb1e5c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82c442e0_644d8ae3",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-09-29T18:00:17Z",
+      "side": 1,
+      "message": "NPE? Should this be \"context\"?",
+      "range": {
+        "startLine": 131,
+        "startChar": 19,
+        "endLine": 131,
+        "endChar": 27
+      },
+      "revId": "1e613522b756190e807b4c55954a5e4a70eb1e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
