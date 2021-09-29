@@ -39,6 +39,30 @@
       },
       "revId": "1e613522b756190e807b4c55954a5e4a70eb1e5c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc9a36f5_f56a353a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-09-29T18:06:04Z",
+      "side": 1,
+      "message": "Right. patch was tested in internal branch with \"context\". Manually copy the logic introduces the bug. Thanks.",
+      "parentUuid": "82c442e0_644d8ae3",
+      "range": {
+        "startLine": 131,
+        "startChar": 19,
+        "endLine": 131,
+        "endChar": 27
+      },
+      "revId": "1e613522b756190e807b4c55954a5e4a70eb1e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
