@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48e13061_8ccf3566",
+        "filename": "src/java/com/android/internal/telephony/RadioResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-09-29T23:24:26Z",
+      "side": 0,
+      "message": "Are you trying to move all convertXxx into the same place?\n\nI feel RIL.java right now is overloaded with those convertXxx methods. Maybe those HIDL/AIDL static conversion methods can be moved into a separate file like RILUtils or HalUtils.",
+      "range": {
+        "startLine": 1913,
+        "startChar": 0,
+        "endLine": 1925,
+        "endChar": 5
+      },
+      "revId": "c024f16a4f82b597cafb172bf2e5e4535d5f75ea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

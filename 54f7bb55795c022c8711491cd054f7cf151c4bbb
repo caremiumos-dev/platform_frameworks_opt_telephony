@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a5ced9_12bd634c",
+        "filename": "src/java/com/android/internal/telephony/DataResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-09-29T23:24:26Z",
+      "side": 1,
+      "message": "private final",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 13
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43a6e2f4_36e1938f",
+        "filename": "src/java/com/android/internal/telephony/DataResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-09-29T23:24:26Z",
+      "side": 1,
+      "message": "private if possible",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 10
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c89c7e_476348b2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 7923,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-09-29T23:24:26Z",
+      "side": 1,
+      "message": "Is this for better readability? Otherwise the same name convertToSliceInfo can just work.",
+      "range": {
+        "startLine": 7923,
+        "startChar": 54,
+        "endLine": 7923,
+        "endChar": 58
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9886ba9_7e6cc5e7",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 7970,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-09-29T23:24:26Z",
+      "side": 1,
+      "message": "I noticed some of those convertXxx are private, some are public. Is that intended?",
+      "range": {
+        "startLine": 7970,
+        "startChar": 4,
+        "endLine": 7970,
+        "endChar": 10
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
