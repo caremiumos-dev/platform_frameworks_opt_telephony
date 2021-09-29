@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae57ba6b_a7e29339",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-09-29T19:04:54Z",
+      "side": 1,
+      "message": "Chen, please help to review this bug fix. This is target on T for now( I will evaluate if it is qualified for S QPR2 and let you know if it needs to CP),\n\nJeff discovered this bug. I explored many scenarios and find it contributes (and direct root caused ) to several issues related to CarrierService binding.\n\nThanks",
+      "revId": "3701cae0af267753efe1ebe8779c85ee650d082b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
