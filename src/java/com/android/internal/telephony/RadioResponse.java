@@ -1851,7 +1851,6 @@ public class RadioResponse extends IRadioResponse.Stub {
         responseVoid(responseInfo);
     }
 
-
     /**
      * @param responseInfo Response info struct containing response type, serial no. and error
      * @param keepaliveStatus status of the keepalive with a handle for the session
@@ -1866,7 +1865,7 @@ public class RadioResponse extends IRadioResponse.Stub {
         try {
             switch(responseInfo.error) {
                 case RadioError.NONE:
-                    int convertedStatus = convertHalKeepaliveStatusCode(keepaliveStatus.code);
+                    int convertedStatus = RIL.convertHalKeepaliveStatusCode(keepaliveStatus.code);
                     if (convertedStatus < 0) {
                         ret = new KeepaliveStatus(KeepaliveStatus.ERROR_UNSUPPORTED);
                     } else {
@@ -1907,20 +1906,6 @@ public class RadioResponse extends IRadioResponse.Stub {
             }
         } finally {
             mRil.processResponseDone(rr, responseInfo, null);
-        }
-    }
-
-    private int convertHalKeepaliveStatusCode(int halCode) {
-        switch (halCode) {
-            case android.hardware.radio.V1_1.KeepaliveStatusCode.ACTIVE:
-                return KeepaliveStatus.STATUS_ACTIVE;
-            case android.hardware.radio.V1_1.KeepaliveStatusCode.INACTIVE:
-                return KeepaliveStatus.STATUS_INACTIVE;
-            case android.hardware.radio.V1_1.KeepaliveStatusCode.PENDING:
-                return KeepaliveStatus.STATUS_PENDING;
-            default:
-                mRil.riljLog("Invalid Keepalive Status" + halCode);
-                return -1;
         }
     }
 
@@ -3177,7 +3162,7 @@ public class RadioResponse extends IRadioResponse.Stub {
         RILRequest rr = mRil.processResponse_1_6(info);
 
         if (rr != null) {
-            SlicingConfig ret = new SlicingConfig(slicingConfig);
+            SlicingConfig ret = RIL.convertToSlicingConfig(slicingConfig);
             if (info.error == RadioError.NONE) {
                 sendMessageResponse(rr.mResult, ret);
             }
