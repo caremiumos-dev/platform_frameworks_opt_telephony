@@ -91,6 +91,30 @@
       },
       "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fbc538b_6f9b080d",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 7970,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-09-30T17:31:51Z",
+      "side": 1,
+      "message": "Yep, only the classes used in IRadioDataResponse need to be public. The others are private because it\u0027s not used anywhere outside of here, but I can make them all public if that makes more sense.",
+      "parentUuid": "b9886ba9_7e6cc5e7",
+      "range": {
+        "startLine": 7970,
+        "startChar": 4,
+        "endLine": 7970,
+        "endChar": 10
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
