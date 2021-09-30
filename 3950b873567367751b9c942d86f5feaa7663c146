@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9dd2497_d522fd7a",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-09-30T17:27:28Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 339,
+        "startChar": 19,
+        "endLine": 339,
+        "endChar": 23
+      },
+      "revId": "3950b873567367751b9c942d86f5feaa7663c146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a35cc27e_cf5dedb5",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-09-30T17:27:28Z",
+      "side": 1,
+      "message": "From an extensibility perspective, would it be better to create a RadioConfigIndicationHidl and RadioConfigIndicationAidl class that gets called from RadioConfigIndication instead? New methods would only be added to RadioConfigIndicationAidl from now on, so having the Hidl class in the same file would be confusing.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 69
+      },
+      "revId": "3950b873567367751b9c942d86f5feaa7663c146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c3ff515_2accbd21",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-09-30T17:27:28Z",
+      "side": 1,
+      "message": "same comment as for RadioConfigIndication",
+      "range": {
+        "startLine": 72,
+        "startChar": 17,
+        "endLine": 73,
+        "endChar": 80
+      },
+      "revId": "3950b873567367751b9c942d86f5feaa7663c146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

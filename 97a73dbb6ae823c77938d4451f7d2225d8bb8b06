@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9ca71b5_001e9d9a",
+        "filename": "src/java/com/android/internal/telephony/RadioConfig.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-09-30T17:27:28Z",
+      "side": 0,
+      "message": "These should be left as is. If I remember correctly, calls from IRadioConfig are \u003e and IRadioConfigResponse are \u003c.",
+      "range": {
+        "startLine": 369,
+        "startChar": 23,
+        "endLine": 369,
+        "endChar": 47
+      },
+      "revId": "97a73dbb6ae823c77938d4451f7d2225d8bb8b06",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
