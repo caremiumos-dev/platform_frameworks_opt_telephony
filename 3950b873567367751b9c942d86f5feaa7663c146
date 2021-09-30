@@ -116,6 +116,30 @@
       },
       "revId": "3950b873567367751b9c942d86f5feaa7663c146",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e968d04_07b27285",
+        "filename": "src/java/com/android/internal/telephony/RadioConfigResponse.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1403265
+      },
+      "writtenOn": "2021-09-30T23:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c3ff515_2accbd21",
+      "range": {
+        "startLine": 72,
+        "startChar": 17,
+        "endLine": 73,
+        "endChar": 80
+      },
+      "revId": "3950b873567367751b9c942d86f5feaa7663c146",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
