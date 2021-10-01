@@ -22,6 +22,30 @@
       },
       "revId": "af2c67543337a61137be033c85edd965901416c0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b04420a8_c87a2946",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-10-01T21:01:26Z",
+      "side": 1,
+      "message": "Thinking twice, considering that we need to split calls into segments, this might be safer. We will have to accumulate RAT switch count and duration instead of replacing them since pull may fail due to frequency limit.\n\nTo make it slightly better, we can add the switch count and duration to the new atom, which will avoid copying majority of the field.",
+      "parentUuid": "7bb1b44d_4dfab1aa",
+      "range": {
+        "startLine": 238,
+        "startChar": 12,
+        "endLine": 248,
+        "endChar": 69
+      },
+      "revId": "af2c67543337a61137be033c85edd965901416c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
