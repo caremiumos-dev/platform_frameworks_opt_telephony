@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f683e3_6e2c66f2",
+        "filename": "src/java/com/android/internal/telephony/DataResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-10-01T00:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9a5ced9_12bd634c",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 13
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43a6e2f4_36e1938f",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "299b5f01_0b0d4ab6",
+        "filename": "src/java/com/android/internal/telephony/DataResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-10-01T00:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43a6e2f4_36e1938f",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 10
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13c89c7e_476348b2",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-09-29T23:24:26Z",
       "side": 1,
       "message": "Is this for better readability? Otherwise the same name convertToSliceInfo can just work.",
+      "range": {
+        "startLine": 7923,
+        "startChar": 54,
+        "endLine": 7923,
+        "endChar": 58
+      },
+      "revId": "54f7bb55795c022c8711491cd054f7cf151c4bbb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c628098a_f81124e2",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 7923,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-10-01T00:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13c89c7e_476348b2",
       "range": {
         "startLine": 7923,
         "startChar": 54,
