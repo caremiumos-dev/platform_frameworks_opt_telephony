@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29aa2ec_ed7d42f1",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-01T18:33:32Z",
+      "side": 1,
+      "message": "wouldn\u0027t this cause 2 messages to be sent out? one from retry and one from here?",
+      "range": {
+        "startLine": 197,
+        "startChar": 17,
+        "endLine": 202,
+        "endChar": 17
+      },
+      "revId": "f5f3fb2735821e3e00d045bf39b20c0fb6ed019f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b7344f6_2e260b17",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SmsStorageMonitorTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-01T18:33:32Z",
+      "side": 1,
+      "message": "this will slow the unit testing. change the retry timers for unit test.",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 9
+      },
+      "revId": "f5f3fb2735821e3e00d045bf39b20c0fb6ed019f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
