@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48bad867_17f2ad13",
+        "filename": "proguard.flags",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-10-02T00:33:16Z",
+      "side": 1,
+      "message": "If obfuscation is disabled, do we need this?",
+      "range": {
+        "startLine": 5,
+        "startChar": 1,
+        "endLine": 5,
+        "endChar": 13
+      },
+      "revId": "0abcb675f7483fae7b4171fccde1773f098c3417",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55636711_456a1c5b",
+        "filename": "proguard.flags",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-10-02T00:33:16Z",
+      "side": 1,
+      "message": "Minor. Do we need to list them both here, or can we keep anything android.telephony.gsm.* ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "0abcb675f7483fae7b4171fccde1773f098c3417",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
