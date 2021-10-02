@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09db8e30_67b715cd",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2021-10-02T00:04:47Z",
+      "side": 1,
+      "message": "{@code DataCallSession} ?",
+      "range": {
+        "startLine": 742,
+        "startChar": 28,
+        "endLine": 742,
+        "endChar": 45
+      },
+      "revId": "da73d3f1dbf1e09c13f060514c6701b852c14caa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
