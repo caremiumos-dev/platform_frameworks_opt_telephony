@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3815937_9222dd6e",
+        "filename": "proguard.flags",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-10-04T17:37:29Z",
+      "side": 1,
+      "message": "We can remove it for now.",
+      "parentUuid": "48bad867_17f2ad13",
+      "range": {
+        "startLine": 5,
+        "startChar": 1,
+        "endLine": 5,
+        "endChar": 13
+      },
+      "revId": "0abcb675f7483fae7b4171fccde1773f098c3417",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55636711_456a1c5b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-02T00:33:16Z",
       "side": 1,
       "message": "Minor. Do we need to list them both here, or can we keep anything android.telephony.gsm.* ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "0abcb675f7483fae7b4171fccde1773f098c3417",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4765ead_4ea348d4",
+        "filename": "proguard.flags",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-10-04T17:37:29Z",
+      "side": 1,
+      "message": "My concern is that other classes from platform sources might get included, which isn\u0027t necessary: https://developer.android.com/reference/android/telephony/gsm/package-summary\n\nThe contents of android.telephony.gsm appears quite stable so it seems to me using android.telephony.gsm.* might not have much benefits over the other way.",
+      "parentUuid": "55636711_456a1c5b",
       "range": {
         "startLine": 9,
         "startChar": 0,
