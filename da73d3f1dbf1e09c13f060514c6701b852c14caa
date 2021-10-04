@@ -22,6 +22,30 @@
       },
       "revId": "da73d3f1dbf1e09c13f060514c6701b852c14caa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac34983_fd709ee5",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-10-04T23:19:53Z",
+      "side": 1,
+      "message": "Similar methods above does not use @code. I prefer to keep them consistent for now.",
+      "parentUuid": "09db8e30_67b715cd",
+      "range": {
+        "startLine": 742,
+        "startChar": 28,
+        "endLine": 742,
+        "endChar": 45
+      },
+      "revId": "da73d3f1dbf1e09c13f060514c6701b852c14caa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
