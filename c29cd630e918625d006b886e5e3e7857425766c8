@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a6ddb2d_6cf47202",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1237773
+      },
+      "writtenOn": "2021-10-05T23:23:02Z",
+      "side": 1,
+      "message": "Maybe this should be regenerated (i.e. delete it and amend the commit)? That\u0027s what I usually do when I have a Merged-In tag. That way when things get merged together there aren\u0027t 2 commits with the same Change-Id.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "c29cd630e918625d006b886e5e3e7857425766c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
