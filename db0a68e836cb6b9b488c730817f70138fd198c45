@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "025cb46a_fecb1aa6",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-05T13:36:47Z",
+      "side": 1,
+      "message": "change the name to mReportedMemoryStatusToModem change the logic to reflect the name",
+      "range": {
+        "startLine": 77,
+        "startChar": 20,
+        "endLine": 77,
+        "endChar": 46
+      },
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8701e4db_7950214a",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-05T13:36:47Z",
+      "side": 1,
+      "message": "mIsWaitingResponse should be set to false here and use the utiility function to send requests",
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d4f5dca_ba572ed3",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-05T13:36:47Z",
+      "side": 1,
+      "message": "these two are always together. Move them to a function.",
+      "range": {
+        "startLine": 201,
+        "startChar": 16,
+        "endLine": 203,
+        "endChar": 85
+      },
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
