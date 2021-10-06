@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ebefb56_4db0cce2",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-10-06T04:43:55Z",
+      "side": 1,
+      "message": "Changed as \"mIsMemoryStatusReportingFailed\". let me know if it should be changed as \"mReportedMemoryStatusToModem\".",
+      "parentUuid": "be5e3c50_706a4385",
+      "range": {
+        "startLine": 77,
+        "startChar": 20,
+        "endLine": 77,
+        "endChar": 46
+      },
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8701e4db_7950214a",
         "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
         "patchSetId": 3
@@ -78,6 +102,30 @@
       "writtenOn": "2021-10-05T13:36:47Z",
       "side": 1,
       "message": "these two are always together. Move them to a function.",
+      "range": {
+        "startLine": 201,
+        "startChar": 16,
+        "endLine": 203,
+        "endChar": 85
+      },
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b9a8e64_5899c94c",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-10-06T04:43:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d4f5dca_ba572ed3",
       "range": {
         "startLine": 201,
         "startChar": 16,
