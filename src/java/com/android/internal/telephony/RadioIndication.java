@@ -218,14 +218,21 @@ public class RadioIndication extends IRadioIndication.Stub {
     }
 
     public void nitzTimeReceived(int indicationType, String nitzTime, long receivedTime) {
+        nitzTimeReceived(indicationType, nitzTime, receivedTime, Long.MIN_VALUE);
+    }
+
+    public void nitzTimeReceived(int indicationType, String nitzTime,
+        long receivedTime, long ageMs) {
         mRil.processIndication(indicationType);
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_NITZ_TIME_RECEIVED, nitzTime);
 
         // todo: Clean this up with a parcelable class for better self-documentation
-        Object[] result = new Object[2];
+        Object[] result = new Object[(ageMs >= 0) ? 3 : 2];
         result[0] = nitzTime;
         result[1] = receivedTime;
+        if (ageMs >= 0)
+            result[2] = ageMs;
 
         boolean ignoreNitz = TelephonyProperties.ignore_nitz().orElse(false);
 
