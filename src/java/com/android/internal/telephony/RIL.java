@@ -279,6 +279,27 @@ public class RIL extends BaseCommands implements CommandsInterface {
     RadioResponse mRadioResponse;
     RadioIndication mRadioIndication;
     volatile IRadio mRadioProxy = null;
+<<<<<<< HEAD   (125c0b Merge "Snap for 7961266 from 19a8b103468d05b508dff5684d702d3)
+=======
+    DataResponse mDataResponse;
+    DataIndication mDataIndication;
+    volatile IRadioData mDataProxy = null;
+    MessagingResponse mMessagingResponse;
+    MessagingIndication mMessagingIndication;
+    volatile IRadioMessaging mMessagingProxy = null;
+    ModemResponse mModemResponse;
+    ModemIndication mModemIndication;
+    volatile IRadioModem mModemProxy = null;
+    NetworkResponse mNetworkResponse;
+    NetworkIndication mNetworkIndication;
+    volatile IRadioNetwork mNetworkProxy = null;
+    SimResponse mSimResponse;
+    SimIndication mSimIndication;
+    volatile IRadioSim mSimProxy = null;
+    VoiceResponse mVoiceResponse;
+    VoiceIndication mVoiceIndication;
+    volatile IRadioVoice mVoiceProxy = null;
+>>>>>>> CHANGE (bc0e2a Implement IRadio modules)
     final AtomicLong mRadioProxyCookie = new AtomicLong(0);
     final RadioProxyDeathRecipient mRadioProxyDeathRecipient;
     final RilHandler mRilHandler;
@@ -626,6 +647,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         mRadioResponse = new RadioResponse(this);
         mRadioIndication = new RadioIndication(this);
+<<<<<<< HEAD   (125c0b Merge "Snap for 7961266 from 19a8b103468d05b508dff5684d702d3)
+=======
+        mDataResponse = new DataResponse(this);
+        mDataIndication = new DataIndication(this);
+        mMessagingResponse = new MessagingResponse(this);
+        mMessagingIndication = new MessagingIndication(this);
+        mModemResponse = new ModemResponse(this);
+        mModemIndication = new ModemIndication(this);
+        mNetworkResponse = new NetworkResponse(this);
+        mNetworkIndication = new NetworkIndication(this);
+        mSimResponse = new SimResponse(this);
+        mSimIndication = new SimIndication(this);
+        mVoiceResponse = new VoiceResponse(this);
+        mVoiceIndication = new VoiceIndication(this);
+>>>>>>> CHANGE (bc0e2a Implement IRadio modules)
         mRilHandler = new RilHandler();
         mRadioProxyDeathRecipient = new RadioProxyDeathRecipient();
 
@@ -6026,7 +6062,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         android.hardware.radio.V1_6.IRadio.castFrom(radioProxy);
 
                 android.hardware.radio.V1_6.PhonebookRecordInfo pbRecordInfo =
-                        phonebookRecord.toPhonebookRecordInfo();
+                        RILUtils.convertToHalPhonebookRecordInfo(phonebookRecord);
                 try {
                      radioProxy16.updateSimPhonebookRecords(rr.mSerial, pbRecordInfo);
                 } catch (RemoteException | RuntimeException e) {
