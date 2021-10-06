@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b8e7bc_fc94769c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-06T21:20:13Z",
+      "side": 1,
+      "message": "Rebase to latest master branch (unfortunately, lost the +1 from Nathan, even no code change since then).\n\nJack, this is the starting CL to review for the Signal Strength clean up (go/SignalStrengthController)",
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
