@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be5e3c50_706a4385",
+        "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-10-06T02:24:34Z",
+      "side": 1,
+      "message": "Sorry. I didn\u0027t get your point.\n\"mReportMemoryStatusPending\" means that previous report has been failed(not delivered to n/w).",
+      "parentUuid": "025cb46a_fecb1aa6",
+      "range": {
+        "startLine": 77,
+        "startChar": 20,
+        "endLine": 77,
+        "endChar": 46
+      },
+      "revId": "db0a68e836cb6b9b488c730817f70138fd198c45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8701e4db_7950214a",
         "filename": "src/java/com/android/internal/telephony/SmsStorageMonitor.java",
         "patchSetId": 3
