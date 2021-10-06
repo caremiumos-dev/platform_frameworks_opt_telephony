@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e93b35_abf57ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-10-06T17:12:07Z",
+      "side": 1,
+      "message": "We discussed this with Robert and the plan is to merge early so we can spot issues in time.\n\nI have tested voice/data/SMS/WFC.\n\nThere are still some reflection usage in other tests, which currently do not fail yet. However, we will try to fixed them later.",
+      "revId": "1d177d717b1763d5f7cfe85fa598646500177578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
