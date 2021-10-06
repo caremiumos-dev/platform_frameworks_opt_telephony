@@ -1445,6 +1445,12 @@ public class ServiceStateTracker extends Handler {
 
                 String nitzString = (String)((Object[])ar.result)[0];
                 long nitzReceiveTime = ((Long)((Object[])ar.result)[1]).longValue();
+                int  resultLength = ((Object[])ar.result).length;
+                if (resultLength >= 3) {
+                    long age = ((Long)((Object[])ar.result)[2]).longValue();
+                    setTimeFromNITZString(nitzString, nitzReceiveTime, age);
+                    break;
+                }
 
                 setTimeFromNITZString(nitzString, nitzReceiveTime);
                 break;
@@ -4460,9 +4466,17 @@ public class ServiceStateTracker extends Handler {
      * nitzReceiveTime is time_t that the NITZ time was posted
      */
     private void setTimeFromNITZString(String nitzString, long nitzReceiveTime) {
+        setTimeFromNITZString(nitzString, nitzReceiveTime, 0);
+    }
+
+    /**
+     * nitzReceiveTime is time_t that the NITZ time was posted from RIL
+     * age is time_t that the NITZ was cached in RIL and modem
+     */
+    private void setTimeFromNITZString(String nitzString, long nitzReceiveTime, long age) {
         long start = SystemClock.elapsedRealtime();
         if (DBG) {
-            Rlog.d(LOG_TAG, "NITZ: " + nitzString + "," + nitzReceiveTime
+            Rlog.d(LOG_TAG, "NITZ: " + nitzString + "," + nitzReceiveTime + ", age=" + age
                     + " start=" + start + " delay=" + (start - nitzReceiveTime));
         }
         NitzData newNitzData = NitzData.parse(nitzString);
@@ -4470,7 +4484,7 @@ public class ServiceStateTracker extends Handler {
         if (newNitzData != null) {
             try {
                 TimestampedValue<NitzData> nitzSignal =
-                        new TimestampedValue<>(nitzReceiveTime, newNitzData);
+                        new TimestampedValue<>(nitzReceiveTime - age, newNitzData);
                 mNitzState.handleNitzReceived(nitzSignal);
             } finally {
                 if (DBG) {

@@ -241,6 +241,32 @@ public class RadioIndication extends IRadioIndication.Stub {
         }
     }
 
+    public void nitzTimeReceived(int indicationType, String nitzTime,
+        long receivedTime, long age) {
+        mRil.processIndication(indicationType);
+
+        if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_NITZ_TIME_RECEIVED, nitzTime);
+
+        // todo: Clean this up with a parcelable class for better self-documentation
+        Object[] result = new Object[3];
+        result[0] = nitzTime;
+        result[1] = receivedTime;
+        result[2] = age;
+
+        boolean ignoreNitz = TelephonyProperties.ignore_nitz().orElse(false);
+
+        if (ignoreNitz) {
+            if (RIL.RILJ_LOGD) mRil.riljLog("ignoring UNSOL_NITZ_TIME_RECEIVED");
+        } else {
+            if (mRil.mNITZTimeRegistrant != null) {
+                mRil.mNITZTimeRegistrant.notifyRegistrant(new AsyncResult (null, result, null));
+            }
+            // in case NITZ time registrant isn't registered yet, or a new registrant
+            // registers later
+            mRil.mLastNITZTimeInfo = result;
+        }
+    }
+
     public void currentSignalStrength(int indicationType,
                                       android.hardware.radio.V1_0.SignalStrength signalStrength) {
         mRil.processIndication(indicationType);
