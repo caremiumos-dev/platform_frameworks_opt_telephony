@@ -22,6 +22,30 @@
       },
       "revId": "29168b9cf074141d93877d98cfda516b19fdc4ba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4631fe60_72f8c462",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "It would be pretty awkward to get such exception :-). Thanks\nUpdated to \"SSCtr\" since \"SSC\" may get trouble in searching the tag in the log.",
+      "parentUuid": "a447b2e6_7e76d58a",
+      "range": {
+        "startLine": 53,
+        "startChar": 40,
+        "endLine": 53,
+        "endChar": 64
+      },
+      "revId": "29168b9cf074141d93877d98cfda516b19fdc4ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

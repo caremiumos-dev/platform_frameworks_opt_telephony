@@ -89,6 +89,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0131889_cfff7b14",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "Updated.\n\nBTW, Nathan just share us the funny story  (you must know it) this afternoon why we have so many phones. That\u0027s the reason why he LOL.",
+      "parentUuid": "db207998_383b0dd7",
+      "range": {
+        "startLine": 64,
+        "startChar": 36,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92d9cfd0_c6f8c22e",
@@ -135,6 +159,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ad212d6_dbb7df6e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "SignalRequestRecord.toString() has been implemented. Thanks",
+      "parentUuid": "92d9cfd0_c6f8c22e",
+      "range": {
+        "startLine": 226,
+        "startChar": 45,
+        "endLine": 226,
+        "endChar": 66
+      },
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf49498_8ad89771",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac68c9b_ebdc123b",
+      "range": {
+        "startLine": 226,
+        "startChar": 19,
+        "endLine": 226,
+        "endChar": 42
+      },
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aed7b4d0_6d922a2e",
@@ -148,6 +220,30 @@
       "writtenOn": "2021-10-08T02:07:26Z",
       "side": 1,
       "message": "I think you don\u0027t need to pass ci here. Inside SSC you can just directly use mPhone.mCi (super ugly but that\u0027s consistent with other places in telephony)",
+      "range": {
+        "startLine": 450,
+        "startChar": 12,
+        "endLine": 450,
+        "endChar": 29
+      },
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b39230e_d101b58e",
+        "filename": "src/java/com/android/internal/telephony/TelephonyComponentFactory.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "Yes, the parameters passed to makeSignalStrengthController(this, this.mCi) (in GsmCdmaPhone) also indicate the second parameter is redundant.\n\nUpdated now. Thanks",
+      "parentUuid": "aed7b4d0_6d922a2e",
       "range": {
         "startLine": 450,
         "startChar": 12,

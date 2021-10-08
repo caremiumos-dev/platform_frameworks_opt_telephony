@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "281957a7_18067318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-08T05:37:05Z",
+      "side": 1,
+      "message": "Jack, thanks for the review \u0026 suggestions. Patch updated. Please take a look again.",
+      "revId": "86017b9c3bae48dfe8e11325c6e72f800be0b291",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
