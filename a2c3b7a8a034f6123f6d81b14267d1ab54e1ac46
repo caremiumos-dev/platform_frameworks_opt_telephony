@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01c8eeac_887e2c82",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-08T02:12:48Z",
+      "side": 1,
+      "message": "I think we use \u0027Phone\u0027 in most of the places. I think ServiceStateTracker is a bad example to follow.",
+      "parentUuid": "4b8bdad0_efdd69cb",
+      "range": {
+        "startLine": 64,
+        "startChar": 36,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "a2c3b7a8a034f6123f6d81b14267d1ab54e1ac46",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92d9cfd0_c6f8c22e",
         "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
         "patchSetId": 23
