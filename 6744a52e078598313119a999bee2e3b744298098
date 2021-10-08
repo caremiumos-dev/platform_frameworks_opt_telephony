@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5399be9_ace96d9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2021-10-08T18:31:21Z",
+      "side": 1,
+      "message": "Can you pls run the following command after connecting your device ?\nIt will run all the unit tests\n\natest frameworks/opt/telephony/tests/telephonytests/",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "6744a52e078598313119a999bee2e3b744298098",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
