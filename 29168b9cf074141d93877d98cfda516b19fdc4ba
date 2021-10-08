@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a447b2e6_7e76d58a",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-08T02:07:26Z",
+      "side": 1,
+      "message": "RLog.isLoggable can throw exception is the tag exceeds 23 chars. Also you might want to append the phone id at the end of tag like \"SSC-0\", SSC-1\" to distinguish different SSC on DSDS devices.",
+      "range": {
+        "startLine": 53,
+        "startChar": 40,
+        "endLine": 53,
+        "endChar": 64
+      },
+      "revId": "29168b9cf074141d93877d98cfda516b19fdc4ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
