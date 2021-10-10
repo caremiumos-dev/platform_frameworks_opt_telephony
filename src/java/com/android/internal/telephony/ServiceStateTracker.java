@@ -85,6 +85,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
 import android.telephony.VoiceSpecificRegistrationInfo;
+import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.LocalLog;
@@ -287,7 +288,8 @@ public class ServiceStateTracker extends Handler {
     public    static final int EVENT_ICC_CHANGED                       = 42;
     protected static final int EVENT_GET_CELL_INFO_LIST                = 43;
     protected static final int EVENT_UNSOL_CELL_INFO_LIST              = 44;
-    // Only sent if the IMS state is moving from true -> false
+    // Only sent if the IMS state is moving from true -> false and power off delay for IMS
+    // registration feature is enabled.
     protected static final int EVENT_CHANGE_IMS_STATE                  = 45;
     protected static final int EVENT_IMS_STATE_CHANGED                 = 46;
     protected static final int EVENT_IMS_STATE_DONE                    = 47;
@@ -428,7 +430,6 @@ public class ServiceStateTracker extends Handler {
             Context context = mPhone.getContext();
 
             mPhone.notifyPhoneStateChanged();
-            mPhone.notifyCallForwardingIndicator();
 
             if (!SubscriptionManager.isValidSubscriptionId(mPrevSubId)) {
                 // just went from invalid to valid subId, so notify with current service
@@ -2382,7 +2383,6 @@ public class ServiceStateTracker extends Handler {
                 int serviceState = regCodeToServiceState(registrationState);
                 int newDataRat = ServiceState.networkTypeToRilRadioTechnology(
                         networkRegState.getAccessNetworkTechnology());
-                boolean nrHasChanged = false;
 
                 if (DBG) {
                     log("handlePollStateResultMessage: PS cellular. " + networkRegState);
@@ -2394,23 +2394,10 @@ public class ServiceStateTracker extends Handler {
                 if (serviceState == ServiceState.STATE_OUT_OF_SERVICE) {
                     mLastPhysicalChannelConfigList = null;
                 }
-                nrHasChanged |= updateNrFrequencyRangeFromPhysicalChannelConfigs(
-                        mLastPhysicalChannelConfigList, mNewSS);
-                nrHasChanged |= updateNrStateFromPhysicalChannelConfigs(
-                        mLastPhysicalChannelConfigList, mNewSS);
-                setPhyCellInfoFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
-
-                if (nrHasChanged) {
-                    TelephonyMetrics.getInstance().writeServiceStateChanged(
-                            mPhone.getPhoneId(), mSS);
-                    mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
-                    mServiceStateStats.onServiceStateChanged(mSS);
-                }
 
                 mPSEmergencyOnly = networkRegState.isEmergencyEnabled();
                 mEmergencyOnly = (mCSEmergencyOnly || mPSEmergencyOnly);
                 if (mPhone.isPhoneTypeGsm()) {
-
                     mNewReasonDataDenied = networkRegState.getRejectCause();
                     mNewMaxDataCalls = dataSpecificStates.maxDataCalls;
                     mGsmDataRoaming = regCodeIsRoaming(registrationState);
@@ -2975,6 +2962,36 @@ public class ServiceStateTracker extends Handler {
             wfcFlightSpnFormat = wfcSpnFormats[flightModeIdx];
         }
 
+        String crossSimSpnFormat = null;
+        if (mPhone.getImsPhone() != null
+                && (mPhone.getImsPhone() != null)
+                && (mPhone.getImsPhone().getImsRegistrationTech()
+                == ImsRegistrationImplBase.REGISTRATION_TECH_CROSS_SIM)) {
+            // In Cros SIM Calling mode show SPN or PLMN + Cross SIM Calling
+            //
+            // 1) Show SPN + Cross SIM Calling If SIM has SPN and SPN display condition
+            //    is satisfied or SPN override is enabled for this carrier
+            //
+            // 2) Show PLMN + Cross SIM Calling if there is no valid SPN in case 1
+            PersistableBundle bundle = getCarrierConfig();
+            int crossSimSpnFormatIdx =
+                    bundle.getInt(CarrierConfigManager.KEY_CROSS_SIM_SPN_FORMAT_INT);
+            boolean useRootLocale =
+                    bundle.getBoolean(CarrierConfigManager.KEY_WFC_SPN_USE_ROOT_LOCALE);
+
+            String[] crossSimSpnFormats = SubscriptionManager.getResourcesForSubId(
+                    mPhone.getContext(),
+                    mPhone.getSubId(), useRootLocale)
+                    .getStringArray(R.array.crossSimSpnFormats);
+
+            if (crossSimSpnFormatIdx < 0 || crossSimSpnFormatIdx >= crossSimSpnFormats.length) {
+                loge("updateSpnDisplay: KEY_CROSS_SIM_SPN_FORMAT_INT out of bounds: "
+                        + crossSimSpnFormatIdx);
+                crossSimSpnFormatIdx = 0;
+            }
+            crossSimSpnFormat = crossSimSpnFormats[crossSimSpnFormatIdx];
+        }
+
         if (mPhone.isPhoneTypeGsm()) {
             // The values of plmn/showPlmn change in different scenarios.
             // 1) No service but emergency call allowed -> expected
@@ -3042,9 +3059,27 @@ public class ServiceStateTracker extends Handler {
                     && ((rule & CARRIER_NAME_DISPLAY_BITMASK_SHOW_SPN)
                     == CARRIER_NAME_DISPLAY_BITMASK_SHOW_SPN);
             if (DBG) log("updateSpnDisplay: rawSpn = " + spn);
-
-            if (!TextUtils.isEmpty(spn) && !TextUtils.isEmpty(wfcVoiceSpnFormat) &&
-                    !TextUtils.isEmpty(wfcDataSpnFormat)) {
+            if (!TextUtils.isEmpty(crossSimSpnFormat)) {
+                if (!TextUtils.isEmpty(spn)) {
+                    // Show SPN + Cross-SIM Calling If SIM has SPN and SPN display condition
+                    // is satisfied or SPN override is enabled for this carrier.
+                    String originalSpn = spn.trim();
+                    spn = String.format(crossSimSpnFormat, originalSpn);
+                    dataSpn = spn;
+                    showSpn = true;
+                    showPlmn = false;
+                } else if (!TextUtils.isEmpty(plmn)) {
+                    // Show PLMN + Cross-SIM Calling if there is no valid SPN in the above case
+                    String originalPlmn = plmn.trim();
+                    PersistableBundle config = getCarrierConfig();
+                    if (mIccRecords != null && config.getBoolean(
+                            CarrierConfigManager.KEY_WFC_CARRIER_NAME_OVERRIDE_BY_PNN_BOOL)) {
+                        originalPlmn = mIccRecords.getPnnHomeName();
+                    }
+                    plmn = String.format(crossSimSpnFormat, originalPlmn);
+                }
+            } else if (!TextUtils.isEmpty(spn) && !TextUtils.isEmpty(wfcVoiceSpnFormat)
+                    && !TextUtils.isEmpty(wfcDataSpnFormat)) {
                 // Show SPN + Wi-Fi Calling If SIM has SPN and SPN display condition
                 // is satisfied or SPN override is enabled for this carrier.
 
@@ -3334,7 +3369,14 @@ public class ServiceStateTracker extends Handler {
 
         if (mImsRegistrationOnOff && !registered) {
             // moving to deregistered, only send this event if we need to re-evaluate
-            sendMessage(obtainMessage(EVENT_CHANGE_IMS_STATE));
+            if (getRadioPowerOffDelayTimeoutForImsRegistration() > 0) {
+                // only send this event if the power off delay for IMS deregistration feature is
+                // enabled.
+                sendMessage(obtainMessage(EVENT_CHANGE_IMS_STATE));
+            } else {
+                log("setImsRegistrationState: EVENT_CHANGE_IMS_STATE not sent because power off "
+                        + "delay for IMS deregistration is not enabled.");
+            }
         }
         mImsRegistrationOnOff = registered;
     }
@@ -3467,6 +3509,12 @@ public class ServiceStateTracker extends Handler {
         if (TelephonyUtils.IS_DEBUGGABLE && mPhone.mTelephonyTester != null) {
             mPhone.mTelephonyTester.overrideServiceState(mNewSS);
         }
+
+        NetworkRegistrationInfo networkRegState = mNewSS.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        updateNrFrequencyRangeFromPhysicalChannelConfigs(mLastPhysicalChannelConfigList, mNewSS);
+        updateNrStateFromPhysicalChannelConfigs(mLastPhysicalChannelConfigList, mNewSS);
+        setPhyCellInfoFromCellIdentity(mNewSS, networkRegState.getCellIdentity());
 
         if (DBG) {
             log("Poll ServiceState done: "
@@ -3794,9 +3842,7 @@ public class ServiceStateTracker extends Handler {
             mPhone.getContext().getContentResolver()
                     .insert(getUriForSubscriptionId(mPhone.getSubId()),
                             getContentValuesForServiceState(mSS));
-        }
 
-        if (hasChanged || hasNrStateChanged) {
             TelephonyMetrics.getInstance().writeServiceStateChanged(mPhone.getPhoneId(), mSS);
             mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
             mServiceStateStats.onServiceStateChanged(mSS);
@@ -5039,8 +5085,8 @@ public class ServiceStateTracker extends Handler {
                     msg.arg1 = ++mPendingRadioPowerOffAfterDataOffTag;
                     if (sendMessageDelayed(msg, 30000)) {
                         if (DBG) {
-                            log("powerOffRadioSafely: Wait up to 30s for data to disconnect, "
-                                    + "then turn off radio.");
+                            log("powerOffRadioSafely: Wait up to 30s for data to isconnect, then"
+                                    + " turn off radio.");
                         }
                         mPendingRadioPowerOffAfterDataOff = true;
                     } else {
@@ -5156,6 +5202,7 @@ public class ServiceStateTracker extends Handler {
         updateReportingCriteria(config);
         updateOperatorNamePattern(config);
         mCdnr.updateEfFromCarrierConfig(config);
+        mPhone.notifyCallForwardingIndicator();
 
         // Sometimes the network registration information comes before carrier config is ready.
         // For some cases like roaming/non-roaming overriding, we need carrier config. So it's
