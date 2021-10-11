@@ -46,6 +46,30 @@
       },
       "revId": "29168b9cf074141d93877d98cfda516b19fdc4ba",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "523908bd_a81cf991",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-11T16:59:38Z",
+      "side": 1,
+      "message": "SSCtr is fine, but do you want to append the phone id? It would help you a lot when you are debugging on a DSDS device where you have two SignalStrengthController instances running at the same time.",
+      "parentUuid": "4631fe60_72f8c462",
+      "range": {
+        "startLine": 53,
+        "startChar": 40,
+        "endLine": 53,
+        "endChar": 64
+      },
+      "revId": "29168b9cf074141d93877d98cfda516b19fdc4ba",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
