@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "589fa466_3d80e101",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-11T22:33:16Z",
+      "side": 1,
+      "message": "Add you guys back. \n\nAgain, this is NON-functional refactoring (which is safe) in SST after introducing SignalStrengthController. Functional refactoring will be performed separately later. ",
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
