@@ -35,6 +35,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.service.carrier.CarrierService;
+import android.telephony.AnomalyReporter;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import com.android.internal.telephony.util.TelephonyUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -74,6 +76,16 @@ public class CarrierServiceBindHelper {
     // whether we have successfully bound to the service
     private boolean mServiceBound = false;
 
+    // UUID for the anomaly to report carrier service binding disconnected
+    private static final UUID UUID_ANOMALY_CARRIER_SERVICE_DISCONNECTED =
+            UUID.fromString("4fad323a-82bf-4329-8cfb-771eac7adbcc");
+    // The minimum interval between two anomalies allowed to report here
+    private static final int ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS = 24 * 60 * 60 * 1000; // 24 hours
+    // The delay to report the anomaly after detecting disconnection. Used to filter the normal case
+    // for transient disconnection due to e.g. carrier app upgrading
+    private static final int ANOMALY_REPORTING_DELAY_MILLIS = 30 * 1000; // 30 seconds
+    private long mLastAnomalyReportingTimestamp = -1;
+
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -90,11 +102,15 @@ public class CarrierServiceBindHelper {
         }
     };
 
+    // msg.obj is the phoneId
     private static final int EVENT_REBIND = 0;
+    // msg.obj is the phoneId
     @VisibleForTesting
     public static final int EVENT_PERFORM_IMMEDIATE_UNBIND = 1;
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 2;
+    // msg.obj is the anomaly message string
+    private static final int EVENT_MAYBE_REPORT_ANOMALY = 3;
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @VisibleForTesting
@@ -122,6 +138,10 @@ public class CarrierServiceBindHelper {
                     break;
                 case EVENT_MULTI_SIM_CONFIG_CHANGED:
                     updateBindingsAndSimStates();
+                    break;
+                case EVENT_MAYBE_REPORT_ANOMALY:
+                    String message = (String) msg.obj;
+                    maybeReportAnomaly(message);
                     break;
             }
         }
@@ -348,9 +368,11 @@ public class CarrierServiceBindHelper {
 
             // Actually unbind
             if (mServiceBound) {
-                logdWithLocalLog("Unbinding from carrier app");
+                String message = "Unbinding from carrier app";
+                logdWithLocalLog(message);
                 mServiceBound = false;
                 mContext.unbindService(connection);
+                sendEventMaybeReportAnomalyWithDelay(message);
             } else {
                 logdWithLocalLog("Not bound, skipping unbindService call");
             }
@@ -383,24 +405,31 @@ public class CarrierServiceBindHelper {
         public void onServiceConnected(ComponentName name, IBinder service) {
             logdWithLocalLog("Connected to carrier app: " + name.flattenToString());
             connected = true;
+            cancelEventMaybeReportAnomaly();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            logdWithLocalLog("Disconnected from carrier app: " + name.flattenToString());
+            String message = "Disconnected from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            sendEventMaybeReportAnomalyWithDelay(message);
         }
 
         @Override
         public void onBindingDied(ComponentName name) {
-            logdWithLocalLog("Binding from carrier app died: " + name.flattenToString());
+            String message = "Binding from carrier app died: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            sendEventMaybeReportAnomalyWithDelay(message);
         }
 
         @Override
         public void onNullBinding(ComponentName name) {
-            logdWithLocalLog("Null binding from carrier app: " + name.flattenToString());
+            String message = "Null binding from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            sendEventMaybeReportAnomalyWithDelay(message);
         }
 
         @Override
@@ -459,6 +488,26 @@ public class CarrierServiceBindHelper {
                     appBinding.rebind();
                 }
             }
+        }
+    }
+
+    private void sendEventMaybeReportAnomalyWithDelay(String message) {
+        mHandler.sendMessageAtTime(
+                mHandler.obtainMessage(EVENT_MAYBE_REPORT_ANOMALY, message),
+                SystemClock.uptimeMillis() + ANOMALY_REPORTING_DELAY_MILLIS);
+    }
+
+    private void cancelEventMaybeReportAnomaly() {
+        mHandler.removeMessages(EVENT_MAYBE_REPORT_ANOMALY);
+    }
+
+    private void maybeReportAnomaly(String message) {
+        if (mLastAnomalyReportingTimestamp == -1
+                || SystemClock.elapsedRealtime() - mLastAnomalyReportingTimestamp
+                > ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS) {
+            AnomalyReporter.reportAnomaly(UUID_ANOMALY_CARRIER_SERVICE_DISCONNECTED, message);
+            mLastAnomalyReportingTimestamp = SystemClock.elapsedRealtime();
+            logdWithLocalLog("Report anomaly with message: " + message);
         }
     }
 
