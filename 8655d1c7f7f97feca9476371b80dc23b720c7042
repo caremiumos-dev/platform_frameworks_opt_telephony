@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6fd41de_0e360c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Does this need to be a child of the signal strength refactors? Looks a bit strange",
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f16971c_749caa37",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Nit: this doesn\u0027t make sense until the following CL?",
+      "range": {
+        "startLine": 79,
+        "startChar": 65,
+        "endLine": 80,
+        "endChar": 34
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42386c2c_14809afe",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Not related to this CL, but what was the conclusion on this? I thought there was a bug because we don\u0027t call unbindService if mServiceBound is false, but we should still be calling it in that case?",
+      "range": {
+        "startLine": 366,
+        "startChar": 16,
+        "endLine": 366,
+        "endChar": 51
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec144f3_a25315a3",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Should phoneId be passed here? Similar for the cancel method below",
+      "range": {
+        "startLine": 487,
+        "startChar": 17,
+        "endLine": 487,
+        "endChar": 51
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0a544b4_2c58b388",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Probably needs to be a per-phoneId value",
+      "range": {
+        "startLine": 488,
+        "startChar": 12,
+        "endLine": 488,
+        "endChar": 37
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "138dfaf7_1ab7e2e3",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Nit: invert condition + early return to reduce nesting",
+      "range": {
+        "startLine": 488,
+        "startChar": 38,
+        "endLine": 488,
+        "endChar": 40
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2034b9e0_85bdf3bf",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-10-12T21:32:49Z",
+      "side": 1,
+      "message": "Suggest making this a static value, e.g. PROACTIVE_REBIND_ATTEMPTS_EXHAUSTED or similar",
+      "range": {
+        "startLine": 488,
+        "startChar": 41,
+        "endLine": 488,
+        "endChar": 43
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
