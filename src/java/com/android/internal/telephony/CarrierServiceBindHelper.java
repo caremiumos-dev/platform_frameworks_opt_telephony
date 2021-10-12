@@ -74,6 +74,15 @@ public class CarrierServiceBindHelper {
     // whether we have successfully bound to the service
     private boolean mServiceBound = false;
 
+    // The initial delay to proactively rebind when binding get lost
+    private static final int PROACTIVE_REBIND_INITIAL_DELAY_MILLIS = 30 * 1000; // 30 seconds
+    // The maximum delay to proactively rebind before giving up. The number is picked so at most
+    // two anomalies were reported
+    private static final int PROACTIVE_REBIND_MAXIMUM_DELAY_MILLIS = 47 * 60 * 60 * 100; // 47 hours
+    // Delay start from initial value, doubled if binding does not re-establish,
+    // until it reaches maximum and set to -1.
+    private long mLastProactiveRebindDelay = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
+
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -90,11 +99,15 @@ public class CarrierServiceBindHelper {
         }
     };
 
+    // msg.obj is the phoneId
     private static final int EVENT_REBIND = 0;
+    // msg.obj is the phoneId
     @VisibleForTesting
     public static final int EVENT_PERFORM_IMMEDIATE_UNBIND = 1;
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 2;
+    // msg.obj is the message string
+    private static final int EVENT_BINDING_LOST = 3;
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @VisibleForTesting
@@ -122,6 +135,9 @@ public class CarrierServiceBindHelper {
                     break;
                 case EVENT_MULTI_SIM_CONFIG_CHANGED:
                     updateBindingsAndSimStates();
+                    break;
+                case EVENT_BINDING_LOST:
+                    maybeProactivelyRebind();
                     break;
             }
         }
@@ -221,7 +237,6 @@ public class CarrierServiceBindHelper {
                 );
 
             if (carrierPackageNames == null || carrierPackageNames.size() <= 0) {
-                logdWithLocalLog("No carrier app for: " + phoneId);
                 // Unbind after a delay in case this is a temporary blip in carrier privileges.
                 unbind(false /* immediate */);
                 return;
@@ -261,7 +276,7 @@ public class CarrierServiceBindHelper {
                 logdWithLocalLog("CarrierService class changed, unbind immediately.");
                 // Unbind immediately if the carrier service component has changed.
                 unbind(true /* immediate */);
-            } else if (connection != null) {
+            } else if (connection != null && connection.connected) {
                 logdWithLocalLog(
                         "CarrierService class unchanged with connection up, cancelScheduledUnbind");
                 // Component is unchanged and connection is up - do nothing, but cancel any
@@ -348,9 +363,11 @@ public class CarrierServiceBindHelper {
 
             // Actually unbind
             if (mServiceBound) {
-                logdWithLocalLog("Unbinding from carrier app");
+                String message = "Unbinding from carrier app";
+                logdWithLocalLog(message);
                 mServiceBound = false;
                 mContext.unbindService(connection);
+                maybeSendEventBindingLostWithDelay(message);
             } else {
                 logdWithLocalLog("Not bound, skipping unbindService call");
             }
@@ -383,24 +400,32 @@ public class CarrierServiceBindHelper {
         public void onServiceConnected(ComponentName name, IBinder service) {
             logdWithLocalLog("Connected to carrier app: " + name.flattenToString());
             connected = true;
+            cancelEventBindingLost();
+            mLastProactiveRebindDelay = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            logdWithLocalLog("Disconnected from carrier app: " + name.flattenToString());
+            String message = "Disconnected from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeSendEventBindingLostWithDelay(message);
         }
 
         @Override
         public void onBindingDied(ComponentName name) {
-            logdWithLocalLog("Binding from carrier app died: " + name.flattenToString());
+            String message = "Binding from carrier app died: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeSendEventBindingLostWithDelay(message);
         }
 
         @Override
         public void onNullBinding(ComponentName name) {
-            logdWithLocalLog("Null binding from carrier app: " + name.flattenToString());
+            String message = "Null binding from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeSendEventBindingLostWithDelay(message);
         }
 
         @Override
@@ -458,6 +483,35 @@ public class CarrierServiceBindHelper {
                     }
                     appBinding.rebind();
                 }
+            }
+        }
+    }
+
+    private void maybeSendEventBindingLostWithDelay(String message) {
+        if (mLastProactiveRebindDelay != -1) {
+            mHandler.sendMessageAtTime(
+                    mHandler.obtainMessage(EVENT_BINDING_LOST, message),
+                    SystemClock.uptimeMillis() + mLastProactiveRebindDelay);
+
+            mLastProactiveRebindDelay *= 2; // double the next rebind delay
+            if (mLastProactiveRebindDelay >= PROACTIVE_REBIND_MAXIMUM_DELAY_MILLIS) {
+                mLastProactiveRebindDelay = -1;
+                logdWithLocalLog("Proactive rebind reach maximum delay, give up!");
+            }
+        }
+    }
+
+    private void cancelEventBindingLost() {
+        mHandler.removeMessages(EVENT_BINDING_LOST);
+    }
+
+    // Proactively rebind if service is not bound or disconnected
+    private void maybeProactivelyRebind() {
+        for (int phoneId = 0; phoneId < mBindings.size(); phoneId++) {
+            AppBinding binding = mBindings.get(phoneId);
+            if (!mServiceBound || !binding.connection.connected) {
+                binding.rebind();
+                logdWithLocalLog("Proactive rebind for phoneId: " + phoneId);
             }
         }
     }
