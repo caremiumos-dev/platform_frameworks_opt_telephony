@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66614785_932b9b49",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:43:23Z",
+      "side": 1,
+      "message": "Why is the UUID hardcoded instead of randomly generated, for example?",
+      "revId": "f66f2821174dd3c5a476a2f8956b1d11650358e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "461a3565_77990b81",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:43:23Z",
+      "side": 1,
+      "message": "Would using TimeUnit.DAY.toMillis(1) work instead?",
+      "range": {
+        "startLine": 92,
+        "startChar": 68,
+        "endLine": 92,
+        "endChar": 87
+      },
+      "revId": "f66f2821174dd3c5a476a2f8956b1d11650358e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "146ce256_04e43632",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:43:23Z",
+      "side": 1,
+      "message": "nit: use a javadoc style comment",
+      "revId": "f66f2821174dd3c5a476a2f8956b1d11650358e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846733e3_b8817db1",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:43:23Z",
+      "side": 1,
+      "message": "nit: this isn\u0027t really a timestamp if it\u0027s the time elapsed since boot",
+      "range": {
+        "startLine": 530,
+        "startChar": 51,
+        "endLine": 530,
+        "endChar": 81
+      },
+      "revId": "f66f2821174dd3c5a476a2f8956b1d11650358e5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
