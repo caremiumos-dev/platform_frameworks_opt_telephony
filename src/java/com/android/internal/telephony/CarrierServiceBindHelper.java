@@ -35,6 +35,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.service.carrier.CarrierService;
+import android.telephony.AnomalyReporter;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import com.android.internal.telephony.util.TelephonyUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -73,6 +75,11 @@ public class CarrierServiceBindHelper {
 
     // whether we have successfully bound to the service
     private boolean mServiceBound = false;
+
+    private final UUID mCarrierServiceDisconnectedAnomalyUUID =
+            UUID.fromString("4fad323a-82bf-4329-8cfb-771eac7adbcc");
+    private long mLastAnomalyReportingTimestamp = -1;
+    private static final int ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS = 24 * 60 * 60 * 1000; // 24 hours
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -387,20 +394,26 @@ public class CarrierServiceBindHelper {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            logdWithLocalLog("Disconnected from carrier app: " + name.flattenToString());
+            String message = "Disconnected from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeReportAnomaly(mCarrierServiceDisconnectedAnomalyUUID, message);
         }
 
         @Override
         public void onBindingDied(ComponentName name) {
-            logdWithLocalLog("Binding from carrier app died: " + name.flattenToString());
+            String message = "Binding from carrier app died: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeReportAnomaly(mCarrierServiceDisconnectedAnomalyUUID, message);
         }
 
         @Override
         public void onNullBinding(ComponentName name) {
-            logdWithLocalLog("Null binding from carrier app: " + name.flattenToString());
+            String message = "Null binding from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
+            maybeReportAnomaly(mCarrierServiceDisconnectedAnomalyUUID, message);
         }
 
         @Override
@@ -459,6 +472,15 @@ public class CarrierServiceBindHelper {
                     appBinding.rebind();
                 }
             }
+        }
+    }
+
+    private void maybeReportAnomaly(UUID anomaly, String message) {
+        if (mLastAnomalyReportingTimestamp == -1
+                || SystemClock.elapsedRealtime() - mLastAnomalyReportingTimestamp
+                > ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS) {
+            AnomalyReporter.reportAnomaly(anomaly, message);
+            mLastAnomalyReportingTimestamp = SystemClock.elapsedRealtime();
         }
     }
 
