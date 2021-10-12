@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "463b3ca7_dd442654",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:46:32Z",
+      "side": 1,
+      "message": "nit: use TimeUnit.SECONDS.toMillis(30)",
+      "range": {
+        "startLine": 78,
+        "startChar": 69,
+        "endLine": 78,
+        "endChar": 78
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f16971c_749caa37",
         "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
         "patchSetId": 2
@@ -36,6 +59,52 @@
         "startChar": 65,
         "endLine": 80,
         "endChar": 34
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "167abdf0_d3465c81",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:46:32Z",
+      "side": 1,
+      "message": "TimeUnit.HOURS.toMillis(47)",
+      "range": {
+        "startLine": 81,
+        "startChar": 69,
+        "endLine": 81,
+        "endChar": 87
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297583fb_f731c1fc",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-12T21:46:32Z",
+      "side": 1,
+      "message": "nit: DelayMillis",
+      "range": {
+        "startLine": 84,
+        "startChar": 17,
+        "endLine": 84,
+        "endChar": 42
       },
       "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
