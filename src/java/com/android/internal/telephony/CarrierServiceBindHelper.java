@@ -35,6 +35,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.service.carrier.CarrierService;
+import android.telephony.AnomalyReporter;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -49,6 +50,8 @@ import com.android.internal.util.IndentingPrintWriter;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -81,6 +84,13 @@ public class CarrierServiceBindHelper {
     // Delay starts from INITIAL value, doubles if binding does not re-establish,
     // until it reaches MAXIMUM and sets to EXHAUSTED.
     private long mLastProactiveRebindDelayMillis = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
+
+    // UUID for the anomaly to report carrier service binding lost (unbound or disconnected)
+    private static final UUID UUID_ANOMALY_CARRIER_SERVICE_BINDING_LOST =
+            UUID.fromString("4fad323a-82bf-4329-8cfb-771eac7adbcc");
+    // The minimum interval between two anomalies allowed to report here
+    private static final long ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
+    private long mLastAnomalyReportingTimestamp = -1;
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -133,8 +143,8 @@ public class CarrierServiceBindHelper {
                     updateBindingsAndSimStates();
                     break;
                 case EVENT_BINDING_LOST:
-                    phoneId = (int) msg.obj;
-                    rebindProactively(phoneId);
+                    Pair pair = (Pair) msg.obj;
+                    rebindProactively(pair.phoneId, pair.message);
                     break;
             }
         }
@@ -291,9 +301,10 @@ public class CarrierServiceBindHelper {
             bindCount++;
             lastBindStartMillis = System.currentTimeMillis();
 
+            String message = "Bind carrier service but never get connected.";
             // Prepare to proactively rebind in case bindService succeed but never get connected.
             // In this case, no other callback is invoked to trigger the proactive rebinding.
-            sendEventBindingLostWithDelay(phoneId);
+            sendEventBindingLostWithDelay(phoneId, message);
 
             connection = new CarrierServiceConnection(phoneId);
             String error;
@@ -364,10 +375,12 @@ public class CarrierServiceBindHelper {
             // Always call unbindService, no matter if bindService succeed.
             if (connection != null) {
                 mContext.unbindService(connection);
-                logdWithLocalLog("Unbinding from carrier app");
+
+                String message = "Unbinding from carrier app";
+                logdWithLocalLog(message);
                 connection = null;
                 mUnbindScheduledUptimeMillis = -1;
-                sendEventBindingLostWithDelay(phoneId);
+                sendEventBindingLostWithDelay(phoneId, message);
             }
         }
 
@@ -400,31 +413,35 @@ public class CarrierServiceBindHelper {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            logdWithLocalLog("Connected to carrier app: " + name.flattenToString());
+            String message = "Connected to carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = true;
-            cancelEventBindingLost(phoneId);
+            cancelEventBindingLost(phoneId, message);
             mLastProactiveRebindDelayMillis = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            logdWithLocalLog("Disconnected from carrier app: " + name.flattenToString());
+            String message = "Disconnected from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
-            sendEventBindingLostWithDelay(phoneId);
+            sendEventBindingLostWithDelay(phoneId, message);
         }
 
         @Override
         public void onBindingDied(ComponentName name) {
-            logdWithLocalLog("Binding from carrier app died: " + name.flattenToString());
+            String message = "Binding from carrier app died: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
-            sendEventBindingLostWithDelay(phoneId);
+            sendEventBindingLostWithDelay(phoneId, message);
         }
 
         @Override
         public void onNullBinding(ComponentName name) {
-            logdWithLocalLog("Null binding from carrier app: " + name.flattenToString());
+            String message = "Null binding from carrier app: " + name.flattenToString();
+            logdWithLocalLog(message);
             connected = false;
-            sendEventBindingLostWithDelay(phoneId);
+            sendEventBindingLostWithDelay(phoneId, message);
         }
 
         @Override
@@ -486,7 +503,7 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    private void sendEventBindingLostWithDelay(int phoneId) {
+    private void sendEventBindingLostWithDelay(int phoneId, String message) {
         if (mLastProactiveRebindDelayMillis == PROACTIVE_REBIND_ATTEMPTS_EXHAUSTED
                 || mHandler.hasMessages(EVENT_BINDING_LOST, getMessageToken(phoneId))) {
             logdWithLocalLog("Duplicated binding lost event ignored.");
@@ -494,7 +511,7 @@ public class CarrierServiceBindHelper {
         }
 
         mHandler.sendMessageAtTime(
-                mHandler.obtainMessage(EVENT_BINDING_LOST, getMessageToken(phoneId)),
+                mHandler.obtainMessage(EVENT_BINDING_LOST, getMessageToken(phoneId, message)),
                 SystemClock.uptimeMillis() + mLastProactiveRebindDelayMillis);
 
         mLastProactiveRebindDelayMillis *= 2; // double the next rebind delay
@@ -504,16 +521,19 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    private void cancelEventBindingLost(int phoneId) {
-        mHandler.removeMessages(EVENT_BINDING_LOST, getMessageToken(phoneId));
+    private void cancelEventBindingLost(int phoneId, String message) {
+        // Remove message with same EVENT_BINDING_LOST and phoneId, msg is not taking into account
+        mHandler.removeEqualMessages(EVENT_BINDING_LOST, getMessageToken(phoneId, message));
     }
 
     // Proactively rebind if service is not bound or disconnected
-    private void rebindProactively(int phoneId) {
+    private void rebindProactively(int phoneId, String message) {
         AppBinding binding = mBindings.get(phoneId);
         if (binding == null || (binding.connection != null && binding.connection.connected)) {
             return;
         }
+
+        maybeReportAnomaly(message);
         // Always unbind and rebind to activate the connection again in case the previous binding
         // has been dead and we will never receive anothre connection.
         binding.unbind(true);
@@ -532,6 +552,52 @@ public class CarrierServiceBindHelper {
         // Integer#valueOf guarantees the integers within [-128, 127] are cached and thus memory
         // comparison (==) returns true for the same integer.
         return Integer.valueOf(phoneId);
+    }
+
+    /**
+     * Return a (phoneId, message) Pair object whose equality is only determined by phoneId.
+     */
+    private Pair getMessageToken(int phoneId, String message) {
+        return new Pair(phoneId, message);
+    }
+
+    // Report anomaly if it was never reported or reported ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS ago
+    private void maybeReportAnomaly(String message) {
+        if (mLastAnomalyReportingTimestamp == -1
+                || SystemClock.elapsedRealtime() - mLastAnomalyReportingTimestamp
+                > ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS) {
+            AnomalyReporter.reportAnomaly(UUID_ANOMALY_CARRIER_SERVICE_BINDING_LOST, message);
+            mLastAnomalyReportingTimestamp = SystemClock.elapsedRealtime();
+            logdWithLocalLog("Report anomaly with message: " + message);
+        }
+    }
+
+    /**
+     * A data wrapper of (phoneId, message) pair. The object equals is only determined by phoneId.
+     * This is used to carry message for anomaly but removing handler message by phoneId only.
+     */
+    private class Pair {
+        public final int phoneId;
+        public final String message;
+
+        Pair(int phoneId, String message) {
+            this.phoneId = phoneId;
+            this.message = message;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof Pair)) {
+                return false;
+            }
+            Pair other = (Pair) o;
+            return this.phoneId == other.phoneId;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(this.phoneId);
+        }
     }
 
     private void logdWithLocalLog(String msg) {
