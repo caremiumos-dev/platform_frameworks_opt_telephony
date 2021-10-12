@@ -35,6 +35,7 @@ import android.os.Process;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.service.carrier.CarrierService;
+import android.telephony.AnomalyReporter;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import com.android.internal.telephony.util.TelephonyUtils;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -82,6 +84,13 @@ public class CarrierServiceBindHelper {
     // Delay start from initial value, doubled if binding does not re-establish,
     // until it reaches maximum and set to -1.
     private long mLastProactiveRebindDelay = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
+
+    // UUID for the anomaly to report carrier service binding lost (unbound or disconnected)
+    private static final UUID UUID_ANOMALY_CARRIER_SERVICE_BINDING_LOST =
+            UUID.fromString("4fad323a-82bf-4329-8cfb-771eac7adbcc");
+    // The minimum interval between two anomalies allowed to report here
+    private static final int ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS = 24 * 60 * 60 * 1000; // 24 hours
+    private long mLastAnomalyReportingTimestamp = -1;
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -134,6 +143,8 @@ public class CarrierServiceBindHelper {
                     updateBindingsAndSimStates();
                     break;
                 case EVENT_BINDING_LOST:
+                    String message = (String) msg.obj;
+                    maybeReportAnomaly(message);
                     maybeProactivelyRebind();
                     break;
             }
@@ -510,6 +521,17 @@ public class CarrierServiceBindHelper {
                 binding.rebind();
                 logdWithLocalLog("Proactive rebind for phoneId: " + phoneId);
             }
+        }
+    }
+
+    // Report anomaly if it was never reported or reported ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS ago
+    private void maybeReportAnomaly(String message) {
+        if (mLastAnomalyReportingTimestamp == -1
+                || SystemClock.elapsedRealtime() - mLastAnomalyReportingTimestamp
+                > ANOMALIES_MINIMUM_INTERVAL_IN_MILLIS) {
+            AnomalyReporter.reportAnomaly(UUID_ANOMALY_CARRIER_SERVICE_BINDING_LOST, message);
+            mLastAnomalyReportingTimestamp = SystemClock.elapsedRealtime();
+            logdWithLocalLog("Report anomaly with message: " + message);
         }
     }
 
