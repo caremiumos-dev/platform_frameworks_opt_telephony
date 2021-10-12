@@ -44,10 +44,12 @@ import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.util.TelephonyUtils;
+import com.android.internal.util.IndentingPrintWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -60,7 +62,7 @@ public class CarrierServiceBindHelper {
      * How long to linger a binding after an app loses carrier privileges, as long as no new
      * binding comes in to take its place.
      */
-    private static final int UNBIND_DELAY_MILLIS = 30 * 1000; // 30 seconds
+    private static final long UNBIND_DELAY_MILLIS = TimeUnit.SECONDS.toMillis(30);
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private Context mContext;
@@ -70,6 +72,15 @@ public class CarrierServiceBindHelper {
     public SparseArray<String> mLastSimState = new SparseArray<>();
     private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
     private final LocalLog mLocalLog = new LocalLog(100);
+
+    // The initial delay to proactively rebind when binding get lost
+    private static final long PROACTIVE_REBIND_INITIAL_DELAY_MILLIS = TimeUnit.SECONDS.toMillis(30);
+    // The maximum delay to proactively rebind before giving up.
+    private static final long PROACTIVE_REBIND_MAXIMUM_DELAY_MILLIS = TimeUnit.HOURS.toMillis(47);
+    private static final long PROACTIVE_REBIND_ATTEMPTS_EXHAUSTED = -1;
+    // Delay starts from INITIAL value, doubles if binding does not re-establish,
+    // until it reaches MAXIMUM and sets to EXHAUSTED.
+    private long mLastProactiveRebindDelayMillis = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -92,6 +103,7 @@ public class CarrierServiceBindHelper {
     public static final int EVENT_PERFORM_IMMEDIATE_UNBIND = 1;
     @VisibleForTesting
     public static final int EVENT_MULTI_SIM_CONFIG_CHANGED = 2;
+    private static final int EVENT_BINDING_LOST = 3;
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     @VisibleForTesting
@@ -119,6 +131,10 @@ public class CarrierServiceBindHelper {
                     break;
                 case EVENT_MULTI_SIM_CONFIG_CHANGED:
                     updateBindingsAndSimStates();
+                    break;
+                case EVENT_BINDING_LOST:
+                    phoneId = (int) msg.obj;
+                    rebindProactively(phoneId);
                     break;
             }
         }
@@ -220,7 +236,6 @@ public class CarrierServiceBindHelper {
                 );
 
             if (carrierPackageNames == null || carrierPackageNames.size() <= 0) {
-                logdWithLocalLog("No carrier app for: " + phoneId);
                 // Unbind after a delay in case this is a temporary blip in carrier privileges.
                 unbind(false /* immediate */);
                 return;
@@ -265,7 +280,7 @@ public class CarrierServiceBindHelper {
                         "CarrierService class unchanged with connection up, cancelScheduledUnbind");
                 // Component is unchanged and connection is up - do nothing, but cancel any
                 // scheduled unbinds.
-                cancelScheduledUnbind();
+                cancelScheduledUnbind(phoneId);
                 return;
             }
 
@@ -278,8 +293,11 @@ public class CarrierServiceBindHelper {
             bindCount++;
             lastBindStartMillis = System.currentTimeMillis();
 
-            connection = new CarrierServiceConnection();
+            // Prepare to proactively rebind in case bindService succeed but never get connected.
+            // In this case, no other callback is invoked to trigger the proactive rebinding.
+            sendEventBindingLostWithDelay(phoneId);
 
+            connection = new CarrierServiceConnection(phoneId);
             String error;
             try {
                 if (mContext.bindService(
@@ -324,14 +342,15 @@ public class CarrierServiceBindHelper {
             // disabled).
             if (immediate || !connection.connected) {
                 logdWithLocalLog("unbind immediately or with disconnected connection");
-                cancelScheduledUnbind();
+                cancelScheduledUnbind(phoneId);
                 performImmediateUnbind();
             } else if (mUnbindScheduledUptimeMillis == -1) {
                 long currentUptimeMillis = SystemClock.uptimeMillis();
                 mUnbindScheduledUptimeMillis = currentUptimeMillis + UNBIND_DELAY_MILLIS;
                 logdWithLocalLog("Scheduling unbind in " + UNBIND_DELAY_MILLIS + " millis");
                 mHandler.sendMessageAtTime(
-                        mHandler.obtainMessage(EVENT_PERFORM_IMMEDIATE_UNBIND, phoneId),
+                        mHandler.obtainMessage(EVENT_PERFORM_IMMEDIATE_UNBIND,
+                                getMessageToken(phoneId)),
                         mUnbindScheduledUptimeMillis);
             }
         }
@@ -354,13 +373,14 @@ public class CarrierServiceBindHelper {
             } catch (IllegalArgumentException e) {
                 logeWithLocalLog("Tried to unbind without binding e=" + e);
             }
+            sendEventBindingLostWithDelay(phoneId);
             connection = null;
             mUnbindScheduledUptimeMillis = -1;
         }
 
-        private void cancelScheduledUnbind() {
+        private void cancelScheduledUnbind(int phoneId) {
             logdWithLocalLog("cancelScheduledUnbind");
-            mHandler.removeMessages(EVENT_PERFORM_IMMEDIATE_UNBIND);
+            mHandler.removeMessages(EVENT_PERFORM_IMMEDIATE_UNBIND, getMessageToken(phoneId));
             mUnbindScheduledUptimeMillis = -1;
         }
 
@@ -378,29 +398,40 @@ public class CarrierServiceBindHelper {
 
     private class CarrierServiceConnection implements ServiceConnection {
         private boolean connected;
+        private final int phoneId;
+
+        CarrierServiceConnection(int phoneId) {
+            super();
+            this.phoneId = phoneId;
+        }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             logdWithLocalLog("Connected to carrier app: " + name.flattenToString());
             connected = true;
+            cancelEventBindingLost(phoneId);
+            mLastProactiveRebindDelayMillis = PROACTIVE_REBIND_INITIAL_DELAY_MILLIS;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             logdWithLocalLog("Disconnected from carrier app: " + name.flattenToString());
             connected = false;
+            sendEventBindingLostWithDelay(phoneId);
         }
 
         @Override
         public void onBindingDied(ComponentName name) {
             logdWithLocalLog("Binding from carrier app died: " + name.flattenToString());
             connected = false;
+            sendEventBindingLostWithDelay(phoneId);
         }
 
         @Override
         public void onNullBinding(ComponentName name) {
             logdWithLocalLog("Null binding from carrier app: " + name.flattenToString());
             connected = false;
+            sendEventBindingLostWithDelay(phoneId);
         }
 
         @Override
@@ -462,6 +493,54 @@ public class CarrierServiceBindHelper {
         }
     }
 
+    private void sendEventBindingLostWithDelay(int phoneId) {
+        if (mLastProactiveRebindDelayMillis == PROACTIVE_REBIND_ATTEMPTS_EXHAUSTED
+                || mHandler.hasMessages(EVENT_BINDING_LOST, getMessageToken(phoneId))) {
+            logdWithLocalLog("Duplicated binding lost event ignored!");
+            return;
+        }
+
+        mHandler.sendMessageAtTime(
+                mHandler.obtainMessage(EVENT_BINDING_LOST, getMessageToken(phoneId)),
+                SystemClock.uptimeMillis() + mLastProactiveRebindDelayMillis);
+
+        mLastProactiveRebindDelayMillis *= 2; // double the next rebind delay
+        if (mLastProactiveRebindDelayMillis >= PROACTIVE_REBIND_MAXIMUM_DELAY_MILLIS) {
+            mLastProactiveRebindDelayMillis = PROACTIVE_REBIND_ATTEMPTS_EXHAUSTED;
+            logdWithLocalLog("Proactive rebinding reached maximum delay, giving up!");
+        }
+    }
+
+    private void cancelEventBindingLost(int phoneId) {
+        mHandler.removeMessages(EVENT_BINDING_LOST, getMessageToken(phoneId));
+    }
+
+    // Proactively rebind if service is not bound or disconnected
+    private void rebindProactively(int phoneId) {
+        AppBinding binding = mBindings.get(phoneId);
+        if (binding == null || (binding.isServiceBound && binding.connection.connected)) {
+            logdWithLocalLog("Ignore proactively rebinding");
+            return;
+        }
+        // Unbind immediately to avoid leaking.
+        binding.unbind(true);
+        binding.rebind();
+        logdWithLocalLog("Proactively rebinding for phoneId: " + phoneId);
+    }
+
+    /**
+     * Returns a boxed Integer object for phoneId, services as message token to distinguish messages
+     * with same code when calling {@link Handler#removeMessages(int, Object)}.
+     */
+    private Integer getMessageToken(int phoneId) {
+        if (phoneId < -128 || phoneId > 127) {
+            throw new IllegalArgumentException("phoneId should be in range [-128, 127], inclusive");
+        }
+        // Integer#valueOf guarantees the integers within [-128, 127] are cached and thus memory
+        // comparison (==) returns true for the same integer.
+        return Integer.valueOf(phoneId);
+    }
+
     private void logdWithLocalLog(String msg) {
         Log.d(LOG_TAG, msg);
         mLocalLog.log(msg);
@@ -473,11 +552,15 @@ public class CarrierServiceBindHelper {
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        IndentingPrintWriter indentPW = new IndentingPrintWriter(pw, "  ");
         pw.println("CarrierServiceBindHelper:");
+        indentPW.increaseIndent();
+        indentPW.println("mLastProactiveRebindDelayMillis: " + mLastProactiveRebindDelayMillis);
         for (int i = 0; i < mBindings.size(); i++) {
-            mBindings.get(i).dump(fd, pw, args);
+            mBindings.get(i).dump(fd, indentPW, args);
         }
-        pw.println("CarrierServiceBindHelperLogs=");
-        mLocalLog.dump(fd, pw, args);
+        indentPW.decreaseIndent();
+        indentPW.println("CarrierServiceBindHelperLogs=");
+        mLocalLog.dump(fd, indentPW, args);
     }
 }
