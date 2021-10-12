@@ -71,9 +71,6 @@ public class CarrierServiceBindHelper {
     private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
     private final LocalLog mLocalLog = new LocalLog(100);
 
-    // whether we have successfully bound to the service
-    private boolean mServiceBound = false;
-
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -186,6 +183,8 @@ public class CarrierServiceBindHelper {
     private class AppBinding {
         private int phoneId;
         private CarrierServiceConnection connection;
+        // whether we have successfully bound to the service
+        private boolean isServiceBound;
         private int bindCount;
         private long lastBindStartMillis;
         private int unbindCount;
@@ -291,7 +290,7 @@ public class CarrierServiceBindHelper {
                         (r) -> mHandler.post(r),
                         connection)) {
                     logdWithLocalLog("service bound");
-                    mServiceBound = true;
+                    isServiceBound = true;
                     return;
                 }
 
@@ -346,14 +345,14 @@ public class CarrierServiceBindHelper {
             carrierPackage = null;
             carrierServiceClass = null;
 
-            // Actually unbind
-            if (mServiceBound) {
-                logdWithLocalLog("Unbinding from carrier app");
-                mServiceBound = false;
+            // Always call unbindService, no matter if bindService succeed. But wrap in try/catch
+            // block to avoid crashing phone process with IAE("Service not registered”).
+            try {
                 mContext.unbindService(connection);
-            } else {
-                logdWithLocalLog("Not bound, skipping unbindService call");
+            } catch (IllegalArgumentException e) {
+                logeWithLocalLog("Tried to unbind without binding e=" + e);
             }
+            isServiceBound = false;
             connection = null;
             mUnbindScheduledUptimeMillis = -1;
         }
