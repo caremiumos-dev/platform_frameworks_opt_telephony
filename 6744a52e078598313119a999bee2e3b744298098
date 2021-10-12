@@ -22,6 +22,30 @@
       },
       "revId": "6744a52e078598313119a999bee2e3b744298098",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24d7bd8a_84c96d08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2021-10-12T03:08:44Z",
+      "side": 1,
+      "message": "Jaya, I have executed the given command and all the unit testcases were passed",
+      "parentUuid": "b5399be9_ace96d9b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "6744a52e078598313119a999bee2e3b744298098",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
