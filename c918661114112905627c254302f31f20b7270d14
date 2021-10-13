@@ -16,6 +16,23 @@
       "message": "Add you guys back. \n\nThis is NON-functional refactoring (which is safe) in DSM after introducing SignalStrengthController. Functional refactoring will be performed separately later. ",
       "revId": "c918661114112905627c254302f31f20b7270d14",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89d96953_d054aa8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T22:38:24Z",
+      "side": 1,
+      "message": "Friendly ping. Nathan \u0026 Hunter, this is a non-functional refactoring. It just move the signal strength related thresholds const/method from DSM to SSC which is dedicated class now.\n\nPls help to take a review.",
+      "revId": "c918661114112905627c254302f31f20b7270d14",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
