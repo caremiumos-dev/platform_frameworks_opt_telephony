@@ -16,6 +16,121 @@
       "message": "Julien, thanks for the suggestions. Patch updated to land them.",
       "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf16945_dc3dd005",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-13T18:10:07Z",
+      "side": 1,
+      "message": "It\u0027s very strange to see a number like 47 here. How did we arrive at \"one hour less than two days\"?",
+      "range": {
+        "startLine": 78,
+        "startChar": 94,
+        "endLine": 78,
+        "endChar": 96
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce10933d_ea6dbf6e",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-13T18:10:07Z",
+      "side": 1,
+      "message": "It is painful to me that an int is being passed in obj rather than arg1. (please don\u0027t change this now).",
+      "range": {
+        "startLine": 135,
+        "startChar": 30,
+        "endLine": 135,
+        "endChar": 44
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45a454ef_9a82f1e0",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-13T18:10:07Z",
+      "side": 1,
+      "message": "final Integer ?",
+      "range": {
+        "startLine": 396,
+        "startChar": 7,
+        "endLine": 396,
+        "endChar": 19
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b068678_050ef35e",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-13T18:10:07Z",
+      "side": 1,
+      "message": "nit: reached... giving...",
+      "range": {
+        "startLine": 505,
+        "startChar": 47,
+        "endLine": 505,
+        "endChar": 52
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4865931_419b8a50",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-13T18:10:07Z",
+      "side": 1,
+      "message": "\u003d__\u003d is this taking advantage of the autoboxed Integer \"\u003d\u003d\" trick?",
+      "range": {
+        "startLine": 510,
+        "startChar": 52,
+        "endLine": 510,
+        "endChar": 59
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
