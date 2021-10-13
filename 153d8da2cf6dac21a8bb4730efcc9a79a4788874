@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95f6b39e_f04eb346",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2021-10-13T23:22:56Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this early CL have been copied to AOSP recently? I am confused why this would need a manual cherry pick",
+      "revId": "153d8da2cf6dac21a8bb4730efcc9a79a4788874",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
