@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d2a144f_49e5a104",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T00:08:03Z",
+      "side": 1,
+      "message": "Just find this one should be reviewed firstly. \n\nThe bound status mServiceBound is used in later CL. It should be a per phoneId/AppBinding status instead of shared global one.\n\nAnd unbindService should always called after bindService, no matter succeed or not.\nPls take a look",
+      "revId": "20c4abf1d3f2039ac23518f4dacf6174890e1abb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
