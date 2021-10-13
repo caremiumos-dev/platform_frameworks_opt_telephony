@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "584e3d5d_d5dda5af",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T05:15:32Z",
+      "side": 1,
+      "message": "This change belongs to the child cl (aosp/1854371) which needs refactoring now.",
+      "parentUuid": "cce25842_79e9a0ae",
+      "range": {
+        "startLine": 413,
+        "startChar": 9,
+        "endLine": 414,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f61e42d7_64541e0a",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-13T02:23:13Z",
       "side": 1,
       "message": "Same here",
+      "range": {
+        "startLine": 421,
+        "startChar": 11,
+        "endLine": 422,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "877b4afd_67fedfef",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T05:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f61e42d7_64541e0a",
       "range": {
         "startLine": 421,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63754c1b_94040065",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T05:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28dc9b6b_2e3d322d",
+      "range": {
+        "startLine": 429,
+        "startChar": 12,
+        "endLine": 430,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "867a4881_ec74a4da",
@@ -87,6 +159,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bde6854a_aa8ca6d1",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T05:15:32Z",
+      "side": 1,
+      "message": "I put the cancelation into sendEventBindingLostWithDelay (make sure old event is canceled before sending new one). This will guarantee that even we have multiple path that trigger sendEventBindingLostWithDelay, at most one EVENT_BINDING_LOST event is in the queue. Thanks.",
+      "parentUuid": "867a4881_ec74a4da",
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2d57247_1d5c4516",
@@ -100,6 +190,30 @@
       "writtenOn": "2021-10-13T02:23:13Z",
       "side": 1,
       "message": "nit: \"rebinding\" I think?",
+      "range": {
+        "startLine": 521,
+        "startChar": 38,
+        "endLine": 521,
+        "endChar": 44
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac860793_9b46ec5a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T05:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2d57247_1d5c4516",
       "range": {
         "startLine": 521,
         "startChar": 38,
