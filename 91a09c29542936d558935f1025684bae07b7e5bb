@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce25842_79e9a0ae",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-13T02:23:13Z",
+      "side": 1,
+      "message": "Why do we need to split the message from the log function?",
+      "range": {
+        "startLine": 413,
+        "startChar": 9,
+        "endLine": 414,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f61e42d7_64541e0a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-13T02:23:13Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 421,
+        "startChar": 11,
+        "endLine": 422,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28dc9b6b_2e3d322d",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-13T02:23:13Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 429,
+        "startChar": 12,
+        "endLine": 430,
+        "endChar": 38
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "867a4881_ec74a4da",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-13T02:23:13Z",
+      "side": 1,
+      "message": "Do we need to cancel the handler here as well, or is it safe to keep only in CarrierServiceConnection?",
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d57247_1d5c4516",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1777585
+      },
+      "writtenOn": "2021-10-13T02:23:13Z",
+      "side": 1,
+      "message": "nit: \"rebinding\" I think?",
+      "range": {
+        "startLine": 521,
+        "startChar": 38,
+        "endLine": 521,
+        "endChar": 44
+      },
+      "revId": "91a09c29542936d558935f1025684bae07b7e5bb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
