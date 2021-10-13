@@ -22,6 +22,30 @@
       },
       "revId": "cc529825ea6c203fd0574d5049f394175c214301",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c804c9e_49c156a0",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 0,
+      "message": "Too many lines of such log printed that flush other useful into.",
+      "parentUuid": "13b8a4e5_45d613d9",
+      "range": {
+        "startLine": 224,
+        "startChar": 16,
+        "endLine": 224,
+        "endChar": 32
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

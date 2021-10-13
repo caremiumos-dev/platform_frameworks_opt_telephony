@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d55bd059_323cff9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "oh, sorry. Forgot to rebase. It was tested with those signal strength cls. It is not rebased to the child of aosp/1854666. thanks",
+      "parentUuid": "a6fd41de_0e360c38",
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "463b3ca7_dd442654",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-10-12T21:46:32Z",
       "side": 1,
       "message": "nit: use TimeUnit.SECONDS.toMillis(30)",
+      "range": {
+        "startLine": 78,
+        "startChar": 69,
+        "endLine": 78,
+        "endChar": 78
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d82a20d_c3ece47a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "463b3ca7_dd442654",
       "range": {
         "startLine": 78,
         "startChar": 69,
@@ -64,6 +106,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e4af534_07baac62",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Right. The patch was split from a combined one. This comment belongs to the following CL. Thanks",
+      "parentUuid": "4f16971c_749caa37",
+      "range": {
+        "startLine": 79,
+        "startChar": 65,
+        "endLine": 80,
+        "endChar": 34
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "167abdf0_d3465c81",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-10-12T21:46:32Z",
       "side": 1,
       "message": "TimeUnit.HOURS.toMillis(47)",
+      "range": {
+        "startLine": 81,
+        "startChar": 69,
+        "endLine": 81,
+        "endChar": 87
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a41ce9b4_7f83c2a4",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "167abdf0_d3465c81",
       "range": {
         "startLine": 81,
         "startChar": 69,
@@ -110,6 +200,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "738b154b_14de8737",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Done. Thanks",
+      "parentUuid": "297583fb_f731c1fc",
+      "range": {
+        "startLine": 84,
+        "startChar": 17,
+        "endLine": 84,
+        "endChar": 42
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42386c2c_14809afe",
@@ -133,6 +247,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "876fb1b2_0ae9e9f5",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "This is done in parent CL now (aosp/1854666)",
+      "parentUuid": "42386c2c_14809afe",
+      "range": {
+        "startLine": 366,
+        "startChar": 16,
+        "endLine": 366,
+        "endChar": 51
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aec144f3_a25315a3",
@@ -146,6 +284,30 @@
       "writtenOn": "2021-10-12T21:32:49Z",
       "side": 1,
       "message": "Should phoneId be passed here? Similar for the cancel method below",
+      "range": {
+        "startLine": 487,
+        "startChar": 17,
+        "endLine": 487,
+        "endChar": 51
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb8a7b0_fad2b1f5",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Yes, phoneId is needed. Otherwise, the bindings in all phones will be retried no matter which one get lost. With phoneId, only the right binding is retried.",
+      "parentUuid": "aec144f3_a25315a3",
       "range": {
         "startLine": 487,
         "startChar": 17,
@@ -220,6 +382,78 @@
         "startChar": 41,
         "endLine": 488,
         "endChar": 43
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa5dbd3_55a63d07",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "That\u0027s a good name! I was feeling bad with the hardcoded -1 but did not get a better name to represent the state. I will take it. Thanks!",
+      "parentUuid": "2034b9e0_85bdf3bf",
+      "range": {
+        "startLine": 488,
+        "startChar": 41,
+        "endLine": 488,
+        "endChar": 43
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de31252b_5ccb3669",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "138dfaf7_1ab7e2e3",
+      "range": {
+        "startLine": 488,
+        "startChar": 38,
+        "endLine": 488,
+        "endChar": 40
+      },
+      "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4aaa88c_dd5120a7",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-13T01:00:53Z",
+      "side": 1,
+      "message": "Right, symmetric with maybeSendEventBindingLostWithDelay. Only the handler message with the right phoneId should be removed.",
+      "parentUuid": "e0a544b4_2c58b388",
+      "range": {
+        "startLine": 488,
+        "startChar": 12,
+        "endLine": 488,
+        "endChar": 37
       },
       "revId": "8655d1c7f7f97feca9476371b80dc23b720c7042",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
