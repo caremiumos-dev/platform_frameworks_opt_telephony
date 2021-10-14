@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c2c9b5f_ff42e92b",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-14T20:35:45Z",
+      "side": 1,
+      "message": "Right. That\u0027s quite reasonable. Although we have a pending clean up work in DSM ( go/remove-always-report-signal), it doesn\u0027t need the SSC here. I have updated the patch. Thanks",
+      "parentUuid": "7bfe4a56_65a75937",
+      "range": {
+        "startLine": 591,
+        "startChar": 0,
+        "endLine": 591,
+        "endChar": 89
+      },
+      "revId": "7004e8e039a27608257786bf8d7a39db8e63cffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e85362a_5f932563",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-14T19:51:55Z",
       "side": 1,
       "message": "can be private if we disconnect from DSM.",
+      "range": {
+        "startLine": 327,
+        "startChar": 4,
+        "endLine": 327,
+        "endChar": 8
+      },
+      "revId": "7004e8e039a27608257786bf8d7a39db8e63cffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4e25c7_e4e28b9a",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-14T20:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e85362a_5f932563",
       "range": {
         "startLine": 327,
         "startChar": 4,

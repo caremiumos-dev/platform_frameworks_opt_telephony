@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "577789d8_34bdabf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-14T20:35:45Z",
+      "side": 1,
+      "message": "Jack, thanks for review and suggestion. Patch updated to land the comments.",
+      "revId": "67608ef9003ee7040c13f71c55e6a6086dfaa449",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
