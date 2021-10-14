@@ -2071,6 +2071,23 @@ public class ServiceStateTrackerTest extends TelephonyTest {
             assertEquals(expectedNitzData, actualNitzSignal.getValue());
             assertTrue(actualNitzSignal.getReferenceTimeMillis() <= SystemClock.elapsedRealtime());
         }
+        {
+            // Mock sending correct nitz str from RIL
+            String nitzStr = "21/08/15,00:00:00+0";
+            NitzData expectedNitzData = NitzData.parse(nitzStr);
+            mSimulatedCommands.triggerNITZupdate(nitzStr, 60*1000);  // set ageMs as 60 seconds
+            waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+
+            ArgumentCaptor<TimestampedValue<NitzData>> argumentsCaptor =
+                    ArgumentCaptor.forClass(TimestampedValue.class);
+            verify(mNitzStateMachine, times(2))
+                    .handleNitzReceived(argumentsCaptor.capture());
+
+            // Confirm the argument was what we expected.
+            TimestampedValue<NitzData> actualNitzSignal = argumentsCaptor.getValue();
+            assertEquals(expectedNitzData, actualNitzSignal.getValue());
+            assertTrue(actualNitzSignal.getReferenceTimeMillis() <= SystemClock.elapsedRealtime());
+        }
     }
 
     private void changeRegState(int state, CellIdentity cid, int rat) {

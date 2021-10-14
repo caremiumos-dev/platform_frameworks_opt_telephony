@@ -1183,9 +1183,13 @@ public class SimulatedCommands extends BaseCommands
     }
 
     public void triggerNITZupdate(String NITZStr) {
+        triggerNITZupdate(NITZStr, 0);
+    }
+
+    public void triggerNITZupdate(String NITZStr, long ageMs) {
         if (NITZStr != null) {
             mNITZTimeRegistrant.notifyRegistrant(new AsyncResult (null, new Object[]{NITZStr,
-                    SystemClock.elapsedRealtime()}, null));
+                    SystemClock.elapsedRealtime(), (ageMs >= 0 ? ageMs : 0)}, null));
         }
     }
 
