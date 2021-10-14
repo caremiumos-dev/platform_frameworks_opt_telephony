@@ -237,17 +237,24 @@ public class NetworkIndication extends IRadioNetworkIndication.Stub {
      * Indicates when radio has received a NITZ time message.
      * @param indicationType Type of radio indication
      * @param nitzTime NITZ time string in the form "yy/mm/dd,hh:mm:ss(+/-)tz,dt"
-     * @param receivedTime milliseconds since boot that the NITZ time was received
+     * @param receivedTime time (in milliseconds since boot) at which RIL sent the NITZ time to the
+     *        framework
+     * @param ageMs time in milliseconds indicating how long NITZ was cached in RIL and modem.
+     *        This must track true age and must not be calculated using clocks that can stop
+     *        ticking while the device is up. If it can not be guaranteed, there must not be
+     *        any caching done at the modem and should fill in 0 for ageMs
      */
-    public void nitzTimeReceived(int indicationType, String nitzTime, long receivedTime) {
+    public void nitzTimeReceived(int indicationType, String nitzTime,
+        long receivedTime, long ageMs) {
         mRil.processIndication(indicationType);
 
         if (RIL.RILJ_LOGD) mRil.unsljLogRet(RIL_UNSOL_NITZ_TIME_RECEIVED, nitzTime);
 
         // TODO: Clean this up with a parcelable class for better self-documentation
-        Object[] result = new Object[2];
+        Object[] result = new Object[3];
         result[0] = nitzTime;
         result[1] = receivedTime;
+        result[2] = ageMs;
 
         boolean ignoreNitz = TelephonyProperties.ignore_nitz().orElse(false);
 
