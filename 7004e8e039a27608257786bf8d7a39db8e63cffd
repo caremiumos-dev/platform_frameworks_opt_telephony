@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bfe4a56_65a75937",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-14T19:51:55Z",
+      "side": 1,
+      "message": "It\u0027s better to completely disconnect DSM from SSC. It\u0027s pretty straightforward to detect EVENT_RIL_CONNECTED and EVENT_RADIO_AVAILABLE in SSC.",
+      "range": {
+        "startLine": 591,
+        "startChar": 0,
+        "endLine": 591,
+        "endChar": 89
+      },
+      "revId": "7004e8e039a27608257786bf8d7a39db8e63cffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e85362a_5f932563",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-14T19:51:55Z",
+      "side": 1,
+      "message": "can be private if we disconnect from DSM.",
+      "range": {
+        "startLine": 327,
+        "startChar": 4,
+        "endLine": 327,
+        "endChar": 8
+      },
+      "revId": "7004e8e039a27608257786bf8d7a39db8e63cffd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
