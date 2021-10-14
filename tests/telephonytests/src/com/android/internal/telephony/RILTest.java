@@ -116,7 +116,6 @@ import android.hardware.radio.V1_0.RadioResponseType;
 import android.hardware.radio.V1_0.RadioTechnologyFamily;
 import android.hardware.radio.V1_0.SmsWriteArgs;
 import android.hardware.radio.V1_6.IRadio;
-import android.hardware.radio.deprecated.V1_0.IOemHook;
 import android.net.ConnectivityManager;
 import android.net.InetAddresses;
 import android.net.LinkAddress;
@@ -204,8 +203,6 @@ public class RILTest extends TelephonyTest {
     private TelephonyManager mTelephonyManager;
     @Mock
     private IRadio mRadioProxy;
-    @Mock
-    private IOemHook mOemHookProxy;
 
     private HalVersion mRadioVersionV10 = new HalVersion(1, 0);
     private HalVersion mRadioVersionV11 = new HalVersion(1, 1);
@@ -315,7 +312,6 @@ public class RILTest extends TelephonyTest {
                 RILConstants.PREFERRED_NETWORK_MODE), Phone.PREFERRED_CDMA_SUBSCRIPTION, 0);
         mRILUnderTest = spy(mRILInstance);
         doReturn(mRadioProxy).when(mRILUnderTest).getRadioProxy(any());
-        doReturn(mOemHookProxy).when(mRILUnderTest).getOemHookProxy(any());
 
         try {
             replaceInstance(RIL.class, "mRadioVersion", mRILUnderTest, mRadioVersionV10);
@@ -1382,22 +1378,6 @@ public class RILTest extends TelephonyTest {
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_GET_BARRING_INFO);
     }
 
-    @Test
-    public void testInvokeOemRilRequestStrings() throws Exception {
-        String[] strings = new String[]{"a", "b", "c"};
-        mRILUnderTest.invokeOemRilRequestStrings(strings, obtainMessage());
-        verify(mOemHookProxy).sendRequestStrings(
-                mSerialNumberCaptor.capture(), eq(new ArrayList<>(Arrays.asList(strings))));
-    }
-
-    @Test
-    public void testInvokeOemRilRequestRaw() throws Exception {
-        byte[] data = new byte[]{1, 2, 3};
-        mRILUnderTest.invokeOemRilRequestRaw(data, obtainMessage());
-        verify(mOemHookProxy).sendRequestRaw(
-                mSerialNumberCaptor.capture(), eq(RILUtils.primitiveArrayToArrayList(data)));
-    }
-
     private Message obtainMessage() {
         return mRILUnderTest.getRilHandler().obtainMessage();
     }
@@ -2022,7 +2002,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityLte();
         initializeCellIdentityLte_1_5(halCellIdentity, false, true);
 
-        CellIdentityLte cellIdentity = new CellIdentityLte(halCellIdentity);
+        CellIdentityLte cellIdentity = RILUtils.convertHalCellIdentityLte(halCellIdentity);
 
         assertEquals(CSG_INDICATION,
                 cellIdentity.getClosedSubscriberGroupInfo().getCsgIndicator());
@@ -2038,7 +2018,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityLte();
         initializeCellIdentityLte_1_5(halCellIdentity, true, false);
 
-        CellIdentityLte cellIdentity = new CellIdentityLte(halCellIdentity);
+        CellIdentityLte cellIdentity = RILUtils.convertHalCellIdentityLte(halCellIdentity);
 
         Set<String> additionalPlmns = new HashSet<>();
         Collections.addAll(additionalPlmns, ADDITIONAL_PLMNS);
@@ -2067,7 +2047,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityWcdma();
         initializeCellIdentityWcdma_1_5(halCellIdentity, false, true);
 
-        CellIdentityWcdma cellIdentity = new CellIdentityWcdma(halCellIdentity);
+        CellIdentityWcdma cellIdentity = RILUtils.convertHalCellIdentityWcdma(halCellIdentity);
 
         assertEquals(CSG_INDICATION,
                 cellIdentity.getClosedSubscriberGroupInfo().getCsgIndicator());
@@ -2083,7 +2063,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityWcdma();
         initializeCellIdentityWcdma_1_5(halCellIdentity, true, false);
 
-        CellIdentityWcdma cellIdentity = new CellIdentityWcdma(halCellIdentity);
+        CellIdentityWcdma cellIdentity = RILUtils.convertHalCellIdentityWcdma(halCellIdentity);
 
         Set<String> additionalPlmns = new HashSet<>();
         Collections.addAll(additionalPlmns, ADDITIONAL_PLMNS);
@@ -2112,7 +2092,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityTdscdma();
         initializeCellIdentityTdscdma_1_5(halCellIdentity, false, true);
 
-        CellIdentityTdscdma cellIdentity = new CellIdentityTdscdma(halCellIdentity);
+        CellIdentityTdscdma cellIdentity = RILUtils.convertHalCellIdentityTdscdma(halCellIdentity);
 
         assertEquals(CSG_INDICATION,
                 cellIdentity.getClosedSubscriberGroupInfo().getCsgIndicator());
@@ -2128,7 +2108,7 @@ public class RILTest extends TelephonyTest {
                 new android.hardware.radio.V1_5.CellIdentityTdscdma();
         initializeCellIdentityTdscdma_1_5(halCellIdentity, true, false);
 
-        CellIdentityTdscdma cellIdentity = new CellIdentityTdscdma(halCellIdentity);
+        CellIdentityTdscdma cellIdentity = RILUtils.convertHalCellIdentityTdscdma(halCellIdentity);
 
         Set<String> additionalPlmns = new HashSet<>();
         Collections.addAll(additionalPlmns, ADDITIONAL_PLMNS);
@@ -2342,7 +2322,8 @@ public class RILTest extends TelephonyTest {
         android.hardware.radio.V1_6.OptionalOsAppId halOsAppId =
                 new android.hardware.radio.V1_6.OptionalOsAppId();
         android.hardware.radio.V1_6.OsAppId osAppId = new android.hardware.radio.V1_6.OsAppId();
-        osAppId.osAppId = RILUtils.primitiveArrayToArrayList("OS_APP_ID".getBytes());
+        byte[] osAppIdArray = {1, 2, 3, 4};
+        osAppId.osAppId = RILUtils.primitiveArrayToArrayList(osAppIdArray);
         halOsAppId.value(osAppId);
 
         halTrafficDescriptor.dnn = halDnn;
@@ -2350,10 +2331,11 @@ public class RILTest extends TelephonyTest {
         result16.trafficDescriptors = new ArrayList<>(Arrays.asList(halTrafficDescriptor));
 
         List<TrafficDescriptor> trafficDescriptors = Arrays.asList(
-                new TrafficDescriptor("DNN", "OS_APP_ID"));
+                new TrafficDescriptor("DNN", osAppIdArray));
 
         response = new DataCallResponse.Builder()
                 .setCause(0)
+                .setRetryDurationMillis(-1L)
                 .setId(0)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IPV4V6)
