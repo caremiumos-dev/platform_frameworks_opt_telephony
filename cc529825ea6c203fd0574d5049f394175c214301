@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e80bb7c_0ed55baf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "It\u0027s a bit surprising that the dispose() API is NOT used at all. The comments is in GmsCdmaPhone#dispose: \nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/GsmCdmaPhone.java;l\u003d990\n\nI guess phone is designed to keep in running and all components here just prepare that one day they will have case to clean up.",
+      "parentUuid": "5502d30c_0d3e63a6",
+      "range": {
+        "startLine": 821,
+        "startChar": 0,
+        "endLine": 821,
+        "endChar": 55
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "831cfcce_0cf7bd29",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-10-14T01:41:03Z",
       "side": 1,
       "message": "Suggest TimeUnit.* for consistency",
+      "range": {
+        "startLine": 77,
+        "startChar": 50,
+        "endLine": 77,
+        "endChar": 59
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a50b561_35afaacf",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "831cfcce_0cf7bd29",
       "range": {
         "startLine": 77,
         "startChar": 50,
@@ -87,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c276b57e_54a9af76",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bd941e6_738aae56",
+      "range": {
+        "startLine": 93,
+        "startChar": 5,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7e002e2_4b3d72e8",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-10-14T01:41:03Z",
       "side": 1,
       "message": "Nit: weird formatting - switch to regular /** javadoc */ ?",
+      "range": {
+        "startLine": 104,
+        "startChar": 64,
+        "endLine": 104,
+        "endChar": 66
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a9a0f64_18c73fe3",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7e002e2_4b3d72e8",
       "range": {
         "startLine": 104,
         "startChar": 64,
@@ -133,6 +229,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "804ed67e_18a2bf39",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8552f7c0_1bce45f6",
+      "range": {
+        "startLine": 106,
+        "startChar": 35,
+        "endLine": 107,
+        "endChar": 47
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "807bd5a1_7c484c02",
@@ -146,6 +266,54 @@
       "writtenOn": "2021-10-14T01:41:03Z",
       "side": 1,
       "message": "obtainMessage(EVENT_*)?",
+      "range": {
+        "startLine": 342,
+        "startChar": 14,
+        "endLine": 343,
+        "endChar": 46
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79854c61_5964a850",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "807bd5a1_7c484c02",
+      "range": {
+        "startLine": 342,
+        "startChar": 14,
+        "endLine": 343,
+        "endChar": 46
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feb779a9_29936376",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "807bd5a1_7c484c02",
       "range": {
         "startLine": 342,
         "startChar": 14,
@@ -179,6 +347,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "915c4f82_43a9adbe",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e52c8d1_9f95c4ca",
+      "range": {
+        "startLine": 345,
+        "startChar": 13,
+        "endLine": 345,
+        "endChar": 21
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c867222b_0f996c86",
@@ -192,6 +384,30 @@
       "writtenOn": "2021-10-14T01:41:03Z",
       "side": 1,
       "message": "Ditto for these two",
+      "range": {
+        "startLine": 421,
+        "startChar": 5,
+        "endLine": 421,
+        "endChar": 24
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57efac3d_17720059",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c867222b_0f996c86",
       "range": {
         "startLine": 421,
         "startChar": 5,
@@ -225,6 +441,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c95e91a5_5c19f14e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da1e3048_991d1a2f",
+      "range": {
+        "startLine": 427,
+        "startChar": 27,
+        "endLine": 427,
+        "endChar": 46
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d02eb918_74d86f39",
@@ -248,6 +488,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a7e70b_d3e7bf0a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "There is a dedicated child CL  to make SignalStrengthController mockable in TelephonyTest:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1758717/2/tests/telephonytests/src/com/android/internal/telephony/TelephonyTest.java",
+      "parentUuid": "d02eb918_74d86f39",
+      "range": {
+        "startLine": 145,
+        "startChar": 37,
+        "endLine": 145,
+        "endChar": 41
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6242849_50fda87b",
@@ -261,6 +525,30 @@
       "writtenOn": "2021-10-14T01:41:03Z",
       "side": 1,
       "message": "Should this go in TelephonyTest instead?",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 0
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "980c83e8_33da447c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/metrics/CallQualityMetricsTest.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T03:30:22Z",
+      "side": 1,
+      "message": "Yes, it will be refactored into TelephonyTest in a dedicated CL(aosp/1758717). The local mock here is just a temporary solution (to minimize the unrelated refactoring).",
+      "parentUuid": "d6242849_50fda87b",
       "range": {
         "startLine": 42,
         "startChar": 0,
