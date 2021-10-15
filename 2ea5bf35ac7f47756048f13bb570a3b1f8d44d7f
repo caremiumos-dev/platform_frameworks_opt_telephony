@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e2bd24_602793a7",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T22:13:34Z",
+      "side": 1,
+      "message": "The story is that I firstly develop this patch together with Anomaly support. Then I realize it is better to separate into two CLs.\n\nIn the anomaly cl(aosp/1854371 which now need refactoring), the default minimum anomaly interval is set to 24 hours. The 47 hours maximum delay here will make sure there are at most two anomalies reported (The first report catches the initial context. If issue remain, the second one tells us issue is not resolved. More reports are less useful IMO).\n\nThere was comments explain it but it is meaningful in aosp/1854371 and got removed.",
+      "parentUuid": "dbf16945_dc3dd005",
+      "range": {
+        "startLine": 78,
+        "startChar": 94,
+        "endLine": 78,
+        "endChar": 96
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce10933d_ea6dbf6e",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-10-13T18:10:07Z",
       "side": 1,
       "message": "It is painful to me that an int is being passed in obj rather than arg1. (please don\u0027t change this now).",
+      "range": {
+        "startLine": 135,
+        "startChar": 30,
+        "endLine": 135,
+        "endChar": 44
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0e6b7e_cd103c22",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T22:13:34Z",
+      "side": 1,
+      "message": "msg.obj is used to carry the phoneId instead of arg1, with two reasons:\n1. We have case here to remove messages(in method cancelEventBindingLost) while Handler only support to remove message with code + obj (no support of code + arg1/arg2). \n2. Keep consistent with other events.",
+      "parentUuid": "ce10933d_ea6dbf6e",
       "range": {
         "startLine": 135,
         "startChar": 30,
@@ -87,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5afc72_c39412c0",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T22:13:34Z",
+      "side": 1,
+      "message": "This is good case for final. Thanks",
+      "parentUuid": "45a454ef_9a82f1e0",
+      "range": {
+        "startLine": 396,
+        "startChar": 7,
+        "endLine": 396,
+        "endChar": 19
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b068678_050ef35e",
@@ -110,6 +182,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "001737bb_cf854416",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T22:13:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b068678_050ef35e",
+      "range": {
+        "startLine": 505,
+        "startChar": 47,
+        "endLine": 505,
+        "endChar": 52
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4865931_419b8a50",
@@ -123,6 +219,30 @@
       "writtenOn": "2021-10-13T18:10:07Z",
       "side": 1,
       "message": "\u003d__\u003d is this taking advantage of the autoboxed Integer \"\u003d\u003d\" trick?",
+      "range": {
+        "startLine": 510,
+        "startChar": 52,
+        "endLine": 510,
+        "endChar": 59
+      },
+      "revId": "2ea5bf35ac7f47756048f13bb570a3b1f8d44d7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319cb8d1_b99aca3a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-15T22:13:34Z",
+      "side": 1,
+      "message": "Yeah. But now I make it explicitly (just like in CCL) to avoid mis-understadning.",
+      "parentUuid": "e4865931_419b8a50",
       "range": {
         "startLine": 510,
         "startChar": 52,
