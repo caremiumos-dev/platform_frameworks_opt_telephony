@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6307d72_505464f7",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-17T22:11:10Z",
+      "side": 1,
+      "message": "what is this actually doing now? given that we ignore it in unbind, and don\u0027t actually log in anywhere, I\u0027m not sure it serves a purpose.\n\nif you want to keep it, I\u0027d recommend updating the comment and perhaps the name to reflect what it truly means (that we\u0027ve called bindService).",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 39
+      },
+      "revId": "32995e9945d6b61c22aefbf0d273e2dec29ba8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06ae3884_9db77182",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-17T22:11:10Z",
+      "side": 1,
+      "message": "should we add a TODO to remove this catch block once we feel we\u0027ve proven this change is safe? or just skip adding it entirely since it\u0027s not currently present?\n\ncatching IAE is a hack to work around buggy logic that we aren\u0027t making symmetric calls to bind+unbind. it should be a last-ditch measure of protection in an emergency, not the usual steady state behavior. It represents a coding error on the part of the client if we\u0027re making asymmetric calls (unbinding the same connection twice / letting a connection leak).",
+      "range": {
+        "startLine": 348,
+        "startChar": 76,
+        "endLine": 349,
+        "endChar": 88
+      },
+      "revId": "32995e9945d6b61c22aefbf0d273e2dec29ba8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
