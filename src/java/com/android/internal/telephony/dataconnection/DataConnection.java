@@ -1660,6 +1660,7 @@ public class DataConnection extends StateMachine {
             if (!uplinkUpdated) {
                 mUplinkBandwidth = values.second;
             }
+            mUplinkBandwidth = Math.min(mUplinkBandwidth, mDownlinkBandwidth);
         }
     }
 
@@ -3705,7 +3706,7 @@ public class DataConnection extends StateMachine {
         }
     }
 
-    /** Sets the {@link DataCallSessionStats} mock for this phone ID during unit testing. */
+    /** Sets the {@link DataCallSessionStats} mock for this data connection during unit testing. */
     @VisibleForTesting
     public void setDataCallSessionStats(DataCallSessionStats dataCallSessionStats) {
         mDataCallSessionStats = dataCallSessionStats;
