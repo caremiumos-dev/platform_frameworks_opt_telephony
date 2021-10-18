@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9640d08_c28c649b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-18T21:47:14Z",
+      "side": 1,
+      "message": "+ Jeff as well.\n\nIt is not possible to cover the edge cases in unit test. So I created a manual regression test (go/carrier-serivce-binding-test) to make sure in all scenarios below there should be one (and at most one) persistent binding from phone to Carrier Service:\n- Tycho in \"normal\" status\n- Tycho crash once\n- Tycho has repeated crashes\n\nHopefully we can turn those test cases into automatic test later. This will give us more confidence on the persist binding behavior in platform side.",
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
