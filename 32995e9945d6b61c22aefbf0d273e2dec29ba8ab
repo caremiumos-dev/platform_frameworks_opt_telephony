@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3badef38_579539d3",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-18T17:18:46Z",
+      "side": 1,
+      "message": "mServiceBound was only used to conditionally call unbindService. It is indeed useless now. I was to keep it for the child CL (aosp/1854367). But think twice, it is a redundant check over there. So this global variable is removed now.",
+      "parentUuid": "c6307d72_505464f7",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 39
+      },
+      "revId": "32995e9945d6b61c22aefbf0d273e2dec29ba8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06ae3884_9db77182",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-17T22:11:10Z",
       "side": 1,
       "message": "should we add a TODO to remove this catch block once we feel we\u0027ve proven this change is safe? or just skip adding it entirely since it\u0027s not currently present?\n\ncatching IAE is a hack to work around buggy logic that we aren\u0027t making symmetric calls to bind+unbind. it should be a last-ditch measure of protection in an emergency, not the usual steady state behavior. It represents a coding error on the part of the client if we\u0027re making asymmetric calls (unbinding the same connection twice / letting a connection leak).",
+      "range": {
+        "startLine": 348,
+        "startChar": 76,
+        "endLine": 349,
+        "endChar": 88
+      },
+      "revId": "32995e9945d6b61c22aefbf0d273e2dec29ba8ab",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e3fe70f_58b67730",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-18T17:18:46Z",
+      "side": 1,
+      "message": "The IAE \"protection\" revealed my concern that even a symmetric bind/unbindService may cause IAE (but I did not see that case). \n\nI do see the catching IAE in other framework logic:\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/core/java/com/android/server/notification/ManagedServices.java;l\u003d1647\n\nBut I know this is not the right practice to follow. IAE is not observed during the regression test so far. I have removed the logic.",
+      "parentUuid": "06ae3884_9db77182",
       "range": {
         "startLine": 348,
         "startChar": 76,
