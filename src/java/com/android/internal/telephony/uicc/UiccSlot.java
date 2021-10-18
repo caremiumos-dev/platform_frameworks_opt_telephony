@@ -38,6 +38,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
 import com.android.internal.telephony.uicc.euicc.EuiccCard;
+import com.android.internal.telephony.util.FrameworksUtils;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -358,7 +359,7 @@ public class UiccSlot extends Handler {
                     r.getString(R.string.sim_removed_message);
             String buttonTxt = r.getString(R.string.sim_restart_button);
 
-            AlertDialog dialog = new AlertDialog.Builder(mContext)
+            AlertDialog dialog = FrameworksUtils.makeAlertDialogBuilder(mContext)
                     .setTitle(title)
                     .setMessage(message)
                     .setPositiveButton(buttonTxt, listener)

@@ -81,6 +81,7 @@ import com.android.internal.telephony.GsmAlphabet.TextEncodingDetails;
 import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.util.FrameworksUtils;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -1715,6 +1716,7 @@ public abstract class SMSDispatcher extends Handler {
                 return;
             }
 
+            sendMessage(obtainMessage(EVENT_SEND_LIMIT_REACHED_CONFIRMATION, trackers));
             for (SmsTracker tracker : trackers) {
                 sendSms(tracker);
             }
@@ -1880,7 +1882,7 @@ public abstract class SMSDispatcher extends Handler {
         ConfirmDialogListener listener =
                 new ConfirmDialogListener(trackers, null, ConfirmDialogListener.RATE_LIMIT);
 
-        AlertDialog d = new AlertDialog.Builder(mContext)
+        AlertDialog d = FrameworksUtils.makeAlertDialogBuilder(mContext)
                 .setTitle(R.string.sms_control_title)
                 .setIcon(R.drawable.stat_sys_warning)
                 .setMessage(messageText)
@@ -1946,7 +1948,7 @@ public abstract class SMSDispatcher extends Handler {
                 R.id.sms_short_code_remember_choice_checkbox);
         rememberChoice.setOnCheckedChangeListener(listener);
 
-        AlertDialog d = new AlertDialog.Builder(mContext)
+        AlertDialog d = FrameworksUtils.makeAlertDialogBuilder(mContext)
                 .setView(layout)
                 .setPositiveButton(r.getString(R.string.sms_short_code_confirm_allow), listener)
                 .setNegativeButton(r.getString(R.string.sms_short_code_confirm_deny), listener)
