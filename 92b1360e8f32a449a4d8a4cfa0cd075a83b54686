@@ -22,6 +22,30 @@
       },
       "revId": "92b1360e8f32a449a4d8a4cfa0cd075a83b54686",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "987ab0d0_d6066063",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-19T03:04:23Z",
+      "side": 1,
+      "message": "added a test case to the NITZ unit test and passed the ServiceStateTrackerTest",
+      "parentUuid": "4495ed47_0f190869",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "92b1360e8f32a449a4d8a4cfa0cd075a83b54686",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
