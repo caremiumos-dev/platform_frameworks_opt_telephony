@@ -574,6 +574,9 @@ public class MultiSimSettingController extends Handler {
             int subId = mPrimarySubList.get(0);
             if (DBG) log("[updateDefaultValues] to only primary sub " + subId);
             mSubController.setDefaultDataSubId(subId);
+            final TelephonyManager tm =
+                    TelephonyManager.from(mContext).createForSubscriptionId(subId);
+            tm.setDataEnabledForReason(TelephonyManager.DATA_ENABLED_REASON_USER, true);
             mSubController.setDefaultVoiceSubId(subId);
             mSubController.setDefaultSmsSubId(subId);
             sendDefaultSubConfirmedNotification(subId);
