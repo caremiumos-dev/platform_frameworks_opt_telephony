@@ -159,6 +159,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3839d425_3f3843f5",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-19T15:40:21Z",
+      "side": 1,
+      "message": "FYI. I add those @UnsupportedAppUsage back. The lint error messages provides links on the best practice to reserve those annotation:\n go/nonsdk-policy#keep-annotation-on-trivial-changes\n \n It also provides usage statistics link shows that all those three fields do have external caller. Keeping annotation provides them opportunities to update and prevents from breaking existing features.",
+      "parentUuid": "c276b57e_54a9af76",
+      "range": {
+        "startLine": 93,
+        "startChar": 5,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "cc529825ea6c203fd0574d5049f394175c214301",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7e002e2_4b3d72e8",
