@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ff981b_1db24329",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-20T14:41:14Z",
+      "side": 1,
+      "message": "Plumbing to connect to https://r.android.com/1846393",
+      "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
