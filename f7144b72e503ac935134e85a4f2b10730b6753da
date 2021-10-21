@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa8bc5eb_4caa1df6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-21T07:39:13Z",
+      "side": 1,
+      "message": "Correct. Even if the NitzStateMachine does the same calculation, internally, I want to give it as much information as possible for future changes.",
+      "parentUuid": "a27e737b_ccaa0ed8",
+      "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6aed711c_3c46754f",
         "filename": "src/java/com/android/internal/telephony/NitzSignal.java",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2021-10-21T05:11:59Z",
       "side": 1,
       "message": "why do you call this Elapsed?",
+      "range": {
+        "startLine": 42,
+        "startChar": 38,
+        "endLine": 42,
+        "endChar": 58
+      },
+      "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50274b35_e811bb60",
+        "filename": "src/java/com/android/internal/telephony/NitzSignal.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-21T07:39:13Z",
+      "side": 1,
+      "message": "Because it comes from the clock used by SystemClock#elapsedRealtime() (AKA CLOCK_BOOTTIME) as mentioned in the javadoc above and also indicated by @ElapsedRealtimeLong. \n\n[I don\u0027t call times like this \"boot time\" or similar because I think that is less clear and also it can be confused with \"uptime\" (CLOCK_MONOTONIC), which is a different clock with different guarantees, but also is related to boot.]\n\nSince these values will be compared with other time values, it\u0027s important to be clear what clock they come from, as different clocks have different timebases and guarantees.\n\nIt could be called \"receiptElapsedRealtimeMillis\" (as I did on the accessor), but that leads to long lines. If you prefer this I can change it just for the param or for the field too.",
+      "parentUuid": "6aed711c_3c46754f",
       "range": {
         "startLine": 42,
         "startChar": 38,
