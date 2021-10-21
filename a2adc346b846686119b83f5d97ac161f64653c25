@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0700a3_ff92233b",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 0,
+      "message": "why remove this, out of curiosity?",
+      "revId": "a2adc346b846686119b83f5d97ac161f64653c25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

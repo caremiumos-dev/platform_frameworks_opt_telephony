@@ -16,6 +16,120 @@
       "message": "+ Jeff as well.\n\nIt is not possible to cover the edge cases in unit test. So I created a manual regression test (go/carrier-serivce-binding-test) to make sure in all scenarios below there should be one (and at most one) persistent binding from phone to Carrier Service:\n- Tycho in \"normal\" status\n- Tycho crash once\n- Tycho has repeated crashes\n\nHopefully we can turn those test cases into automatic test later. This will give us more confidence on the persist binding behavior in platform side.",
       "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9f8a5d_888d42ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "Sorry for the delay. This logic is really tricky and it\u0027s hard for me to feel confident that we\u0027re addressing every possible event ordering / scenario. The more we can simplify the number of states here, the easier it will be to reason about.",
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "749ef97e_e6594a4b",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "AIUI, under normal circumstances, the platform will automatically try to recreate the service with some level of backoff a few times before ultimately giving up. I think the maximum backoff in that case is longer than 30 seconds. Does it make sense to coordinate with that value such that the backoff we apply here continues to build off that initial backoff? Otherwise, you have sort of peculiar backoff behavior where you wait longer and longer, then suddenly reset the backoff to a shorter value. Then again, once you reestablish the binding, you\u0027ll be resetting the platform\u0027s backoff value, so maybe it\u0027s not too different in the end.\n\nFor comparison, ServiceWatcherImpl triggers a binding 500ms later and has no backoff.",
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83f1cf9_b3e355f9",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "I\u0027m not really sure what this retry loop is attempting to accomplish. In the crash loop scenario we know about, the carrier app doesn\u0027t crash immediately - the connection does come up. In this implementation, that would reset the delay, so it would never go beyond the first value, even if the app is still crash looping.\n\nBinding without ever getting an onServiceConnected callback would be more unusual in practice, though certainly still possible. But the scenario we\u0027re seeing is a bit different AFAIK.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 89
+      },
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eeb0c09_dad162dd",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "Are you sure about this?\n\nI\u0027d expect that you get no onServiceConnected, but that the platform will retry some number of times, and eventually you\u0027d get an onBindingDied when those retries are exhausted. But it wouldn\u0027t be immediate.",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 51
+      },
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e225eb_e3488d26",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is wise. It effectively defeats the platform\u0027s backoff logic, because you rebind immediately even for transient disconnections. I would have expected the only delta here to be in the case that the binding permanently dies (in onBIndingDied).",
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce283c6_251c86ee",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1006780
+      },
+      "writtenOn": "2021-10-21T19:22:58Z",
+      "side": 1,
+      "message": "By handling this as a rebind, this introduces a conflict with the existing logic to rebind in the event of package changes, which will also trigger an onBindingDied callback. The combination seems like it could be fairly churny.\n\nIf we\u0027re going to start re-binding due to onBindingDied, should we also get rid of the package change listeners?",
+      "revId": "af1b413e275489bbb461af8f0935ec541d29a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
