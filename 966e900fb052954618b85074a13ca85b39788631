@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80b70ec_b5232299",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 0,
+      "message": "Can we verify that this UAU is either a false-positive or very minimal?",
+      "range": {
+        "startLine": 189,
+        "startChar": 5,
+        "endLine": 189,
+        "endChar": 24
+      },
+      "revId": "966e900fb052954618b85074a13ca85b39788631",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f4ed0f_6e810f8e",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 0,
+      "message": "I think we probably need to support a proxy method here for compatibility unless we can verify in the compat portal that the usage is sufficiently low / it\u0027s a false positive. :-(",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 889,
+        "endChar": 87
+      },
+      "revId": "966e900fb052954618b85074a13ca85b39788631",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

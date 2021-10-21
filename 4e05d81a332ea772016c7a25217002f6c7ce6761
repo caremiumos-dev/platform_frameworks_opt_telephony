@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "167908e6_4511df40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "Alright, first round of comments... I sped up a bit at the end. Lots of code. I\u0027ll do at least one more \"thorough\" review.",
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c13a0a75_9f05951c",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "same comment as with \"dispose\" down below. Let\u0027s think about the \"ownership\" model and be clear about it.",
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc17a18_c49bd1aa",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "I see this is public, so I presume some other object (like maybe Phone?) is invoking dispose here? If so, should that be the place where SSC#dispose() is being invoked? If the idea is to not have SSC be a sub-component of SST, that seems like the right thing to do.",
+      "range": {
+        "startLine": 814,
+        "startChar": 3,
+        "endLine": 815,
+        "endChar": 55
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b250af4e_cb17d26d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 4580,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "At least one call to this was removed. Is it still necessary to have this here?",
+      "range": {
+        "startLine": 4580,
+        "startChar": 17,
+        "endLine": 4580,
+        "endChar": 44
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce0912d4_fd905646",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "EVENT_POLL_SIGNAL_STRENGTH_DONE?\n\nWe can\u0027t have POLL_SIGNAL_STRENGTH trigger GET_SIGNAL_STRENGTH... even as a non-functional change.",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd0b6782_63abca1e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "Is this really existing logic? So a getSignalStrength() call will enqueue a new SignalStrength \"poll\" and that creates a cascade of future endless polling? That doesn\u0027t seem right.",
+      "range": {
+        "startLine": 219,
+        "startChar": 16,
+        "endLine": 219,
+        "endChar": 43
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bfb0879_b1692c52",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "My goodness this is bad.",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 339,
+        "endChar": 0
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4d8cc75_b0c716d0",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 452,
+        "startChar": 4,
+        "endLine": 452,
+        "endChar": 87
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "288db6c5_784fe723",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T00:53:22Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 458,
+        "startChar": 5,
+        "endLine": 458,
+        "endChar": 24
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
