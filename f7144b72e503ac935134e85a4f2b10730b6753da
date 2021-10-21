@@ -16,6 +16,46 @@
       "message": "Plumbing to connect to https://r.android.com/1846393",
       "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a27e737b_ccaa0ed8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-21T05:11:59Z",
+      "side": 1,
+      "message": "With this change, we dont need to calculate the received time. Instead will just pass it as it is",
+      "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aed711c_3c46754f",
+        "filename": "src/java/com/android/internal/telephony/NitzSignal.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-21T05:11:59Z",
+      "side": 1,
+      "message": "why do you call this Elapsed?",
+      "range": {
+        "startLine": 42,
+        "startChar": 38,
+        "endLine": 42,
+        "endChar": 58
+      },
+      "revId": "f7144b72e503ac935134e85a4f2b10730b6753da",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
