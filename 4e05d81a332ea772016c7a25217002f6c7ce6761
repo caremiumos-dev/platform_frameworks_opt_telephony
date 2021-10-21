@@ -53,6 +53,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1cf414_05463cd9",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T18:06:56Z",
+      "side": 1,
+      "message": "I\u0027d like the other components to ask SSC for signal strength updates, not SST, assuming that\u0027s a small change. Then we can just completely get SST out of the picture.",
+      "parentUuid": "5e2a6843_06a93ce7",
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbc17a18_c49bd1aa",
@@ -194,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cb7db6b_35964255",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T18:06:56Z",
+      "side": 1,
+      "message": "In that case, could you split out different events so that these flows are clear. The penalty for a couple \"duplicate\" case statements is very small. The penalty for difficult-to-follow code is very high.",
+      "parentUuid": "e8f437de_de15a969",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd0b6782_63abca1e",
@@ -231,6 +273,30 @@
       "side": 1,
       "message": "Yeah. This is the exact logic from SST:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/ServiceStateTracker.java;l\u003d1370?q\u003dServiceStateTracker\n\nqueueNextSignalStrengthPoll() will check the beautiful flag mDontPollSignalStrength in the very beginning. When get unsolicited signal strength updates from the radio, the flag will be set to true (in event EVENT_SIGNAL_STRENGTH_UPDATE). And we don\u0027t actually get endless polling.",
       "parentUuid": "bd0b6782_63abca1e",
+      "range": {
+        "startLine": 219,
+        "startChar": 16,
+        "endLine": 219,
+        "endChar": 43
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43caf7eb_81682584",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-21T18:06:56Z",
+      "side": 1,
+      "message": "If the other behavior is the old HAL support, then it\u0027s only supported on devices with HAL \u003c 1.2.... I think we can safely delete it.",
+      "parentUuid": "08decb57_0b107e16",
       "range": {
         "startLine": 219,
         "startChar": 16,
