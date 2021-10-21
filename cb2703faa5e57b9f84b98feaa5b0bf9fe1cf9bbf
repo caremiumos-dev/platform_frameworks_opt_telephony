@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0558c4d_4feb6542",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "b3941d16_0ad6a69e",
+      "range": {
+        "startLine": 240,
+        "startChar": 14,
+        "endLine": 241,
+        "endChar": 23
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9af08b6_6b214405",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "Perhaps clearer to say:\n\nand therefore must be calculated using clocks that include the time spend in sleep / low power states\n\n[i.e. like the docs on SystemClock]",
+      "range": {
+        "startLine": 243,
+        "startChar": 84,
+        "endLine": 244,
+        "endChar": 44
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67397589_7b6929fe",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "c9af08b6_6b214405",
       "range": {
         "startLine": 243,
         "startChar": 84,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a168c120_6d4be81c",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "72fed4bc_b0f00568",
+      "range": {
+        "startLine": 248,
+        "startChar": 13,
+        "endLine": 248,
+        "endChar": 25
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81ffdccc_60c3deb4",
@@ -83,6 +155,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "[It\u0027s amazing how often basic arithmetic is messed up (trivial issues like wrong ordering of args when calculating age) or overflow leading to massive negative or positive values. Given this is going to be new code for partners / SoC vendors, and multiple parties are involved, I think it makes sense to be super defensive about negatives, and \"fail\" in a way that should be super obvious. Just converting to zero will just hide a major issue]\n\nIf it\u0027s negative, I think this it should be logged with a warning level or above, and probably the NITZ shouldn\u0027t be passed on at all: one piece of information is corrupt, why should we trust the others? e.g. similar to ignoreNitz.\n\nI also think that ages greater than some threshold should be ignored, but I think we can leave that logic in the NitzStateMachine (once we actually pass the age further downstream, see later review comments about my design doc comments).",
+      "range": {
+        "startLine": 257,
+        "startChar": 21,
+        "endLine": 257,
+        "endChar": 26
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c64773_5d51041f",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "Add check for ageMs in patchset 14.\nIn normal cases, the value of ageMs should be greater then 0 and less then receivedTimeMs.\nSo if the ageMs value is negative or greater than receivedTimeMs, ignore the NITZ.",
+      "parentUuid": "81ffdccc_60c3deb4",
       "range": {
         "startLine": 257,
         "startChar": 21,
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb86dc73_59c40967",
+        "filename": "src/java/com/android/internal/telephony/RadioIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "Remove the changes in this file because we should change in another file NetworkIndication.java, not this one.",
+      "parentUuid": "6fbd5e88_66a6301f",
+      "range": {
+        "startLine": 216,
+        "startChar": 75,
+        "endLine": 216,
+        "endChar": 87
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cf4f72c_13496b7b",
@@ -129,6 +249,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "Generally, Java\u0027s case statement scoping default is not great. Since there are several local variables in this \"case\" they will therefore be in scope for other \"case\" / throughout the (very long) method. Blocks are often used to avoid needing to come with alternative var names, or to avoid \"pollution\" between cases.\n\nSo, I suggest adding braces:\n\ncase EVENT_NITZ_TIME: {\n   ...\n   break;\n}\n\nTelephony team\u0027s code, so up to you.",
+      "range": {
+        "startLine": 1430,
+        "startChar": 32,
+        "endLine": 1430,
+        "endChar": 33
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "686baa0a_addf6298",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "7cf4f72c_13496b7b",
       "range": {
         "startLine": 1430,
         "startChar": 32,
@@ -162,6 +306,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25cd335a_1d7b0201",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "53e5599b_35038ef0",
+      "range": {
+        "startLine": 1436,
+        "startChar": 34,
+        "endLine": 1436,
+        "endChar": 40
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0ca9aa3_baab0713",
@@ -175,6 +343,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "I think use of time_t in docs is a bit misleading here. time_t usually refers to UTC tracking in C, which isn\u0027t the case here.\n\nCan you change the docs for nitzReceiveTime to one like what I suggested in other files for the same value. e.g. relate the origin of the time value to SystemClock.elapsedRealtime() to make it clear what the timebase is.\n\n----\n\nSimilar, ageMs doc can be the same text as you\u0027ve used elsewhere.\n\n----\n\nAlso, I suggest renaming nitzReceiveTime -\u003e nitzElapsedRealtimeMillis, or nitzReceiveTimeMillis / nitzReceiveTimeMs for greater clarity like I\u0027ve said elsewhere.\n\nEven better, (additionally) annotate the parameter with @ElapsedRealtimeLong if you can.",
+      "range": {
+        "startLine": 4419,
+        "startChar": 26,
+        "endLine": 4419,
+        "endChar": 32
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3314264e_d937e3bf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 4419,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13",
+      "parentUuid": "b0ca9aa3_baab0713",
       "range": {
         "startLine": 4419,
         "startChar": 26,
@@ -231,6 +423,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d720ff2_f0c554a1",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 15",
+      "parentUuid": "78269e67_4707eb90",
+      "range": {
+        "startLine": 2075,
+        "startChar": 50,
+        "endLine": 2075,
+        "endChar": 53
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cfc44dd_8cd8283c",
@@ -244,6 +460,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "Nit: \"60 * 1000\" according to most coding standards.",
+      "range": {
+        "startLine": 2078,
+        "startChar": 58,
+        "endLine": 2078,
+        "endChar": 60
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "791f1a82_f21787fd",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 15",
+      "parentUuid": "4cfc44dd_8cd8283c",
       "range": {
         "startLine": 2078,
         "startChar": 58,
@@ -277,6 +517,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "101569f2_db48804f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2083,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 15",
+      "parentUuid": "21015fcd_1de42c67",
+      "range": {
+        "startLine": 2083,
+        "startChar": 38,
+        "endLine": 2083,
+        "endChar": 43
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b55f757_960449f5",
@@ -300,6 +564,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c28f738_db975883",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 2089,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 15",
+      "parentUuid": "4b55f757_960449f5",
+      "range": {
+        "startLine": 2089,
+        "startChar": 68,
+        "endLine": 2089,
+        "endChar": 79
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b95cf1fb_ea6e917b",
@@ -313,6 +601,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "I think this one should continue to test the case with no ageMs argument in the Object[], rather than making it the same as ageMs \u003d\u003d 0. The 2 param case has its own branch in the production code, so should probably have its own test.\n\nIf you don\u0027t want to do that, then I don\u0027t think you need an overload here: just pass zero in the tests and thereby make it clearer that you\u0027re only testing the 3-param case.",
+      "range": {
+        "startLine": 1186,
+        "startChar": 8,
+        "endLine": 1186,
+        "endChar": 25
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7169d01d_7c1fe19d",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-21T09:35:24Z",
+      "side": 1,
+      "message": "updated in patchset 13.",
+      "parentUuid": "b95cf1fb_ea6e917b",
       "range": {
         "startLine": 1186,
         "startChar": 8,
