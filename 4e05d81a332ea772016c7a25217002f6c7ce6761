@@ -35,6 +35,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e2a6843_06a93ce7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "SSC is the only owner of the signal strength states and action performer now. Any other telephony component (here SST) want to update the state (here reset signal strength value to default when switch the phone type) needs to ask SSC to perform it. Pls let me know if you have concern here. Thanks",
+      "parentUuid": "c13a0a75_9f05951c",
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbc17a18_c49bd1aa",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-10-21T00:53:22Z",
       "side": 1,
       "message": "I see this is public, so I presume some other object (like maybe Phone?) is invoking dispose here? If so, should that be the place where SSC#dispose() is being invoked? If the idea is to not have SSC be a sub-component of SST, that seems like the right thing to do.",
+      "range": {
+        "startLine": 814,
+        "startChar": 3,
+        "endLine": 815,
+        "endChar": 55
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "909e1d0e_dc7fe70f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "Hunter provided the exactly same comments :-)\n\nThe dispose API in Phone components are never called. GsmCdmaPhone#dispose provides the explanation:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/GsmCdmaPhone.java;l\u003d989?q\u003dgsmcdmaphone \n\nIt is not a concern now since all those components are designed to \"happily live forever\". The logic in dispose here is just in case \"one day\" they will be invoked, I guess.",
+      "parentUuid": "cbc17a18_c49bd1aa",
       "range": {
         "startLine": 814,
         "startChar": 3,
@@ -81,6 +123,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14026935_3db6a195",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 4580,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "It is still called here when handling EVENT_SIM_READY/EVENT_RADIO_STATE_CHANGED/EVENT_PHONE_TYPE_SWITCHED events.",
+      "parentUuid": "b250af4e_cb17d26d",
+      "range": {
+        "startLine": 4580,
+        "startChar": 17,
+        "endLine": 4580,
+        "endChar": 44
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce0912d4_fd905646",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-10-21T00:53:22Z",
       "side": 1,
       "message": "EVENT_POLL_SIGNAL_STRENGTH_DONE?\n\nWe can\u0027t have POLL_SIGNAL_STRENGTH trigger GET_SIGNAL_STRENGTH... even as a non-functional change.",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f437de_de15a969",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "This is not only used to get result from POLL_SIGNAL_STRENGTH. It is also used in multiple cases when proactively query signal strength from modem:\n\nmCi.getSignalStrength(obtainMessage(EVENT_GET_SIGNAL_STRENGTH));",
+      "parentUuid": "ce0912d4_fd905646",
       "range": {
         "startLine": 209,
         "startChar": 17,
@@ -127,6 +217,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08decb57_0b107e16",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "Yeah. This is the exact logic from SST:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/ServiceStateTracker.java;l\u003d1370?q\u003dServiceStateTracker\n\nqueueNextSignalStrengthPoll() will check the beautiful flag mDontPollSignalStrength in the very beginning. When get unsolicited signal strength updates from the radio, the flag will be set to true (in event EVENT_SIGNAL_STRENGTH_UPDATE). And we don\u0027t actually get endless polling.",
+      "parentUuid": "bd0b6782_63abca1e",
+      "range": {
+        "startLine": 219,
+        "startChar": 16,
+        "endLine": 219,
+        "endChar": 43
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bfb0879_b1692c52",
@@ -140,6 +254,30 @@
       "writtenOn": "2021-10-21T00:53:22Z",
       "side": 1,
       "message": "My goodness this is bad.",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 339,
+        "endChar": 0
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74cb940c_1f14913e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "This is a bit hacky solution from CBRS support:\nhttps://googleplex-android-review.git.corp.google.com/c/platform/frameworks/opt/telephony/+/9521308/2/src/java/com/android/internal/telephony/ServiceStateTracker.java\n\nWith some crash fix later:\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/1344697/1/src/java/com/android/internal/telephony/ServiceStateTracker.java#5054\n\nSuggest we keep it as is in this CL and optimize it later.",
+      "parentUuid": "1bfb0879_b1692c52",
       "range": {
         "startLine": 319,
         "startChar": 5,
@@ -173,6 +311,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d0b8ddf_97150559",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4d8cc75_b0c716d0",
+      "range": {
+        "startLine": 452,
+        "startChar": 4,
+        "endLine": 452,
+        "endChar": 87
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "288db6c5_784fe723",
@@ -186,6 +348,30 @@
       "writtenOn": "2021-10-21T00:53:22Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 458,
+        "startChar": 5,
+        "endLine": 458,
+        "endChar": 24
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16ce086_b0bb6e17",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 1,
+      "message": "Done. Usage rate is LOW:\n  http://nonsdk/usage/Lcom%2Fandroid%2Finternal%2Ftelephony%2FServiceStateTracker%3B-%3EsetSignalStrengthDefaultValues%28%29V",
+      "parentUuid": "288db6c5_784fe723",
       "range": {
         "startLine": 458,
         "startChar": 5,

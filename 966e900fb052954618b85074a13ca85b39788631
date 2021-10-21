@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aa25b18_f4029ea3",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 0,
+      "message": "When I tried to remove the @UnsupportedAppUsage I got the lint error with usage link:  http://nonsdk/usage/Lcom%2Fandroid%2Finternal%2Ftelephony%2FServiceStateTracker%3B-%3EmSignalStrength%3ALandroid%2Ftelephony%2FSignalStrength%3B\nwhich show the Usage Level is MEDIUM.\n\nAccording to go/nonsdk-policy#keep-annotation-on-trivial-changes, we should be able to move it but recommended to keep the @UnsupportedAppUsage to let apps update if they insist on depending this private field.",
+      "parentUuid": "b80b70ec_b5232299",
+      "range": {
+        "startLine": 189,
+        "startChar": 5,
+        "endLine": 189,
+        "endChar": 24
+      },
+      "revId": "966e900fb052954618b85074a13ca85b39788631",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18f4ed0f_6e810f8e",
@@ -42,6 +66,53 @@
         "startChar": 4,
         "endLine": 889,
         "endChar": 87
+      },
+      "revId": "966e900fb052954618b85074a13ca85b39788631",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70533456_fdf17a2f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 0,
+      "message": "https://data.corp.google.com/sites/ezo8cfiu8snw/combined_api_checker/?f\u003dsignature:in:Lcom%2Fandroid%2Finternal%2Ftelephony%2FServiceStateTracker;-%3EnotifySignalStrength()Z\n\nUsage level for #notifySignalStrength is LOW. Only one app uses this API.",
+      "parentUuid": "18f4ed0f_6e810f8e",
+      "range": {
+        "startLine": 889,
+        "startChar": 4,
+        "endLine": 889,
+        "endChar": 87
+      },
+      "revId": "966e900fb052954618b85074a13ca85b39788631",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83879ed7_79a7426a",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 5740,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T03:28:35Z",
+      "side": 0,
+      "message": "This usage for this field is empty:\nhttp://nonsdk/usage/Lcom%2Fandroid%2Finternal%2Ftelephony%2FServiceStateTracker%3B-%3EsetSignalStrengthDefaultValues%28%29V\n\nI assume it is safe to move it into SignalStrengthController.",
+      "range": {
+        "startLine": 5740,
+        "startChar": 17,
+        "endLine": 5740,
+        "endChar": 47
       },
       "revId": "966e900fb052954618b85074a13ca85b39788631",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
