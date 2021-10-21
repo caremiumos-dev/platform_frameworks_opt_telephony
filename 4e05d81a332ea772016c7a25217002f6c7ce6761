@@ -71,6 +71,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b545cb_3e38b8f7",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T18:29:27Z",
+      "side": 1,
+      "message": "It is great to completely get SST out for SS handling, just like what we did for DSM. Let\u0027s do it in follow-up CL. \n\nThis CL will serve a \"non-functional\" migration. Any non-minor optimization from original SST logic can be done later. In case there are regression introduced, we only need to handle the small optimization part, instead of this kind of structure change.",
+      "parentUuid": "1f1cf414_05463cd9",
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbc17a18_c49bd1aa",
@@ -236,6 +254,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abc30a9_77748c33",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T18:29:27Z",
+      "side": 1,
+      "message": "This can be done by define a EVENT_POLL_SIGNAL_STRENGTH_DONE which just fall through to the same logic as what GET_SIGNAL_STRENGTH does:\n\nEVENT_POLL_SIGNAL_STRENGTH_DONE: // fall trough\nEVENT_GET_SIGNAL_STRENGTH:\n(original logic here)\n\nA new event does not cost anything but does make the logic flow clearer.",
+      "parentUuid": "2cb7db6b_35964255",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 42
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd0b6782_63abca1e",
@@ -297,6 +339,30 @@
       "side": 1,
       "message": "If the other behavior is the old HAL support, then it\u0027s only supported on devices with HAL \u003c 1.2.... I think we can safely delete it.",
       "parentUuid": "08decb57_0b107e16",
+      "range": {
+        "startLine": 219,
+        "startChar": 16,
+        "endLine": 219,
+        "endChar": 43
+      },
+      "revId": "4e05d81a332ea772016c7a25217002f6c7ce6761",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be49a68a_4d27893e",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 22
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T18:29:27Z",
+      "side": 1,
+      "message": "Roger that. Again, let\u0027s do it in separate CL.",
+      "parentUuid": "43caf7eb_81682584",
       "range": {
         "startLine": 219,
         "startChar": 16,

@@ -16,6 +16,23 @@
       "message": "Nathan, thanks for the comments in the first round of review. I provides some context for each comment. Will wait for the next round.",
       "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35337c42_3f2d9422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-21T18:29:27Z",
+      "side": 1,
+      "message": "Nathan, for the more ideas. I think I got them. The plan is that let\u0027s land them on next CLs (we have list of optimization ideas) while keeping this CL non-functional migration only, in case we met any regression, if you agree.\nThanks",
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
