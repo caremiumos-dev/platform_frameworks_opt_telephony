@@ -33,6 +33,75 @@
       "message": "Nathan, for the more ideas. I think I got them. The plan is that let\u0027s land them on next CLs (we have list of optimization ideas) while keeping this CL non-functional migration only, in case we met any regression, if you agree.\nThanks",
       "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c6bbba0_2e26306f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 2265,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-22T00:12:09Z",
+      "side": 1,
+      "message": "Can this be made asynchronous (have the SignalStrengthController listen for ServiceStateChange)?",
+      "range": {
+        "startLine": 2265,
+        "startChar": 53,
+        "endLine": 2265,
+        "endChar": 85
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98bde1ba_dc1fa7c8",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-22T00:12:09Z",
+      "side": 1,
+      "message": "This isn\u0027t going to really do anybody any good. Once the thing is moved, someone that\u0027s using it will have to make a breaking code change, so we might as well not invite them to latch onto a new internal variable that they honestly don\u0027t need. In short, let\u0027s remove all UAU if we are confident that we can change it from its current location.",
+      "range": {
+        "startLine": 96,
+        "startChar": 5,
+        "endLine": 96,
+        "endChar": 24
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f51d32_1f886c72",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-22T00:12:09Z",
+      "side": 1,
+      "message": "Let\u0027s not fetch a new carrier config bundle every time the signal strength is updated.",
+      "range": {
+        "startLine": 279,
+        "startChar": 39,
+        "endLine": 279,
+        "endChar": 55
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
