@@ -35,6 +35,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a99e257a_9b448414",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T00:34:49Z",
+      "side": 1,
+      "message": "+ Jack for reviewing the patch. Thanks",
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c6bbba0_2e26306f",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-10-22T00:12:09Z",
       "side": 1,
       "message": "Can this be made asynchronous (have the SignalStrengthController listen for ServiceStateChange)?",
+      "range": {
+        "startLine": 2265,
+        "startChar": 53,
+        "endLine": 2265,
+        "endChar": 85
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52b96d82_365b3bc2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 2265,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T00:34:49Z",
+      "side": 1,
+      "message": "Record in go/signalstrength-s-post-ic (line 21) to take care in separate CL.",
+      "parentUuid": "8c6bbba0_2e26306f",
       "range": {
         "startLine": 2265,
         "startChar": 53,
@@ -83,6 +124,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cb8008dc_1bdeaed2",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T00:34:49Z",
+      "side": 1,
+      "message": "This is only @UnsupportedAppUsage kept here. The main concern is that it has \"MEDIA\" usage:\nhttp://nonsdk/usage/Lcom%2Fandroid%2Finternal%2Ftelephony%2FServiceStateTracker%3B-%3EmSignalStrength%3ALandroid%2Ftelephony%2FSignalStrength%3B\n\nThe lint msg and go/nonsdk-policy#keep-annotation-on-trivial-changes suggest we keep it.\n\nI am leaving this one as un-resolved and ask suggestion from JackYu@.",
+      "parentUuid": "98bde1ba_dc1fa7c8",
+      "range": {
+        "startLine": 96,
+        "startChar": 5,
+        "endLine": 96,
+        "endChar": 24
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17f51d32_1f886c72",
         "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
         "patchSetId": 23
@@ -94,6 +159,30 @@
       "writtenOn": "2021-10-22T00:12:09Z",
       "side": 1,
       "message": "Let\u0027s not fetch a new carrier config bundle every time the signal strength is updated.",
+      "range": {
+        "startLine": 279,
+        "startChar": 39,
+        "endLine": 279,
+        "endChar": 55
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "126033f4_ea1c9866",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T00:34:49Z",
+      "side": 1,
+      "message": "Put into our todo list go/signalstrength-s-post-ic for future optimization",
+      "parentUuid": "17f51d32_1f886c72",
       "range": {
         "startLine": 279,
         "startChar": 39,
