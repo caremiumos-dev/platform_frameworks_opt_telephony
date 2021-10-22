@@ -1349,6 +1349,14 @@ public class ServiceStateTracker extends Handler {
                 break;
 
             case EVENT_RADIO_STATE_CHANGED:
+                // If SIM isn't powered down, need to trigger poll done immediately
+                // when radio is off to avoid skipping the stale OOS state.
+                if (mCi.getRadioState() == TelephonyManager.RADIO_POWER_OFF) {
+                    setPowerStateToDesired();
+                    log("Trigger as manual polling");
+                    pollState();
+                    break;
+                } // fallthrough
             case EVENT_PHONE_TYPE_SWITCHED:
                 if(!mPhone.isPhoneTypeGsm() &&
                         mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON) {
