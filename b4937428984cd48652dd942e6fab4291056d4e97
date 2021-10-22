@@ -52,6 +52,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e17d198b_82bf5cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T01:08:46Z",
+      "side": 1,
+      "message": "Jack, thanks for the quick review. All SS related cases needs to move to SSCTest, no doubt. Pls continue to review the rest of part on your convenience. Thanks",
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c6bbba0_2e26306f",
@@ -206,6 +223,30 @@
       "writtenOn": "2021-10-22T00:47:39Z",
       "side": 1,
       "message": "I think if you want to separate SSC from SST and DSM, then it\u0027s better to move all signal related tests to SSCTest as well. For unit test we would like to make each unit separated. For example, testWcdmaSignalStrengthReportingCriteria has nothing to do with SST anymore, so it\u0027s cleaner to move to SSCTest.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 42
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df34800_cddf5a92",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTrackerTest.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-22T01:08:46Z",
+      "side": 1,
+      "message": "Sure. Jack. Let me do it as the immediately next CL (don\u0027t approve any others if haven\u0027t done it :-)\n\nCurrent delegation mode (all SS function actually pass to SSC) keeps the minimum patch size (with confidence there is no break). Thanks",
+      "parentUuid": "d45c5f03_5bdc03c6",
       "range": {
         "startLine": 145,
         "startChar": 0,
