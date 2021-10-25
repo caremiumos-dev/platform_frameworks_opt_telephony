@@ -55,6 +55,7 @@ public class AdnCapacity implements Parcelable {
         mMaxAnrLength = maxAnrLength;
     }
 
+<<<<<<< HEAD   (59fd0d Snap for 7629706 from 5f8529e26eac1bffe92092c6090d64e803ae09)
     public AdnCapacity(PhonebookCapacity pbCap) {
         if (pbCap != null) {
             mMaxAdnCount = pbCap.maxAdnRecords;
@@ -68,6 +69,10 @@ public class AdnCapacity implements Parcelable {
             mMaxEmailLength = pbCap.maxEmailLen;
             mMaxAnrLength = pbCap.maxAdditionalNumberLen;
         }
+=======
+    public AdnCapacity() {
+        this(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+>>>>>>> CHANGE (d4f4e4 Fix loading SIM phonebook redundantly)
     }
 
     public int getMaxAdnCount() {
@@ -112,6 +117,14 @@ public class AdnCapacity implements Parcelable {
 
     public boolean isSimFull() {
         return mMaxAdnCount == mUsedAdnCount;
+    }
+
+    public boolean isSimEmpty() {
+        return mUsedAdnCount == 0;
+    }
+
+    public boolean isSimValid() {
+        return mMaxAdnCount > 0;
     }
 
     public static final Parcelable.Creator<AdnCapacity> CREATOR
