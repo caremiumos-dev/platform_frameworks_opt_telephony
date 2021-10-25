@@ -22,6 +22,30 @@
       },
       "revId": "20d20184c185257c85f233b928f59af405eb31ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a745b76d_8b31b7a2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 4440,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-25T10:23:33Z",
+      "side": 1,
+      "message": "FYI, I\u0027ve just landed that today, so you should be able to sync.",
+      "parentUuid": "d2d5c773_c7ff4544",
+      "range": {
+        "startLine": 4440,
+        "startChar": 0,
+        "endLine": 4440,
+        "endChar": 87
+      },
+      "revId": "20d20184c185257c85f233b928f59af405eb31ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

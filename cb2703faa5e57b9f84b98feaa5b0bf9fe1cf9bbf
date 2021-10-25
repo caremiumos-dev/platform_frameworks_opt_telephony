@@ -189,6 +189,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0206bcd_45cb8ada",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-25T10:23:33Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "63c64773_5d51041f",
+      "range": {
+        "startLine": 257,
+        "startChar": 21,
+        "endLine": 257,
+        "endChar": 26
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fbd5e88_66a6301f",
@@ -390,6 +414,30 @@
       "writtenOn": "2021-10-19T10:31:40Z",
       "side": 1,
       "message": "This is a good first step. I\u0027d prefer that what I suggested on the design doc is eventually done, but I appreciate that\u0027s more work. We can talk about this offline.\n\nI\u0027m happy to share / take on the load to push the information into the NitzStateMachine as it will further improve clarity / correctness. I will require your (or other telephony team member) reviews, though.",
+      "range": {
+        "startLine": 4433,
+        "startChar": 28,
+        "endLine": 4433,
+        "endChar": 44
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5c2f86_9794c955",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-25T10:23:33Z",
+      "side": 1,
+      "message": "Thanks! Now submitted, so you\u0027ll have to rebase but should be relatively easy to do.",
+      "parentUuid": "a9860ee5_3f9c6997",
       "range": {
         "startLine": 4433,
         "startChar": 28,
