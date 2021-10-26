@@ -103,6 +103,30 @@
       },
       "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571d2a58_161441fa",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-26T17:51:16Z",
+      "side": 1,
+      "message": "Yes, I was thinking we can keep it 3 all the time. I will wait for Aaron to get back on length being 2. If he agrees to make it 3, then I think file can also always trigger with 3",
+      "parentUuid": "c6c50b91_ddfc160e",
+      "range": {
+        "startLine": 1188,
+        "startChar": 20,
+        "endLine": 1188,
+        "endChar": 31
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
