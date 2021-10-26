@@ -19,6 +19,8 @@ package com.android.internal.telephony;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.CellIdentity;
+import android.telephony.CellIdentityLte;
 import android.telephony.LteVopsSupportInfo;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
@@ -401,5 +403,22 @@ public class ServiceStateTest extends TestCase {
         ss.setChannelNumber(36000); // band 33
 
         assertEquals(ss.getDuplexMode(), ServiceState.DUPLEX_MODE_TDD);
+    }
+
+    @SmallTest
+    public void testLastKnownCellIdentity() {
+        ServiceState ss = new ServiceState();
+        CellIdentity cellIdentity = new CellIdentityLte(1, 2, 3, 4, 5);
+        ss.setLastKnownCellIdentity(cellIdentity);
+        assertEquals(ss.getLastKnownCellIdentity(), cellIdentity);
+
+        ServiceState copySS = new ServiceState(ss);
+        assertEquals(ss.getLastKnownCellIdentity(), copySS.getLastKnownCellIdentity());
+
+        ServiceState newSS = ss.createLocationInfoSanitizedCopy(false);
+        assertNull(newSS.getLastKnownCellIdentity());
+
+        newSS = ss.createLastCellIdSanitizedCopy();
+        assertNull(newSS.getLastKnownCellIdentity());
     }
 }
