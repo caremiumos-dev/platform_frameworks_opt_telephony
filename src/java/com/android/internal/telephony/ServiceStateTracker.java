@@ -272,7 +272,8 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_CARRIER_CONFIG_CHANGED            = 57;
     private static final int EVENT_POLL_STATE_REQUEST                  = 58;
     // Timeout event used when delaying radio power off to wait for IMS deregistration to happen.
-    private static final int EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT    = 62;
+    private static final int EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT   = 62;
+    protected static final int EVENT_RESET_LAST_KNOWN_CELL_IDENTITY    = 63;
 
     /**
      * The current service state.
@@ -454,7 +455,9 @@ public class ServiceStateTracker extends Handler {
     protected final GsmCdmaPhone mPhone;
 
     private CellIdentity mCellIdentity;
+    @Nullable private CellIdentity mLastKnownCellIdentity;
     private static final int MS_PER_HOUR = 60 * 60 * 1000;
+    private static final int MS_IN_A_DAY = MS_PER_HOUR * 24;
     private final NitzStateMachine mNitzState;
 
     private ServiceStateStats mServiceStateStats;
@@ -747,6 +750,7 @@ public class ServiceStateTracker extends Handler {
         mNitzState.handleNetworkUnavailable();
         mCellIdentity = null;
         mPhone.getSignalStrengthController().setSignalStrengthDefaultValues();
+        mLastKnownCellIdentity = null;
 
         //cancel any pending pollstate request on voice tech switching
         cancelPollState();
@@ -1673,6 +1677,12 @@ public class ServiceStateTracker extends Handler {
             case EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT: {
                 if (DBG) log("EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT triggered");
                 powerOffRadioSafely();
+                break;
+            }
+
+            case EVENT_RESET_LAST_KNOWN_CELL_IDENTITY: {
+                if (DBG) log("EVENT_RESET_LAST_KNOWN_CELL_IDENTITY triggered");
+                mLastKnownCellIdentity = null;
                 break;
             }
 
@@ -3572,6 +3582,14 @@ public class ServiceStateTracker extends Handler {
         mNewSS.setStateOutOfService();
 
         mCellIdentity = primaryCellIdentity;
+        if (mSS.getState() == ServiceState.STATE_IN_SERVICE && primaryCellIdentity != null) {
+            mLastKnownCellIdentity = mCellIdentity;
+            removeMessages(EVENT_RESET_LAST_KNOWN_CELL_IDENTITY);
+        }
+
+        if (hasDeregistered && !hasMessages(EVENT_RESET_LAST_KNOWN_CELL_IDENTITY)) {
+            sendEmptyMessageDelayed(EVENT_RESET_LAST_KNOWN_CELL_IDENTITY, MS_IN_A_DAY);
+        }
 
         int areaCode = getAreaCodeFromCellIdentity(mCellIdentity);
         if (areaCode != mLastKnownAreaCode && areaCode != CellInfo.UNAVAILABLE) {
@@ -5861,5 +5879,18 @@ public class ServiceStateTracker extends Handler {
      */
     public void unregisterForAreaCodeChanged(Handler h) {
         mAreaCodeChangedRegistrants.remove(h);
+    }
+
+    /**
+     * @return {@CellIdentity} last known cell identity {@CellIdentity}.
+     *
+     * If there is current registered network this value will be same as the registered cell
+     * identity. If the device goes out of service the previous cell identity is cached and
+     * will be returned. If the cache age of the Cell identity is more than 24 hours
+     * it will be cleared and null will be returned.
+     *
+     */
+    public @Nullable CellIdentity getLastKnownCellIdentity() {
+        return mLastKnownCellIdentity;
     }
 }
