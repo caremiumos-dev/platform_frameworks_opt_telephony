@@ -448,6 +448,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "766d0fb6_ee1fbfc2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-26T09:46:04Z",
+      "side": 1,
+      "message": "updated in patchset 17",
+      "parentUuid": "ba5c2f86_9794c955",
+      "range": {
+        "startLine": 4433,
+        "startChar": 28,
+        "endLine": 4433,
+        "endChar": 44
+      },
+      "revId": "cb2703faa5e57b9f84b98feaa5b0bf9fe1cf9bbf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78269e67_4707eb90",
