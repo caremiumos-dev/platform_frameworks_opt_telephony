@@ -79,6 +79,30 @@
       },
       "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c50b91_ddfc160e",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-10-26T17:48:24Z",
+      "side": 1,
+      "message": "FYI - I suggested keeping it separate because I assumed there will be callers who won\u0027t provide the age field at all, i.e. the case when the Object[].length is 2. \n\nCalling through the other method means the tests would only be covering the new behavior, not the legacy.\n\nIf all the callers can be guaranteed to provide an Object[].length \u003d\u003d 3 then I agree it wouldn\u0027t need to be tested and several things can be simplified.\n\nI confess, I didn\u0027t follow why RadioIndication (one that still appears to use Object[].length \u003d\u003d 2) went away.",
+      "parentUuid": "a455cbaa_cfd521a4",
+      "range": {
+        "startLine": 1188,
+        "startChar": 20,
+        "endLine": 1188,
+        "endChar": 31
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
