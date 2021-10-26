@@ -296,7 +296,8 @@ public class ServiceStateTracker extends Handler {
     protected static final int EVENT_CARRIER_CONFIG_CHANGED            = 57;
     private static final int EVENT_POLL_STATE_REQUEST                  = 58;
     // Timeout event used when delaying radio power off to wait for IMS deregistration to happen.
-    private static final int EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT    = 62;
+    private static final int EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT   = 62;
+    protected static final int EVENT_RESET_LAST_KNOWN_CELL_IDENTITY    = 63;
 
     /**
      * The current service state.
@@ -479,6 +480,7 @@ public class ServiceStateTracker extends Handler {
 
     private CellIdentity mCellIdentity;
     private static final int MS_PER_HOUR = 60 * 60 * 1000;
+    private static final int MS_IN_A_DAY = MS_PER_HOUR * 24;
     private final NitzStateMachine mNitzState;
 
     private ServiceStateStats mServiceStateStats;
@@ -1759,6 +1761,12 @@ public class ServiceStateTracker extends Handler {
             case EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT: {
                 if (DBG) log("EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT triggered");
                 powerOffRadioSafely();
+                break;
+            }
+
+            case EVENT_RESET_LAST_KNOWN_CELL_IDENTITY: {
+                if (DBG) log("EVENT_RESET_LAST_KNOWN_CELL_IDENTITY triggered");
+                mSS.setLastKnownCellIdentity(null);
                 break;
             }
 
@@ -3650,10 +3658,20 @@ public class ServiceStateTracker extends Handler {
         }
 
         ServiceState oldMergedSS = new ServiceState(mPhone.getServiceState());
+        mNewSS.setLastKnownCellIdentity(mSS.getLastKnownCellIdentity());
         mSS = new ServiceState(mNewSS);
+
         mNewSS.setStateOutOfService();
 
         mCellIdentity = primaryCellIdentity;
+        if (mSS.getState() == ServiceState.STATE_IN_SERVICE && primaryCellIdentity != null) {
+            mSS.setLastKnownCellIdentity(mCellIdentity);
+            removeMessages(EVENT_RESET_LAST_KNOWN_CELL_IDENTITY);
+        }
+
+        if (hasDeregistered) {
+            sendEmptyMessageDelayed(EVENT_RESET_LAST_KNOWN_CELL_IDENTITY, MS_IN_A_DAY);
+        }
 
         int areaCode = getAreaCodeFromCellIdentity(mCellIdentity);
         if (areaCode != mLastKnownAreaCode && areaCode != CellInfo.UNAVAILABLE) {
