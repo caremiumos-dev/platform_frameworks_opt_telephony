@@ -16,6 +16,69 @@
       "message": "LGTM. +1 is the most I can do.",
       "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feb049b5_c8ea0f76",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-26T17:39:05Z",
+      "side": 1,
+      "message": "send and Anomaly report to connectivity monitor here. We should catch this in dogfood if it happens",
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40d55738_c5162081",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-26T17:39:05Z",
+      "side": 1,
+      "message": "how will this be not true? Do you need this check if it is not needed above",
+      "range": {
+        "startLine": 1436,
+        "startChar": 0,
+        "endLine": 1436,
+        "endChar": 43
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a455cbaa_cfd521a4",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-10-26T17:39:05Z",
+      "side": 1,
+      "message": "call triggerNITZupdate  with age as 0 here",
+      "range": {
+        "startLine": 1188,
+        "startChar": 20,
+        "endLine": 1188,
+        "endChar": 31
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
