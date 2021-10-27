@@ -22,6 +22,30 @@
       },
       "revId": "f078c563434d2457fdf42d862d0f3bfddf4c23c0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2876d420_c8a10a7f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T03:41:35Z",
+      "side": 1,
+      "message": "Thanks for the detailed suggestion, Jack. @RunWithLooper does help to remove the boilerplate logic to setup/clean up test handler.\n\nSince this is a follow-up of aosp/1573541, I may also ask your help to review aosp/1573541 as well. Thanks",
+      "parentUuid": "9485a756_99a57446",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "f078c563434d2457fdf42d862d0f3bfddf4c23c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
