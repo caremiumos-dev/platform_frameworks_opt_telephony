@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f17583aa_17cb00b8",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 3692,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-10-27T18:16:21Z",
+      "side": 1,
+      "message": "@Jack, I agree with your comments in general. In fact, I believe I gave similar comments. I expect this all to be done. The question for you and Rambo is whether that should be done in the same patch with the code move or whether it should be a different patch. While I have a preference, I don\u0027t have a strong opinion.\n\n@Rambo, can you chat offline with Jack and agree on where to land those changes (this patch vs a future patch)? You can also make a separate dependent change and merge them as a stack (or squash before submit).",
+      "parentUuid": "2e85690c_b1a1ebdd",
+      "range": {
+        "startLine": 3692,
+        "startChar": 49,
+        "endLine": 3692,
+        "endChar": 69
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd0bc5c7_1b51b680",
         "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
         "patchSetId": 25
