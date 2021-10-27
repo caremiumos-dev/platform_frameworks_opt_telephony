@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76ce03bf_dfc4d538",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 3692,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Yeh. In Phase I, SSC is more like a \"delegate\" instead of full \"controller\". \n\nIn Phase II, there will be no dependency from SST to SSC which is only controller os SS logic.\n\nAccording the plan (go/SignalStrengthController), I record this TODO in go/signalstrength-s-post-ic (line 23) and will handle it in Phase II.\n\nThanks",
+      "parentUuid": "2e85690c_b1a1ebdd",
+      "range": {
+        "startLine": 3692,
+        "startChar": 49,
+        "endLine": 3692,
+        "endChar": 69
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd0bc5c7_1b51b680",
@@ -61,6 +85,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "whether asking the modem to provide the latest signal strength or not is something SSC should control. You should do mCi.registerForAvailable or registerForOn inside SSC.",
+      "range": {
+        "startLine": 3729,
+        "startChar": 3,
+        "endLine": 3729,
+        "endChar": 75
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52c25df1_359b4e0f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Ok, this is the logic in current SST. Let\u0027s keep it in phase I and optimize it in phase II.\n\nAdd TODO in code and also record in go/signalstrength-s-post-ic (line 24). This may be done together with line 18 in one follow-up CL.",
+      "parentUuid": "cd0bc5c7_1b51b680",
       "range": {
         "startLine": 3729,
         "startChar": 3,
@@ -94,6 +142,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e31356_aee2389d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 4583,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "The signal strength polling process needs a through optimization. One separate CL is deserved in phase II. This is record in go/signalstrength-s-post-ic (line 25).\n\nBut we also have a bunch that may be optimized together. e.g. remove the constant solicited polling (controlled by mDontPollSignalStrength).",
+      "parentUuid": "56ec7537_22d8f734",
+      "range": {
+        "startLine": 4583,
+        "startChar": 1,
+        "endLine": 4583,
+        "endChar": 48
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a5354d9_66e1ac9b",
@@ -107,6 +179,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "SSC should have its own onCarrierConfigChanged()",
+      "range": {
+        "startLine": 4936,
+        "startChar": 0,
+        "endLine": 4937,
+        "endChar": 77
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee7696dc_aee1e555",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 4937,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "TODO in phase II.\ngo/signalstrength-s-post-ic (line 26).",
+      "parentUuid": "4a5354d9_66e1ac9b",
       "range": {
         "startLine": 4936,
         "startChar": 0,
@@ -140,6 +236,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "287c60e3_c598e176",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Yes, Nathan provided the same comments. This is planned in Phase II (go/signalstrength-s-post-ic line 16).",
+      "parentUuid": "71d6dd0a_28ad0076",
+      "range": {
+        "startLine": 95,
+        "startChar": 20,
+        "endLine": 95,
+        "endChar": 43
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61f108c2_50363577",
@@ -153,6 +273,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "Can we add @NonNull or @Nullable for this?",
+      "range": {
+        "startLine": 97,
+        "startChar": 12,
+        "endLine": 97,
+        "endChar": 26
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfdd9c16_a360efe5",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Marked it as @NonNull.\nmSignalStrength is created with default value in constructor and never get nulled (in worst case, it is assigned with default value again). As a benefit, we never need to null check it before calling the methods of it.",
+      "parentUuid": "61f108c2_50363577",
       "range": {
         "startLine": 97,
         "startChar": 12,
@@ -209,6 +353,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c2c3cb8_f5650476",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f4d69c0_9c86fe5b",
+      "range": {
+        "startLine": 117,
+        "startChar": 18,
+        "endLine": 117,
+        "endChar": 30
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56235fe_9ef63961",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11987c6c_5796a581",
+      "range": {
+        "startLine": 117,
+        "startChar": 12,
+        "endLine": 117,
+        "endChar": 17
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31c6d9c1_724a9cdd",
@@ -222,6 +414,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "This is weird. We got an exception from modem and then we\u0027ll broadcast a bogus/meaningless signal strength to the clients.\n\nI know this is the existing code moved from SST, but can we refactor?",
+      "range": {
+        "startLine": 285,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 0
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b82e29a_d65fc772",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "The new SignalStrength object just created the default values (which is all of UNAVAILABLE/UNKNOWN or similar) for all tech. It is worthy to think if keeping current signal strength value is better.\n\nCreate TODO in go/signalstrength-s-post-ic (line 27) to investigate later.",
+      "parentUuid": "31c6d9c1_724a9cdd",
       "range": {
         "startLine": 285,
         "startChar": 0,
@@ -255,6 +471,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ab830e_c244a629",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Done. And double checked no other similar duplication. Thanks",
+      "parentUuid": "8cc011e8_62a89a05",
+      "range": {
+        "startLine": 299,
+        "startChar": 17,
+        "endLine": 299,
+        "endChar": 21
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3012bd02_540163bc",
@@ -268,6 +508,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "Can just move this to the constructor",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 64
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a702d22_cfec104d",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "This has been called in the constructor of SSC.\n\nAt present, it is also called in three other scenarios in SST:\n1. updatePhoneType\n2. mCi.getRadioState() return RADIO_POWER_UNAVAILABLE\n3. mCi.getRadioState() return RADIO_POWER_OFF\n\nBefore we are able to remove all SS logic in SST. SST still need to ask SSC to set the default SS value here.",
+      "parentUuid": "3012bd02_540163bc",
       "range": {
         "startLine": 448,
         "startChar": 0,
@@ -301,6 +565,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9841ef_b03bf0c2",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Sure. Let me do it in Phase II. This is listed at line 30 in go/signalstrength-s-post-ic",
+      "parentUuid": "f32280db_eb3e9ff9",
+      "range": {
+        "startLine": 451,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 54
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb74835d_b60674b4",
@@ -324,6 +612,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d7b8bf_08cc378b",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "TODO in Line 28 of go/signalstrength-s-post-ic. I will make sure the new log is still human readable before refacotor.",
+      "parentUuid": "bb74835d_b60674b4",
+      "range": {
+        "startLine": 488,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 5
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4badad9a_07706ca8",
@@ -337,6 +649,30 @@
       "writtenOn": "2021-10-27T07:24:32Z",
       "side": 1,
       "message": "should listen to carrier config changed event",
+      "range": {
+        "startLine": 644,
+        "startChar": 4,
+        "endLine": 644,
+        "endChar": 50
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2651d468_099f21ff",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Yes, the same TODO is recorded at line 26 go/signalstrength-s-post-ic",
+      "parentUuid": "4badad9a_07706ca8",
       "range": {
         "startLine": 644,
         "startChar": 4,

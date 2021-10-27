@@ -187,6 +187,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b07bb3df_daac6144",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-10-27T19:22:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "121c4286_2e759f63",
+      "range": {
+        "startLine": 96,
+        "startChar": 5,
+        "endLine": 96,
+        "endChar": 24
+      },
+      "revId": "b4937428984cd48652dd942e6fab4291056d4e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17f51d32_1f886c72",
