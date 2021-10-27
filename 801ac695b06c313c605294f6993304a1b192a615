@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e85690c_b1a1ebdd",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 3692,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "The signal strength controller should be more like a \"controller\", instead of \"to-be-controlled\" by SST.\n\nI think SSC should have the control on when to/not-to notify signal strength. Also it\u0027s weird why we need to broadcast signal strength when CS/PS RAT change. Can we not do the extra notify here, but just rely on the signal strength update criteria set earlier?\n\nIf this is still needed, you can do SST.registerForVoiceRegStateOrRatChanged/registerForDataRegStateOrRatChanged from SSC.",
+      "range": {
+        "startLine": 3692,
+        "startChar": 49,
+        "endLine": 3692,
+        "endChar": 69
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd0bc5c7_1b51b680",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "whether asking the modem to provide the latest signal strength or not is something SSC should control. You should do mCi.registerForAvailable or registerForOn inside SSC.",
+      "range": {
+        "startLine": 3729,
+        "startChar": 3,
+        "endLine": 3729,
+        "endChar": 75
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56ec7537_22d8f734",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 4583,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "I think we should clean this up.",
+      "range": {
+        "startLine": 4583,
+        "startChar": 1,
+        "endLine": 4583,
+        "endChar": 48
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a5354d9_66e1ac9b",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 4937,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "SSC should have its own onCarrierConfigChanged()",
+      "range": {
+        "startLine": 4936,
+        "startChar": 0,
+        "endLine": 4937,
+        "endChar": 77
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d6dd0a_28ad0076",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "Can we clean this up? This has been dead code for a long time. Today all modem vendors support unsolicited signal strength update. It would be terrible if the device needs to wake up every 20 seconds to do this regardless screen on or not.",
+      "range": {
+        "startLine": 95,
+        "startChar": 20,
+        "endLine": 95,
+        "endChar": 43
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f108c2_50363577",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "Can we add @NonNull or @Nullable for this?",
+      "range": {
+        "startLine": 97,
+        "startChar": 12,
+        "endLine": 97,
+        "endChar": 26
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f4d69c0_9c86fe5b",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "\u003d null, for consistency with other variables.",
+      "range": {
+        "startLine": 117,
+        "startChar": 18,
+        "endLine": 117,
+        "endChar": 30
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11987c6c_5796a581",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "Can we add @NonNull or @Nullable for this?",
+      "range": {
+        "startLine": 117,
+        "startChar": 12,
+        "endLine": 117,
+        "endChar": 17
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31c6d9c1_724a9cdd",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "This is weird. We got an exception from modem and then we\u0027ll broadcast a bogus/meaningless signal strength to the clients.\n\nI know this is the existing code moved from SST, but can we refactor?",
+      "range": {
+        "startLine": 285,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 0
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc011e8_62a89a05",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "already in the TAG",
+      "range": {
+        "startLine": 299,
+        "startChar": 17,
+        "endLine": 299,
+        "endChar": 21
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3012bd02_540163bc",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "Can just move this to the constructor",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 64
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f32280db_eb3e9ff9",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "I think this needs to be refactored. notifySignalStrength() is doing more than just \"notifying signal strength\". It also updates mLastSignalStrength. I think this is not a very good coding practice, and is very likely to cause more issues or get mis-used in the future.\n\nCan we not have this function but just do something like this?\nif (signalStrength !\u003d mSignalStrength) {\n    mSignalStrength \u003d signalStrength; \n    mPhone.notifySignalStrength();    \n}",
+      "range": {
+        "startLine": 451,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 54
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb74835d_b60674b4",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "I think this is not needed. Probably can just pw.println(\"mEarfcnPairListForRsrpBoost\u003d\" + mEarfcnPairListForRsrpBoost);",
+      "range": {
+        "startLine": 488,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 5
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4badad9a_07706ca8",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T07:24:32Z",
+      "side": 1,
+      "message": "should listen to carrier config changed event",
+      "range": {
+        "startLine": 644,
+        "startChar": 4,
+        "endLine": 644,
+        "endChar": 50
+      },
+      "revId": "801ac695b06c313c605294f6993304a1b192a615",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
