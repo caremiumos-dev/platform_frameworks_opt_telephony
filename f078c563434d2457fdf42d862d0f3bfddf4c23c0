@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9485a756_99a57446",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-27T00:42:40Z",
+      "side": 1,
+      "message": "This is not needed anymore.\n\nYou can add \"@TestableLooper.RunWithLooper\" for the test class, and then just create mSsc in setUp(). Then instead of calling waitForLastHandlerAction(), call processAllMessages().\n\nYou can use ImsPhoneTest as an example.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "f078c563434d2457fdf42d862d0f3bfddf4c23c0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
