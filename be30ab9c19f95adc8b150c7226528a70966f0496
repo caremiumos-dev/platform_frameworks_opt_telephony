@@ -35,6 +35,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2ccf74f_3bedde90",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-27T07:22:52Z",
+      "side": 1,
+      "message": "updated in patchset 18",
+      "parentUuid": "feb049b5_c8ea0f76",
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40d55738_c5162081",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-10-26T17:39:05Z",
       "side": 1,
       "message": "how will this be not true? Do you need this check if it is not needed above",
+      "range": {
+        "startLine": 1436,
+        "startChar": 0,
+        "endLine": 1436,
+        "endChar": 43
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b465973_6d500731",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-27T07:22:52Z",
+      "side": 1,
+      "message": "In legacy projects, which are still using the HIDL interface, RIL won’t send the Age parameter (only first 2 parameters).\nThis check is to ensure that only parse the Age value while RIL sends 3 parameters; otherwise, it will cause an exception crash.",
+      "parentUuid": "40d55738_c5162081",
       "range": {
         "startLine": 1436,
         "startChar": 0,
@@ -119,6 +161,30 @@
       "side": 1,
       "message": "Yes, I was thinking we can keep it 3 all the time. I will wait for Aaron to get back on length being 2. If he agrees to make it 3, then I think file can also always trigger with 3",
       "parentUuid": "c6c50b91_ddfc160e",
+      "range": {
+        "startLine": 1188,
+        "startChar": 20,
+        "endLine": 1188,
+        "endChar": 31
+      },
+      "revId": "be30ab9c19f95adc8b150c7226528a70966f0496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08dca313_173831c3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SimulatedCommands.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-10-27T07:22:52Z",
+      "side": 1,
+      "message": "Hi Sooraj,\nFor this API triggerNITZupdate(), it should only be called by the unit tests of ServiceStateTrackerTest.java. Then it passes the NITZ parameters to ServiceStateTracker.java.\nSince in ServiceStateTracker, it must support both 2 and 3 parameters (with/without Age). So I agree with Neil\u0027s suggestion to separate 2 and 3 parameters function call here. Then we can test both two cases in ServiceStateTracker.\n\nHi Neil,\nIn Android T, because we change the Radio HAL from HIDL to AIDL, so the new nitzTimeReceived API (with Age) be moved to NetworkIndication.java.",
+      "parentUuid": "571d2a58_161441fa",
       "range": {
         "startLine": 1188,
         "startChar": 20,
