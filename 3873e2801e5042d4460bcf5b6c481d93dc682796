@@ -16,6 +16,24 @@
       "message": "Jack, thanks so much for the review with detailed suggestions. You may see that I marked most of the functional change as TODO here. This is to strictly follow the original plan (go/SignalStrengthController) in which we will perform TWO-PHASES work:\n\nPhase I: Non-functional Migration:\nThis CL and the follow-up UT migration CL aosp/1867305 are the last step for this phase. Here we will keep the logic originally in SST/DSM. But record ALL the comments/suggestion/ideas to postpone to phase II.\n\nPhase II: Functional clean-up and optimization which covers:\n- go/remove-always-report-signal\n- Remove the SSC as the dependencies of DSM and SST. SSC will be the only controller for signal strength logic\n- Clean up the obsoleted SS logic in SSC (the logic is kept in stage I)\n- Land functional change request during Stage I code review\n- Deploy optimizations piece by piece\n- ...\n\nThis can make sure the minimum regression:\n- Phase I has CL with large size but the risk is very small since the logic is the same\n- Phase II will be a series of small CLs each focus on its own topic (e.g. SS polling process optimization).\n- In case anything broken, phase II will be the first suspect. Since it is small, it will save us lots of work to debug. In the worse case we have to revert, we just need to revert the minimum part.\n\nAll the suggestion are recorded (go/signalstrength-s-post-ic) to make sure nothing is lost.\n\nPlease let me know if this works.\nThanks\n",
       "revId": "3873e2801e5042d4460bcf5b6c481d93dc682796",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "035efabc_a8d312bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-10-28T07:46:58Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "ffc60a20_9b30b6ff",
+      "revId": "3873e2801e5042d4460bcf5b6c481d93dc682796",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
