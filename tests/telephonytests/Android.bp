@@ -38,6 +38,9 @@ android_test {
     ],
 
     jarjar_rules: ":jarjar-rules-telephony-tests",
+    optimize: {
+        enabled: false,
+    },
 
     test_suites: [
         "device-tests",
