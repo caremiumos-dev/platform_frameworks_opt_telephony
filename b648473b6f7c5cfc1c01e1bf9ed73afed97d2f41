@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7110741a_3ecd7358",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-01T18:20:25Z",
+      "side": 1,
+      "message": "if there was a daylight saving adjustment (not from nitz, but from another source) and we receive a newSignal from nitz for which getAgeAdjustedElapsedRealtimeMillis is before this event of day light saving time, then we should ignore it. Right now it looks like we are only checkving whether to ignore based upon previous nitz signal. That won\u0027t be sufficient, isnt it",
+      "range": {
+        "startLine": 218,
+        "startChar": 21,
+        "endLine": 218,
+        "endChar": 63
+      },
+      "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
