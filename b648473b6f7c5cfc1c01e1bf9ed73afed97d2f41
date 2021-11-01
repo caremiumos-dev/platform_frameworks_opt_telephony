@@ -94,6 +94,30 @@
       },
       "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "716e10bd_aa222316",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-01T20:10:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b189f10_63be9122",
+      "range": {
+        "startLine": 218,
+        "startChar": 21,
+        "endLine": 218,
+        "endChar": 63
+      },
+      "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
