@@ -70,6 +70,30 @@
       },
       "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b189f10_63be9122",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-11-01T20:08:39Z",
+      "side": 1,
+      "message": "Ok. If you\u0027re happy that DST changes out of scope for time detection.\n\nThe telephony code we\u0027re talking about in this change can only \"see\" NITZ signals from a single telephony \"slot\". The place that sees time suggestions from multiple SIM slots and origins (e.g. NTP, GNSS, etc.) is the system server.\n\nThe way time detection in the system server works is to prioritize origins. If there\u0027s a signal from NTP, and NTP is prioritized higher than NITZ, it doesn\u0027t matter if the NITZ signal is newer than the latest signal from NTP; the NITZ signals will be ignored. NTP signals can \"age out\", i.e. become so old we no longer trust them, at which point the device falls back to the next highest priority source.\n\nThe system server _could_ choose to ignore telephony suggestions for a given slot based on the elapsed realtime if we thought it was worthwhile. Until now we haven\u0027t had to. I don\u0027t think we want to now either: there\u0027s a stream of NITZ signals coming from the modem, and we assume each signal supersedes (or is the same) as earlier ones. We trust that the elapsed realtime, age and NITZ are not lies; if the modem is lying to us, we\u0027re in trouble for all sorts of reasons. e.g. the issue we\u0027re solving here, which was _because_ the modem _was_ lying to us about the UTC time to try to make time detection work properly after caching, which broke _time zone_ detection because the other info in the NITZ signal was a lie.\n\nIn the system server, there is some prioritization between SIM slots too, but I don\u0027t think that will be affected here - we only keep the latest suggestion from each slot, and try to stick with a slot for multiple slot devices.\n\nThat\u0027s the way it works today, anyway. I wouldn\u0027t rule out changes in the future that try to pick newer signals from different origins for time detection, but I don\u0027t have plans to. There\u0027s a reason we now prioritize NITZ below NTP by default - NITZ seems to be quite unreliable.",
+      "parentUuid": "1b528c5c_8b067630",
+      "range": {
+        "startLine": 218,
+        "startChar": 21,
+        "endLine": 218,
+        "endChar": 63
+      },
+      "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
