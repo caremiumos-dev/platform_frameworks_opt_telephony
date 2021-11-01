@@ -22,6 +22,30 @@
       },
       "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a95853_107094a3",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-11-01T18:27:36Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m not really following.\n\nThis is basically just avoiding processing signals that are nearly identical and would cause work for no benefit (it\u0027s mostly redundant, we do a similar check in the server but it has been kept for historic continuity). \n\nThese points that may help:\n\nOn Android, the elapsed realtime clock is unaffected by UTC time changes and DST - it records the number of millis / nanos since boot.\n\nUTC is unaffected by DST, by definition.\n\nThis doesn\u0027t go near the device UTC system clock. The Encoded UTC time in utcTimeDifferenceMillis compares the encoded NITZ from the carrier signal only.",
+      "parentUuid": "7110741a_3ecd7358",
+      "range": {
+        "startLine": 218,
+        "startChar": 21,
+        "endLine": 218,
+        "endChar": 63
+      },
+      "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
