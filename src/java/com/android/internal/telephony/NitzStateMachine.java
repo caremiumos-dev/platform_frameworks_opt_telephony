@@ -101,6 +101,12 @@ public interface NitzStateMachine {
         int getNitzUpdateDiffMillis();
 
         /**
+         * If the device leaves the network for less than this value, a NITZ signal can be restored
+         * for use when it rejoins.
+         */
+        int getNitzNetworkDisconnectRetentionMillis();
+
+        /**
          * Returns true if the {@code gsm.ignore-nitz} system property is set to "yes".
          */
         boolean getIgnoreNitz();
@@ -123,31 +129,44 @@ public interface NitzStateMachine {
      */
     class DeviceStateImpl implements DeviceState {
         private static final int NITZ_UPDATE_SPACING_DEFAULT = 1000 * 60 * 10;
-        private final int mNitzUpdateSpacing;
+        private final int mNitzUpdateSpacingMillis;
 
         private static final int NITZ_UPDATE_DIFF_DEFAULT = 2000;
-        private final int mNitzUpdateDiff;
+        private final int mNitzUpdateDiffMillis;
+
+        private static final int NITZ_NETWORK_DISCONNECT_RETENTION_MILLIS_DEFAULT = 1000 * 60 * 5;
+        private final int mNitzNetworkDisconnectRetentionMillis;
 
         private final ContentResolver mCr;
 
         public DeviceStateImpl(Phone phone) {
             Context context = phone.getContext();
             mCr = context.getContentResolver();
-            mNitzUpdateSpacing =
+            mNitzUpdateSpacingMillis =
                     SystemProperties.getInt("ro.nitz_update_spacing", NITZ_UPDATE_SPACING_DEFAULT);
-            mNitzUpdateDiff =
+            mNitzUpdateDiffMillis =
                     SystemProperties.getInt("ro.nitz_update_diff", NITZ_UPDATE_DIFF_DEFAULT);
+            mNitzNetworkDisconnectRetentionMillis =
+                    SystemProperties.getInt("ro.nitz_network_disconnect_retention",
+                            NITZ_NETWORK_DISCONNECT_RETENTION_MILLIS_DEFAULT);
         }
 
         @Override
         public int getNitzUpdateSpacingMillis() {
             return Settings.Global.getInt(mCr, Settings.Global.NITZ_UPDATE_SPACING,
-                    mNitzUpdateSpacing);
+                    mNitzUpdateSpacingMillis);
         }
 
         @Override
         public int getNitzUpdateDiffMillis() {
-            return Settings.Global.getInt(mCr, Settings.Global.NITZ_UPDATE_DIFF, mNitzUpdateDiff);
+            return Settings.Global.getInt(mCr, Settings.Global.NITZ_UPDATE_DIFF,
+                    mNitzUpdateDiffMillis);
+        }
+
+        @Override
+        public int getNitzNetworkDisconnectRetentionMillis() {
+            return Settings.Global.getInt(mCr, Settings.Global.NITZ_NETWORK_DISCONNECT_UPDATE_DIFF,
+                    mNitzNetworkDisconnectRetentionMillis);
         }
 
         @Override
