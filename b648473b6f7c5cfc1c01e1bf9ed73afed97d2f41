@@ -46,6 +46,30 @@
       },
       "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b528c5c_8b067630",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzSignalInputFilterPredicateFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-01T19:44:40Z",
+      "side": 1,
+      "message": "I was thinking we will compare the getAgeAdjustedElapsedRealtimeMillis to when previous time update happened. (not just from nitz). Only if time receipt of this signal is after the the previous time update, we would accept the request. Not sure if I am missing something.",
+      "parentUuid": "f0a95853_107094a3",
+      "range": {
+        "startLine": 218,
+        "startChar": 21,
+        "endLine": 218,
+        "endChar": 63
+      },
+      "revId": "b648473b6f7c5cfc1c01e1bf9ed73afed97d2f41",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
