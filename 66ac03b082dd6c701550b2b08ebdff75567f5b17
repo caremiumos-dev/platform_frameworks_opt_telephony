@@ -16,6 +16,24 @@
       "message": "1. The APN selection logic has been moved down to TelephonyProvider long time ago.\n2. This can be supported by adding carrier-id based APN entry. For example, AT\u0026T 5G SIM has a special carrier-id https://cs.android.com/android/platform/superproject/+/master:packages/providers/TelephonyProvider/assets/latest_carrier_id/carrier_list.textpb;l\u003d11235?q\u003dcarrier_list.textpb\n3. There is no DcTracker anymore in T. We\u0027ll take care of this in T.",
       "revId": "66ac03b082dd6c701550b2b08ebdff75567f5b17",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "877635a5_9cb398ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2021-11-02T22:40:47Z",
+      "side": 1,
+      "message": "#2 \nAT\u0026T requirement is based on device capability. Following CL has the exact apn names for each gid and device capability.\nhttps://android-review.googlesource.com/c/platform/frameworks/base/+/1878017/1/telephony/java/android/telephony/CarrierConfigManager.java\n\nhow is carrier-id helps choose nrphone apn for 5G SA device in below case?\n\"52FF:mms,supl,hipri,default,fota:SA:nrphone\",\n\"52FF:mms,supl,hipri,default,fota:NSA:nxtgenphone\"",
+      "parentUuid": "634ce719_61d6ee4d",
+      "revId": "66ac03b082dd6c701550b2b08ebdff75567f5b17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
