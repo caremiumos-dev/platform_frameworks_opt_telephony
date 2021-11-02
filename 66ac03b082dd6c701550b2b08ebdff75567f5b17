@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "634ce719_61d6ee4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-02T21:09:33Z",
+      "side": 1,
+      "message": "1. The APN selection logic has been moved down to TelephonyProvider long time ago.\n2. This can be supported by adding carrier-id based APN entry. For example, AT\u0026T 5G SIM has a special carrier-id https://cs.android.com/android/platform/superproject/+/master:packages/providers/TelephonyProvider/assets/latest_carrier_id/carrier_list.textpb;l\u003d11235?q\u003dcarrier_list.textpb\n3. There is no DcTracker anymore in T. We\u0027ll take care of this in T.",
+      "revId": "66ac03b082dd6c701550b2b08ebdff75567f5b17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
