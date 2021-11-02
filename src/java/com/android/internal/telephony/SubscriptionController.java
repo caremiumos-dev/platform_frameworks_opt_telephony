@@ -93,7 +93,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Implementation of the ISub interface.
@@ -589,6 +588,9 @@ public class SubscriptionController extends ISub.Stub {
         boolean areUiccApplicationsEnabled = cursor.getInt(cursor.getColumnIndexOrThrow(
                 SubscriptionManager.UICC_APPLICATIONS_ENABLED)) == 1;
 
+        int usageSetting = cursor.getInt(cursor.getColumnIndexOrThrow(
+                SubscriptionManager.USAGE_SETTING));
+
         if (VDBG) {
             String iccIdToPrint = SubscriptionInfo.givePrintableIccid(iccId);
             String cardIdToPrint = SubscriptionInfo.givePrintableIccid(cardId);
@@ -603,7 +605,8 @@ public class SubscriptionController extends ISub.Stub {
                     + " isOpportunistic:" + isOpportunistic + " groupUUID:" + groupUUID
                     + " profileClass:" + profileClass + " subscriptionType: " + subType
                     + " carrierConfigAccessRules:" + carrierConfigAccessRules
-                    + " areUiccApplicationsEnabled: " + areUiccApplicationsEnabled);
+                    + " areUiccApplicationsEnabled: " + areUiccApplicationsEnabled
+                    + " usageSetting: " + usageSetting);
         }
 
         // If line1number has been set to a different number, use it instead.
@@ -615,7 +618,8 @@ public class SubscriptionController extends ISub.Stub {
                 carrierName, nameSource, iconTint, number, dataRoaming, /* icon= */ null,
                 mcc, mnc, countryIso, isEmbedded, accessRules, cardId, publicCardId,
                 isOpportunistic, groupUUID, /* isGroupDisabled= */ false , carrierId, profileClass,
-                subType, groupOwner, carrierConfigAccessRules, areUiccApplicationsEnabled);
+                subType, groupOwner, carrierConfigAccessRules, areUiccApplicationsEnabled,
+                usageSetting);
         info.setAssociatedPlmns(ehplmns, hplmns);
         return info;
     }
@@ -1705,6 +1709,9 @@ public class SubscriptionController extends ISub.Stub {
         value.put(SubscriptionManager.ALLOWED_NETWORK_TYPES,
                 "user=" + RadioAccessFamily.getRafFromNetworkType(
                         RILConstants.PREFERRED_NETWORK_MODE));
+
+        value.put(SubscriptionManager.USAGE_SETTING,
+                SubscriptionManager.USAGE_SETTING_UNKNOWN);
 
         Uri uri = resolver.insert(SubscriptionManager.CONTENT_URI, value);
 
@@ -3187,6 +3194,7 @@ public class SubscriptionController extends ISub.Stub {
             case SubscriptionManager.IMS_RCS_UCE_ENABLED:
             case SubscriptionManager.CROSS_SIM_CALLING_ENABLED:
             case SubscriptionManager.VOIMS_OPT_IN_STATUS:
+            case SubscriptionManager.USAGE_SETTING:
                 value.put(propKey, Integer.parseInt(propValue));
                 break;
             case SubscriptionManager.ALLOWED_NETWORK_TYPES:
@@ -3267,6 +3275,7 @@ public class SubscriptionController extends ISub.Stub {
                         case SubscriptionManager.VOIMS_OPT_IN_STATUS:
                         case SubscriptionManager.D2D_STATUS_SHARING:
                         case SubscriptionManager.D2D_STATUS_SHARING_SELECTED_CONTACTS:
+                        case SubscriptionManager.USAGE_SETTING:
                             resultValue = cursor.getString(0);
                             break;
                         default:
