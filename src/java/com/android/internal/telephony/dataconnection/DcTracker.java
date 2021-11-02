@@ -3545,6 +3545,8 @@ public class DcTracker extends Handler {
 
         dedupeApnSettings();
 
+        filterApnSettings();
+
         if (mAllApnSettings.isEmpty()) {
             log("createAllApnList: No APN found for carrier, operator: " + operator);
             mApnSettingsInitializationLog.log("no APN found for carrier, operator: "
@@ -3561,6 +3563,119 @@ public class DcTracker extends Handler {
 
         addDefaultApnSettingsAsNeeded();
         if (DBG) log("createAllApnList: X mAllApnSettings=" + mAllApnSettings);
+    }
+
+    private void filterApnSettings() {
+        PersistableBundle carrierConfig;
+        CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
+                .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (configManager == null) {
+            loge("CarrierConfigManager is null");
+            return;
+        }
+
+        carrierConfig = configManager.getConfigForSubId(mPhone.getSubId());
+        if(carrierConfig == null) {
+            loge("Carrier Config info is null");
+            return;
+        }
+
+        if(carrierConfig.getBoolean(CarrierConfigManager.
+                KEY_REQUIRE_APN_FILTERING_WITH_RADIO_CAPABILITY)) {
+            filterApnSettingsWithRadioCapability();
+        }
+    }
+
+   /*Filters out multipe apns based on radio capability if the APN's GID value is listed in
+    CarrierConfigManager#KEY_MULTI_APN_ARRAY_FOR_SAME_GID as per the operator requirement*/
+    @Override
+    private void filterApnSettingsWithRadioCapability() {
+        if (VDBG) {
+            log(" filterApnSettingsWithRadioCapability start: mAllApnSettings:" + mAllApnSettings);
+        }
+        int i = 0;
+        while (i < mAllApnSettings.size()) {
+            ApnSetting apn = mAllApnSettings.get(i);
+            String apnType = ApnSetting.getApnTypesStringFromBitmask(apn.getApnTypeBitmask());
+            if(apn.hasMvnoParams() && (apn.getMvnoType() == ApnSetting.MVNO_TYPE_GID) &&
+                    isApnFilteringRequired(apn.getMvnoMatchData(), apnType)) {
+                String apnName = getApnBasedOnRadioCapability(apn.getMvnoMatchData(),
+                        apnType, getEnhancedRadioCapability());
+                if(apnName != null && !apnName.equals(apn.getApnName())) {
+                    mAllApnSettings.remove(i);
+                    log("filterApnSettingsWithRadioCapability: removed not supported apn:" + apn);
+                } else {
+                    i++;
+                }
+            } else {
+                i++;
+            }
+        }
+        if(VDBG) {
+            log("filterApnSettingsWithRadioCapability: end: mAllApnSettings:" + mAllApnSettings);
+        }
+    }
+
+    //TODO: Implement the function to get radio capabilities from modem
+    //return SA, NSA, LTE etc..
+    private String getEnhancedRadioCapability() {
+       return "";
+    }
+
+     /**
+     * Check if APN filtering is required
+     *
+     * @param gid gid value of the apn.
+     * @param apnType  apn type.
+     * @return True if multipe apns present in CarrierConfigManager#KEY_MULTI_APN_ARRAY_FOR_SAME_GID
+               for this gid .
+     */
+    private boolean isApnFilteringRequired(String gid, String apnType) {
+        final String[] apnConfig =
+                CarrierConfigManager.getDefaultConfig().
+                getStringArray(CarrierConfigManager.KEY_MULTI_APN_ARRAY_FOR_SAME_GID);
+        for(String apnEntry: apnConfig) {
+            String[] split = apnEntry.split(":");
+            if (split.length == KEY_MULTI_APN_ARRAY_FOR_SAME_GID_ENTRY_LENGTH) {
+                if(gid.equals(split[GID]) && apnType.equals(split[APN_TYPE])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+     /**
+     * Return apn name based on the device capability if the coresponding
+     * entry present in CarrierConfigManager#KEY_MULTI_APN_ARRAY_FOR_SAME_GID
+     *
+     * @param gid gid value of the apn.
+     * @param apnType  apn type.
+     * @param deviceCapability  device capability, Ex: SA, NSA, LTE etc..
+     * @return apn name from the entry matches with all the above three params.
+     */
+
+    private String getApnBasedOnRadioCapability(String gid, String apnType,
+            String deviceCapability) {
+        if(deviceCapability == null) {
+            loge("getApnBasedOnRadioCapability: deviceCapability is null");
+            return null;
+        }
+        final String[] apnConfig =
+                CarrierConfigManager.getDefaultConfig().
+                getStringArray(CarrierConfigManager.KEY_MULTI_APN_ARRAY_FOR_SAME_GID);
+        for(String apnEntry: apnConfig) {
+            String[] split = apnEntry.split(":");
+            if (split.length == KEY_MULTI_APN_ARRAY_FOR_SAME_GID_ENTRY_LENGTH &&
+                    deviceCapability != null) {
+                if(gid.equals(split[GID]) && apnType.equals(split[APN_TYPE]) &&
+                        deviceCapability.equals(split[DEVICE_CAPABILITY])) {
+                    return split[APN_NAME];
+                }
+            }
+        }
+        return null;
     }
 
     private void dedupeApnSettings() {
