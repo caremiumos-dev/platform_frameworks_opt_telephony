@@ -1154,7 +1154,7 @@ public class EuiccControllerTest extends TelephonyTest {
         SubscriptionInfo subInfo = new SubscriptionInfo(
                 0, "", 0, "", "", 0, 0, "", 0, null, "", "", "", true /* isEmbedded */,
                 hasPrivileges ? new UiccAccessRule[] { ACCESS_RULE } : null, "", CARD_ID,
-                false, null, false, 0, 0, 0, null, null, true);
+                false, null, false, 0, 0, 0, null, null, true, -1);
         when(mSubscriptionManager.canManageSubscription(subInfo, PACKAGE_NAME)).thenReturn(
                 hasPrivileges);
         when(mSubscriptionManager.getActiveSubscriptionInfoList(anyBoolean())).thenReturn(
@@ -1175,11 +1175,11 @@ public class EuiccControllerTest extends TelephonyTest {
         SubscriptionInfo subInfo1 = new SubscriptionInfo(
                 0, "", 0, "", "", 0, 0, "", 0, null, "", "", "", true /* isEmbedded */,
                 hasPrivileges ? new UiccAccessRule[] { ACCESS_RULE } : null, "", CARD_ID,
-                false, null, false, 0, 0, 0, null, null, true);
+                false, null, false, 0, 0, 0, null, null, true, -1);
         SubscriptionInfo subInfo2 = new SubscriptionInfo(
                 0, "", 0, "", "", 0, 0, "", 0, null, "", "", "", true /* isEmbedded */,
                 hasPrivileges ? new UiccAccessRule[] { ACCESS_RULE } : null, "",
-                1 /* cardId */, false, null, false, 0, 0, 0, null, null, true);
+                1 /* cardId */, false, null, false, 0, 0, 0, null, null, true, -1);
         when(mSubscriptionManager.canManageSubscription(subInfo1, PACKAGE_NAME)).thenReturn(
                 hasPrivileges);
         when(mSubscriptionManager.canManageSubscription(subInfo2, PACKAGE_NAME)).thenReturn(
