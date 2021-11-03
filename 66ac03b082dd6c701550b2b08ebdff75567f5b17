@@ -34,6 +34,24 @@
       "parentUuid": "634ce719_61d6ee4d",
       "revId": "66ac03b082dd6c701550b2b08ebdff75567f5b17",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1e6bcd7_8e7e5d1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2021-11-03T18:54:06Z",
+      "side": 1,
+      "message": "Hi Avinash,\n\nI have discussed with Jack. He agreed with my comment in the bug that you need to have device specific APNs and include the APN conf xml appropriately at build time.\n\nCarrier ID is not going to change based on device capability so you cannot the original suggestion will not help",
+      "parentUuid": "877635a5_9cb398ff",
+      "revId": "66ac03b082dd6c701550b2b08ebdff75567f5b17",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
