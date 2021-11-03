@@ -1,0 +1,133 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000016864447",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1877784?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "4b3b9173_887f69d8",
+          "description": "Change to \"src/java/com/android/internal/telephony/dataconnection/DcTracker.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+              "range": {
+                "startLine": 3589,
+                "startChar": 17,
+                "endLine": 3589,
+                "endChar": 24
+              },
+              "replacement": "multiple"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "62701624_88fbe7a7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3589,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-11-03T17:48:20Z",
+      "side": 1,
+      "message": "Common typo found: \"multipe\" -- should it be \"multiple\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 3589,
+        "startChar": 17,
+        "endLine": 3589,
+        "endChar": 24
+      },
+      "revId": "480af2729ebe9259db982e31dffc6f52331eaa7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000016864447",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1877784?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "1a692e2a_ceab4f1e",
+          "description": "Change to \"src/java/com/android/internal/telephony/dataconnection/DcTracker.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+              "range": {
+                "startLine": 3630,
+                "startChar": 23,
+                "endLine": 3630,
+                "endChar": 30
+              },
+              "replacement": "multiple"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "25233ae2_80ebf6b0",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3630,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-11-03T17:48:20Z",
+      "side": 1,
+      "message": "Common typo found: \"multipe\" -- should it be \"multiple\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 3630,
+        "startChar": 23,
+        "endLine": 3630,
+        "endChar": 30
+      },
+      "revId": "480af2729ebe9259db982e31dffc6f52331eaa7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000016864447",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1877784?revision\u003d2",
+      "fixSuggestions": [
+        {
+          "fixId": "7933cadb_7a2ce169",
+          "description": "Change to \"src/java/com/android/internal/telephony/dataconnection/DcTracker.java\"",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+              "range": {
+                "startLine": 3650,
+                "startChar": 61,
+                "endLine": 3650,
+                "endChar": 73
+              },
+              "replacement": "corresponding"
+            }
+          ]
+        }
+      ],
+      "key": {
+        "uuid": "7ffacbbb_04ddf8e8",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 3650,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-11-03T17:48:20Z",
+      "side": 1,
+      "message": "Common typo found: \"coresponding\" -- should it be \"corresponding\"?\nNote: a line containing \"common_typos_disable\" or \"common_typos_enable\" will turn off or on (respectively) the linter for subsequent lines in the file. Alternatively include the token \"NOTYPO\" within a line to skip typo linting that line or include \u0027No-Typo-Check: \u003creason\u003e\u0027in the commit message.",
+      "range": {
+        "startLine": 3650,
+        "startChar": 61,
+        "endLine": 3650,
+        "endChar": 73
+      },
+      "revId": "480af2729ebe9259db982e31dffc6f52331eaa7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
