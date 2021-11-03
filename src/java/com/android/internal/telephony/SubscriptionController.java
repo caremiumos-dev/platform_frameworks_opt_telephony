@@ -52,6 +52,7 @@ import android.telephony.RadioAccessFamily;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.SimDisplayNameSource;
+import android.telephony.SubscriptionManager.UsageSetting;
 import android.telephony.TelephonyFrameworkInitializer;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyRegistryManager;
@@ -3013,9 +3014,9 @@ public class SubscriptionController extends ISub.Stub {
     private void validateSubId(int subId) {
         if (DBG) logd("validateSubId subId: " + subId);
         if (!SubscriptionManager.isValidSubscriptionId(subId)) {
-            throw new RuntimeException("Invalid sub id passed as parameter");
+            throw new IllegalArgumentException("Invalid sub id passed as parameter");
         } else if (subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
-            throw new RuntimeException("Default sub id passed as parameter");
+            throw new IllegalArgumentException("Default sub id passed as parameter");
         }
     }
 
@@ -4523,6 +4524,48 @@ public class SubscriptionController extends ISub.Stub {
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
+    }
+
+    /**
+     * Set the Usage Setting for this subscription.
+     *
+     * @param usageSetting whether it’s opportunistic subscription.
+     * @param subId the unique SubscriptionInfo index in database
+     * @param callingPackage The package making the IPC.
+     * @return the number of records updated
+     *
+     * @throws SecurityException if doesn't have required permission.
+     */
+    @Override
+    public int setUsageSetting(@UsageSetting int usageSetting, int subId, String callingPackage) {
+        try {
+            TelephonyPermissions.enforceCallingOrSelfModifyPermissionOrCarrierPrivilege(
+                    mContext, subId, callingPackage);
+        } catch (SecurityException e) {
+            enforceCarrierPrivilegeOnInactiveSub(subId, callingPackage,
+                    "Caller requires permission on sub " + subId);
+        }
+
+        if (usageSetting < SubscriptionManager.USAGE_SETTING_DEFAULT
+                || usageSetting > SubscriptionManager.USAGE_SETTING_DATA_CENTRIC) {
+            throw new IllegalArgumentException("setUsageSetting: Invalid usage setting: "
+                    + usageSetting);
+        }
+
+        final long token = Binder.clearCallingIdentity();
+        try {
+            final int ret = setSubscriptionProperty(subId, SubscriptionManager.USAGE_SETTING,
+                    String.valueOf(usageSetting));
+
+            // ret is the number of records updated in the DB, which should always be 1.
+            // TODO(b/205027930): move this check prior to the database mutation request
+            if (ret != 1) throw new IllegalArgumentException(
+                    "Invalid SubscriptionId for setUsageSetting");
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+        // FIXME: return the usage setting
+        return 0;
     }
 
     /**
