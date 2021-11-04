@@ -18,7 +18,10 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.IBinder;
@@ -78,6 +81,7 @@ public class SignalStrengthController extends Handler {
     private static final int EVENT_GET_SIGNAL_STRENGTH                      = 6;
     private static final int EVENT_POLL_SIGNAL_STRENGTH                     = 7;
     private static final int EVENT_SIGNAL_STRENGTH_UPDATE                   = 8;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED                   = 9;
 
     private final Phone mPhone;
     private final CommandsInterface mCi;
@@ -109,6 +113,20 @@ public class SignalStrengthController extends Handler {
 
     private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED.equals(action)) {
+                int phoneId = intent.getExtras().getInt(CarrierConfigManager.EXTRA_SLOT_INDEX);
+                // Ignore the carrier config changed if the phoneId is not matched.
+                if (phoneId == mPhone.getPhoneId()) {
+                    sendEmptyMessage(EVENT_CARRIER_CONFIG_CHANGED);
+                }
+            }
+        }
+    };
+
     public SignalStrengthController(Phone phone) {
         mPhone = phone;
         mCi = mPhone.mCi;
@@ -117,6 +135,10 @@ public class SignalStrengthController extends Handler {
         mCi.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         mCi.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
         setSignalStrengthDefaultValues();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -220,6 +242,11 @@ public class SignalStrengthController extends Handler {
 
                 ar = (AsyncResult) msg.obj;
                 onSignalStrengthResult(ar);
+                break;
+            }
+
+            case EVENT_CARRIER_CONFIG_CHANGED: {
+                onCarrierConfigChanged();
                 break;
             }
 
@@ -780,6 +807,14 @@ public class SignalStrengthController extends Handler {
         }
 
         return earfcnPairList;
+    }
+
+    private void onCarrierConfigChanged() {
+        PersistableBundle config = getCarrierConfig();
+        log("CarrierConfigChange: " + config);
+
+        updateArfcnLists(config);
+        updateReportingCriteria(config);
     }
 
     /**
