@@ -18,7 +18,10 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.IBinder;
@@ -38,14 +41,10 @@ import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.telephony.uicc.IccCardStatus;
-import com.android.internal.telephony.uicc.UiccCard;
-import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
@@ -82,16 +81,11 @@ public class SignalStrengthController extends Handler {
     private static final int EVENT_GET_SIGNAL_STRENGTH                      = 6;
     private static final int EVENT_POLL_SIGNAL_STRENGTH                     = 7;
     private static final int EVENT_SIGNAL_STRENGTH_UPDATE                   = 8;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED                   = 9;
 
     private final Phone mPhone;
     private final CommandsInterface mCi;
 
-    /**
-     * By default, strength polling is enabled.  However, if we're
-     * getting unsolicited signal strength updates from the radio, set
-     * value to true and don't bother polling any more.
-     */
-    private boolean mDontPollSignalStrength = false;
     @NonNull
     private SignalStrength mSignalStrength;
     private long mSignalStrengthUpdatedTime;
@@ -119,6 +113,23 @@ public class SignalStrengthController extends Handler {
 
     private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
 
+    @NonNull
+    private PersistableBundle mCarrierConfig;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED.equals(action)) {
+                int phoneId = intent.getExtras().getInt(CarrierConfigManager.EXTRA_SLOT_INDEX);
+                // Ignore the carrier config changed if the phoneId is not matched.
+                if (phoneId == mPhone.getPhoneId()) {
+                    sendEmptyMessage(EVENT_CARRIER_CONFIG_CHANGED);
+                }
+            }
+        }
+    };
+
     public SignalStrengthController(Phone phone) {
         mPhone = phone;
         mCi = mPhone.mCi;
@@ -127,6 +138,11 @@ public class SignalStrengthController extends Handler {
         mCi.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
         mCi.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
         setSignalStrengthDefaultValues();
+
+        mCarrierConfig = getCarrierConfig();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -169,7 +185,7 @@ public class SignalStrengthController extends Handler {
                 mSignalRequestRecords.add(record);
 
                 updateAlwaysReportSignalStrength();
-                updateReportingCriteria(getCarrierConfig());
+                updateReportingCriteria(mCarrierConfig);
 
                 onCompleted.sendToTarget();
                 break;
@@ -191,7 +207,7 @@ public class SignalStrengthController extends Handler {
                 }
 
                 updateAlwaysReportSignalStrength();
-                updateReportingCriteria(getCarrierConfig());
+                updateReportingCriteria(mCarrierConfig);
 
                 if (onCompleted != null) {
                     AsyncResult ret = AsyncResult.forMessage(onCompleted);
@@ -201,7 +217,7 @@ public class SignalStrengthController extends Handler {
             }
 
             case EVENT_ON_DEVICE_IDLE_STATE_CHANGED: {
-                updateReportingCriteria(getCarrierConfig());
+                updateReportingCriteria(mCarrierConfig);
                 break;
             }
 
@@ -215,8 +231,6 @@ public class SignalStrengthController extends Handler {
                 }
                 ar = (AsyncResult) msg.obj;
                 onSignalStrengthResult(ar);
-                queueNextSignalStrengthPoll();
-
                 break;
             }
 
@@ -231,12 +245,12 @@ public class SignalStrengthController extends Handler {
                 // This is a notification from CommandsInterface.setOnSignalStrengthUpdate
 
                 ar = (AsyncResult) msg.obj;
-
-                // The radio is telling us about signal strength changes
-                // we don't have to ask it
-                mDontPollSignalStrength = true;
-
                 onSignalStrengthResult(ar);
+                break;
+            }
+
+            case EVENT_CARRIER_CONFIG_CHANGED: {
+                onCarrierConfigChanged();
                 break;
             }
 
@@ -276,9 +290,8 @@ public class SignalStrengthController extends Handler {
         if ((ar.exception == null) && (ar.result != null)) {
             mSignalStrength = (SignalStrength) ar.result;
 
-            PersistableBundle config = getCarrierConfig();
             if (mPhone.getServiceStateTracker() != null) {
-                mSignalStrength.updateLevel(config, mPhone.getServiceStateTracker().mSS);
+                mSignalStrength.updateLevel(mCarrierConfig, mPhone.getServiceStateTracker().mSS);
             }
         } else {
             log("onSignalStrengthResult() Exception from RIL : " + ar.exception);
@@ -333,26 +346,6 @@ public class SignalStrengthController extends Handler {
         }
 
         return false;
-    }
-
-    void queueNextSignalStrengthPoll() {
-        if (mDontPollSignalStrength) {
-            // The radio is telling us about signal strength changes
-            // we don't have to ask it
-            return;
-        }
-
-        // if there is no SIM present, do not poll signal strength
-        UiccCard uiccCard = UiccController.getInstance().getUiccCard(
-                mPhone != null ? mPhone.getPhoneId() : SubscriptionManager.DEFAULT_PHONE_INDEX);
-        if (uiccCard == null
-                || uiccCard.getCardState() == IccCardStatus.CardState.CARDSTATE_ABSENT) {
-            log("Not polling signal strength due to absence of SIM");
-            return;
-        }
-
-        // TODO Don't poll signal strength if screen is off
-        sendMessageDelayed(obtainMessage(EVENT_POLL_SIGNAL_STRENGTH), POLL_PERIOD_MILLIS);
     }
 
     /**
@@ -477,7 +470,6 @@ public class SignalStrengthController extends Handler {
         pw.println("mSignalRequestRecords=" + mSignalRequestRecords);
         pw.println(" mLastSignalStrength=" + mLastSignalStrength);
         pw.println(" mSignalStrength=" + mSignalStrength);
-        pw.println(" mDontPollSignalStrength=" + mDontPollSignalStrength);
         pw.println(" mLteRsrpBoost=" + mLteRsrpBoost);
         pw.println(" mNrRsrpBoost=" + Arrays.toString(mNrRsrpBoost));
         dumpEarfcnPairList(pw, mEarfcnPairListForRsrpBoost, "mEarfcnPairListForRsrpBoost");
@@ -818,6 +810,14 @@ public class SignalStrengthController extends Handler {
         }
 
         return earfcnPairList;
+    }
+
+    private void onCarrierConfigChanged() {
+        mCarrierConfig = getCarrierConfig();
+        log("CarrierConfigChange: " + mCarrierConfig);
+
+        updateArfcnLists(mCarrierConfig);
+        updateReportingCriteria(mCarrierConfig);
     }
 
     /**
