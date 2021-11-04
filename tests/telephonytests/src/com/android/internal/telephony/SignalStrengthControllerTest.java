@@ -47,6 +47,7 @@ import android.telephony.SignalThresholdInfo;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
+import android.util.Pair;
 
 import org.junit.After;
 import org.junit.Before;
@@ -604,6 +605,19 @@ public class SignalStrengthControllerTest extends TelephonyTest {
         mSimulatedCommands.notifySignalStrength();
         processAllMessages();
         assertEquals(mSsc.getSignalStrength().getLevel(), CellSignalStrength.SIGNAL_STRENGTH_GOOD);
+    }
+
+    /**
+     * Test toString of ArrayList<Pair<Integer, Integer>> type is human readable.
+     * Several fields of SSC (mEarfcnPairListForRsrpBoost, mNrarfcnRangeListForRsrpBoost) are such
+     * type. The test can confirm we are able to dump them directly.
+     */
+    @Test
+    public void testArrayListOfPairIsHumanReadable() {
+        ArrayList<Pair<Integer, Integer>> data = new ArrayList<>();
+        data.add(new Pair<>(1, 2));
+        data.add(new Pair<>(3, 4));
+        assertThat(data.toString()).isEqualTo("[Pair{1 2}, Pair{3 4}]");
     }
 
     private void sendCarrierConfigUpdate() {
