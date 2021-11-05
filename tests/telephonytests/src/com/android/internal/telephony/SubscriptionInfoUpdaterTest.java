@@ -940,4 +940,32 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
                 eq(FAKE_ICCID_1), eq(FAKE_SUB_ID_1));
         verify(mSubscriptionController, times(1)).notifySubscriptionInfoChanged();
     }
+
+    @Test
+    @SmallTest
+    public void testCalculateUsageSetting() throws Exception {
+        // The most common case, request a voice-centric->data-centric change
+        mContextFixture.putIntResource(
+                com.android.internal.R.integer.config_default_usage_setting,
+                SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC);
+        mContextFixture.putIntArrayResource(
+                com.android.internal.R.array.config_supported_usage_settings,
+                new int[]{SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC,
+                SubscriptionManager.USAGE_SETTING_DATA_CENTRIC});
+
+        assertEquals(SubscriptionManager.USAGE_SETTING_DATA_CENTRIC,
+                mUpdater.calculateUsageSetting(
+                    SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC,
+                    SubscriptionManager.USAGE_SETTING_DATA_CENTRIC));
+
+        // Test that a voice-centric-only device only allows voice-centric configuration
+        mContextFixture.putIntArrayResource(
+                com.android.internal.R.array.config_supported_usage_settings,
+                new int[]{SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC});
+
+        assertEquals(SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC,
+                mUpdater.calculateUsageSetting(
+                    SubscriptionManager.USAGE_SETTING_VOICE_CENTRIC,
+                    SubscriptionManager.USAGE_SETTING_DATA_CENTRIC));
+    }
 }
