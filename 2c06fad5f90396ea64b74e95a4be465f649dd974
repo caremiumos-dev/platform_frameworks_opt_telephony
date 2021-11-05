@@ -22,6 +22,30 @@
       },
       "revId": "2c06fad5f90396ea64b74e95a4be465f649dd974",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54328323_555eec5d",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-05T04:38:23Z",
+      "side": 1,
+      "message": "Yes, Jack. With this patch, EVENT_GET_SIGNAL_STRENGTH will be only used by getSignalStrengthFromCi() with all three scenarios called in SST. They are all questionable now. It would be great if we can clean them up.\n\nIn the worst case we can not remove getSignalStrengthFromCi(), introducing EVENT_POLL_SIGNAL_STRENGTH_DONE to handle polling done is still quite \"nature\". It does not cost us.\n\nThanks",
+      "parentUuid": "378fc7b2_6a7823f1",
+      "range": {
+        "startLine": 200,
+        "startChar": 17,
+        "endLine": 200,
+        "endChar": 42
+      },
+      "revId": "2c06fad5f90396ea64b74e95a4be465f649dd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
