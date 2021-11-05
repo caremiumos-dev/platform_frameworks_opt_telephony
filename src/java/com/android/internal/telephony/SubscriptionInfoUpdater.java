@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Handler;
@@ -44,6 +45,7 @@ import android.service.euicc.GetEuiccProfileInfoListResult;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.SubscriptionManager.UsageSetting;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyManager.SimState;
 import android.telephony.UiccAccessRule;
@@ -591,6 +593,51 @@ public class SubscriptionInfoUpdater extends Handler {
         updateCarrierServices(phoneId, IccCardConstants.INTENT_VALUE_ICC_LOADED);
     }
 
+    /**
+     * Calculate the usage setting based on the carrier request.
+     *
+     * @param currentUsageSetting the current setting in the subscription DB
+     * @param preferredUsageSetting provided by the carrier config
+     * @return the calculated usage setting.
+     */
+    @VisibleForTesting
+    @UsageSetting public int calculateUsageSetting(
+            @UsageSetting int currentUsageSetting, @UsageSetting int preferredUsageSetting) {
+        int defaultUsageSetting;
+        int[] supportedUsageSettings;
+
+        // Range check the inputs, and on failure, make no changes
+        if (preferredUsageSetting < SubscriptionManager.USAGE_SETTING_DEFAULT
+                || preferredUsageSetting > SubscriptionManager.USAGE_SETTING_DATA_CENTRIC) {
+            return currentUsageSetting;
+        }
+
+        //  Load the resources to provide the device capability
+        try {
+            defaultUsageSetting = sContext.getResources().getInteger(
+                com.android.internal.R.integer.config_default_usage_setting);
+            supportedUsageSettings = sContext.getResources().getIntArray(
+                com.android.internal.R.array.config_supported_usage_settings);
+            if (supportedUsageSettings.length < 1) return currentUsageSetting;
+        } catch (Resources.NotFoundException nfe) {
+            loge("Failed to load usage setting resources!");
+            return currentUsageSetting;
+        }
+
+        // Default is always allowed
+        if (preferredUsageSetting == SubscriptionManager.USAGE_SETTING_DEFAULT) {
+            return preferredUsageSetting;
+        }
+
+        // Forced setting must be explicitly supported
+        for (int i = 0; i < supportedUsageSettings.length; i++) {
+            if (preferredUsageSetting == supportedUsageSettings[i]) return preferredUsageSetting;
+        }
+
+        // If the preferred setting is not possible, just keep the current setting.
+        return currentUsageSetting;
+    }
+
     private void restoreSimSpecificSettingsForPhone(int phoneId) {
         SubscriptionManager subManager = SubscriptionManager.from(sContext);
         subManager.restoreSimSpecificSettingsForIccIdFromBackup(sIccId[phoneId]);
@@ -1107,6 +1154,37 @@ public class SubscriptionInfoUpdater extends Handler {
                     }
                 } catch (IllegalArgumentException e) {
                     loge("Invalid Group UUID=" + groupUuidString);
+                }
+            }
+
+            // FIXME: Radio HAL 2.0 needs to be cherry picked to AOSP.
+            if (/*PhoneFactory.getPhone(phoneId).getHalVersion()
+                    .greaterOrEqual(RIL.RADIO_HAL_VERSION_2_0)*/ true) {
+
+                final int preferredUsageSetting =
+                        config.getInt(
+                                CarrierConfigManager.KEY_CELLULAR_USAGE_SETTING_INT,
+                                SubscriptionManager.USAGE_SETTING_UNKNOWN);
+
+                @UsageSetting int newUsageSetting = calculateUsageSetting(
+                        currentSubInfo.getUsageSetting(),
+                        preferredUsageSetting);
+
+                if (newUsageSetting != currentSubInfo.getUsageSetting()) {
+                    cv.put(SubscriptionManager.USAGE_SETTING, newUsageSetting);
+                    if (DBG) {
+                        logd("UsageSetting changed,"
+                                + " oldSetting=" + currentSubInfo.getUsageSetting()
+                                + " preferredSetting=" + preferredUsageSetting
+                                + " newSetting=" + newUsageSetting);
+                    }
+                } else {
+                    if (DBG) {
+                        logd("UsageSetting unchanged,"
+                                + " oldSetting=" + currentSubInfo.getUsageSetting()
+                                + " preferredSetting=" + preferredUsageSetting
+                                + " newSetting=" + newUsageSetting);
+                    }
                 }
             }
         }
