@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e8c91eb_4f51d88a",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-05T01:43:18Z",
+      "side": 1,
+      "message": "The change comes from the suggestion during the review. I am a bit hesitating if the \"simplify\" is worthy now.\n\nTake a List of two Pairs (1, 2) and (3, 4) as example\n\nThe old dump will generate: mEarfcnPairListForRsrpBoost\u003d{(1,2),(3,4)}\nwhile the new one will output: mEarfcnPairListForRsrpBoost\u003d[Pair(1,2), Pair(3,4)].\n\nSo the original method dumpEarfcnPairList does improve the readability. The \"Pair\" here is internal implementation, it is not needed in dump info...\n\nThought?",
+      "revId": "42831360c055df407064254e1ec0fb20384687a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
