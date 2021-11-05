@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13dfaf3_a327d61b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2021-11-05T17:31:18Z",
+      "side": 1,
+      "message": "Verified in ProGuard usage map that android.telephony.gsm.SmsMessage$SubmitPdu no longer gets removed and local test on coral passes.",
+      "revId": "086b39e3622b4feb55881b098f8db2eb68bd3797",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
