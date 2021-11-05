@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "378fc7b2_6a7823f1",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-05T04:23:25Z",
+      "side": 1,
+      "message": "You are planning to remove EVENT_GET_SIGNAL_STRENGTH and getSignalStrengthFromCi() later, right?",
+      "range": {
+        "startLine": 200,
+        "startChar": 17,
+        "endLine": 200,
+        "endChar": 42
+      },
+      "revId": "2c06fad5f90396ea64b74e95a4be465f649dd974",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
