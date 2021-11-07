@@ -212,6 +212,7 @@ public class ServiceStateTracker extends Handler {
     private RegistrantList mNrStateChangedRegistrants = new RegistrantList();
     private RegistrantList mNrFrequencyChangedRegistrants = new RegistrantList();
     private RegistrantList mCssIndicatorChangedRegistrants = new RegistrantList();
+    private final RegistrantList mBandwidthChangedRegistrants = new RegistrantList();
     private final RegistrantList mAirplaneModeChangedRegistrants = new RegistrantList();
     private final RegistrantList mAreaCodeChangedRegistrants = new RegistrantList();
 
@@ -1283,8 +1284,6 @@ public class ServiceStateTracker extends Handler {
                 mPrevSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
                 mIsSimReady = true;
                 pollStateInternal(false);
-                // Signal strength polling stops when radio is off
-                queueNextSignalStrengthPoll();
                 break;
 
             case EVENT_RADIO_STATE_CHANGED:
@@ -1292,9 +1291,6 @@ public class ServiceStateTracker extends Handler {
                 if(!mPhone.isPhoneTypeGsm() &&
                         mCi.getRadioState() == TelephonyManager.RADIO_POWER_ON) {
                     handleCdmaSubscriptionSource(mCdmaSSM.getCdmaSubscriptionSource());
-
-                    // Signal strength polling stops when radio is off.
-                    queueNextSignalStrengthPoll();
                 }
                 // This will do nothing in the 'radio not available' case
                 setPowerStateToDesired();
@@ -3481,6 +3477,8 @@ public class ServiceStateTracker extends Handler {
 
         boolean hasCssIndicatorChanged = (mSS.getCssIndicator() != mNewSS.getCssIndicator());
 
+        boolean hasBandwidthChanged = mSS.getCellBandwidths() != mNewSS.getCellBandwidths();
+
         boolean has4gHandoff = false;
         boolean hasMultiApnSupport = false;
         boolean hasLostMultiApnSupport = false;
@@ -3524,6 +3522,7 @@ public class ServiceStateTracker extends Handler {
                     + " hasCssIndicatorChanged = " + hasCssIndicatorChanged
                     + " hasNrFrequencyRangeChanged = " + hasNrFrequencyRangeChanged
                     + " hasNrStateChanged = " + hasNrStateChanged
+                    + " hasBandwidthChanged = " + hasBandwidthChanged
                     + " hasAirplaneModeOnlChanged = " + hasAirplaneModeOnChanged);
         }
 
@@ -3598,6 +3597,10 @@ public class ServiceStateTracker extends Handler {
 
         if (hasCssIndicatorChanged) {
             mCssIndicatorChangedRegistrants.notifyRegistrants();
+        }
+
+        if (hasBandwidthChanged) {
+            mBandwidthChangedRegistrants.notifyRegistrants();
         }
 
         if (hasRejectCauseChanged) {
@@ -4591,10 +4594,6 @@ public class ServiceStateTracker extends Handler {
             return mUiccController.getUiccCardApplication(mPhone.getPhoneId(),
                     UiccController.APP_FAM_3GPP2);
         }
-    }
-
-    private void queueNextSignalStrengthPoll() {
-        mPhone.getSignalStrengthController().queueNextSignalStrengthPoll();
     }
 
     private void notifyCdmaSubscriptionInfoReady() {
@@ -5756,6 +5755,25 @@ public class ServiceStateTracker extends Handler {
      */
     public void unregisterForCssIndicatorChanged(Handler h) {
         mCssIndicatorChangedRegistrants.remove(h);
+    }
+
+    /**
+     * Registers for cell bandwidth changed.
+     * @param h handler to notify
+     * @param what what code of message when delivered
+     * @param obj placed in Message.obj
+     */
+    public void registerForBandwidthChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mBandwidthChangedRegistrants.add(r);
+    }
+
+    /**
+     * Unregisters for cell bandwidth changed.
+     * @param h handler to notify
+     */
+    public void unregisterForBandwidthChanged(Handler h) {
+        mBandwidthChangedRegistrants.remove(h);
     }
 
     /**
