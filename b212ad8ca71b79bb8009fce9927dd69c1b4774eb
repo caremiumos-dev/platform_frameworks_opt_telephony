@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff14b5dd_ed9ce129",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4531,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-08T23:47:31Z",
+      "side": 1,
+      "message": "this need update.",
+      "range": {
+        "startLine": 4531,
+        "startChar": 27,
+        "endLine": 4531,
+        "endChar": 67
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c02f9fc_ee605737",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4533,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-08T23:47:31Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 4533,
+        "startChar": 29,
+        "endLine": 4533,
+        "endChar": 32
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42bdd724_94ddf2ac",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4562,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-08T23:47:31Z",
+      "side": 1,
+      "message": "Is the invalid subId the only reason that may return ret !\u003d 1?\nIf not, we may need to update the exception string to be more instructive.",
+      "range": {
+        "startLine": 4562,
+        "startChar": 21,
+        "endLine": 4562,
+        "endChar": 63
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5155f2_40b9ec44",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4567,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-08T23:47:31Z",
+      "side": 1,
+      "message": "I know this is a TODO. It feels a bit weird now to return \"the number of records updated\" now. \n \n In above logic, if ret is not 1, it will throw IAE to caller. This means here we have only one possible value (\"1\" in normal case) to return to caller. This makes the int return value useless.",
+      "range": {
+        "startLine": 4567,
+        "startChar": 8,
+        "endLine": 4567,
+        "endChar": 16
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
