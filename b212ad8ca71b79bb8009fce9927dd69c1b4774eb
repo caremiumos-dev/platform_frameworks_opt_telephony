@@ -235,6 +235,30 @@
       },
       "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf80cecf_183f15b0",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4567,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-09T22:29:20Z",
+      "side": 1,
+      "message": "Ok, I got the patten here.\n\nI think the helper method is setSubscriptionPropertyHelper which require CallISubMethodHelper which has interface method of:\n\nint callMethod(ISub iSub) throws RemoteException;\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/base/telephony/java/android/telephony/SubscriptionManager.java;l\u003d3585\n\nChecking SubscriptionManager, we do have list of methods that are restricted on the pattern:\n- setIconTint\n- setDisplayName\n- setDataRoaming\n- setOpportunistic (return boolean by comparing)\n- setDeviceToDeviceStatusSharingPreference (discard return return lambda)\n- setDeviceToDeviceStatusSharingContacts (discard return return lambda)\n\nBut the last \"return 0;\" is almost not readable without comments. IMO, Just returning ret seems more reasonable if you don\u0027t want a long comments.",
+      "parentUuid": "ade8d731_210af9d7",
+      "range": {
+        "startLine": 4567,
+        "startChar": 8,
+        "endLine": 4567,
+        "endChar": 16
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
