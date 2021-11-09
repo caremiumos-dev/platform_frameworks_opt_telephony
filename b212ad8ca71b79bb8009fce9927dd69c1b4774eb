@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56b9b58d_330efa2a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4531,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-09T21:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff14b5dd_ed9ce129",
+      "range": {
+        "startLine": 4531,
+        "startChar": 27,
+        "endLine": 4531,
+        "endChar": 67
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c02f9fc_ee605737",
@@ -95,6 +119,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b6bc868_69c25c19",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4533,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-09T21:10:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c02f9fc_ee605737",
+      "range": {
+        "startLine": 4533,
+        "startChar": 29,
+        "endLine": 4533,
+        "endChar": 32
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42bdd724_94ddf2ac",
@@ -120,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e52feb2_35048a59",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4562,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-09T21:10:52Z",
+      "side": 1,
+      "message": "This is part of a broken chain of \"helper\" methods. There should always be a single row that is \"found\" by the request, so for a setter on a single subId this should actually always be one. If it\u0027s not, then we can presume that the subId is invalid. I\u0027d like to re-do these methods so that we can pre-range-check the subId. Note that there\u0027s a bug filed to fix this.",
+      "parentUuid": "42bdd724_94ddf2ac",
+      "range": {
+        "startLine": 4562,
+        "startChar": 21,
+        "endLine": 4562,
+        "endChar": 63
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e5155f2_40b9ec44",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 3
@@ -131,6 +203,30 @@
       "writtenOn": "2021-11-08T23:47:31Z",
       "side": 1,
       "message": "I know this is a TODO. It feels a bit weird now to return \"the number of records updated\" now. \n \n In above logic, if ret is not 1, it will throw IAE to caller. This means here we have only one possible value (\"1\" in normal case) to return to caller. This makes the int return value useless.",
+      "range": {
+        "startLine": 4567,
+        "startChar": 8,
+        "endLine": 4567,
+        "endChar": 16
+      },
+      "revId": "b212ad8ca71b79bb8009fce9927dd69c1b4774eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade8d731_210af9d7",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 4567,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-09T21:10:52Z",
+      "side": 1,
+      "message": "It\u0027s not actually useless because There is a method in SubscriptionManager that\u0027s a \"helper\" for calling setters/getters in the DB, which expects a lambda with a return value of an int.\n\nI am very unhappy with this pattern, but I spoke to tgunn@, and we agreed that for now the top-level API should not return a boolean and should throw; however, all of the underneath methods translate rows-updated -\u003e boolean for return.\n\nReturning a non-integer would require duplication, and returning a meaningful integer will create confusion at this point. :-/\n\nFor comparison, see:\n\nSubscriptionManager#setOpportunistic() which uses the \"bool\"\n\nand see\n\nSubscriptionManager#setDeviceToDeviceStatusSharingContacts() which uses the proper API pattern, but just throws away the return value entirely!\n\ntl;dr, this is temporary, but I want to do code cleanups after FC.",
+      "parentUuid": "3e5155f2_40b9ec44",
       "range": {
         "startLine": 4567,
         "startChar": 8,
