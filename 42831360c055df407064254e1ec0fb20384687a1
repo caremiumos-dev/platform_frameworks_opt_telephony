@@ -34,6 +34,24 @@
       "parentUuid": "2e8c91eb_4f51d88a",
       "revId": "42831360c055df407064254e1ec0fb20384687a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d2486b6_df2cff2a",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-10T16:30:22Z",
+      "side": 1,
+      "message": "+ Jack to suggest here as well.\n\nJack, this is from your review comment. We can see it is able to simplify the logic to dump both mEarfcnPairListForRsrpBoost and mNrarfcnRangeListForRsrpBoost. But it will introduce a bit less clean output (\"Pair\" shows in log).\n\nSo which one do you prefer (clean logic v.s. clean log)?\nThanks",
+      "parentUuid": "1e88e509_764a210d",
+      "revId": "42831360c055df407064254e1ec0fb20384687a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
