@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "020cd299_114217d6",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-10T16:54:42Z",
+      "side": 1,
+      "message": "Put into the TODO list to investigate (go/signalstrength-s-post-ic line 35).\n\nHere mCarrierConfig services as local cache (use a little bit memory to save time/performance) while the original logic always fetch CC inline.\n\nI have no idea how to further improve it yet but will think about it later.\nThanks",
+      "parentUuid": "db3353d7_6cb60f0b",
+      "range": {
+        "startLine": 118,
+        "startChar": 30,
+        "endLine": 118,
+        "endChar": 44
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18224776_0507bebb",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-10T16:08:59Z",
       "side": 1,
       "message": "probably won\u0027t matter, but should this registerReceiver() pass the handler of the SignalStrengthController?",
+      "range": {
+        "startLine": 146,
+        "startChar": 28,
+        "endLine": 146,
+        "endChar": 44
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef5193a_88c3b7a0",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-10T16:54:42Z",
+      "side": 1,
+      "message": "Yeh. We do have version of registerReceiver that can pass the handler.\n\nSince the receiver carefully post the real work to handler (with msg EVENT_CARRIER_CONFIG_CHANGED) when receive the broadcast intent, it should be no problem to let main thread handle the broadcast intent.\n\nActually it is a little tricky to pass handler here. We have to pass \"this\" object (SignalStrengthController extends Handler). But since we are in constructor, \"this\" is not ready yet. We have to re-org the logic (move the receiver out of constructor). This extra work looks like not worthy at this moment.",
+      "parentUuid": "18224776_0507bebb",
       "range": {
         "startLine": 146,
         "startChar": 28,
