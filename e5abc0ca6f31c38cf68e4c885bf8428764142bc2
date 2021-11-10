@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db3353d7_6cb60f0b",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-10T16:08:59Z",
+      "side": 1,
+      "message": "It really pains me to think that we are keeping yet another copy of this monstrous bundle. Can you file a bug to see how we can get away from this pattern? (not before FC).",
+      "range": {
+        "startLine": 118,
+        "startChar": 30,
+        "endLine": 118,
+        "endChar": 44
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18224776_0507bebb",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-10T16:08:59Z",
+      "side": 1,
+      "message": "probably won\u0027t matter, but should this registerReceiver() pass the handler of the SignalStrengthController?",
+      "range": {
+        "startLine": 146,
+        "startChar": 28,
+        "endLine": 146,
+        "endChar": 44
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
