@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9741bf1_8f120146",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-11T17:50:44Z",
+      "side": 1,
+      "message": "I started to get the point of the concern when saw Jack mentioned CC has 500+ K/V pairs now.\n\nThe concern is not within this class but overall on how Carrier Config bundle is used. Even every client cached it privately, the overall memory consumption may be also an increasing concern, not saying clients has so many different ways on how to fetch CC.\n\nThis does deserve a separate bug to optimize. b/205975929 is filed to handle it.",
+      "parentUuid": "020cd299_114217d6",
+      "range": {
+        "startLine": 118,
+        "startChar": 30,
+        "endLine": 118,
+        "endChar": 44
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18224776_0507bebb",
@@ -118,6 +142,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a697183_1382f090",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-11T17:50:44Z",
+      "side": 1,
+      "message": "We still need to call updateReportingCriteria here. \n\nThis is the case client set a SignalStrengthUpdateRequest which may include a customized criteria which need to consolidated with system signal strength criteria(although it did not change). This call is the trigger to respect client\u0027s request.",
+      "parentUuid": "e9baa544_fdf0afcd",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a64d5df_0925ebe9",
@@ -131,6 +179,30 @@
       "writtenOn": "2021-11-11T07:21:28Z",
       "side": 1,
       "message": "Isn\u0027t this redundant? The config was not changed.",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 56
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9f3903_fc0003d4",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-11T17:50:44Z",
+      "side": 1,
+      "message": "We also need to call updateReportingCriteria, very similar case as EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST.\n\nThe case is that, client (e.g. Bluetooth) may have set the SignalStrengthUpdate request to continue reporting signal when device is idle. The idle state change event is the moment we need to re-evalute the client + system signal strength criteria. Although system\u0027s part did not change, the clients\u0027 part (cached in mSignalRequestRecords) need to double-check here.",
+      "parentUuid": "8a64d5df_0925ebe9",
       "range": {
         "startLine": 220,
         "startChar": 0,
@@ -164,6 +236,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30abba76_ccb86b85",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-11T17:50:44Z",
+      "side": 1,
+      "message": "Ok, got it. Just print the msg indicating CC change and any need of checking k/v can go to dumpsys. Thanks",
+      "parentUuid": "a1426597_3c9274b1",
+      "range": {
+        "startLine": 819,
+        "startChar": 8,
+        "endLine": 819,
+        "endChar": 54
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35c302b6_ca4f2602",
@@ -177,6 +273,30 @@
       "writtenOn": "2021-11-11T07:21:28Z",
       "side": 1,
       "message": "if you don\u0027t store the carrier config reference in mCarrierConfig, then this make sense. But since you are already storing it in mCarrierConfig, then why bother passing it as a param here? There is no chance you can pass any other persistable bundle other then the one from carrier config manager. So why not just directly use mCarrierConfig in updateArfcnLists().",
+      "range": {
+        "startLine": 821,
+        "startChar": 25,
+        "endLine": 821,
+        "endChar": 39
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1571ea0_4fcd5c9f",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-11T17:50:44Z",
+      "side": 1,
+      "message": "Indeed. Before system level cached CC bundle is ready (b/205975929), the SSC private cache (mCarrierConfig) should be only copy of the CC values within SSC.\n\nBoth updateReportingCriteria and updateArfcnLists methods are updated to directly access mCarrierConfig instead. Thanks",
+      "parentUuid": "35c302b6_ca4f2602",
       "range": {
         "startLine": 821,
         "startChar": 25,
