@@ -93,6 +93,98 @@
       },
       "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9baa544_fdf0afcd",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-11T07:21:28Z",
+      "side": 1,
+      "message": "Isn\u0027t this redundant? The config was not changed.",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a64d5df_0925ebe9",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-11T07:21:28Z",
+      "side": 1,
+      "message": "Isn\u0027t this redundant? The config was not changed.",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 56
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1426597_3c9274b1",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-11T07:21:28Z",
+      "side": 1,
+      "message": "Carrier config has 500+ key/value pairs. I am not sure logging in one line is a good idea. And we actually have carrier config in the dumpsys already.",
+      "range": {
+        "startLine": 819,
+        "startChar": 8,
+        "endLine": 819,
+        "endChar": 54
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35c302b6_ca4f2602",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-11T07:21:28Z",
+      "side": 1,
+      "message": "if you don\u0027t store the carrier config reference in mCarrierConfig, then this make sense. But since you are already storing it in mCarrierConfig, then why bother passing it as a param here? There is no chance you can pass any other persistable bundle other then the one from carrier config manager. So why not just directly use mCarrierConfig in updateArfcnLists().",
+      "range": {
+        "startLine": 821,
+        "startChar": 25,
+        "endLine": 821,
+        "endChar": 39
+      },
+      "revId": "e5abc0ca6f31c38cf68e4c885bf8428764142bc2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
