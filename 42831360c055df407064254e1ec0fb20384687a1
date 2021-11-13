@@ -69,6 +69,47 @@
       "parentUuid": "1e88e509_764a210d",
       "revId": "42831360c055df407064254e1ec0fb20384687a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6631da99_c991f4f1",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-13T18:39:35Z",
+      "side": 1,
+      "message": "I think this change is fine. Code is cleaner and output is more clear.",
+      "parentUuid": "2d2486b6_df2cff2a",
+      "revId": "42831360c055df407064254e1ec0fb20384687a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816c6201_d2aa595a",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2021-11-13T18:39:35Z",
+      "side": 1,
+      "message": "I don\u0027t think this test is needed. Unit test should be testing the functionality of SSC, but this is testing its dependency, ArrayList and Pair.",
+      "range": {
+        "startLine": 616,
+        "startChar": 16,
+        "endLine": 616,
+        "endChar": 50
+      },
+      "revId": "42831360c055df407064254e1ec0fb20384687a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
