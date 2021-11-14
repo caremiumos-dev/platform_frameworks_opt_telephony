@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7d08cb_8472afe2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-14T21:04:37Z",
+      "side": 1,
+      "message": "please check with hunter if this is still needed",
+      "range": {
+        "startLine": 627,
+        "startChar": 7,
+        "endLine": 630,
+        "endChar": 9
+      },
+      "revId": "383bf66e073dbe80d59911955232d42739212246",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d694c5b7_d3e25051",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-14T21:04:37Z",
+      "side": 1,
+      "message": "can you add a comment where you will invoke the commands interface",
+      "range": {
+        "startLine": 1169,
+        "startChar": 16,
+        "endLine": 1188,
+        "endChar": 17
+      },
+      "revId": "383bf66e073dbe80d59911955232d42739212246",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
