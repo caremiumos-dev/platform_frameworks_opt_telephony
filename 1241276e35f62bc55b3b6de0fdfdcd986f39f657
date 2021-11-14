@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de0b9e74_d08fd45a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-14T20:38:08Z",
+      "side": 1,
+      "message": "This function is called from context of multiple apis who have documented that it will throw RuntimeException. Either update all documentation that which describes runtime will be thrown to illegal will be thrown. Or use runtime.",
+      "range": {
+        "startLine": 3016,
+        "startChar": 22,
+        "endLine": 3016,
+        "endChar": 46
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04fed68c_67bca5a2",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4544,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-14T20:38:08Z",
+      "side": 1,
+      "message": "what is the usecase to update inactive subId setting",
+      "range": {
+        "startLine": 4544,
+        "startChar": 12,
+        "endLine": 4544,
+        "endChar": 48
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f6c7517_3e746a13",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4563,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-14T20:38:08Z",
+      "side": 1,
+      "message": "do you not plan to update commands interface after the db update?",
+      "range": {
+        "startLine": 4562,
+        "startChar": 5,
+        "endLine": 4563,
+        "endChar": 66
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
