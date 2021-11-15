@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72272c2c_46758b23",
+        "filename": "src/java/com/android/internal/telephony/VoiceResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1435078
+      },
+      "writtenOn": "2021-11-15T10:12:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1427ba38_dfd5ed32",
+      "range": {
+        "startLine": 263,
+        "startChar": 16,
+        "endLine": 263,
+        "endChar": 37
+      },
+      "revId": "4a282152b8c7d1aa6f4c2b31fe1181b50bae487a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f95fd6dd_4d7f5c59",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-12T22:41:34Z",
       "side": 1,
       "message": "setVoNrEnabledResponse",
+      "range": {
+        "startLine": 347,
+        "startChar": 16,
+        "endLine": 347,
+        "endChar": 38
+      },
+      "revId": "4a282152b8c7d1aa6f4c2b31fe1181b50bae487a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6e10155_09dc2842",
+        "filename": "src/java/com/android/internal/telephony/VoiceResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1435078
+      },
+      "writtenOn": "2021-11-15T10:12:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f95fd6dd_4d7f5c59",
       "range": {
         "startLine": 347,
         "startChar": 16,
