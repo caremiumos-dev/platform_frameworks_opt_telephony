@@ -26,6 +26,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ca49888_f50e5af7",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-11-15T18:41:38Z",
+      "side": 1,
+      "message": "TODO(b/###)",
+      "range": {
+        "startLine": 1160,
+        "startChar": 15,
+        "endLine": 1160,
+        "endChar": 20
+      },
+      "revId": "383bf66e073dbe80d59911955232d42739212246",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ec5e7d9_3491b25b",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2021-11-15T18:41:38Z",
+      "side": 1,
+      "message": "else if (preferredUsageSetting !\u003d currentSubInfo.getUsageSetting()) ?\n\nIf absolutely nothing is different between old/preferred/new, then there isn\u0027t really anything worth logging imo, but if we don\u0027t make a change that was requested that should indeed be logged",
+      "range": {
+        "startLine": 1181,
+        "startChar": 18,
+        "endLine": 1181,
+        "endChar": 24
+      },
+      "revId": "383bf66e073dbe80d59911955232d42739212246",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d694c5b7_d3e25051",
         "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
         "patchSetId": 8
