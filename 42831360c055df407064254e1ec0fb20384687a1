@@ -110,6 +110,30 @@
       },
       "revId": "42831360c055df407064254e1ec0fb20384687a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9d62cf1_ebf1b3a8",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-11-15T04:34:23Z",
+      "side": 1,
+      "message": "Test case removed. Thanks",
+      "parentUuid": "816c6201_d2aa595a",
+      "range": {
+        "startLine": 616,
+        "startChar": 16,
+        "endLine": 616,
+        "endChar": 50
+      },
+      "revId": "42831360c055df407064254e1ec0fb20384687a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
