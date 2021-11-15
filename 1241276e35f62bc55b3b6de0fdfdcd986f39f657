@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7011e81a_35f046ca",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-15T18:19:33Z",
+      "side": 1,
+      "message": "IllegalArgumentException is a RuntimeException.\n\nhttps://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html\n\nRuntimeException should almost never be thrown directly, Both are parcelable exceptions. I\u0027m going to try and make my code better without making the existing code worse. :-)",
+      "parentUuid": "de0b9e74_d08fd45a",
+      "range": {
+        "startLine": 3016,
+        "startChar": 22,
+        "endLine": 3016,
+        "endChar": 46
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04fed68c_67bca5a2",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 7
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b933741c_ef4c4cfa",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4544,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-15T18:19:33Z",
+      "side": 1,
+      "message": "It\u0027s incorrect not to allow someone to update the DB while the subscription is inactive (it\u0027s a settings database, after all), and this will also ensure that there are no odd races that occur. Btw, I copied this pattern from #setOpportunistic() which follows a lot of the same patterns.",
+      "parentUuid": "04fed68c_67bca5a2",
+      "range": {
+        "startLine": 4544,
+        "startChar": 12,
+        "endLine": 4544,
+        "endChar": 48
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f6c7517_3e746a13",
         "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
         "patchSetId": 7
@@ -60,6 +108,30 @@
       "writtenOn": "2021-11-14T20:38:08Z",
       "side": 1,
       "message": "do you not plan to update commands interface after the db update?",
+      "range": {
+        "startLine": 4562,
+        "startChar": 5,
+        "endLine": 4563,
+        "endChar": 66
+      },
+      "revId": "1241276e35f62bc55b3b6de0fdfdcd986f39f657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a19f6a9_d4fb091a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 4563,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-11-15T18:19:33Z",
+      "side": 1,
+      "message": "Not directly. A change will trigger the onSubscriptionsChangedListener() and the phone object will update the settings for its active subscriptions (which can follow approximately the same logic as the sim-load case).",
+      "parentUuid": "3f6c7517_3e746a13",
       "range": {
         "startLine": 4562,
         "startChar": 5,
