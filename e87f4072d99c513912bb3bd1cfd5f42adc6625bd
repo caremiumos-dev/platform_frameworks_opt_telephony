@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da0efc1e_2740e0e0",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3591,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-16T21:53:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17a8cc13_b81a6370",
+      "range": {
+        "startLine": 3591,
+        "startChar": 74,
+        "endLine": 3591,
+        "endChar": 85
+      },
+      "revId": "e87f4072d99c513912bb3bd1cfd5f42adc6625bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d6a124c_302cbc05",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdf768bc_515ae63f",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 5885,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-16T21:53:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d6a124c_302cbc05",
+      "range": {
+        "startLine": 5885,
+        "startChar": 15,
+        "endLine": 5885,
+        "endChar": 29
+      },
+      "revId": "e87f4072d99c513912bb3bd1cfd5f42adc6625bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10d8028e_535b229a",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-11-15T23:48:31Z",
       "side": 1,
       "message": "cell",
+      "range": {
+        "startLine": 5889,
+        "startChar": 49,
+        "endLine": 5889,
+        "endChar": 53
+      },
+      "revId": "e87f4072d99c513912bb3bd1cfd5f42adc6625bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f968d071_654d766d",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 5889,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-16T21:53:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10d8028e_535b229a",
       "range": {
         "startLine": 5889,
         "startChar": 49,
