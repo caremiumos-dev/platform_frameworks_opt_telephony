@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f673e135_97415fe4",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2021-11-17T17:48:05Z",
+      "side": 1,
+      "message": "Starting from S, its enforced that either PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_MUTABLE so its crashing\n\nI passed PendingIntent.FLAG_MUTABLE and the change works fine\n\nCan you pls update your CL ?",
+      "range": {
+        "startLine": 637,
+        "startChar": 65,
+        "endLine": 637,
+        "endChar": 98
+      },
+      "revId": "7cf65d3744d93919811b84b2947ceb5334e47e69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
