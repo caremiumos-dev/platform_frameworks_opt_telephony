@@ -63,6 +63,24 @@
       "message": "Can we add some tests for when the location access IS renounced?",
       "revId": "ac7eb7014d07b3cba8f6fca09229d301709a0d7e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdd6c67_7036ce65",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/TelephonyRegistryTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2021-11-19T22:45:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b2c40d4b_b5cf38c2",
+      "revId": "ac7eb7014d07b3cba8f6fca09229d301709a0d7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
