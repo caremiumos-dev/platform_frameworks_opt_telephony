@@ -93,6 +93,7 @@ import com.android.internal.telephony.uicc.IsimRecords;
 import com.android.internal.telephony.uicc.UiccCard;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.UiccPort;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.internal.util.XmlUtils;
@@ -3931,6 +3932,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Gets the Uicc port corresponding to this phone.
+     * @return the UiccPort object corresponding to the phone ID.
+     */
+    public UiccPort getUiccPort() {
+        return mUiccController.getUiccPort(mPhoneId);
+    }
+
+    /**
      * Get P-CSCF address from PCO after data connection is established or modified.
      * @param apnType the apnType, "ims" for IMS APN, "emergency" for EMERGENCY APN
      */
@@ -4654,6 +4663,21 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      **/
     public void setSimPowerState(int state, Message result, WorkSource workSource) {
         mCi.setSimCardPower(state, result, workSource);
+    }
+
+    /**
+     * Enable or disable Voice over NR (VoNR)
+     * @param enabled enable or disable VoNR.
+     **/
+    public void setVoNrEnabled(boolean enabled, Message result, WorkSource workSource) {
+        mCi.setVoNrEnabled(enabled, result, workSource);
+    }
+
+    /**
+     * Is voice over NR enabled
+     */
+    public void isVoNrEnabled(Message message, WorkSource workSource) {
+        mCi.isVoNrEnabled(message, workSource);
     }
 
     public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,

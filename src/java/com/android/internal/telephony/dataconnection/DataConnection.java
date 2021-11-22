@@ -150,8 +150,6 @@ public class DataConnection extends StateMachine {
      */
     private static final UUID OS_ID = UUID.fromString("97a498e3-fc92-5c94-8986-0333d06e4e47");
 
-    private static final int MIN_V6_MTU = 1280;
-
     /**
      * The data connection is not being or been handovered. Note this is the state for the source
      * data connection, not destination data connection
@@ -743,9 +741,9 @@ public class DataConnection extends StateMachine {
             return;
         }
 
-        if (apn != null && apn.getMtu() != PhoneConstants.UNSET_MTU) {
-            lp.setMtu(apn.getMtu());
-            if (DBG) log("MTU set by APN to: " + apn.getMtu());
+        if (apn != null && apn.getMtuV4() != PhoneConstants.UNSET_MTU) {
+            lp.setMtu(apn.getMtuV4());
+            if (DBG) log("MTU set by APN to: " + apn.getMtuV4());
             return;
         }
 
@@ -883,8 +881,10 @@ public class DataConnection extends StateMachine {
         Message msg = obtainMessage(EVENT_SETUP_DATA_CONNECTION_DONE, cp);
         msg.obj = cp;
 
-        DataProfile dp = DcTracker.createDataProfile(mApnSetting, cp.mProfileId,
-                cp.mIsPreferredApn);
+        DataProfile dp = new DataProfile.Builder()
+                .setApnSetting(mApnSetting)
+                .setPreferred(cp.mIsPreferredApn)
+                .build();
 
         // We need to use the actual modem roaming state instead of the framework roaming state
         // here. This flag is only passed down to ril_service for picking the correct protocol (for
@@ -2103,31 +2103,9 @@ public class DataConnection extends StateMachine {
                     }
                 }
 
-                boolean useLowerMtuValue = false;
-                CarrierConfigManager configManager = (CarrierConfigManager)
-                        mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
-                if (configManager != null) {
-                    PersistableBundle bundle = configManager.getConfigForSubId(mSubId);
-                    if (bundle != null) {
-                        useLowerMtuValue = bundle.getBoolean(
-                                CarrierConfigManager.KEY_USE_LOWER_MTU_VALUE_IF_BOTH_RECEIVED)
-                                && response.getMtuV4() != PhoneConstants.UNSET_MTU
-                                && response.getMtuV6() != PhoneConstants.UNSET_MTU;
-                    }
-                }
-
-                int interfaceMtu = response.getMtu();
                 for (InetAddress gateway : response.getGatewayAddresses()) {
                     int mtu = gateway instanceof java.net.Inet6Address ? response.getMtuV6()
                             : response.getMtuV4();
-                    if (useLowerMtuValue) {
-                        mtu = Math.min(response.getMtuV4(), response.getMtuV6());
-                        // Never set an MTU below MIN_V6_MTU on a network that has IPv6.
-                        if (mtu < MIN_V6_MTU) {
-                            mtu = MIN_V6_MTU;
-                        }
-                        interfaceMtu = mtu;
-                    }
                     // Allow 0.0.0.0 or :: as a gateway;
                     // this indicates a point-to-point interface.
                     linkProperties.addRoute(new RouteInfo(null, gateway, null,
@@ -2137,7 +2115,7 @@ public class DataConnection extends StateMachine {
                 // set interface MTU
                 // this may clobber the setting read from the APN db, but that's ok
                 // TODO: remove once LinkProperties#setMtu is deprecated
-                linkProperties.setMtu(interfaceMtu);
+                linkProperties.setMtu(response.getMtu());
 
                 result = SetupResult.SUCCESS;
             } catch (UnknownHostException e) {

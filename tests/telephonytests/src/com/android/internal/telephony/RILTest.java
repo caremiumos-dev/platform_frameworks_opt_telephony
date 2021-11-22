@@ -164,10 +164,9 @@ import android.telephony.data.QosBearerSession;
 import android.telephony.data.TrafficDescriptor;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
+import android.util.SparseArray;
 
 import androidx.test.filters.FlakyTest;
-
-import com.android.internal.telephony.dataconnection.DcTracker;
 
 import org.junit.After;
 import org.junit.Before;
@@ -203,6 +202,12 @@ public class RILTest extends TelephonyTest {
     private TelephonyManager mTelephonyManager;
     @Mock
     private IRadio mRadioProxy;
+    @Mock
+    private RadioDataProxy mDataProxy;
+    @Mock
+    private RadioNetworkProxy mNetworkProxy;
+    @Mock
+    private RadioSimProxy mSimProxy;
 
     private HalVersion mRadioVersionV10 = new HalVersion(1, 0);
     private HalVersion mRadioVersionV11 = new HalVersion(1, 1);
@@ -272,14 +277,14 @@ public class RILTest extends TelephonyTest {
     private static final int AUTH_TYPE = 0;
     private static final String USER_NAME = "username";
     private static final String PASSWORD = "password";
-    private static final int TYPE = 0;
-    private static final int MAX_CONNS_TIME = 1;
-    private static final int MAX_CONNS = 3;
-    private static final int WAIT_TIME = 10;
+    private static final int TYPE = DataProfile.TYPE_3GPP;
     private static final boolean APN_ENABLED = true;
-    private static final int SUPPORTED_APN_TYPES_BITMASK = 123456;
+    private static final int SUPPORTED_APN_TYPES_BITMASK = ApnSetting.TYPE_CBS
+            | ApnSetting.TYPE_IMS;
+    private static final int SUPPORTED_NETWORK_TYPES_BITMASK =
+            (int) (TelephonyManager.NETWORK_TYPE_BITMASK_UMTS
+                    | TelephonyManager.NETWORK_TYPE_BITMASK_LTE);
     private static final int ROAMING_PROTOCOL = ApnSetting.PROTOCOL_IPV6;
-    private static final int BEARER_BITMASK = 123123;
     private static final int MTU = 1234;
     private static final boolean PERSISTENT = true;
 
@@ -307,12 +312,25 @@ public class RILTest extends TelephonyTest {
                 mock(IThermalService.class), new Handler(Looper.myLooper()));
         doReturn(powerManager).when(context).getSystemService(Context.POWER_SERVICE);
         doReturn(new ApplicationInfo()).when(context).getApplicationInfo();
-
-        mRILInstance = new RIL(context, RadioAccessFamily.getRafFromNetworkType(
-                RILConstants.PREFERRED_NETWORK_MODE), Phone.PREFERRED_CDMA_SUBSCRIPTION, 0);
+        SparseArray<RadioServiceProxy> proxies = new SparseArray<>();
+        proxies.put(RIL.RADIO_SERVICE, null);
+        proxies.put(RIL.DATA_SERVICE, mDataProxy);
+        proxies.put(RIL.NETWORK_SERVICE, mNetworkProxy);
+        proxies.put(RIL.SIM_SERVICE, mSimProxy);
+        mRILInstance = new RIL(context,
+                RadioAccessFamily.getRafFromNetworkType(RILConstants.PREFERRED_NETWORK_MODE),
+                Phone.PREFERRED_CDMA_SUBSCRIPTION, 0, proxies);
         mRILUnderTest = spy(mRILInstance);
         doReturn(mRadioProxy).when(mRILUnderTest).getRadioProxy(any());
-
+        doReturn(mDataProxy).when(mRILUnderTest).getRadioServiceProxy(eq(RadioDataProxy.class),
+                any());
+        doReturn(mNetworkProxy).when(mRILUnderTest).getRadioServiceProxy(
+                eq(RadioNetworkProxy.class), any());
+        doReturn(mSimProxy).when(mRILUnderTest).getRadioServiceProxy(eq(RadioSimProxy.class),
+                any());
+        doReturn(false).when(mDataProxy).isEmpty();
+        doReturn(false).when(mNetworkProxy).isEmpty();
+        doReturn(false).when(mSimProxy).isEmpty();
         try {
             replaceInstance(RIL.class, "mRadioVersion", mRILUnderTest, mRadioVersionV10);
         } catch (Exception e) {
@@ -1024,12 +1042,21 @@ public class RILTest extends TelephonyTest {
     @FlakyTest
     @Test
     public void testSetInitialAttachApn() throws Exception {
-        ApnSetting apnSetting = ApnSetting.makeApnSetting(
-                -1, "22210", "Vodafone IT", "web.omnitel.it", null, -1,
-                null, null, -1, "", "", 0, ApnSetting.TYPE_DUN, ApnSetting.PROTOCOL_IP,
-                ApnSetting.PROTOCOL_IP, true, 0, 0, false, 0, 0, 0, 0, -1, "");
-        DataProfile dataProfile = DcTracker.createDataProfile(
-                apnSetting, apnSetting.getProfileId(), false);
+        ApnSetting apnSetting = new ApnSetting.Builder()
+                .setId(-1)
+                .setOperatorNumeric("22210")
+                .setEntryName("Vodafone IT")
+                .setApnName("web.omnitel.it")
+                .setApnTypeBitmask(ApnSetting.TYPE_DUN)
+                .setProtocol(ApnSetting.PROTOCOL_IP)
+                .setRoamingProtocol(ApnSetting.PROTOCOL_IP)
+                .setCarrierEnabled(true)
+                .build();
+
+        DataProfile dataProfile = new DataProfile.Builder()
+                .setApnSetting(apnSetting)
+                .setPreferred(false)
+                .build();
         boolean isRoaming = false;
 
         mRILUnderTest.setInitialAttachApn(dataProfile, isRoaming, obtainMessage());
@@ -1365,7 +1392,7 @@ public class RILTest extends TelephonyTest {
     public void testGetBarringInfo() throws Exception {
         // Not supported on Radio 1.0.
         mRILUnderTest.getBarringInfo(obtainMessage());
-        verify(mRadioProxy, never()).getBarringInfo(anyInt());
+        verify(mNetworkProxy, never()).getBarringInfo(anyInt());
 
         // Make radio version 1.5 to support the operation.
         try {
@@ -1373,7 +1400,7 @@ public class RILTest extends TelephonyTest {
         } catch (Exception e) {
         }
         mRILUnderTest.getBarringInfo(obtainMessage());
-        verify(mRadioProxy).getBarringInfo(mSerialNumberCaptor.capture());
+        verify(mNetworkProxy).getBarringInfo(mSerialNumberCaptor.capture());
         verifyRILResponse(
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_GET_BARRING_INFO);
     }
@@ -2588,53 +2615,50 @@ public class RILTest extends TelephonyTest {
 
     @Test
     public void testSetupDataCall() throws Exception {
-        DataProfile dp = new DataProfile.Builder()
+        ApnSetting apn = new ApnSetting.Builder()
+                .setId(1234)
+                .setEntryName(APN)
+                .setApnName(APN)
+                .setApnTypeBitmask(SUPPORTED_APN_TYPES_BITMASK)
+                .setProtocol(ApnSetting.PROTOCOL_IPV6)
+                .setRoamingProtocol(ApnSetting.PROTOCOL_IPV6)
+                .setCarrierEnabled(true)
                 .setProfileId(PROFILE_ID)
-                .setApn(APN)
-                .setProtocolType(PROTOCOL)
                 .setAuthType(AUTH_TYPE)
-                .setUserName(USER_NAME)
+                .setUser(USER_NAME)
                 .setPassword(PASSWORD)
-                .setType(TYPE)
-                .setMaxConnectionsTime(MAX_CONNS_TIME)
-                .setMaxConnections(MAX_CONNS)
-                .setWaitTime(WAIT_TIME)
-                .enable(APN_ENABLED)
-                .setSupportedApnTypesBitmask(SUPPORTED_APN_TYPES_BITMASK)
-                .setRoamingProtocolType(ROAMING_PROTOCOL)
-                .setBearerBitmask(BEARER_BITMASK)
-                .setMtu(MTU)
-                .setPersistent(PERSISTENT)
+                .setNetworkTypeBitmask(SUPPORTED_NETWORK_TYPES_BITMASK)
+                .setMtuV4(MTU)
+                .setModemCognitive(true)
+                .build();
+
+        DataProfile dp = new DataProfile.Builder()
+                .setApnSetting(apn)
                 .setPreferred(false)
                 .build();
 
         mRILUnderTest.setupDataCall(AccessNetworkConstants.AccessNetworkType.EUTRAN, dp, false,
-                false, 0, null,
-                DataCallResponse.PDU_SESSION_ID_NOT_SET, null, null, true, obtainMessage());
-        ArgumentCaptor<DataProfileInfo> dpiCaptor = ArgumentCaptor.forClass(DataProfileInfo.class);
-        verify(mRadioProxy).setupDataCall(
-                mSerialNumberCaptor.capture(), eq(AccessNetworkConstants.AccessNetworkType.EUTRAN),
-                dpiCaptor.capture(), eq(true), eq(false), eq(false));
+                false, 0, null, DataCallResponse.PDU_SESSION_ID_NOT_SET, null, null, true,
+                obtainMessage());
+        ArgumentCaptor<DataProfile> dpiCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        verify(mDataProxy).setupDataCall(mSerialNumberCaptor.capture(),
+                anyInt(), eq(AccessNetworkConstants.AccessNetworkType.EUTRAN), dpiCaptor.capture(),
+                eq(false), eq(false), anyInt(), any(), anyInt(), any(), any(), eq(true));
         verifyRILResponse(
                 mRILUnderTest, mSerialNumberCaptor.getValue(), RIL_REQUEST_SETUP_DATA_CALL);
-        DataProfileInfo dpi = dpiCaptor.getValue();
-        assertEquals(PROFILE_ID, dpi.profileId);
-        assertEquals(APN, dpi.apn);
-        assertEquals(PROTOCOL, ApnSetting.getProtocolIntFromString(dpi.protocol));
-        assertEquals(AUTH_TYPE, dpi.authType);
-        assertEquals(USER_NAME, dpi.user);
-        assertEquals(PASSWORD, dpi.password);
-        assertEquals(TYPE, dpi.type);
-        assertEquals(MAX_CONNS_TIME, dpi.maxConnsTime);
-        assertEquals(MAX_CONNS, dpi.maxConns);
-        assertEquals(WAIT_TIME, dpi.waitTime);
-        assertEquals(APN_ENABLED, dpi.enabled);
-        assertEquals(SUPPORTED_APN_TYPES_BITMASK, dpi.supportedApnTypesBitmap);
-        assertEquals(ROAMING_PROTOCOL, ApnSetting.getProtocolIntFromString(dpi.protocol));
-        assertEquals(
-                BEARER_BITMASK,
-                ServiceState.convertBearerBitmaskToNetworkTypeBitmask(dpi.bearerBitmap >> 1));
-        assertEquals(MTU, dpi.mtu);
+        DataProfile dpi = dpiCaptor.getValue();
+        assertEquals(PROFILE_ID, dpi.getProfileId());
+        assertEquals(APN, dpi.getApn());
+        assertEquals(PROTOCOL, dpi.getProtocolType());
+        assertEquals(AUTH_TYPE, dpi.getAuthType());
+        assertEquals(USER_NAME, dpi.getUserName());
+        assertEquals(PASSWORD, dpi.getPassword());
+        assertEquals(TYPE, dpi.getType());
+        assertEquals(APN_ENABLED, dpi.isEnabled());
+        assertEquals(SUPPORTED_APN_TYPES_BITMASK, dpi.getSupportedApnTypesBitmask());
+        assertEquals(ROAMING_PROTOCOL, dpi.getRoamingProtocolType());
+        assertEquals(SUPPORTED_NETWORK_TYPES_BITMASK, dpi.getBearerBitmask());
+        assertEquals(MTU, dpi.getMtu());
     }
 
     @Test
@@ -2727,7 +2751,7 @@ public class RILTest extends TelephonyTest {
     public void testEnableUiccApplications() throws Exception {
         // Not supported on Radio 1.0.
         mRILUnderTest.enableUiccApplications(false, obtainMessage());
-        verify(mRadioProxy, never()).enableUiccApplications(anyInt(), anyBoolean());
+        verify(mSimProxy, never()).enableUiccApplications(anyInt(), anyBoolean());
 
         // Make radio version 1.5 to support the operation.
         try {
@@ -2735,7 +2759,7 @@ public class RILTest extends TelephonyTest {
         } catch (Exception e) {
         }
         mRILUnderTest.enableUiccApplications(false, obtainMessage());
-        verify(mRadioProxy).enableUiccApplications(mSerialNumberCaptor.capture(), anyBoolean());
+        verify(mSimProxy).enableUiccApplications(mSerialNumberCaptor.capture(), anyBoolean());
         verifyRILResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
                 RIL_REQUEST_ENABLE_UICC_APPLICATIONS);
     }
@@ -2744,7 +2768,7 @@ public class RILTest extends TelephonyTest {
     public void testAreUiccApplicationsEnabled() throws Exception {
         // Not supported on Radio 1.0.
         mRILUnderTest.areUiccApplicationsEnabled(obtainMessage());
-        verify(mRadioProxy, never()).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
+        verify(mSimProxy, never()).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
 
         // Make radio version 1.5 to support the operation.
         try {
@@ -2752,7 +2776,7 @@ public class RILTest extends TelephonyTest {
         } catch (Exception e) {
         }
         mRILUnderTest.areUiccApplicationsEnabled(obtainMessage());
-        verify(mRadioProxy).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
+        verify(mSimProxy).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
         verifyRILResponse(mRILUnderTest, mSerialNumberCaptor.getValue(),
                 RIL_REQUEST_GET_UICC_APPLICATIONS_ENABLEMENT);
     }
@@ -2764,7 +2788,7 @@ public class RILTest extends TelephonyTest {
         Message message = obtainMessage();
         mRILUnderTest.areUiccApplicationsEnabled(message);
         processAllMessages();
-        verify(mRadioProxy, never()).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
+        verify(mSimProxy, never()).areUiccApplicationsEnabled(mSerialNumberCaptor.capture());
         // Sending message is handled by getRadioProxy when proxy is null.
         // areUiccApplicationsEnabled shouldn't explicitly send another callback.
         assertEquals(null, message.obj);
