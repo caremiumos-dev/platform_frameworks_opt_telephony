@@ -16,6 +16,29 @@
       "message": "I\u0027d like both Aaron and Jack to look at this.\n\nPlease advise me about the general approach, placement of the calls in ServiceStateTracker (I have added calls back where they were in releases \u003c R) and ways and resources available to test this. More information is available in the various bugs.",
       "revId": "f2ed1c6b019b6f1ca25659f9af8820dc5c0ef486",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d41de4_70842456",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzStateMachineImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2021-11-24T03:27:40Z",
+      "side": 1,
+      "message": "Generally, it looks fine from RIL POV. But I have one question about DSDS.\nFor example, if slot-1 keeps in-service, and slot-2 temporary no-service for more than 5  mins. After slot-2 service back, how about the value of the mLatestNitzSignal in NITZ state machine, will it be cleared?",
+      "range": {
+        "startLine": 172,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 38
+      },
+      "revId": "f2ed1c6b019b6f1ca25659f9af8820dc5c0ef486",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
