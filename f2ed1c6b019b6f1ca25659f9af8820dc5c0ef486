@@ -39,6 +39,30 @@
       },
       "revId": "f2ed1c6b019b6f1ca25659f9af8820dc5c0ef486",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcae2255_f126a441",
+        "filename": "src/java/com/android/internal/telephony/nitz/NitzStateMachineImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2021-11-25T15:16:15Z",
+      "side": 1,
+      "message": "There\u0027s a separate NitzStateMachine instance for each slot (i.e. like there is a ServiceStateTracker too), so the NITZ state is handled independently for each slot.",
+      "parentUuid": "06d41de4_70842456",
+      "range": {
+        "startLine": 172,
+        "startChar": 16,
+        "endLine": 172,
+        "endChar": 38
+      },
+      "revId": "f2ed1c6b019b6f1ca25659f9af8820dc5c0ef486",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
