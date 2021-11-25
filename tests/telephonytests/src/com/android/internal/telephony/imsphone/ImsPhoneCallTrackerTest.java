@@ -121,6 +121,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     private ImsCall mImsCall;
     private ImsCall mSecondImsCall;
     private Bundle mBundle = new Bundle();
+    private static final int SUB_0 = 0;
     @Nullable private VtDataUsageProvider mVtDataUsageProvider;
     @Mock
     private ImsCallSession mImsCallSession;
@@ -277,7 +278,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         processAllMessages();
 
         verify(mMockConnector).connect();
-        mConnectorListener.connectionReady(mImsManager);
+        mConnectorListener.connectionReady(mImsManager, SUB_0);
     }
 
     @After
@@ -853,7 +854,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         processAllMessages();
 
         // Simulate ImsManager getting reconnected.
-        mConnectorListener.connectionReady(mImsManager);
+        mConnectorListener.connectionReady(mImsManager, SUB_0);
         verify(mImsManager, never()).makeCall(nullable(ImsCallProfile.class),
                 eq(new String[]{"+17005554141"}), nullable(ImsCall.Listener.class));
         // Make sure that open is called in ImsPhoneCallTracker when it was first connected and
@@ -1389,7 +1390,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         ImsPhoneCallTracker.Config config = new ImsPhoneCallTracker.Config();
         config.isD2DCommunicationSupported = true;
         mCTUT.setConfig(config);
-        mConnectorListener.connectionReady(mImsManager);
+        mConnectorListener.connectionReady(mImsManager, SUB_0);
 
         // Expect to get offered header extensions since d2d is supported.
         verify(mImsManager).setOfferedRtpHeaderExtensionTypes(
@@ -1420,7 +1421,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         ImsPhoneCallTracker.Config config = new ImsPhoneCallTracker.Config();
         config.isD2DCommunicationSupported = true;
         mCTUT.setConfig(config);
-        mConnectorListener.connectionReady(mImsManager);
+        mConnectorListener.connectionReady(mImsManager, SUB_0);
 
         // Expect to get offered header extensions since d2d is supported.
         verify(mImsManager).setOfferedRtpHeaderExtensionTypes(
@@ -1440,7 +1441,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         ImsPhoneCallTracker.Config config = new ImsPhoneCallTracker.Config();
         config.isD2DCommunicationSupported = false;
         mCTUT.setConfig(config);
-        mConnectorListener.connectionReady(mImsManager);
+        mConnectorListener.connectionReady(mImsManager, SUB_0);
 
         // Expect no offered header extensions since d2d is not supported.
         verify(mImsManager, never()).setOfferedRtpHeaderExtensionTypes(any());
