@@ -25,6 +25,9 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.UserInfo;
 import android.net.ConnectivityManager;
 import android.net.InetAddresses;
 import android.net.KeepalivePacketData;
@@ -46,8 +49,10 @@ import android.os.AsyncResult;
 import android.os.HandlerExecutor;
 import android.os.Message;
 import android.os.PersistableBundle;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserManager;
 import android.provider.Telephony;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.TransportType;
@@ -95,6 +100,7 @@ import com.android.internal.telephony.metrics.DataCallSessionStats;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.nano.TelephonyProto.RilDataCall;
 import com.android.internal.telephony.uicc.IccUtils;
+import com.android.internal.telephony.util.ArrayUtils;
 import com.android.internal.util.AsyncChannel;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Protocol;
@@ -1962,6 +1968,15 @@ public class DataConnection extends StateMachine {
             builder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
         }
 
+        final int carrierServicePackageUid = getCarrierServicePackageUid();
+
+        // TODO(b/205736323): Owner and Admin UIDs currently come from separate data sources. Unify
+        //                    them, and remove ArrayUtils.contains() check.
+        if (carrierServicePackageUid != Process.INVALID_UID
+                && ArrayUtils.contains(mAdministratorUids, carrierServicePackageUid)) {
+            builder.setOwnerUid(carrierServicePackageUid);
+            // TODO: If carrier-restricted, add appropriate INTERNAL_NETWORK and AccessUids
+        }
         builder.setAdministratorUids(mAdministratorUids);
 
         // Always start with NOT_VCN_MANAGED, then remove if VcnManager indicates this is part of a
@@ -1972,6 +1987,54 @@ public class DataConnection extends StateMachine {
         }
 
         return builder.build();
+    }
+
+    // TODO(b/205736323): Once TelephonyManager#getCarrierServicePackageNameForPhone() is plumbed to
+    //                    CarrierPrivilegesTracker's cache, query the cached UIDs.
+    private int getFirstUidForPackage(@Nullable String pkgName) {
+        if (pkgName == null) {
+            return Process.INVALID_UID;
+        }
+
+        List<UserInfo> users = mPhone.getContext().getSystemService(UserManager.class).getUsers();
+        for (UserInfo user : users) {
+            int userId = user.getUserHandle().getIdentifier();
+            try {
+                PackageManager pm = mPhone.getContext().getPackageManager();
+
+                if (pm != null) {
+                    return pm.getPackageUidAsUser(pkgName, userId);
+                }
+            } catch (NameNotFoundException exception) {
+                // Didn't find package. Try other users
+                Rlog.i(
+                        "DataConnection",
+                        "Unable to find uid for package " + pkgName + " and user " + userId);
+            }
+        }
+        return Process.INVALID_UID;
+    }
+
+    @Nullable
+    private String getCarrierServicePackageName() {
+        // TODO(b/205736323) plumb this through to CarrierPrivilegesTracker, which will cache the
+        // value instead of re-querying every time.
+        List<String> carrierServicePackages =
+                mPhone.getContext()
+                        .getSystemService(TelephonyManager.class)
+                        .getCarrierPackageNamesForIntentAndPhone(
+                                new Intent(CarrierService.CARRIER_SERVICE_INTERFACE),
+                                mPhone.getPhoneId());
+        if (carrierServicePackages != null && !carrierServicePackages.isEmpty()) {
+            return carrierServicePackages.get(0);
+        }
+        return null;
+    }
+
+    private int getCarrierServicePackageUid() {
+        String pkgName = getCarrierServicePackageName();
+
+        return getFirstUidForPackage(pkgName);
     }
 
     /**
