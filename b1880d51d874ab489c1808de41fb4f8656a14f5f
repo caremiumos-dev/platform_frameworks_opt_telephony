@@ -22,6 +22,30 @@
       },
       "revId": "b1880d51d874ab489c1808de41fb4f8656a14f5f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d7fc14_56d5e027",
+        "filename": "src/java/com/android/internal/telephony/ModemResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1435078
+      },
+      "writtenOn": "2021-12-01T07:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa74344_de1232f7",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 70
+      },
+      "revId": "b1880d51d874ab489c1808de41fb4f8656a14f5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
