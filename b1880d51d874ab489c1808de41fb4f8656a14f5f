@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fa74344_de1232f7",
+        "filename": "src/java/com/android/internal/telephony/ModemResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2021-12-01T06:32:37Z",
+      "side": 1,
+      "message": "can you pls make a TODO comment to update the function as per the new API ?",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 70
+      },
+      "revId": "b1880d51d874ab489c1808de41fb4f8656a14f5f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
