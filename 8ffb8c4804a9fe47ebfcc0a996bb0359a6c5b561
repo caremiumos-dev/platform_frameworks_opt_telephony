@@ -22,6 +22,30 @@
       },
       "revId": "8ffb8c4804a9fe47ebfcc0a996bb0359a6c5b561",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb18b7c_72b64eee",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-12-01T01:41:50Z",
+      "side": 1,
+      "message": "I\u0027d presume that\u0027s an edge case we\u0027ll hit extremely rarely. In CPT, we actually log.e for this exact check, so i\u0027d presume it\u0027s pretty safe.\n\nThat said, it didn\u0027t seem to be that serious, so I dropped the log level here to info.\n\nThoughts?",
+      "parentUuid": "9b53bda7_bccd0bc2",
+      "range": {
+        "startLine": 2005,
+        "startChar": 21,
+        "endLine": 2005,
+        "endChar": 22
+      },
+      "revId": "8ffb8c4804a9fe47ebfcc0a996bb0359a6c5b561",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
