@@ -105,9 +105,9 @@ public class ModemResponse extends IRadioModemResponse.Stub {
                 final int idleModeTimeMs = activityInfo.idleModeTimeMs;
                 int [] txModeTimeMs = new int[ModemActivityInfo.getNumTxPowerLevels()];
                 for (int i = 0; i < ModemActivityInfo.getNumTxPowerLevels(); i++) {
-                    txModeTimeMs[i] = activityInfo.txmModetimeMs[i];
+                    txModeTimeMs[i] = activityInfo.techSpecificInfo[0].txmModetimeMs[i];
                 }
-                final int rxModeTimeMs = activityInfo.rxModeTimeMs;
+                final int rxModeTimeMs = activityInfo.techSpecificInfo[0].rxModeTimeMs;
                 ret = new ModemActivityInfo(SystemClock.elapsedRealtime(), sleepModeTimeMs,
                         idleModeTimeMs, txModeTimeMs, rxModeTimeMs);
             } else {
