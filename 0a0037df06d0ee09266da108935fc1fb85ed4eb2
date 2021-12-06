@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000018053143",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1782887?revision\u003d10",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "ae01ce35_1881669b",
+        "filename": "src/java/com/android/internal/telephony/IccPhoneBookInterfaceManager.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2021-12-06T07:51:49Z",
+      "side": 1,
+      "message": "Lines longer than 100 characters should be wrapped to improve readability; see https://source.android.com/setup/contribute/code-style#limit-line-length for more details.",
+      "range": {
+        "startLine": 275,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 103
+      },
+      "revId": "0a0037df06d0ee09266da108935fc1fb85ed4eb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
