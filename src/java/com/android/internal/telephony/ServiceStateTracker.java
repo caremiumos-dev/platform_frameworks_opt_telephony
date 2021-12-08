@@ -353,6 +353,7 @@ public class ServiceStateTracker extends Handler {
     private final LocalLog mCdnrLogs = new LocalLog(64);
 
     private Pattern mOperatorNameStringPattern;
+    private boolean m5gIconDisplayOnlyWithULI = false;
 
     private class SstSubscriptionsChangedListener extends OnSubscriptionsChangedListener {
 
@@ -2047,6 +2048,37 @@ public class ServiceStateTracker extends Handler {
         return hasChanged;
     }
 
+    private boolean isNrMmwaveFromPhysicalChannelConfigs(List<PhysicalChannelConfig> physicalChannelConfigs) {
+        int frequencyRange = ServiceState.FREQUENCY_RANGE_UNKNOWN;
+
+        if (physicalChannelConfigs != null) {
+            DcTracker dcTracker = mPhone.getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+            if (dcTracker == null) {
+                return false;
+            }
+            for (PhysicalChannelConfig config : physicalChannelConfigs) {
+                if (isNrPhysicalChannelConfig(config)) {
+                    // Update the frequency range of the NR parameters if there is an internet data
+                    // connection associate to this NR physical channel channel config.
+                    int[] contextIds = config.getContextIds();
+                    for (int cid : contextIds) {
+                        DataConnection dc = dcTracker.getDataConnectionByContextId(cid);
+                        if (dc != null && dc.getNetworkCapabilities().hasCapability(
+                                NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                            frequencyRange = ServiceState.getBetterNRFrequencyRange(
+                                    frequencyRange, config.getFrequencyRange());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (DBG) {
+            log("isNrMmwaveFromPhysicalChannelConfigs: frequencyRange = " + frequencyRange);
+        }
+        return frequencyRange == ServiceState.FREQUENCY_RANGE_MMWAVE;
+    }
+
     private boolean updateNrStateFromPhysicalChannelConfigs(
             List<PhysicalChannelConfig> configs, ServiceState ss) {
         NetworkRegistrationInfo regInfo = ss.getNetworkRegistrationInfo(
@@ -2064,7 +2096,9 @@ public class ServiceStateTracker extends Handler {
 
         int oldNrState = regInfo.getNrState();
         int newNrState = oldNrState;
-        if (hasNrSecondaryServingCell) {
+        // Device show 5G icon only if has ULI (isEnDcAvailable inside NetworkRegistrationInfo)
+		// Check NR frequency as well for operators who show 5G only if has ULI
+        if (hasNrSecondaryServingCell && (!m5gIconDisplayOnlyWithULI || isNrMmwaveFromPhysicalChannelConfigs(configs))) {
             newNrState = NetworkRegistrationInfo.NR_STATE_CONNECTED;
         } else {
             regInfo.updateNrState();
@@ -4949,6 +4983,7 @@ public class ServiceStateTracker extends Handler {
         updateOperatorNamePattern(config);
         mCdnr.updateEfFromCarrierConfig(config);
         mPhone.notifyCallForwardingIndicator();
+        m5gIconDisplayOnlyWithULI = config.getBoolean(CarrierConfigManager.KEY_5G_ICON_DISPLAY_WITH_ULI_ONLY_BOOL);
 
         // Sometimes the network registration information comes before carrier config is ready.
         // For some cases like roaming/non-roaming overriding, we need carrier config. So it's

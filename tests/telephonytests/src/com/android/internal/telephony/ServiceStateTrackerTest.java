@@ -2071,6 +2071,29 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
     }
 
+    private void sendNrPhyChanConfigChange(int nrFreqRange) {
+        ArrayList<PhysicalChannelConfig> pc = new ArrayList<>();
+		// LTE Servicing Cell
+        pc.add(new PhysicalChannelConfig.Builder()
+                .setNetworkType(TelephonyManager.NETWORK_TYPE_LTE)
+                .setCellConnectionStatus(PhysicalChannelConfig.CONNECTION_PRIMARY_SERVING)
+                .setCellBandwidthDownlinkKhz(10000)
+                .setFrequencyRange(ServiceState.FREQUENCY_RANGE_MID)
+                .setContextIds(new int[] {0})
+                .build());
+        // Nr Secondary Cell
+        pc.add(new PhysicalChannelConfig.Builder()
+                .setNetworkType(TelephonyManager.NETWORK_TYPE_NR)
+                .setCellConnectionStatus(PhysicalChannelConfig.CONNECTION_SECONDARY_SERVING)
+                .setCellBandwidthDownlinkKhz(10000)
+                .setFrequencyRange(nrFreqRange)
+                .setContextIds(new int[] {0})
+                .build());
+        sst.sendMessage(sst.obtainMessage(ServiceStateTracker.EVENT_PHYSICAL_CHANNEL_CONFIG,
+                new AsyncResult(null, pc, null)));
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+    }
+
     private void sendRegStateUpdateForLteCellId(CellIdentityLte cellId) {
         LteVopsSupportInfo lteVopsSupportInfo =
                 new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
@@ -2908,5 +2931,35 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         // Check emergency
         doReturn(ServiceState.STATE_EMERGENCY_ONLY).when(mServiceState).getState();
         assertEquals(ServiceState.STATE_EMERGENCY_ONLY, sst.getCombinedRegState(mServiceState));
+    }
+
+    @Test
+    public void testNrIconDisplayOnlyWithULI() throws Exception {
+        // Enable carrier config to display 5G icon only if received ULI from modem
+        mBundle.putBoolean(CarrierConfigManager.KEY_5G_ICON_DISPLAY_WITH_ULI_ONLY_BOOL,
+                true);
+        sendCarrierConfigUpdate();
+
+        CellIdentity cid = new CellIdentityLte();
+        LteVopsSupportInfo lteVopsSupportInfo =
+                new LteVopsSupportInfo(LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE,
+                    LteVopsSupportInfo.LTE_STATUS_NOT_AVAILABLE);
+        // set NR is not restricted and endc available
+        NetworkRegistrationInfo nri = new NetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_PS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                1, TelephonyManager.NETWORK_TYPE_LTE, 0, false, null, cid, getPlmnFromCellIdentity(cid),
+                1, false, true, true, lteVopsSupportInfo);
+        sst.mPollingContext[0] = 1;
+
+        // update NR FR1(SUB6) physical config change event
+        sendNrPhyChanConfigChange(ServiceState.FREQUENCY_RANGE_UNKNOWN);
+        // update data reg state to be in service
+        sst.sendMessage(sst.obtainMessage(
+                ServiceStateTracker.EVENT_POLL_STATE_PS_CELLULAR_REGISTRATION,
+                new AsyncResult(sst.mPollingContext, nri, null)));
+        waitForLastHandlerAction(mSSTTestHandler.getThreadHandler());
+        NetworkRegistrationInfo curNri = sst.mSS.getNetworkRegistrationInfo(NetworkRegistrationInfo.DOMAIN_PS,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        assertEquals(NetworkRegistrationInfo.NR_STATE_NOT_RESTRICTED, curNri.getNrState());
     }
 }
