@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18cdee53_3ea69307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-12-09T22:02:40Z",
+      "side": 1,
+      "message": "You\u0027ll also need to add the new APIs to RIL.java and RadioNetworkProxy.java",
+      "revId": "cf408245092dd5bbe83902342a12954cee802efd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
