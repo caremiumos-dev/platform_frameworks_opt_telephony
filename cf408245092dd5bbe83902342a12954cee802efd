@@ -16,6 +16,24 @@
       "message": "You\u0027ll also need to add the new APIs to RIL.java and RadioNetworkProxy.java",
       "revId": "cf408245092dd5bbe83902342a12954cee802efd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c73abd_19dcb6f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2021-12-09T22:13:09Z",
+      "side": 1,
+      "message": "Since nothing is calling it (yet), that\u0027s not *strictly* needed in these patches. Would you like me to go ahead and add it in this patch?",
+      "parentUuid": "18cdee53_3ea69307",
+      "revId": "cf408245092dd5bbe83902342a12954cee802efd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
