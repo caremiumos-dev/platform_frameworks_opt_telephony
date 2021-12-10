@@ -22,6 +22,30 @@
       },
       "revId": "7cf65d3744d93919811b84b2947ceb5334e47e69",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd37407_86d4afa2",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceStateTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1403772
+      },
+      "writtenOn": "2021-12-10T01:38:15Z",
+      "side": 1,
+      "message": "Added FLAG_IMMUTABLE as creator of intent can still modify vis FLAG_UPDATE_CURRENT",
+      "parentUuid": "f673e135_97415fe4",
+      "range": {
+        "startLine": 637,
+        "startChar": 65,
+        "endLine": 637,
+        "endChar": 98
+      },
+      "revId": "7cf65d3744d93919811b84b2947ceb5334e47e69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
