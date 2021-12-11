@@ -41,6 +41,7 @@ import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 
@@ -69,8 +70,7 @@ public class SignalStrengthController extends Handler {
 
     private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
             TimeUnit.SECONDS.toMillis(10);
-    /** Signal strength poll rate. */
-    private static final long POLL_PERIOD_MILLIS = TimeUnit.SECONDS.toMillis(20);
+
     private static final int INVALID_ARFCN = -1;
 
     private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST       = 1;
@@ -116,6 +116,19 @@ public class SignalStrengthController extends Handler {
 
     @NonNull
     private PersistableBundle mCarrierConfig;
+
+    /**
+     * UnitTest mockable interface to get phoneId from subscription Id. It is introduced because
+     * {@link SubscriptionManager#getPhoneId(int)} is static and can't mock in UT.
+     */
+    @FunctionalInterface
+    public interface SubidToPhoneId {
+        /**
+         * Return phone id from the provided subscription {@code subId}.
+         */
+        int getPhoneId(int subId);
+    }
+    private static SubidToPhoneId sSubIdToPhoneId = SubscriptionManager::getPhoneId;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -163,13 +176,12 @@ public class SignalStrengthController extends Handler {
                 Message onCompleted = pair.second;
                 AsyncResult ret = AsyncResult.forMessage(onCompleted);
 
-                // TODO(b/177956310): Check subId to filter out old request until a better solution
                 boolean dupRequest = mSignalRequestRecords.stream().anyMatch(
                         srr -> srr.mCallingUid == record.mCallingUid
-                                && srr.mSubId == record.mSubId);
+                                && srr.mPhoneId == record.mPhoneId);
                 if (dupRequest) {
                     ret.exception = new IllegalStateException(
-                            "setSignalStrengthUpdateRequest called again with same subId");
+                            "setSignalStrengthUpdateRequest called again with same phoneId");
                     onCompleted.sendToTarget();
                     break;
                 }
@@ -203,6 +215,7 @@ public class SignalStrengthController extends Handler {
                 while (it.hasNext()) {
                     SignalRequestRecord srr = it.next();
                     if (srr.mRequest.getLiveToken().equals(record.mRequest.getLiveToken())) {
+                        srr.mRequest.getLiveToken().unlinkToDeath(record, /*flag=*/0);
                         it.remove();
                     }
                 }
@@ -491,7 +504,8 @@ public class SignalStrengthController extends Handler {
      */
     public void setSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @NonNull Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        SignalRequestRecord record = new SignalRequestRecord(sSubIdToPhoneId.getPhoneId(subId),
+                callingUid, request);
         sendMessage(obtainMessage(EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
     }
@@ -501,7 +515,8 @@ public class SignalStrengthController extends Handler {
      */
     public void clearSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @Nullable Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        SignalRequestRecord record = new SignalRequestRecord(sSubIdToPhoneId.getPhoneId(subId),
+                callingUid, request);
         sendMessage(obtainMessage(EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
     }
@@ -534,12 +549,12 @@ public class SignalStrengthController extends Handler {
         }
 
         final boolean isDeviceIdle = mPhone.isDeviceIdle();
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         // The total number of record is small (10~15 tops). With each request has at most 5
         // SignalThresholdInfo which has at most 8 thresholds arrays. So the nested loop should
         // not be a concern here.
         for (SignalRequestRecord record : mSignalRequestRecords) {
-            if (curSubId != record.mSubId
+            if (curPhoneId != record.mPhoneId
                     || (isDeviceIdle && !record.mRequest.isReportingRequestedWhileIdle())) {
                 continue;
             }
@@ -569,9 +584,9 @@ public class SignalStrengthController extends Handler {
             return true;
         }
 
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         return mSignalRequestRecords.stream().anyMatch(
-                srr -> curSubId == srr.mSubId
+                srr -> curPhoneId == srr.mPhoneId
                         && srr.mRequest.isSystemThresholdReportingRequestedWhileIdle());
     }
 
@@ -589,7 +604,7 @@ public class SignalStrengthController extends Handler {
             int subId,
             boolean isDeviceIdle) {
         for (SignalRequestRecord record : mSignalRequestRecords) {
-            if (subId != record.mSubId) {
+            if (sSubIdToPhoneId.getPhoneId(subId) != record.mPhoneId) {
                 continue;
             }
             for (SignalThresholdInfo info : record.mRequest.getSignalThresholdInfos()) {
@@ -637,25 +652,25 @@ public class SignalStrengthController extends Handler {
     }
 
     private class SignalRequestRecord implements IBinder.DeathRecipient {
-        final int mSubId; // subId the request originally applied to
+        final int mPhoneId; // phoneId the request originally subscription applied to
         final int mCallingUid;
         final SignalStrengthUpdateRequest mRequest;
 
-        SignalRequestRecord(int subId, int uid, @NonNull SignalStrengthUpdateRequest request) {
+        SignalRequestRecord(int phoneId, int uid, @NonNull SignalStrengthUpdateRequest request) {
             this.mCallingUid = uid;
-            this.mSubId = subId;
+            this.mPhoneId = phoneId;
             this.mRequest = request;
         }
 
         @Override
         public void binderDied() {
-            clearSignalStrengthUpdateRequest(mSubId, mCallingUid, mRequest, null /*onCompleted*/);
+            clearSignalStrengthUpdateRequest(mPhoneId, mCallingUid, mRequest, null /*onCompleted*/);
         }
 
         @Override
         public String toString() {
             StringBuffer sb = new StringBuffer("SignalRequestRecord {");
-            sb.append("mSubId=").append(mSubId);
+            sb.append("mPhoneId=").append(mPhoneId);
             sb.append(" mCallingUid=").append(mCallingUid);
             sb.append(" mRequest=").append(mRequest).append("}");
             return sb.toString();
@@ -663,12 +678,11 @@ public class SignalStrengthController extends Handler {
     }
 
     private void updateAlwaysReportSignalStrength() {
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
-                srr -> srr.mSubId == curSubId && isSignalReportRequestedWhileIdle(srr.mRequest));
+                srr -> srr.mPhoneId == curPhoneId && isSignalReportRequestedWhileIdle(
+                        srr.mRequest));
 
-        // TODO(b/177924721): TM#setAlwaysReportSignalStrength will be removed and we will not
-        // worry about unset flag which was set by other client.
         mPhone.setAlwaysReportSignalStrength(alwaysReport);
     }
 
