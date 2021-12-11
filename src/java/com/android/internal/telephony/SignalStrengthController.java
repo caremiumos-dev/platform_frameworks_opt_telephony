@@ -41,6 +41,7 @@ import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 
@@ -69,29 +70,28 @@ public class SignalStrengthController extends Handler {
 
     private static final long SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS =
             TimeUnit.SECONDS.toMillis(10);
-    /** Signal strength poll rate. */
-    private static final long POLL_PERIOD_MILLIS = TimeUnit.SECONDS.toMillis(20);
+
     private static final int INVALID_ARFCN = -1;
 
-    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST       = 1;
-    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST     = 2;
-    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED             = 3;
-    private static final int EVENT_RIL_CONNECTED                            = 4;
-    private static final int EVENT_RADIO_AVAILABLE                          = 5;
-    private static final int EVENT_GET_SIGNAL_STRENGTH                      = 6;
-    private static final int EVENT_POLL_SIGNAL_STRENGTH                     = 7;
-    private static final int EVENT_SIGNAL_STRENGTH_UPDATE                   = 8;
-    private static final int EVENT_POLL_SIGNAL_STRENGTH_DONE                = 9;
-    private static final int EVENT_CARRIER_CONFIG_CHANGED                   = 10;
-
+    private static final int EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST = 1;
+    private static final int EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST = 2;
+    private static final int EVENT_ON_DEVICE_IDLE_STATE_CHANGED = 3;
+    private static final int EVENT_RIL_CONNECTED = 4;
+    private static final int EVENT_RADIO_AVAILABLE = 5;
+    private static final int EVENT_GET_SIGNAL_STRENGTH = 6;
+    private static final int EVENT_POLL_SIGNAL_STRENGTH = 7;
+    private static final int EVENT_SIGNAL_STRENGTH_UPDATE = 8;
+    private static final int EVENT_POLL_SIGNAL_STRENGTH_DONE = 9;
+    private static final int EVENT_CARRIER_CONFIG_CHANGED = 10;
+    private static SubidToPhoneId sSubIdToPhoneId = SubscriptionManager::getPhoneId;
     private final Phone mPhone;
     private final CommandsInterface mCi;
-
+    private final Object mRsrpBoostLock = new Object();
+    private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
     @NonNull
     private SignalStrength mSignalStrength;
     private long mSignalStrengthUpdatedTime;
     private SignalStrength mLastSignalStrength = null;
-
     /**
      * List of LTE EARFCNs (E-UTRAN Absolute Radio Frequency Channel Number,
      * Reference: 3GPP TS 36.104 5.4.3)
@@ -110,13 +110,8 @@ public class SignalStrengthController extends Handler {
     private ArrayList<Pair<Integer, Integer>> mNrarfcnRangeListForRsrpBoost = null;
     @Nullable
     private int[] mNrRsrpBoost = null;
-    private final Object mRsrpBoostLock = new Object();
-
-    private final List<SignalRequestRecord> mSignalRequestRecords = new ArrayList<>();
-
     @NonNull
     private PersistableBundle mCarrierConfig;
-
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -146,6 +141,98 @@ public class SignalStrengthController extends Handler {
         mPhone.getContext().registerReceiver(mBroadcastReceiver, filter);
     }
 
+    private static boolean isRanAndSignalMeasurementTypeMatch(
+            @AccessNetworkConstants.RadioAccessNetworkType int ran,
+            @SignalThresholdInfo.SignalMeasurementType int measurement,
+            SignalThresholdInfo info) {
+        return ran == info.getRadioAccessNetworkType()
+                && measurement == info.getSignalMeasurementType();
+    }
+
+    private static boolean isSignalReportRequestedWhileIdle(SignalStrengthUpdateRequest request) {
+        return request.isSystemThresholdReportingRequestedWhileIdle()
+                || request.isReportingRequestedWhileIdle();
+    }
+
+    /**
+     * Checks if the provided earfcn falls within the range of earfcns.
+     *
+     * return int index in earfcnPairList if earfcn falls within the provided range; -1 otherwise.
+     */
+    private static int containsEarfcnInEarfcnRange(ArrayList<Pair<Integer, Integer>> earfcnPairList,
+            int earfcn) {
+        int index = 0;
+        if (earfcnPairList != null) {
+            for (Pair<Integer, Integer> earfcnPair : earfcnPairList) {
+                if ((earfcn >= earfcnPair.first) && (earfcn <= earfcnPair.second)) {
+                    return index;
+                }
+                index++;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Convert the earfcnStringArray to list of pairs.
+     *
+     * Format of the earfcnsList is expected to be {"erafcn1_start-earfcn1_end",
+     * "earfcn2_start-earfcn2_end" ... }
+     */
+    private static ArrayList<Pair<Integer, Integer>> convertEarfcnStringArrayToPairList(
+            String[] earfcnsList) {
+        ArrayList<Pair<Integer, Integer>> earfcnPairList = new ArrayList<Pair<Integer, Integer>>();
+
+        if (earfcnsList != null) {
+            int earfcnStart;
+            int earfcnEnd;
+            for (int i = 0; i < earfcnsList.length; i++) {
+                try {
+                    String[] earfcns = earfcnsList[i].split("-");
+                    if (earfcns.length != 2) {
+                        if (DBG) {
+                            log("Invalid earfcn range format");
+                        }
+                        return null;
+                    }
+
+                    earfcnStart = Integer.parseInt(earfcns[0]);
+                    earfcnEnd = Integer.parseInt(earfcns[1]);
+
+                    if (earfcnStart > earfcnEnd) {
+                        if (DBG) {
+                            log("Invalid earfcn range format");
+                        }
+                        return null;
+                    }
+
+                    earfcnPairList.add(new Pair<Integer, Integer>(earfcnStart, earfcnEnd));
+                } catch (PatternSyntaxException pse) {
+                    if (DBG) {
+                        log("Invalid earfcn range format");
+                    }
+                    return null;
+                } catch (NumberFormatException nfe) {
+                    if (DBG) {
+                        log("Invalid earfcn number format");
+                    }
+                    return null;
+                }
+            }
+        }
+
+        return earfcnPairList;
+    }
+
+    private static void log(String msg) {
+        if (DBG) Rlog.d(TAG, msg);
+    }
+
+    private static void loge(String msg) {
+        Rlog.e(TAG, msg);
+    }
+
     @Override
     public void handleMessage(Message msg) {
         if (DBG) log("received event " + msg.what);
@@ -163,13 +250,12 @@ public class SignalStrengthController extends Handler {
                 Message onCompleted = pair.second;
                 AsyncResult ret = AsyncResult.forMessage(onCompleted);
 
-                // TODO(b/177956310): Check subId to filter out old request until a better solution
                 boolean dupRequest = mSignalRequestRecords.stream().anyMatch(
                         srr -> srr.mCallingUid == record.mCallingUid
-                                && srr.mSubId == record.mSubId);
+                                && srr.mPhoneId == record.mPhoneId);
                 if (dupRequest) {
                     ret.exception = new IllegalStateException(
-                            "setSignalStrengthUpdateRequest called again with same subId");
+                            "setSignalStrengthUpdateRequest called again with same phoneId");
                     onCompleted.sendToTarget();
                     break;
                 }
@@ -203,6 +289,7 @@ public class SignalStrengthController extends Handler {
                 while (it.hasNext()) {
                     SignalRequestRecord srr = it.next();
                     if (srr.mRequest.getLiveToken().equals(record.mRequest.getLiveToken())) {
+                        srr.mRequest.getLiveToken().unlinkToDeath(record, /*flag=*/0);
                         it.remove();
                     }
                 }
@@ -468,8 +555,8 @@ public class SignalStrengthController extends Handler {
     /**
      * Print the SignalStrengthController states into the given stream.
      *
-     * @param fd The raw file descriptor that the dump is being sent to.
-     * @param pw A PrintWriter to which the dump is to be set.
+     * @param fd   The raw file descriptor that the dump is being sent to.
+     * @param pw   A PrintWriter to which the dump is to be set.
      * @param args Additional arguments to the dump request.
      */
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -491,7 +578,8 @@ public class SignalStrengthController extends Handler {
      */
     public void setSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @NonNull Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        SignalRequestRecord record = new SignalRequestRecord(sSubIdToPhoneId.getPhoneId(subId),
+                callingUid, request);
         sendMessage(obtainMessage(EVENT_SET_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
     }
@@ -501,7 +589,8 @@ public class SignalStrengthController extends Handler {
      */
     public void clearSignalStrengthUpdateRequest(int subId, int callingUid,
             SignalStrengthUpdateRequest request, @Nullable Message onCompleted) {
-        SignalRequestRecord record = new SignalRequestRecord(subId, callingUid, request);
+        SignalRequestRecord record = new SignalRequestRecord(sSubIdToPhoneId.getPhoneId(subId),
+                callingUid, request);
         sendMessage(obtainMessage(EVENT_CLEAR_SIGNAL_STRENGTH_UPDATE_REQUEST,
                 new Pair<SignalRequestRecord, Message>(record, onCompleted)));
     }
@@ -510,11 +599,11 @@ public class SignalStrengthController extends Handler {
      * Align all the qualified thresholds set from applications to the {@code systemThresholds}
      * and consolidate a new thresholds array, follow rules below:
      * 1. All threshold values (whose interval is guaranteed to be larger than hysteresis) in
-     *    {@code systemThresholds} will keep as it.
+     * {@code systemThresholds} will keep as it.
      * 2. Any threshold from apps that has interval less than hysteresis from any threshold in
-     *    {@code systemThresholds} will be removed.
+     * {@code systemThresholds} will be removed.
      * 3. The target thresholds will be {@code systemThresholds} + all qualified thresholds from
-     *    apps, sorted in ascending order.
+     * apps, sorted in ascending order.
      */
     @VisibleForTesting
     public int[] getConsolidatedSignalThresholds(int ran, int measurement,
@@ -534,12 +623,12 @@ public class SignalStrengthController extends Handler {
         }
 
         final boolean isDeviceIdle = mPhone.isDeviceIdle();
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         // The total number of record is small (10~15 tops). With each request has at most 5
         // SignalThresholdInfo which has at most 8 thresholds arrays. So the nested loop should
         // not be a concern here.
         for (SignalRequestRecord record : mSignalRequestRecords) {
-            if (curSubId != record.mSubId
+            if (curPhoneId != record.mPhoneId
                     || (isDeviceIdle && !record.mRequest.isReportingRequestedWhileIdle())) {
                 continue;
             }
@@ -569,9 +658,9 @@ public class SignalStrengthController extends Handler {
             return true;
         }
 
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         return mSignalRequestRecords.stream().anyMatch(
-                srr -> curSubId == srr.mSubId
+                srr -> curPhoneId == srr.mPhoneId
                         && srr.mRequest.isSystemThresholdReportingRequestedWhileIdle());
     }
 
@@ -589,7 +678,7 @@ public class SignalStrengthController extends Handler {
             int subId,
             boolean isDeviceIdle) {
         for (SignalRequestRecord record : mSignalRequestRecords) {
-            if (subId != record.mSubId) {
+            if (sSubIdToPhoneId.getPhoneId(subId) != record.mPhoneId) {
                 continue;
             }
             for (SignalThresholdInfo info : record.mRequest.getSignalThresholdInfos()) {
@@ -602,24 +691,11 @@ public class SignalStrengthController extends Handler {
         return false;
     }
 
-    private static boolean isRanAndSignalMeasurementTypeMatch(
-            @AccessNetworkConstants.RadioAccessNetworkType int ran,
-            @SignalThresholdInfo.SignalMeasurementType int measurement,
-            SignalThresholdInfo info) {
-        return ran == info.getRadioAccessNetworkType()
-                && measurement == info.getSignalMeasurementType();
-    }
-
-    private static boolean isSignalReportRequestedWhileIdle(SignalStrengthUpdateRequest request) {
-        return request.isSystemThresholdReportingRequestedWhileIdle()
-                || request.isReportingRequestedWhileIdle();
-    }
-
     /**
      * Gets the carrier configuration values for a particular subscription.
      *
      * @return A {@link PersistableBundle} containing the config for the given subId,
-     *         or default values for an invalid subId.
+     * or default values for an invalid subId.
      */
     @NonNull
     private PersistableBundle getCarrierConfig() {
@@ -636,39 +712,12 @@ public class SignalStrengthController extends Handler {
         return CarrierConfigManager.getDefaultConfig();
     }
 
-    private class SignalRequestRecord implements IBinder.DeathRecipient {
-        final int mSubId; // subId the request originally applied to
-        final int mCallingUid;
-        final SignalStrengthUpdateRequest mRequest;
-
-        SignalRequestRecord(int subId, int uid, @NonNull SignalStrengthUpdateRequest request) {
-            this.mCallingUid = uid;
-            this.mSubId = subId;
-            this.mRequest = request;
-        }
-
-        @Override
-        public void binderDied() {
-            clearSignalStrengthUpdateRequest(mSubId, mCallingUid, mRequest, null /*onCompleted*/);
-        }
-
-        @Override
-        public String toString() {
-            StringBuffer sb = new StringBuffer("SignalRequestRecord {");
-            sb.append("mSubId=").append(mSubId);
-            sb.append(" mCallingUid=").append(mCallingUid);
-            sb.append(" mRequest=").append(mRequest).append("}");
-            return sb.toString();
-        }
-    }
-
     private void updateAlwaysReportSignalStrength() {
-        final int curSubId = mPhone.getSubId();
+        final int curPhoneId = mPhone.getPhoneId();
         boolean alwaysReport = mSignalRequestRecords.stream().anyMatch(
-                srr -> srr.mSubId == curSubId && isSignalReportRequestedWhileIdle(srr.mRequest));
+                srr -> srr.mPhoneId == curPhoneId && isSignalReportRequestedWhileIdle(
+                        srr.mRequest));
 
-        // TODO(b/177924721): TM#setAlwaysReportSignalStrength will be removed and we will not
-        // worry about unset flag which was set by other client.
         mPhone.setAlwaysReportSignalStrength(alwaysReport);
     }
 
@@ -731,83 +780,24 @@ public class SignalStrengthController extends Handler {
         serviceState.setArfcnRsrpBoost(rsrpBoost);
     }
 
-    /**
-     * Checks if the provided earfcn falls within the range of earfcns.
-     *
-     * return int index in earfcnPairList if earfcn falls within the provided range; -1 otherwise.
-     */
-    private static int containsEarfcnInEarfcnRange(ArrayList<Pair<Integer, Integer>> earfcnPairList,
-            int earfcn) {
-        int index = 0;
-        if (earfcnPairList != null) {
-            for (Pair<Integer, Integer> earfcnPair : earfcnPairList) {
-                if ((earfcn >= earfcnPair.first) && (earfcn <= earfcnPair.second)) {
-                    return index;
-                }
-                index++;
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * Convert the earfcnStringArray to list of pairs.
-     *
-     * Format of the earfcnsList is expected to be {"erafcn1_start-earfcn1_end",
-     * "earfcn2_start-earfcn2_end" ... }
-     */
-    private static ArrayList<Pair<Integer, Integer>> convertEarfcnStringArrayToPairList(
-            String[] earfcnsList) {
-        ArrayList<Pair<Integer, Integer>> earfcnPairList = new ArrayList<Pair<Integer, Integer>>();
-
-        if (earfcnsList != null) {
-            int earfcnStart;
-            int earfcnEnd;
-            for (int i = 0; i < earfcnsList.length; i++) {
-                try {
-                    String[] earfcns = earfcnsList[i].split("-");
-                    if (earfcns.length != 2) {
-                        if (DBG) {
-                            log("Invalid earfcn range format");
-                        }
-                        return null;
-                    }
-
-                    earfcnStart = Integer.parseInt(earfcns[0]);
-                    earfcnEnd = Integer.parseInt(earfcns[1]);
-
-                    if (earfcnStart > earfcnEnd) {
-                        if (DBG) {
-                            log("Invalid earfcn range format");
-                        }
-                        return null;
-                    }
-
-                    earfcnPairList.add(new Pair<Integer, Integer>(earfcnStart, earfcnEnd));
-                } catch (PatternSyntaxException pse) {
-                    if (DBG) {
-                        log("Invalid earfcn range format");
-                    }
-                    return null;
-                } catch (NumberFormatException nfe) {
-                    if (DBG) {
-                        log("Invalid earfcn number format");
-                    }
-                    return null;
-                }
-            }
-        }
-
-        return earfcnPairList;
-    }
-
     private void onCarrierConfigChanged() {
         mCarrierConfig = getCarrierConfig();
         log("Carrier Config changed.");
 
         updateArfcnLists();
         updateReportingCriteria();
+    }
+
+    /**
+     * UnitTest mockable interface to get phoneId from subscription Id. It is introduced because
+     * {@link SubscriptionManager#getPhoneId(int)} is static and can't mock in UT.
+     */
+    @FunctionalInterface
+    public interface SubidToPhoneId {
+        /**
+         * Return phone id from the provided subscription {@code subId}.
+         */
+        int getPhoneId(int subId);
     }
 
     /**
@@ -923,11 +913,29 @@ public class SignalStrengthController extends Handler {
         };
     }
 
-    private static void log(String msg) {
-        if (DBG) Rlog.d(TAG, msg);
-    }
+    private class SignalRequestRecord implements IBinder.DeathRecipient {
+        final int mPhoneId; // phoneId the request originally subscription applied to
+        final int mCallingUid;
+        final SignalStrengthUpdateRequest mRequest;
 
-    private static void loge(String msg) {
-        Rlog.e(TAG, msg);
+        SignalRequestRecord(int phoneId, int uid, @NonNull SignalStrengthUpdateRequest request) {
+            this.mCallingUid = uid;
+            this.mPhoneId = phoneId;
+            this.mRequest = request;
+        }
+
+        @Override
+        public void binderDied() {
+            clearSignalStrengthUpdateRequest(mPhoneId, mCallingUid, mRequest, null /*onCompleted*/);
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer sb = new StringBuffer("SignalRequestRecord {");
+            sb.append("mPhoneId=").append(mPhoneId);
+            sb.append(" mCallingUid=").append(mCallingUid);
+            sb.append(" mRequest=").append(mRequest).append("}");
+            return sb.toString();
+        }
     }
 }
