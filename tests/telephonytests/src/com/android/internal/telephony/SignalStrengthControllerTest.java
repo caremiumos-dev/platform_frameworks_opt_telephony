@@ -44,6 +44,7 @@ import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.SignalStrength;
 import android.telephony.SignalStrengthUpdateRequest;
 import android.telephony.SignalThresholdInfo;
+import android.telephony.SubscriptionManager;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -69,22 +70,12 @@ public class SignalStrengthControllerTest extends TelephonyTest {
     private static final String TAG = "SignalStrengthControllerTest";
 
     private static final int ACTIVE_SUB_ID = 0;
-    private static final int INVALID_SUB_ID = 1000;
     private static final int CALLING_UID = 12345;
     private static final int PHONE_ID = 0;
-    private static final String HOME_PLMN = "310260";
-    private static final String PLMN1 = "480123";
-    private static final String PLMN2 = "586111";
-    private static final String HOME_PNN = "home pnn";
-    private static final String[] CARRIER_CONFIG_SPDI = new String[] {HOME_PLMN, PLMN2};
-    private static final String[] CARRIER_CONFIG_EHPLMN = new String[] {HOME_PLMN, PLMN1};
-    private static final String[] CARRIER_CONFIG_PNN = new String[] {
-            String.format("%s,%s", HOME_PNN, "short"), "f2,s2"
-    };
-
+    @Mock
+    SignalStrengthController.SubidToPhoneId mMockSubIdToPhoneId;
     @Mock
     private Handler mHandler;
-
     private SignalStrengthController mSsc;
     private PersistableBundle mBundle;
 
@@ -92,28 +83,36 @@ public class SignalStrengthControllerTest extends TelephonyTest {
     public void setUp() throws Exception {
         super.setUp(TAG);
 
+        replaceInstance(SignalStrengthController.class, "sSubIdToPhoneId", null,
+                mMockSubIdToPhoneId);
+
         when(mPhone.getSubId()).thenReturn(ACTIVE_SUB_ID);
+        when(mPhone.getPhoneId()).thenReturn(PHONE_ID);
+        when(mMockSubIdToPhoneId.getPhoneId(eq(ACTIVE_SUB_ID))).thenReturn(PHONE_ID);
+        when(mMockSubIdToPhoneId.getPhoneId(
+                eq(SubscriptionManager.INVALID_SUBSCRIPTION_ID))).thenReturn(
+                SubscriptionManager.INVALID_PHONE_INDEX);
         mSsc = new SignalStrengthController(mPhone);
         replaceInstance(Handler.class, "mLooper", mHandler, mSsc.getLooper());
         replaceInstance(Phone.class, "mLooper", mPhone, mSsc.getLooper());
 
         mBundle = mContextFixture.getCarrierConfigBundle();
         mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY,
-                new int[] {
+                new int[]{
                         -110, /* SIGNAL_STRENGTH_POOR */
                         -90, /* SIGNAL_STRENGTH_MODERATE */
                         -80, /* SIGNAL_STRENGTH_GOOD */
                         -65,  /* SIGNAL_STRENGTH_GREAT */
                 });
         mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY,
-                new int[] {
+                new int[]{
                         -31, /* SIGNAL_STRENGTH_POOR */
                         -19, /* SIGNAL_STRENGTH_MODERATE */
                         -7, /* SIGNAL_STRENGTH_GOOD */
                         6  /* SIGNAL_STRENGTH_GREAT */
                 });
         mBundle.putIntArray(CarrierConfigManager.KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY,
-                new int[] {
+                new int[]{
                         -5, /* SIGNAL_STRENGTH_POOR */
                         5, /* SIGNAL_STRENGTH_MODERATE */
                         15, /* SIGNAL_STRENGTH_GOOD */
@@ -140,8 +139,8 @@ public class SignalStrengthControllerTest extends TelephonyTest {
                 true /* shouldReportSystemWhileIdle */
         );
 
-        mSsc.setSignalStrengthUpdateRequest(INVALID_SUB_ID, CALLING_UID,
-                request, Message.obtain(mHandler));
+        mSsc.setSignalStrengthUpdateRequest(SubscriptionManager.INVALID_SUBSCRIPTION_ID,
+                CALLING_UID, request, Message.obtain(mHandler));
         processAllMessages();
 
         verify(mPhone).setAlwaysReportSignalStrength(eq(false));
