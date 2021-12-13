@@ -47,6 +47,7 @@ import android.os.Registrant;
 import android.os.RegistrantList;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.telephony.Annotation.CarrierPrivilegeStatus;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -61,6 +62,7 @@ import com.android.internal.annotations.GuardedBy;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccPort;
 import com.android.internal.telephony.uicc.UiccProfile;
+import com.android.internal.util.ArrayUtils;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -650,5 +652,50 @@ public class CarrierPrivilegesTracker extends Handler {
      */
     public void unregisterCarrierPrivilegesListener(Handler handler) {
         sendMessage(obtainMessage(ACTION_UNREGISTER_LISTENER, handler));
+    }
+
+    /** Backing of {@link TelephonyManager#checkCarrierPrivilegesForPackage}. */
+    public @CarrierPrivilegeStatus int getCarrierPrivilegeStatusForPackage(String packageName) {
+        // TODO(b/205736323) consider if/how we want to account for the RULES_NOT_LOADED and
+        // ERROR_LOADING_RULES constants. Technically those will never be returned today since those
+        // results are only from the SIM rules, but the CC rules' result (which never has these
+        // errors) always supersede them unless something goes super wrong when getting CC.
+        mPrivilegedPackageInfoLock.readLock().lock();
+        try {
+            return mPrivilegedPackageInfo.mPackageNames.contains(packageName)
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS
+                    : TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
+        } finally {
+            mPrivilegedPackageInfoLock.readLock().unlock();
+        }
+    }
+
+    /** Backing of {@link TelephonyManager#getPackagesWithCarrierPrivileges}. */
+    public Set<String> getPackagesWithCarrierPrivileges() {
+        mPrivilegedPackageInfoLock.readLock().lock();
+        try {
+            return Collections.unmodifiableSet(mPrivilegedPackageInfo.mPackageNames);
+        } finally {
+            mPrivilegedPackageInfoLock.readLock().unlock();
+        }
+    }
+
+    /**
+     * Backing of {@link TelephonyManager#hasCarrierPrivileges} and {@link
+     * TelephonyManager#getCarrierPrivilegeStatus(int)}.
+     */
+    public @CarrierPrivilegeStatus int getCarrierPrivilegeStatusForUid(int uid) {
+        // TODO(b/205736323) consider if/how we want to account for the RULES_NOT_LOADED and
+        // ERROR_LOADING_RULES constants. Technically those will never be returned today since those
+        // results are only from the SIM rules, but the CC rules' result (which never has these
+        // errors) always supersede them unless something goes super wrong when getting CC.
+        mPrivilegedPackageInfoLock.readLock().lock();
+        try {
+            return ArrayUtils.contains(mPrivilegedPackageInfo.mUids, uid)
+                    ? TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS
+                    : TelephonyManager.CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
+        } finally {
+            mPrivilegedPackageInfoLock.readLock().unlock();
+        }
     }
 }
