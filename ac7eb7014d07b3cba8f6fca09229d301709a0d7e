@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4667fa_a012e15c",
+        "filename": "src/java/com/android/internal/telephony/NetworkScanRequestTracker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2021-12-14T21:52:32Z",
+      "side": 1,
+      "message": "Ignore.",
+      "parentUuid": "faf717fa_d5483b68",
+      "range": {
+        "startLine": 262,
+        "startChar": 24,
+        "endLine": 262,
+        "endChar": 51
+      },
+      "revId": "ac7eb7014d07b3cba8f6fca09229d301709a0d7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2c40d4b_b5cf38c2",
