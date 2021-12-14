@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b08b905c_e2dd8c2d",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-14T05:10:33Z",
+      "side": 1,
+      "message": "All previous states are accessed in the single handler thread. So no lock hold for them.\n\nDo we actually break the design here and introduce multiple thread access for mPrivilegedPackageInfo now? I did not the other thread access except for dumping.\n\nIs the ReadWriteLock really worthy here, considering it make the logic a bit verbose (lock/unlock, read/write lock distinguish)?",
+      "range": {
+        "startLine": 154,
+        "startChar": 18,
+        "endLine": 154,
+        "endChar": 58
+      },
+      "revId": "a3e75b2fcc1bd743d411c705b9b080f82e6e2c85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35af2743_8eb932e5",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-14T05:10:33Z",
+      "side": 1,
+      "message": "Override hashCode as well (go/ej3e-11).",
+      "range": {
+        "startLine": 187,
+        "startChar": 23,
+        "endLine": 187,
+        "endChar": 29
+      },
+      "revId": "a3e75b2fcc1bd743d411c705b9b080f82e6e2c85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
