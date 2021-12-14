@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a283b3_b243e8af",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-14T05:48:53Z",
+      "side": 1,
+      "message": "NVM, see the follow-up CLs where the mPrivilegedPackageInfo are accessed from IPC threads. And it does look like a good case for RW-lock, one single point of write and multiple points of read.",
+      "parentUuid": "b08b905c_e2dd8c2d",
+      "range": {
+        "startLine": 154,
+        "startChar": 18,
+        "endLine": 154,
+        "endChar": 58
+      },
+      "revId": "a3e75b2fcc1bd743d411c705b9b080f82e6e2c85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35af2743_8eb932e5",
