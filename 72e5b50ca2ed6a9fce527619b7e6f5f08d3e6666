@@ -46,6 +46,30 @@
       },
       "revId": "72e5b50ca2ed6a9fce527619b7e6f5f08d3e6666",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ea2b9f_738f86ef",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2021-12-15T17:56:27Z",
+      "side": 1,
+      "message": "Yes. Please either update the thresholds from \"-5\" to \"-3\" for  SIGNAL_STRENGTH_POOR or update the rssnr value used for constructing CellSignalStrengthLte from \"-34\" to \"-45\" to reflect that convertRssnrUnitFromTenDbToDB works properly.",
+      "parentUuid": "0a75f2c0_56a7b093",
+      "range": {
+        "startLine": 505,
+        "startChar": 40,
+        "endLine": 505,
+        "endChar": 60
+      },
+      "revId": "72e5b50ca2ed6a9fce527619b7e6f5f08d3e6666",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
