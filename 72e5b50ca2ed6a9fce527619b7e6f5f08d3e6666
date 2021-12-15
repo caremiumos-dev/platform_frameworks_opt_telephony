@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eddb14d_b82914d3",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1131623
+      },
+      "writtenOn": "2021-12-15T03:11:41Z",
+      "side": 1,
+      "message": "Per issue description, if rssnr value is -34, the expected value should be -4, which should  SIGNAL_STRENGTH_NONE_OR_UNKNOWN. Your test is showing this is SIGNAL_STRENGTH_POOR.",
+      "range": {
+        "startLine": 505,
+        "startChar": 40,
+        "endLine": 505,
+        "endChar": 60
+      },
+      "revId": "72e5b50ca2ed6a9fce527619b7e6f5f08d3e6666",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
