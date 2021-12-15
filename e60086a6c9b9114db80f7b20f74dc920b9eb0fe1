@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4ae4500_038ebdc0",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-15T03:42:15Z",
+      "side": 1,
+      "message": "I did not get why we have read lock here. I see no read of mPrivilegedPackageInfo.\n\nIf this is to because of calling of getCarrierPrivilegeStatusForPackage, then we should read lock inside getCarrierPrivilegeStatusForPackage to reduce the lock scope.\n\nOr mPrivilegedPackageInfoLock RW-lock has extended to protect state other than mPrivilegedPackageInfo now?",
+      "range": {
+        "startLine": 718,
+        "startChar": 8,
+        "endLine": 718,
+        "endChar": 53
+      },
+      "revId": "e60086a6c9b9114db80f7b20f74dc920b9eb0fe1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
