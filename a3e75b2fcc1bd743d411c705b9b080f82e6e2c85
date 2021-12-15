@@ -69,6 +69,29 @@
       },
       "revId": "a3e75b2fcc1bd743d411c705b9b080f82e6e2c85",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e214a4a_8d2b9b79",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-15T02:04:20Z",
+      "side": 1,
+      "message": "Should we make a deep copy here to actually guarantee the safety? \n\nI feel we should since the write lock does not protect the reference but actually the data inside mPrivilegedPackageInfo. But I am not 100% sure. I did a quick search but did not find a satisfied answer...",
+      "range": {
+        "startLine": 532,
+        "startChar": 12,
+        "endLine": 532,
+        "endChar": 66
+      },
+      "revId": "a3e75b2fcc1bd743d411c705b9b080f82e6e2c85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
