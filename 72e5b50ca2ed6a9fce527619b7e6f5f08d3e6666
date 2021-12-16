@@ -70,6 +70,30 @@
       },
       "revId": "72e5b50ca2ed6a9fce527619b7e6f5f08d3e6666",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1a1285_4186641c",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/SignalStrengthControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1688249
+      },
+      "writtenOn": "2021-12-16T08:38:53Z",
+      "side": 1,
+      "message": "The lteThresholds in this test case is updated with the default values and match issue description:\nint[] lteThresholds \u003d {\n                -3, // SIGNAL_STRENGTH_POOR\n                1, // SIGNAL_STRENGTH_MODERATE\n                5, // SIGNAL_STRENGTH_GOOD\n                13,  // SIGNAL_STRENGTH_GREAT\nThis will give SIGNAL_STRENGTH_NONE_OR_UNKNOWN",
+      "parentUuid": "70ea2b9f_738f86ef",
+      "range": {
+        "startLine": 505,
+        "startChar": 40,
+        "endLine": 505,
+        "endChar": 60
+      },
+      "revId": "72e5b50ca2ed6a9fce527619b7e6f5f08d3e6666",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
