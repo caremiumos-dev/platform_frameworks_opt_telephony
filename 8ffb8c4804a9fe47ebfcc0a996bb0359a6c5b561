@@ -46,6 +46,30 @@
       },
       "revId": "8ffb8c4804a9fe47ebfcc0a996bb0359a6c5b561",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e068f1d8_9cf8a680",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-12-16T00:32:20Z",
+      "side": 1,
+      "message": "Resolving, I\u0027d assume this is acceptable.",
+      "parentUuid": "ceb18b7c_72b64eee",
+      "range": {
+        "startLine": 2005,
+        "startChar": 21,
+        "endLine": 2005,
+        "endChar": 22
+      },
+      "revId": "8ffb8c4804a9fe47ebfcc0a996bb0359a6c5b561",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
