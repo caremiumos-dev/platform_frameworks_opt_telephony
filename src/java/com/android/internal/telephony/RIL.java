@@ -1267,6 +1267,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 handleRadioProxyExceptionForRR(SIM_SERVICE, "supplySimDepersonalization", e);
             }
         } else {
+            if (PersoSubState.PERSOSUBSTATE_SIM_NETWORK == persoType) {
+                supplyNetworkDepersonalization(controlKey, result);
+                return;
+            }
             if (RILJ_LOGD) {
                 Rlog.d(RILJ_LOG_TAG, "supplySimDepersonalization: REQUEST_NOT_SUPPORTED");
             }
@@ -2704,7 +2708,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             mMetrics.writeSetPreferredNetworkType(mPhoneId, networkType);
 
             try {
-                networkProxy.setAllowedNetworkTypesBitmap(rr.mSerial, mAllowedNetworkTypesBitmask);
+                networkProxy.setPreferredNetworkTypeBitmap(rr.mSerial, mAllowedNetworkTypesBitmask);
             } catch (RemoteException | RuntimeException e) {
                 handleRadioProxyExceptionForRR(NETWORK_SERVICE, "setPreferredNetworkType", e);
             }
@@ -2735,6 +2739,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
             @TelephonyManager.NetworkTypeBitMask int networkTypeBitmask, Message result) {
         RadioNetworkProxy networkProxy = getRadioServiceProxy(RadioNetworkProxy.class, result);
         if (!networkProxy.isEmpty()) {
+            if (mRadioVersion.less(RADIO_HAL_VERSION_1_6)) {
+                // For older HAL, redirects the call to setPreferredNetworkType.
+                setPreferredNetworkType(
+                        RadioAccessFamily.getNetworkTypeFromRaf(networkTypeBitmask), result);
+                return;
+            }
             RILRequest rr = obtainRequest(RIL_REQUEST_SET_ALLOWED_NETWORK_TYPES_BITMAP, result,
                     mRILDefaultWorkSource);
 
@@ -3890,6 +3900,19 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 handleRadioProxyExceptionForRR(SIM_SERVICE, "setUiccSubscription", e);
             }
         }
+    }
+
+    /**
+     * Whether the device modem supports reporting the EID in either the slot or card status or
+     * through ATR.
+     * @return true if the modem supports EID.
+     */
+    @Override
+    public boolean supportsEid() {
+        // EID should be supported as long as HAL >= 1.2.
+        //  - in HAL 1.2 we have EID through ATR
+        //  - in later HAL versions we also have EID through slot / card status.
+        return mRadioVersion.greaterOrEqual(RADIO_HAL_VERSION_1_2);
     }
 
     @Override
