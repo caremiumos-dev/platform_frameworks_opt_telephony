@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7996cb9c_dfab9aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2021-12-16T00:00:09Z",
+      "side": 1,
+      "message": "Identical code, made a copy in DataConnection in an attempt to decouple from API review since it sounds like tgunn is busy.",
+      "revId": "3831b66e0511931f0b8e968114f734158e68bee7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
