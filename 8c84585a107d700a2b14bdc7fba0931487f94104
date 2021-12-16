@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebd59d0e_d1d6d6fb",
+        "filename": "src/java/com/android/internal/telephony/RadioMessagingProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-12-16T07:20:53Z",
+      "side": 1,
+      "message": "It should be here rather than RadioVoiceProxy?",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 33
+      },
+      "revId": "8c84585a107d700a2b14bdc7fba0931487f94104",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95cba80c_95f1bcc0",
+        "filename": "src/java/com/android/internal/telephony/RadioMessagingProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-12-16T07:20:53Z",
+      "side": 1,
+      "message": "It should be here rather than RadioVoiceProxy?",
+      "range": {
+        "startLine": 377,
+        "startChar": 16,
+        "endLine": 377,
+        "endChar": 24
+      },
+      "revId": "8c84585a107d700a2b14bdc7fba0931487f94104",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
