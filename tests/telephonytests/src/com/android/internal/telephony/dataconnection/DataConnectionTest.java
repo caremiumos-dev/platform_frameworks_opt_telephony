@@ -876,7 +876,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         String testPkg = "com.android.telephony.test";
         TelephonyManager telMgr = mockContext.getSystemService(TelephonyManager.class);
-        doReturn(testPkg).when(telMgr).getCarrierServicePackageNameForLogicalSlot(anyInt());
+        doReturn("BLAH").when(telMgr).getCarrierServicePackageNameForLogicalSlot(anyInt());
 
         UserInfo info = new UserInfo(0 /* id */, "TEST_USER", 0 /* flags */);
         UserManager userMgr = mockContext.getSystemService(UserManager.class);
