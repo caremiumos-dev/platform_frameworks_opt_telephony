@@ -430,7 +430,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
         public synchronized void unlinkToDeath() {
             if (mBinder != null) {
-                mBinder.unlinkToDeath(this, 0);
+                mBinder.unlinkToDeath(this, mServiceCookies.get(mService).intValue());
                 mBinder = null;
             }
         }
@@ -447,6 +447,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
     private synchronized void resetProxyAndRequestList(int service) {
         if (service == RADIO_SERVICE) {
             mRadioProxy = null;
+            // In addition, reset HIDL service in the radio servcie proxies.
+            for (int svc = MIN_SERVICE_IDX; svc <= MAX_SERVICE_IDX; svc++) {
+                if (svc == RADIO_SERVICE) continue;
+                if (mServiceProxies.get(svc).getHidl() != null) {
+                    mServiceProxies.get(svc).setHidl(RADIO_HAL_VERSION_UNKNOWN, null);
+                }
+            }
         } else {
             mServiceProxies.get(service).clear();
         }
@@ -662,9 +669,20 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 }
 
                 if (mRadioProxy != null) {
-                    mRadioProxy.linkToDeath(mRadioProxyDeathRecipient,
-                            mServiceCookies.get(RADIO_SERVICE).incrementAndGet());
-                    mRadioProxy.setResponseFunctions(mRadioResponse, mRadioIndication);
+                    boolean hasHidlSet = false;
+                    for (int service = MIN_SERVICE_IDX; service <= MAX_SERVICE_IDX; service++) {
+                        if (service == RADIO_SERVICE) continue;
+                        if (mServiceProxies.get(service).getHidl() != null) {
+                            hasHidlSet = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasHidlSet) {
+                        mRadioProxy.linkToDeath(mRadioProxyDeathRecipient,
+                                mServiceCookies.get(RADIO_SERVICE).incrementAndGet());
+                        mRadioProxy.setResponseFunctions(mRadioResponse, mRadioIndication);
+                    }
                 } else {
                     mDisabledRadioServices.get(RADIO_SERVICE).add(mPhoneId);
                     riljLoge("getRadioProxy: mRadioProxy for "
@@ -949,10 +967,28 @@ public class RIL extends BaseCommands implements CommandsInterface {
                                 break;
                         }
                     } else {
-                        serviceProxy.getHidl().linkToDeath(mRadioProxyDeathRecipient,
-                                mServiceCookies.get(service).incrementAndGet());
-                        serviceProxy.getHidl().setResponseFunctions(
-                                mRadioResponse, mRadioIndication);
+                        boolean hasHidlSet = false;
+                        for (int svc = MIN_SERVICE_IDX; svc <= MAX_SERVICE_IDX; svc++) {
+                            if (svc == RADIO_SERVICE) {
+                                if (mRadioProxy != null) {
+                                    hasHidlSet = true;
+                                    break;
+                                }
+                            } else {
+                                if (svc == service) continue;
+                                if (mServiceProxies.get(svc).getHidl() != null) {
+                                    hasHidlSet = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!hasHidlSet) {
+                            serviceProxy.getHidl().linkToDeath(mRadioProxyDeathRecipient,
+                                    mServiceCookies.get(RADIO_SERVICE).incrementAndGet());
+                            serviceProxy.getHidl().setResponseFunctions(
+                                    mRadioResponse, mRadioIndication);
+                        }
                     }
                 } else {
                     mDisabledRadioServices.get(service).add(mPhoneId);
@@ -1076,13 +1112,6 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 context.getPackageName());
         mActiveWakelockWorkSource = new WorkSource();
 
-        TelephonyDevController tdc = TelephonyDevController.getInstance();
-        if (proxies == null) {
-            // TelephonyDevController#registerRIL will call getHardwareConfig.
-            // To prevent extra requests when running tests, only registerRIL when proxies is null
-            tdc.registerRIL(this);
-        }
-
         // Set radio callback; needed to set RadioIndication callback (should be done after
         // wakelock stuff is initialized above as callbacks are received on separate binder threads)
         for (int service = MIN_SERVICE_IDX; service <= MAX_SERVICE_IDX; service++) {
@@ -1094,6 +1123,13 @@ public class RIL extends BaseCommands implements CommandsInterface {
                     getRadioServiceProxy(service, null);
                 }
             }
+        }
+
+        TelephonyDevController tdc = TelephonyDevController.getInstance();
+        if (proxies == null) {
+            // TelephonyDevController#registerRIL will call getHardwareConfig.
+            // To prevent extra requests when running tests, only registerRIL when proxies is null
+            tdc.registerRIL(this);
         }
 
         if (RILJ_LOGD) {
