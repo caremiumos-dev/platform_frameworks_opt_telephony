@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "707b1288_e42907c6",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2021-12-21T22:34:22Z",
+      "side": 1,
+      "message": "I see Lint is complaining, asking us to switch to getSystemService(xxx.class) to avoid the cast. But for readability, we should keep the same style.\nSo either we keep as is or we actually need to update all those managers together, you decide. :-)",
+      "range": {
+        "startLine": 269,
+        "startChar": 37,
+        "endLine": 269,
+        "endChar": 62
+      },
+      "revId": "140cd42e0baf348a88acca62a3b68f57abfff87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
