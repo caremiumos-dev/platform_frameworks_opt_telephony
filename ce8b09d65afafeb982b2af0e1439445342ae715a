@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a572fdf_2a08d32f",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-12-22T16:36:50Z",
+      "side": 1,
+      "message": "From the documentation, getRadioServiceProxy is never called with RADIO_SERVICE and getRadioProxy is used instead. For this change to work, getRadioProxy needs to be removed and combined with getRadioServiceProxy.",
+      "range": {
+        "startLine": 972,
+        "startChar": 32,
+        "endLine": 972,
+        "endChar": 52
+      },
+      "revId": "ce8b09d65afafeb982b2af0e1439445342ae715a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
