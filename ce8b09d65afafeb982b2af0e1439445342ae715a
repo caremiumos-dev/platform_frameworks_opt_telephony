@@ -22,6 +22,30 @@
       },
       "revId": "ce8b09d65afafeb982b2af0e1439445342ae715a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1359771c_eb813340",
+        "filename": "src/java/com/android/internal/telephony/RIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2021-12-23T00:22:20Z",
+      "side": 1,
+      "message": "This loop just checks whether HIDL service is already set or not. I used MIN_SERVICE_IDX for initial value instead of MIN_SERVICE_IDX - 1 and checking mRadioProxy !\u003d  null additionally.\nAnyways, it is better to merge getRadioProxy and getRadioServiceProxy?",
+      "parentUuid": "0a572fdf_2a08d32f",
+      "range": {
+        "startLine": 972,
+        "startChar": 32,
+        "endLine": 972,
+        "endChar": 52
+      },
+      "revId": "ce8b09d65afafeb982b2af0e1439445342ae715a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
