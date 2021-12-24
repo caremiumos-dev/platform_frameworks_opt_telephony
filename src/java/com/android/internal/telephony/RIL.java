@@ -1077,23 +1077,21 @@ public class RIL extends BaseCommands implements CommandsInterface {
         mActiveWakelockWorkSource = new WorkSource();
 
         TelephonyDevController tdc = TelephonyDevController.getInstance();
-        if (proxies == null) {
-            // TelephonyDevController#registerRIL will call getHardwareConfig.
-            // To prevent extra requests when running tests, only registerRIL when proxies is null
-            tdc.registerRIL(this);
-        }
 
-        // Set radio callback; needed to set RadioIndication callback (should be done after
-        // wakelock stuff is initialized above as callbacks are received on separate binder threads)
-        for (int service = MIN_SERVICE_IDX; service <= MAX_SERVICE_IDX; service++) {
-            if (service == RADIO_SERVICE) {
-                getRadioProxy(null);
-            } else {
-                if (proxies == null) {
-                    // Prevent telephony tests from calling the service
+        // Prevent telephony tests from calling the services
+        if (proxies == null) {
+            // Set radio callback; needed to set RadioIndication callback (should be done after
+            // wakelock stuff is initialized above as callbacks are received on separate binder
+            // threads)
+            for (int service = MIN_SERVICE_IDX; service <= MAX_SERVICE_IDX; service++) {
+                if (service == RADIO_SERVICE) {
+                    getRadioProxy(null);
+                } else {
                     getRadioServiceProxy(service, null);
                 }
             }
+            // TelephonyDevController#registerRIL will call getHardwareConfig.
+            tdc.registerRIL(this);
         }
 
         if (RILJ_LOGD) {

@@ -316,7 +316,6 @@ public class RILTest extends TelephonyTest {
         doReturn(powerManager).when(context).getSystemService(Context.POWER_SERVICE);
         doReturn(new ApplicationInfo()).when(context).getApplicationInfo();
         SparseArray<RadioServiceProxy> proxies = new SparseArray<>();
-        proxies.put(RIL.RADIO_SERVICE, null);
         proxies.put(RIL.DATA_SERVICE, mDataProxy);
         proxies.put(RIL.NETWORK_SERVICE, mNetworkProxy);
         proxies.put(RIL.SIM_SERVICE, mSimProxy);
