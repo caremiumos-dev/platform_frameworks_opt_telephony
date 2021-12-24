@@ -694,6 +694,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
      * {@link RadioNetworkProxy}, {@link RadioSimProxy}, {@link RadioVoiceProxy}, or null if the
      * service is not available.
      */
+    @VisibleForTesting
     public <T extends RadioServiceProxy> T getRadioServiceProxy(Class<T> serviceClass,
             Message result) {
         if (serviceClass == RadioDataProxy.class) {
@@ -721,8 +722,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
      * Returns a {@link RadioServiceProxy} or null if the service is not available.
      * For RADIO_SERVICE, use {@link #getRadioProxy} instead, as this will always return null.
      */
-    @VisibleForTesting
-    public synchronized RadioServiceProxy getRadioServiceProxy(int service, Message result) {
+    private synchronized RadioServiceProxy getRadioServiceProxy(int service, Message result) {
         if (!SubscriptionManager.isValidPhoneId(mPhoneId)) return null;
         if (!mIsCellularSupported) {
             if (RILJ_LOGV) riljLog("getRadioServiceProxy: Not calling getService(): wifi-only");
@@ -735,6 +735,11 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
 
         RadioServiceProxy serviceProxy = mServiceProxies.get(service);
+        if (serviceProxy == null) {
+            riljLoge("getRadioServiceProxy: " + serviceToString(service) + " for "
+                    + HIDL_SERVICE_NAME[mPhoneId] + " is null");
+            return null;
+        }
         if (!serviceProxy.isEmpty()) {
             return serviceProxy;
         }
