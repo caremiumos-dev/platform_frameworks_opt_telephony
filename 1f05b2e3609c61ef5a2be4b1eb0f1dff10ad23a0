@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de8ee5d4_7bac5810",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-12-30T22:24:48Z",
+      "side": 1,
+      "message": "Bug: 182131920\nor\nFix: 182131920",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "1f05b2e3609c61ef5a2be4b1eb0f1dff10ad23a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
