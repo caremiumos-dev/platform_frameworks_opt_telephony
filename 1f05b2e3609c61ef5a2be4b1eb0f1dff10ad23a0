@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68b57c3c_59702c34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2021-12-30T22:29:50Z",
+      "side": 1,
+      "message": "nit: Synchronize",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "1f05b2e3609c61ef5a2be4b1eb0f1dff10ad23a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de8ee5d4_7bac5810",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
