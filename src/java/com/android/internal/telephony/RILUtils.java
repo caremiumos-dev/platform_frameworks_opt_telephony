@@ -335,6 +335,7 @@ import com.android.internal.telephony.dataconnection.KeepaliveStatus;
 import com.android.internal.telephony.uicc.AdnCapacity;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus;
 import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.IccSlotPortMapping;
 import com.android.internal.telephony.uicc.IccSlotStatus;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.SimPhonebookRecord;
@@ -959,6 +960,7 @@ public class RILUtils {
         dpi.mtuV6 = dp.getMtuV6();
         dpi.persistent = dp.isPersistent();
         dpi.preferred = dp.isPreferred();
+        dpi.alwaysOn = dp.getApnSetting().isAlwaysOn();
 
         // profile id is only meaningful when it's persistent on the modem.
         dpi.profileId = (dpi.persistent) ? dp.getProfileId()
@@ -4184,7 +4186,9 @@ public class RILUtils {
             }
         }
         if (cardStatus15 != null) {
-            iccCardStatus.physicalSlotIndex = cardStatus15.base.base.physicalSlotId;
+            IccSlotPortMapping slotPortMapping = new IccSlotPortMapping();
+            slotPortMapping.mPhysicalSlotIndex = cardStatus15.base.base.physicalSlotId;
+            iccCardStatus.mSlotPortMapping = slotPortMapping;
             iccCardStatus.atr = cardStatus15.base.base.atr;
             iccCardStatus.iccid = cardStatus15.base.base.iccid;
             iccCardStatus.eid = cardStatus15.base.eid;
@@ -4227,7 +4231,6 @@ public class RILUtils {
         iccCardStatus.mGsmUmtsSubscriptionAppIndex = cardStatus.gsmUmtsSubscriptionAppIndex;
         iccCardStatus.mCdmaSubscriptionAppIndex = cardStatus.cdmaSubscriptionAppIndex;
         iccCardStatus.mImsSubscriptionAppIndex = cardStatus.imsSubscriptionAppIndex;
-        iccCardStatus.physicalSlotIndex = cardStatus.slotMap.physicalSlotId;
         iccCardStatus.atr = cardStatus.atr;
         iccCardStatus.iccid = cardStatus.iccid;
         iccCardStatus.eid = cardStatus.eid;
@@ -4249,6 +4252,10 @@ public class RILUtils {
             appStatus.pin2 = appStatus.PinStateFromRILInt(rilAppStatus.pin2);
             iccCardStatus.mApplications[i] = appStatus;
         }
+        IccSlotPortMapping slotPortMapping = new IccSlotPortMapping();
+        slotPortMapping.mPhysicalSlotIndex = cardStatus.slotMap.physicalSlotId;
+        slotPortMapping.mPortIndex = cardStatus.slotMap.portId;
+        iccCardStatus.mSlotPortMapping = slotPortMapping;
         return iccCardStatus;
     }
 
