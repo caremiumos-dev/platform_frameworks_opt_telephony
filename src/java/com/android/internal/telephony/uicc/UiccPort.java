@@ -67,8 +67,8 @@ public class UiccPort {
             mContext = c;
             mCi = ci;
             mIccid = ics.iccid;
-            mPortIdx = ics.mSlotPortMapping.mPortIndex;
-            mPhysicalSlotIndex = ics.mSlotPortMapping.mPhysicalSlotIndex;
+            mPortIdx = 0; //TODO call ics.portId; after new HAL changes
+            mPhysicalSlotIndex = ics.physicalSlotIndex;
             if (mUiccProfile == null) {
                 mUiccProfile = TelephonyComponentFactory.getInstance()
                         .inject(UiccProfile.class.getName()).makeUiccProfile(
