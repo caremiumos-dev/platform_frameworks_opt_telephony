@@ -34,7 +34,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
-import android.telephony.UiccPortInfo;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
@@ -52,7 +51,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 @RunWith(AndroidTestingRunner.class)
@@ -340,7 +338,7 @@ public class UiccControllerTest extends TelephonyTest {
         doReturn("A1B2C3D4").when(mMockCard).getCardId();
         doReturn("123451234567890").when(mMockCard).getIccId();
         doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mMockCard).getCardState();
-        doReturn(true).when(mMockSlot).isActive(); //TODO: use UICCPort when ready
+
         // simulate card status loaded so that the UiccController sets the card ID
         IccCardStatus ics = new IccCardStatus();
         ics.setCardState(1 /* present */);
@@ -358,14 +356,9 @@ public class UiccControllerTest extends TelephonyTest {
                 false,     // isEuicc
                 0,         // cardId
                 null,      // eid
+                ics.iccid, // iccid
                 0,         // slotIndex
-                true, // isRemovable
-                false,   //  isMultipleEnabledProfileSupported
-                Collections.singletonList(new UiccPortInfo(
-                        ics.iccid, // iccid
-                        0, // portIdx TODO: need to mock UiccPort
-                        0, //logicalSlotIdx
-                        true))); //isActive
+                true);     // isRemovable
         assertEquals(uiccCardInfo, mUiccControllerUT.getAllUiccCardInfos().get(0));
     }
 
@@ -383,7 +376,6 @@ public class UiccControllerTest extends TelephonyTest {
         doReturn("A1B2C3D4").when(mMockCard).getCardId();
         doReturn("123451234567890F").when(mMockCard).getIccId();
         doReturn(IccCardStatus.CardState.CARDSTATE_PRESENT).when(mMockCard).getCardState();
-        doReturn(true).when(mMockSlot).isActive(); //TODO: use UICCPort when ready
 
         // simulate card status loaded so that the UiccController sets the card ID
         IccCardStatus ics = new IccCardStatus();
@@ -402,14 +394,9 @@ public class UiccControllerTest extends TelephonyTest {
                 false,     // isEuicc
                 0,         // cardId
                 null,      // eid
+                IccUtils.stripTrailingFs(ics.iccid), //iccid without ending F
                 0,         // slotIndex
-                true, // isRemovable
-                false,   //  isMultipleEnabledProfileSupported
-                Collections.singletonList(new UiccPortInfo(
-                        IccUtils.stripTrailingFs(ics.iccid), // iccid
-                        0, // portIdx TODO: need to mock UiccPort
-                        0, //logicalSlotIdx
-                        true))); //isActive
+                true);     // isRemovable
         assertEquals(uiccCardInfo, mUiccControllerUT.getAllUiccCardInfos().get(0));
     }
 
@@ -424,7 +411,6 @@ public class UiccControllerTest extends TelephonyTest {
         doReturn(null).when(mMockSlot).getUiccCard();
         doReturn("123451234567890").when(mMockSlot).getIccId();
         doReturn(false).when(mMockSlot).isRemovable();
-        doReturn(true).when(mMockSlot).isActive(); //TODO: use UICCPort when ready
 
         // simulate card status loaded so that the UiccController sets the card ID
         IccCardStatus ics = new IccCardStatus();
@@ -444,14 +430,9 @@ public class UiccControllerTest extends TelephonyTest {
                 true,                                   // isEuicc
                 TelephonyManager.UNINITIALIZED_CARD_ID, // cardId
                 null,                                   // eid
+                ics.iccid,                              // iccid
                 0,                                      // slotIndex
-                false,                      // isRemovable
-                false,   //  isMultipleEnabledProfileSupported
-                Collections.singletonList(new UiccPortInfo(
-                        ics.iccid, // iccid
-                        0, // portIdx TODO: need to mock UiccPort
-                        0, //logicalSlotIdx
-                        true)));    //isActive
+                false);                                 // isRemovable
         assertEquals(uiccCardInfo, mUiccControllerUT.getAllUiccCardInfos().get(0));
     }
 

@@ -21,7 +21,6 @@ import static android.telephony.TelephonyManager.UNSUPPORTED_CARD_ID;
 
 import static java.util.Arrays.copyOf;
 
-import android.annotation.Nullable;
 import android.app.BroadcastOptions;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
@@ -41,7 +40,6 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
-import android.telephony.UiccPortInfo;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
@@ -62,7 +60,6 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -387,7 +384,6 @@ public class UiccController extends Handler {
      * @return UiccPort object corresponding to given phone id; null if there is no card present for
      * the phone id
      */
-    @Nullable
     public UiccPort getUiccPortForPhone(int phoneId) {
         synchronized (mLock) {
             if (isValidPhoneIndex(phoneId)) {
@@ -907,8 +903,6 @@ public class UiccController extends Handler {
             final UiccSlot slot = mUiccSlots[slotIndex];
             if (slot == null) continue;
             boolean isEuicc = slot.isEuicc();
-            //TODO: UiccSlot should have a isMultipleEnabledProfileSupported method.
-            boolean isMultipleEnabledProfileSupported = false;
             String eid = null;
             UiccCard card = slot.getUiccCard();
             String iccid = null;
@@ -933,13 +927,8 @@ public class UiccController extends Handler {
                     cardId = convertToPublicCardId(iccid);
                 }
             }
-            UiccCardInfo info = new UiccCardInfo(
-                    isEuicc, cardId, eid, slotIndex, isRemovable, isMultipleEnabledProfileSupported,
-                    Collections.singletonList(
-                            new UiccPortInfo(IccUtils.stripTrailingFs(iccid),
-                                    0 /* TODO: to use portList from UiccSlots */,
-                                    slot.getPhoneId(),
-                                    slot.isActive())));
+            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid,
+                    IccUtils.stripTrailingFs(iccid), slotIndex, isRemovable);
             infos.add(info);
         }
         return infos;

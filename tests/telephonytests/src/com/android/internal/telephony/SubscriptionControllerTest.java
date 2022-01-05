@@ -54,7 +54,6 @@ import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
-import android.telephony.UiccPortInfo;
 import android.telephony.UiccSlotInfo;
 import android.test.mock.MockContentResolver;
 
@@ -73,7 +72,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -1750,8 +1748,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
     public void testGetEnabledSubscriptionIdSingleSIM() {
         // A single SIM device may have logical slot 0 mapped to physical slot 1
         // (i.e. logical slot -1 mapped to physical slot 0)
-        UiccSlotInfo slot0 = getFakeUiccSlotInfo(false, -1, null);
-        UiccSlotInfo slot1 = getFakeUiccSlotInfo(true, 0, null);
+        UiccSlotInfo slot0 = getFakeUiccSlotInfo(false, -1);
+        UiccSlotInfo slot1 = getFakeUiccSlotInfo(true, 0);
         UiccSlotInfo [] uiccSlotInfos = {slot0, slot1};
         UiccSlot [] uiccSlots = {mUiccSlot, mUiccSlot};
 
@@ -1774,8 +1772,8 @@ public class SubscriptionControllerTest extends TelephonyTest {
         doReturn(SINGLE_SIM).when(mTelephonyManager).getActiveModemCount();
         // A dual SIM device may have logical slot 0 mapped to physical slot 0
         // (i.e. logical slot 1 mapped to physical slot 1)
-        UiccSlotInfo slot0 = getFakeUiccSlotInfo(true, 0, null);
-        UiccSlotInfo slot1 = getFakeUiccSlotInfo(true, 1, null);
+        UiccSlotInfo slot0 = getFakeUiccSlotInfo(true, 0);
+        UiccSlotInfo slot1 = getFakeUiccSlotInfo(true, 1);
         UiccSlotInfo [] uiccSlotInfos = {slot0, slot1};
         UiccSlot [] uiccSlots = {mUiccSlot, mUiccSlot};
 
@@ -1797,17 +1795,13 @@ public class SubscriptionControllerTest extends TelephonyTest {
     }
 
 
-    private UiccSlotInfo getFakeUiccSlotInfo(boolean active, int logicalSlotIndex, String iccId) {
-        return getFakeUiccSlotInfo(active, logicalSlotIndex, "fake card Id", iccId);
+    private UiccSlotInfo getFakeUiccSlotInfo(boolean active, int logicalSlotIndex) {
+        return getFakeUiccSlotInfo(active, logicalSlotIndex, "fake card Id");
     }
 
-    private UiccSlotInfo getFakeUiccSlotInfo(
-            boolean active, int logicalSlotIndex, String cardId, String iccId) {
-        return new UiccSlotInfo(false, cardId,
-                UiccSlotInfo.CARD_STATE_INFO_PRESENT, true, true,
-                Collections.singletonList(
-                        new UiccPortInfo(iccId, 0, logicalSlotIndex, active)
-                ));
+    private UiccSlotInfo getFakeUiccSlotInfo(boolean active, int logicalSlotIndex, String cardId) {
+        return new UiccSlotInfo(active, false, cardId,
+                UiccSlotInfo.CARD_STATE_INFO_PRESENT, logicalSlotIndex, true, true);
     }
 
     @Test
@@ -1922,7 +1916,7 @@ public class SubscriptionControllerTest extends TelephonyTest {
         String iccId = "123F";
         mSubscriptionControllerUT.addSubInfoRecord(iccId, 0);
         mSubscriptionControllerUT.registerForUiccAppsEnabled(mHandler, 0, null, false);
-        UiccSlotInfo slot = getFakeUiccSlotInfo(true, 0, iccId + "FF", iccId);
+        UiccSlotInfo slot = getFakeUiccSlotInfo(true, 0, iccId + "FF");
         UiccSlotInfo[] uiccSlotInfos = {slot};
         doReturn(uiccSlotInfos).when(mTelephonyManager).getUiccSlotsInfo();
 
