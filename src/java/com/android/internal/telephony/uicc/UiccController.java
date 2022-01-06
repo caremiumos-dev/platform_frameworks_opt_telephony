@@ -21,6 +21,7 @@ import static android.telephony.TelephonyManager.UNSUPPORTED_CARD_ID;
 
 import static java.util.Arrays.copyOf;
 
+import android.annotation.Nullable;
 import android.app.BroadcastOptions;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
@@ -40,6 +41,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.UiccCardInfo;
+import android.telephony.UiccPortInfo;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
@@ -60,6 +62,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -384,6 +387,7 @@ public class UiccController extends Handler {
      * @return UiccPort object corresponding to given phone id; null if there is no card present for
      * the phone id
      */
+    @Nullable
     public UiccPort getUiccPortForPhone(int phoneId) {
         synchronized (mLock) {
             if (isValidPhoneIndex(phoneId)) {
@@ -767,13 +771,13 @@ public class UiccController extends Handler {
 
         logWithLocalLog("onGetIccCardStatusDone: phoneId " + index + " IccCardStatus: " + status);
 
-        int slotId = status.physicalSlotIndex;
+        int slotId = status.mSlotPortMapping.mPhysicalSlotIndex;
         if (VDBG) log("onGetIccCardStatusDone: phoneId " + index + " physicalSlotIndex " + slotId);
         if (slotId == INVALID_SLOT_ID) {
             slotId = index;
         }
 
-        if (eidIsNotSupported(status)) {
+        if (!mCis[0].supportsEid()) {
             // we will never get EID from the HAL, so set mDefaultEuiccCardId to UNSUPPORTED_CARD_ID
             if (DBG) log("eid is not supported");
             mDefaultEuiccCardId = UNSUPPORTED_CARD_ID;
@@ -833,15 +837,6 @@ public class UiccController extends Handler {
 
         if (DBG) log("Notifying IccChangedRegistrants");
         mIccChangedRegistrants.notifyRegistrants(new AsyncResult(null, index, null));
-    }
-
-    /**
-     * Returns true if EID is not supproted.
-     */
-    private boolean eidIsNotSupported(IccCardStatus status) {
-        // if card status does not contain slot ID, we know we are on HAL < 1.2, so EID will never
-        // be available
-        return status.physicalSlotIndex == INVALID_SLOT_ID;
     }
 
     /**
@@ -912,6 +907,8 @@ public class UiccController extends Handler {
             final UiccSlot slot = mUiccSlots[slotIndex];
             if (slot == null) continue;
             boolean isEuicc = slot.isEuicc();
+            //TODO: UiccSlot should have a isMultipleEnabledProfileSupported method.
+            boolean isMultipleEnabledProfileSupported = false;
             String eid = null;
             UiccCard card = slot.getUiccCard();
             String iccid = null;
@@ -936,8 +933,13 @@ public class UiccController extends Handler {
                     cardId = convertToPublicCardId(iccid);
                 }
             }
-            UiccCardInfo info = new UiccCardInfo(isEuicc, cardId, eid,
-                    IccUtils.stripTrailingFs(iccid), slotIndex, isRemovable);
+            UiccCardInfo info = new UiccCardInfo(
+                    isEuicc, cardId, eid, slotIndex, isRemovable, isMultipleEnabledProfileSupported,
+                    Collections.singletonList(
+                            new UiccPortInfo(IccUtils.stripTrailingFs(iccid),
+                                    0 /* TODO: to use portList from UiccSlots */,
+                                    slot.getPhoneId(),
+                                    slot.isActive())));
             infos.add(info);
         }
         return infos;
@@ -1164,12 +1166,16 @@ public class UiccController extends Handler {
                 options.toBundle());
     }
 
-    private boolean slotStatusChanged(ArrayList<IccSlotStatus> slotStatusList) {
+    /**
+     * Check if slot status has changed from the last received one
+     */
+    @VisibleForTesting
+    public boolean slotStatusChanged(ArrayList<IccSlotStatus> slotStatusList) {
         if (sLastSlotStatus == null || sLastSlotStatus.size() != slotStatusList.size()) {
             return true;
         }
-        for (IccSlotStatus iccSlotStatus : slotStatusList) {
-            if (!sLastSlotStatus.contains(iccSlotStatus)) {
+        for (int i = 0; i < slotStatusList.size(); i++) {
+            if (!sLastSlotStatus.get(i).equals(slotStatusList.get(i))) {
                 return true;
             }
         }

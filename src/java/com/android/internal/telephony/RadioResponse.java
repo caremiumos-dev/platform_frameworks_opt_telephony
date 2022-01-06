@@ -61,6 +61,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.AdnCapacity;
 import com.android.internal.telephony.uicc.IccCardStatus;
 import com.android.internal.telephony.uicc.IccIoResult;
+import com.android.internal.telephony.uicc.IccSlotPortMapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1891,7 +1892,9 @@ public class RadioResponse extends IRadioResponse.Stub {
 
         if (rr != null) {
             IccCardStatus iccCardStatus = RILUtils.convertHalCardStatus(cardStatus.base);
-            iccCardStatus.physicalSlotIndex = cardStatus.physicalSlotId;
+            IccSlotPortMapping slotPortMapping = new IccSlotPortMapping();
+            slotPortMapping.mPhysicalSlotIndex = cardStatus.physicalSlotId;
+            iccCardStatus.mSlotPortMapping = slotPortMapping;
             iccCardStatus.atr = cardStatus.atr;
             iccCardStatus.iccid = cardStatus.iccid;
             mRil.riljLog("responseIccCardStatus: from HIDL: " + iccCardStatus);
@@ -1908,7 +1911,9 @@ public class RadioResponse extends IRadioResponse.Stub {
 
         if (rr != null) {
             IccCardStatus iccCardStatus = RILUtils.convertHalCardStatus(cardStatus.base.base);
-            iccCardStatus.physicalSlotIndex = cardStatus.base.physicalSlotId;
+            IccSlotPortMapping slotPortMapping = new IccSlotPortMapping();
+            slotPortMapping.mPhysicalSlotIndex = cardStatus.base.physicalSlotId;
+            iccCardStatus.mSlotPortMapping = slotPortMapping;
             iccCardStatus.atr = cardStatus.base.atr;
             iccCardStatus.iccid = cardStatus.base.iccid;
             iccCardStatus.eid = cardStatus.eid;
@@ -1960,17 +1965,18 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * Send int array response
+     * @param service radio service that received the response
      * @param ril RIL to send response
      * @param responseInfo responseInfo
      * @param var response int array
      */
-    public static void responseInts(RIL ril, android.hardware.radio.RadioResponseInfo responseInfo,
-            int ...var) {
+    public static void responseInts(int service, RIL ril,
+            android.hardware.radio.RadioResponseInfo responseInfo, int ...var) {
         final ArrayList<Integer> ints = new ArrayList<>();
         for (int i = 0; i < var.length; i++) {
             ints.add(var[i]);
         }
-        responseIntArrayList(ril, responseInfo, ints);
+        responseIntArrayList(service, ril, responseInfo, ints);
     }
 
     private void responseIntArrayList(RadioResponseInfo responseInfo, ArrayList<Integer> var) {
@@ -2006,13 +2012,14 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * Send int array list response
+     * @param service radio service that received the response
      * @param ril RIL to send response
      * @param responseInfo responseInfo
      * @param var response int array list
      */
-    public static void responseIntArrayList(RIL ril,
+    public static void responseIntArrayList(int service, RIL ril,
             android.hardware.radio.RadioResponseInfo responseInfo, ArrayList<Integer> var) {
-        RILRequest rr = ril.processResponse(responseInfo);
+        RILRequest rr = ril.processResponse(service, responseInfo);
 
         if (rr != null) {
             int[] ret = new int[var.size()];
@@ -2173,12 +2180,13 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * Send void response
+     * @param service radio service that received the response
      * @param ril RIL to send response
      * @param responseInfo response void
      */
-    public static void responseVoid(RIL ril,
+    public static void responseVoid(int service, RIL ril,
             android.hardware.radio.RadioResponseInfo responseInfo) {
-        RILRequest rr = ril.processResponse(responseInfo);
+        RILRequest rr = ril.processResponse(service, responseInfo);
 
         if (rr != null) {
             Object ret = null;
@@ -2202,13 +2210,14 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * Send string response
+     * @param service radio service that received the response
      * @param ril RIL to send response
      * @param responseInfo responseInfo
      * @param str response string
      */
-    public static void responseString(RIL ril,
+    public static void responseString(int service, RIL ril,
             android.hardware.radio.RadioResponseInfo responseInfo, String str) {
-        RILRequest rr = ril.processResponse(responseInfo);
+        RILRequest rr = ril.processResponse(service, responseInfo);
 
         if (rr != null) {
             if (responseInfo.error == RadioError.NONE) {
@@ -2228,17 +2237,18 @@ public class RadioResponse extends IRadioResponse.Stub {
 
     /**
      * Send String array response
+     * @param service radio service that received the response
      * @param ril RIL to send response
      * @param responseInfo responseInfo
      * @param str String array
      */
-    public static void responseStrings(RIL ril,
+    public static void responseStrings(int service, RIL ril,
             android.hardware.radio.RadioResponseInfo responseInfo, String ...str) {
         ArrayList<String> strings = new ArrayList<>();
         for (int i = 0; i < str.length; i++) {
             strings.add(str[i]);
         }
-        responseStringArrayList(ril, responseInfo, strings);
+        responseStringArrayList(service, ril, responseInfo, strings);
     }
 
     static void responseStringArrayList(RIL ril, RadioResponseInfo responseInfo,
@@ -2257,9 +2267,9 @@ public class RadioResponse extends IRadioResponse.Stub {
         }
     }
 
-    private static void responseStringArrayList(RIL ril,
+    private static void responseStringArrayList(int service, RIL ril,
             android.hardware.radio.RadioResponseInfo responseInfo, ArrayList<String> strings) {
-        RILRequest rr = ril.processResponse(responseInfo);
+        RILRequest rr = ril.processResponse(service, responseInfo);
 
         if (rr != null) {
             String[] ret = new String[strings.size()];

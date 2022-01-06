@@ -43,6 +43,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.UserInfo;
 import android.net.InetAddresses;
 import android.net.KeepalivePacketData;
 import android.net.LinkAddress;
@@ -54,6 +57,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.os.UserManager;
 import android.provider.Telephony;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
@@ -61,6 +65,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.ServiceState;
 import android.telephony.ServiceState.RegState;
 import android.telephony.ServiceState.RilRadioTechnology;
+import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
 import android.telephony.data.DataProfile;
@@ -200,7 +205,7 @@ public class DataConnectionTest extends TelephonyTest {
             Handler h = new Handler();
             mDcc = DcController.makeDcc(mPhone, mDcTracker, mDataServiceManager, h.getLooper(), "");
             mDc = DataConnection.makeDataConnection(mPhone, 0, mDcTracker, mDataServiceManager,
-                    mDcTesterFailBringUpAll, mDcc, true);
+                    mDcTesterFailBringUpAll, mDcc);
         }
     }
 
@@ -385,6 +390,63 @@ public class DataConnectionTest extends TelephonyTest {
                 eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
                 anyInt(), any(), tdCaptor.capture(), anyBoolean(), any(Message.class));
 
+        verify(mSimulatedCommandsVerifier, times(0))
+                .allocatePduSessionId(any());
+
+        assertEquals("spmode.ne.jp", dpCaptor.getValue().getApn());
+        if (tdCaptor.getValue() != null) {
+            if (mApnContext.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE) {
+                assertEquals(null, tdCaptor.getValue().getDataNetworkName());
+                assertTrue(Arrays.equals(DataConnection.getEnterpriseOsAppId(),
+                        tdCaptor.getValue().getOsAppId()));
+            } else {
+                assertEquals("spmode.ne.jp", tdCaptor.getValue().getDataNetworkName());
+                assertEquals(null, tdCaptor.getValue().getOsAppId());
+            }
+        }
+        assertTrue(mDc.isActive());
+
+        assertEquals(1, mDc.getPduSessionId());
+        assertEquals(3, mDc.getPcscfAddresses().length);
+        assertTrue(Arrays.stream(mDc.getPcscfAddresses()).anyMatch("fd00:976a:c305:1d::8"::equals));
+        assertTrue(Arrays.stream(mDc.getPcscfAddresses()).anyMatch("fd00:976a:c202:1d::7"::equals));
+        assertTrue(Arrays.stream(mDc.getPcscfAddresses()).anyMatch("fd00:976a:c305:1d::5"::equals));
+    }
+
+    @Test
+    @SmallTest
+    public void testConnectOnIwlan() throws Exception {
+        assertTrue(mDc.isInactive());
+        Field field = DataConnection.class.getDeclaredField("mTransportType");
+        field.setAccessible(true);
+        field.setInt(mDc, AccessNetworkConstants.TRANSPORT_TYPE_WLAN);
+        connectEvent(true);
+
+        verify(mCT, times(1)).registerForVoiceCallStarted(any(Handler.class),
+                eq(DataConnection.EVENT_DATA_CONNECTION_VOICE_CALL_STARTED), eq(null));
+        verify(mCT, times(1)).registerForVoiceCallEnded(any(Handler.class),
+                eq(DataConnection.EVENT_DATA_CONNECTION_VOICE_CALL_ENDED), eq(null));
+        verify(mSimulatedCommandsVerifier, times(0))
+                .registerForNattKeepaliveStatus(any(Handler.class),
+                        eq(DataConnection.EVENT_KEEPALIVE_STATUS), eq(null));
+        verify(mSimulatedCommandsVerifier, times(0))
+                .registerForLceInfo(any(Handler.class),
+                        eq(DataConnection.EVENT_LINK_CAPACITY_CHANGED), eq(null));
+        verify(mVcnManager, atLeastOnce())
+                .applyVcnNetworkPolicy(
+                        argThat(caps ->
+                                caps.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED)),
+                        any());
+
+        ArgumentCaptor<DataProfile> dpCaptor = ArgumentCaptor.forClass(DataProfile.class);
+        ArgumentCaptor<TrafficDescriptor> tdCaptor =
+                ArgumentCaptor.forClass(TrafficDescriptor.class);
+        verify(mDataServiceManager, times(1)).setupDataCall(
+                eq(AccessNetworkType.UTRAN), dpCaptor.capture(), eq(false),
+                eq(false), eq(DataService.REQUEST_REASON_NORMAL), any(),
+                anyInt(), any(), tdCaptor.capture(), anyBoolean(), any(Message.class));
+
         verify(mSimulatedCommandsVerifier, times(1))
                 .allocatePduSessionId(any());
 
@@ -401,7 +463,7 @@ public class DataConnectionTest extends TelephonyTest {
         }
         assertTrue(mDc.isActive());
 
-        assertEquals(mDc.getPduSessionId(), 1);
+        assertEquals(1, mDc.getPduSessionId());
         assertEquals(3, mDc.getPcscfAddresses().length);
         assertTrue(Arrays.stream(mDc.getPcscfAddresses()).anyMatch("fd00:976a:c305:1d::8"::equals));
         assertTrue(Arrays.stream(mDc.getPcscfAddresses()).anyMatch("fd00:976a:c202:1d::7"::equals));
@@ -475,6 +537,28 @@ public class DataConnectionTest extends TelephonyTest {
 
         verify(mSimulatedCommandsVerifier, times(1)).unregisterForLceInfo(any(Handler.class));
         verify(mSimulatedCommandsVerifier, times(1))
+                .unregisterForNattKeepaliveStatus(any(Handler.class));
+        verify(mDataServiceManager, times(1)).deactivateDataCall(eq(DEFAULT_DC_CID),
+                eq(DataService.REQUEST_REASON_NORMAL), any(Message.class));
+        verify(mSimulatedCommandsVerifier, times(0))
+                .releasePduSessionId(any(), eq(5));
+
+        assertTrue(mDc.isInactive());
+    }
+
+    @Test
+    @SmallTest
+    public void testDisconnectOnIwlan() throws Exception {
+        testConnectEvent();
+
+        Field field = DataConnection.class.getDeclaredField("mTransportType");
+        field.setAccessible(true);
+        field.setInt(mDc, AccessNetworkConstants.TRANSPORT_TYPE_WLAN);
+        mDc.setPduSessionId(5);
+        disconnectEvent();
+
+        verify(mSimulatedCommandsVerifier, times(0)).unregisterForLceInfo(any(Handler.class));
+        verify(mSimulatedCommandsVerifier, times(0))
                 .unregisterForNattKeepaliveStatus(any(Handler.class));
         verify(mDataServiceManager, times(1)).deactivateDataCall(eq(DEFAULT_DC_CID),
                 eq(DataService.REQUEST_REASON_NORMAL), any(Message.class));
@@ -783,6 +867,37 @@ public class DataConnectionTest extends TelephonyTest {
         assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_METERED));
         assertFalse(getNetworkCapabilities().hasCapability(NET_CAPABILITY_TEMPORARILY_NOT_METERED));
         assertTrue(getNetworkCapabilities().hasCapability(NET_CAPABILITY_NOT_CONGESTED));
+    }
+
+    @Test
+    public void testOwnerUid() throws Exception {
+        Context mockContext = mContextFixture.getTestDouble();
+        doReturn(mockContext).when(mPhone).getContext();
+
+        String testPkg = "com.android.telephony.test";
+        TelephonyManager telMgr = mockContext.getSystemService(TelephonyManager.class);
+        doReturn(testPkg).when(telMgr).getCarrierServicePackageNameForLogicalSlot(anyInt());
+
+        UserInfo info = new UserInfo(0 /* id */, "TEST_USER", 0 /* flags */);
+        UserManager userMgr = mockContext.getSystemService(UserManager.class);
+        doReturn(Collections.singletonList(info)).when(userMgr).getUsers();
+
+        int carrierConfigPkgUid = 12345;
+        PackageManager pkgMgr = mockContext.getPackageManager();
+        doReturn(carrierConfigPkgUid).when(pkgMgr).getPackageUidAsUser(eq(testPkg), anyInt());
+
+        mContextFixture
+                .getCarrierConfigBundle()
+                .putStringArray(
+                        CarrierConfigManager.KEY_CARRIER_METERED_APN_TYPES_STRINGS,
+                        new String[] {"default"});
+        testConnectEvent();
+        AsyncResult adminUidsResult = new AsyncResult(null, new int[] {carrierConfigPkgUid}, null);
+        mDc.sendMessage(DataConnection.EVENT_CARRIER_PRIVILEGED_UIDS_CHANGED, adminUidsResult);
+        // Wait for carirer privilege UIDs to be updated
+        waitForMs(100);
+
+        assertEquals(carrierConfigPkgUid, getNetworkCapabilities().getOwnerUid());
     }
 
     @Test
