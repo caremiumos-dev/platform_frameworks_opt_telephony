@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55c7050d_19272b71",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2668,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-01-11T19:10:10Z",
+      "side": 1,
+      "message": "In the current implementation, \"*\" gets remapped to null for the from code. For implementation consistently, lets follow that previous implementation for this new addition as well.",
+      "range": {
+        "startLine": 2668,
+        "startChar": 72,
+        "endLine": 2668,
+        "endChar": 75
+      },
+      "revId": "69e7786672545b3cc65864c9e94d785519f37bcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
