@@ -471,6 +471,17 @@ public class DataConnectionTest extends TelephonyTest {
     }
 
     @Test
+    public void testEnterpriseOsAppIdsUtilities() {
+        assertTrue(Arrays.equals(DataConnection.getEnterpriseOsAppId(),
+                DataConnection.getEnterpriseOsAppIds().get(0)));
+        TrafficDescriptor trafficDescriptor = new TrafficDescriptor("default",
+                DataConnection.getEnterpriseOsAppId());
+        assertEquals(DataConnection.getEnterpriseSubLevel(trafficDescriptor),
+                NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_1);
+        assertTrue(DataConnection.matchEnterpriseOsAppId(trafficDescriptor.getOsAppId()));
+    }
+
+    @Test
     public void testConnectEventDuplicateContextIds() throws Exception {
         setUpDefaultData(DEFAULT_DC_CID);
 

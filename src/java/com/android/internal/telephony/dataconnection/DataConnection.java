@@ -842,6 +842,38 @@ public class DataConnection extends StateMachine {
     }
 
     /**
+     * API to generate the list of OsAppIds for enterprise traffic category.
+     * @return byte[] representing OsId + length of OsAppId + OsAppId
+     */
+    @VisibleForTesting
+    public static List<byte[]> getEnterpriseOsAppIds() {
+        List<byte[]> enterpriseOsAppIds = new ArrayList<>();
+        for (int i = NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_1;
+                i < NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_5; i++) {
+            byte[] osAppId;
+            if (i == NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_1) {
+                osAppId = NetworkCapabilities.getCapabilityCarrierName(
+                        NetworkCapabilities.NET_CAPABILITY_ENTERPRISE).getBytes();
+            } else {
+                osAppId = (NetworkCapabilities.getCapabilityCarrierName(
+                        NetworkCapabilities.NET_CAPABILITY_ENTERPRISE) + i).getBytes();
+            }
+            // 16 bytes for UUID, 1 byte for length of osAppId, and up to 255 bytes for osAppId
+            ByteBuffer bb = ByteBuffer.allocate(16 + 1 + osAppId.length);
+            bb.putLong(OS_ID.getMostSignificantBits());
+            bb.putLong(OS_ID.getLeastSignificantBits());
+            bb.put((byte) osAppId.length);
+            bb.put(osAppId);
+            if (VDBG) {
+                Rlog.d("DataConnection", "getEnterpriseOsAppId: "
+                        + IccUtils.bytesToHexString(bb.array()));
+            }
+            enterpriseOsAppIds.add(bb.array());
+        }
+        return enterpriseOsAppIds;
+    }
+
+    /**
      * Begin setting up a data connection, calls setupDataCall
      * and the ConnectionParams will be returned with the
      * EVENT_SETUP_DATA_CONNECTION_DONE
@@ -1811,12 +1843,43 @@ public class DataConnection extends StateMachine {
     private boolean isEnterpriseUse() {
         boolean enterpriseTrafficDescriptor = mTrafficDescriptors
                 .stream()
-                .anyMatch(td -> td.getOsAppId() != null && Arrays.equals(td.getOsAppId(),
-                        getEnterpriseOsAppId()));
+                .anyMatch(td -> td.getOsAppId() != null && matchEnterpriseOsAppId(td.getOsAppId()));
         boolean enterpriseApnContext = mApnContexts.keySet()
                 .stream()
                 .anyMatch(ac -> ac.getApnTypeBitmask() == ApnSetting.TYPE_ENTERPRISE);
         return enterpriseTrafficDescriptor || enterpriseApnContext;
+    }
+
+    /**
+     * get enterprise sub level for a give traffic descriptor
+     *
+     * @return enterprise sub level
+     */
+    @VisibleForTesting
+    public static int getEnterpriseSubLevel(TrafficDescriptor trafficDescriptor) {
+        List<byte[]> enterpriseOsAppIds = getEnterpriseOsAppIds();
+        for (int i = NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_1;
+                i < NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_5; i++) {
+            if (Arrays.equals(trafficDescriptor.getOsAppId(), enterpriseOsAppIds.get(i - 1))) {
+                return i;
+            }
+        }
+        return NetworkCapabilities.NET_CAPABILITY_ENTERPRISE_SUB_LEVEL_1;
+    }
+
+    /**
+     * check if os app id matches with any enterprise OsAppId
+     *
+     * @return true if enterprise OsAppId else false
+     */
+    @VisibleForTesting
+    public static boolean matchEnterpriseOsAppId(byte[] osAppId) {
+        for (byte[] enterpriseOsAppId : getEnterpriseOsAppIds()) {
+            if (Arrays.equals(osAppId, enterpriseOsAppId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
