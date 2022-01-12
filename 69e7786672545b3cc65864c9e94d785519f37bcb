@@ -22,6 +22,30 @@
       },
       "revId": "69e7786672545b3cc65864c9e94d785519f37bcb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57cbe8a9_f96d5940",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2668,
+      "author": {
+        "id": 1900897
+      },
+      "writtenOn": "2022-01-12T09:09:44Z",
+      "side": 1,
+      "message": "OK. New patch lets updateCarrierConfigCache() to convert \"*\" to null.",
+      "parentUuid": "55c7050d_19272b71",
+      "range": {
+        "startLine": 2668,
+        "startChar": 72,
+        "endLine": 2668,
+        "endChar": 75
+      },
+      "revId": "69e7786672545b3cc65864c9e94d785519f37bcb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
