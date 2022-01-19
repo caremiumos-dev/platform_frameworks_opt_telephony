@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80626446_2a96ca96",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-01-19T16:37:21Z",
+      "side": 1,
+      "message": "nits: baseSs, to match the logic.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 30,
+        "endLine": 1089,
+        "endChar": 34
+      },
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d4fad4b_9068116b",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-01-19T16:37:21Z",
+      "side": 1,
+      "message": "This should have the highest priority, since it is OTT, right? Then we may put this first to highlight the priority (no need to check IMS case if telcomSs has override to be IN_SERVICE)",
+      "range": {
+        "startLine": 1090,
+        "startChar": 10,
+        "endLine": 1091,
+        "endChar": 84
+      },
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb67d5bf_fbf0fa9a",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-01-19T16:37:21Z",
+      "side": 1,
+      "message": "We may use the following instead:\n```\nif (finalVoiceSs !\u003d ServiceState.STATE_IN_SERVICE) {\n    // xxx\n    return baseSs;\n}\n```\n\nbaseSs.getDataRegistrationState() above may return STATE_EMERGENCY_ONLY or #STATE_POWER_OFF. If telecomSs is not IN_SERVICE, it is not guaranteed \"Must be IN_SERVICE if we\u0027re here\" when setEmergencyOnly(false)",
+      "range": {
+        "startLine": 1116,
+        "startChar": 12,
+        "endLine": 1116,
+        "endChar": 61
+      },
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
