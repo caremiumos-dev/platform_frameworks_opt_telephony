@@ -276,6 +276,9 @@ public class ServiceStateTracker extends Handler {
     // Timeout event used when delaying radio power off to wait for IMS deregistration to happen.
     private static final int EVENT_POWER_OFF_RADIO_IMS_DEREG_TIMEOUT   = 62;
     protected static final int EVENT_RESET_LAST_KNOWN_CELL_IDENTITY    = 63;
+    // Telecom has un/registered a PhoneAccount that provides OTT voice calling capability, e.g.
+    // wi-fi calling.
+    protected static final int EVENT_TELECOM_VOICE_SERVICE_STATE_OVERRIDE_CHANGED = 64;
 
     /**
      * The current service state.
@@ -1681,6 +1684,15 @@ public class ServiceStateTracker extends Handler {
                 mLastKnownCellIdentity = null;
                 break;
             }
+
+            case EVENT_TELECOM_VOICE_SERVICE_STATE_OVERRIDE_CHANGED:
+                if (DBG) log("EVENT_TELECOM_VOICE_SERVICE_STATE_OVERRIDE_CHANGED");
+                // Similar to IMS, OTT voice state will only affect the merged service state if the
+                // service state of GsmCdma phone is not STATE_IN_SERVICE.
+                if (mSS.getState() != ServiceState.STATE_IN_SERVICE) {
+                    mPhone.notifyServiceStateChanged(mPhone.getServiceState());
+                }
+                break;
 
             default:
                 log("Unhandled message with number: " + msg.what);
@@ -5156,6 +5168,11 @@ public class ServiceStateTracker extends Handler {
             // NV is ready when subscription source is NV
             sendMessage(obtainMessage(EVENT_NV_READY));
         }
+    }
+
+    /** Called when telecom has reported a voice service state change. */
+    public void onTelecomVoiceServiceStateOverrideChanged() {
+        sendMessage(obtainMessage(EVENT_TELECOM_VOICE_SERVICE_STATE_OVERRIDE_CHANGED));
     }
 
     private void dumpCellInfoList(PrintWriter pw) {
