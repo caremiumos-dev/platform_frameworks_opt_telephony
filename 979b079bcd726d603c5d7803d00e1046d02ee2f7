@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a98a7d8c_b1f9ed01",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-01-20T21:40:41Z",
+      "side": 1,
+      "message": "nits: Maybe use local variables baseServiceState and imsServiceState are worthy here for better readability.\n\n(at first glance, I thought this is ?: within a ?:, then I got it is just two ?: to get the separate SS :)",
+      "range": {
+        "startLine": 591,
+        "startChar": 12,
+        "endLine": 591,
+        "endChar": 70
+      },
+      "revId": "979b079bcd726d603c5d7803d00e1046d02ee2f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
