@@ -22,6 +22,30 @@
       },
       "revId": "1f283ca78df5cbdeaae13fa329ba3bcd33ff8f7d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae6230a_fcdbe674",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-01-20T21:22:53Z",
+      "side": 0,
+      "message": "Updated to keep this sentence in the javadoc",
+      "parentUuid": "1d961f50_377aeb7d",
+      "range": {
+        "startLine": 1077,
+        "startChar": 7,
+        "endLine": 1078,
+        "endChar": 48
+      },
+      "revId": "1f283ca78df5cbdeaae13fa329ba3bcd33ff8f7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

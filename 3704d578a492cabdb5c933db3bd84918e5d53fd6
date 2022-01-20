@@ -1,6 +1,60 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c087297_92b4c71d",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-01-20T21:22:53Z",
+      "side": 1,
+      "message": "Ultimately since they both just use IN/OUT_OF_SERVICE for the constants, this basically just becomes a big boolean or that doesn\u0027t need special care for ordering/priority - the only special consideration is that we don\u0027t directly use imsSs.getState() to assign finalVoiceSs (we use baseSs.getDatregState instead)",
+      "parentUuid": "1d4fad4b_9068116b",
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ec4fa7_51b78da5",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-01-20T21:22:53Z",
+      "side": 1,
+      "message": "Done\n\nThis is a very slight behavior change from previous treatment of the IMS info, but I believe it\u0027s safe to assume that we shouldn\u0027t see POWER_OFF from data reg state alone",
+      "parentUuid": "eb67d5bf_fbf0fa9a",
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c355ee0_f90d533c",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-01-20T21:22:53Z",
+      "side": 1,
+      "message": "Ah yes, good catch",
+      "parentUuid": "80626446_2a96ca96",
+      "revId": "3704d578a492cabdb5c933db3bd84918e5d53fd6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80626446_2a96ca96",
