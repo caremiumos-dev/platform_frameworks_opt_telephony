@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000019459910",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1955516?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "9529fb6e_e2854d46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2022-01-20T00:48:11Z",
+      "side": 1,
+      "message": "Third-party license (BSD) disallowed in repository platform/frameworks/opt/telephony:\nBSD license\n",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "bdf6ea029050d9745b5c48f466a4d2a4b61f16ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000019459910",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1955516?revision\u003d1",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "48c1f51b_fd20fdb7",
+        "filename": "tests/telephonytests/LICENSE_BSD",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2022-01-20T00:48:11Z",
+      "side": 1,
+      "message": "Third-party license (BSD) disallowed in repository platform/frameworks/opt/telephony:\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:...Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and or other materials provided with the distribution....may be used to endorse or promote products derived from this software without specific prior written permission.\n",
+      "range": {
+        "startLine": 3,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 68
+      },
+      "revId": "bdf6ea029050d9745b5c48f466a4d2a4b61f16ca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
