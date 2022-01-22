@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "34d9b025_cf5506aa",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1605425
+      },
+      "writtenOn": "2022-01-22T07:32:44Z",
+      "side": 1,
+      "message": "Please let me know is this design fine?",
+      "parentUuid": "ef04ff2c_826d3b4f",
+      "range": {
+        "startLine": 2167,
+        "startChar": 15,
+        "endLine": 2167,
+        "endChar": 55
+      },
+      "revId": "f80fed934deeb9b620cb899aa50da4b41bdb3123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "56965382_416b85a3",
         "filename": "src/java/com/android/internal/telephony/Phone.java",
         "patchSetId": 5
