@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4768c2a_2953e4ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1887141
+      },
+      "writtenOn": "2022-01-24T13:06:19Z",
+      "side": 1,
+      "message": "Cherry pick from master branch.",
+      "revId": "0c6f287d3e44d1b46b0d752b9fc189d0e152503c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
