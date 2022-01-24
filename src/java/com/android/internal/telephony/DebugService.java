@@ -23,6 +23,7 @@ import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 /**
  * A debug service that will dump telephony's state
@@ -43,18 +44,26 @@ public class DebugService {
      * Dump the state of various objects, add calls to other objects as desired.
      */
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        boolean saveAtoms = false;
         if (args != null && args.length > 0) {
+            saveAtoms = Arrays.asList(args).contains("--saveatoms");
             if (TextUtils.equals(args[0], "--metrics")
                     || TextUtils.equals(args[0], "--metricsproto")
                     || TextUtils.equals(args[0], "--metricsprototext"))
             {
                 log("Collecting telephony metrics..");
                 TelephonyMetrics.getInstance().dump(fd, pw, args);
+                if (saveAtoms) {
+                    PhoneFactory.getMetricsCollector().getAtomsStorage().flushAtoms();
+                }
                 return;
             }
         }
         log("Dump telephony.");
         PhoneFactory.dump(fd, pw, args);
+        if (saveAtoms) {
+            PhoneFactory.getMetricsCollector().getAtomsStorage().flushAtoms();
+        }
     }
 
     private static void log(String s) {

@@ -998,6 +998,11 @@ public class PersistAtomsStorage {
         }
     }
 
+    /** Saves a copy of {@link PersistAtoms} to a file in private storage. */
+    public void flushAtoms() {
+        saveAtomsToFileNow();
+    }
+
     /** Loads {@link PersistAtoms} from a file in private storage. */
     private PersistAtoms loadAtomsFromFile() {
         try {
