@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "282540e3_ff5d166d",
+        "filename": "src/java/com/android/internal/telephony/DebugService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-25T23:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2692a3a7_57673940",
+      "range": {
+        "startLine": 49,
+        "startChar": 12,
+        "endLine": 49,
+        "endChar": 68
+      },
+      "revId": "3fb4d80fe2d376567c8af19f2d3ce9fab1ba6c70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bede2c9b_3fa29b63",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-25T19:01:43Z",
       "side": 1,
       "message": "Should we check hasCallbacks() to see if any save command is pending?\nIf nothing is pending, there is no need to save.\n\nAlso, we need to stop any delayed save operation, as it would not be necessary to do it again, using mHandler.removeCallbacks(mSaveRunnable);",
+      "range": {
+        "startLine": 1003,
+        "startChar": 8,
+        "endLine": 1003,
+        "endChar": 28
+      },
+      "revId": "3fb4d80fe2d376567c8af19f2d3ce9fab1ba6c70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6cded6d_4dbd061d",
+        "filename": "src/java/com/android/internal/telephony/metrics/PersistAtomsStorage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-25T23:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bede2c9b_3fa29b63",
       "range": {
         "startLine": 1003,
         "startChar": 8,
