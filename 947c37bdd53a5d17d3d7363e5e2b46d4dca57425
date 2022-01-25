@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99645d3_4c66c3ab",
+        "filename": "src/java/com/android/internal/telephony/DebugService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-25T23:38:24Z",
+      "side": 1,
+      "message": "In the past, the return was only after the dump. After these changes, it\u0027s impossible to pass parameters to PhoneFactory.dump(). I think we should return in the cases, but not in the default.",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 18
+      },
+      "revId": "947c37bdd53a5d17d3d7363e5e2b46d4dca57425",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
