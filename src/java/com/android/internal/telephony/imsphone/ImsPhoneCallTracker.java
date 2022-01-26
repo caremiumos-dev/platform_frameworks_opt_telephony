@@ -1034,9 +1034,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             mUtInterface.registerForSuppServiceIndication(this, EVENT_SUPP_SERVICE_INDICATION,
                     null);
         }
-
+        updateCarrierConfiguration(mPhone.getSubId());
         maybeConfigureRtpHeaderExtensions();
-        updateImsServiceConfig();
         // For compatibility with apps that still use deprecated intent
         sendImsServiceStateIntent(ImsManager.ACTION_IMS_SERVICE_UP);
     }
@@ -1477,8 +1476,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         }
 
         PersistableBundle carrierConfig = carrierConfigManager.getConfigForSubId(subId);
-        if (carrierConfig == null) {
-            loge("cacheCarrierConfiguration: Empty carrier config.");
+        if (!CarrierConfigManager.isConfigForIdentifiedCarrier(carrierConfig)) {
+            loge("cacheCarrierConfiguration: Empty or default carrier config.");
             mCarrierConfigLoaded = false;
             return;
         }
