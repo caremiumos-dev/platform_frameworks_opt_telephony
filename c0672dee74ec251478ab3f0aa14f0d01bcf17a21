@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dd2ddd6_a16e99c4",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-26T22:01:28Z",
+      "side": 1,
+      "message": "Should this be something like:\nif (!contains()) {\n  addCall();\n}\nbeginMtSetup();",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 0
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213f76fd_4c880add",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-26T22:01:28Z",
+      "side": 1,
+      "message": "\"begin\" is a bit confusing. How about renaming it as callAccepted()?\nAfter all, only incoming calls (MT) can be accepted.",
+      "range": {
+        "startLine": 378,
+        "startChar": 17,
+        "endLine": 378,
+        "endChar": 29
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ac62c3e_c80f1b56",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-26T22:01:28Z",
+      "side": 1,
+      "message": "Should we return after this?",
+      "range": {
+        "startLine": 394,
+        "startChar": 12,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
