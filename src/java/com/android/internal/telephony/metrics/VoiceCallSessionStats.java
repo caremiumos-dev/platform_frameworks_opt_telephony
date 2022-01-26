@@ -153,13 +153,21 @@ public class VoiceCallSessionStats {
     /** Updates internal states when previous CS calls are accepted to track MT call setup time. */
     public synchronized void onRilAcceptCall(List<Connection> connections) {
         for (Connection conn : connections) {
-            addCall(conn);
+            if (mCallProtos.contains(getConnectionId(conn))) {
+                beginMtSetup(conn);
+            } else {
+                addCall(conn);
+            }
         }
     }
 
     /** Updates internal states when a CS MO call is created. */
     public synchronized void onRilDial(Connection conn) {
-        addCall(conn);
+        if (mCallProtos.contains(getConnectionId(conn))) {
+            beginMtSetup(conn);
+        } else {
+            addCall(conn);
+        }
     }
 
     /**
@@ -171,7 +179,11 @@ public class VoiceCallSessionStats {
             if (!mCallProtos.contains(id)) {
                 // handle new connections
                 if (conn.getDisconnectCause() == DisconnectCause.NOT_DISCONNECTED) {
-                    addCall(conn);
+                    if (mCallProtos.contains(getConnectionId(conn))) {
+                        beginMtSetup(conn);
+                    } else {
+                        addCall(conn);
+                    }
                     checkCallSetup(conn, mCallProtos.get(id));
                 } else {
                     logd("onRilCallListChanged: skip adding disconnected connection");
@@ -198,7 +210,11 @@ public class VoiceCallSessionStats {
 
     /** Updates internal states when an IMS MO call is created. */
     public synchronized void onImsDial(ImsPhoneConnection conn) {
-        addCall(conn);
+        if (mCallProtos.contains(getConnectionId(conn))) {
+            beginMtSetup(conn);
+        } else {
+            addCall(conn);
+        }
         if (conn.hasRttTextStream()) {
             setRttStarted(conn);
         }
@@ -206,7 +222,11 @@ public class VoiceCallSessionStats {
 
     /** Updates internal states when an IMS MT call is created. */
     public synchronized void onImsCallReceived(ImsPhoneConnection conn) {
-        addCall(conn);
+        if (mCallProtos.contains(getConnectionId(conn))) {
+            beginMtSetup(conn);
+        } else {
+            addCall(conn);
+        }
         if (conn.hasRttTextStream()) {
             setRttStarted(conn);
         }
@@ -215,7 +235,11 @@ public class VoiceCallSessionStats {
     /** Updates internal states when previous IMS calls are accepted to track MT call setup time. */
     public synchronized void onImsAcceptCall(List<Connection> connections) {
         for (Connection conn : connections) {
-            addCall(conn);
+            if (mCallProtos.contains(getConnectionId(conn))) {
+                beginMtSetup(conn);
+            } else {
+                addCall(conn);
+            }
         }
     }
 
@@ -237,7 +261,11 @@ public class VoiceCallSessionStats {
             } else {
                 loge("onImsCallTerminated: untracked connection");
                 // fake a call so at least some info can be tracked
-                addCall(conn);
+                if (mCallProtos.contains(getConnectionId(conn))) {
+                    beginMtSetup(conn);
+                } else {
+                    addCall(conn);
+                }
                 finishImsCall(id, reasonInfo);
             }
         }
@@ -366,6 +394,14 @@ public class VoiceCallSessionStats {
 
     /* internal */
 
+    /** Handles ringing MT call getting accepted. */
+    private void beginMtSetup(Connection conn) {
+        logd("addCall: resetting setup info");
+        VoiceCallSession proto = mCallProtos.get(getConnectionId(conn));
+        proto.setupBeginMillis = getTimeMillis();
+        proto.setupDuration = VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
+    }
+
     /**
      * Adds a call connection.
      *
@@ -373,60 +409,51 @@ public class VoiceCallSessionStats {
      * RilRequest.RIL_REQUEST_ANSWER} or {@code ImsCommand.IMS_CMD_ACCEPT}).
      */
     private void addCall(Connection conn) {
-        int id = getConnectionId(conn);
-        if (mCallProtos.contains(id)) {
-            // mostly handles ringing MT call getting accepted (MT call setup begins)
-            logd("addCall: resetting setup info");
-            VoiceCallSession proto = mCallProtos.get(id);
-            proto.setupBeginMillis = getTimeMillis();
-            proto.setupDuration = VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
-        } else {
-            int bearer = getBearer(conn);
-            ServiceState serviceState = getServiceState();
-            @NetworkType int rat = ServiceStateStats.getVoiceRat(mPhone, serviceState);
+        int bearer = getBearer(conn);
+        ServiceState serviceState = getServiceState();
+        @NetworkType int rat = ServiceStateStats.getVoiceRat(mPhone, serviceState);
 
-            VoiceCallSession proto = new VoiceCallSession();
+        VoiceCallSession proto = new VoiceCallSession();
 
-            proto.bearerAtStart = bearer;
-            proto.bearerAtEnd = bearer;
-            proto.direction = getDirection(conn);
-            proto.setupDuration = VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
-            proto.setupFailed = true;
-            proto.disconnectReasonCode = conn.getDisconnectCause();
-            proto.disconnectExtraCode = conn.getPreciseDisconnectCause();
-            proto.disconnectExtraMessage = conn.getVendorDisconnectCause();
-            proto.ratAtStart = rat;
-            proto.ratAtConnected = TelephonyManager.NETWORK_TYPE_UNKNOWN;
-            proto.ratAtEnd = rat;
-            proto.ratSwitchCount = 0L;
-            proto.codecBitmask = 0L;
-            proto.simSlotIndex = mPhoneId;
-            proto.isMultiSim = SimSlotState.isMultiSim();
-            proto.isEsim = SimSlotState.isEsim(mPhoneId);
-            proto.carrierId = mPhone.getCarrierId();
-            proto.srvccCompleted = false;
-            proto.srvccFailureCount = 0L;
-            proto.srvccCancellationCount = 0L;
-            proto.rttEnabled = false;
-            proto.isEmergency = conn.isEmergencyCall();
-            proto.isRoaming = serviceState != null ? serviceState.getVoiceRoaming() : false;
-            proto.isMultiparty = conn.isMultiparty();
+        proto.bearerAtStart = bearer;
+        proto.bearerAtEnd = bearer;
+        proto.direction = getDirection(conn);
+        proto.setupDuration = VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
+        proto.setupFailed = true;
+        proto.disconnectReasonCode = conn.getDisconnectCause();
+        proto.disconnectExtraCode = conn.getPreciseDisconnectCause();
+        proto.disconnectExtraMessage = conn.getVendorDisconnectCause();
+        proto.ratAtStart = rat;
+        proto.ratAtConnected = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        proto.ratAtEnd = rat;
+        proto.ratSwitchCount = 0L;
+        proto.codecBitmask = 0L;
+        proto.simSlotIndex = mPhoneId;
+        proto.isMultiSim = SimSlotState.isMultiSim();
+        proto.isEsim = SimSlotState.isEsim(mPhoneId);
+        proto.carrierId = mPhone.getCarrierId();
+        proto.srvccCompleted = false;
+        proto.srvccFailureCount = 0L;
+        proto.srvccCancellationCount = 0L;
+        proto.rttEnabled = false;
+        proto.isEmergency = conn.isEmergencyCall();
+        proto.isRoaming = serviceState != null ? serviceState.getVoiceRoaming() : false;
+        proto.isMultiparty = conn.isMultiparty();
 
-            // internal fields for tracking
-            proto.setupBeginMillis = getTimeMillis();
+        // internal fields for tracking
+        proto.setupBeginMillis = getTimeMillis();
 
-            // audio codec might have already been set
-            int codec = audioQualityToCodec(bearer, conn.getAudioCodec());
-            if (codec != AudioCodec.AUDIO_CODEC_UNKNOWN) {
-                proto.codecBitmask = (1L << codec);
-            }
-
-            proto.concurrentCallCountAtStart = mCallProtos.size();
-            mCallProtos.put(id, proto);
-
-            // RAT call count needs to be updated
-            updateRatTracker(serviceState);
+        // audio codec might have already been set
+        int codec = audioQualityToCodec(bearer, conn.getAudioCodec());
+        if (codec != AudioCodec.AUDIO_CODEC_UNKNOWN) {
+            proto.codecBitmask = (1L << codec);
         }
+
+        proto.concurrentCallCountAtStart = mCallProtos.size();
+        mCallProtos.put(getConnectionId(conn), proto);
+
+        // RAT call count needs to be updated
+        updateRatTracker(serviceState);
     }
 
     /** Sends the call metrics to persist storage when it is finished. */
