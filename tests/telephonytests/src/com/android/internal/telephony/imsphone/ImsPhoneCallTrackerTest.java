@@ -50,7 +50,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.annotation.Nullable;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.NetworkStats;
@@ -120,6 +122,7 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
     private ImsCall.Listener mImsCallListener;
     private ImsCall mImsCall;
     private ImsCall mSecondImsCall;
+    private BroadcastReceiver mBroadcastReceiver;
     private Bundle mBundle = new Bundle();
     @Nullable private VtDataUsageProvider mVtDataUsageProvider;
     @Mock
@@ -272,6 +275,11 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         mVtDataUsageProvider = vtDataUsageProviderCaptor.getValue();
         assertNotNull(mVtDataUsageProvider);
         mVtDataUsageProvider.setProviderCallbackBinder(mVtDataUsageProviderCb);
+        final ArgumentCaptor<BroadcastReceiver> receiverCaptor =
+                ArgumentCaptor.forClass(BroadcastReceiver.class);
+        verify(mContext).registerReceiver(receiverCaptor.capture(), any());
+        mBroadcastReceiver = receiverCaptor.getValue();
+        assertNotNull(mBroadcastReceiver);
 
         logd("ImsPhoneCallTracker initiated");
         processAllMessages();
@@ -350,6 +358,28 @@ public class ImsPhoneCallTrackerTest extends TelephonyTest {
         processAllMessages();
         assertTrue(mCTUT.isVideoCallEnabled());
         verify(mImsPhone, times(1)).notifyForVideoCapabilityChanged(eq(true));
+    }
+
+    @Test
+    @SmallTest
+    public void testCarrierConfigLoadSubscription() {
+        // Start with there being no subId loaded, so SubscriptionController#isActiveSubId is false
+        // as part of setup, connectionReady is called, which ends up calling
+        // updateCarrierConfiguration. Since the carrier config is not report carrier identified
+        // config, we should not see updateImsServiceConfig called yet.
+        verify(mImsManager, never()).updateImsServiceConfig();
+
+        // Receive a carrier config changed indication and subscription/carrier config is loaded.
+        doReturn(true).when(mSubscriptionController).isActiveSubId(anyInt());
+        PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
+        // CarrierConfigLoader has signalled that the carrier config has been applied for a specific
+        // subscription.
+        bundle.putBoolean(CarrierConfigManager.KEY_CARRIER_CONFIG_APPLIED_BOOL, true);
+        Intent intent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
+        intent.putExtra(PhoneConstants.SUBSCRIPTION_KEY, mImsPhone.getSubId());
+        mBroadcastReceiver.onReceive(mContext, intent);
+        processAllMessages();
+        verify(mImsManager).updateImsServiceConfig();
     }
 
     @Test
