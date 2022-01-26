@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d9c2ea7_a7aacb48",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "We probably should log errors here, since a call must ring before it can be accepted, it should already be tracked.",
+      "range": {
+        "startLine": 159,
+        "startChar": 16,
+        "endLine": 159,
+        "endChar": 30
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fd6eaa1_fb8160ed",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "We probably should log errors here instead of calling beginMtSetup(). MT calls are received, not dialed.\n\nWe might still add the call since the on in mCallProtos could be stale.\n\nAlternatively, have the error checked and logged inside addCall() so it handles all the cases.",
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "490340f9_37dbb8d2",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "We probably do not need this. beginMtSetup() should be called when MT calls are accepted by the user. And anyway, we have checked !mCallProtos.contains(id) beforehand.\n\nHowever, please do double check if under any circumstance MT calls can go from ringing to accepted without calling onRilAcceptCall.",
+      "range": {
+        "startLine": 182,
+        "startChar": 20,
+        "endLine": 184,
+        "endChar": 28
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d838673_36620652",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "Same as onRilDial",
+      "range": {
+        "startLine": 214,
+        "startChar": 12,
+        "endLine": 214,
+        "endChar": 31
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a1ea87b_b14f8dfb",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "This is a new MT call. If it is already there, we need to log an error. See onRilDial",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 31
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf18e1eb_73a2586b",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "Same as onRilAcceptCall",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 30
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13eeaba2_d61892d2",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-26T20:13:02Z",
+      "side": 1,
+      "message": "We already checked that id was not in mCallProtos, so we do not need to handle this case again.",
+      "range": {
+        "startLine": 264,
+        "startChar": 16,
+        "endLine": 266,
+        "endChar": 24
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
