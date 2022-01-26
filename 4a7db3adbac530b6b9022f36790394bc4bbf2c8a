@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee98898e_a2ff69b4",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d9c2ea7_a7aacb48",
+      "range": {
+        "startLine": 159,
+        "startChar": 16,
+        "endLine": 159,
+        "endChar": 30
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd6eaa1_fb8160ed",
@@ -41,6 +65,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "918a8587_670eb2d7",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fd6eaa1_fb8160ed",
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "490340f9_37dbb8d2",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-01-26T20:13:02Z",
       "side": 1,
       "message": "We probably do not need this. beginMtSetup() should be called when MT calls are accepted by the user. And anyway, we have checked !mCallProtos.contains(id) beforehand.\n\nHowever, please do double check if under any circumstance MT calls can go from ringing to accepted without calling onRilAcceptCall.",
+      "range": {
+        "startLine": 182,
+        "startChar": 20,
+        "endLine": 184,
+        "endChar": 28
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c461a2ef_1a87268c",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "490340f9_37dbb8d2",
       "range": {
         "startLine": 182,
         "startChar": 20,
@@ -87,6 +153,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd43a2e_55be7ae9",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d838673_36620652",
+      "range": {
+        "startLine": 214,
+        "startChar": 12,
+        "endLine": 214,
+        "endChar": 31
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a1ea87b_b14f8dfb",
@@ -100,6 +190,30 @@
       "writtenOn": "2022-01-26T20:13:02Z",
       "side": 1,
       "message": "This is a new MT call. If it is already there, we need to log an error. See onRilDial",
+      "range": {
+        "startLine": 226,
+        "startChar": 12,
+        "endLine": 226,
+        "endChar": 31
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5fe65aa_93a7e947",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a1ea87b_b14f8dfb",
       "range": {
         "startLine": 226,
         "startChar": 12,
@@ -133,6 +247,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c78c822f_e571c2f8",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf18e1eb_73a2586b",
+      "range": {
+        "startLine": 241,
+        "startChar": 16,
+        "endLine": 241,
+        "endChar": 30
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13eeaba2_d61892d2",
@@ -146,6 +284,30 @@
       "writtenOn": "2022-01-26T20:13:02Z",
       "side": 1,
       "message": "We already checked that id was not in mCallProtos, so we do not need to handle this case again.",
+      "range": {
+        "startLine": 264,
+        "startChar": 16,
+        "endLine": 266,
+        "endChar": 24
+      },
+      "revId": "4a7db3adbac530b6b9022f36790394bc4bbf2c8a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a493740_2ac94d7a",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-26T21:48:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13eeaba2_d61892d2",
       "range": {
         "startLine": 264,
         "startChar": 16,
