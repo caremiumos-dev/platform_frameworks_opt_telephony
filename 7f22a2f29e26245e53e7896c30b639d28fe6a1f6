@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd939992_6ad81785",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-27T23:25:05Z",
+      "side": 1,
+      "message": "Hi Tyler, could you review this change for ProGuard rules? Thanks.",
+      "revId": "7f22a2f29e26245e53e7896c30b639d28fe6a1f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
