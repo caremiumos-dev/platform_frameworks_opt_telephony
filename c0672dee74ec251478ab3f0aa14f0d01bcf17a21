@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a69df015_96e495e1",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-27T23:39:59Z",
+      "side": 1,
+      "message": "My mistake... you\u0027re right (the previous name was misleading!).",
+      "parentUuid": "6a265ba7_e49c19fc",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 0
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "213f76fd_4c880add",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I think this case is something that we shouldn\u0027t run into, but I chose to still update the proto since the existing one could be stale.",
       "parentUuid": "8ac62c3e_c80f1b56",
+      "range": {
+        "startLine": 394,
+        "startChar": 12,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "053950d9_5057dc1d",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-27T23:39:59Z",
+      "side": 1,
+      "message": "I agree with you that this should not happen. But it seems that return would make the new behavior more similar to what we had in the past (and thus less risky to change). WDYT?",
+      "parentUuid": "2ef4dd22_881e817b",
       "range": {
         "startLine": 394,
         "startChar": 12,

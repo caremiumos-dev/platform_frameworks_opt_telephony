@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d118edf_89939ad8",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-01-27T23:39:59Z",
+      "side": 1,
+      "message": "I understand that this is guaranteed not to be null, because the caller checks it. But the pattern is weak... in the future it\u0027s easy to forget it.\n\nWould it make sense to move the if condition from the callers to here? Exact same code, but avoid duplication in the 2 callers and have a more robust method here, that can be invoked more safely.",
+      "range": {
+        "startLine": 380,
+        "startChar": 33,
+        "endLine": 380,
+        "endChar": 48
+      },
+      "revId": "1defbc774a5ce0e7398e52a21716549bc26412be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
