@@ -188,6 +188,30 @@
       },
       "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb632f8c_32c52260",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-27T23:46:32Z",
+      "side": 1,
+      "message": "Either way, we probably want to log the details about the one that we are throwing away for debugging purpose.",
+      "parentUuid": "053950d9_5057dc1d",
+      "range": {
+        "startLine": 394,
+        "startChar": 12,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
