@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a265ba7_e49c19fc",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-27T18:47:44Z",
+      "side": 1,
+      "message": "I think the current code is right - a call must ring before it\u0027s accepted, so the connection should already be tracked.",
+      "parentUuid": "1dd2ddd6_a16e99c4",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 0
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "213f76fd_4c880add",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b8ed24_9e1cb333",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-27T18:47:44Z",
+      "side": 1,
+      "message": "I renamed it to acceptCall to sound more consistent with other functions.",
+      "parentUuid": "213f76fd_4c880add",
+      "range": {
+        "startLine": 378,
+        "startChar": 17,
+        "endLine": 378,
+        "endChar": 29
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ac62c3e_c80f1b56",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-01-26T22:01:28Z",
       "side": 1,
       "message": "Should we return after this?",
+      "range": {
+        "startLine": 394,
+        "startChar": 12,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ef4dd22_881e817b",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-27T18:47:44Z",
+      "side": 1,
+      "message": "I think this case is something that we shouldn\u0027t run into, but I chose to still update the proto since the existing one could be stale.",
+      "parentUuid": "8ac62c3e_c80f1b56",
       "range": {
         "startLine": 394,
         "startChar": 12,
