@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "23d0a0a9_07213547",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -20,10 +21,10 @@
         "endChar": 34
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "283ea49f_2358a8c8",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -44,10 +45,10 @@
         "endChar": 34
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "ed55a055_5c093889",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -68,10 +69,10 @@
         "endChar": 34
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "2911fbb0_6dd73a8d",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -92,10 +93,10 @@
         "endChar": 34
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "40a1bb51_ba11c68c",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -115,10 +116,10 @@
         "endChar": 27
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "a641bed8_48376ae5",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -138,10 +139,10 @@
         "endChar": 91
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "06253c83_4d3f38ff",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -162,10 +163,10 @@
         "endChar": 91
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "26d1ca01_36aff634",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
@@ -186,10 +187,34 @@
         "endChar": 27
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6d16f0_dc853129",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1605425
+      },
+      "writtenOn": "2022-01-28T18:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26d1ca01_36aff634",
+      "range": {
+        "startLine": 1543,
+        "startChar": 22,
+        "endLine": 1543,
+        "endChar": 27
+      },
+      "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "b176f546_aa415deb",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
@@ -209,10 +234,10 @@
         "endChar": 54
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "5292fe96_7bd8cd17",
         "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneMmiCode.java",
@@ -233,8 +258,7 @@
         "endChar": 54
       },
       "revId": "fecf57b6c2c8594a268ea821f1ad92d64f4788e7",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": false
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
