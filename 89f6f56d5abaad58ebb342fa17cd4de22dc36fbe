@@ -16,6 +16,24 @@
       "message": "We can remove this as already called @ line #1489",
       "revId": "89f6f56d5abaad58ebb342fa17cd4de22dc36fbe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf541e9e_93820f97",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-01-28T00:57:01Z",
+      "side": 1,
+      "message": "Yes, I agree. It would be redundant in all cases now.",
+      "parentUuid": "d0db2557_e8a1b48c",
+      "revId": "89f6f56d5abaad58ebb342fa17cd4de22dc36fbe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
