@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "391c1368_190e12d5",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1056478
+      },
+      "writtenOn": "2022-01-28T18:57:19Z",
+      "side": 1,
+      "message": "We should likely cache values even if it\u0027s for an invalid carrier; this way we don\u0027t lose defaults, or keep carrier values when not camped.",
+      "range": {
+        "startLine": 1485,
+        "startChar": 8,
+        "endLine": 1485,
+        "endChar": 32
+      },
+      "revId": "46f2c99d6ad3e552bd9dc01d7618cf0a19e8c884",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
