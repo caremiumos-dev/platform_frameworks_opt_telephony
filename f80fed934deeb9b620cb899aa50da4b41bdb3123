@@ -119,6 +119,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "794abc17_982987d0",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1605425
+      },
+      "writtenOn": "2022-01-28T18:01:07Z",
+      "side": 1,
+      "message": "Updated design",
+      "parentUuid": "34d9b025_cf5506aa",
+      "range": {
+        "startLine": 2167,
+        "startChar": 15,
+        "endLine": 2167,
+        "endChar": 55
+      },
+      "revId": "f80fed934deeb9b620cb899aa50da4b41bdb3123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56965382_416b85a3",
@@ -203,6 +227,30 @@
       "side": 1,
       "message": "Ideally this should be one of value @ https://cs.android.com/android/platform/superproject/+/master:frameworks/base/telephony/java/android/telephony/ims/ImsSsData.java;l\u003d185?q\u003dImsSsData.java\u0026ss\u003dandroid%2Fplatform%2Fsuperproject",
       "parentUuid": "a9028832_a5f76181",
+      "range": {
+        "startLine": 1677,
+        "startChar": 30,
+        "endLine": 1677,
+        "endChar": 53
+      },
+      "revId": "f80fed934deeb9b620cb899aa50da4b41bdb3123",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca21df48_b748ad0a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1605425
+      },
+      "writtenOn": "2022-01-28T18:01:07Z",
+      "side": 1,
+      "message": "Added extra checks.",
+      "parentUuid": "b0449d8e_a4f2b912",
       "range": {
         "startLine": 1677,
         "startChar": 30,
