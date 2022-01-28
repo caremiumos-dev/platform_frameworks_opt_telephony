@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9493e985_791b07de",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-01-28T18:41:25Z",
+      "side": 1,
+      "message": "Can we also print connection.toString, probably also with stack trace? WDYT?",
+      "range": {
+        "startLine": 395,
+        "startChar": 55,
+        "endLine": 395,
+        "endChar": 75
+      },
+      "revId": "b62269dea6891d8bdc9be3b2ce19e7e12850f7b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
