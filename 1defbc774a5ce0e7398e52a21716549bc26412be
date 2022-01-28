@@ -22,6 +22,30 @@
       },
       "revId": "1defbc774a5ce0e7398e52a21716549bc26412be",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a396b05b_1d86159f",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-28T17:02:05Z",
+      "side": 1,
+      "message": "I agree. Fixed.",
+      "parentUuid": "3d118edf_89939ad8",
+      "range": {
+        "startLine": 380,
+        "startChar": 33,
+        "endLine": 380,
+        "endChar": 48
+      },
+      "revId": "1defbc774a5ce0e7398e52a21716549bc26412be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

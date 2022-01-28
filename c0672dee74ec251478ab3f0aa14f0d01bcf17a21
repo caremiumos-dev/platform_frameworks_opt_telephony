@@ -212,6 +212,30 @@
       },
       "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bae26b4d_feb77575",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-01-28T17:02:05Z",
+      "side": 1,
+      "message": "You are right. I added connection ids to log messages.",
+      "parentUuid": "bb632f8c_32c52260",
+      "range": {
+        "startLine": 394,
+        "startChar": 12,
+        "endLine": 394,
+        "endChar": 56
+      },
+      "revId": "c0672dee74ec251478ab3f0aa14f0d01bcf17a21",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
