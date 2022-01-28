@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "511b2789_f80017e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-01-28T23:09:28Z",
+      "side": 1,
+      "message": "I\u0027m working on an internal change to move these to RadioVoiceProxy.\nI\u0027ll update this change once it\u0027s available on aosp",
+      "parentUuid": "d58bb748_1a67c1e9",
+      "revId": "8c84585a107d700a2b14bdc7fba0931487f94104",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ebd59d0e_d1d6d6fb",
         "filename": "src/java/com/android/internal/telephony/RadioMessagingProxy.java",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-16T07:20:53Z",
       "side": 1,
       "message": "It should be here rather than RadioVoiceProxy?",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 33
+      },
+      "revId": "8c84585a107d700a2b14bdc7fba0931487f94104",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b3d2c13_9aad76ae",
+        "filename": "src/java/com/android/internal/telephony/RadioMessagingProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-01-28T23:09:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebd59d0e_d1d6d6fb",
       "range": {
         "startLine": 136,
         "startChar": 16,
@@ -54,6 +96,30 @@
       "writtenOn": "2021-12-16T07:20:53Z",
       "side": 1,
       "message": "It should be here rather than RadioVoiceProxy?",
+      "range": {
+        "startLine": 377,
+        "startChar": 16,
+        "endLine": 377,
+        "endChar": 24
+      },
+      "revId": "8c84585a107d700a2b14bdc7fba0931487f94104",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5140a24_93f0ae68",
+        "filename": "src/java/com/android/internal/telephony/RadioMessagingProxy.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-01-28T23:09:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95cba80c_95f1bcc0",
       "range": {
         "startLine": 377,
         "startChar": 16,
