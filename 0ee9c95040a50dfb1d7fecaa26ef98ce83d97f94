@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "447ed1b3_5f31fc52",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1605425
+      },
+      "writtenOn": "2022-02-01T05:16:44Z",
+      "side": 1,
+      "message": "If we are removing handling of CARRIER_CONFIG_CHANGED then how this case mentioned in comments will be handled?\n\n1) If records are not loaded by the time updateCarrierConfiguration is called from startListeningForCalls then how updateCarrierConfiguration will be called and update the cache with appropriate MCC/MNC ?",
+      "range": {
+        "startLine": 1493,
+        "startChar": 50,
+        "endLine": 1493,
+        "endChar": 72
+      },
+      "revId": "0ee9c95040a50dfb1d7fecaa26ef98ce83d97f94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
