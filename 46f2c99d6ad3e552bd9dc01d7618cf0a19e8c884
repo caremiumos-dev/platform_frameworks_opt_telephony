@@ -22,6 +22,30 @@
       },
       "revId": "46f2c99d6ad3e552bd9dc01d7618cf0a19e8c884",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92da1834_dea1fc35",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-02-01T00:10:23Z",
+      "side": 1,
+      "message": "Done - we now use indications from ImsResolver to load configs and update the cache even in the no sim case.",
+      "parentUuid": "391c1368_190e12d5",
+      "range": {
+        "startLine": 1485,
+        "startChar": 8,
+        "endLine": 1485,
+        "endChar": 32
+      },
+      "revId": "46f2c99d6ad3e552bd9dc01d7618cf0a19e8c884",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
