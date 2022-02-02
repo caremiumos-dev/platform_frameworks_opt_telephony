@@ -22,6 +22,30 @@
       },
       "revId": "0ee9c95040a50dfb1d7fecaa26ef98ce83d97f94",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff216fa7_913ee6fe",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-02-02T01:31:05Z",
+      "side": 1,
+      "message": "I agree, we need to ensure that we get the correct indications when the sim moves to ready as well as when config changes after we have already attached to the ImsService.\n\nCreating a follow up CL that builds on this one to re-introduce CARRIER_CONFIG_CHANGED to solve these conditions.",
+      "parentUuid": "447ed1b3_5f31fc52",
+      "range": {
+        "startLine": 1493,
+        "startChar": 50,
+        "endLine": 1493,
+        "endChar": 72
+      },
+      "revId": "0ee9c95040a50dfb1d7fecaa26ef98ce83d97f94",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
