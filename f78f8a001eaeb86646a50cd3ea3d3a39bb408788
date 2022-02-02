@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7690af72_f268688a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-02-02T22:18:45Z",
+      "side": 1,
+      "message": "no need to specify commit id as long as both gerrits have same change id",
+      "range": {
+        "startLine": 12,
+        "startChar": 26,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "f78f8a001eaeb86646a50cd3ea3d3a39bb408788",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "223432e2_057914a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-02-02T22:18:45Z",
+      "side": 1,
+      "message": "you have merge conflicts on another build",
+      "revId": "f78f8a001eaeb86646a50cd3ea3d3a39bb408788",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
