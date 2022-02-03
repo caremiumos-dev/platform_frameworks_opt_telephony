@@ -17,13 +17,18 @@
 package com.android.internal.telephony;
 
 import static com.android.internal.telephony.ProxyController.EVENT_MULTI_SIM_CONFIG_CHANGED;
+import static com.android.internal.telephony.ProxyController.EVENT_START_RC_RESPONSE;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.RadioAccessFamily;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -72,5 +77,25 @@ public class ProxyControllerTest extends TelephonyTest {
         replaceInstance(PhoneFactory.class, "sPhones", null, new Phone[] {mPhone});
         Message.obtain(mProxyController.mHandler, EVENT_MULTI_SIM_CONFIG_CHANGED).sendToTarget();
         processAllMessages();
+    }
+
+    @Test
+    @SmallTest
+    public void testRequestNotSupported() throws Exception {
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        ArgumentCaptor<Integer> intCaptor = ArgumentCaptor.forClass(int.class);
+
+        int activeModemCount = 2;
+        doReturn(activeModemCount).when(mTelephonyManager).getPhoneCount();
+        RadioAccessFamily[] rafs = new RadioAccessFamily[activeModemCount];
+        mProxyController.setRadioCapability(rafs);
+
+        Message.obtain(mProxyController.mHandler, EVENT_START_RC_RESPONSE,
+                AsyncResult.forMessage(null, null,
+                        new CommandException(CommandException.Error.REQUEST_NOT_SUPPORTED)))
+                .sendToTarget();
+        processAllMessages();
+
+        assertFalse(mProxyController.mWakeLock.isHeld())
     }
 }
