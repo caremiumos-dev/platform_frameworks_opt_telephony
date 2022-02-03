@@ -64,6 +64,29 @@
       },
       "revId": "e9be40ddbc03b898c4aeae18079d4f4d71e9f13e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18001099_26cd5e4a",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-03T18:40:13Z",
+      "side": 1,
+      "message": "There is a bug in this logic.. the comment in the bug was already updated\n\nCan you pls get some update ?",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 9
+      },
+      "revId": "e9be40ddbc03b898c4aeae18079d4f4d71e9f13e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
