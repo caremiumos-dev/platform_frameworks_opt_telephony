@@ -34,6 +34,29 @@
       "parentUuid": "6d2f8530_d4287ed7",
       "revId": "a8ae821646d3fb6ef80bb73362efea72af0ea4fa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77822672_11bc6bb2",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-02-07T21:40:02Z",
+      "side": 1,
+      "message": "Late on this. But I don\u0027t think we should print the stack trace here. There is a risk of spamming the logcat and the value is unclear. We already have traces that should help with it.",
+      "range": {
+        "startLine": 399,
+        "startChar": 30,
+        "endLine": 399,
+        "endChar": 70
+      },
+      "revId": "a8ae821646d3fb6ef80bb73362efea72af0ea4fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
