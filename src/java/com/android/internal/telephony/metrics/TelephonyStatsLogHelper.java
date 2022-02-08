@@ -35,13 +35,33 @@ public class TelephonyStatsLogHelper {
             int carrierId,
             int phoneNumberSourceUicc,
             int phoneNumberSourceCarrier,
-            int phoneNumberSourceIms) {
+            int phoneNumberSourceIms,
+            boolean volteEnabled,
+            boolean wfcEnabled,
+            int wfcMode,
+            int wfcRoamingMode,
+            boolean videoCallingEnabled,
+            boolean dataRoamingEnabled,
+            long allowedNetworksByUser,
+            boolean is2gDisabled,
+            boolean isPin1Enabled,
+            int simVoltageClass) {
         return TelephonyStatsLog.buildStatsEvent(
                 atomId,
                 simSlotIndex,
                 carrierId,
                 phoneNumberSourceUicc,
                 phoneNumberSourceCarrier,
-                phoneNumberSourceIms);
+                phoneNumberSourceIms,
+                volteEnabled,
+                wfcEnabled,
+                wfcMode,
+                wfcRoamingMode,
+                videoCallingEnabled,
+                dataRoamingEnabled,
+                allowedNetworksByUser,
+                is2gDisabled,
+                isPin1Enabled,
+                simVoltageClass);
     }
 }

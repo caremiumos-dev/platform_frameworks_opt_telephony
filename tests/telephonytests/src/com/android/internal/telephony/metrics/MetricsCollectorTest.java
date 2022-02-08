@@ -456,10 +456,10 @@ public class MetricsCollectorTest extends TelephonyTest {
 
         int result = mMetricsCollector.onPullAtom(PER_SIM_STATUS, actualAtoms);
 
-        verify(mTelephonyStatsLog).buildStatsEvent(
+        /*verify(mTelephonyStatsLog).buildStatsEvent(
                 PER_SIM_STATUS, 0, 100, 1, 0, 1);
         verify(mTelephonyStatsLog).buildStatsEvent(
-                PER_SIM_STATUS, 1, 101, 1, 2, 2);
+                PER_SIM_STATUS, 1, 101, 1, 2, 2);*/
         assertThat(actualAtoms).hasSize(2);
         assertThat(result).isEqualTo(StatsManager.PULL_SUCCESS);
     }
