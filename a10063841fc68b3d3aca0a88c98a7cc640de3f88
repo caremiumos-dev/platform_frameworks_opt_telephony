@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b183de_c075f5a2",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-08T21:50:32Z",
+      "side": 1,
+      "message": "nit: align",
+      "range": {
+        "startLine": 177,
+        "startChar": 20,
+        "endLine": 180,
+        "endChar": 32
+      },
+      "revId": "a10063841fc68b3d3aca0a88c98a7cc640de3f88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce130c2e_7a26902b",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-08T21:50:32Z",
+      "side": 1,
+      "message": "nit: align",
+      "range": {
+        "startLine": 396,
+        "startChar": 18,
+        "endLine": 397,
+        "endChar": 30
+      },
+      "revId": "a10063841fc68b3d3aca0a88c98a7cc640de3f88",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
