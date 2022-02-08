@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9ded59a_69251318",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2022-02-08T23:02:18Z",
+      "side": 1,
+      "message": "Please check this once.\nI think i should start from 0 instead of 1.",
+      "range": {
+        "startLine": 467,
+        "startChar": 21,
+        "endLine": 467,
+        "endChar": 30
+      },
+      "revId": "2856c35c55df35ff8369852b0b13d6695a269c70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
