@@ -16,9 +16,12 @@
 
 package com.android.internal.telephony;
 
+import static android.telephony.ServiceState.UNKNOWN_ID;
+
 import android.os.Bundle;
 import android.os.Parcel;
 import android.telephony.AccessNetworkConstants;
+import android.telephony.CellIdentityLte;
 import android.telephony.LteVopsSupportInfo;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
@@ -30,6 +33,7 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ServiceStateTest extends TestCase {
 
@@ -401,5 +405,46 @@ public class ServiceStateTest extends TestCase {
         ss.setChannelNumber(36000); // band 33
 
         assertEquals(ss.getDuplexMode(), ServiceState.DUPLEX_MODE_TDD);
+    }
+
+    public void testCreateLocationInfoSanitizedCopy() {
+        ServiceState ss = new ServiceState();
+        NetworkRegistrationInfo nri = new NetworkRegistrationInfo.Builder()
+                .setTransportType(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
+                .setAccessNetworkTechnology(TelephonyManager.NETWORK_TYPE_LTE)
+                .setDomain(NetworkRegistrationInfo.DOMAIN_PS)
+                .setCellIdentity(new CellIdentityLte())
+                .build();
+        ss.addNetworkRegistrationInfo(nri);
+        ss.setCdmaSystemAndNetworkId(12345, 6789);
+        ss.setOperatorName(/*longName*/"AwesomeTelecomm", /*shortName*/"AT", /*numeric*/"123456");
+
+        ServiceState fineLocationSanitized =
+                ss.createLocationInfoSanitizedCopy(/*removeCoarseLocation*/ false);
+        List<NetworkRegistrationInfo> networkRegistrationInfoList =
+                fineLocationSanitized.getNetworkRegistrationInfoList();
+        assertNotNull(networkRegistrationInfoList);
+        for (NetworkRegistrationInfo networkRegistrationInfo : networkRegistrationInfoList) {
+            assertNull(networkRegistrationInfo.getCellIdentity());
+        }
+        assertEquals("AwesomeTelecomm", fineLocationSanitized.getOperatorAlphaLong());
+        assertEquals("AT", fineLocationSanitized.getOperatorAlphaShort());
+        assertEquals("123456", fineLocationSanitized.getOperatorNumeric());
+        assertEquals(12345, fineLocationSanitized.getCdmaSystemId());
+        assertEquals(6789, fineLocationSanitized.getCdmaNetworkId());
+
+        ServiceState coarseLocationSanitized =
+                ss.createLocationInfoSanitizedCopy(/*removeCoarseLocation*/ true);
+        List<NetworkRegistrationInfo> networkRegistrationInfos =
+                coarseLocationSanitized.getNetworkRegistrationInfoList();
+        assertNotNull(networkRegistrationInfos);
+        for (NetworkRegistrationInfo networkRegistrationInfo : networkRegistrationInfos) {
+            assertNull(networkRegistrationInfo.getCellIdentity());
+        }
+        assertEquals(null, coarseLocationSanitized.getOperatorAlphaLong());
+        assertEquals(null, coarseLocationSanitized.getOperatorAlphaShort());
+        assertEquals(null, coarseLocationSanitized.getOperatorNumeric());
+        assertEquals(UNKNOWN_ID, coarseLocationSanitized.getCdmaSystemId());
+        assertEquals(UNKNOWN_ID, coarseLocationSanitized.getCdmaNetworkId());
     }
 }
