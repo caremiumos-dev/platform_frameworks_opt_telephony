@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab7e0ff_039c232f",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-09T22:20:23Z",
+      "side": 1,
+      "message": "Is there already a test that\u0027s checking the sanitization of the CellIdentity? If not, we should probably check that CellIdentity sanitization is called as part of this effort. (probably separate tests to ensure that the right contents are sanitized... just that SS#sanitize() calls CellIdentity#sanitize() is good enough for this test.",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 77
+      },
+      "revId": "231affbdf865bd47f0efa610c07014151348cdca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
