@@ -699,8 +699,9 @@ public class SignalStrengthController extends Handler {
         }
     }
 
-    void updateServiceStateArfcnRsrpBoost(ServiceState serviceState,
-            CellIdentity cellIdentity) {
+    void updateServiceStateArfcnRsrpBoost(ServiceState serviceState, CellIdentity cellIdentity) {
+        if (cellIdentity == null) return;
+
         int rsrpBoost = 0;
         int arfcn;
 
