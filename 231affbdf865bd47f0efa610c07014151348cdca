@@ -22,6 +22,30 @@
       },
       "revId": "231affbdf865bd47f0efa610c07014151348cdca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8640846_6233d6aa",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-10T00:06:46Z",
+      "side": 1,
+      "message": "Yeh. both the removeCoarseLocation true and false cases cover the sanitization of CellIdentity here (\"assertNull(networkRegistrationInfo.getCellIdentity());\"). \n\nCellInfoTest has dedicated cases to cover CellIdentity#sanitize():\nhttps://source.corp.google.com/android/cts/tests/tests/telephony/current/src/android/telephony/cts/CellInfoTest.java;l\u003d445",
+      "parentUuid": "2ab7e0ff_039c232f",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 77
+      },
+      "revId": "231affbdf865bd47f0efa610c07014151348cdca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
