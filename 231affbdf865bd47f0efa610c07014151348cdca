@@ -70,6 +70,30 @@
       },
       "revId": "231affbdf865bd47f0efa610c07014151348cdca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12457dcc_ff2d7bad",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-10T02:07:38Z",
+      "side": 1,
+      "message": "If we check NetworkRegistrationInfo#sanitizeLocationInfo, it just null the CellIdentity:\n\nhttps://source.corp.google.com/android/frameworks/base/telephony/java/android/telephony/NetworkRegistrationInfo.java;l\u003d750?q\u003dNetworkRegistrationInfo%20package:android#:~:text\u003d%7D%3B-,/**,%7D,-private%20NetworkRegistrationInfo%20copy\n\nSo here we did check ServiceState is sanitized (whether removeCoarseLocation parameter is true or false), the CellIdentities in the NetworkRegistrationInfos are sanitized.\n\nA private method with a few line of comments are used to make it more readable (hide the detail how we check CI is sanitized).",
+      "parentUuid": "850dd214_307f1541",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 77
+      },
+      "revId": "231affbdf865bd47f0efa610c07014151348cdca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
