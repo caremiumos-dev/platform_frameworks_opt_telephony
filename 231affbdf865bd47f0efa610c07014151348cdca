@@ -46,6 +46,30 @@
       },
       "revId": "231affbdf865bd47f0efa610c07014151348cdca",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "850dd214_307f1541",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/ServiceStateTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-10T01:19:03Z",
+      "side": 1,
+      "message": "What I\u0027m asking is: is there a test case that checks to be sure that when ServiceState is sanitized, the CellIdentities in the NetworkRegistrationInfos are sanitized? Since this is the test that\u0027s checking the ServiceState sanitization, I\u0027m afraid there isn\u0027t one.",
+      "parentUuid": "e8640846_6233d6aa",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 77
+      },
+      "revId": "231affbdf865bd47f0efa610c07014151348cdca",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
