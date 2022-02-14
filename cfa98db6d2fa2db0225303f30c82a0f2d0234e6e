@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "713489dd_8e4fdc05",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2514,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-02-14T21:23:44Z",
+      "side": 1,
+      "message": "This may be happening due to a difference in how we now set up the IMS callbacks (per sub instead of per slot). This is causing the IMS registration callback to be re-registered and cached info is being sent back to telephony.\n\nCan we put this CL in as a stop-gap while we identify the root cause?",
+      "range": {
+        "startLine": 2514,
+        "startChar": 12,
+        "endLine": 2514,
+        "endChar": 48
+      },
+      "revId": "cfa98db6d2fa2db0225303f30c82a0f2d0234e6e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
