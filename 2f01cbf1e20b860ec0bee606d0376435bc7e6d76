@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "466ffb16_046e6256",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-14T19:25:04Z",
+      "side": 1,
+      "message": "Under what conditions is this null? Does this happen when a requested threshold type isn\u0027t used by the system? If so, is it better to define an \"empty\" set for the system for each valid type? Or is it better to accept null here?\n\nI think this is an excellent case for a docstring to explain.",
+      "range": {
+        "startLine": 530,
+        "startChar": 28,
+        "endLine": 530,
+        "endChar": 44
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bef5cc4_a474a6ef",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-14T19:25:04Z",
+      "side": 1,
+      "message": "This method doesn\u0027t actually seem like it belongs in SignalStrength controller, or maybe the real problem is that this shouldn\u0027t be stashing some variable in the ServiceState object at all.\n\nUpon reflection, I am thinking that the \"correct\" way to do this is calculate the boost in real time whenever there is an onSignalStrengthResult(). Right now it\u0027s super weird that the SignalStrengthController is stashing the boost info in a ServiceState object and then pulling it back out when needed. AFAICT SignalStrengthController is the only thing in the entire code that is using that variable anyway. I could be wrong, but from 5 minutes of digging around, it seems to be the case. If so, then we can simplify a lot of that logic by moving everything into SignalStrengthController, and we can get the boost variable out of the ServiceState object entirely, which would be a really nice win.",
+      "range": {
+        "startLine": 715,
+        "startChar": 9,
+        "endLine": 715,
+        "endChar": 41
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20cbcf6f_99945780",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-14T19:25:04Z",
+      "side": 1,
+      "message": "nit package protected?",
+      "range": {
+        "startLine": 715,
+        "startChar": 4,
+        "endLine": 715,
+        "endChar": 8
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
