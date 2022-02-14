@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1767225c_ea957266",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-14T21:05:05Z",
+      "side": 1,
+      "message": "We do pass empty int array (new int[]{}) when system threshold is not enabled or no need to be honored:\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/GsmCdmaPhone.java;l\u003d4147\n\nThe null case comes from the opposite case and the fact that the system threadhold are read from API Parcellable#getIntArray which is @Nullable.\n\nWe can enforce to also return empty array when detecting system threshold is null in the same line above. But since shouldHonorSystemThresholds is only used once. It does not improve much.",
+      "parentUuid": "466ffb16_046e6256",
+      "range": {
+        "startLine": 530,
+        "startChar": 28,
+        "endLine": 530,
+        "endChar": 44
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bef5cc4_a474a6ef",
@@ -60,6 +84,54 @@
       "writtenOn": "2022-02-14T19:25:04Z",
       "side": 1,
       "message": "nit package protected?",
+      "range": {
+        "startLine": 715,
+        "startChar": 4,
+        "endLine": 715,
+        "endChar": 8
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcb37fff_6c0e348c",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-14T21:05:05Z",
+      "side": 1,
+      "message": "Yeh. ServiceState works as a temporary state storage for ArfcnRsrpBoot info in original design. I think this is where all the confusing come from.\n\nThe ArfcnRsrpBoost info is maintained and updated (the set method ServiceState#setArfcnRsrpBoost) in SSC, but the info retrieval (get method ServiceState#getArfcnRsrpBoost) are used by both CellSignalStrengthLte and CellSignalStrengthNr.\n\nI think the info go through ServiceState because the current method accept ServiceState as the parameter(SignalStrength#updateLevel(PersistableBundle, ServiceState):\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/base/telephony/java/android/telephony/CellSignalStrengthLte.java;l\u003d256?q\u003dupdateLevel\n\nOf cause we can bypass ServiceState and directly pass the  ArfcnRsrpBoost from SSC to CellSignalStrengthXXX ( e.g. by adding the third parameter to SignalStrength#updateLevel). But ArfcnRsrpBoot only applies to LTE and NR and it seems not be worthy to update the common API.\n\nPls let me know if this makes sense to you.",
+      "parentUuid": "1bef5cc4_a474a6ef",
+      "range": {
+        "startLine": 715,
+        "startChar": 9,
+        "endLine": 715,
+        "endChar": 41
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa55f179_75634603",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-14T21:05:05Z",
+      "side": 1,
+      "message": "updateServiceStateArfcnRsrpBoost is now package access protected  because the only caller is SST:\n\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/opt/telephony/src/java/com/android/internal/telephony/ServiceStateTracker.java;l\u003d2277?q\u003dupdateServiceStateArfcnRsrpBoost\u0026sq\u003d",
+      "parentUuid": "20cbcf6f_99945780",
       "range": {
         "startLine": 715,
         "startChar": 4,
