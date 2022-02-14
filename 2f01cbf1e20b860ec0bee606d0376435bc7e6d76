@@ -188,6 +188,30 @@
       },
       "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7993d230_d43e613c",
+        "filename": "src/java/com/android/internal/telephony/SignalStrengthController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-14T22:31:53Z",
+      "side": 1,
+      "message": "File b/219572311 with a TODO here to improve later.",
+      "parentUuid": "dd981ae6_8e45b286",
+      "range": {
+        "startLine": 715,
+        "startChar": 9,
+        "endLine": 715,
+        "endChar": 41
+      },
+      "revId": "2f01cbf1e20b860ec0bee606d0376435bc7e6d76",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
