@@ -2507,8 +2507,14 @@ public class ImsPhone extends ImsPhoneBase {
         if (phoneNumber == null) {
             return;
         }
-        SubscriptionController subController = SubscriptionController.getInstance();
         int subId = getSubId();
+        if (!SubscriptionManager.isValidSubscriptionId(subId)) {
+            // SubscriptionController.setSubscriptionProperty validates input subId
+            // so do not proceed if subId invalid.
+            // QUESTION: when would this happen?
+            return;
+        }
+        SubscriptionController subController = SubscriptionController.getInstance();
         String countryIso = getCountryIso(subController, subId);
         // Format the number as one more defense to reject garbage values:
         // phoneNumber will become null.
