@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba8e3f0_b3ca5dda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2022-02-15T20:31:17Z",
+      "side": 1,
+      "message": "System reports owner as deleted user.\nPlease update it to your name.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 6
+      },
+      "revId": "939a0de7290df269ac66138bff6974f4c5775976",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
