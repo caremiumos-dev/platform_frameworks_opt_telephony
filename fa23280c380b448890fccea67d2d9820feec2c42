@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71cb8df_7fd42076",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-16T19:04:14Z",
+      "side": 1,
+      "message": "Jack, the root cause comes from the previous ServiceStateTracker. But it\u0027s a good opportunity to throughly scan SignalStrengthController to improve nullability. Pls help to take a look.\n\nThanks!",
+      "revId": "fa23280c380b448890fccea67d2d9820feec2c42",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
