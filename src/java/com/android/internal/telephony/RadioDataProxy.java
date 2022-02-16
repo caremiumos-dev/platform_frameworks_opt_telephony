@@ -69,7 +69,6 @@ public class RadioDataProxy extends RadioServiceProxy {
         super.clear();
         mDataProxy = null;
     }
-
     /**
      * Check whether a RadioData implementation exists
      * @return true if there is neither a HIDL nor AIDL implementation
