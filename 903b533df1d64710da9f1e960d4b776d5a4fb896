@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18df926_ca013809",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2022-02-16T17:50:56Z",
+      "side": 1,
+      "message": "please have a look if this is the correct way to solve this or if there should be a change in the API?\nThis solves the problem at least.\nBR\nMattias",
+      "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
