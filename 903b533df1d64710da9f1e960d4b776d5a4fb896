@@ -87,6 +87,30 @@
       },
       "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c607db40_2db9be59",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2022-02-17T17:58:10Z",
+      "side": 1,
+      "message": "yep I heard something about that, thanks for checking. Please check the provider change too, it is pretty straight forward.",
+      "parentUuid": "314fff50_9252e177",
+      "range": {
+        "startLine": 3563,
+        "startChar": 41,
+        "endLine": 3563,
+        "endChar": 83
+      },
+      "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
