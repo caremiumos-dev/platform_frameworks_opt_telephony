@@ -39,6 +39,30 @@
       },
       "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b7fc5dc_5a289f0f",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2022-02-17T17:27:36Z",
+      "side": 1,
+      "message": "Sorry, I actually think we should totally remove this if statement. What is it for? First we ask for a preferredApn and then we check if the mcc and mnc matches, seems a bit strange to me, is this a real use case?\n\nThe commit that introduced this if statement is a gigantic one from the stone age when this source code was in frameworks/base:\n\ncommit 3611e5c9399e8459e1bc7119ac45865ddd6ff5be\nAuthor: Wink Saville \u003cwink@google.com\u003e\nDate:   Wed Nov 3 17:11:07 2010 -0700\n\n    Allow DataConnectionTrackers to manage multiple data connections.\n    \n    This is the first step to allow simultaneous data connections.\n    \n    Bug: 2441767\n    Change-Id: Ia625cfe94b771a6958401adca84b80543fbdb35c\n    \n    \nI think we can remove the lines 3563-3566.",
+      "parentUuid": "25409d17_fe3e52b1",
+      "range": {
+        "startLine": 3563,
+        "startChar": 41,
+        "endLine": 3563,
+        "endChar": 83
+      },
+      "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
