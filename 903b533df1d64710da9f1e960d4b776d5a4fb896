@@ -63,6 +63,30 @@
       },
       "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "314fff50_9252e177",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DcTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-17T17:46:50Z",
+      "side": 1,
+      "message": "This whole DcTracker is going away in Android T\n\nI will check if this issue still applicable but this fix might be helpful for you in Android S. You can make a local change.",
+      "parentUuid": "4b7fc5dc_5a289f0f",
+      "range": {
+        "startLine": 3563,
+        "startChar": 41,
+        "endLine": 3563,
+        "endChar": 83
+      },
+      "revId": "903b533df1d64710da9f1e960d4b776d5a4fb896",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
