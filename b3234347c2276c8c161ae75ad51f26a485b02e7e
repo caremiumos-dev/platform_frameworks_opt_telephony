@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c53705_a35a4154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-22T06:21:42Z",
+      "side": 1,
+      "message": "There was one more change which also needs to be cherry-pick but its not a trivial cherry-pick .. it needed lot of changes",
+      "revId": "b3234347c2276c8c161ae75ad51f26a485b02e7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
