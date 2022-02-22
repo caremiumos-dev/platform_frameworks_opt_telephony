@@ -16,6 +16,23 @@
       "message": "Still under checking in Sony internally",
       "revId": "e28d59bbe27782335c1469f24ae328db169b9bdf",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf3ab3e_2a6dc30c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2022-02-22T07:19:51Z",
+      "side": 1,
+      "message": "Hi Yoshiaki,\n\nIts not a clean cherry-pick hence pls make sure you test it thoroughly ",
+      "revId": "e28d59bbe27782335c1469f24ae328db169b9bdf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
