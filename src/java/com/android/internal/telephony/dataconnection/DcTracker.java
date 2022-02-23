@@ -3302,11 +3302,14 @@ public class DcTracker extends Handler {
 
             int newRequestType = calculateNewRetryRequestType(handoverFailureMode, requestType,
                     cause);
+            handleSpecialClearCode(cause, apnContext);
             onDataSetupCompleteError(apnContext, newRequestType, fallbackOnFailedHandover);
         }
     }
 
-
+    protected void handleSpecialClearCode(int cause, ApnContext apnContext) {
+        log("handleSpecialClearCode");
+    }
 
     /**
      * Error has occurred during the SETUP {aka bringUP} request and the DCT
