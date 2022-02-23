@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00ded25_f896c2b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-02-23T18:04:42Z",
+      "side": 1,
+      "message": "Removing CR +2. Please also add a check to convert null TrafficDescriptor into an empty TD in RadioDataProxy#setupDataCall for AIDL.",
+      "revId": "d66637421ff854563f5438211bfa7dde1073e5cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
