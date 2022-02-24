@@ -16,6 +16,29 @@
       "message": "Note: I probably need to fix some unit tests before this will pass presubmit.",
       "revId": "2b2c021a40c8b62d542b24635dfd3f25ed48d935",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7278f4b_889ae058",
+        "filename": "src/java/com/android/internal/telephony/DeviceStateMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-02-24T01:52:54Z",
+      "side": 1,
+      "message": "nits: dup of \"but\"",
+      "range": {
+        "startLine": 361,
+        "startChar": 14,
+        "endLine": 361,
+        "endChar": 17
+      },
+      "revId": "2b2c021a40c8b62d542b24635dfd3f25ed48d935",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
