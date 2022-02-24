@@ -34,6 +34,24 @@
       "parentUuid": "b00ded25_f896c2b3",
       "revId": "d66637421ff854563f5438211bfa7dde1073e5cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ccaf786_69cbbf6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-02-24T01:13:50Z",
+      "side": 1,
+      "message": "Ack, missed that. Updated the review.",
+      "parentUuid": "78e40adc_3d08e97c",
+      "revId": "d66637421ff854563f5438211bfa7dde1073e5cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
