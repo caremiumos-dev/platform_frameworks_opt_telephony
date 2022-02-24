@@ -16,6 +16,24 @@
       "message": "Removing CR +2. Please also add a check to convert null TrafficDescriptor into an empty TD in RadioDataProxy#setupDataCall for AIDL.",
       "revId": "d66637421ff854563f5438211bfa7dde1073e5cd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78e40adc_3d08e97c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-02-24T01:01:38Z",
+      "side": 1,
+      "message": "For setupDataCall, it uses RILUtils.convertToHalDataProfile()and calls RILUtils.convertToHalTrafficDescriptorAidl() in there.\nIf \u0027null\u0027 is filled into trafficDescriptor of DataProfileInfo in RadioDataProxy#setupDataCall(), it can be filled with empty trafficDescrriptor object finally through convertToHalTrafficDescriptorAidl().\nSo I think no more changes is needed.\nDo you see any other call path?",
+      "parentUuid": "b00ded25_f896c2b3",
+      "revId": "d66637421ff854563f5438211bfa7dde1073e5cd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
