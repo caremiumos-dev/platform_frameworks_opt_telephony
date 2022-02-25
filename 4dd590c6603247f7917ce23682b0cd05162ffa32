@@ -16,6 +16,24 @@
       "message": "Super nits: With (capital W)\n\nI can\u0027t remember why all those methods have lower case w in the word \"with\":\n- testScreenOnOffwithRadioToggle\n- testGetBarringInfowithRadioToggle\n\nThey all should be W instead, right?",
       "revId": "4dd590c6603247f7917ce23682b0cd05162ffa32",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2da01d_155a5bba",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-02-25T20:30:21Z",
+      "side": 1,
+      "message": "I don\u0027t remember. I went back and looked and followed the \"style of the file\" though rather than change them.",
+      "parentUuid": "3c7a7864_fc3c6dc5",
+      "revId": "4dd590c6603247f7917ce23682b0cd05162ffa32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
