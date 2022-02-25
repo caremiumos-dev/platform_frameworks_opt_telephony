@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2f9c3b_f0efcae6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221112
+      },
+      "writtenOn": "2022-02-25T23:29:42Z",
+      "side": 1,
+      "message": "might be that this is needed for S V2 branches, but it is up to you to decide.\nBR\nMattias",
+      "revId": "48df86e4c83d476e74120a89af3d30e0ef682278",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
