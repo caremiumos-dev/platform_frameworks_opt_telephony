@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea899e1c_6363375d",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-02-25T23:51:05Z",
+      "side": 1,
+      "message": "this actually sounds like this api will accept 2 parameters. one is uid and the other corresponding access. or the caller has some acccess and sets the uid but either way AccessUid was atleast was clear we are setting uids only",
+      "range": {
+        "startLine": 1972,
+        "startChar": 20,
+        "endLine": 1972,
+        "endChar": 37
+      },
+      "revId": "9187e16aea446b15cbce2b93d346ec4105de0331",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
