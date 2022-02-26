@@ -969,6 +969,25 @@ public class CarrierPrivilegesTracker extends Handler {
     }
 
     /**
+     * @return The UID of carrier service package. {@link Process#INVALID_UID} if not found.
+     */
+    public int getCarrierServicePackageUid() {
+        Intent intent = new Intent(CarrierService.CARRIER_SERVICE_INTERFACE);
+        List<String> carrierPackageNames = getCarrierPackageNamesForIntent(intent);
+        if (!carrierPackageNames.isEmpty()) {
+            List<Integer> uids = new ArrayList<>(getUidsForPackage(carrierPackageNames.get(0),
+                    /* invalidateCache= */ false));
+            if (uids.isEmpty()) return Process.INVALID_UID;
+            if (uids.size() > 1) {
+                Rlog.w(TAG, "getCarrierServicePackageUid: more than one uid for carrier "
+                        + "service package.");
+            }
+            return uids.get(0);
+        }
+        return Process.INVALID_UID;
+    }
+
+    /**
      * Backing of {@link TelephonyManager#getCarrierPackageNamesForIntent} and {@link
      * TelephonyManager#getCarrierPackageNamesForIntentAndPhone}.
      */
