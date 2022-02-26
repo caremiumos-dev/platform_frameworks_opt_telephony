@@ -16,6 +16,24 @@
       "message": "There was one more change which also needs to be cherry-pick but its not a trivial cherry-pick .. it needed lot of changes",
       "revId": "b3234347c2276c8c161ae75ad51f26a485b02e7e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "426e1905_5260090d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1061057
+      },
+      "writtenOn": "2022-02-26T13:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2c53705_a35a4154",
+      "revId": "b3234347c2276c8c161ae75ad51f26a485b02e7e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
