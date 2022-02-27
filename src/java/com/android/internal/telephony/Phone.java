@@ -39,6 +39,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.preference.PreferenceManager;
+import android.provider.DeviceConfig;
 import android.sysprop.TelephonyProperties;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
@@ -76,6 +77,7 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.data.DataNetworkController;
 import com.android.internal.telephony.dataconnection.DataConnectionReasons;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
@@ -304,6 +306,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     // WLAN DcTracker is for IWLAN data connection. For IWLAN legacy mode, only one (WWAN) DcTracker
     // will be created.
     protected final SparseArray<DcTracker> mDcTrackers = new SparseArray<>();
+    protected DataNetworkController mDataNetworkController;
     /* Used for dispatching signals to configured carrier apps */
     protected CarrierSignalAgent mCarrierSignalAgent;
     /* Used for dispatching carrier action from carrier apps */
@@ -4870,6 +4873,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return null;
     }
 
+    /**
+     * @return The data network controller
+     */
+    public @Nullable DataNetworkController getDataNetworkController() {
+        return mDataNetworkController;
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
@@ -4906,6 +4916,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" needsOtaServiceProvisioning=" + needsOtaServiceProvisioning());
         pw.println(" isInEmergencySmsMode=" + isInEmergencySmsMode());
         pw.println(" isEcmCanceledForEmergency=" + isEcmCanceledForEmergency());
+        pw.println(" isUsingNewDataStack=" + isUsingNewDataStack());
         pw.println(" service state=" + getServiceState());
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
@@ -4929,6 +4940,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     pw.println("++++++++++++++++++++++++++++++++");
                 }
             }
+        }
+
+        if (mDataNetworkController != null) {
+            try {
+                mDataNetworkController.dump(fd, pw, args);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pw.flush();
+            pw.println("++++++++++++++++++++++++++++++++");
         }
 
         if (getServiceStateTracker() != null) {
@@ -5096,5 +5117,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     @VisibleForTesting
     public boolean isAllowedNetworkTypesLoadedFromDb() {
         return mIsAllowedNetworkTypesLoadedFromDb;
+    }
+
+    /**
+     * @return {@code true} if using the new telephony data stack. See go/atdr for the design.
+     */
+    // TODO: Temp code. Use cl/399526916 for future canary process. After rolling out to 100%
+    //  dogfooders, the code below should be completely removed.
+    public boolean isUsingNewDataStack() {
+        String configValue = DeviceConfig.getProperty(DeviceConfig.NAMESPACE_TELEPHONY,
+                "new_telephony_data_enabled");
+        return configValue != null && Boolean.parseBoolean(configValue);
     }
 }
