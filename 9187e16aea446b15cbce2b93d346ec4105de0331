@@ -22,6 +22,30 @@
       },
       "revId": "9187e16aea446b15cbce2b93d346ec4105de0331",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b5468bb_6c333aa7",
+        "filename": "src/java/com/android/internal/telephony/dataconnection/DataConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1015428
+      },
+      "writtenOn": "2022-02-27T00:58:19Z",
+      "side": 1,
+      "message": "I also prefer the old name but the API council strongly rejected it. This was the best alternative they had.\n\nFWIW I don\u0027t think this sounds like we\u0027ll set like it will accept 2 parameters because \"access\" doesn\u0027t make sense as a parameter. Either you have access or you don\u0027t, so the only thing that would make sense is to pass a boolean, and then you\u0027d never call it \"UidsWithAccess\" but something like \"AccessForUids\" (with add/remove as a prefix for example).",
+      "parentUuid": "ea899e1c_6363375d",
+      "range": {
+        "startLine": 1972,
+        "startChar": 20,
+        "endLine": 1972,
+        "endChar": 37
+      },
+      "revId": "9187e16aea446b15cbce2b93d346ec4105de0331",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
