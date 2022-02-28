@@ -71,7 +71,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -119,7 +118,10 @@ public class EuiccControllerTest extends TelephonyTest {
     private static final String ICC_ID = "54321";
     private static final int CARD_ID = 25;
 
-    @Mock private EuiccConnector mMockConnector;
+    // Mocked classes
+    private EuiccConnector mMockConnector;
+    private UiccSlot mUiccSlot;
+
     private TestEuiccController mController;
     private int mSavedEuiccProvisionedValue;
 
@@ -176,7 +178,9 @@ public class EuiccControllerTest extends TelephonyTest {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp("EuiccControllerTest");
+        super.setUp(getClass().getSimpleName());
+        mMockConnector = Mockito.mock(EuiccConnector.class);
+        mUiccSlot = Mockito.mock(UiccSlot.class);
         mController = new TestEuiccController(mContext, mMockConnector);
 
         PackageInfo pi = new PackageInfo();
@@ -192,9 +196,10 @@ public class EuiccControllerTest extends TelephonyTest {
 
     @After
     public void tearDown() throws Exception {
-        super.tearDown();
         Settings.Global.putInt(mContext.getContentResolver(),
                 Settings.Global.EUICC_PROVISIONED, mSavedEuiccProvisionedValue);
+        mController = null;
+        super.tearDown();
     }
 
     @Test(expected = SecurityException.class)

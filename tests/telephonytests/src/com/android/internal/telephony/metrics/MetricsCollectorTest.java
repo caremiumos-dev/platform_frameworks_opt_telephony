@@ -53,7 +53,6 @@ import com.android.internal.telephony.uicc.UiccSlot;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,27 +81,40 @@ public class MetricsCollectorTest extends TelephonyTest {
 
     // b/153195691: we cannot verify the contents of StatsEvent as its getters are marked with @hide
 
-    @Mock private Phone mSecondPhone;
-    @Mock private UiccSlot mPhysicalSlot;
-    @Mock private UiccSlot mEsimSlot;
-    @Mock private UiccCard mActiveCard;
-    @Mock private UiccPort mActivePort;
-
-    @Mock private ServiceStateStats mServiceStateStats;
-
+    // Mocked classes
+    private Phone mSecondPhone;
+    private TelephonyStatsLogHelper mTelephonyStatsLog;
+    private UiccSlot mPhysicalSlot;
+    private UiccSlot mEsimSlot;
+    private UiccCard mActiveCard;
+    private UiccPort mActivePort;
+    private ServiceStateStats mServiceStateStats;
     private MetricsCollector mMetricsCollector;
 
     @Before
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
+
         mMetricsCollector = new MetricsCollector(mContext);
         mMetricsCollector.setPersistAtomsStorage(mPersistAtomsStorage);
+
+        mSecondPhone = mock(Phone.class);
+        mTelephonyStatsLog = mock(TelephonyStatsLogHelper.class);
+        mPhysicalSlot = mock(UiccSlot.class);
+        mEsimSlot = mock(UiccSlot.class);
+        mActiveCard = mock(UiccCard.class);
+        mActivePort = mock(UiccPort.class);
+        mServiceStateStats = mock(ServiceStateStats.class);
+        mMetricsCollector =
+                new MetricsCollector(mContext, mPersistAtomsStorage, mTelephonyStatsLog);
+
         doReturn(mSST).when(mSecondPhone).getServiceStateTracker();
         doReturn(mServiceStateStats).when(mSST).getServiceStateStats();
     }
 
     @After
     public void tearDown() throws Exception {
+        mMetricsCollector = null;
         super.tearDown();
     }
 
