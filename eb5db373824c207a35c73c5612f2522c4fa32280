@@ -1,4 +1,21 @@
 {
-  "comments": [],
-  "submitRequirementResults": []
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffc43068_6a90f15b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-03-01T21:55:16Z",
+      "side": 1,
+      "message": "Please un-abandon and submit. I can give +2 and abandon the internal change instead.",
+      "revId": "eb5db373824c207a35c73c5612f2522c4fa32280",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
 }
