@@ -34,7 +34,24 @@
       "parentUuid": "3c7a7864_fc3c6dc5",
       "revId": "4dd590c6603247f7917ce23682b0cd05162ffa32",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "760e5d2a_60467b89",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/DeviceStateMonitorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-03-01T19:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe2da01d_155a5bba",
+      "revId": "4dd590c6603247f7917ce23682b0cd05162ffa32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
-  ],
-  "submitRequirementResults": []
+  ]
 }
