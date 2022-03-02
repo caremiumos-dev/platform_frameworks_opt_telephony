@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c30a658_f2028fe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2022-03-02T15:20:33Z",
+      "side": 1,
+      "message": "I removed the line that was causing the conflict with an internal change. It was just a logging statement tidy up.",
+      "revId": "2120357afba5f47171c9a31c6dec888a90083356",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
