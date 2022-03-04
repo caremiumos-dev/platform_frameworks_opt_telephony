@@ -86,6 +86,10 @@ import com.android.ims.ImsEcbm;
 import com.android.ims.ImsManager;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
+import com.android.internal.telephony.data.DataConfigManager;
+import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.data.DataProfileManager;
+import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataEnabledOverride;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DataThrottler;
@@ -198,6 +202,12 @@ public abstract class TelephonyTest {
     @Mock
     protected DcTracker mDcTracker;
     @Mock
+    protected DataNetworkController mDataNetworkController;
+    @Mock
+    protected DataConfigManager mDataConfigManager;
+    @Mock
+    protected DataProfileManager mDataProfileManager;
+    @Mock
     protected DisplayInfoController mDisplayInfoController;
     @Mock
     protected GsmCdmaCall mGsmCdmaCall;
@@ -275,6 +285,8 @@ public abstract class TelephonyTest {
     protected DeviceStateMonitor mDeviceStateMonitor;
     @Mock
     protected TransportManager mTransportManager;
+    @Mock
+    protected AccessNetworksManager mAccessNetworksManager;
     @Mock
     protected IntentBroadcaster mIntentBroadcaster;
     @Mock
@@ -538,6 +550,8 @@ public abstract class TelephonyTest {
                 .makeDeviceStateMonitor(nullable(Phone.class));
         doReturn(mTransportManager).when(mTelephonyComponentFactory)
                 .makeTransportManager(nullable(Phone.class));
+        doReturn(mAccessNetworksManager).when(mTelephonyComponentFactory)
+                .makeAccessNetworksManager(nullable(Phone.class));
         doReturn(mNitzStateMachine).when(mTelephonyComponentFactory)
                 .makeNitzStateMachine(nullable(GsmCdmaPhone.class));
         doReturn(mLocaleTracker).when(mTelephonyComponentFactory)
@@ -570,8 +584,10 @@ public abstract class TelephonyTest {
         doReturn(mAppSmsManager).when(mPhone).getAppSmsManager();
         doReturn(mIccSmsInterfaceManager).when(mPhone).getIccSmsInterfaceManager();
         doReturn(mTransportManager).when(mPhone).getTransportManager();
+        doReturn(mAccessNetworksManager).when(mPhone).getAccessNetworksManager();
         doReturn(mDataEnabledSettings).when(mPhone).getDataEnabledSettings();
         doReturn(mDcTracker).when(mPhone).getDcTracker(anyInt());
+        doReturn(mDataNetworkController).when(mPhone).getDataNetworkController();
         doReturn(mCarrierPrivilegesTracker).when(mPhone).getCarrierPrivilegesTracker();
         doReturn(mSignalStrength).when(mPhone).getSignalStrength();
         doReturn(mVoiceCallSessionStats).when(mPhone).getVoiceCallSessionStats();
@@ -582,6 +598,8 @@ public abstract class TelephonyTest {
         doReturn(mLinkBandwidthEstimator).when(mPhone).getLinkBandwidthEstimator();
         doReturn(mCellIdentity).when(mPhone).getCurrentCellIdentity();
         doReturn(mCellLocation).when(mCellIdentity).asCellLocation();
+        doReturn(mDataConfigManager).when(mDataNetworkController).getDataConfigManager();
+        doReturn(mDataProfileManager).when(mDataNetworkController).getDataProfileManager();
 
         //mUiccController
         doReturn(mUiccCardApplication3gpp).when(mUiccController).getUiccCardApplication(anyInt(),
@@ -705,6 +723,29 @@ public abstract class TelephonyTest {
                 Settings.Global.DEVICE_PROVISIONING_MOBILE_DATA_ENABLED, 1);
         doReturn(mDataThrottler).when(mDcTracker).getDataThrottler();
         doReturn(-1L).when(mDataThrottler).getRetryTime(anyInt());
+
+        doReturn(90).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_EIMS));
+        doReturn(80).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_SUPL));
+        doReturn(70).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_MMS));
+        doReturn(70).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_XCAP));
+        doReturn(50).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_CBS));
+        doReturn(50).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_MCX));
+        doReturn(50).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_FOTA));
+        doReturn(40).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_IMS));
+        doReturn(30).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_DUN));
+        doReturn(20).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE));
+        doReturn(20).when(mDataConfigManager).getNetworkCapabilityPriority(
+                eq(NetworkCapabilities.NET_CAPABILITY_INTERNET));
 
         // CellularNetworkValidator
         doReturn(SubscriptionManager.INVALID_PHONE_INDEX)
@@ -1033,6 +1074,15 @@ public abstract class TelephonyTest {
         while (!areAllTestableLoopersIdle()) {
             for (TestableLooper looper : mTestableLoopers) looper.processAllMessages();
         }
+    }
+
+    /**
+     * Handle all messages including the delayed messages.
+     */
+    public void processAllFutureMessages() {
+        processAllMessages();
+        moveTimeForward(TimeUnit.DAYS.toMillis(1));
+        processAllMessages();
     }
 
     /**

@@ -2280,6 +2280,7 @@ public class DcTracker extends Handler {
     }
 
     protected void setInitialAttachApn() {
+        if (mPhone.isUsingNewDataStack()) return;
         ApnSetting apnSetting = null;
         int preferredApnSetId = getPreferredApnSetId();
         ArrayList<ApnSetting> allApnSettings = new ArrayList<>();
@@ -3490,6 +3491,7 @@ public class DcTracker extends Handler {
 
     protected void setDataProfilesAsNeeded() {
         if (DBG) log("setDataProfilesAsNeeded");
+        if (mPhone.isUsingNewDataStack()) return;
 
         ArrayList<DataProfile> dataProfileList = new ArrayList<>();
 
@@ -3560,10 +3562,6 @@ public class DcTracker extends Handler {
             mPreferredApn = null;
         } else {
             mPreferredApn = getPreferredApn();
-            if (mPreferredApn != null && !mPreferredApn.getOperatorNumeric().equals(operator)) {
-                mPreferredApn = null;
-                setPreferredApn(-1);
-            }
             if (DBG) log("createAllApnList: mPreferredApn=" + mPreferredApn);
         }
 
@@ -3727,7 +3725,9 @@ public class DcTracker extends Handler {
                 log("buildWaitingApns: Preferred APN:" + operator + ":"
                         + mPreferredApn.getOperatorNumeric() + ":" + mPreferredApn);
             }
-            if (mPreferredApn.getOperatorNumeric().equals(operator)) {
+
+            if (TextUtils.equals(mPreferredApn.getOperatorNumeric(), operator)
+                    || mPreferredApn.getCarrierId() == mPhone.getCarrierId()) {
                 if (mPreferredApn.canSupportNetworkType(
                         ServiceState.rilRadioTechnologyToNetworkType(radioTech))) {
                     // Create a new instance of ApnSetting for ENTERPRISE because each

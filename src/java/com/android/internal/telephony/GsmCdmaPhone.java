@@ -89,6 +89,8 @@ import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
+import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.dataconnection.LinkBandwidthEstimator;
@@ -306,6 +308,9 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierActionAgent(this);
         mCarrierSignalAgent = mTelephonyComponentFactory.inject(CarrierSignalAgent.class.getName())
                 .makeCarrierSignalAgent(this);
+        mAccessNetworksManager = mTelephonyComponentFactory
+                .inject(AccessNetworksManager.class.getName())
+                .makeAccessNetworksManager(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
         // SST/DSM depends on SSC, so SSC is instanced before SST/DSM
@@ -333,6 +338,12 @@ public class GsmCdmaPhone extends Phone {
                     .makeDcTracker(this, transport);
             mDcTrackers.put(transport, dcTracker);
             mTransportManager.registerDataThrottler(dcTracker.getDataThrottler());
+        }
+
+        if (isUsingNewDataStack()) {
+            mDataNetworkController = mTelephonyComponentFactory.inject(
+                    DataNetworkController.class.getName())
+                    .makeDataNetworkController(this, getLooper());
         }
 
         mCarrierResolver = mTelephonyComponentFactory.inject(CarrierResolver.class.getName())
@@ -647,6 +658,11 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public TransportManager getTransportManager() {
         return mTransportManager;
+    }
+
+    @Override
+    public AccessNetworksManager getAccessNetworksManager() {
+        return mAccessNetworksManager;
     }
 
     @Override
