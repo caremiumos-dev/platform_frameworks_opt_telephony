@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.data;
 
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.net.NetworkCapabilities.TRANSPORT_CELLULAR;
 import static android.telephony.CarrierConfigManager.KEY_DATA_SWITCH_VALIDATION_TIMEOUT_LONG;
 import static android.telephony.SubscriptionManager.DEFAULT_SUBSCRIPTION_ID;
@@ -1305,11 +1306,13 @@ public class PhoneSwitcher extends Handler {
         // if Internet PDN is established on the non-preferred phone, it will interrupt
         // Internet connection on the preferred phone. So we only accept Internet request with
         // preferred data subscription or no specified subscription.
-        // One exception is, if it's restricted request (doesn't have NET_CAPABILITY_NOT_RESTRICTED)
-        // it will be accepted, which is used temporary data usage from system.
-        if (netRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                && netRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
-                && subId != preferredDataSubId && subId != mValidator.getSubIdInValidation()) {
+        // This includes requests that allow restricted INTERNET, since that would cause a breakage
+        // of the user's network connectivity. System apps requiring access to INTERNET should
+        // simply use the default subscription to avoid breaking system-wide data access, and access
+        // to any other PDNs is unaffected.
+        if (netRequest.hasCapability(NET_CAPABILITY_INTERNET)
+                && subId != preferredDataSubId
+                && subId != mValidator.getSubIdInValidation()) {
             // Returning INVALID_PHONE_INDEX will result in netRequest not being handled.
             return INVALID_PHONE_INDEX;
         }
