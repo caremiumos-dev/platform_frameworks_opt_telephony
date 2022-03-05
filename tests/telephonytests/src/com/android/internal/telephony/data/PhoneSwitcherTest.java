@@ -778,12 +778,13 @@ public class PhoneSwitcherTest extends TelephonyTest {
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(
                 new TelephonyNetworkRequest(internetRequest, mPhone), 1));
 
-        // Restricted network request will should be applied.
+        // Ignore restricted network requests as well
         internetRequest = addInternetNetworkRequest(2, 50, true);
         assertFalse(mPhoneSwitcher.shouldApplyNetworkRequest(
                 new TelephonyNetworkRequest(internetRequest, mPhone), 0));
-        assertTrue(mPhoneSwitcher.shouldApplyNetworkRequest(
-                new TelephonyNetworkRequest(internetRequest, mPhone), 1));
+        assertFalse(
+                mPhoneSwitcher.shouldApplyNetworkRequest(
+                        new TelephonyNetworkRequest(internetRequest, mPhone), 1));
     }
 
     @Test
