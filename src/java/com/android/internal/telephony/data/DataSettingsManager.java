@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.data;
 
+import android.annotation.CallbackExecutor;
 import android.annotation.NonNull;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,32 +29,86 @@ import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.concurrent.Executor;
 
 /**
  * DataSettingsManager maintains the data related settings, for example, data enabled settings,
  * data roaming settings, etc...
  */
 public class DataSettingsManager extends Handler {
+    /** Event for data config updated. */
+    private static final int EVENT_DATA_CONFIG_UPDATED = 1;
+
     private final Phone mPhone;
     private final String mLogTag;
     private final LocalLog mLocalLog = new LocalLog(128);
+
+    /** Data config manager */
+    private final @NonNull DataConfigManager mDataConfigManager;
+
+    /** Data settings manager callback. */
+    private final @NonNull DataSettingsManagerCallback mDataSettingsManagerCallback;
+
+    /**
+     * Data settings manager callback. This should be only used by {@link DataNetworkController}.
+     */
+    public abstract static class DataSettingsManagerCallback extends DataCallback {
+        /**
+         * Constructor
+         *
+         * @param executor The executor of the callback.
+         */
+        public DataSettingsManagerCallback(@NonNull @CallbackExecutor Executor executor) {
+            super(executor);
+        }
+
+        /**
+         * Called when overall data enabled state changed.
+         *
+         * @param enabled {@code true} indicates mobile data is enabled.
+         */
+        public abstract void onDataEnabledChanged(boolean enabled);
+
+        /**
+         * Called when overall data enabled state changed.
+         *
+         * @param enabled {@code true} indicates mobile data is enabled.
+         */
+        public abstract void onRoamingEnabledChanged(boolean enabled);
+    }
 
     /**
      * Constructor
      *
      * @param phone The phone instance.
+     * @param dataNetworkController Data network controller.
      * @param looper The looper to be used by the handler. Currently the handler thread is the
      * phone process's main thread.
+     * @param callback Data settings manager callback.
      */
-    public DataSettingsManager(Phone phone, Looper looper) {
+    public DataSettingsManager(@NonNull Phone phone,
+            @NonNull DataNetworkController dataNetworkController, @NonNull Looper looper,
+            @NonNull DataSettingsManagerCallback callback) {
         super(looper);
         mPhone = phone;
         mLogTag = "DSMGR-" + mPhone.getPhoneId();
+
+        mDataSettingsManagerCallback = callback;
+        mDataConfigManager = dataNetworkController.getDataConfigManager();
+
+        mDataConfigManager.registerForConfigUpdate(this, EVENT_DATA_CONFIG_UPDATED);
     }
 
     @Override
     public void handleMessage(Message msg) {
 
+    }
+
+    /**
+     * @return {@code true} if data is enabled.
+     */
+    public boolean isDataEnabled() {
+        return true;
     }
 
     /**

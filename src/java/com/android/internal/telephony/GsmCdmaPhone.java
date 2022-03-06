@@ -15,6 +15,7 @@
  */
 
 package com.android.internal.telephony;
+
 import static com.android.internal.telephony.CommandException.Error.GENERIC_FAILURE;
 import static com.android.internal.telephony.CommandException.Error.SIM_BUSY;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_DISABLE;
@@ -90,9 +91,10 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.data.LinkBandwidthEstimator;
+import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
-import com.android.internal.telephony.dataconnection.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.gsm.GsmMmiCode;
@@ -307,6 +309,9 @@ public class GsmCdmaPhone extends Phone {
                 .makeCarrierActionAgent(this);
         mCarrierSignalAgent = mTelephonyComponentFactory.inject(CarrierSignalAgent.class.getName())
                 .makeCarrierSignalAgent(this);
+        mAccessNetworksManager = mTelephonyComponentFactory
+                .inject(AccessNetworksManager.class.getName())
+                .makeAccessNetworksManager(this);
         mTransportManager = mTelephonyComponentFactory.inject(TransportManager.class.getName())
                 .makeTransportManager(this);
         // SST/DSM depends on SSC, so SSC is instanced before SST/DSM
@@ -336,9 +341,11 @@ public class GsmCdmaPhone extends Phone {
             mTransportManager.registerDataThrottler(dcTracker.getDataThrottler());
         }
 
-        mDataNetworkController = mTelephonyComponentFactory.inject(
-                DataNetworkController.class.getName())
-                .makeDataNetworkController(this, getLooper());
+        if (isUsingNewDataStack()) {
+            mDataNetworkController = mTelephonyComponentFactory.inject(
+                    DataNetworkController.class.getName())
+                    .makeDataNetworkController(this, getLooper());
+        }
 
         mCarrierResolver = mTelephonyComponentFactory.inject(CarrierResolver.class.getName())
                 .makeCarrierResolver(this);
@@ -652,6 +659,11 @@ public class GsmCdmaPhone extends Phone {
     @Override
     public TransportManager getTransportManager() {
         return mTransportManager;
+    }
+
+    @Override
+    public AccessNetworksManager getAccessNetworksManager() {
+        return mAccessNetworksManager;
     }
 
     @Override
@@ -4695,6 +4707,9 @@ public class GsmCdmaPhone extends Phone {
      * @return Currently bound data service package names.
      */
     public @NonNull List<String> getDataServicePackages() {
+        if (isUsingNewDataStack()) {
+            return getDataNetworkController().getDataServicePackages();
+        }
         List<String> packages = new ArrayList<>();
         int[] transports = new int[]{AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
                 AccessNetworkConstants.TRANSPORT_TYPE_WLAN};

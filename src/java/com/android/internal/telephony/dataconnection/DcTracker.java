@@ -797,7 +797,9 @@ public class DcTracker extends Handler {
         mDcTesterFailBringUpAll = new DcTesterFailBringUpAll(mPhone, dcHandler);
 
         mDataConnectionTracker = this;
-        registerForAllEvents();
+        if (!mPhone.isUsingNewDataStack()) {
+            registerForAllEvents();
+        }
         mApnObserver = new ApnChangeObserver();
         phone.getContext().getContentResolver().registerContentObserver(
                 Telephony.Carriers.CONTENT_URI, true, mApnObserver);
@@ -2280,6 +2282,7 @@ public class DcTracker extends Handler {
     }
 
     protected void setInitialAttachApn() {
+        if (mPhone.isUsingNewDataStack()) return;
         ApnSetting apnSetting = null;
         int preferredApnSetId = getPreferredApnSetId();
         ArrayList<ApnSetting> allApnSettings = new ArrayList<>();
@@ -3490,6 +3493,7 @@ public class DcTracker extends Handler {
 
     protected void setDataProfilesAsNeeded() {
         if (DBG) log("setDataProfilesAsNeeded");
+        if (mPhone.isUsingNewDataStack()) return;
 
         ArrayList<DataProfile> dataProfileList = new ArrayList<>();
 
