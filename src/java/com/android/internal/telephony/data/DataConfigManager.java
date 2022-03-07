@@ -30,11 +30,13 @@ import android.os.PersistableBundle;
 import android.os.RegistrantList;
 import android.telephony.Annotation.NetCapability;
 import android.telephony.Annotation.NetworkType;
+import android.telephony.Annotation.OverrideNetworkType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.IndentingPrintWriter;
 
+import com.android.internal.R;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.data.DataRetryManager.DataRetryRule;
 import com.android.telephony.Rlog;
@@ -55,6 +57,28 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DataConfigManager extends Handler {
     private static final int EVENT_CARRIER_CONFIG_CHANGED = 1;
+
+    /** Indicates the bandwidth estimation source is from the modem. */
+    private static final String BANDWIDTH_SOURCE_MODEM_STRING_VALUE = "modem";
+
+    /** Indicates the bandwidth estimation source is from the static carrier config. */
+    private static final String BANDWIDTH_SOURCE_CARRIER_CONFIG_STRING_VALUE = "carrier_config";
+
+    /** Indicates the bandwidth estimation source is from {@link LinkBandwidthEstimator}. */
+    private static final String BANDWIDTH_SOURCE_BANDWIDTH_ESTIMATOR_STRING_VALUE =
+            "bandwidth_estimator";
+
+    // /** Configuration used only network type GSM. Should not be used outside of DataConfigManager
+    //   */
+    // private static final String CONFIG_USED_NETWORK_TYPE_GPRS = "GPRS";
+
+    // private static final String CONFIG_USED_NETWORK_TYPE_EDGE = "EDGE";
+
+    // TODO: A lot more to be added.
+
+    // private static final String CONFIG_USED_NETWORK_TYPE_NR_NSA = "NR_NSA";
+
+    // private static final String CONFIG_USED_NETWORK_TYPE_NR_NSA_MMWAVE = "NR_NSA_MMWAVE";
 
     private final Phone mPhone;
     private final String mLogTag;
@@ -230,6 +254,56 @@ public class DataConfigManager extends Handler {
     }
 
     /**
+     * @return The delay in millisecond for IMS graceful tear down. If IMS/RCS de-registration
+     * does not complete within the window, the data network will be torn down after timeout.
+     */
+    public long getImsDeregistrationDelay() {
+        return mResources.getInteger(R.integer.config_delay_for_ims_dereg_millis);
+    }
+
+    /**
+     * @return {@code true} if PDN should persist when IWLAN data service restarted/crashed.
+     * {@code false} will cause all data networks on IWLAN torn down if IWLAN data service crashes.
+     */
+    public boolean shouldPersistIwlanDataNetworksWhenDataServiceRestarted() {
+        return mResources.getBoolean(com.android.internal.R.bool
+                .config_wlan_data_service_conn_persistence_on_restart);
+    }
+
+    /**
+     * @return The bandwidth estimation source.
+     */
+    public @DataNetwork.BandwidthEstimationSource int getBandwidthEstimateSource() {
+        String source = mResources.getString(
+                com.android.internal.R.string.config_bandwidthEstimateSource);
+        switch (source) {
+            case BANDWIDTH_SOURCE_MODEM_STRING_VALUE:
+                return DataNetwork.BANDWIDTH_SOURCE_MODEM;
+            case BANDWIDTH_SOURCE_CARRIER_CONFIG_STRING_VALUE:
+                return DataNetwork.BANDWIDTH_SOURCE_CARRIER_CONFIG;
+            case BANDWIDTH_SOURCE_BANDWIDTH_ESTIMATOR_STRING_VALUE:
+                return DataNetwork.BANDWIDTH_SOURCE_BANDWIDTH_ESTIMATOR;
+            default:
+                loge("Invalid bandwidth estimation source config: " + source);
+                return DataNetwork.BANDWIDTH_SOURCE_UNKNOWN;
+        }
+    }
+
+    /**
+     * Get the bandwidth estimate from the carrier config.
+     *
+     * @param networkType The current network type.
+     * @param overrideNetworkType The override network type. This is used to indicate 5G NSA and
+     * millimeter wave case.
+     * @return The pre-configured bandwidth estimate from carrier config.
+     */
+    public @NonNull DataNetwork.NetworkBandwidth getBandwidthForNetworkType(
+            @NetworkType int networkType, @OverrideNetworkType int overrideNetworkType) {
+        return new DataNetwork.NetworkBandwidth(0, 0);
+        // TODO: Add the real implementation.
+    }
+
+    /**
      * Registration point for subscription info ready
      *
      * @param h handler to notify
@@ -274,6 +348,7 @@ public class DataConfigManager extends Handler {
         IndentingPrintWriter pw = new IndentingPrintWriter(printWriter, "  ");
         pw.println(DataConfigManager.class.getSimpleName() + "-" + mPhone.getPhoneId() + ":");
         pw.increaseIndent();
+        pw.println("isConfigCarrierSpecific=" + isConfigCarrierSpecific());
         pw.println("Network capability priority:");
         pw.increaseIndent();
         for (Map.Entry<Integer, Integer> entry : mNetworkCapabilityPriorityMap.entrySet()) {
@@ -288,6 +363,11 @@ public class DataConfigManager extends Handler {
             pw.println(rule);
         }
         pw.decreaseIndent();
+        pw.println("getImsDeregistrationDelay=" + getImsDeregistrationDelay());
+        pw.println("shouldPersistIwlanDataNetworksWhenDataServiceRestarted="
+                + shouldPersistIwlanDataNetworksWhenDataServiceRestarted());
+        pw.println("Bandwidth estimation source=" + mResources.getString(
+                com.android.internal.R.string.config_bandwidthEstimateSource));
         pw.decreaseIndent();
     }
 }

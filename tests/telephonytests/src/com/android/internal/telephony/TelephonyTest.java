@@ -57,6 +57,7 @@ import android.os.Message;
 import android.os.MessageQueue;
 import android.os.RegistrantList;
 import android.os.ServiceManager;
+import android.os.StrictMode;
 import android.os.UserManager;
 import android.permission.LegacyPermissionManager;
 import android.provider.BlockedNumberContract;
@@ -89,12 +90,12 @@ import com.android.internal.telephony.cdma.EriManager;
 import com.android.internal.telephony.data.DataConfigManager;
 import com.android.internal.telephony.data.DataNetworkController;
 import com.android.internal.telephony.data.DataProfileManager;
+import com.android.internal.telephony.data.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataEnabledOverride;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DataThrottler;
 import com.android.internal.telephony.dataconnection.DcTracker;
-import com.android.internal.telephony.dataconnection.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
@@ -465,8 +466,24 @@ public abstract class TelephonyTest {
         mOldInstances.clear();
     }
 
+    // TODO: Unit tests that do not extend TelephonyTest or ImsTestBase should enable strict mode
+    //   by calling this method.
+    public static void enableStrictMode() {
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .detectIncorrectContextUse()
+                .detectLeakedRegistrationObjects()
+                .detectUnsafeIntentLaunch()
+                .detectActivityLeaks()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
+    }
+
     protected void setUp(String tag) throws Exception {
         TAG = tag;
+        enableStrictMode();
         MockitoAnnotations.initMocks(this);
         TelephonyManager.disableServiceHandleCaching();
         SubscriptionController.disableCaching();
@@ -683,6 +700,9 @@ public abstract class TelephonyTest {
         doReturn(new int[]{AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
                 AccessNetworkConstants.TRANSPORT_TYPE_WLAN})
                 .when(mTransportManager).getAvailableTransports();
+        doReturn(new int[]{AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                AccessNetworkConstants.TRANSPORT_TYPE_WLAN})
+                .when(mAccessNetworksManager).getAvailableTransports();
         doReturn(AccessNetworkConstants.TRANSPORT_TYPE_WWAN).when(mTransportManager)
                 .getCurrentTransport(anyInt());
         doReturn(true).when(mDataEnabledSettings).isDataEnabled();

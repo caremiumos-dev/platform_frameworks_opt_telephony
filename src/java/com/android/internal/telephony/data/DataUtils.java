@@ -30,6 +30,7 @@ import android.telephony.Annotation.ValidationStatus;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.ApnSetting.ApnType;
+import android.telephony.ims.feature.ImsFeature;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -268,7 +269,7 @@ public class DataUtils {
      * @return The string format time.
      */
     public static @NonNull String elapsedTimeToString(@ElapsedRealtimeLong long elapsedTime) {
-        return (elapsedTime != 0) ? getReadableSystemTime(System.currentTimeMillis()
+        return (elapsedTime != 0) ? systemTimeToString(System.currentTimeMillis()
                 - SystemClock.elapsedRealtime() + elapsedTime) : "never";
     }
 
@@ -278,7 +279,22 @@ public class DataUtils {
      * @param systemTime The system time retrieved from {@link System#currentTimeMillis()}.
      * @return The string format time.
      */
-    public static @NonNull String getReadableSystemTime(@CurrentTimeMillisLong long systemTime) {
+    public static @NonNull String systemTimeToString(@CurrentTimeMillisLong long systemTime) {
         return (systemTime != 0) ? TIME_FORMAT.format(systemTime) : "never";
+    }
+
+    /**
+     * Convert the IMS feature to string.
+     *
+     * @param imsFeature IMS feature.
+     * @return IMS feature in string format.
+     */
+    public static @NonNull String imsFeatureToString(@ImsFeature.FeatureType int imsFeature) {
+        switch (imsFeature) {
+            case ImsFeature.FEATURE_MMTEL: return "MMTEL";
+            case ImsFeature.FEATURE_RCS: return "RCS";
+            default:
+                return "Unknown(" + imsFeature + ")";
+        }
     }
 }

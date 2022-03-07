@@ -16,23 +16,25 @@
 
 package com.android.internal.telephony.data;
 
+import android.annotation.CallbackExecutor;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RegistrantList;
 import android.provider.Telephony;
 import android.telephony.Annotation;
 import android.telephony.Annotation.NetCapability;
-import android.telephony.NetworkRegistrationInfo;
+import android.telephony.Annotation.NetworkType;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataProfile;
+import android.telephony.data.TrafficDescriptor;
 import android.util.IndentingPrintWriter;
 import android.util.LocalLog;
 
@@ -45,6 +47,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +57,12 @@ import java.util.stream.Collectors;
 public class DataProfileManager extends Handler {
     /** Event for data config updated. */
     private static final int EVENT_DATA_CONFIG_UPDATED = 1;
+
+    /** Event for APN database changed. */
+    private static final int EVENT_APN_DATABASE_CHANGED = 2;
+
+    /** Event for SIM refresh. */
+    private static final int EVENT_SIM_REFRESH = 3;
 
     private final Phone mPhone;
     private final String mLogTag;
@@ -83,8 +92,27 @@ public class DataProfileManager extends Handler {
     /** Preferred data profile set id. */
     private int mPreferredDataProfileSetId = Telephony.Carriers.NO_APN_SET_ID;
 
-    /** Registrant list for internet validation status changed. */
-    private final @NonNull RegistrantList mDataProfilesChangedRegistrants = new RegistrantList();
+    /** Data profile manager callback. */
+    private final @NonNull DataProfileManagerCallback mDataProfileManagerCallback;
+
+    /**
+     * Data profile manager callback. This should be only used by {@link DataNetworkController}.
+     */
+    public abstract static class DataProfileManagerCallback extends DataCallback {
+        /**
+         * Constructor
+         *
+         * @param executor The executor of the callback.
+         */
+        public DataProfileManagerCallback(@NonNull @CallbackExecutor Executor executor) {
+            super(executor);
+        }
+
+        /**
+         * Called when data profiles changed.
+         */
+        public abstract void onDataProfilesChanged();
+    }
 
     /**
      * Constructor
@@ -94,10 +122,12 @@ public class DataProfileManager extends Handler {
      * @param dataServiceManager WWAN data service manager.
      * @param looper The looper to be used by the handler. Currently the handler thread is the
      * phone process's main thread.
+     * @param callback Data profile manager callback.
      */
     public DataProfileManager(@NonNull Phone phone,
             @NonNull DataNetworkController dataNetworkController,
-            @NonNull DataServiceManager dataServiceManager, @NonNull Looper looper) {
+            @NonNull DataServiceManager dataServiceManager, @NonNull Looper looper,
+            @NonNull DataProfileManagerCallback callback) {
         super(looper);
         mPhone = phone;
         mLogTag = "DPM-" + mPhone.getPhoneId();
@@ -105,8 +135,24 @@ public class DataProfileManager extends Handler {
         mWwanDataServiceManager = dataServiceManager;
         mDataConfigManager = dataNetworkController.getDataConfigManager();
         mAccessNetworksManager = phone.getAccessNetworksManager();
+        mDataProfileManagerCallback = callback;
+        registerAllEvents();
+    }
 
+    /**
+     * Register for all events that data network controller is interested.
+     */
+    private void registerAllEvents() {
         mDataConfigManager.registerForConfigUpdate(this, EVENT_DATA_CONFIG_UPDATED);
+        mPhone.getContext().getContentResolver().registerContentObserver(
+                Telephony.Carriers.CONTENT_URI, true, new ContentObserver(this) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        super.onChange(selfChange);
+                        sendEmptyMessage(EVENT_APN_DATABASE_CHANGED);
+                    }
+                });
+        mPhone.mCi.registerForIccRefresh(this, EVENT_SIM_REFRESH, null);
     }
 
     @Override
@@ -115,7 +161,19 @@ public class DataProfileManager extends Handler {
             case EVENT_DATA_CONFIG_UPDATED:
                 onDataConfigUpdated();
                 break;
+            case EVENT_SIM_REFRESH:
+                log("SIM refreshed.");
+                updateDataProfiles();
+                break;
+            case EVENT_APN_DATABASE_CHANGED:
+                log("APN database changed.");
+                updateDataProfiles();
+                break;
         }
+    }
+
+    private void onApnDatabaseChanged() {
+        updateDataProfiles();
     }
 
     /**
@@ -148,7 +206,8 @@ public class DataProfileManager extends Handler {
                 if (apn != null) {
                     profiles.add(new DataProfile.Builder()
                             .setApnSetting(apn)
-                            .setTrafficDescriptor(null)
+                            // TODO: Support TD correctly once ENTERPRISE becomes an APN type.
+                            .setTrafficDescriptor(new TrafficDescriptor(apn.getApnName(), null))
                             .setPreferred(false)
                             .build());
                     log("Added " + apn);
@@ -189,7 +248,8 @@ public class DataProfileManager extends Handler {
             log("Data profiles changed.");
             mAllDataProfiles.clear();
             mAllDataProfiles.addAll(profiles);
-            mDataProfilesChangedRegistrants.notifyRegistrants();
+            mDataProfileManagerCallback.invokeFromExecutor(
+                    mDataProfileManagerCallback::onDataProfilesChanged);
         }
 
         mPreferredDataProfileSetId = getPreferredDataProfileSetId();
@@ -278,7 +338,7 @@ public class DataProfileManager extends Handler {
         }
 
         if (initialAttachDataProfile == null) {
-            loge("Cannot find initial attach data profile. ANN database needs to be configured"
+            loge("Cannot find initial attach data profile. APN database needs to be configured"
                     + " correctly.");
             // return here as we can't push a null data profile to the modem as initial attach APN.
             return;
@@ -296,6 +356,7 @@ public class DataProfileManager extends Handler {
      * Update the data profiles at modem.
      */
     private void updateDataProfilesAtModem() {
+        log("updateDataProfilesAtModem: set " + mAllDataProfiles.size() + " data profiles.");
         mWwanDataServiceManager.setDataProfile(mAllDataProfiles,
                 mPhone.getServiceState().getDataRoamingFromRegistration(), null);
     }
@@ -325,10 +386,11 @@ public class DataProfileManager extends Handler {
      * Get the data profile that can satisfy the network request.
      *
      * @param networkRequest The network request.
+     * @param networkType The current data network type.
      * @return The data profile. {@code null} if can't find any satisfiable data profile.
      */
     public @Nullable DataProfile getDataProfileForNetworkRequest(
-            @NonNull TelephonyNetworkRequest networkRequest) {
+            @NonNull TelephonyNetworkRequest networkRequest, @NetworkType int networkType) {
         // Step 1: Check if preferred data profile can satisfy the request.
         if (mPreferredDataProfile != null
                 && mPreferredDataProfile.canSatisfy(networkRequest.getCapabilities())) {
@@ -344,20 +406,14 @@ public class DataProfileManager extends Handler {
             return null;
         }
 
-        // Step 3: Check if the remaining data profiles can used in current data RAT.
-        int transport = mAccessNetworksManager.getPreferredTransportByNetworkCapability(
-                networkRequest.getHighestPriorityNetworkCapability());
-        NetworkRegistrationInfo nri = mPhone.getServiceState().getNetworkRegistrationInfo(
-                NetworkRegistrationInfo.DOMAIN_PS, transport);
-        int dataRat = nri.getAccessNetworkTechnology();
-
+        // Step 3: Check if the remaining data profiles can used in current data network type.
         dataProfiles = dataProfiles.stream()
                 .filter(dp -> dp.getApnSetting() != null
-                        && dp.getApnSetting().canSupportNetworkType(dataRat))
+                        && dp.getApnSetting().canSupportNetworkType(networkType))
                 .collect(Collectors.toList());
         if (dataProfiles.size() == 0) {
-            log("Can't find any data profile for RAT "
-                    + TelephonyManager.getNetworkTypeName(dataRat));
+            log("Can't find any data profile for network type "
+                    + TelephonyManager.getNetworkTypeName(networkType));
             return null;
         }
 
@@ -395,16 +451,6 @@ public class DataProfileManager extends Handler {
                 .sorted((dp1, dp2) ->
                         Long.compare(dp1.getLastSetupTimestamp(), dp2.getLastSetupTimestamp()))
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Register for data profiles changed changed event.
-     *
-     * @param handler The handler to handle the event.
-     * @param what The event.
-     */
-    public void registerForDataProfilesChanged(@NonNull Handler handler, int what) {
-        mDataProfilesChangedRegistrants.addUnique(handler, what, null);
     }
 
     /**
@@ -448,7 +494,7 @@ public class DataProfileManager extends Handler {
         pw.increaseIndent();
         for (DataProfile dp : mAllDataProfiles) {
             pw.print(dp);
-            pw.print(", last setup time: " + DataUtils.elapsedTimeToString(
+            pw.println(", last setup time: " + DataUtils.elapsedTimeToString(
                     dp.getLastSetupTimestamp()));
         }
         pw.decreaseIndent();

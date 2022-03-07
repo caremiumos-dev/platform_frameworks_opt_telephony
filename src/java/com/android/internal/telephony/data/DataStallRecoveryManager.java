@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.data;
 
+import android.annotation.CallbackExecutor;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.content.ContentResolver;
@@ -23,13 +24,11 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
-import android.os.AsyncResult;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerExecutor;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RegistrantList;
 import android.provider.Settings;
 import android.telephony.Annotation.ValidationStatus;
 import android.telephony.PreciseDataConnectionState;
@@ -41,12 +40,14 @@ import android.util.IndentingPrintWriter;
 import android.util.LocalLog;
 
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.data.DataNetworkController.DataNetworkControllerCallback;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.concurrent.Executor;
 
 /**
  * DataStallRecoveryManager monitors the network validation result from connectivity service and
@@ -71,9 +72,6 @@ public class DataStallRecoveryManager extends Handler {
 
     /** Event for data config updated. */
     private static final int EVENT_DATA_CONFIG_UPDATED = 1;
-
-    /** Event for internet validation status changed. */
-    private static final int EVENT_INTERNET_VALIDATION_STATUS_CHANGED = 2;
 
     private final @NonNull Phone mPhone;
     private final @NonNull String mLogTag;
@@ -100,29 +98,53 @@ public class DataStallRecoveryManager extends Handler {
     /** Telephony Manager */
     private TelephonyManager mTelephonyManager;
 
-    /** The RegistrantList for recovery action reestablish. */
-    private final RegistrantList mDataStallReestablishRegistrants = new RegistrantList();
-
     /** Listening the callback from TelephonyCallback. */
     private TelephonyStateListener mTelephonyStateListener;
+
+    private @NonNull DataStallRecoveryManagerCallback mDataStallRecoveryManagerCallback;
+
+    /**
+     * The data stall recovery manager callback. Note this is only used for passing information
+     * internally in the data stack, should not be used externally.
+     */
+    public abstract static class DataStallRecoveryManagerCallback extends DataCallback {
+        /**
+         * Constructor
+         *
+         * @param executor The executor of the callback.
+         */
+        public DataStallRecoveryManagerCallback(@NonNull @CallbackExecutor Executor executor) {
+            super(executor);
+        }
+
+        /**
+         * Called when data stall occurs and needed to tear down / setup a new data network for
+         * internet.
+         */
+        public abstract void onDataStallReestablishInternet();
+    }
 
     /**
      * Constructor
      *
      * @param phone The phone instance.
+     * @param dataNetworkController Data network controller
      * @param dataServiceManager The WWAN data service manager.
      * @param looper The looper to be used by the handler. Currently the handler thread is the
      * phone process's main thread.
+     * @param callback Callback to notify data network controller for data stall events.
      */
     public DataStallRecoveryManager(@NonNull Phone phone,
             @NonNull DataNetworkController dataNetworkController,
-            @NonNull DataServiceManager dataServiceManager, @NonNull Looper looper) {
+            @NonNull DataServiceManager dataServiceManager, @NonNull Looper looper,
+            @NonNull DataStallRecoveryManagerCallback callback) {
         super(looper);
         mPhone = phone;
         mLogTag = "DSTMTR-" + mPhone.getPhoneId();
         mDataNetworkController = dataNetworkController;
         mWwanDataServiceManager = dataServiceManager;
         mDataConfigManager = mDataNetworkController.getDataConfigManager();
+        mDataStallRecoveryManagerCallback = callback;
         mResolver = mPhone.getContext().getContentResolver();
         mTelephonyManager = mPhone.getContext().getSystemService(TelephonyManager.class);
         mConnectivityManager = mPhone.getContext().getSystemService(ConnectivityManager.class);
@@ -134,8 +156,25 @@ public class DataStallRecoveryManager extends Handler {
     /** Register for all events that data stall monitor is interested. */
     private void registerAllEvents() {
         mDataConfigManager.registerForConfigUpdate(this, EVENT_DATA_CONFIG_UPDATED);
-        mDataNetworkController.registerForInternetValidationStatusChanged(this,
-                EVENT_INTERNET_VALIDATION_STATUS_CHANGED);
+        mDataNetworkController.registerDataNetworkControllerCallback(
+                this::post,
+                new DataNetworkControllerCallback() {
+                    @Override
+                    public void onInternetDataNetworkValidationStatusChanged(
+                            @ValidationStatus int validationStatus) {
+                        onInternetValidationStatusChanged(validationStatus);
+                    }
+
+                    @Override
+                    public void onInternetDataNetworkConnected() {
+                        // onInternetDataNetworkConnected();
+                    }
+
+                    @Override
+                    public void onInternetDataNetworkDisconnected() {
+                        // onInternetDataNetworkDisconnected();
+                    }
+                }, false);
         mTelephonyManager.registerTelephonyCallback(
                     new HandlerExecutor(this), mTelephonyStateListener);
     }
@@ -169,10 +208,8 @@ public class DataStallRecoveryManager extends Handler {
             case EVENT_DATA_CONFIG_UPDATED:
                 onDataConfigUpdated();
                 break;
-            case EVENT_INTERNET_VALIDATION_STATUS_CHANGED:
-                AsyncResult ar = (AsyncResult) msg.obj;
-                int validationStatus = (int) ar.result;
-                onInternetValidationStatusChanged(validationStatus);
+            default:
+                loge("Unexpected message " + msg);
                 break;
         }
     }
@@ -190,16 +227,6 @@ public class DataStallRecoveryManager extends Handler {
     private void onInternetValidationStatusChanged(@ValidationStatus int validationStatus) {
         // TODO: (b/178670629): Add the logic when Validation Status Changed.
 
-    }
-
-    /**
-     * Register for data stall reestablish event.
-     *
-     * @param handler The handler to handle the event.
-     * @param what The event.
-     */
-    public void registerForDataStallReestablishEvent(@NonNull Handler handler, int what) {
-        mDataStallReestablishRegistrants.addUnique(handler, what, null);
     }
 
     /** Get recovery action from settings. */
@@ -262,7 +289,8 @@ public class DataStallRecoveryManager extends Handler {
             return;
         }
         log("cleanUpDataCall: notify clean up data call");
-        mDataStallReestablishRegistrants.notifyRegistrants();
+        mDataStallRecoveryManagerCallback.invokeFromExecutor(
+                () -> mDataStallRecoveryManagerCallback.onDataStallReestablishInternet());
     }
 
     /** Recovery Action: RECOVERY_ACTION_RADIO_RESTART */

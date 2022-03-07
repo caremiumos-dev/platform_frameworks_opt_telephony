@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.data;
 
+import android.annotation.CallbackExecutor;
 import android.annotation.CurrentTimeMillisLong;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
@@ -47,6 +48,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -79,7 +81,7 @@ public class DataRetryManager extends Handler {
      * The data retry callback. This is only used to notify {@link DataNetworkController} to retry
      * setup data network.
      */
-    private @Nullable DataRetryCallback mDataRetryCallback;
+    private @NonNull DataRetryManagerCallback mDataRetryManagerCallback;
 
     /** Data config manager instance. */
     private final @NonNull DataConfigManager mDataConfigManager;
@@ -483,12 +485,12 @@ public class DataRetryManager extends Handler {
         @Override
         public String toString() {
             return "[DataRetryEntry: delay=" + retryDelayMillis + "ms, retry time:"
-                    + DataUtils.getReadableSystemTime(mRetrySystemTime) + ", " + dataProfile
+                    + DataUtils.systemTimeToString(mRetrySystemTime) + ", " + dataProfile
                     + ", retry type=" + retryTypeToString(retryType) + ", retry capabilities="
                     + DataUtils.networkCapabilitiesToString(networkCapabilities.stream()
                     .mapToInt(Number::intValue).toArray()) + ", applied rule="
                     + appliedDataRetryRule + ", state=" + retryStateToString(mRetryState)
-                    + ", timestamp=" + DataUtils.getReadableSystemTime(mRetryStateTimestamp) + "]";
+                    + ", timestamp=" + DataUtils.systemTimeToString(mRetryStateTimestamp) + "]";
         }
 
         /** Data retry entry builder. */
@@ -576,13 +578,22 @@ public class DataRetryManager extends Handler {
     }
 
     /** Data retry callback. This should be only used by {@link DataNetworkController}. */
-    public interface DataRetryCallback {
+    public abstract static class DataRetryManagerCallback extends DataCallback {
+        /**
+         * Constructor
+         *
+         * @param executor The executor of the callback.
+         */
+        public DataRetryManagerCallback(@NonNull @CallbackExecutor Executor executor) {
+            super(executor);
+        }
+
         /**
          * Called when data retry occurs.
          *
          * @param dataRetryEntry The data retry entry.
          */
-        void onDataRetry(@NonNull DataRetryEntry dataRetryEntry);
+        public abstract void onDataRetry(@NonNull DataRetryEntry dataRetryEntry);
     }
 
     /**
@@ -592,26 +603,19 @@ public class DataRetryManager extends Handler {
      * @param dataNetworkController Data network controller.
      * @param looper The looper to be used by the handler. Currently the handler thread is the
      * phone process's main thread.
+     * @param dataRetryManagerCallback Data retry callback.
      */
     public DataRetryManager(@NonNull Phone phone,
-            @NonNull DataNetworkController dataNetworkController, @NonNull Looper looper) {
+            @NonNull DataNetworkController dataNetworkController, @NonNull Looper looper,
+            @NonNull DataRetryManagerCallback dataRetryManagerCallback) {
         super(looper);
         mPhone = phone;
         mLogTag = "DRM-" + mPhone.getPhoneId();
+        mDataRetryManagerCallback = dataRetryManagerCallback;
 
         mDataConfigManager = dataNetworkController.getDataConfigManager();
         mDataProfileManager = dataNetworkController.getDataProfileManager();
         mDataConfigManager.registerForConfigUpdate(this, EVENT_DATA_CONFIG_UPDATED);
-    }
-
-    /**
-     * Register for data retry callback. This should be only called once by
-     * {@link DataNetworkController}.
-     *
-     * @param callback The data retry callback.
-     */
-    public void registerForDataRetryCallback(@NonNull DataRetryCallback callback) {
-        mDataRetryCallback = callback;
     }
 
     @Override
@@ -626,7 +630,8 @@ public class DataRetryManager extends Handler {
                         evaluationEntry.cause, evaluationEntry.retryDelayMillis);
                 break;
             case EVENT_DATA_RETRY:
-                mDataRetryCallback.onDataRetry((DataRetryEntry) msg.obj);
+                mDataRetryManagerCallback.invokeFromExecutor(
+                        () -> mDataRetryManagerCallback.onDataRetry((DataRetryEntry) msg.obj));
                 break;
             case EVENT_CANCEL_ALL_DATA_RETRIES:
                 onCancelAllRetries();
@@ -730,8 +735,8 @@ public class DataRetryManager extends Handler {
                     log("Found matching rule " + retryRule + ", failed count=" + failedCount);
                     if (failedCount == retryRule.getMaxRetries()) {
                         log("Data retry failed for " + failedCount + " times. Stopped "
-                                + "timer-based data retry. Condition-based retry will happen when "
-                                + "condition changes.");
+                                + "timer-based data retry. Condition-based retry will still happen "
+                                + "when condition changes.");
                         return;
                     }
 

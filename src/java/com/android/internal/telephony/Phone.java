@@ -77,11 +77,11 @@ import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.data.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataConnectionReasons;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
-import com.android.internal.telephony.dataconnection.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
@@ -4888,6 +4888,30 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return mDataNetworkController;
     }
 
+    /**
+     * Used in unit tests to set whether the AllowedNetworkTypes is loaded from Db.  Should not
+     * be used otherwise.
+     *
+     * @return {@code true} if the AllowedNetworkTypes is loaded from Db,
+     * {@code false} otherwise.
+     */
+    @VisibleForTesting
+    public boolean isAllowedNetworkTypesLoadedFromDb() {
+        return mIsAllowedNetworkTypesLoadedFromDb;
+    }
+
+    /**
+     * @return {@code true} if using the new telephony data stack. See go/atdr for the design.
+     */
+    // TODO: Temp code. Use cl/399526916 for future canary process. After rolling out to 100%
+    //  dogfooders, the code below should be completely removed.
+    public boolean isUsingNewDataStack() {
+        return false;
+        /*String configValue = DeviceConfig.getProperty(DeviceConfig.NAMESPACE_TELEPHONY,
+                "new_telephony_data_enabled");
+        return Boolean.parseBoolean(configValue);*/
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
@@ -5113,29 +5137,5 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     private static String pii(String s) {
         return Rlog.pii(LOG_TAG, s);
-    }
-
-    /**
-     * Used in unit tests to set whether the AllowedNetworkTypes is loaded from Db.  Should not
-     * be used otherwise.
-     *
-     * @return {@code true} if the AllowedNetworkTypes is loaded from Db,
-     * {@code false} otherwise.
-     */
-    @VisibleForTesting
-    public boolean isAllowedNetworkTypesLoadedFromDb() {
-        return mIsAllowedNetworkTypesLoadedFromDb;
-    }
-
-    /**
-     * @return {@code true} if using the new telephony data stack. See go/atdr for the design.
-     */
-    // TODO: Temp code. Use cl/399526916 for future canary process. After rolling out to 100%
-    //  dogfooders, the code below should be completely removed.
-    public boolean isUsingNewDataStack() {
-        return false;
-        /*String configValue = DeviceConfig.getProperty(DeviceConfig.NAMESPACE_TELEPHONY,
-                "new_telephony_data_enabled");
-        return Boolean.parseBoolean(configValue);*/
     }
 }

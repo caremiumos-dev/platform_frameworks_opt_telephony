@@ -18,7 +18,9 @@ package com.android.internal.telephony.data;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
 import android.content.ContentValues;
@@ -38,6 +40,7 @@ import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
 import com.android.internal.telephony.TelephonyTest;
+import com.android.internal.telephony.data.DataProfileManager.DataProfileManagerCallback;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,6 +62,9 @@ public class DataProfileManagerTest extends TelephonyTest {
 
     @Mock
     private DataServiceManager mDataServiceManager;
+
+    @Mock
+    private DataProfileManagerCallback mDataProfileManagerCallback;
 
     private DataProfileManager mDataProfileManagerUT;
 
@@ -349,8 +355,12 @@ public class DataProfileManagerTest extends TelephonyTest {
                 Telephony.Carriers.CONTENT_URI.getAuthority(), mApnSettingContentProvider);
 
         doReturn(true).when(mDataConfigManager).isConfigCarrierSpecific();
+        doAnswer(invocation -> {
+            ((Runnable) invocation.getArguments()[0]).run();
+            return null;
+        }).when(mDataProfileManagerCallback).invokeFromExecutor(any(Runnable.class));
         mDataProfileManagerUT = new DataProfileManager(mPhone, mDataNetworkController,
-                mDataServiceManager, Looper.myLooper());
+                mDataServiceManager, Looper.myLooper(), mDataProfileManagerCallback);
         mDataProfileManagerUT.obtainMessage(1).sendToTarget();
         processAllMessages();
 
@@ -368,7 +378,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 .build();
         TelephonyNetworkRequest tnr = new TelephonyNetworkRequest(request, mPhone);
-        DataProfile dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr);
+        DataProfile dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr,
+                TelephonyManager.NETWORK_TYPE_LTE);
 
         assertThat(dp.canSatisfy(tnr.getCapabilities())).isTrue();
         assertThat(dp.getApnSetting().getApnName()).isEqualTo(GENERAL_PURPOSE_APN);
@@ -378,7 +389,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_SUPL)
                 .build();
         tnr = new TelephonyNetworkRequest(request, mPhone);
-        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr);
+        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr,
+                TelephonyManager.NETWORK_TYPE_LTE);
 
         assertThat(dp.canSatisfy(tnr.getCapabilities())).isTrue();
         assertThat(dp.getApnSetting().getApnName()).isEqualTo(GENERAL_PURPOSE_APN);
@@ -387,7 +399,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_IMS)
                 .build();
         tnr = new TelephonyNetworkRequest(request, mPhone);
-        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr);
+        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr,
+                TelephonyManager.NETWORK_TYPE_LTE);
         assertThat(dp.canSatisfy(tnr.getCapabilities())).isTrue();
         assertThat(dp.getApnSetting().getApnName()).isEqualTo(IMS_APN);
 
@@ -395,7 +408,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_DUN)
                 .build();
         tnr = new TelephonyNetworkRequest(request, mPhone);
-        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr);
+        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr,
+                TelephonyManager.NETWORK_TYPE_LTE);
         assertThat(dp).isNull();
 
         doReturn(new NetworkRegistrationInfo.Builder()
@@ -407,7 +421,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_DUN)
                 .build();
         tnr = new TelephonyNetworkRequest(request, mPhone);
-        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr);
+        dp = mDataProfileManagerUT.getDataProfileForNetworkRequest(tnr,
+                TelephonyManager.NETWORK_TYPE_NR);
         assertThat(dp.canSatisfy(tnr.getCapabilities())).isTrue();
         assertThat(dp.getApnSetting().getApnName()).isEqualTo(TETHERING_APN);
     }
