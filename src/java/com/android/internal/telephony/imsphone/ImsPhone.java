@@ -1700,8 +1700,8 @@ public class ImsPhone extends ImsPhoneBase {
         int[] cbInfos = new int[1];
         cbInfos[0] = SERVICE_CLASS_NONE;
 
-        if (infos[0].getStatus() == 1) {
-            cbInfos[0] = SERVICE_CLASS_VOICE;
+        if (infos[0].getStatus() != 0) {
+            cbInfos[0] = infos[0].getStatus();
         }
 
         return cbInfos;
