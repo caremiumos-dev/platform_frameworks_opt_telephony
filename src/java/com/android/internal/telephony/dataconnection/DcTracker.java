@@ -5438,7 +5438,7 @@ public class DcTracker extends Handler {
         }
     }
 
-    private void stopDataStallAlarm() {
+    protected void stopDataStallAlarm() {
         if (VDBG_STALL) {
             log("stopDataStallAlarm: current tag=" + mDataStallAlarmTag +
                     " mDataStallAlarmIntent=" + mDataStallAlarmIntent);
