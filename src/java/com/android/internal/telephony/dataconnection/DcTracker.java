@@ -2444,7 +2444,9 @@ public class DcTracker extends Handler {
         boolean retry = true;
         String reason = apnContext.getReason();
 
-        if (Phone.REASON_RADIO_TURNED_OFF.equals(reason) || (isOnlySingleDcAllowed(getDataRat())
+        if (Phone.REASON_RADIO_TURNED_OFF.equals(reason) ||
+		        mNotRetry ||
+		        (isOnlySingleDcAllowed(getDataRat())
                 && isHigherPriorityApnContextActive(apnContext))) {
             retry = false;
         }
@@ -3310,6 +3312,17 @@ public class DcTracker extends Handler {
                 }
             }
 
+			if (cause == DataFailCause.ACTIVE_PDP_CONTEXT_MAX_NUMBER_REACHED) {
+			    ApnContext otherContext = lowerPriorityApnContextActive(apnContext);
+				if (otherContext != null) {
+					log("cause: " + cause + ", apnContext: " + apnContext + ", otherContext: " + otherContext);
+					if (otherContext.getApnType().equals(PhoneConstants.APN_TYPE_DEFAULT)) {
+						mTemporaryContext = apnContext;
+					}
+					mNotRetry = true;
+					cleanUpConnectionInternal(true, RELEASE_TYPE_DETACH, otherContext);
+				}
+			}
             int newRequestType = calculateNewRetryRequestType(handoverFailureMode, requestType,
                     cause);
             onDataSetupCompleteError(apnContext, newRequestType, fallbackOnFailedHandover);
@@ -3429,8 +3442,11 @@ public class DcTracker extends Handler {
             }
             apnContext.setApnSetting(null);
             apnContext.setDataConnection(null);
-            if (isOnlySingleDcAllowed(getDataRat())) {
+            if (isOnlySingleDcAllowed(getDataRat()) ||
+				    (mTemporaryContext != null && !apnContext.getApnType().equals(PhoneConstants.APN_TYPE_DEFAULT))) {
                 if(DBG) log("onDisconnectDone: isOnlySigneDcAllowed true so setup single apn");
+				mTemporaryContext = null;
+				mNotRetry = false;
                 setupDataOnAllConnectableApns(Phone.REASON_SINGLE_PDN_ARBITRATION,
                         RetryFailures.ALWAYS);
             } else {
@@ -5730,5 +5746,19 @@ public class DcTracker extends Handler {
         return (NotificationManager) mPhone.getContext()
                 .createContextAsUser(UserHandle.ALL, 0 /* flags */)
                 .getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    private ApnContext mTemporaryContext = null;
+    private boolean mNotRetry = false;
+
+    private ApnContext lowerPriorityApnContextActive(ApnContext apnContext){
+        ApnContext otherContext = null;
+        for (ApnContext context : mPrioritySortedApnContexts){
+            if(context.isEnabled() && context.getState() != DctConstants.state.FAILED &&
+			        context.getPriority() < apnContext.getPriority()){
+				otherContext = 	context;
+			}
+        }
+		return otherContext;
     }
 }
