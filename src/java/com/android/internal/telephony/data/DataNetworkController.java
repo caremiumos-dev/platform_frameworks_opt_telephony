@@ -51,6 +51,8 @@ import android.telephony.TelephonyManager;
 import android.telephony.TelephonyManager.DataState;
 import android.telephony.TelephonyManager.SimState;
 import android.telephony.TelephonyRegistryManager;
+import android.telephony.data.DataCallResponse;
+import android.telephony.data.DataCallResponse.HandoverFailureMode;
 import android.telephony.data.DataProfile;
 import android.telephony.ims.ImsException;
 import android.telephony.ims.ImsManager;
@@ -70,15 +72,18 @@ import android.util.SparseBooleanArray;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.PhoneSwitcher;
 import com.android.internal.telephony.SubscriptionInfoUpdater;
+import com.android.internal.telephony.data.AccessNetworksManager.AccessNetworksManagerCallback;
 import com.android.internal.telephony.data.DataEvaluation.DataAllowedReason;
 import com.android.internal.telephony.data.DataEvaluation.DataDisallowedReason;
 import com.android.internal.telephony.data.DataEvaluation.DataEvaluationReason;
+import com.android.internal.telephony.data.DataNetwork.DataNetworkCallback;
 import com.android.internal.telephony.data.DataNetwork.TearDownReason;
 import com.android.internal.telephony.data.DataProfileManager.DataProfileManagerCallback;
+import com.android.internal.telephony.data.DataRetryManager.DataHandoverRetryEntry;
 import com.android.internal.telephony.data.DataRetryManager.DataRetryEntry;
 import com.android.internal.telephony.data.DataRetryManager.DataRetryManagerCallback;
+import com.android.internal.telephony.data.DataRetryManager.DataSetupRetryEntry;
 import com.android.internal.telephony.data.DataSettingsManager.DataSettingsManagerCallback;
 import com.android.internal.telephony.data.DataStallRecoveryManager.DataStallRecoveryManagerCallback;
 import com.android.internal.telephony.ims.ImsResolver;
@@ -100,7 +105,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -171,12 +176,19 @@ public class DataNetworkController extends Handler {
     /** Event for emergency call started or ended. */
     private static final int EVENT_EMERGENCY_CALL_CHANGED = 20;
 
+    /** Event for re-evaluating preferred transport. */
+    private static final int EVENT_REEVALUATE_PREFERRED_TRANSPORT = 21;
+
     /** The supported IMS features. This is for IMS graceful tear down support. */
     private static final Collection<Integer> SUPPORTED_IMS_FEATURES =
             List.of(ImsFeature.FEATURE_MMTEL, ImsFeature.FEATURE_RCS);
 
     /** The maximum number of previously connected data networks for debugging purposes. */
     private static final int MAX_HISTORICAL_CONNECTED_DATA_NETWORKS = 10;
+
+    /** The delay to re-evaluate preferred transport when handover failed and fallback to source. */
+    private static final long REEVALUATE_PREFERRED_TRANSPORT_DELAY_MILLIS =
+            TimeUnit.SECONDS.toMillis(3);
 
     private final Phone mPhone;
     private final String mLogTag;
@@ -211,6 +223,9 @@ public class DataNetworkController extends Handler {
      */
     private final @NonNull List<DataNetwork> mDataNetworkList = new ArrayList<>();
 
+    /** {@code true} indicating at least one data network exists. */
+    private boolean mAnyDataNetworkExisting;
+
     /**
      * Contain the last 10 data networks that were connected. This is for debugging purposes only.
      */
@@ -227,11 +242,9 @@ public class DataNetworkController extends Handler {
      */
     private @DataState int mImsDataNetworkState = TelephonyManager.DATA_DISCONNECTED;
 
-    /**
-     * Data network controller callback. Used for listening events from data network controller.
-     */
-    private final @NonNull DataNetworkControllerCallbackList mDataNetworkControllerCallbacks =
-            new DataNetworkControllerCallbackList();
+    /** Data network controller callbacks. */
+    private final @NonNull Set<DataNetworkControllerCallback> mDataNetworkControllerCallbacks =
+            new ArraySet<>();
 
     /** Indicates if packet switch data is restricted by the network. */
     private boolean mPsRestricted = false;
@@ -250,8 +263,8 @@ public class DataNetworkController extends Handler {
      */
     private final @NonNull SparseArray<ImsStateCallback> mImsStateCallbacks = new SparseArray<>();
 
-    /** IMS feature registration state. Key is the IMS feature, value is the registration state. */
-    private final @NonNull SparseArray<Boolean> mImsFeatureRegistrationState = new SparseArray<>();
+    /** Registered IMS features. Unregistered IMS features are removed from the set. */
+    private final @NonNull Set<Integer> mRegisteredImsFeatures = new ArraySet<>();
 
     /** IMS feature package names. Key is the IMS feature, value is the package name. */
     private final @NonNull SparseArray<String> mImsFeaturePackageName = new SparseArray<>();
@@ -431,67 +444,14 @@ public class DataNetworkController extends Handler {
      * The data network controller callback. Note this is only used for passing information
      * internally in the data stack, should not be used externally.
      */
-    public static class DataNetworkControllerCallback {
-        /** The executor of the callback. */
-        private @NonNull Executor mExecutor;
-
+    public static class DataNetworkControllerCallback extends DataCallback {
         /**
-         * Indicates the callback is automatically unregistered after first invocation. This is
-         * useful for the clients which only want to get the result once.
-         */
-        private boolean mAutoUnregisterEnabled = false;
-
-        /**
-         * Indicates callback auto unregister should be skipped this time. This
-         * is internally used by {@link DataNetworkControllerCallbackList}.
-         */
-        private boolean mSkipAutoUnregisterThisTime = false;
-
-        /**
-         * Set the executor of the callback.
+         * Constructor
          *
-         * @param executor The executor
-         * @param enableAutoUnregister {@code true} if this callback should be unregistered
-         * automatically after invoked the overridden callback method.
+         * @param executor The executor of the callback.
          */
-        final void init(@NonNull @CallbackExecutor Executor executor,
-                boolean enableAutoUnregister) {
-            Objects.requireNonNull(executor);
-            mExecutor = executor;
-            mAutoUnregisterEnabled = enableAutoUnregister;
-        }
-
-        /**
-         * @return The executor of the callback.
-         */
-        final @NonNull Executor getExecutor() {
-            return mExecutor;
-        }
-
-        /**
-         * @return {@code true} if this callback should be unregistered automatically after invoked
-         * the overridden callback method.
-         */
-        final boolean isAutoUnregisterEnabled() {
-            return mAutoUnregisterEnabled;
-        }
-
-        /**
-         * @return {@code true} if the callback auto unregister should be skipped this time. This
-         * is internally used by {@link DataNetworkControllerCallbackList}.
-         */
-        final boolean shouldSkipAutoUnregister() {
-            return mSkipAutoUnregisterThisTime;
-        }
-
-        /**
-         * Set the flag that indicates whether this callback should be auto unregistered or not.
-         * This should be only called by
-         *
-         * @param skip {@code true} if this callback should be auto unregistered.
-         */
-        final void setSkipAutoUnregister(boolean skip) {
-            mSkipAutoUnregisterThisTime = skip;
+        public DataNetworkControllerCallback(@NonNull @CallbackExecutor Executor executor) {
+            super(executor);
         }
 
         /**
@@ -500,93 +460,22 @@ public class DataNetworkController extends Handler {
          * @param validationStatus The validation status.
          */
         public void onInternetDataNetworkValidationStatusChanged(
-                @ValidationStatus int validationStatus) {
-            mSkipAutoUnregisterThisTime = true;
-        }
+                @ValidationStatus int validationStatus) {}
 
         /** Called when internet data network is connected. */
-        public void onInternetDataNetworkConnected() {
-            // Never remove this line.
-            mSkipAutoUnregisterThisTime = true;
-        }
+        public void onInternetDataNetworkConnected() {}
 
         /** Called when internet data network is disconnected. */
-        public void onInternetDataNetworkDisconnected() {
-            // Never remove this line.
-            mSkipAutoUnregisterThisTime = true;
-        }
-
-        /** Called when all data networks are disconnected. */
-        public void onAllDataNetworksDisconnected() {
-            // Never remove this line.
-            mSkipAutoUnregisterThisTime = true;
-        }
-    }
-
-    /**
-     * The list of all registered callbacks.
-     */
-    @VisibleForTesting
-    public class DataNetworkControllerCallbackList {
-        /** Callbacks set. */
-        private final @NonNull Set<DataNetworkControllerCallback> mCallbacks = new ArraySet<>();
+        public void onInternetDataNetworkDisconnected() {}
 
         /**
-         * Register the callback.
+         * Called when any data network existing status changed.
          *
-         * @param callback The callback.
+         * @param anyDataExisting {@code true} indicating there is at least one data network
+         * existing regardless of its state. {@code false} indicating all data networks are
+         * disconnected.
          */
-        public void registerCallback(@NonNull DataNetworkControllerCallback callback) {
-            logv("registerCallback: " + callback);
-            mCallbacks.add(Objects.requireNonNull(callback));
-
-            if (mDataNetworkList.isEmpty()) {
-                notifyListeners(DataNetworkControllerCallback::onAllDataNetworksDisconnected);
-            }
-        }
-
-        /**
-         * Unregister the callback.
-         *
-         * @param callback The callback.
-         */
-        public void unregisterCallback(@NonNull DataNetworkControllerCallback callback) {
-            logv("unregisterCallback: " + callback);
-            mCallbacks.remove(callback);
-        }
-
-        /**
-         * Notify the listeners
-         *
-         * @param callbackConsumer The consumer which contains the actual callback method.
-         */
-        public void notifyListeners(Consumer<DataNetworkControllerCallback> callbackConsumer) {
-            Iterator<DataNetworkControllerCallback> it = mCallbacks.iterator();
-            while (it.hasNext()) {
-                DataNetworkControllerCallback callback = it.next();
-                callback.setSkipAutoUnregister(false);
-                // Invoke the actual callback passed in consumer.
-                callback.getExecutor().execute(() -> callbackConsumer.accept(callback));
-                // The client might not override this method, we should skip auto unregister in
-                // this case.
-                if (callback.shouldSkipAutoUnregister()) {
-                    logv("Callback " + callback + " skipped auto unregistering.");
-                    continue;
-                }
-
-                // If the callback was registered as an auto-unregistered callback, unregister now
-                // since the callback has been invoked.
-                if (callback.isAutoUnregisterEnabled()) {
-                    logv("Callback " + callback + " automatically removed.");
-                    it.remove();
-                }
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "[DataNetworkControllerCallbackList: " + mCallbacks + "]";
-        }
+        public void onAnyDataNetworkExistingChanged(boolean anyDataExisting) {}
     }
 
     /**
@@ -753,17 +642,19 @@ public class DataNetworkController extends Handler {
         if (!mAccessNetworksManager.isInLegacyMode()) {
             mDataServiceManagers.put(AccessNetworkConstants.TRANSPORT_TYPE_WLAN,
                     new DataServiceManager(mPhone, looper,
-                            AccessNetworkConstants.TRANSPORT_TYPE_WWAN));
+                            AccessNetworkConstants.TRANSPORT_TYPE_WLAN));
         }
         mDataConfigManager = new DataConfigManager(mPhone, looper);
         mDataSettingsManager = new DataSettingsManager(mPhone, this, looper,
                 new DataSettingsManagerCallback(this::post) {
                     @Override
-                    public void onDataEnabledChanged(boolean enabled) {
+                    public void onDataEnabledChanged(boolean enabled,
+                            @TelephonyManager.DataEnabledChangedReason int reason) {
                         // If mobile data is enabled by the user, evaluate the unsatisfied network
                         // requests and then attempt to setup data networks to satisfy them.
                         // If mobile data is disabled, evaluate the existing data networks and
                         // see if they need to be torn down.
+                        logl("onDataEnabledChanged: enabled=" + enabled);
                         sendMessage(obtainMessage(enabled
                                         ? EVENT_REEVALUATE_UNSATISFIED_NETWORK_REQUESTS
                                         : EVENT_REEVALUATE_EXISTING_DATA_NETWORKS,
@@ -775,6 +666,7 @@ public class DataNetworkController extends Handler {
                         // requests and then attempt to setup data networks to satisfy them.
                         // If data roaming is disabled, evaluate the existing data networks and
                         // see if they need to be torn down.
+                        logl("onDataRoamingEnabledChanged: enabled=" + enabled);
                         sendMessage(obtainMessage(enabled
                                         ? EVENT_REEVALUATE_UNSATISFIED_NETWORK_REQUESTS
                                         : EVENT_REEVALUATE_EXISTING_DATA_NETWORKS,
@@ -800,8 +692,24 @@ public class DataNetworkController extends Handler {
         mDataRetryManager = new DataRetryManager(mPhone, this, looper,
                 new DataRetryManagerCallback(this::post) {
                     @Override
-                    public void onDataRetry(@NonNull DataRetryEntry dataRetryEntry) {
-                        setupDataNetwork(dataRetryEntry.dataProfile, dataRetryEntry);
+                    public void onDataNetworkSetupRetry(
+                            @NonNull DataSetupRetryEntry dataSetupRetryEntry) {
+                        Objects.requireNonNull(dataSetupRetryEntry);
+                        DataNetworkController.this.onDataNetworkSetupRetry(dataSetupRetryEntry);
+                    }
+                    @Override
+                    public void onDataNetworkHandoverRetry(
+                            @NonNull DataHandoverRetryEntry dataHandoverRetryEntry) {
+                        Objects.requireNonNull(dataHandoverRetryEntry);
+                        DataNetworkController.this
+                                .onDataNetworkHandoverRetry(dataHandoverRetryEntry);
+                    }
+                    @Override
+                    public void onDataNetworkHandoverRetryStopped(
+                            @NonNull DataNetwork dataNetwork) {
+                        Objects.requireNonNull(dataNetwork);
+                        tearDownGracefully(dataNetwork,
+                                DataNetwork.TEAR_DOWN_REASON_HANDOVER_FAILED);
                     }
                 });
         mImsManager = mPhone.getContext().getSystemService(ImsManager.class);
@@ -823,6 +731,13 @@ public class DataNetworkController extends Handler {
         filter.addAction(TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED);
         filter.addAction(TelephonyManager.ACTION_SIM_APPLICATION_STATE_CHANGED);
         mPhone.getContext().registerReceiver(mIntentReceiver, filter, null, mPhone);
+
+        mAccessNetworksManager.registerCallback(new AccessNetworksManagerCallback(this::post) {
+            @Override
+            public void onPreferredTransportChanged(@NetCapability int capability) {
+                DataNetworkController.this.onReevaluatePreferredTransport(capability);
+            }
+        });
 
         mPhone.getServiceStateTracker().registerForDataRegStateOrRatChanged(
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN, this, EVENT_SERVICE_STATE_CHANGED,
@@ -924,12 +839,10 @@ public class DataNetworkController extends Handler {
                 onTearDownAllDataNetworks(msg.arg1);
                 break;
             case EVENT_REGISTER_DATA_NETWORK_CONTROLLER_CALLBACK:
-                mDataNetworkControllerCallbacks
-                        .registerCallback((DataNetworkControllerCallback) msg.obj);
+                mDataNetworkControllerCallbacks.add((DataNetworkControllerCallback) msg.obj);
                 break;
             case EVENT_UNREGISTER_DATA_NETWORK_CONTROLLER_CALLBACK:
-                mDataNetworkControllerCallbacks.unregisterCallback(
-                        (DataNetworkControllerCallback) msg.obj);
+                mDataNetworkControllerCallbacks.remove((DataNetworkControllerCallback) msg.obj);
                 break;
             case EVENT_SUBSCRIPTION_CHANGED:
                 onSubscriptionChanged();
@@ -945,6 +858,9 @@ public class DataNetworkController extends Handler {
                     sendMessage(obtainMessage(EVENT_REEVALUATE_UNSATISFIED_NETWORK_REQUESTS,
                             DataEvaluationReason.EMERGENCY_CALL_CHANGED));
                 }
+                break;
+            case EVENT_REEVALUATE_PREFERRED_TRANSPORT:
+                onReevaluatePreferredTransport(msg.arg1);
                 break;
             default:
                 loge("Unexpected event " + msg.what);
@@ -1060,7 +976,7 @@ public class DataNetworkController extends Handler {
             }
 
             // When reaching here, it means this data network can satisfy all the network requests.
-            log("Found a compatible data network " + dataNetwork + ". Attaching "
+            logv("Found a compatible data network " + dataNetwork + ". Attaching "
                     + requestList);
             return dataNetwork.attachNetworkRequests(requestList);
         }
@@ -1090,12 +1006,12 @@ public class DataNetworkController extends Handler {
      * used to setup the data network.
      *
      * @param networkRequest The network request to evaluate.
+     * @param reason The reason for evaluation.
      * @return The data evaluation result.
      */
     private @NonNull DataEvaluation evaluateNetworkRequest(
             @NonNull TelephonyNetworkRequest networkRequest, DataEvaluationReason reason) {
         DataEvaluation evaluation = new DataEvaluation(reason);
-
         int transport = mAccessNetworksManager.getPreferredTransportByNetworkCapability(
                 networkRequest.getHighestPriorityNetworkCapability());
 
@@ -1168,28 +1084,15 @@ public class DataNetworkController extends Handler {
             evaluation.addDataDisallowedReason(DataDisallowedReason.DATA_SERVICE_NOT_READY);
         }
 
-        // Check if there is any compatible data profile
-        DataProfile dataProfile = mDataProfileManager
-                .getDataProfileForNetworkRequest(networkRequest, getDataNetworkType(transport));
-        if (dataProfile == null) {
-            evaluation.addDataDisallowedReason(DataDisallowedReason.NO_SUITABLE_DATA_PROFILE);
-        }
-
-        // Check if data is disabled
-        int[] apnTypes = Arrays.stream(networkRequest.getApnTypesCapabilities())
-                .map(DataUtils::networkCapabilityToApnType).toArray();
-        int apnType = 0;
-        for (int apn : apnTypes) {
-            apnType |= apn;
-        }
-        if (apnType == 0 ? !mDataSettingsManager.isDataEnabled()
-                : !mDataSettingsManager.isDataEnabled(apnType)) {
-            evaluation.addDataDisallowedReason(DataDisallowedReason.DATA_DISABLED);
-        }
-
         // Check if device is CDMA and is currently in ECBM
         if (mPhone.isInEcm() && mPhone.getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) {
             evaluation.addDataDisallowedReason(DataDisallowedReason.EMERGENCY_CALL);
+        }
+
+
+        if (!mDataSettingsManager.isDataEnabled(DataUtils.networkCapabilityToApnType(
+                networkRequest.getHighestPriorityNetworkCapability()))) {
+            evaluation.addDataDisallowedReason(DataDisallowedReason.DATA_DISABLED);
         }
 
         // Check whether to allow data in certain situations if data is disallowed for soft reasons
@@ -1206,17 +1109,12 @@ public class DataNetworkController extends Handler {
             if (transport == AccessNetworkConstants.TRANSPORT_TYPE_WLAN) {
                 evaluation.addDataAllowedReason(DataAllowedReason.UNMETERED_USAGE);
             } else if (transport == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
+                int apnType = DataUtils.networkCapabilityToApnType(
+                        networkRequest.getHighestPriorityNetworkCapability());
                 Set<Integer> meteredApns = mServiceState.getDataRoaming()
                         ? mDataConfigManager.getMeteredApnTypesWhenRoaming()
                         : mDataConfigManager.getMeteredApnTypes();
-                boolean unmetered = !meteredApns.isEmpty() && apnTypes.length != 0;
-                for (int apn : apnTypes) {
-                    if (meteredApns.contains(apn)) {
-                        unmetered = false;
-                        break;
-                    }
-                }
-                if (unmetered) {
+                if (!meteredApns.contains(apnType)) {
                     evaluation.addDataAllowedReason(DataAllowedReason.UNMETERED_USAGE);
                 }
             }
@@ -1227,13 +1125,44 @@ public class DataNetworkController extends Handler {
             }
         }
 
+        // Check if there is any compatible data profile
+        DataProfile dataProfile = mDataProfileManager
+                .getDataProfileForNetworkRequest(networkRequest, getDataNetworkType(transport));
+        if (dataProfile == null) {
+            evaluation.addDataDisallowedReason(DataDisallowedReason.NO_SUITABLE_DATA_PROFILE);
+        } else if (reason == DataEvaluationReason.NEW_REQUEST
+                && mDataRetryManager.isAnySetupRetryScheduled(dataProfile)) {
+            // If this is a new request, check if there is any retry already scheduled. For all
+            // other evaluation reasons, since they are all condition changes, so if there is any
+            // retry scheduled, we still want to go ahead and setup the data network.
+            evaluation.addDataDisallowedReason(DataDisallowedReason.RETRY_SCHEDULED);
+        }
+
         if (evaluation.isDataAllowed()) {
             evaluation.setCandidateDataProfile(dataProfile);
         }
 
         networkRequest.setEvaluation(evaluation);
-        log(evaluation.toString());
+        log(evaluation.toString() + ", network type="
+                + TelephonyManager.getNetworkTypeName(getDataNetworkType(transport))
+                + ", reg state="
+                + NetworkRegistrationInfo.registrationStateToString(
+                        getDataRegistrationState(transport)));
         return evaluation;
+    }
+
+    /**
+     * @return The grouped unsatisfied network requests. The network requests that have the same
+     * network capabilities is grouped into one {@link NetworkRequestList}.
+     */
+    private @NonNull List<NetworkRequestList> getGroupedUnsatisfiedNetworkRequests() {
+        NetworkRequestList networkRequestList = new NetworkRequestList();
+        for (TelephonyNetworkRequest networkRequest : mAllNetworkRequestList) {
+            if (networkRequest.getState() == TelephonyNetworkRequest.REQUEST_STATE_UNSATISFIED) {
+                networkRequestList.add(networkRequest);
+            }
+        }
+        return DataUtils.getGroupedNetworkRequestList(networkRequestList);
     }
 
     /**
@@ -1243,32 +1172,16 @@ public class DataNetworkController extends Handler {
      */
     private void onReevaluateUnsatisfiedNetworkRequests(@NonNull DataEvaluationReason reason) {
         // First, try to group similar network request together.
-        Map<Set<Integer>, NetworkRequestList> requestsMap = new ArrayMap<>();
-        int count = 0;
-        for (TelephonyNetworkRequest networkRequest : mAllNetworkRequestList) {
-            if (networkRequest.getState() == TelephonyNetworkRequest.REQUEST_STATE_UNSATISFIED) {
-                Set<Integer> key = Arrays.stream(networkRequest.getCapabilities()).boxed()
-                        .collect(Collectors.toSet());
-                requestsMap.computeIfAbsent(key, v -> new NetworkRequestList());
-                requestsMap.get(key).add(networkRequest);
-                count++;
-            }
-        }
-
-        if (count == 0) {
-            log("onReevaluateUnsatisfiedNetworkRequests: No unsatisfied network requests to "
-                    + "evaluate.");
-            return;
-        }
-
-        log("Re-evaluating " + count + " unsatisfied network requests in " + requestsMap.size()
-                + " groups, " + requestsMap.keySet().stream()
-                .map(capsSet -> DataUtils.networkCapabilitiesToString(
-                        capsSet.stream().mapToInt(Number::intValue).toArray()))
-                .collect(Collectors.joining(",")) + " due to " + reason);
+        List<NetworkRequestList> networkRequestLists = getGroupedUnsatisfiedNetworkRequests();
+        log("Re-evaluating " + networkRequestLists.stream().mapToInt(List::size).sum()
+                + " unsatisfied network requests in " + networkRequestLists.size()
+                + " groups, " + networkRequestLists.stream().map(
+                        requestList -> DataUtils.networkCapabilitiesToString(
+                                requestList.get(0).getCapabilities()))
+                .collect(Collectors.joining(", ")) + " due to " + reason);
 
         // Second, see if any existing network can satisfy those network requests.
-        for (NetworkRequestList requestList : requestsMap.values()) {
+        for (NetworkRequestList requestList : networkRequestLists) {
             if (findCompatibleDataNetworkAndAttach(requestList)) {
                 continue;
             }
@@ -1342,8 +1255,10 @@ public class DataNetworkController extends Handler {
         DataProfile dataProfile = dataNetwork.getDataProfile();
         if (dataProfile.getApnSetting() != null) {
             // Check if data is disabled for the APN type
-            dataDisabled = !mDataSettingsManager.isDataEnabled(
-                    dataProfile.getApnSetting().getApnTypeBitmask());
+            dataDisabled = !mDataSettingsManager.isDataEnabled(DataUtils
+                    .networkCapabilityToApnType(DataUtils
+                            .getHighestPriorityNetworkCapabilityFromDataProfile(
+                                    mDataConfigManager, dataProfile)));
 
             // Sometimes network temporarily OOS and network type becomes UNKNOWN. We don't
             // tear down network in that case.
@@ -1478,14 +1393,14 @@ public class DataNetworkController extends Handler {
                     public void onRegistered(ImsRegistrationAttributes attributes) {
                         log("IMS " + DataUtils.imsFeatureToString(imsFeature)
                                 + " registered. Attributes=" + attributes);
-                        mImsFeatureRegistrationState.put(imsFeature, true);
+                        mRegisteredImsFeatures.add(imsFeature);
                     }
 
                     @Override
                     public void onUnregistered(ImsReasonInfo info) {
                         log("IMS " + DataUtils.imsFeatureToString(imsFeature)
                                 + " deregistered. Info=" + info);
-                        mImsFeatureRegistrationState.put(imsFeature, false);
+                        mRegisteredImsFeatures.remove(imsFeature);
                         evaluatePendingImsDeregDataNetworks();
                     }
                 };
@@ -1678,16 +1593,20 @@ public class DataNetworkController extends Handler {
      * Setup data network.
      *
      * @param dataProfile The data profile to setup the data network.
-     * @param dataRetryEntry Data retry entry. {@code null} if this data network setup is not
+     * @param dataSetupRetryEntry Data retry entry. {@code null} if this data network setup is not
      * initiated by a data retry.
      */
     private void setupDataNetwork(@NonNull DataProfile dataProfile,
-            @Nullable DataRetryEntry dataRetryEntry) {
-        log("onSetupDataNetwork: dataProfile=" + dataProfile);
+            @Nullable DataSetupRetryEntry dataSetupRetryEntry) {
+        log("onSetupDataNetwork: dataProfile=" + dataProfile + ", retryEntry="
+                + dataSetupRetryEntry);
         for (DataNetwork dataNetwork : mDataNetworkList) {
             if (dataNetwork.getDataProfile().equals(dataProfile)) {
                 log("onSetupDataNetwork: Found existing data network " + dataNetwork
                         + " has the same data profile.");
+                if (dataSetupRetryEntry != null) {
+                    dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+                }
                 return;
             }
         }
@@ -1697,28 +1616,36 @@ public class DataNetworkController extends Handler {
         if (networkRequestList.isEmpty()) {
             log("Can't find any unsatisfied network requests that can be satisfied by this data "
                     + "profile.");
+            if (dataSetupRetryEntry != null) {
+                dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            }
+
             return;
         }
 
-        logl("Creating data network with " + dataProfile + ", and attaching "
-                + networkRequestList.size() + " network requests to it.");
+        int transport = mAccessNetworksManager.getPreferredTransportByNetworkCapability(
+                networkRequestList.get(0).getHighestPriorityNetworkCapability());
+        logl("Creating data network on "
+                + AccessNetworkConstants.transportTypeToString(transport) + " with " + dataProfile
+                + ", and attaching " + networkRequestList.size() + " network requests to it.");
+
         mDataNetworkList.add(new DataNetwork(mPhone, getLooper(), mDataServiceManagers,
-                dataProfile, networkRequestList, new DataNetwork.DataNetworkCallback(this::post) {
+                dataProfile, networkRequestList, transport, new DataNetworkCallback(this::post) {
                     @Override
                     public void onSetupDataFailed(@NonNull DataNetwork dataNetwork,
                             @NonNull NetworkRequestList requestList, @DataFailureCause int cause,
-                            long retryDurationMillis) {
-                        if (dataRetryEntry != null) {
-                            dataRetryEntry.setState(DataRetryEntry.RETRY_STATE_FAILED);
+                            long retryDelayMillis) {
+                        if (dataSetupRetryEntry != null) {
+                            dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_FAILED);
                         }
-                        DataNetworkController.this.onDataNetworkSetupDataFailed(
-                                dataNetwork, requestList, cause, retryDurationMillis);
+                        DataNetworkController.this.onDataNetworkSetupFailed(
+                                dataNetwork, requestList, cause, retryDelayMillis);
                     }
 
                     @Override
                     public void onConnected(@NonNull DataNetwork dataNetwork) {
-                        if (dataRetryEntry != null) {
-                            dataRetryEntry.setState(DataRetryEntry.RETRY_STATE_SUCCEEDED);
+                        if (dataSetupRetryEntry != null) {
+                            dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_SUCCEEDED);
                         }
                         DataNetworkController.this.onDataNetworkConnected(dataNetwork);
                     }
@@ -1750,7 +1677,25 @@ public class DataNetworkController extends Handler {
                         DataNetworkController.this.onDataNetworkDisconnected(
                                 dataNetwork, cause);
                     }
+
+                    @Override
+                    public void onHandoverSucceeded(@NonNull DataNetwork dataNetwork) {
+                        DataNetworkController.this.onDataNetworkHandoverSucceeded(dataNetwork);
+                    }
+
+                    @Override
+                    public void onHandoverFailed(@NonNull DataNetwork dataNetwork,
+                            @DataFailureCause int cause, long retryDelayMillis,
+                            @HandoverFailureMode int handoverFailureMode) {
+                        DataNetworkController.this.onDataNetworkHandoverFailed(
+                                dataNetwork, cause, retryDelayMillis, handoverFailureMode);
+                    }
                 }));
+        if (!mAnyDataNetworkExisting) {
+            mAnyDataNetworkExisting = true;
+            mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                    () -> callback.onAnyDataNetworkExistingChanged(mAnyDataNetworkExisting)));
+        }
     }
 
     /**
@@ -1761,16 +1706,21 @@ public class DataNetworkController extends Handler {
      * @param cause The fail cause
      * @param retryDelayMillis The retry timer suggested by the network/data service.
      */
-    private void onDataNetworkSetupDataFailed(@NonNull DataNetwork dataNetwork,
+    private void onDataNetworkSetupFailed(@NonNull DataNetwork dataNetwork,
             @NonNull NetworkRequestList requestList, @DataFailureCause int cause,
             long retryDelayMillis) {
         logl("onDataNetworkSetupDataFailed: " + dataNetwork + ", cause="
-                + DataFailCause.toString(cause) + "(" + cause + "), retryDelayMillis="
-                + retryDelayMillis + "ms.");
+                + DataFailCause.toString(cause) + "(0x" + Integer.toHexString(cause)
+                + "), retryDelayMillis=" + retryDelayMillis + "ms.");
         mDataNetworkList.remove(dataNetwork);
+        if (mAnyDataNetworkExisting && mDataNetworkList.isEmpty()) {
+            mAnyDataNetworkExisting = false;
+            mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                    () -> callback.onAnyDataNetworkExistingChanged(mAnyDataNetworkExisting)));
+        }
         // Data retry manager will determine if retry is needed. If needed, retry will be scheduled.
-        mDataRetryManager.evaluateDataRetry(dataNetwork.getDataProfile(), requestList, cause,
-                retryDelayMillis);
+        mDataRetryManager.evaluateDataSetupRetry(dataNetwork.getDataProfile(),
+                dataNetwork.getTransport(), requestList, cause, retryDelayMillis);
     }
 
     /**
@@ -1785,10 +1735,7 @@ public class DataNetworkController extends Handler {
         if (mPreviousConnectedDataNetworkList.size() > MAX_HISTORICAL_CONNECTED_DATA_NETWORKS) {
             mPreviousConnectedDataNetworkList.remove(MAX_HISTORICAL_CONNECTED_DATA_NETWORKS);
         }
-        if (dataNetwork.isInternetSupported()) {
-            mDataNetworkControllerCallbacks.notifyListeners(
-                    DataNetworkControllerCallback::onInternetDataNetworkConnected);
-        }
+
         updateOverallInternetDataState();
 
         if (dataNetwork.getNetworkCapabilities().hasCapability(
@@ -1797,6 +1744,75 @@ public class DataNetworkController extends Handler {
                     + TelephonyUtils.dataStateToString(mImsDataNetworkState) + " to CONNECTED.");
             mImsDataNetworkState = TelephonyManager.DATA_CONNECTED;
         }
+    }
+
+    /**
+     * Called when needed to retry data setup.
+     *
+     * @param dataSetupRetryEntry The data setup retry entry scheduled by {@link DataRetryManager}.
+     */
+    private void onDataNetworkSetupRetry(@NonNull DataSetupRetryEntry dataSetupRetryEntry) {
+        TelephonyNetworkRequest telephonyNetworkRequest =
+                dataSetupRetryEntry.networkRequestList.get(0);
+        if (!mAllNetworkRequestList.contains(telephonyNetworkRequest)) {
+            log("onDataNetworkSetupRetry: " + telephonyNetworkRequest + " no longer in the list.");
+            dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            return;
+        }
+        int networkCapability = telephonyNetworkRequest.getHighestPriorityNetworkCapability();
+        int preferredTransport = mAccessNetworksManager.getPreferredTransportByNetworkCapability(
+                networkCapability);
+        if (preferredTransport != dataSetupRetryEntry.transport) {
+            log("Cannot re-satisfy " + telephonyNetworkRequest + " on "
+                    + AccessNetworkConstants.transportTypeToString(dataSetupRetryEntry.transport)
+                    + ". The preferred transport has switched to "
+                    + AccessNetworkConstants.transportTypeToString(preferredTransport)
+                    + ". " + dataSetupRetryEntry);
+            dataSetupRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            return;
+        }
+
+        DataEvaluation evaluation = evaluateNetworkRequest(
+                telephonyNetworkRequest, DataEvaluationReason.DATA_RETRY);
+        if (evaluation.isDataAllowed()) {
+            setupDataNetwork(dataSetupRetryEntry.dataProfile, dataSetupRetryEntry);
+        }
+    }
+
+    /**
+     * Called when needed to retry data network handover.
+     *
+     * @param dataHandoverRetryEntry The handover entry.
+     */
+    private void onDataNetworkHandoverRetry(
+            @NonNull DataHandoverRetryEntry dataHandoverRetryEntry) {
+        DataNetwork dataNetwork = dataHandoverRetryEntry.dataNetwork;
+        if (!mDataNetworkList.contains(dataNetwork)) {
+            log("onDataNetworkHandoverRetry: " + dataNetwork + " no longer exists.");
+            dataHandoverRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            return;
+        }
+
+        if (!dataNetwork.isConnected()) {
+            log("onDataNetworkHandoverRetry: " + dataNetwork + " is not in the right state.");
+            dataHandoverRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            return;
+        }
+
+        int preferredTransport = mAccessNetworksManager.getPreferredTransportByNetworkCapability(
+                dataNetwork.getHighestPriorityNetworkCapability());
+        if (dataNetwork.getTransport() == preferredTransport) {
+            log("onDataNetworkHandoverRetry: " + dataNetwork + " is already on the preferred "
+                    + "transport " + AccessNetworkConstants.transportTypeToString(
+                            preferredTransport) + ".");
+            dataHandoverRetryEntry.setState(DataRetryEntry.RETRY_STATE_CANCELLED);
+            return;
+        }
+
+        logl("Start handover " + dataNetwork + " to "
+                + AccessNetworkConstants.transportTypeToString(preferredTransport)
+                + ", " + dataHandoverRetryEntry);
+        dataNetwork.startHandover(preferredTransport, dataHandoverRetryEntry);
     }
 
     /**
@@ -1829,8 +1845,8 @@ public class DataNetworkController extends Handler {
 
         // TODO: Add DataConfigManager.isRecoveryOnBadNetworkEnabled()
         if (dataNetwork.isInternetSupported()) {
-            mDataNetworkControllerCallbacks.notifyListeners(callback ->
-                    callback.onInternetDataNetworkValidationStatusChanged(status));
+            mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                    () -> callback.onInternetDataNetworkValidationStatusChanged(status)));
         }
     }
 
@@ -1847,8 +1863,10 @@ public class DataNetworkController extends Handler {
         if (dataNetwork.getNetworkCapabilities().hasCapability(
                 NetworkCapabilities.NET_CAPABILITY_IMS)) {
             logl("IMS data state changed from "
-                    + TelephonyUtils.dataStateToString(mImsDataNetworkState) + " to CONNECTED.");
-            mImsDataNetworkState = TelephonyManager.DATA_CONNECTED;
+                    + TelephonyUtils.dataStateToString(mImsDataNetworkState) + " to "
+                    + (suspended ? "SUSPENDED" : "CONNECTED"));
+            mImsDataNetworkState = suspended
+                    ? TelephonyManager.DATA_SUSPENDED : TelephonyManager.DATA_CONNECTED;
         }
     }
 
@@ -1860,7 +1878,6 @@ public class DataNetworkController extends Handler {
      */
     private void onDataNetworkDisconnected(@NonNull DataNetwork dataNetwork,
             @DataFailureCause int cause) {
-        // TODO: Should perform retry here.
         logl("onDataNetworkDisconnected: " + dataNetwork + ", cause="
                 + DataFailCause.toString(cause) + "(" + cause + ")");
         mDataNetworkList.remove(dataNetwork);
@@ -1874,15 +1891,68 @@ public class DataNetworkController extends Handler {
             mImsDataNetworkState = TelephonyManager.DATA_DISCONNECTED;
         }
 
-        if (dataNetwork.isInternetSupported()) {
-            mDataNetworkControllerCallbacks.notifyListeners(
-                    DataNetworkControllerCallback::onInternetDataNetworkDisconnected);
+        if (mAnyDataNetworkExisting && mDataNetworkList.isEmpty()) {
+            log("All data networks disconnected now.");
+            mAnyDataNetworkExisting = false;
+            mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                    () -> callback.onAnyDataNetworkExistingChanged(mAnyDataNetworkExisting)));
         }
 
-        if (mDataNetworkList.isEmpty()) {
-            log("All data networks disconnected now.");
-            mDataNetworkControllerCallbacks.notifyListeners(
-                    DataNetworkControllerCallback::onAllDataNetworksDisconnected);
+        // Sometimes network was unsolicitedly reported lost for reasons. We should re-evaluate
+        // and see if data network can be re-established again.
+        //TODO: Add some dalays here
+        sendMessage(obtainMessage(EVENT_REEVALUATE_UNSATISFIED_NETWORK_REQUESTS,
+                DataEvaluationReason.DATA_NETWORK_DISCONNECTED));
+    }
+
+    /**
+     * Called when handover between IWLAN and cellular network succeeded.
+     *
+     * @param dataNetwork The data network.
+     */
+    private void onDataNetworkHandoverSucceeded(@NonNull DataNetwork dataNetwork) {
+        logl("Successfully handover " + dataNetwork + " to "
+                + AccessNetworkConstants.transportTypeToString(dataNetwork.getTransport()));
+    }
+
+    /**
+     * Called when data network handover between IWLAN and cellular network failed.
+     *
+     * @param dataNetwork The data network.
+     * @param cause The fail cause.
+     * @param retryDelayMillis Network suggested retry time in milliseconds.
+     * {@link Long#MAX_VALUE} indicates data retry should not occur.
+     * {@link DataCallResponse#RETRY_DURATION_UNDEFINED} indicates network did not suggest any
+     * retry duration.
+     * @param handoverFailureMode The handover failure mode that determine the behavior of
+     * how frameworks should handle the handover failure.
+     */
+    private void onDataNetworkHandoverFailed(@NonNull DataNetwork dataNetwork,
+            @DataFailureCause int cause, long retryDelayMillis,
+            @HandoverFailureMode int handoverFailureMode) {
+        logl("onDataNetworkHandoverFailed: " + dataNetwork + ", cause="
+                + DataFailCause.toString(cause) + "(0x" + Integer.toHexString(cause)
+                + "), retryDelayMillis=" + retryDelayMillis + "ms, handoverFailureMode="
+                + DataCallResponse.failureModeToString(handoverFailureMode));
+        if (handoverFailureMode == DataCallResponse.HANDOVER_FAILURE_MODE_DO_FALLBACK
+                || (handoverFailureMode == DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY
+                && cause == DataFailCause.HANDOFF_PREFERENCE_CHANGED)) {
+            // Don't retry handover anymore. Give QNS some time to switch the preferred transport
+            // to the original one, but we should re-evaluate the preferred transport again to
+            // make sure QNS does change it back, if not, we still need to perform handover at that
+            // time.
+            sendMessageDelayed(obtainMessage(EVENT_REEVALUATE_PREFERRED_TRANSPORT,
+                    dataNetwork.getHighestPriorityNetworkCapability(), 0),
+                    REEVALUATE_PREFERRED_TRANSPORT_DELAY_MILLIS);
+        } else if (handoverFailureMode == DataCallResponse
+                .HANDOVER_FAILURE_MODE_NO_FALLBACK_RETRY_SETUP_NORMAL || handoverFailureMode
+                == DataCallResponse.HANDOVER_FAILURE_MODE_LEGACY) {
+            // Tear down the data network on source transport. After disconnected, a new data
+            // network will be brought up on the target transport.
+            tearDownGracefully(dataNetwork, DataNetwork.TEAR_DOWN_REASON_HANDOVER_FAILED);
+        } else {
+            // Delegate to data retry manager to evaluate if handover retry should be performed.
+            mDataRetryManager.evaluateDataHandoverRetry(dataNetwork, cause, retryDelayMillis);
         }
     }
 
@@ -1902,7 +1972,14 @@ public class DataNetworkController extends Handler {
      * internet. This event is from {@link DataStallRecoveryManager}.
      */
     private void onDataStallReestablishInternet() {
-        log("onDataStallReestablishInternet");
+        log("onDataStallReestablishInternet: Tear down data networks that support internet.");
+        // Tear down all data networks that support internet. After data disconnected, unsatisfied
+        // network requests will be re-evaluate again and data network controller will attempt to
+        // setup data networks to satisfy them.
+        mDataNetworkList.stream()
+                .filter(DataNetwork::isInternetSupported)
+                .forEach(dataNetwork -> dataNetwork.tearDown(
+                        DataNetwork.TEAR_DOWN_REASON_DATA_STALL));
     }
 
     /**
@@ -1954,6 +2031,44 @@ public class DataNetworkController extends Handler {
             } else if (simState == TelephonyManager.SIM_STATE_LOADED) {
                 sendMessage(obtainMessage(EVENT_REEVALUATE_UNSATISFIED_NETWORK_REQUESTS,
                         DataEvaluationReason.SIM_LOADED));
+            }
+        }
+    }
+
+    /**
+     * Called when needed to re-evaluate preferred transport for certain capability.
+     *
+     * @param capability The network capability that has preferred transport changed.
+     */
+    private void onReevaluatePreferredTransport(@NetCapability int capability) {
+        int preferredTransport = mAccessNetworksManager
+                .getPreferredTransportByNetworkCapability(capability);
+        logl(DataUtils.networkCapabilityToString(capability) + " preferred on "
+                + AccessNetworkConstants.transportTypeToString(preferredTransport));
+        for (DataNetwork dataNetwork : mDataNetworkList) {
+            if (dataNetwork.getHighestPriorityNetworkCapability() == capability) {
+                // Check if the data network's current transport is different than from the
+                // preferred transport. If it's different, then handover is needed.
+                if (dataNetwork.getTransport() == preferredTransport) {
+                    log("onPreferredTransportChanged:" + dataNetwork + " already on "
+                            + AccessNetworkConstants.transportTypeToString(preferredTransport));
+                    continue;
+                }
+
+                if (!dataNetwork.isConnecting() && !dataNetwork.isConnected()) {
+                    log("onReevaluatePreferredTransport:" + dataNetwork
+                            + " it not in the right state.");
+                    continue;
+                }
+
+                if (mDataRetryManager.isAnyHandoverRetryScheduled(dataNetwork)) {
+                    log("onReevaluatePreferredTransport: Found handover retry entry for "
+                            + dataNetwork);
+                    continue;
+                }
+                logl("Start handover " + dataNetwork + " to "
+                        + AccessNetworkConstants.transportTypeToString(preferredTransport));
+                dataNetwork.startHandover(preferredTransport, null);
             }
         }
     }
@@ -2097,38 +2212,13 @@ public class DataNetworkController extends Handler {
                     + TelephonyUtils.dataStateToString(dataNetworkState) + ".");
             // TODO: Create a new route to notify TelephonyRegistry.
             mInternetDataNetworkState = dataNetworkState;
-        }
-    }
-
-    /**
-     * Update the IMS data network state. For now only {@link TelephonyManager#DATA_CONNECTED}
-     * , {@link TelephonyManager#DATA_SUSPENDED}, and
-     * {@link TelephonyManager#DATA_DISCONNECTED} are supported. This method is only for debugging
-     * purposes now.
-     */
-    private void updateImsDataState() {
-        int dataNetworkState = TelephonyManager.DATA_DISCONNECTED;
-        // There should not be more than one IMS PDN.
-        DataNetwork imsInternetDataNetwork = mDataNetworkList.stream()
-                .filter(dataNetwork -> dataNetwork.getNetworkCapabilities()
-                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_IMS))
-                .findAny()
-                .orElse(null);
-        if (imsInternetDataNetwork != null) {
-            // TODO: Support handover state
-            if (imsInternetDataNetwork.isSuspended()) {
-                dataNetworkState = TelephonyManager.DATA_SUSPENDED;
-            } else if (imsInternetDataNetwork.isConnected()
-                    || imsInternetDataNetwork.isUnderHandover()) {
-                dataNetworkState = TelephonyManager.DATA_CONNECTED;
-            }
-        }
-
-        if (mImsDataNetworkState != dataNetworkState) {
-            logl("IMS data state changed from "
-                    + TelephonyUtils.dataStateToString(mInternetDataNetworkState) + " to "
-                    + TelephonyUtils.dataStateToString(dataNetworkState) + ".");
-            mImsDataNetworkState = dataNetworkState;
+            if (mInternetDataNetworkState == TelephonyManager.DATA_CONNECTED) {
+                mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                        callback::onInternetDataNetworkConnected));
+            } else if (mInternetDataNetworkState == TelephonyManager.DATA_DISCONNECTED) {
+                mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
+                        callback::onInternetDataNetworkDisconnected));
+            } // TODO: Add suspended callback if needed.
         }
     }
 
@@ -2186,14 +2276,10 @@ public class DataNetworkController extends Handler {
     /**
      * Register data network controller callback.
      *
-     * @param executor The executor of the callback.
      * @param callback The callback.
-     * @param autoUnregister {@code true} if this callback should be unregistered automatically
-     * after invoked the overridden callback method.
      */
-    public void registerDataNetworkControllerCallback(@NonNull @CallbackExecutor Executor executor,
-            @NonNull DataNetworkControllerCallback callback, boolean autoUnregister) {
-        callback.init(executor, autoUnregister);
+    public void registerDataNetworkControllerCallback(
+            @NonNull DataNetworkControllerCallback callback) {
         sendMessage(obtainMessage(EVENT_REGISTER_DATA_NETWORK_CONTROLLER_CALLBACK, callback));
     }
 
@@ -2269,7 +2355,7 @@ public class DataNetworkController extends Handler {
             if (imsFeaturePackage != null) {
                 if (dataNetwork.getAttachedNetworkRequestList()
                         .hasNetworkRequestsFromPackage(imsFeaturePackage)) {
-                    if (mImsFeatureRegistrationState.get(imsFeature)) {
+                    if (mRegisteredImsFeatures.contains(imsFeature)) {
                         return false;
                     }
                 }
@@ -2297,11 +2383,11 @@ public class DataNetworkController extends Handler {
         if (isImsGracefulTearDownSupported() && !isSafeToTearDown(dataNetwork)) {
             log("tearDownGracefully: Not safe to tear down " + dataNetwork
                     + " at this point. Wait for IMS de-registration or timeout. MMTEL="
-                    + (mImsFeatureRegistrationState.get(ImsFeature.FEATURE_MMTEL)
-                    ? "registered" : "deregistered")
+                    + (mRegisteredImsFeatures.contains(ImsFeature.FEATURE_MMTEL)
+                    ? "registered" : "not registered")
                     + ", RCS="
-                    + (mImsFeatureRegistrationState.get(ImsFeature.FEATURE_RCS)
-                    ? "registered" : "deregistered")
+                    + (mRegisteredImsFeatures.contains(ImsFeature.FEATURE_RCS)
+                    ? "registered" : "not registered")
             );
             mPendingImsDeregDataNetworks.put(dataNetwork,
                     dataNetwork.tearDownWithCondition(reason, deregDelay));
@@ -2412,20 +2498,21 @@ public class DataNetworkController extends Handler {
         pw.decreaseIndent();
 
         pw.println("IMS features registration state: MMTEL="
-                + (mImsFeatureRegistrationState.get(ImsFeature.FEATURE_MMTEL)
-                ? "registered" : "deregistered")
+                + (mRegisteredImsFeatures.contains(ImsFeature.FEATURE_MMTEL)
+                ? "registered" : "not registered")
                 + ", RCS="
-                + (mImsFeatureRegistrationState.get(ImsFeature.FEATURE_RCS)
-                ? "registered" : "deregistered"));
+                + (mRegisteredImsFeatures.contains(ImsFeature.FEATURE_RCS)
+                ? "registered" : "not registered"));
         pw.println("mServiceState=" + mServiceState);
         pw.println("mPsRestricted=" + mPsRestricted);
+        pw.println("mAnyDataNetworkExisting=" + mAnyDataNetworkExisting);
         pw.println("mInternetDataNetworkState="
                 + TelephonyUtils.dataStateToString(mInternetDataNetworkState));
         pw.println("mImsDataNetworkState="
                 + TelephonyUtils.dataStateToString(mImsDataNetworkState));
         pw.println("mDataServiceBound=" + mDataServiceBound);
         pw.println("mSimState=" + SubscriptionInfoUpdater.simStateString(mSimState));
-        pw.println(mDataNetworkControllerCallbacks);
+        pw.println("mDataNetworkControllerCallbacks=" + mDataNetworkControllerCallbacks);
         pw.println("Local logs:");
         pw.increaseIndent();
         mLocalLog.dump(fd, pw, args);
