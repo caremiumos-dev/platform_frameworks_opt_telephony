@@ -2806,8 +2806,15 @@ public class SubscriptionController extends ISub.Stub {
 
         TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
         PhoneAccountHandle currentHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
+        String currentPackageName =
+            currentHandle == null ? null : currentHandle.getComponentName().getPackageName();
+        boolean currentIsSim = "com.android.phone".equals(currentPackageName);
 
-        if (!Objects.equals(currentHandle, newHandle)) {
+        // Do not override user selected outgoing calling account
+        // if the user has selected a third-party app as default
+        boolean shouldKeepOutgoingAccount = currentHandle != null && !currentIsSim;
+
+        if (!Objects.equals(currentHandle, newHandle) && !shouldKeepOutgoingAccount) {
             telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
             logd("[setDefaultVoiceSubId] change to phoneAccountHandle=" + newHandle);
         } else {
