@@ -90,9 +90,9 @@ import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
+import com.android.internal.telephony.data.AccessNetworksManager;
 import com.android.internal.telephony.data.DataNetworkController;
 import com.android.internal.telephony.data.LinkBandwidthEstimator;
-import com.android.internal.telephony.dataconnection.AccessNetworksManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.dataconnection.TransportManager;
@@ -358,6 +358,7 @@ public class GsmCdmaPhone extends Phone {
         mSST.registerForNetworkAttached(this, EVENT_REGISTERED_TO_NETWORK, null);
         mSST.registerForVoiceRegStateOrRatChanged(this, EVENT_VRS_OR_RAT_CHANGED, null);
 
+        // TODO: Remove SettingsObserver and provisioning events when DataEnabledSettings is removed
         mSettingsObserver = new SettingsObserver(context, this);
         mSettingsObserver.observe(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
@@ -457,7 +458,8 @@ public class GsmCdmaPhone extends Phone {
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(TelecomManager.ACTION_CURRENT_TTY_MODE_CHANGED);
         filter.addAction(TelecomManager.ACTION_TTY_PREFERRED_MODE_CHANGED);
-        mContext.registerReceiver(mBroadcastReceiver, filter);
+        mContext.registerReceiver(mBroadcastReceiver, filter,
+                android.Manifest.permission.MODIFY_PHONE_STATE, null);
 
         mCDM = new CarrierKeyDownloadManager(this);
         mCIM = new CarrierInfoManager();
@@ -2628,6 +2630,9 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public boolean getDataRoamingEnabled() {
+        if (isUsingNewDataStack()) {
+            return getDataSettingsManager().isDataRoamingEnabled();
+        }
         if (getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN) != null) {
             return getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN).getDataRoamingEnabled();
         }
@@ -2636,6 +2641,10 @@ public class GsmCdmaPhone extends Phone {
 
     @Override
     public void setDataRoamingEnabled(boolean enable) {
+        if (isUsingNewDataStack()) {
+            getDataSettingsManager().setDataRoamingEnabled(enable);
+            return;
+        }
         if (getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN) != null) {
             getDcTracker(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)
                     .setDataRoamingEnabledByUser(enable);
@@ -2690,6 +2699,10 @@ public class GsmCdmaPhone extends Phone {
      */
     @Override
     public boolean isUserDataEnabled() {
+        if (isUsingNewDataStack()) {
+            return getDataSettingsManager().isDataEnabledForReason(
+                    TelephonyManager.DATA_ENABLED_REASON_USER);
+        }
         if (mDataEnabledSettings.isProvisioning()) {
             return mDataEnabledSettings.isProvisioningDataEnabled();
         } else {
@@ -3010,6 +3023,7 @@ public class GsmCdmaPhone extends Phone {
                 updateCdmaRoamingSettingsAfterCarrierConfigChanged(b);
 
                 updateNrSettingsAfterCarrierConfigChanged(b);
+                updateVoNrSettings(b);
                 updateSsOverCdmaSupported(b);
                 loadAllowedNetworksFromSubscriptionDatabase();
                 // Obtain new radio capabilities from the modem, since some are SIM-dependent
@@ -3247,14 +3261,23 @@ public class GsmCdmaPhone extends Phone {
             case EVENT_SET_CARRIER_DATA_ENABLED:
                 ar = (AsyncResult) msg.obj;
                 boolean enabled = (boolean) ar.result;
+                if (isUsingNewDataStack()) {
+                    getDataSettingsManager().setDataEnabled(
+                            TelephonyManager.DATA_ENABLED_REASON_CARRIER, enabled);
+                    return;
+                }
                 mDataEnabledSettings.setDataEnabled(TelephonyManager.DATA_ENABLED_REASON_CARRIER,
                         enabled);
                 break;
             case EVENT_DEVICE_PROVISIONED_CHANGE:
-                mDataEnabledSettings.updateProvisionedChanged();
+                if (!isUsingNewDataStack()) {
+                    mDataEnabledSettings.updateProvisionedChanged();
+                }
                 break;
             case EVENT_DEVICE_PROVISIONING_DATA_SETTING_CHANGE:
-                mDataEnabledSettings.updateProvisioningDataEnabled();
+                if (!isUsingNewDataStack()) {
+                    mDataEnabledSettings.updateProvisioningDataEnabled();
+                }
                 break;
             case EVENT_GET_AVAILABLE_NETWORKS_DONE:
                 ar = (AsyncResult) msg.obj;
@@ -3322,6 +3345,10 @@ public class GsmCdmaPhone extends Phone {
                 resetCarrierKeysForImsiEncryption();
                 break;
             }
+            case EVENT_SET_VONR_ENABLED_DONE:
+                logd("EVENT_SET_VONR_ENABLED_DONE is done");
+                break;
+
             default:
                 super.handleMessage(msg);
         }
@@ -3742,7 +3769,9 @@ public class GsmCdmaPhone extends Phone {
             // send an Intent
             sendEmergencyCallbackModeChange();
             // Re-initiate data connection
-            mDataEnabledSettings.setInternalDataEnabled(true);
+            if (!isUsingNewDataStack()) {
+                mDataEnabledSettings.setInternalDataEnabled(true);
+            }
             notifyEmergencyCallRegistrants(false);
         }
         mIsTestingEmergencyCallbackMode = false;
@@ -4749,6 +4778,45 @@ public class GsmCdmaPhone extends Phone {
         int[] nrAvailabilities = config.getIntArray(
                 CarrierConfigManager.KEY_CARRIER_NR_AVAILABILITIES_INT_ARRAY);
         mIsCarrierNrSupported = !ArrayUtils.isEmpty(nrAvailabilities);
+    }
+
+    private void updateVoNrSettings(PersistableBundle config) {
+        UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
+
+        // If no card is present, do nothing.
+        if (slot == null || slot.getCardState() != IccCardStatus.CardState.CARDSTATE_PRESENT) {
+            return;
+        }
+
+        if (config == null) {
+            loge("didn't get the vonr_enabled_bool from the carrier config.");
+            return;
+        }
+
+        boolean mIsVonrEnabledByCarrier =
+                config.getBoolean(CarrierConfigManager.KEY_VONR_ENABLED_BOOL);
+
+        String result = SubscriptionController.getInstance().getSubscriptionProperty(
+                getSubId(),
+                SubscriptionManager.NR_ADVANCED_CALLING_ENABLED);
+
+        int setting = -1;
+        if (result != null) {
+            setting = Integer.parseInt(result);
+        }
+
+        logd("VoNR setting from telephony.db:"
+                + setting
+                + " ,vonr_enabled_bool:"
+                + mIsVonrEnabledByCarrier);
+
+        if (!mIsVonrEnabledByCarrier) {
+            mCi.setVoNrEnabled(false, obtainMessage(EVENT_SET_VONR_ENABLED_DONE), null);
+        } else if (setting == 1 || setting == -1) {
+            mCi.setVoNrEnabled(true, obtainMessage(EVENT_SET_VONR_ENABLED_DONE), null);
+        } else if (setting == 0) {
+            mCi.setVoNrEnabled(false, obtainMessage(EVENT_SET_VONR_ENABLED_DONE), null);
+        }
     }
 
     private void updateCdmaRoamingSettingsAfterCarrierConfigChanged(PersistableBundle config) {

@@ -71,7 +71,8 @@ import android.util.Log;
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.IccCardConstants.State;
-import com.android.internal.telephony.dataconnection.DataEnabledOverride;
+import com.android.internal.telephony.data.DataEnabledOverride;
+import com.android.internal.telephony.data.PhoneSwitcher;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -4586,12 +4587,9 @@ public class SubscriptionController extends ISub.Stub {
         }
     }
 
-    /**
-     * Implements getPhoneNumber() APIs, w/o permission check.
-     * Can be used by other phone internal components.
-     */
+    // Internal helper method for implementing getPhoneNumber() API.
     @Nullable
-    public String getPhoneNumber(int subId, int source) {
+    private String getPhoneNumber(int subId, int source) {
         if (source == SubscriptionManager.PHONE_NUMBER_SOURCE_UICC) {
             Phone phone = PhoneFactory.getPhone(getPhoneId(subId));
             return phone != null ? phone.getLine1Number() : null;
@@ -4680,7 +4678,7 @@ public class SubscriptionController extends ISub.Stub {
     /**
      * @hide
      */
-    protected static void invalidateActiveDataSubIdCaches() {
+    public static void invalidateActiveDataSubIdCaches() {
         if (sCachingEnabled) {
             SubscriptionManager.invalidateActiveDataSubIdCaches();
         }

@@ -44,6 +44,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import android.net.NetworkPolicyManager;
 import android.net.vcn.VcnManager;
 import android.net.vcn.VcnNetworkPolicyResult;
 import android.net.wifi.WifiInfo;
@@ -87,12 +88,15 @@ import com.android.ims.ImsEcbm;
 import com.android.ims.ImsManager;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
+import com.android.internal.telephony.data.AccessNetworksManager;
+import com.android.internal.telephony.data.CellularNetworkValidator;
 import com.android.internal.telephony.data.DataConfigManager;
+import com.android.internal.telephony.data.DataEnabledOverride;
 import com.android.internal.telephony.data.DataNetworkController;
 import com.android.internal.telephony.data.DataProfileManager;
+import com.android.internal.telephony.data.DataServiceManager;
+import com.android.internal.telephony.data.DataSettingsManager;
 import com.android.internal.telephony.data.LinkBandwidthEstimator;
-import com.android.internal.telephony.dataconnection.AccessNetworksManager;
-import com.android.internal.telephony.dataconnection.DataEnabledOverride;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DataThrottler;
 import com.android.internal.telephony.dataconnection.DcTracker;
@@ -204,6 +208,8 @@ public abstract class TelephonyTest {
     protected DcTracker mDcTracker;
     @Mock
     protected DataNetworkController mDataNetworkController;
+    @Mock
+    protected DataSettingsManager mDataSettingsManager;
     @Mock
     protected DataConfigManager mDataConfigManager;
     @Mock
@@ -348,6 +354,10 @@ public abstract class TelephonyTest {
     protected CellIdentity mCellIdentity;
     @Mock
     protected CellLocation mCellLocation;
+    @Mock
+    protected DataServiceManager mMockedWwanDataServiceManager;
+    @Mock
+    protected DataServiceManager mMockedWlanDataServiceManager;
 
     protected ActivityManager mActivityManager;
     protected ImsCallProfile mImsCallProfile;
@@ -362,6 +372,7 @@ public abstract class TelephonyTest {
     protected UserManager mUserManager;
     protected KeyguardManager mKeyguardManager;
     protected VcnManager mVcnManager;
+    protected NetworkPolicyManager mNetworkPolicyManager;
     protected SimulatedCommands mSimulatedCommands;
     protected ContextFixture mContextFixture;
     protected Context mContext;
@@ -523,6 +534,7 @@ public abstract class TelephonyTest {
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
         mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         mVcnManager = mContext.getSystemService(VcnManager.class);
+        mNetworkPolicyManager = mContext.getSystemService(NetworkPolicyManager.class);
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         //mTelephonyComponentFactory
@@ -604,7 +616,9 @@ public abstract class TelephonyTest {
         doReturn(mAccessNetworksManager).when(mPhone).getAccessNetworksManager();
         doReturn(mDataEnabledSettings).when(mPhone).getDataEnabledSettings();
         doReturn(mDcTracker).when(mPhone).getDcTracker(anyInt());
+        doReturn(mDataSettingsManager).when(mDataNetworkController).getDataSettingsManager();
         doReturn(mDataNetworkController).when(mPhone).getDataNetworkController();
+        doReturn(mDataSettingsManager).when(mPhone).getDataSettingsManager();
         doReturn(mCarrierPrivilegesTracker).when(mPhone).getCarrierPrivilegesTracker();
         doReturn(mSignalStrength).when(mPhone).getSignalStrength();
         doReturn(mVoiceCallSessionStats).when(mPhone).getVoiceCallSessionStats();
