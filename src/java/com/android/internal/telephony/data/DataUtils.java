@@ -25,12 +25,15 @@ import android.net.NetworkCapabilities;
 import android.os.SystemClock;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.RadioAccessNetworkType;
+import android.telephony.AccessNetworkConstants.TransportType;
 import android.telephony.Annotation.NetCapability;
 import android.telephony.Annotation.NetworkType;
 import android.telephony.Annotation.ValidationStatus;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.ApnSetting.ApnType;
+import android.telephony.data.DataCallResponse;
+import android.telephony.data.DataCallResponse.LinkStatus;
 import android.telephony.data.DataProfile;
 import android.telephony.ims.feature.ImsFeature;
 import android.util.ArrayMap;
@@ -367,5 +370,47 @@ public class DataUtils {
                 .sorted((list1, list2) -> Integer.compare(
                         list2.get(0).getPriority(), list1.get(0).getPriority()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the target transport from source transport. This is only used for handover between
+     * IWLAN and cellular scenario.
+     *
+     * @param sourceTransport The source transport.
+     * @return The target transport.
+     */
+    public static @TransportType int getTargetTransport(@TransportType int sourceTransport) {
+        return sourceTransport == AccessNetworkConstants.TRANSPORT_TYPE_WWAN
+                ? AccessNetworkConstants.TRANSPORT_TYPE_WLAN
+                : AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
+    }
+
+    /**
+     * Get the source transport from target transport. This is only used for handover between
+     * IWLAN and cellular scenario.
+     *
+     * @param targetTransport The target transport.
+     * @return The source transport.
+     */
+    public static @TransportType int getSourceTransport(@TransportType int targetTransport) {
+        return targetTransport == AccessNetworkConstants.TRANSPORT_TYPE_WWAN
+                ? AccessNetworkConstants.TRANSPORT_TYPE_WLAN
+                : AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
+    }
+
+    /**
+     * Convert link status to string.
+     *
+     * @param linkStatus The link status.
+     * @return The link status in string format.
+     */
+    public static @NonNull String linkStatusToString(@LinkStatus int linkStatus) {
+        switch (linkStatus) {
+            case DataCallResponse.LINK_STATUS_UNKNOWN: return "UNKNOWN";
+            case DataCallResponse.LINK_STATUS_INACTIVE: return "INACTIVE";
+            case DataCallResponse.LINK_STATUS_ACTIVE: return "ACTIVE";
+            case DataCallResponse.LINK_STATUS_DORMANT: return "DORMANT";
+            default: return "UNKNOWN(" + linkStatus + ")";
+        }
     }
 }

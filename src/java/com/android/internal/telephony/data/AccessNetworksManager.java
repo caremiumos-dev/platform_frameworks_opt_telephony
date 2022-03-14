@@ -406,6 +406,24 @@ public class AccessNetworksManager extends Handler {
             }
             bindQualifiedNetworksService();
         }
+
+        if (phone.isUsingNewDataStack()) {
+            // Using post to delay the registering because data retry manager instance is created
+            // later than access networks manager.
+            post(() -> mPhone.getDataNetworkController().getDataRetryManager().registerCallback(
+                    new DataRetryManager.DataRetryManagerCallback(this::post) {
+                        @Override
+                        public void onThrottleStatusChanged(List<ThrottleStatus> throttleStatuses) {
+                            try {
+                                logl("onThrottleStatusChanged: " + throttleStatuses);
+                                mIQualifiedNetworksService.reportThrottleStatusChanged(
+                                        mPhone.getPhoneId(), throttleStatuses);
+                            } catch (Exception ex) {
+                                loge("onThrottleStatusChanged: ", ex);
+                            }
+                        }
+                    }));
+        }
     }
 
     /**
@@ -638,16 +656,16 @@ public class AccessNetworksManager extends Handler {
         for (QualifiedNetworks networks : networksList) {
             if (networks.qualifiedNetworks.length > 0) {
                 int transport = getTransportFromAccessNetwork(networks.qualifiedNetworks[0]);
-                if (getCurrentTransport(networks.apnType) != transport) {
+                if (getPreferredTransport(networks.apnType) != transport) {
                     mAccessNetworksManagerCallbacks.forEach(callback ->
                             callback.invokeFromExecutor(() ->
                                     callback.onPreferredTransportChanged(DataUtils
                                             .apnTypeToNetworkCapability(networks.apnType))));
+                    mPreferredTransports.put(networks.apnType, transport);
+                    logl("setPreferredTransports: apnType="
+                            + ApnSetting.getApnTypeString(networks.apnType) + ", transport="
+                            + AccessNetworkConstants.transportTypeToString(transport));
                 }
-                mPreferredTransports.put(networks.apnType, transport);
-                logl("setPreferredTransports: apnType="
-                        + ApnSetting.getApnTypeString(networks.apnType)
-                        + ", transport=" + AccessNetworkConstants.transportTypeToString(transport));
             }
         }
     }
