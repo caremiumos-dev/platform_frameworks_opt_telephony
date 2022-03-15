@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f6fac6_a47b5433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-03-15T18:18:12Z",
+      "side": 1,
+      "message": "Instead of making the method protected, I think the others (startNetStatPoll and resetPollStats) should be made private instead, since only DCT calls it.\nIs there a use case for making this protected?",
+      "revId": "0bf34f80fa436b51f7fe90eb0b43232f5dd4076b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
