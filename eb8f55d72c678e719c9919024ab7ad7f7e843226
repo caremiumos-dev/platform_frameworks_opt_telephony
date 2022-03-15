@@ -22,6 +22,30 @@
       },
       "revId": "eb8f55d72c678e719c9919024ab7ad7f7e843226",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faff512b_71501551",
+        "filename": "src/java/com/android/internal/telephony/PhoneConfigurationManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1435078
+      },
+      "writtenOn": "2022-03-15T08:44:49Z",
+      "side": 1,
+      "message": "I tried, wont work if just add the IllegalStateException, not sure if telephony can throws the exception stack to cts, but I think we can just throw IllegalStateException in cts tests",
+      "parentUuid": "c680f77c_483b453a",
+      "range": {
+        "startLine": 466,
+        "startChar": 8,
+        "endLine": 466,
+        "endChar": 33
+      },
+      "revId": "eb8f55d72c678e719c9919024ab7ad7f7e843226",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
