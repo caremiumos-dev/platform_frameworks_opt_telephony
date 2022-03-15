@@ -2837,11 +2837,11 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 return DisconnectCause.NORMAL;
 
             case ImsReasonInfo.CODE_SIP_FORBIDDEN:
-                return DisconnectCause.SERVER_ERROR;
-
             case ImsReasonInfo.CODE_SIP_REDIRECTED:
+            case ImsReasonInfo.CODE_SIP_BAD_REQUEST:
             case ImsReasonInfo.CODE_SIP_NOT_ACCEPTABLE:
             case ImsReasonInfo.CODE_SIP_GLOBAL_ERROR:
+            case ImsReasonInfo.CODE_SIP_SERVER_ERROR:
                 return DisconnectCause.SERVER_ERROR;
 
             case ImsReasonInfo.CODE_EMERGENCY_CALL_OVER_WFC_NOT_AVAILABLE:
@@ -2851,7 +2851,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 return DisconnectCause.WFC_SERVICE_NOT_AVAILABLE_IN_THIS_LOCATION;
 
             case ImsReasonInfo.CODE_SIP_SERVICE_UNAVAILABLE:
-            case ImsReasonInfo.CODE_SIP_SERVER_ERROR:
                 return DisconnectCause.SERVER_UNREACHABLE;
 
             case ImsReasonInfo.CODE_SIP_NOT_FOUND:
@@ -2965,7 +2964,6 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 }
                 break;
 
-            case ImsReasonInfo.CODE_SIP_BAD_REQUEST:
             case ImsReasonInfo.CODE_REJECT_CALL_ON_OTHER_SUB:
             case ImsReasonInfo.CODE_REJECT_ONGOING_E911_CALL:
             case ImsReasonInfo.CODE_REJECT_ONGOING_CALL_SETUP:
