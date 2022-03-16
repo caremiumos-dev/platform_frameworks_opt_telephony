@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33b7146_88124dd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000835
+      },
+      "writtenOn": "2022-03-16T10:44:24Z",
+      "side": 1,
+      "message": "Loads of git_master builds failed with:\n\nFAILED: out/soong/.intermediates/frameworks/opt/telephony/telephony-common/android_common/javac/telephony-common.jar\n...\nAn exception has occurred in the compiler (11.0.13). Please file a bug against the Java compiler via the Java bug reporting page (http://bugreport.java.com) after checking the Bug Database (http://bugs.java.com) for duplicates. Include your program and the following diagnostic in your report. Thank you.\njava.lang.ClassCastException: class com.sun.tools.javac.code.Symbol$ClassSymbol cannot be cast to class com.sun.tools.javac.code.Symbol$MethodSymbol (com.sun.tools.javac.code.Symbol$ClassSymbol and com.sun.tools.javac.code.Symbol$MethodSymbol are in module jdk.compiler of loader \u0027app\u0027)\n\tat jdk.compiler/com.sun.tools.javac.comp.TransTypes.visitApply(TransTypes.java:667)\n\tat jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodInvocation.accept(JCTree.java:1634)\n...\n\tat jdk.compiler/com.sun.tools.javac.main.JavaCompiler.desugar(JavaCompiler.java:1432)\n\tat jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:973)\n\tat jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:311)\n\tat jdk.compiler/com.sun.tools.javac.main.Main.compile(Main.java:170)\n\tat jdk.compiler/com.sun.tools.javac.Main.compile(Main.java:57)\n\tat jdk.compiler/com.sun.tools.javac.Main.main(Main.java:43)",
+      "revId": "9187e16aea446b15cbce2b93d346ec4105de0331",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea899e1c_6363375d",
