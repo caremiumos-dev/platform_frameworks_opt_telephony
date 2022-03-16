@@ -16,6 +16,23 @@
       "message": "Ready for review",
       "revId": "509aa936893ccb181dbe7826d5c0502867d32970",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "093dc69f_1e7a8dec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-03-16T18:06:26Z",
+      "side": 1,
+      "message": "Thank you for the patch, we do not think this is the correct place to fix this issue, since there are multiple systems interacting here and this may introduce unintended bugs. We are looking to fix this in T.",
+      "revId": "509aa936893ccb181dbe7826d5c0502867d32970",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
