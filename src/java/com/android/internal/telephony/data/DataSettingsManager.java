@@ -163,7 +163,7 @@ public class DataSettingsManager extends Handler {
         mDataConfigManager = dataNetworkController.getDataConfigManager();
         mDataEnabledOverride = getDataEnabledOverride();
         mDataConfigManager.registerForConfigUpdate(this, EVENT_DATA_CONFIG_UPDATED);
-        mSettingsObserver = new SettingsObserver(mPhone.getContext(), mPhone);
+        mSettingsObserver = new SettingsObserver(mPhone.getContext(), this);
         mSettingsObserver.observe(Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
                 EVENT_PROVISIONED_CHANGED);
         mSettingsObserver.observe(
@@ -171,6 +171,12 @@ public class DataSettingsManager extends Handler {
                 EVENT_PROVISIONING_DATA_ENABLED_CHANGED);
         mPhone.getCallTracker().registerForVoiceCallStarted(this, EVENT_CALL_STATE_CHANGED, null);
         mPhone.getCallTracker().registerForVoiceCallEnded(this, EVENT_CALL_STATE_CHANGED, null);
+        if (mPhone.getImsPhone() != null) {
+            mPhone.getImsPhone().getCallTracker().registerForVoiceCallStarted(
+                    this, EVENT_CALL_STATE_CHANGED, null);
+            mPhone.getImsPhone().getCallTracker().registerForVoiceCallEnded(
+                    this, EVENT_CALL_STATE_CHANGED, null);
+        }
         mPhone.getContext().getSystemService(TelephonyRegistryManager.class)
                 .addOnSubscriptionsChangedListener(new OnSubscriptionsChangedListener() {
                     @Override
