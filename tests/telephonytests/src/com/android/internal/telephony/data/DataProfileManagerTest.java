@@ -20,6 +20,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -35,6 +36,7 @@ import android.os.Looper;
 import android.provider.Telephony;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.TelephonyManager;
+import android.telephony.data.ApnSetting;
 import android.telephony.data.DataProfile;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
@@ -51,6 +53,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +79,8 @@ public class DataProfileManagerTest extends TelephonyTest {
     private int mPreferredApnId = 0;
 
     private DataNetworkControllerCallback mDataNetworkControllerCallback;
+
+    private boolean mSimInserted = true;
 
     private class ApnSettingContentProvider extends MockContentProvider {
         public final String[] APN_COLUMNS = new String[]{
@@ -125,7 +130,7 @@ public class DataProfileManagerTest extends TelephonyTest {
                     "",                     // user
                     "",                     // password
                     -1,                     // authtype
-                    "default,supl,mms",     // types
+                    "default,supl,mms,ia",  // types
                     "IPV4V6",               // protocol
                     "IPV4V6",               // roaming_protocol
                     1,                      // carrier_enabled
@@ -281,11 +286,12 @@ public class DataProfileManagerTest extends TelephonyTest {
 
                     logd("Query '" + PLMN + "' APN settings");
                     MatrixCursor mc = new MatrixCursor(APN_COLUMNS);
-                    mc.addRow(getFakeApn1());
-                    mc.addRow(getFakeApn2());
-                    mc.addRow(getFakeApn3());
-                    mc.addRow(getFakeApn4());
-
+                    if (mSimInserted) {
+                        mc.addRow(getFakeApn1());
+                        mc.addRow(getFakeApn2());
+                        mc.addRow(getFakeApn3());
+                        mc.addRow(getFakeApn4());
+                    }
                     return mc;
                 }
             } else if (isPathPrefixMatch(uri,
@@ -365,6 +371,8 @@ public class DataProfileManagerTest extends TelephonyTest {
                 Telephony.Carriers.CONTENT_URI.getAuthority(), mApnSettingContentProvider);
 
         doReturn(true).when(mDataConfigManager).isConfigCarrierSpecific();
+        doReturn(List.of(ApnSetting.TYPE_IA, ApnSetting.TYPE_DEFAULT))
+                .when(mDataConfigManager).getAllowedInitialAttachApnTypes();
         doAnswer(invocation -> {
             ((Runnable) invocation.getArguments()[0]).run();
             return null;
@@ -519,5 +527,72 @@ public class DataProfileManagerTest extends TelephonyTest {
         mDataNetworkControllerCallback.onInternetDataNetworkConnected(List.of(dp1, dp2));
         // The small timestamp profile should be returned.
         assertThat(mPreferredApnId).isEqualTo(dp2.getApnSetting().getId());
+    }
+
+    @Test
+    public void testSetInitialAttachDataProfile() {
+        ArgumentCaptor<DataProfile> dataProfileCaptor =
+                ArgumentCaptor.forClass(DataProfile.class);
+
+        verify(mMockedWwanDataServiceManager).setInitialAttachApn(dataProfileCaptor.capture(),
+                eq(false), eq(null));
+        assertThat(dataProfileCaptor.getValue().getApnSetting().getApnName())
+                .isEqualTo(GENERAL_PURPOSE_APN);
+    }
+
+    @Test
+    public void testSimRemoval() throws Exception {
+        testGetDataProfileForNetworkCapabilities();
+        Mockito.clearInvocations(mDataProfileManagerCallback);
+        mSimInserted = false;
+        mDataProfileManagerUT.obtainMessage(2 /*EVENT_APN_DATABASE_CHANGED*/).sendToTarget();
+        processAllMessages();
+
+        verify(mDataProfileManagerCallback).onDataProfilesChanged();
+
+        List<DataProfile> dataProfiles = mDataProfileManagerUT
+                .getDataProfilesForNetworkCapabilities(
+                        new int[]{NetworkCapabilities.NET_CAPABILITY_INTERNET});
+        assertThat(dataProfiles).isEmpty();
+
+        dataProfiles = mDataProfileManagerUT.getDataProfilesForNetworkCapabilities(
+                        new int[]{NetworkCapabilities.NET_CAPABILITY_EIMS});
+        assertThat(dataProfiles).hasSize(1);
+        assertThat(dataProfiles.get(0).getApnSetting().getApnName()).isEqualTo("sos");
+
+        dataProfiles = mDataProfileManagerUT.getDataProfilesForNetworkCapabilities(
+                new int[]{NetworkCapabilities.NET_CAPABILITY_IMS});
+        assertThat(dataProfiles).hasSize(1);
+        assertThat(dataProfiles.get(0).getApnSetting().getApnName()).isEqualTo("ims");
+    }
+
+    @Test
+    public void testSimInsertedAgain() throws Exception {
+        testSimRemoval();
+        Mockito.clearInvocations(mDataProfileManagerCallback);
+        Mockito.clearInvocations(mMockedWwanDataServiceManager);
+
+        doReturn(List.of(ApnSetting.TYPE_IMS))
+                .when(mDataConfigManager).getAllowedInitialAttachApnTypes();
+
+        mSimInserted = true;
+        mDataProfileManagerUT.obtainMessage(2 /*EVENT_APN_DATABASE_CHANGED*/).sendToTarget();
+        processAllMessages();
+
+        ArgumentCaptor<DataProfile> dataProfileCaptor =
+                ArgumentCaptor.forClass(DataProfile.class);
+
+        verify(mDataProfileManagerCallback).onDataProfilesChanged();
+        verify(mMockedWwanDataServiceManager).setInitialAttachApn(dataProfileCaptor.capture(),
+                eq(false), eq(null));
+
+        // Should only use IMS APN for initial attach
+        assertThat(dataProfileCaptor.getValue().getApnSetting().getApnName()).isEqualTo(IMS_APN);
+
+        List<DataProfile> dataProfiles = mDataProfileManagerUT
+                .getDataProfilesForNetworkCapabilities(
+                        new int[]{NetworkCapabilities.NET_CAPABILITY_IMS});
+        assertThat(dataProfiles).hasSize(1);
+        assertThat(dataProfiles.get(0).getApnSetting().getApnName()).isEqualTo(IMS_APN);
     }
 }

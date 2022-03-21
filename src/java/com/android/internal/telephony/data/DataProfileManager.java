@@ -32,6 +32,7 @@ import android.provider.Telephony;
 import android.telephony.Annotation;
 import android.telephony.Annotation.NetCapability;
 import android.telephony.Annotation.NetworkType;
+import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.data.ApnSetting;
@@ -432,31 +433,36 @@ public class DataProfileManager extends Handler {
      *
      * Note that starting from Android 13 only APNs that supports "IA" type will be used for
      * initial attach. Please update APN configuration file if needed.
+     *
+     * Some carriers might explicitly require that using "user-added" APN for initial
+     * attach. In this case, exception can be configured through
+     * {@link CarrierConfigManager#KEY_ALLOWED_INITIAL_ATTACH_APN_TYPES_STRING_ARRAY}.
      */
     private void updateInitialAttachDataProfileAtModem() {
         DataProfile initialAttachDataProfile = null;
-        if (mPreferredDataProfile != null
-                && mPreferredDataProfile.canSatisfy(NetworkCapabilities.NET_CAPABILITY_IA)) {
-            initialAttachDataProfile = mPreferredDataProfile;
-        } else {
-            initialAttachDataProfile = mAllDataProfiles.stream()
-                    .filter(dp -> dp.canSatisfy(NetworkCapabilities.NET_CAPABILITY_IA))
+
+        // Sort the data profiles so the preferred data profile is at the beginning.
+        List<DataProfile> allDataProfiles = mAllDataProfiles.stream()
+                .sorted(Comparator.comparing((DataProfile dp) -> !dp.equals(mPreferredDataProfile)))
+                .collect(Collectors.toList());
+        // Search in the order. "IA" type should be the first from getAllowedInitialAttachApnTypes.
+        for (int apnType : mDataConfigManager.getAllowedInitialAttachApnTypes()) {
+            initialAttachDataProfile = allDataProfiles.stream()
+                    .filter(dp -> dp.canSatisfy(DataUtils.apnTypeToNetworkCapability(apnType)))
                     .findFirst()
                     .orElse(null);
-        }
-
-        if (initialAttachDataProfile == null) {
-            loge("Cannot find initial attach data profile. APN database needs to be configured"
-                    + " correctly.");
-            // return here as we can't push a null data profile to the modem as initial attach APN.
-            return;
+            if (initialAttachDataProfile != null) break;
         }
 
         if (!Objects.equals(mInitialAttachDataProfile, initialAttachDataProfile)) {
             mInitialAttachDataProfile = initialAttachDataProfile;
             logl("Initial attach data profile updated as " + mInitialAttachDataProfile);
-            mWwanDataServiceManager.setInitialAttachApn(mInitialAttachDataProfile,
-                    mPhone.getServiceState().getDataRoamingFromRegistration(), null);
+            // TODO: Push the null data profile to modem on new AIDL HAL. Modem should clear the IA
+            //  APN.
+            if (mInitialAttachDataProfile != null) {
+                mWwanDataServiceManager.setInitialAttachApn(mInitialAttachDataProfile,
+                        mPhone.getServiceState().getDataRoamingFromRegistration(), null);
+            }
         }
     }
 
