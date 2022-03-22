@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "119f5c7e_21719790",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-03-22T20:36:36Z",
+      "side": 1,
+      "message": "Pure CP from internal to aosp, with UT verifed pass.",
+      "revId": "97ee318407c8f50152d3bd360412388e0ea420c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
