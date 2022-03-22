@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0394536_e65a7d81",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2968,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-03-22T18:45:23Z",
+      "side": 0,
+      "message": "These responses were previously used for other disconnect causes... are we sure this is not a carrier specific issue where we need to map BAD_REQUEST/REDIRECTED for orange to SERVER_ERROR but CODE_SIP_BAD_REQUEST should be mapped to INCOMING_AUTO_REJECTED for others?",
+      "range": {
+        "startLine": 2968,
+        "startChar": 31,
+        "endLine": 2968,
+        "endChar": 51
+      },
+      "revId": "47650fb4301b2c69ae769131d9384d80eec05131",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
