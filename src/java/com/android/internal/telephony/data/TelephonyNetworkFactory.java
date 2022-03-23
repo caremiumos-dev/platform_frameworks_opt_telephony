@@ -156,12 +156,16 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_CBS)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_IA)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_RCS)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_MMTEL)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_MCX)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_LATENCY)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_BANDWIDTH)
                 .setNetworkSpecifier(new TelephonyNetworkSpecifier.Builder()
                 .setSubscriptionId(subscriptionId).build());
         return builder.build();
@@ -223,9 +227,13 @@ public class TelephonyNetworkFactory extends NetworkFactory {
 
     private int getTransportTypeFromNetworkRequest(TelephonyNetworkRequest networkRequest) {
         if (PhoneFactory.getDefaultPhone().isUsingNewDataStack()) {
-            return PhoneFactory.getDefaultPhone().getAccessNetworksManager()
-                    .getPreferredTransportByNetworkCapability(
-                            networkRequest.getApnTypeNetworkCapability());
+            int transport = AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
+            int capability = networkRequest.getApnTypeNetworkCapability();
+            if (capability >= 0) {
+                transport = PhoneFactory.getDefaultPhone().getAccessNetworksManager()
+                        .getPreferredTransportByNetworkCapability(capability);
+            }
+            return transport;
         } else {
             int apnType = ApnContext.getApnTypeFromNetworkRequest(
                     networkRequest.getNativeNetworkRequest());

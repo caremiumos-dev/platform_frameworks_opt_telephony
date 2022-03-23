@@ -696,10 +696,9 @@ public class AccessNetworksManager extends Handler {
     public @TransportType int getPreferredTransportByNetworkCapability(
             @NetCapability int networkCapability) {
         int apnType = DataUtils.networkCapabilityToApnType(networkCapability);
+        // For non-APN type capabilities, always route to WWAN.
         if (apnType == ApnSetting.TYPE_NONE) {
-            // The network capability can't be converted to APN type.
-            throw new IllegalArgumentException("Illegal network capability "
-                    + DataUtils.networkCapabilityToString(networkCapability) + " provided.");
+            return AccessNetworkConstants.TRANSPORT_TYPE_WWAN;
         }
         return getPreferredTransport(apnType);
     }
@@ -711,8 +710,14 @@ public class AccessNetworksManager extends Handler {
      */
     public boolean isAnyApnOnIwlan() {
         for (int apnType : AccessNetworksManager.SUPPORTED_APN_TYPES) {
-            if (getCurrentTransport(apnType) == AccessNetworkConstants.TRANSPORT_TYPE_WLAN) {
-                return true;
+            if (mPhone.isUsingNewDataStack()) {
+                if (getPreferredTransport(apnType) == AccessNetworkConstants.TRANSPORT_TYPE_WLAN) {
+                    return true;
+                }
+            } else {
+                if (getCurrentTransport(apnType) == AccessNetworkConstants.TRANSPORT_TYPE_WLAN) {
+                    return true;
+                }
             }
         }
         return false;

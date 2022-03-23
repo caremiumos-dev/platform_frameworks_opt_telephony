@@ -94,6 +94,7 @@ import com.android.internal.telephony.data.DataConfigManager;
 import com.android.internal.telephony.data.DataEnabledOverride;
 import com.android.internal.telephony.data.DataNetworkController;
 import com.android.internal.telephony.data.DataProfileManager;
+import com.android.internal.telephony.data.DataRetryManager;
 import com.android.internal.telephony.data.DataServiceManager;
 import com.android.internal.telephony.data.DataSettingsManager;
 import com.android.internal.telephony.data.LinkBandwidthEstimator;
@@ -208,6 +209,8 @@ public abstract class TelephonyTest {
     protected DcTracker mDcTracker;
     @Mock
     protected DataNetworkController mDataNetworkController;
+    @Mock
+    protected DataRetryManager mDataRetryManager;
     @Mock
     protected DataSettingsManager mDataSettingsManager;
     @Mock
@@ -631,6 +634,7 @@ public abstract class TelephonyTest {
         doReturn(mCellLocation).when(mCellIdentity).asCellLocation();
         doReturn(mDataConfigManager).when(mDataNetworkController).getDataConfigManager();
         doReturn(mDataProfileManager).when(mDataNetworkController).getDataProfileManager();
+        doReturn(mDataRetryManager).when(mDataNetworkController).getDataRetryManager();
 
         //mUiccController
         doReturn(mUiccCardApplication3gpp).when(mUiccController).getUiccCardApplication(anyInt(),
@@ -722,6 +726,7 @@ public abstract class TelephonyTest {
         doReturn(true).when(mDataEnabledSettings).isDataEnabled();
         doReturn(true).when(mDataEnabledSettings).isDataEnabled(anyInt());
         doReturn(true).when(mDataEnabledSettings).isInternalDataEnabled();
+        doReturn(true).when(mDataSettingsManager).isDataEnabled();
         doReturn(mNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
                 anyInt(), anyInt());
         doReturn(new HalVersion(1, 4)).when(mPhone).getHalVersion();
@@ -839,6 +844,12 @@ public abstract class TelephonyTest {
     }
 
     protected void tearDown() throws Exception {
+        // Clear all remaining messages
+        if (!mTestableLoopers.isEmpty()) {
+            for (TestableLooper looper : mTestableLoopers) {
+                looper.getLooper().quit();
+            }
+        }
         // Ensure there are no references to handlers between tests.
         PhoneConfigurationManager.unregisterAllMultiSimConfigChangeRegistrants();
         // unmonitor TestableLooper for TelephonyTest class
@@ -1111,12 +1122,49 @@ public abstract class TelephonyTest {
     }
 
     /**
+     * @return The longest delay from all the message queues.
+     */
+    private long getLongestDelay() {
+        long delay = 0;
+        for (TestableLooper looper : mTestableLoopers) {
+            MessageQueue queue = looper.getLooper().getQueue();
+            try {
+                Message msg = (Message) MESSAGE_QUEUE_FIELD.get(queue);
+                while (msg != null) {
+                    delay = Math.max(msg.getWhen(), delay);
+                    msg = (Message) MESSAGE_NEXT_FIELD.get(msg);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Access failed in TelephonyTest", e);
+            }
+        }
+        return delay;
+    }
+
+    /**
+     * @return {@code true} if there are any messages in the queue.
+     */
+    private boolean messagesExist() {
+        for (TestableLooper looper : mTestableLoopers) {
+            MessageQueue queue = looper.getLooper().getQueue();
+            try {
+                Message msg = (Message) MESSAGE_QUEUE_FIELD.get(queue);
+                if (msg != null) return true;
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Access failed in TelephonyTest", e);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Handle all messages including the delayed messages.
      */
     public void processAllFutureMessages() {
-        processAllMessages();
-        moveTimeForward(TimeUnit.DAYS.toMillis(1));
-        processAllMessages();
+        while (messagesExist()) {
+            moveTimeForward(getLongestDelay());
+            processAllMessages();
+        }
     }
 
     /**

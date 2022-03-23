@@ -17,7 +17,6 @@
 package com.android.internal.telephony.data;
 
 import android.annotation.NonNull;
-import android.annotation.Nullable;
 import android.annotation.StringDef;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,7 +42,6 @@ import android.telephony.data.ApnSetting;
 import android.text.TextUtils;
 import android.util.IndentingPrintWriter;
 
-import com.android.internal.R;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.data.DataNetworkController.HandoverRule;
 import com.android.internal.telephony.data.DataRetryManager.DataHandoverRetryRule;
@@ -219,9 +217,6 @@ public class DataConfigManager extends Handler {
     /** A map of network types to the downlink and uplink bandwidth values for that network type */
     private @NonNull final @DataConfigNetworkType Map<String, DataNetwork.NetworkBandwidth>
             mBandwidthMap = new ConcurrentHashMap<>();
-    /** A map of network types to the TCP buffer sizes for that network type */
-    private @NonNull final @DataConfigNetworkType Map<String, String> mTcpBufferSizeMap =
-            new ConcurrentHashMap<>();
     /** Rules for handover between IWLAN and cellular network. */
     private @NonNull final List<HandoverRule> mHandoverRuleList = new ArrayList<>();
 
@@ -298,7 +293,6 @@ public class DataConfigManager extends Handler {
         updateSingleDataNetworkTypeList();
         updateUnmeteredNetworkTypes();
         updateBandwidths();
-        updateTcpBuffers();
         updateHandoverRules();
 
         log("Data config updated. Config is " + (isConfigCarrierSpecific() ? "" : "not ")
@@ -430,17 +424,43 @@ public class DataConfigManager extends Handler {
     }
 
     /**
-     * @return The metered APN types when connected to a home network
+     * Get the metered network capabilities.
+     *
+     * @param isRoaming {@code true} for roaming scenario.
+     *
+     * @return The metered network capabilities when connected to a home network.
      */
-    public @NonNull @ApnType Set<Integer> getMeteredApnTypes() {
-        return Collections.unmodifiableSet(mMeteredApnTypes);
+    public @NonNull @NetCapability Set<Integer> getMeteredNetworkCapabilities(boolean isRoaming) {
+        Set<Integer> meteredApnTypes = isRoaming ? mRoamingMeteredApnTypes : mMeteredApnTypes;
+        return meteredApnTypes.stream()
+                .map(DataUtils::apnTypeToNetworkCapability)
+                .filter(cap -> cap >= 0)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
-     * @return The metered APN types when roaming
+     * Check if the network capability metered.
+     *
+     * @param networkCapability The network capability.
+     * @param isRoaming {@code true} for roaming scenario.
+     * @return {@code true} if the network capability is metered.
      */
-    public @NonNull @ApnType Set<Integer> getMeteredApnTypesWhenRoaming() {
-        return Collections.unmodifiableSet(mRoamingMeteredApnTypes);
+    public boolean isMeteredCapability(@NetCapability int networkCapability, boolean isRoaming) {
+        return getMeteredNetworkCapabilities(isRoaming).contains(networkCapability);
+    }
+
+    /**
+     * Check if the network capabilities are metered. If one of the capabilities is metered, then
+     * the capabilities are metered.
+     *
+     * @param networkCapabilities The network capabilities.
+     * @param isRoaming {@code true} for roaming scenario.
+     * @return {@code true} if the capabilities are metered.
+     */
+    public boolean isAnyMeteredCapability(@NonNull @NetCapability int[] networkCapabilities,
+            boolean isRoaming) {
+        return Arrays.stream(networkCapabilities).boxed()
+                .anyMatch(cap -> isMeteredCapability(cap, isRoaming));
     }
 
     /**
@@ -606,45 +626,18 @@ public class DataConfigManager extends Handler {
     }
 
     /**
-     * Update the TCP buffer sizes from the carrier config.
-     */
-    private void updateTcpBuffers() {
-        synchronized (this) {
-            mTcpBufferSizeMap.clear();
-            String[] buffers = mCarrierConfig.getStringArray(
-                    CarrierConfigManager.KEY_TCP_BUFFERS_STRING_ARRAY);
-            if (buffers != null) {
-                for (String buffer : buffers) {
-                    // split[0] = network type as string
-                    // split[1] = rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
-                    String[] split = buffer.split(":");
-                    if (split.length != 2) {
-                        loge("Invalid TCP buffer sizes: " + buffer);
-                        continue;
-                    }
-                    if (split[1].split(",").length != 6) {
-                        loge("Invalid TCP buffer sizes for " + split[0] + ": " + split[1]);
-                        continue;
-                    }
-                    mTcpBufferSizeMap.put(split[0], split[1]);
-                }
-            }
-        }
-    }
-
-    /**
      * Get the TCP config string, used by {@link LinkProperties#setTcpBufferSizes(String)}.
      * The config string will have the following form, with values in bytes:
      * "read_min,read_default,read_max,write_min,write_default,write_max"
      *
-     * @param networkType The network type. Note that {@link TelephonyManager#NETWORK_TYPE_LTE_CA}
-     *                    can be used for LTE CA even though it's not a radio access technology.
-     * @param serviceState The service state, used to determine NR state.
-     * @return The TCP configuration string for the given network type or null if unavailable.
+     * Note that starting from Android 13, the TCP buffer size is fixed after boot up, and should
+     * never be changed based on carriers or the network types. The value should be configured
+     * appropriately based on the device's memory and performance.
+     *
+     * @return The TCP configuration string.
      */
-    public @Nullable String getTcpConfigString(@NetworkType int networkType,
-            @NonNull ServiceState serviceState) {
-        return mTcpBufferSizeMap.get(getDataConfigNetworkType(networkType, serviceState));
+    public @NonNull String getTcpConfigString() {
+        return mResources.getString(com.android.internal.R.string.config_tcp_buffers);
     }
 
     /**
@@ -652,7 +645,8 @@ public class DataConfigManager extends Handler {
      * does not complete within the window, the data network will be torn down after timeout.
      */
     public long getImsDeregistrationDelay() {
-        return mResources.getInteger(R.integer.config_delay_for_ims_dereg_millis);
+        return mResources.getInteger(
+                com.android.internal.R.integer.config_delay_for_ims_dereg_millis);
     }
 
     /**
@@ -662,6 +656,15 @@ public class DataConfigManager extends Handler {
     public boolean shouldPersistIwlanDataNetworksWhenDataServiceRestarted() {
         return mResources.getBoolean(com.android.internal.R.bool
                 .config_wlan_data_service_conn_persistence_on_restart);
+    }
+
+    /**
+     * @return {@code true} if tearing down IMS data network should be delayed until the voice call
+     * ends.
+     */
+    public boolean isImsDelayTearDownEnabled() {
+        return mCarrierConfig.getBoolean(
+                CarrierConfigManager.KEY_DELAY_IMS_TEAR_DOWN_UNTIL_CALL_END_BOOL);
     }
 
     /**
@@ -824,6 +827,32 @@ public class DataConfigManager extends Handler {
     }
 
     /**
+     * @return The PCO id used for determine if data networks are using NR advanced networks. 0
+     * indicates this feature is disabled.
+     */
+    public int getNrAdvancedCapablePcoId() {
+        return mCarrierConfig.getInt(CarrierConfigManager.KEY_NR_ADVANCED_CAPABLE_PCO_ID_INT);
+    }
+
+    /**
+     * @return The allowed APN types for initial attach. The order in the list determines the
+     * priority of it being considered as IA APN. Note this should be only used for some exception
+     * cases that we need to use "user-added" APN for initial attach. The regular way to configure
+     * IA APN is by adding "IA" type to the APN in APN config.
+     */
+    public @NonNull @ApnType List<Integer> getAllowedInitialAttachApnTypes() {
+        String[] apnTypesArray = mCarrierConfig.getStringArray(
+                CarrierConfigManager.KEY_ALLOWED_INITIAL_ATTACH_APN_TYPES_STRING_ARRAY);
+        if (apnTypesArray != null) {
+            return Arrays.stream(apnTypesArray)
+                    .map(ApnSetting::getApnTypesBitmaskFromString)
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
+    }
+
+    /**
      * Registration point for subscription info ready
      *
      * @param h handler to notify
@@ -903,15 +932,13 @@ public class DataConfigManager extends Handler {
                 + shouldResetDataThrottlingWhenTacChanges());
         pw.println("Data service package name=" + getDataServicePackageName());
         pw.println("Default MTU=" + getDefaultMtu());
-        pw.println("TCP buffer sizes:");
-        pw.increaseIndent();
-        mTcpBufferSizeMap.forEach((key, value) -> pw.println(key + ":" + value));
-        pw.decreaseIndent();
+        pw.println("TCP buffer sizes:" + getTcpConfigString());
         pw.println("getImsDeregistrationDelay=" + getImsDeregistrationDelay());
         pw.println("shouldPersistIwlanDataNetworksWhenDataServiceRestarted="
                 + shouldPersistIwlanDataNetworksWhenDataServiceRestarted());
         pw.println("Bandwidth estimation source=" + mResources.getString(
                 com.android.internal.R.string.config_bandwidthEstimateSource));
+        pw.println("isDelayTearDownImsEnabled=" + isImsDelayTearDownEnabled());
         pw.decreaseIndent();
     }
 }
