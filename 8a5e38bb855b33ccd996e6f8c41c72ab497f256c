@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efad5909_1f6946ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-03-23T23:05:30Z",
+      "side": 1,
+      "message": "aosp build break by VoiceCallSessionStats.java. Wait for it to recover and pass TH.",
+      "revId": "8a5e38bb855b33ccd996e6f8c41c72ab497f256c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
