@@ -62,6 +62,7 @@ import android.telephony.TelephonyRegistryManager;
 import android.telephony.UiccAccessRule;
 import android.telephony.UiccPortInfo;
 import android.telephony.UiccSlotInfo;
+import android.telephony.UiccSlotMapping;
 import android.telephony.euicc.EuiccManager;
 import android.text.TextUtils;
 import android.util.EventLog;
@@ -71,7 +72,8 @@ import android.util.Log;
 import com.android.ims.ImsManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.IccCardConstants.State;
-import com.android.internal.telephony.dataconnection.DataEnabledOverride;
+import com.android.internal.telephony.data.DataEnabledOverride;
+import com.android.internal.telephony.data.PhoneSwitcher;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
 import com.android.internal.telephony.uicc.IccUtils;
 import com.android.internal.telephony.uicc.UiccCard;
@@ -1162,9 +1164,12 @@ public class SubscriptionController extends ISub.Stub {
         for (UiccSlot uiccSlot : uiccSlots) {
             if (uiccSlot != null && uiccSlot.getCardState() != null
                     && uiccSlot.getCardState().isCardPresent()
-                    && !uiccSlot.isEuicc()
-                    && !TextUtils.isEmpty(uiccSlot.getIccId())) {
-                ret.add(IccUtils.stripTrailingFs(uiccSlot.getIccId()));
+                    && !uiccSlot.isEuicc()) {
+                // Non euicc slots will have single port, so use default port index.
+                String iccId = uiccSlot.getIccId(TelephonyManager.DEFAULT_PORT_INDEX);
+                if (!TextUtils.isEmpty(iccId)) {
+                    ret.add(IccUtils.stripTrailingFs(iccId));
+                }
             }
         }
 
@@ -4092,7 +4097,11 @@ public class SubscriptionController extends ISub.Stub {
                     PhoneConfigurationManager.getInstance().switchMultiSimConfig(
                             mTelephonyManager.getSupportedModemCount());
                 } else {
-                    UiccController.getInstance().switchSlots(new int[]{physicalSlotIndex}, null);
+                    List<UiccSlotMapping> slotMapping = new ArrayList<>();
+                    // As this is single sim mode, set port index to 0 and logical slot index is 0
+                    slotMapping.add(new UiccSlotMapping(TelephonyManager.DEFAULT_PORT_INDEX,
+                            physicalSlotIndex, 0));
+                    UiccController.getInstance().switchSlots(slotMapping, null);
                 }
             }
             return true;
@@ -4677,7 +4686,7 @@ public class SubscriptionController extends ISub.Stub {
     /**
      * @hide
      */
-    protected static void invalidateActiveDataSubIdCaches() {
+    public static void invalidateActiveDataSubIdCaches() {
         if (sCachingEnabled) {
             SubscriptionManager.invalidateActiveDataSubIdCaches();
         }

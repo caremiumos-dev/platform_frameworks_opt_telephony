@@ -76,10 +76,13 @@ import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
 import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.data.AccessNetworksManager;
+import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.data.DataSettingsManager;
+import com.android.internal.telephony.data.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.DataConnectionReasons;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
-import com.android.internal.telephony.dataconnection.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
@@ -235,8 +238,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_BARRING_INFO_CHANGED = 58;
     protected static final int EVENT_LINK_CAPACITY_CHANGED = 59;
     protected static final int EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION = 60;
+    protected static final int EVENT_SET_VONR_ENABLED_DONE = 61;
 
-    protected static final int EVENT_LAST = EVENT_RESET_CARRIER_KEY_IMSI_ENCRYPTION;
+    protected static final int EVENT_LAST = EVENT_SET_VONR_ENABLED_DONE;
 
     // For shared prefs.
     private static final String GSM_ROAMING_LIST_OVERRIDE_PREFIX = "gsm_roaming_list_";
@@ -304,6 +308,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     // WLAN DcTracker is for IWLAN data connection. For IWLAN legacy mode, only one (WWAN) DcTracker
     // will be created.
     protected final SparseArray<DcTracker> mDcTrackers = new SparseArray<>();
+    protected DataNetworkController mDataNetworkController;
     /* Used for dispatching signals to configured carrier apps */
     protected CarrierSignalAgent mCarrierSignalAgent;
     /* Used for dispatching carrier action from carrier apps */
@@ -342,6 +347,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected DeviceStateMonitor mDeviceStateMonitor;
     protected DisplayInfoController mDisplayInfoController;
     protected TransportManager mTransportManager;
+    protected AccessNetworksManager mAccessNetworksManager;
     protected DataEnabledSettings mDataEnabledSettings;
     // Used for identify the carrier of current subscription
     protected CarrierResolver mCarrierResolver;
@@ -1882,9 +1888,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * @return The instance of transport manager
+     * @return The instance of transport manager.
      */
     public TransportManager getTransportManager() {
+        return null;
+    }
+
+    /**
+     * @return The instance of access networks manager.
+     */
+    public AccessNetworksManager getAccessNetworksManager() {
         return null;
     }
 
@@ -4006,8 +4019,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /**
      * Deletes all the keys for a given Carrier from the device keystore.
+     * @param carrierId : the carrier ID which needs to be matched in the delete query
      */
-    public void deleteCarrierInfoForImsiEncryption() {
+    public void deleteCarrierInfoForImsiEncryption(int carrierId) {
         return;
     }
 
@@ -4870,6 +4884,45 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return null;
     }
 
+    /**
+     * @return The data network controller
+     */
+    public @Nullable DataNetworkController getDataNetworkController() {
+        return mDataNetworkController;
+    }
+
+    /**
+     * @return The data settings manager
+     */
+    public @Nullable DataSettingsManager getDataSettingsManager() {
+        if (mDataNetworkController == null) return null;
+        return mDataNetworkController.getDataSettingsManager();
+    }
+
+    /**
+     * Used in unit tests to set whether the AllowedNetworkTypes is loaded from Db.  Should not
+     * be used otherwise.
+     *
+     * @return {@code true} if the AllowedNetworkTypes is loaded from Db,
+     * {@code false} otherwise.
+     */
+    @VisibleForTesting
+    public boolean isAllowedNetworkTypesLoadedFromDb() {
+        return mIsAllowedNetworkTypesLoadedFromDb;
+    }
+
+    /**
+     * @return {@code true} if using the new telephony data stack. See go/atdr for the design.
+     */
+    // TODO: Temp code. Use cl/399526916 for future canary process. After rolling out to 100%
+    //  dogfooders, the code below should be completely removed.
+    public boolean isUsingNewDataStack() {
+        return false;
+        /*String configValue = DeviceConfig.getProperty(DeviceConfig.NAMESPACE_TELEPHONY,
+                "new_telephony_data_enabled");
+        return Boolean.parseBoolean(configValue);*/
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("Phone: subId=" + getSubId());
         pw.println(" mPhoneId=" + mPhoneId);
@@ -4906,6 +4959,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" needsOtaServiceProvisioning=" + needsOtaServiceProvisioning());
         pw.println(" isInEmergencySmsMode=" + isInEmergencySmsMode());
         pw.println(" isEcmCanceledForEmergency=" + isEcmCanceledForEmergency());
+        pw.println(" isUsingNewDataStack=" + isUsingNewDataStack());
         pw.println(" service state=" + getServiceState());
         pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
@@ -4929,6 +4983,16 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                     pw.println("++++++++++++++++++++++++++++++++");
                 }
             }
+        }
+
+        if (mDataNetworkController != null) {
+            try {
+                mDataNetworkController.dump(fd, pw, args);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            pw.flush();
+            pw.println("++++++++++++++++++++++++++++++++");
         }
 
         if (getServiceStateTracker() != null) {
@@ -5031,8 +5095,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             pw.println("++++++++++++++++++++++++++++++++");
         }
 
-        if (mTransportManager != null) {
-            mTransportManager.dump(fd, pw, args);
+        if (isUsingNewDataStack()) {
+            if (mAccessNetworksManager != null) {
+                mAccessNetworksManager.dump(fd, pw, args);
+            }
+        } else {
+            if (mTransportManager != null) {
+                mTransportManager.dump(fd, pw, args);
+            }
         }
 
         if (mCi != null && mCi instanceof RIL) {
@@ -5084,17 +5154,5 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     private static String pii(String s) {
         return Rlog.pii(LOG_TAG, s);
-    }
-
-    /**
-     * Used in unit tests to set whether the AllowedNetworkTypes is loaded from Db.  Should not
-     * be used otherwise.
-     *
-     * @return {@code true} if the AllowedNetworkTypes is loaded from Db,
-     * {@code false} otherwise.
-     */
-    @VisibleForTesting
-    public boolean isAllowedNetworkTypesLoadedFromDb() {
-        return mIsAllowedNetworkTypesLoadedFromDb;
     }
 }

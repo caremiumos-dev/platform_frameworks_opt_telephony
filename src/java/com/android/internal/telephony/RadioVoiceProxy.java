@@ -56,14 +56,13 @@ public class RadioVoiceProxy extends RadioServiceProxy {
      */
     @Override
     public void clear() {
-        mHalVersion = RIL.RADIO_HAL_VERSION_UNKNOWN;
-        mRadioProxy = null;
+        super.clear();
         mVoiceProxy = null;
     }
 
     /**
      * Check whether a RadioVoice implementation exists
-     * @return false if there is neither a HIDL nor AIDL implementation
+     * @return true if there is neither a HIDL nor AIDL implementation
      */
     @Override
     public boolean isEmpty() {
@@ -81,6 +80,20 @@ public class RadioVoiceProxy extends RadioServiceProxy {
             mVoiceProxy.acceptCall(serial);
         } else {
             mRadioProxy.acceptCall(serial);
+        }
+    }
+
+    /**
+     * Call IRadioVoice#cancelPendingUssd
+     * @param serial Serial number of request
+     * @throws RemoteException
+     */
+    public void cancelPendingUssd(int serial) throws RemoteException {
+        if (isEmpty()) return;
+        if (isAidl()) {
+            mVoiceProxy.cancelPendingUssd(serial);
+        } else {
+            mRadioProxy.cancelPendingUssd(serial);
         }
     }
 
@@ -484,6 +497,21 @@ public class RadioVoiceProxy extends RadioServiceProxy {
             mVoiceProxy.sendDtmf(serial, s);
         } else {
             mRadioProxy.sendDtmf(serial, s);
+        }
+    }
+
+    /**
+     * Call IRadioVoice#sendUssd
+     * @param serial Serial number of request
+     * @param ussd String containing the USSD request in UTF-8 format
+     * @throws RemoteException
+     */
+    public void sendUssd(int serial, String ussd) throws RemoteException {
+        if (isEmpty()) return;
+        if (isAidl()) {
+            mVoiceProxy.sendUssd(serial, ussd);
+        } else {
+            mRadioProxy.sendUssd(serial, ussd);
         }
     }
 

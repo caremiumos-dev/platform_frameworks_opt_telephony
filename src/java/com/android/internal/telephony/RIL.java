@@ -692,9 +692,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     /**
      * Returns a {@link RadioDataProxy}, {@link RadioMessagingProxy}, {@link RadioModemProxy},
-     * {@link RadioNetworkProxy}, {@link RadioSimProxy}, {@link RadioVoiceProxy}, or null if the
-     * service is not available.
+     * {@link RadioNetworkProxy}, {@link RadioSimProxy}, {@link RadioVoiceProxy}, or an empty {@link RadioServiceProxy}
+     * if the service is not available.
      */
+    @NonNull
     public <T extends RadioServiceProxy> T getRadioServiceProxy(Class<T> serviceClass,
             Message result) {
         if (serviceClass == RadioDataProxy.class) {
@@ -715,16 +716,18 @@ public class RIL extends BaseCommands implements CommandsInterface {
         if (serviceClass == RadioVoiceProxy.class) {
             return (T) getRadioServiceProxy(VOICE_SERVICE, result);
         }
+        riljLoge("getRadioServiceProxy: unrecognized " + serviceClass);
         return null;
     }
 
     /**
-     * Returns a {@link RadioServiceProxy} or null if the service is not available.
+     * Returns a {@link RadioServiceProxy}, which is empty if the service is not available.
      * For RADIO_SERVICE, use {@link #getRadioProxy} instead, as this will always return null.
      */
     @VisibleForTesting
+    @NonNull
     public synchronized RadioServiceProxy getRadioServiceProxy(int service, Message result) {
-        if (!SubscriptionManager.isValidPhoneId(mPhoneId)) return null;
+        if (!SubscriptionManager.isValidPhoneId(mPhoneId)) return mServiceProxies.get(service);
         if (!mIsCellularSupported) {
             if (RILJ_LOGV) riljLog("getRadioServiceProxy: Not calling getService(): wifi-only");
             if (result != null) {
@@ -732,7 +735,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                         CommandException.fromRilErrno(RADIO_NOT_AVAILABLE));
                 result.sendToTarget();
             }
-            return null;
+            return mServiceProxies.get(service);
         }
 
         RadioServiceProxy serviceProxy = mServiceProxies.get(service);
@@ -2035,9 +2038,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     @Override
     public void sendUSSD(String ussd, Message result) {
-        RadioMessagingProxy messagingProxy =
-                getRadioServiceProxy(RadioMessagingProxy.class, result);
-        if (!messagingProxy.isEmpty()) {
+        RadioVoiceProxy voiceProxy =
+                getRadioServiceProxy(RadioVoiceProxy.class, result);
+        if (!voiceProxy.isEmpty()) {
             RILRequest rr = obtainRequest(RIL_REQUEST_SEND_USSD, result, mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
@@ -2048,18 +2051,18 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
 
             try {
-                messagingProxy.sendUssd(rr.mSerial, RILUtils.convertNullToEmptyString(ussd));
+                voiceProxy.sendUssd(rr.mSerial, RILUtils.convertNullToEmptyString(ussd));
             } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(MESSAGING_SERVICE, "sendUSSD", e);
+                handleRadioProxyExceptionForRR(VOICE_SERVICE, "sendUssd", e);
             }
         }
     }
 
     @Override
     public void cancelPendingUssd(Message result) {
-        RadioMessagingProxy messagingProxy =
-                getRadioServiceProxy(RadioMessagingProxy.class, result);
-        if (!messagingProxy.isEmpty()) {
+        RadioVoiceProxy voiceProxy =
+                getRadioServiceProxy(RadioVoiceProxy.class, result);
+        if (!voiceProxy.isEmpty()) {
             RILRequest rr = obtainRequest(RIL_REQUEST_CANCEL_USSD, result, mRILDefaultWorkSource);
 
             if (RILJ_LOGD) {
@@ -2067,9 +2070,9 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
 
             try {
-                messagingProxy.cancelPendingUssd(rr.mSerial);
+                voiceProxy.cancelPendingUssd(rr.mSerial);
             } catch (RemoteException | RuntimeException e) {
-                handleRadioProxyExceptionForRR(MESSAGING_SERVICE, "cancelPendingUssd", e);
+                handleRadioProxyExceptionForRR(VOICE_SERVICE, "cancelPendingUssd", e);
             }
         }
     }
@@ -3243,7 +3246,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
             if (RILJ_LOGD) {
                 riljLog(rr.serialString() + "> " + RILUtils.requestToString(rr.mRequest)
-                        + " featureCode = " + featureCode);
+                        + " featureCode = " + Rlog.pii(RILJ_LOG_TAG, featureCode));
             }
 
             try {
@@ -5658,7 +5661,22 @@ public class RIL extends BaseCommands implements CommandsInterface {
             }
             s = sb.toString();
         } else {
-            s = ret.toString();
+            // Check if toString() was overridden. Java classes created from HIDL have a built-in
+            // toString() method, but AIDL classes only have it if the parcelable contains a
+            // @JavaDerive annotation. Manually convert to String as a backup for AIDL parcelables
+            // missing the annotation.
+            boolean toStringExists = false;
+            try {
+                toStringExists = ret.getClass().getMethod("toString").getDeclaringClass()
+                        != Object.class;
+            } catch (NoSuchMethodException e) {
+                Rlog.e(RILJ_LOG_TAG, e.getMessage());
+            }
+            if (toStringExists) {
+                s = ret.toString();
+            } else {
+                s = RILUtils.convertToString(ret) + " [convertToString]";
+            }
         }
         return s;
     }

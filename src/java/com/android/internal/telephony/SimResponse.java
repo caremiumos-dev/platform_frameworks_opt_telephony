@@ -122,7 +122,7 @@ public class SimResponse extends IRadioSimResponse.Stub {
 
         int carrierRestrictionDefault =
                 CarrierRestrictionRules.CARRIER_RESTRICTION_DEFAULT_NOT_ALLOWED;
-        if (carrierRestrictions.priority && !carrierRestrictions.allowedCarriersPrioritized) {
+        if (!carrierRestrictions.allowedCarriersPrioritized) {
             carrierRestrictionDefault = CarrierRestrictionRules.CARRIER_RESTRICTION_DEFAULT_ALLOWED;
         }
 
@@ -290,7 +290,7 @@ public class SimResponse extends IRadioSimResponse.Stub {
 
         if (rr != null) {
             IccIoResult ret = new IccIoResult(iccIo.sw1, iccIo.sw2,
-                    TextUtils.isEmpty(iccIo.simResponse) ? null : iccIo.simResponse);
+                    TextUtils.isEmpty(iccIo.simResponse) ? null : iccIo.simResponse.getBytes());
             if (responseInfo.error == RadioError.NONE) {
                 RadioResponse.sendMessageResponse(rr.mResult, ret);
             }

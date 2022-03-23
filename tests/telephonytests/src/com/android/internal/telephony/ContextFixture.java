@@ -59,6 +59,7 @@ import android.database.MatrixCursor;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkPolicyManager;
 import android.net.Uri;
 import android.net.vcn.VcnManager;
 import android.net.wifi.WifiManager;
@@ -80,6 +81,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyRegistryManager;
 import android.telephony.euicc.EuiccManager;
+import android.telephony.ims.ImsManager;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import android.test.mock.MockContext;
@@ -286,6 +288,8 @@ public class ContextFixture implements TestFixture<Context> {
                     return mPowerWhitelistManager;
                 case Context.LOCATION_SERVICE:
                     return mLocationManager;
+                case Context.NETWORK_POLICY_SERVICE:
+                    return mNetworkPolicyManager;
                 default:
                     return null;
             }
@@ -321,6 +325,12 @@ public class ContextFixture implements TestFixture<Context> {
                 return Context.KEYGUARD_SERVICE;
             } else if (serviceClass == VcnManager.class) {
                 return Context.VCN_MANAGEMENT_SERVICE;
+            } else if (serviceClass == ImsManager.class) {
+                return Context.TELEPHONY_IMS_SERVICE;
+            } else if (serviceClass == TelephonyRegistryManager.class) {
+                return Context.TELEPHONY_REGISTRY_SERVICE;
+            } else if (serviceClass == NetworkPolicyManager.class) {
+                return Context.NETWORK_POLICY_SERVICE;
             }
             return super.getSystemServiceName(serviceClass);
         }
@@ -693,6 +703,7 @@ public class ContextFixture implements TestFixture<Context> {
     private final LocationManager mLocationManager = mock(LocationManager.class);
     private final KeyguardManager mKeyguardManager = mock(KeyguardManager.class);
     private final VcnManager mVcnManager = mock(VcnManager.class);
+    private final NetworkPolicyManager mNetworkPolicyManager = mock(NetworkPolicyManager.class);
 
     private final ContentProvider mContentProvider = spy(new FakeContentProvider());
 
