@@ -22,6 +22,30 @@
       },
       "revId": "47650fb4301b2c69ae769131d9384d80eec05131",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac19d290_63268801",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2968,
+      "author": {
+        "id": 1299902
+      },
+      "writtenOn": "2022-03-23T06:36:17Z",
+      "side": 0,
+      "message": "Hi Brad,\nFrom the very begining, the CODE_SIP_BAD_REQUEST is mapped to DisconnectCause.SERVER_ERROR.\nBut it was changed at https://googleplex-android-review.git.corp.google.com/c/platform/frameworks/opt/telephony/+/9873226/13/src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java#b2147.\nAnd this is not for any carrier requirement, just a question from modem team why the CODE_SIP_BAD_REQUEST is mapping to INCOMING_AUTO_REJECTED. In the case of b/217039791, it is a call drop after call was active. (No a call incoming case)\n\nHi Radhika,\nI don\u0027t have much history information about the change above.\nCan you help confirm we should correct this mapping here?\nAfter sync with modem team, CODE_SIP_BAD_REQUEST may happen during call dialing, incoming or after call active.\nFor current AOSP\u0027s mapping, it may make sense for incoming case but dialing or call acive.\nTo me, it more make sense to map them as DisconnectCause.SERVER_ERROR for dialing and call active case.\nIf you agree with that, I will go back to discuss with Lassen to map DisconnectCause.SERVER_ERROR(by ImsReasonInfo.CODE_SIP_REDIRECTED) or INCOMING_AUTO_REJECTED (by ImsReasonInfo.CODE_SIP_BAD_REQUEST) according to the call state without modifying current AOSP\u0027s mapping here.\n\nWhat do you think?",
+      "parentUuid": "f0394536_e65a7d81",
+      "range": {
+        "startLine": 2968,
+        "startChar": 31,
+        "endLine": 2968,
+        "endChar": 51
+      },
+      "revId": "47650fb4301b2c69ae769131d9384d80eec05131",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
