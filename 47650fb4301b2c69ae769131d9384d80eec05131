@@ -46,6 +46,30 @@
       },
       "revId": "47650fb4301b2c69ae769131d9384d80eec05131",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81538176_a4a72d28",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneCallTracker.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2968,
+      "author": {
+        "id": 1633352
+      },
+      "writtenOn": "2022-03-23T23:54:20Z",
+      "side": 0,
+      "message": "BAD_REQUEST should only be received when the network did not like some header in SIP INVITE. But we have seen Qualcomm uses this as a default code for errors which cannot be mapped to other cause codes. I prefer mapping BAD_request to maybe UNKNOWN and working with Qualcomm to fix the reason info.",
+      "parentUuid": "ac19d290_63268801",
+      "range": {
+        "startLine": 2968,
+        "startChar": 31,
+        "endLine": 2968,
+        "endChar": 51
+      },
+      "revId": "47650fb4301b2c69ae769131d9384d80eec05131",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
