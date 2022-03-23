@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949d50f9_a4f5a735",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-03-23T18:07:13Z",
+      "side": 1,
+      "message": "Please add\n\n```\nBug: 223797061\n```\n\nto this commit message.\n\nOtherwise, looks good.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "1281bb36d55d03f63c97577e79ffab0adddea3d1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
