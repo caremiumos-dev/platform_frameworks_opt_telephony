@@ -22,6 +22,29 @@
       },
       "revId": "e5638c4c2f164d9b19abd926a5249565d92b4b81",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a4ab65_41090e96",
+        "filename": "src/java/com/android/internal/telephony/PhoneSwitcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2022-03-24T19:21:36Z",
+      "side": 1,
+      "message": "Hmm, this actually ends up not doing what we expect it to; BACKGROUND_REQUEST is different (confusingly) from the absence of a NET_CAPABILITY_FOREGROUND.\n\nFOREGROUND appears to be used by ConnSvc as a marker for a \"the default network\", not to be confused with \"hold this network up in the background for me\"",
+      "range": {
+        "startLine": 1229,
+        "startChar": 53,
+        "endLine": 1229,
+        "endChar": 78
+      },
+      "revId": "e5638c4c2f164d9b19abd926a5249565d92b4b81",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
