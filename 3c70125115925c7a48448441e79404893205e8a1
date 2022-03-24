@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a74ac64_538bc505",
+        "filename": "src/java/com/android/internal/telephony/data/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-03-24T21:29:54Z",
+      "side": 1,
+      "message": "Seeing test failures in PhoneSwitcherTest with this change:\n\n```\ncom.android.internal.telephony.data.PhoneSwitcherTest#testEmergencyOverrideEndSuccess\ncom.android.internal.telephony.data.PhoneSwitcherTest#testEmergencyOverrideMultipleOverrideRequests\ncom.android.internal.telephony.data.PhoneSwitcherTest#testNonDefaultDataPhoneInCall\ncom.android.internal.telephony.data.PhoneSwitcherTest#testNonDefaultDataPhoneInCall_ImsCallOnCrossSIM_HandoverToLTE\ncom.android.internal.telephony.data.PhoneSwitcherTest#testNonDefaultDataPhoneInCall_ImsCallOnLte_shouldSwitchDds\n```\n\nCan you please also run tests using `atest FrameworksTelephonyTests:PhoneSwitcherTest` with your fix and ensure tests also pass?",
+      "range": {
+        "startLine": 1646,
+        "startChar": 46,
+        "endLine": 1646,
+        "endChar": 52
+      },
+      "revId": "3c70125115925c7a48448441e79404893205e8a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
