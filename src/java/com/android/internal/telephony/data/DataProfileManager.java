@@ -43,6 +43,7 @@ import android.util.IndentingPrintWriter;
 import android.util.LocalLog;
 
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.RIL;
 import com.android.internal.telephony.data.DataNetworkController.DataNetworkControllerCallback;
 import com.android.telephony.Rlog;
 
@@ -459,9 +460,10 @@ public class DataProfileManager extends Handler {
         if (!Objects.equals(mInitialAttachDataProfile, initialAttachDataProfile)) {
             mInitialAttachDataProfile = initialAttachDataProfile;
             logl("Initial attach data profile updated as " + mInitialAttachDataProfile);
-            // TODO: Push the null data profile to modem on new AIDL HAL. Modem should clear the IA
-            //  APN.
-            if (mInitialAttachDataProfile != null) {
+            // On newer devices, we push the null data profile to the modem. Modem should clear it
+            // up.
+            if (mInitialAttachDataProfile != null
+                    || mPhone.getHalVersion().greaterOrEqual(RIL.RADIO_HAL_VERSION_2_0)) {
                 mWwanDataServiceManager.setInitialAttachApn(mInitialAttachDataProfile,
                         mPhone.getServiceState().getDataRoamingFromRegistration(), null);
             }
