@@ -37,6 +37,8 @@ import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 
+import java.util.List;
+
 /**
  * SIP doesn't need CommandsInterface. The class does nothing but made to work
  * with Phone's constructor.
@@ -659,7 +661,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     @Override
     public void setSignalStrengthReportingCriteria(
-            SignalThresholdInfo signalThresholdInfo, int ran, Message result) {
+            List<SignalThresholdInfo> signalThresholdInfos, Message result) {
     }
 
     @Override

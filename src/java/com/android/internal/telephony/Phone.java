@@ -57,6 +57,7 @@ import android.telephony.RadioAccessFamily;
 import android.telephony.RadioAccessSpecifier;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SignalThresholdInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyDisplayInfo;
 import android.telephony.TelephonyManager;
@@ -4533,7 +4534,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     /** Sets the SignalStrength reporting criteria. */
     public void setSignalStrengthReportingCriteria(
-            int signalStrengthMeasure, int[] thresholds, int ran, boolean isEnabled) {
+            @NonNull List<SignalThresholdInfo> signalThresholdInfos) {
         // no-op default implementation
     }
 

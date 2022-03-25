@@ -4186,31 +4186,40 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void setSignalStrengthReportingCriteria(int signalStrengthMeasure,
-            int[] systemThresholds, int ran, boolean isEnabledForSystem) {
-        int[] consolidatedThresholds = mSignalStrengthController.getConsolidatedSignalThresholds(
-                ran,
-                signalStrengthMeasure,
-                isEnabledForSystem && mSignalStrengthController.shouldHonorSystemThresholds()
-                        ? systemThresholds
-                        : new int[]{},
-                REPORTING_HYSTERESIS_DB);
-        boolean isEnabledForAppRequest =
-                mSignalStrengthController.shouldEnableSignalThresholdForAppRequest(
-                        ran,
-                        signalStrengthMeasure,
-                        getSubId(),
-                        isDeviceIdle());
-        mCi.setSignalStrengthReportingCriteria(
-                new SignalThresholdInfo.Builder()
-                        .setRadioAccessNetworkType(ran)
-                        .setSignalMeasurementType(signalStrengthMeasure)
-                        .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
-                        .setHysteresisDb(REPORTING_HYSTERESIS_DB)
-                        .setThresholds(consolidatedThresholds, true /*isSystem*/)
-                        .setIsEnabled(isEnabledForSystem || isEnabledForAppRequest)
-                        .build(),
-                ran, null);
+    public void setSignalStrengthReportingCriteria(
+            @NonNull List<SignalThresholdInfo> signalThresholdInfos) {
+        List<SignalThresholdInfo> consolidatedSignalThresholdInfos = new ArrayList<>(
+                signalThresholdInfos.size());
+        for (SignalThresholdInfo signalThresholdInfo : signalThresholdInfos) {
+            final int ran = signalThresholdInfo.getRadioAccessNetworkType();
+            final int measurementType = signalThresholdInfo.getSignalMeasurementType();
+            final boolean isEnabledForSystem = signalThresholdInfo.isEnabled();
+            int[] consolidatedThresholds =
+                    mSignalStrengthController.getConsolidatedSignalThresholds(
+                            ran,
+                            measurementType,
+                            isEnabledForSystem
+                                    && mSignalStrengthController.shouldHonorSystemThresholds()
+                                    ? signalThresholdInfo.getThresholds()
+                                    : new int[]{},
+                            REPORTING_HYSTERESIS_DB);
+            boolean isEnabledForAppRequest =
+                    mSignalStrengthController.shouldEnableSignalThresholdForAppRequest(
+                            ran,
+                            measurementType,
+                            getSubId(),
+                            isDeviceIdle());
+            consolidatedSignalThresholdInfos.add(
+                    new SignalThresholdInfo.Builder()
+                            .setRadioAccessNetworkType(ran)
+                            .setSignalMeasurementType(measurementType)
+                            .setHysteresisMs(REPORTING_HYSTERESIS_MILLIS)
+                            .setHysteresisDb(REPORTING_HYSTERESIS_DB)
+                            .setThresholds(consolidatedThresholds, true /*isSystem*/)
+                            .setIsEnabled(isEnabledForSystem || isEnabledForAppRequest)
+                            .build());
+        }
+        mCi.setSignalStrengthReportingCriteria(consolidatedSignalThresholdInfos, null);
     }
 
     @Override
