@@ -35,13 +35,13 @@ import java.util.Set;
  */
 public class DataEvaluation {
     /** The reason for this evaluation */
-    private final DataEvaluationReason mDataEvaluationReason;
+    private final @NonNull DataEvaluationReason mDataEvaluationReason;
 
     /** Data disallowed reasons. There could be multiple reasons for not allowing data. */
     private final @NonNull Set<DataDisallowedReason> mDataDisallowedReasons = new HashSet<>();
 
     /** Data allowed reason. It is intended to only have one allowed reason. */
-    private DataAllowedReason mDataAllowedReason = DataAllowedReason.NONE;
+    private @NonNull DataAllowedReason mDataAllowedReason = DataAllowedReason.NONE;
 
     private @Nullable DataProfile mCandidateDataProfile = null;
 
@@ -70,6 +70,16 @@ public class DataEvaluation {
     }
 
     /**
+     * Remove a data disallowed reason if one exists.
+     *
+     * @param reason Disallowed reason.
+     */
+    public void removeDataDisallowedReason(DataDisallowedReason reason) {
+        mDataDisallowedReasons.remove(reason);
+        mEvaluatedTime = System.currentTimeMillis();
+    }
+
+    /**
      * Add a data allowed reason. Note that adding an allowed reason will clean up the disallowed
      * reasons because they are mutual exclusive.
      *
@@ -94,6 +104,13 @@ public class DataEvaluation {
     }
 
     /**
+     * @return The data allowed reason.
+     */
+    public @NonNull DataAllowedReason getDataAllowedReason() {
+        return mDataAllowedReason;
+    }
+
+    /**
      * Set the candidate data profile for setup data network.
      *
      * @param dataProfile The candidate data profile.
@@ -110,10 +127,10 @@ public class DataEvaluation {
     }
 
     /**
-     * @return {@code true} if the operation is allowed.
+     * @return {@code true} if the evaluation contains disallowed reasons.
      */
-    public boolean isDataAllowed() {
-        return mDataDisallowedReasons.size() == 0;
+    public boolean containsDisallowedReasons() {
+        return mDataDisallowedReasons.size() != 0;
     }
 
     /**
@@ -195,6 +212,13 @@ public class DataEvaluation {
         DATA_HANDOVER,
         /** Preferred transport changed. */
         PREFERRED_TRANSPORT_CHANGED,
+        /** Slice config changed. */
+        SLICE_CONFIG_CHANGED,
+        /**
+         * Single data network arbitration. On certain RATs, only one data network is allowed at the
+         * same time.
+         */
+        SINGLE_DATA_NETWORK_ARBITRATION,
     }
 
     /** Disallowed reasons. There could be multiple reasons if it is not allowed. */
@@ -222,6 +246,8 @@ public class DataEvaluation {
         DATA_RESTRICTED_BY_NETWORK(true),
         /** Radio power is off (i.e. airplane mode on) */
         RADIO_POWER_OFF(true),
+        /** Data setup now allowed due to pending tear down all networks. */
+        PENDING_TEAR_DOWN_ALL(true),
         /** Airplane mode is forcibly turned on by the carrier. */
         RADIO_DISABLED_BY_CARRIER(true),
         /** Underlying data service is not bound. */
@@ -243,7 +269,11 @@ public class DataEvaluation {
         /** Handover is not allowed by policy. */
         NOT_ALLOWED_BY_POLICY(true),
         /** Data network is not in the right state. */
-        ILLEGAL_STATE(true);
+        ILLEGAL_STATE(true),
+        /** VoPS is not supported by the network. */
+        VOPS_NOT_SUPPORTED(true),
+        /** Only one data network is allowed at one time. */
+        ONLY_ALLOWED_SINGLE_NETWORK(true);
 
         private final boolean mIsHardReason;
 

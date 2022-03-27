@@ -386,8 +386,6 @@ public class DataRetryManagerTest extends TelephonyTest {
                 networkRequestList = new DataNetworkController.NetworkRequestList(tnr);
 
         // 1st failed and retry.
-        doReturn(List.of(mDataProfile2, mDataProfile1)).when(mDataProfileManager)
-                .getDataProfilesForNetworkCapabilities((int[]) any());
         mDataRetryManagerUT.evaluateDataSetupRetry(mDataProfile1,
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN, networkRequestList, 123,
                 DataCallResponse.RETRY_DURATION_UNDEFINED);
@@ -408,8 +406,6 @@ public class DataRetryManagerTest extends TelephonyTest {
         logd("retry entry: (" + entry.hashCode() + ")=" + entry);
 
         // 2nd failed and retry.
-        doReturn(List.of(mDataProfile1, mDataProfile2)).when(mDataProfileManager)
-                .getDataProfilesForNetworkCapabilities((int[]) any());
         Mockito.clearInvocations(mDataRetryManagerCallbackMock);
         mDataRetryManagerUT.evaluateDataSetupRetry(mDataProfile2,
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN, networkRequestList, 123,
@@ -459,8 +455,6 @@ public class DataRetryManagerTest extends TelephonyTest {
                 networkRequestList = new DataNetworkController.NetworkRequestList(tnr);
 
         // 1st failed and retry.
-        doReturn(List.of(mDataProfile3)).when(mDataProfileManager)
-                .getDataProfilesForNetworkCapabilities((int[]) any());
         mDataRetryManagerUT.evaluateDataSetupRetry(mDataProfile3,
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN, networkRequestList, 123,
                 DataCallResponse.RETRY_DURATION_UNDEFINED);
@@ -523,8 +517,6 @@ public class DataRetryManagerTest extends TelephonyTest {
                 networkRequestList = new DataNetworkController.NetworkRequestList(tnr);
 
         // 1st/2nd/3rd/4th failed and retry.
-        doReturn(List.of(mDataProfile3)).when(mDataProfileManager)
-                .getDataProfilesForNetworkCapabilities((int[]) any());
         for (long delay : List.of(2000, 4000, 8000, 8000)) {
             Mockito.clearInvocations(mDataRetryManagerCallbackMock);
             mDataRetryManagerUT.evaluateDataSetupRetry(mDataProfile3,
@@ -619,8 +611,6 @@ public class DataRetryManagerTest extends TelephonyTest {
                 networkRequestList = new DataNetworkController.NetworkRequestList(tnr);
 
         // failed and retry.
-        doReturn(List.of(mDataProfile2, mDataProfile1)).when(mDataProfileManager)
-                .getDataProfilesForNetworkCapabilities((int[]) any());
         mDataRetryManagerUT.evaluateDataSetupRetry(mDataProfile1,
                 AccessNetworkConstants.TRANSPORT_TYPE_WWAN, networkRequestList, 123,
                 DataCallResponse.RETRY_DURATION_UNDEFINED);
@@ -631,6 +621,59 @@ public class DataRetryManagerTest extends TelephonyTest {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VCN_MANAGED)
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
                 .build(), mPhone);
-        assertThat(mDataRetryManagerUT.isSimilarNetworkRequestRetryScheduled(tnr)).isTrue();
+        assertThat(mDataRetryManagerUT.isSimilarNetworkRequestRetryScheduled(tnr,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN)).isTrue();
+        assertThat(mDataRetryManagerUT.isSimilarNetworkRequestRetryScheduled(tnr,
+                AccessNetworkConstants.TRANSPORT_TYPE_WLAN)).isFalse();
+    }
+
+    @Test
+    public void testRilCrashedReset() {
+        testDataSetupRetryNetworkSuggestedNeverRetry();
+        Mockito.clearInvocations(mDataRetryManagerCallbackMock);
+
+        // RIL crashed and came back online.
+        mDataRetryManagerUT.obtainMessage(8/*EVENT_RADIO_ON*/,
+                new AsyncResult(AccessNetworkConstants.TRANSPORT_TYPE_WWAN, mDataProfile3, null))
+                .sendToTarget();
+        processAllMessages();
+
+        ArgumentCaptor<List<ThrottleStatus>> throttleStatusCaptor =
+                ArgumentCaptor.forClass(List.class);
+        verify(mDataRetryManagerCallbackMock).onThrottleStatusChanged(
+                throttleStatusCaptor.capture());
+        assertThat(throttleStatusCaptor.getValue()).hasSize(1);
+        ThrottleStatus throttleStatus = throttleStatusCaptor.getValue().get(0);
+        assertThat(throttleStatus.getApnType()).isEqualTo(ApnSetting.TYPE_IMS);
+        assertThat(throttleStatus.getRetryType())
+                .isEqualTo(ThrottleStatus.RETRY_TYPE_NEW_CONNECTION);
+        assertThat(throttleStatus.getThrottleExpiryTimeMillis()).isEqualTo(-1);
+        assertThat(throttleStatus.getTransportType())
+                .isEqualTo(AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+    }
+
+    @Test
+    public void testModemCrashedReset() {
+        testDataSetupRetryNetworkSuggestedNeverRetry();
+        Mockito.clearInvocations(mDataRetryManagerCallbackMock);
+
+        // RIL crashed and came back online.
+        mDataRetryManagerUT.obtainMessage(9/*EVENT_MODEM_RESET*/,
+                new AsyncResult(AccessNetworkConstants.TRANSPORT_TYPE_WWAN, mDataProfile3, null))
+                .sendToTarget();
+        processAllMessages();
+
+        ArgumentCaptor<List<ThrottleStatus>> throttleStatusCaptor =
+                ArgumentCaptor.forClass(List.class);
+        verify(mDataRetryManagerCallbackMock).onThrottleStatusChanged(
+                throttleStatusCaptor.capture());
+        assertThat(throttleStatusCaptor.getValue()).hasSize(1);
+        ThrottleStatus throttleStatus = throttleStatusCaptor.getValue().get(0);
+        assertThat(throttleStatus.getApnType()).isEqualTo(ApnSetting.TYPE_IMS);
+        assertThat(throttleStatus.getRetryType())
+                .isEqualTo(ThrottleStatus.RETRY_TYPE_NEW_CONNECTION);
+        assertThat(throttleStatus.getThrottleExpiryTimeMillis()).isEqualTo(-1);
+        assertThat(throttleStatus.getTransportType())
+                .isEqualTo(AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
     }
 }

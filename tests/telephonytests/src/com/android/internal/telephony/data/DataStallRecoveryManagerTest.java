@@ -28,6 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import android.net.NetworkAgent;
+import android.telephony.Annotation.ValidationStatus;
 import android.telephony.CarrierConfigManager;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -55,7 +56,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         super.setUp(getClass().getSimpleName());
         doReturn(true).when(mPhone).isUsingNewDataStack();
         mCarrierConfigManager = mPhone.getContext().getSystemService(CarrierConfigManager.class);
-        long[] dataStallRecoveryTimersArray = new long[] {1, 1, 1};
+        long[] dataStallRecoveryTimersArray = new long[] {100, 100, 100};
         boolean[] dataStallRecoveryStepsArray = new boolean[] {false, false, false, false};
         doReturn(dataStallRecoveryTimersArray)
                 .when(mDataConfigManager)
@@ -88,7 +89,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         super.tearDown();
     }
 
-    private void sendValidationFailedCallback() throws Exception {
+    private void sendValidationStatusCallback(@ValidationStatus int status) throws Exception {
         ArgumentCaptor<DataNetworkControllerCallback> dataNetworkControllerCallbackCaptor =
                 ArgumentCaptor.forClass(DataNetworkControllerCallback.class);
         verify(mDataNetworkController)
@@ -96,8 +97,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
                         dataNetworkControllerCallbackCaptor.capture());
         DataNetworkControllerCallback dataNetworkControllerCallback =
                 dataNetworkControllerCallbackCaptor.getValue();
-        dataNetworkControllerCallback.onInternetDataNetworkValidationStatusChanged(
-                NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+        dataNetworkControllerCallback.onInternetDataNetworkValidationStatusChanged(status);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         doReturn(PhoneConstants.State.IDLE).when(mPhone).getState();
 
         logd("Sending validation failed callback");
-        sendValidationFailedCallback();
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
         processAllFutureMessages();
 
         verify(mDataStallRecoveryManagerCallback).onDataStallReestablishInternet();
@@ -120,7 +120,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         doReturn(PhoneConstants.State.IDLE).when(mPhone).getState();
 
         logd("Sending validation failed callback");
-        sendValidationFailedCallback();
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
         processAllFutureMessages();
 
         verify(mSST, times(1)).powerOffRadioSafely();
@@ -133,7 +133,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         doReturn(PhoneConstants.State.IDLE).when(mPhone).getState();
 
         logd("Sending validation failed callback");
-        sendValidationFailedCallback();
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
 
         processAllFutureMessages();
 
@@ -148,7 +148,7 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         doReturn(PhoneConstants.State.IDLE).when(mPhone).getState();
 
         logd("Sending validation failed callback");
-        sendValidationFailedCallback();
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
 
         processAllFutureMessages();
 
@@ -163,10 +163,64 @@ public class DataStallRecoveryManagerTest extends TelephonyTest {
         doReturn(PhoneConstants.State.OFFHOOK).when(mPhone).getState();
 
         logd("Sending validation failed callback");
-        sendValidationFailedCallback();
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
 
         processAllFutureMessages();
 
         assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(2);
+    }
+
+    @Test
+    public void testDoNotDoRecoveryBySendMessageDelayedWhenDialCall() throws Exception {
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_VALID);
+        mDataStallRecoveryManager.setRecoveryAction(0);
+        doReturn(PhoneConstants.State.OFFHOOK).when(mPhone).getState();
+        doReturn(3).when(mSignalStrength).getLevel();
+        doReturn(mSignalStrength).when(mPhone).getSignalStrength();
+        logd("Sending validation failed callback");
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+        processAllMessages();
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(1);
+        mDataStallRecoveryManager.sendMessageDelayed(
+                mDataStallRecoveryManager.obtainMessage(2), 1000);
+        moveTimeForward(15000);
+        processAllMessages();
+
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(2);
+    }
+
+    @Test
+    public void testDoNotContinueRecoveryActionAfterModemReset() throws Exception {
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_VALID);
+        mDataStallRecoveryManager.setRecoveryAction(0);
+        doReturn(PhoneConstants.State.IDLE).when(mPhone).getState();
+        doReturn(3).when(mSignalStrength).getLevel();
+        doReturn(mSignalStrength).when(mPhone).getSignalStrength();
+        logd("Sending validation failed callback");
+
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(0);
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+        processAllMessages();
+        moveTimeForward(101);
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(1);
+
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+        processAllMessages();
+        moveTimeForward(101);
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(2);
+
+        sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+        processAllMessages();
+        moveTimeForward(101);
+        assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(3);
+
+        // Handle multiple VALIDATION_STATUS_NOT_VALID and make sure we don't attempt recovery
+        for (int i = 0; i < 4; i++) {
+            sendValidationStatusCallback(NetworkAgent.VALIDATION_STATUS_NOT_VALID);
+            logd("Sending validation failed callback");
+            processAllMessages();
+            moveTimeForward(101);
+            assertThat(mDataStallRecoveryManager.getRecoveryAction()).isEqualTo(0);
+        }
     }
 }

@@ -57,6 +57,7 @@ import android.testing.TestableLooper;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.TelephonyTest;
+import com.android.internal.telephony.data.DataEvaluation.DataAllowedReason;
 import com.android.internal.telephony.data.DataNetwork.DataNetworkCallback;
 
 import org.junit.After;
@@ -67,9 +68,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(AndroidTestingRunner.class)
@@ -138,6 +139,11 @@ public class DataNetworkTest extends TelephonyTest {
                     .build();
 
     private void setSuccessfulSetupDataResponse(DataServiceManager dsm, int cid) {
+        setSuccessfulSetupDataResponse(dsm, cid, Collections.emptyList());
+    }
+
+    private void setSuccessfulSetupDataResponse(DataServiceManager dsm, int cid,
+            List<TrafficDescriptor> tds) {
         doAnswer(invocation -> {
             final Message msg = (Message) invocation.getArguments()[10];
 
@@ -165,7 +171,7 @@ public class DataNetworkTest extends TelephonyTest {
                     .setMtuV6(1500)
                     .setPduSessionId(1)
                     .setQosBearerSessions(new ArrayList<>())
-                    .setTrafficDescriptors(new ArrayList<>())
+                    .setTrafficDescriptors(tds)
                     .build();
             msg.getData().putParcelable("data_call_response", response);
             msg.arg1 = DataServiceCallback.RESULT_SUCCESS;
@@ -244,7 +250,8 @@ public class DataNetworkTest extends TelephonyTest {
 
         mDataNetworkUT = new DataNetwork(mPhone, Looper.myLooper(), mDataServiceManagers,
                 mInternetDataProfile, networkRequestList,
-                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, mDataNetworkCallback);
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
         mDataNetworkUT.sendMessage(9/*EVENT_SERVICE_STATE_CHANGED*/);
 
         processAllMessages();
@@ -258,7 +265,6 @@ public class DataNetworkTest extends TelephonyTest {
         assertThat(networkRequestList.get(0).getState())
                 .isEqualTo(TelephonyNetworkRequest.REQUEST_STATE_SATISFIED);
         LinkProperties lp = mDataNetworkUT.getLinkProperties();
-        List<InetAddress> addresses = lp.getAddresses();
         assertThat(lp.getAddresses()).containsExactly(
                 InetAddresses.parseNumericAddress(IPV4_ADDRESS),
                 InetAddresses.parseNumericAddress(IPV6_ADDRESS));
@@ -294,6 +300,91 @@ public class DataNetworkTest extends TelephonyTest {
                 NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)).isTrue();
 
         verify(mDataNetworkCallback).onConnected(eq(mDataNetworkUT));
+    }
+
+    @Test
+    public void testCreateDataNetworkOnEnterpriseSlice() {
+        DataNetworkController.NetworkRequestList
+                networkRequestList = new DataNetworkController.NetworkRequestList();
+        networkRequestList.add(new TelephonyNetworkRequest(new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)
+                .build(), mPhone));
+
+        List<TrafficDescriptor> tds = List.of(
+                new TrafficDescriptor(null, new TrafficDescriptor.OsAppId(
+                        TrafficDescriptor.OsAppId.ANDROID_OS_ID, "ENTERPRISE", 1).getBytes()),
+                new TrafficDescriptor(null, new TrafficDescriptor.OsAppId(
+                        TrafficDescriptor.OsAppId.ANDROID_OS_ID, "ENTERPRISE", 5).getBytes())
+        );
+        setSuccessfulSetupDataResponse(mMockedWwanDataServiceManager, 123, tds);
+
+        mDataNetworkUT = new DataNetwork(mPhone, Looper.myLooper(), mDataServiceManagers,
+                mInternetDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        mDataNetworkUT.sendMessage(9/*EVENT_SERVICE_STATE_CHANGED*/);
+
+        processAllMessages();
+
+        NetworkCapabilities nc = mDataNetworkUT.getNetworkCapabilities();
+        assertThat(nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)).isTrue();
+        assertThat(nc.getEnterpriseIds()).asList().containsExactly(1, 5);
+    }
+
+    @Test
+    public void testCreateDataNetworkOnUrllcSlice() {
+        DataNetworkController.NetworkRequestList
+                networkRequestList = new DataNetworkController.NetworkRequestList();
+        networkRequestList.add(new TelephonyNetworkRequest(new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_LATENCY)
+                .build(), mPhone));
+
+        List<TrafficDescriptor> tds = List.of(
+                new TrafficDescriptor(null, new TrafficDescriptor.OsAppId(
+                        TrafficDescriptor.OsAppId.ANDROID_OS_ID, "PRIORITIZE_LATENCY", 1)
+                        .getBytes())
+        );
+        setSuccessfulSetupDataResponse(mMockedWwanDataServiceManager, 123, tds);
+
+        mDataNetworkUT = new DataNetwork(mPhone, Looper.myLooper(), mDataServiceManagers,
+                mInternetDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        mDataNetworkUT.sendMessage(9/*EVENT_SERVICE_STATE_CHANGED*/);
+
+        processAllMessages();
+
+        NetworkCapabilities nc = mDataNetworkUT.getNetworkCapabilities();
+        assertThat(nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_LATENCY))
+                .isTrue();
+    }
+
+    @Test
+    public void testCreateDataNetworkOnEmbbSlice() {
+        DataNetworkController.NetworkRequestList
+                networkRequestList = new DataNetworkController.NetworkRequestList();
+        networkRequestList.add(new TelephonyNetworkRequest(new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_BANDWIDTH)
+                .build(), mPhone));
+
+        List<TrafficDescriptor> tds = List.of(
+                new TrafficDescriptor(null, new TrafficDescriptor.OsAppId(
+                        TrafficDescriptor.OsAppId.ANDROID_OS_ID, "PRIORITIZE_BANDWIDTH", 1)
+                        .getBytes())
+        );
+        setSuccessfulSetupDataResponse(mMockedWwanDataServiceManager, 123, tds);
+
+        mDataNetworkUT = new DataNetwork(mPhone, Looper.myLooper(), mDataServiceManagers,
+                mInternetDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        mDataNetworkUT.sendMessage(9/*EVENT_SERVICE_STATE_CHANGED*/);
+
+        processAllMessages();
+
+        NetworkCapabilities nc = mDataNetworkUT.getNetworkCapabilities();
+        assertThat(nc.hasCapability(NetworkCapabilities.NET_CAPABILITY_PRIORITIZE_BANDWIDTH))
+                .isTrue();
     }
 
     // The purpose of this test is to make sure data could be torn down properly.
@@ -348,7 +439,7 @@ public class DataNetworkTest extends TelephonyTest {
 
         mDataNetworkUT = new DataNetwork(mPhone, Looper.myLooper(), mDataServiceManagers,
                 mImsDataProfile, networkRequestList, AccessNetworkConstants.TRANSPORT_TYPE_WLAN,
-                mDataNetworkCallback);
+                DataAllowedReason.NORMAL, mDataNetworkCallback);
         mDataNetworkUT.sendMessage(9/*EVENT_SERVICE_STATE_CHANGED*/);
 
         processAllMessages();
