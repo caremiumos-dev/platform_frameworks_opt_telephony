@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb81159_38a94954",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-03-28T20:47:49Z",
+      "side": 1,
+      "message": "Conflict due to aosp/1969339, but it\u0027s marked DO NOT MERGE. CP\u0027ed around it for now just to get this merged in.",
+      "revId": "c7e99fd35f1682c75872f9a12ce6403f4b644687",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
