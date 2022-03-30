@@ -22,6 +22,30 @@
       },
       "revId": "7b60ff5fbb0c07f0d29f28d4d0fc6ad6f397b748",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "009b4ef3_f76d2820",
+        "filename": "src/java/com/android/internal/telephony/uicc/SimPhonebookRecordCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1128729
+      },
+      "writtenOn": "2022-03-30T07:08:08Z",
+      "side": 1,
+      "message": "Done. Missed the depend patch. Thanks for reminder!",
+      "parentUuid": "be795f85_d6ffa533",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 84
+      },
+      "revId": "7b60ff5fbb0c07f0d29f28d4d0fc6ad6f397b748",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
