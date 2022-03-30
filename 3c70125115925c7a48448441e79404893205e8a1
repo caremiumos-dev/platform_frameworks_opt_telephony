@@ -22,6 +22,30 @@
       },
       "revId": "3c70125115925c7a48448441e79404893205e8a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6eeadce_71c3bafd",
+        "filename": "src/java/com/android/internal/telephony/data/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1714489
+      },
+      "writtenOn": "2022-03-30T02:50:04Z",
+      "side": 1,
+      "message": "As far as I understand, FrameworksTelephonyTests:PhoneSwitcherTest module is a new module added from Android T(Android 13).\nCurrently, Google Beta1 patch version for Android T has just been imported in our side, and the build environment is still incomplete, so it is difficult to proceed with the test in our side.\nSo I would appreciate it if you could check it in your side.\nThank you in advance.",
+      "parentUuid": "5a74ac64_538bc505",
+      "range": {
+        "startLine": 1646,
+        "startChar": 46,
+        "endLine": 1646,
+        "endChar": 52
+      },
+      "revId": "3c70125115925c7a48448441e79404893205e8a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
