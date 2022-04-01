@@ -45,9 +45,16 @@ import com.android.internal.telephony.imsphone.ImsExternalCallTracker;
 import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
 import com.android.internal.telephony.nitz.NitzStateMachineImpl;
+import com.android.internal.telephony.uicc.CsimFileHandler;
 import com.android.internal.telephony.uicc.IccCardStatus;
+import com.android.internal.telephony.uicc.IccFileHandler;
+import com.android.internal.telephony.uicc.RuimRecords;
+import com.android.internal.telephony.uicc.SIMRecords;
+import com.android.internal.telephony.uicc.SIMFileHandler;
 import com.android.internal.telephony.uicc.UiccCard;
+import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccProfile;
+import com.android.internal.telephony.uicc.UsimFileHandler;
 import com.android.telephony.Rlog;
 
 import dalvik.system.PathClassLoader;
@@ -488,4 +495,44 @@ public class TelephonyComponentFactory {
     public DataNetworkController makeDataNetworkController(Phone phone, Looper looper) {
         return new DataNetworkController(phone, looper);
     }
+
+	/**
+     * Create a new SIMRecords.
+     */
+	public SIMRecords makeSimRecords(UiccCardApplication app, Context c,
+	    CommandsInterface ci) {
+        return new SIMRecords(app, c, ci);
+	}
+
+    /**
+     * Create a new RuimRecords.
+     */
+	public RuimRecords makeRuimRecords(UiccCardApplication app, Context c,
+	    CommandsInterface ci) {
+        return new RuimRecords(app, c, ci);
+	}
+
+	/**
+     * Create a new SIMFileHandler.
+     */
+	public IccFileHandler makeSimFileHandler(UiccCardApplication app, String aid,
+	    CommandsInterface ci) {
+        return new SIMFileHandler(app, aid, ci);
+	}
+
+	/**
+     * Create a new UsimFileHandler.
+     */
+	public IccFileHandler makeUsimFileHandler(UiccCardApplication app, String aid,
+	    CommandsInterface ci) {
+        return new UsimFileHandler(app, aid, ci);
+	}
+
+	/**
+     * Create a new CsimFileHandler.
+     */
+	public IccFileHandler makeCsimFileHandler(UiccCardApplication app, String aid,
+	    CommandsInterface ci) {
+        return new CsimFileHandler(app, aid, ci);
+	}
 }
