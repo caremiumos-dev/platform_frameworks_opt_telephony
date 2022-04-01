@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52b2965b_1b541474",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-04-01T08:00:27Z",
+      "side": 1,
+      "message": "needs ag/16945534 to go in first after aosp/2035784",
+      "revId": "ceafcb488b08de6c7497ceea7b673f56b3978e97",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
