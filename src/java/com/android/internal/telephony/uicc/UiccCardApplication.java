@@ -28,6 +28,7 @@ import android.os.RegistrantList;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.TelephonyComponentFactory;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
@@ -95,6 +96,7 @@ public class UiccCardApplication {
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     private boolean mDestroyed;//set to true once this App is commanded to be disposed of.
+    private TelephonyComponentFactory mTelephonyComponentFactory;
 
     private RegistrantList mReadyRegistrants = new RegistrantList();
     private RegistrantList mDetectedRegistrants = new RegistrantList();
@@ -121,6 +123,7 @@ public class UiccCardApplication {
         mContext = c;
         mCi = ci;
 
+        mTelephonyComponentFactory = TelephonyComponentFactory.getInstance();
         mIccFh = createIccFileHandler(as.app_type);
         mIccRecords = createIccRecords(as.app_type, mContext, mCi);
         if (mAppState == AppState.APPSTATE_READY) {
@@ -200,9 +203,11 @@ public class UiccCardApplication {
 
     private IccRecords createIccRecords(AppType type, Context c, CommandsInterface ci) {
         if (type == AppType.APPTYPE_USIM || type == AppType.APPTYPE_SIM) {
-            return new SIMRecords(this, c, ci);
+            return mTelephonyComponentFactory.inject(SIMRecords.class.getName()
+                .makeSimRecords(this, c, ci));
         } else if (type == AppType.APPTYPE_RUIM || type == AppType.APPTYPE_CSIM){
-            return new RuimRecords(this, c, ci);
+            return mTelephonyComponentFactory.inject(RuimRecords.class.getName()
+                .makeRuimRecords(this, c, ci));
         } else if (type == AppType.APPTYPE_ISIM) {
             return new IsimUiccRecords(this, c, ci);
         } else {
@@ -214,13 +219,16 @@ public class UiccCardApplication {
     private IccFileHandler createIccFileHandler(AppType type) {
         switch (type) {
             case APPTYPE_SIM:
-                return new SIMFileHandler(this, mAid, mCi);
+                return mTelephonyComponentFactory.inject(SIMFileHandler.class.getName()
+                    .makeSimFileHandler(this, mAid, mCi));
             case APPTYPE_RUIM:
                 return new RuimFileHandler(this, mAid, mCi);
             case APPTYPE_USIM:
-                return new UsimFileHandler(this, mAid, mCi);
+                return mTelephonyComponentFactory.inject(UsimFileHandler.class.getName()
+                   .makeUsimFileHandler(this, mAid, mCi));
             case APPTYPE_CSIM:
-                return new CsimFileHandler(this, mAid, mCi);
+                return mTelephonyComponentFactory.inject(CsimFileHandler.class.getName()
+                   .makeCsimFileHandler(this, mAid, mCi));
             case APPTYPE_ISIM:
                 return new IsimFileHandler(this, mAid, mCi);
             default:
