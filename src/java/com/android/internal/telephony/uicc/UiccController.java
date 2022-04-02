@@ -689,6 +689,7 @@ public class UiccController extends Handler {
             case CARD_IO_ERROR: return IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR;
             case CARD_RESTRICTED: return IccCardConstants.INTENT_VALUE_ICC_CARD_RESTRICTED;
             case LOADED: return IccCardConstants.INTENT_VALUE_ICC_LOADED;
+            case IMSI_READY: return IccCardConstants.INTENT_VALUE_ICC_IMSI;
             default: return IccCardConstants.INTENT_VALUE_ICC_UNKNOWN;
         }
     }

@@ -139,6 +139,7 @@ public class UiccProfile extends IccCard {
     private static final int EVENT_CARRIER_CONFIG_CHANGED = 14;
     private static final int EVENT_CARRIER_PRIVILEGES_TEST_OVERRIDE_SET = 15;
     private static final int EVENT_SUPPLY_ICC_PIN_DONE = 16;
+    private static final int EVENT_ICC_IMSI_READY = 17;
     // NOTE: any new EVENT_* values must be added to eventToString.
 
     private TelephonyManager mTelephonyManager;
@@ -1807,6 +1808,7 @@ public class UiccProfile extends IccCard {
             case EVENT_CARRIER_PRIVILEGES_TEST_OVERRIDE_SET:
                 return "CARRIER_PRIVILEGES_TEST_OVERRIDE_SET";
             case EVENT_SUPPLY_ICC_PIN_DONE: return "SUPPLY_ICC_PIN_DONE";
+            case EVENT_ICC_IMSI_READY: return "ICC_IMSI_READY";
             default: return "UNKNOWN(" + event + ")";
         }
     }
