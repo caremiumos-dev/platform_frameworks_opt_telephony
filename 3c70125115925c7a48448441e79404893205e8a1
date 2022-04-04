@@ -94,6 +94,30 @@
       },
       "revId": "3c70125115925c7a48448441e79404893205e8a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d613a8_f05c8b0d",
+        "filename": "src/java/com/android/internal/telephony/data/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2022-04-04T18:57:16Z",
+      "side": 1,
+      "message": "Yes this should be fine as the previous lines state:\n```\n        doReturn(Call.State.ACTIVE).when(mActiveCall).getState();\n        doReturn(Call.State.IDLE).when(mInactiveCall).getState();\n        doReturn(Call.State.HOLDING).when(mHoldingCall).getState();\n```\n\nwhich match the isIdle() returns you are setting.\n\nPlease make this change to PhoneSwitcherTest on this CL as well and I can review",
+      "parentUuid": "bfdd2a63_f76485b8",
+      "range": {
+        "startLine": 1646,
+        "startChar": 46,
+        "endLine": 1646,
+        "endChar": 52
+      },
+      "revId": "3c70125115925c7a48448441e79404893205e8a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
