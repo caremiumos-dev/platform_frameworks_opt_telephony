@@ -16,6 +16,24 @@
       "message": "HI yunzhen.kim\n\nI have verified whatever words you mentioned are not saving properly to sim.\nAll words i could able to save and retrieve properly with the current AOSP code.\n\nCan you please elaborate your explanation where exactly it is going wrong and what is the output with out your patch ?",
       "revId": "f6f46b099b0d84dbacd26dbf27f88325e9dc4769",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f04377f5_5e26dd81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-04-04T01:08:13Z",
+      "side": 1,
+      "message": "OK. Dear Arun.\n1st of all, stringToAdnStringField only considers 0x80 encoding even though adnStringFieldToString considers decoding of all tags (0x80, 0x81, 0x82). Original encoding method can miss some words, some chinese and Russian words, to save correctly.\n0x81 example: 杜杜杜\n0x82 example: 潢潤激\nSo I added encoding code for 0x81 and 0x82.",
+      "parentUuid": "2b3c44ea_cda82165",
+      "revId": "f6f46b099b0d84dbacd26dbf27f88325e9dc4769",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
