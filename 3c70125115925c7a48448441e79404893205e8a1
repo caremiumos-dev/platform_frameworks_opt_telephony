@@ -70,6 +70,30 @@
       },
       "revId": "3c70125115925c7a48448441e79404893205e8a1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfdd2a63_f76485b8",
+        "filename": "src/java/com/android/internal/telephony/data/PhoneSwitcher.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1714489
+      },
+      "writtenOn": "2022-04-04T10:55:00Z",
+      "side": 1,
+      "message": "TC failure occurred because the Call#isIdle() method for Mock Object(i.e. mInactiveCall) is not stubbed in PhoneSwitcherTest, so the default value of Primitive type(i.e. false) was returned.\nTherefore, I think the test code also needs to be modified as follows, so could you please review it and let me know if there are any further changes required.\n(Confirmed the PhoneSwitcherTest module pass with the following modification)\n\n## tests/telephonytests/src/com/android/internal/telephony/PhoneSwitcherTest.java\n\n    @Before\n    public void setUp() throws Exception {\n    ...\n        doReturn(true).when(mInactiveCall).isIdle();\n        doReturn(false).when(mActiveCall).isIdle();\n        doReturn(false).when(mHoldingCall).isIdle();\n    ...\n    }\n\"\"\"\n\nIf you agree with the above correction, can we update this change-id to add the test code?",
+      "parentUuid": "4d0acb70_d1ba221e",
+      "range": {
+        "startLine": 1646,
+        "startChar": 46,
+        "endLine": 1646,
+        "endChar": 52
+      },
+      "revId": "3c70125115925c7a48448441e79404893205e8a1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
