@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cc841b8_b5ce6437",
+        "filename": "src/java/com/android/internal/telephony/RILUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4438,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2022-04-08T23:36:24Z",
+      "side": 1,
+      "message": "Is a null record meaningful?",
+      "range": {
+        "startLine": 4438,
+        "startChar": 48,
+        "endLine": 4438,
+        "endChar": 66
+      },
+      "revId": "99cbc1cdcbe20717763d67591dfe14fae0716aa2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
