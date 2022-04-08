@@ -22,6 +22,30 @@
       },
       "revId": "99cbc1cdcbe20717763d67591dfe14fae0716aa2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6df5109d_c8c87a05",
+        "filename": "src/java/com/android/internal/telephony/RILUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4438,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-04-08T23:49:08Z",
+      "side": 1,
+      "message": "An empty record is essentially the same thing as null. If we want to actually pass in null, then the parameter for updateSimPhonebookRecords should be @nullable or else it\u0027ll throw errors, but it\u0027s too late to change the HAL.",
+      "parentUuid": "9cc841b8_b5ce6437",
+      "range": {
+        "startLine": 4438,
+        "startChar": 48,
+        "endLine": 4438,
+        "endChar": 66
+      },
+      "revId": "99cbc1cdcbe20717763d67591dfe14fae0716aa2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
