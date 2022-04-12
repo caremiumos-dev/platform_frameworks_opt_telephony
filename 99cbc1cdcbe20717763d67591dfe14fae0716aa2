@@ -46,6 +46,30 @@
       },
       "revId": "99cbc1cdcbe20717763d67591dfe14fae0716aa2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a74467_06f44a7c",
+        "filename": "src/java/com/android/internal/telephony/RILUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4438,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-04-12T00:14:42Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "6df5109d_c8c87a05",
+      "range": {
+        "startLine": 4438,
+        "startChar": 48,
+        "endLine": 4438,
+        "endChar": 66
+      },
+      "revId": "99cbc1cdcbe20717763d67591dfe14fae0716aa2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
