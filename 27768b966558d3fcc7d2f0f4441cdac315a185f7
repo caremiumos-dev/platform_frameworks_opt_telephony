@@ -22,6 +22,30 @@
       },
       "revId": "27768b966558d3fcc7d2f0f4441cdac315a185f7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a86f34_93f2739a",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1435051
+      },
+      "writtenOn": "2022-04-22T03:55:22Z",
+      "side": 1,
+      "message": "receiveTime \u003d android::elapsedRealtime()\nageMs \u003d cache time \u003d receivedTimeMs - Modem side receivedTime\n\nSo, in normal case, ageMs should alway less than receivedTimeMs.\nThis checking is to avoid the ageMs be overriden unexpectedly, e.g. other module override its memory data.",
+      "parentUuid": "4f0d8bdc_12cb900a",
+      "range": {
+        "startLine": 256,
+        "startChar": 52,
+        "endLine": 256,
+        "endChar": 77
+      },
+      "revId": "27768b966558d3fcc7d2f0f4441cdac315a185f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
