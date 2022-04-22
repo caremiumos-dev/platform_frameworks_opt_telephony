@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f0d8bdc_12cb900a",
+        "filename": "src/java/com/android/internal/telephony/NetworkIndication.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-22T03:32:44Z",
+      "side": 1,
+      "message": "why is this an error?",
+      "range": {
+        "startLine": 256,
+        "startChar": 52,
+        "endLine": 256,
+        "endChar": 77
+      },
+      "revId": "27768b966558d3fcc7d2f0f4441cdac315a185f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
