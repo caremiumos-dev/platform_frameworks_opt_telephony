@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a4071c_ae3ea1b7",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4622,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-27T21:22:55Z",
+      "side": 1,
+      "message": "what is stopping from someone to call into the subscription controller directly? Aren\u0027t you opening up a security hole here?",
+      "range": {
+        "startLine": 4622,
+        "startChar": 18,
+        "endLine": 4622,
+        "endChar": 32
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d94a7c_8123c38b",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-27T21:22:55Z",
+      "side": 1,
+      "message": "is it sim status or phone number that you are pulling",
+      "range": {
+        "startLine": 658,
+        "startChar": 16,
+        "endLine": 658,
+        "endChar": 32
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92abdefd_1a7ee92e",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-27T21:22:55Z",
+      "side": 1,
+      "message": "Phone",
+      "range": {
+        "startLine": 669,
+        "startChar": 25,
+        "endLine": 669,
+        "endChar": 29
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd99e63_2024a367",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-27T21:22:55Z",
+      "side": 1,
+      "message": "numbersFromAllSources?",
+      "range": {
+        "startLine": 674,
+        "startChar": 21,
+        "endLine": 674,
+        "endChar": 27
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9615123f_2ba0e1ff",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-27T21:22:55Z",
+      "side": 1,
+      "message": "what is numberState",
+      "range": {
+        "startLine": 679,
+        "startChar": 18,
+        "endLine": 679,
+        "endChar": 29
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
