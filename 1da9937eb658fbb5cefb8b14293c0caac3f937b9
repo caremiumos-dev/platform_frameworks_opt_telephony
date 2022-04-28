@@ -16,6 +16,24 @@
       "message": "This is now no longer a pure cherry-pick. Should we resolve the comments in a separate CL?",
       "revId": "1da9937eb658fbb5cefb8b14293c0caac3f937b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0639b8b_0329b77b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-28T17:48:53Z",
+      "side": 1,
+      "message": "Original CL had a bug of opening up an api. So we need to fix that any way. So let us fix the comments as well.",
+      "parentUuid": "9bc6cf9e_939c1af6",
+      "revId": "1da9937eb658fbb5cefb8b14293c0caac3f937b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
