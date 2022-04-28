@@ -1416,6 +1416,19 @@ public class PhoneSwitcher extends Handler {
         return PhoneFactory.getPhone(phoneId);
     }
 
+    private int getPhoneIdOfPhoneInActiveCall() {
+        // If there's IDLE, the value will become INVALID_PHONE_INDEX
+        int phoneId = SubscriptionManager.INVALID_PHONE_INDEX;
+        for (Phone phone : PhoneFactory.getPhones()) {
+            if (isPhoneInVoiceCall(phone) || (isPhoneInVoiceCall(phone.getImsPhone())
+                    && isImsOnOriginalNetwork(phone))) {
+                phoneId = phone.getPhoneId();
+                break;
+            }
+        }
+        return phoneId;
+    }
+
     public synchronized boolean shouldApplyNetworkRequest(
             TelephonyNetworkRequest networkRequest, int phoneId) {
         if (!SubscriptionManager.isValidPhoneId(phoneId)) return false;
@@ -1427,8 +1440,18 @@ public class PhoneSwitcher extends Handler {
             return false;
         }
 
-        int phoneIdToHandle = phoneIdForRequest(networkRequest);
+        NetworkRequest netRequest = networkRequest.getNativeNetworkRequest();
+        int subId = getSubIdFromNetworkSpecifier(netRequest.getNetworkSpecifier());
+        int phoneIdInVoiceCall =  getPhoneIdOfPhoneInActiveCall();
 
+        //if this phone is an emergency networkRequest
+        //and subId is not specified that is invalid or default
+        if (phoneIdInVoiceCall != INVALID_PHONE_INDEX && isEmergencyNetworkRequest(networkRequest)
+                && (subId == DEFAULT_SUBSCRIPTION_ID || subId == INVALID_SUBSCRIPTION_ID)) {
+            return phoneId == phoneIdInVoiceCall;
+        }
+
+        int phoneIdToHandle = phoneIdForRequest(networkRequest);
         return phoneId == phoneIdToHandle;
     }
 
