@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88c5b79b_367d4ff1",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T18:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4384b17_7741fe37",
+      "range": {
+        "startLine": 672,
+        "startChar": 23,
+        "endLine": 672,
+        "endChar": 32
+      },
+      "revId": "267f7135b64203a5ba535eaa5f95bcb65383e76f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dddf895_4d0784bb",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-28T18:36:30Z",
       "side": 1,
       "message": "At this point, should this be idForNextUniqueNumber ?",
+      "range": {
+        "startLine": 689,
+        "startChar": 28,
+        "endLine": 689,
+        "endChar": 52
+      },
+      "revId": "267f7135b64203a5ba535eaa5f95bcb65383e76f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e0362c_2dc011fd",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T18:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dddf895_4d0784bb",
       "range": {
         "startLine": 689,
         "startChar": 28,
