@@ -77,6 +77,7 @@ import com.android.internal.telephony.ISetOpportunisticDataCallback;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConfigurationManager;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RadioConfig;
 import com.android.internal.telephony.SubscriptionController;
@@ -1427,8 +1428,17 @@ public class PhoneSwitcher extends Handler {
             return false;
         }
 
-        int phoneIdToHandle = phoneIdForRequest(networkRequest);
+        Phone phone = PhoneFactory.getPhone(phoneId);
+        if ((phone != null) && isEmergencyNetworkRequest(networkRequest)) {
+            //if phone state is off hook, apply the network request.
+            if (phone.getState() == PhoneConstants.State.OFFHOOK) {
+                return true;
+            } else if (phone.getState() == PhoneConstants.State.IDLE) {
+                return false;
+            }
+        }
 
+        int phoneIdToHandle = phoneIdForRequest(networkRequest);
         return phoneId == phoneIdToHandle;
     }
 
