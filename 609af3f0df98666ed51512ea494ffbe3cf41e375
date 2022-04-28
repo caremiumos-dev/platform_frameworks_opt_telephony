@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "083cd5ae_15ee6674",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T17:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "795946d7_51691119",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 670,
+        "endChar": 89
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "257b38c0_bf80d6b7",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "I feel that source is confusing... sources are IMS, UICC and CARRIER. This is rather the uniqueness value. Maybe numberId?",
       "parentUuid": "257b38c0_bf80d6b7",
+      "range": {
+        "startLine": 683,
+        "startChar": 18,
+        "endLine": 683,
+        "endChar": 29
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa237287_10a8b2a5",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T17:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6142d0cd_a5f3ff4a",
       "range": {
         "startLine": 683,
         "startChar": 18,
@@ -118,6 +166,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aa7f4f1_b447eaae",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T17:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "682192a3_9552a1cd",
+      "range": {
+        "startLine": 701,
+        "startChar": 38,
+        "endLine": 701,
+        "endChar": 39
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3133df5_c501cb2d",
@@ -131,6 +203,30 @@
       "writtenOn": "2022-04-28T16:49:26Z",
       "side": 1,
       "message": "2022",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46ff31d6_c5b53334",
+        "filename": "src/java/com/android/internal/telephony/metrics/TelephonyStatsLogHelper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T17:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3133df5_c501cb2d",
       "range": {
         "startLine": 2,
         "startChar": 17,
