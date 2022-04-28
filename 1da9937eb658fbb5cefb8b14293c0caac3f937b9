@@ -34,6 +34,29 @@
       "parentUuid": "9bc6cf9e_939c1af6",
       "revId": "1da9937eb658fbb5cefb8b14293c0caac3f937b9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5dfe092_aa147b23",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-04-28T17:57:40Z",
+      "side": 1,
+      "message": "Change the comment to : Feel free to modify it with more details or improvements.\n\nArray representing whether phone numbers are same as other sources using a phone number identifier. If all the numbers are same then the array all the phoneId will be 0. If all them are different then each index will have different identifiers as 0, 1, 2. If any number is same as a previously found source array can be [0, 0, 1] [ 0, 1, 0] or [0, 1, 1] with repeating identifier specifying it is same as previous source with same identifier.",
+      "range": {
+        "startLine": 670,
+        "startChar": 29,
+        "endLine": 670,
+        "endChar": 93
+      },
+      "revId": "1da9937eb658fbb5cefb8b14293c0caac3f937b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
