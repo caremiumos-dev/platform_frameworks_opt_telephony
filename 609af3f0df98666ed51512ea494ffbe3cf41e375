@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6142d0cd_a5f3ff4a",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-04-28T16:57:11Z",
+      "side": 1,
+      "message": "I feel that source is confusing... sources are IMS, UICC and CARRIER. This is rather the uniqueness value. Maybe numberId?",
+      "parentUuid": "257b38c0_bf80d6b7",
+      "range": {
+        "startLine": 683,
+        "startChar": 18,
+        "endLine": 683,
+        "endChar": 29
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ccc399f_509bf16b",
         "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-28T16:49:26Z",
       "side": 1,
       "message": "PHONE_NUMBER_SOURCE_UICC",
+      "range": {
+        "startLine": 701,
+        "startChar": 38,
+        "endLine": 701,
+        "endChar": 39
+      },
+      "revId": "609af3f0df98666ed51512ea494ffbe3cf41e375",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "682192a3_9552a1cd",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-04-28T16:57:11Z",
+      "side": 1,
+      "message": "This is not UICC, but rather the unique ID as we try to compare various sources. So, I think 0 is right here.",
+      "parentUuid": "9ccc399f_509bf16b",
       "range": {
         "startLine": 701,
         "startChar": 38,
