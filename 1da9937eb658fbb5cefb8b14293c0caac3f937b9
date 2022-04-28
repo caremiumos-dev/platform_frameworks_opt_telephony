@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc6cf9e_939c1af6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2022-04-28T17:32:02Z",
+      "side": 1,
+      "message": "This is now no longer a pure cherry-pick. Should we resolve the comments in a separate CL?",
+      "revId": "1da9937eb658fbb5cefb8b14293c0caac3f937b9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
