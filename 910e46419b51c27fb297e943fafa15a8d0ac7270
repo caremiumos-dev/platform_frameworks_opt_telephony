@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5428f0e_fd098707",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4622,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T16:07:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82a4071c_ae3ea1b7",
+      "range": {
+        "startLine": 4622,
+        "startChar": 18,
+        "endLine": 4622,
+        "endChar": 32
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07d94a7c_8123c38b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-27T21:22:55Z",
       "side": 1,
       "message": "is it sim status or phone number that you are pulling",
+      "range": {
+        "startLine": 658,
+        "startChar": 16,
+        "endLine": 658,
+        "endChar": 32
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec26c6ef_78f051a4",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T16:07:44Z",
+      "side": 1,
+      "message": "Various information per sim such as wifi calling status, sim voltage, and user modified apns(will be added in subsequent patches after this).",
+      "parentUuid": "07d94a7c_8123c38b",
       "range": {
         "startLine": 658,
         "startChar": 16,
@@ -70,6 +118,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56318c9_1b64adde",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T16:07:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92abdefd_1a7ee92e",
+      "range": {
+        "startLine": 669,
+        "startChar": 25,
+        "endLine": 669,
+        "endChar": 29
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cd99e63_2024a367",
@@ -93,6 +165,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4dfbb65_3babf070",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T16:07:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cd99e63_2024a367",
+      "range": {
+        "startLine": 674,
+        "startChar": 21,
+        "endLine": 674,
+        "endChar": 27
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9615123f_2ba0e1ff",
@@ -106,6 +202,30 @@
       "writtenOn": "2022-04-27T21:22:55Z",
       "side": 1,
       "message": "what is numberState",
+      "range": {
+        "startLine": 679,
+        "startChar": 18,
+        "endLine": 679,
+        "endChar": 29
+      },
+      "revId": "910e46419b51c27fb297e943fafa15a8d0ac7270",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2689ab7c_220ec85e",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-04-28T16:07:44Z",
+      "side": 1,
+      "message": "It\u0027s explained in the comment above the declaration of numbersFromAllSources.",
+      "parentUuid": "9615123f_2ba0e1ff",
       "range": {
         "startLine": 679,
         "startChar": 18,
