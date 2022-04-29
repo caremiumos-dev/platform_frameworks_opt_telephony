@@ -178,8 +178,11 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
 
     @Override
     public void handleNetworkUnavailable() {
-        String reason = "handleNetworkUnavailable";
-        clearNetworkStateAndRerunDetection(reason, false /* fullyClearNitz */);
+        boolean networkStateChanged = clearNetworkState(false /* fullyClearNitz */);
+        if (networkStateChanged) {
+            String reason = "handleNetworkUnavailable";
+            runDetection(reason);
+        }
     }
 
     @Override
@@ -251,10 +254,15 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         // connectivity.
 
         // Clear country detection state.
+        boolean countryStateChanged = mCountryIsoCode != null;
         mCountryIsoCode = null;
 
-        String reason = "handleAirplaneModeChanged(" + on + ")";
-        clearNetworkStateAndRerunDetection(reason, true /* fullyClearNitz */);
+        boolean networkStateChanged = clearNetworkState(true /* fullyClearNitz */);
+
+        if (countryStateChanged || networkStateChanged) {
+            String reason = "handleAirplaneModeChanged(" + on + ")";
+            runDetection(reason);
+        }
     }
 
     private void restoreNetworkStateAndRerunDetection(String reason) {
@@ -289,28 +297,17 @@ public final class NitzStateMachineImpl implements NitzStateMachine {
         }
     }
 
-    private void clearNetworkStateAndRerunDetection(String reason, boolean fullyClearNitz) {
-        if (mLatestNitzSignal == null) {
-            if (fullyClearNitz) {
-                mLastNitzSignalCleared = null;
-            }
-
-            // The network state is already empty so there's no need to do anything.
-            if (DBG) {
-                Rlog.d(LOG_TAG, reason + ": mLatestNitzSignal was already null. Nothing to do.");
-            }
-            return;
-        }
-
+    private boolean clearNetworkState(boolean fullyClearNitz) {
         if (fullyClearNitz) {
             mLastNitzSignalCleared = null;
         } else {
             mLastNitzSignalCleared = new TimestampedValue<>(
                     mDeviceState.elapsedRealtimeMillis(), mLatestNitzSignal);
         }
-        mLatestNitzSignal = null;
 
-        runDetection(reason);
+        boolean networkStateChanged = mLatestNitzSignal != null;
+        mLatestNitzSignal = null;
+        return networkStateChanged;
     }
 
     private void runDetection(String reason) {
