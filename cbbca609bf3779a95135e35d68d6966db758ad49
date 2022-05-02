@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2b6bde2_566e58d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-05-02T23:06:12Z",
+      "side": 1,
+      "message": "Jack, would you pls help to approve the topic? This is CP-only (from internal to aosp). Thanks",
+      "revId": "cbbca609bf3779a95135e35d68d6966db758ad49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
