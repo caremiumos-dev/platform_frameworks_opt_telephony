@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1374a33c_0e521003",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1931377
+      },
+      "writtenOn": "2022-05-03T04:20:14Z",
+      "side": 1,
+      "message": "Please review this commit.",
+      "revId": "ea3a021dd5e2ba5b8feaa608e217b63272399362",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
