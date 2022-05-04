@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9120a7ba_57b1a405",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2022-05-04T13:22:33Z",
+      "side": 1,
+      "message": "These are suggested changes for the LocaleTracker based on my (possibly imperfect) understanding of the code. Please can you review or find a good reviewer who knows enough to confirm they are safe.",
+      "revId": "9efbe0f1ecf9f9670a00e6edfb1b158a3ca9b496",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
