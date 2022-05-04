@@ -547,6 +547,7 @@ public class GsmCdmaPhone extends Phone {
     }
 
     private void switchPhoneType(int precisePhoneType) {
+        logd("switchPhoneType(): precisePhoneType=" + precisePhoneType);
         removeCallbacks(mExitEcmRunnable);
 
         initRatSpecific(precisePhoneType);
@@ -3323,10 +3324,12 @@ public class GsmCdmaPhone extends Phone {
                 mUiccApplicationsEnabled = (Boolean) ar.result;
             // Intentional falling through.
             case EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED:
+                logd("EVENT_UICC_APPS_ENABLEMENT_SETTING_CHANGED");
                 reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
                 break;
 
             case EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE: {
+                logd("EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE");
                 ar = (AsyncResult) msg.obj;
                 if (ar == null || ar.exception == null) return;
                 Pair<Boolean, Integer> userObject = (Pair) ar.userObj;
@@ -3371,7 +3374,9 @@ public class GsmCdmaPhone extends Phone {
     // correctly based on supported apps, voice RAT, etc.
     @Override
     protected void onUpdateIccAvailability() {
+        logd("onUpdateIccAvailability(): START mPrecisePhoneType=" + mPrecisePhoneType);
         if (mUiccController == null ) {
+            loge("onUpdateIccAvailability(): mUiccController is Null");
             return;
         }
 
@@ -3386,6 +3391,8 @@ public class GsmCdmaPhone extends Phone {
             if (newUiccApplication != null) {
                 newIsimUiccRecords = (IsimUiccRecords) newUiccApplication.getIccRecords();
                 if (DBG) logd("New ISIM application found");
+            } else {
+                logd("onUpdateIccAvailability(): newUiccApplication is NULL");
             }
             mIsimUiccRecords = newIsimUiccRecords;
         }
@@ -3449,6 +3456,8 @@ public class GsmCdmaPhone extends Phone {
                 }
                 updateCurrentCarrierInProvider();
             }
+        } else {
+            loge("onUpdateIccAvailability(): app is null");
         }
 
         reapplyUiccAppsEnablementIfNeeded(ENABLE_UICC_APPS_MAX_RETRIES);
@@ -4671,26 +4680,35 @@ public class GsmCdmaPhone extends Phone {
     }
 
     private void reapplyUiccAppsEnablementIfNeeded(int retries) {
+        logd("reapplyUiccAppsEnablementIfNeeded START retries=" + retries);
         UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
 
         // If no card is present or we don't have mUiccApplicationsEnabled yet, do nothing.
         if (slot == null || slot.getCardState() != IccCardStatus.CardState.CARDSTATE_PRESENT
                 || mUiccApplicationsEnabled == null) {
+            loge("reapplyUiccAppsEnablementIfNeeded(): mUiccApplicationsEnabled=" + mUiccApplicationsEnabled);
             return;
         }
 
         UiccPort port = mUiccController.getUiccPort(mPhoneId);
+        if (port == null) {
+            loge("reapplyUiccAppsEnablementIfNeeded(): port is null");
+        }
         String iccId = (port == null) ? null : port.getIccId();
         if (iccId == null) {
+            loge("reapplyUiccAppsEnablementIfNeeded(): ICCID is null");
             return;
         }
 
         SubscriptionInfo info = SubscriptionController.getInstance().getSubInfoForIccId(
                 IccUtils.stripTrailingFs(iccId));
-
+        if (info != null) {
+            info.toString();
+        }
         // If info is null, it could be a new subscription. By default we enable it.
         boolean expectedValue = info == null ? true : info.areUiccApplicationsEnabled();
-
+        loge("reapplyUiccAppsEnablementIfNeeded(): expectedValue = " + expectedValue
+                + " mUiccApplicationsEnabled = " + mUiccApplicationsEnabled);
         // If for any reason current state is different from configured state, re-apply the
         // configured state.
         if (expectedValue != mUiccApplicationsEnabled) {

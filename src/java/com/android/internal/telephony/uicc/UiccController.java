@@ -665,8 +665,10 @@ public class UiccController extends Handler {
         synchronized (mLock) {
             UiccPort uiccPort = getUiccPortForPhone(phoneId);
             if (uiccPort != null) {
+                Rlog.d(LOG_TAG, "Valid port and returning the application");
                 return uiccPort.getApplication(family);
             }
+            Rlog.e(LOG_TAG, "Port is NULL and returning null");
             return null;
         }
     }
