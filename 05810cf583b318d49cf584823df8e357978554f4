@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af19927_302e8cbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2022-05-06T12:59:03Z",
+      "side": 1,
+      "message": "OWNER review needed since this is in frameworks/opt/telephony",
+      "revId": "05810cf583b318d49cf584823df8e357978554f4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
