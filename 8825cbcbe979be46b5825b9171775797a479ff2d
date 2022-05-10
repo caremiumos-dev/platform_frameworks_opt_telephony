@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2bed288_f9759ccc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-05-10T19:43:19Z",
+      "side": 1,
+      "message": "Hey guys, I\u0027m getting merge conflict in sc-v2-dev-plus-aosp, and I think it\u0027s because PerSimStatus.java is missing in that branch. I\u0027d like to bypass the presubmit and resolve the conflict later when I get a bug assigned to me. Let me know if that\u0027s ok.",
+      "revId": "8825cbcbe979be46b5825b9171775797a479ff2d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
