@@ -16,6 +16,24 @@
       "message": "Can you please figure it out why it disappeared by discussing with build team",
       "revId": "5a168df576c1737c03296862ac306984e444e355",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36d8bfd7_1a4ffa84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1935045
+      },
+      "writtenOn": "2022-05-10T16:10:18Z",
+      "side": 1,
+      "message": "I don\u0027t know the exact cause at the moment, but I suspect \"DO NOT MERGE\" had something to do with it. All the changes with \"DO NO MERGE\" around that time disappeared.",
+      "parentUuid": "224e3931_a7b31848",
+      "revId": "5a168df576c1737c03296862ac306984e444e355",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
