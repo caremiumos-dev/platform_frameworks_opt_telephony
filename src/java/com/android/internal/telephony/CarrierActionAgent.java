@@ -93,7 +93,10 @@ public class CarrierActionAgent extends Handler {
                     // ignore rebroadcast since carrier apps are direct boot aware.
                     return;
                 }
-                sendMessage(obtainMessage(EVENT_SIM_STATE_CHANGED, iccState));
+                final int phoneId = intent.getIntExtra(PhoneConstants.PHONE_KEY, -1);
+                if (mPhone.getPhoneId() == phoneId) {
+                    sendMessage(obtainMessage(EVENT_SIM_STATE_CHANGED, iccState));
+                }
             }
         }
     };
