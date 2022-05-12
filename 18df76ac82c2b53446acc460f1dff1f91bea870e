@@ -94,6 +94,30 @@
       },
       "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47fcb9b4_4509937a",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1121603
+      },
+      "writtenOn": "2022-05-12T02:31:46Z",
+      "side": 1,
+      "message": "In LTE case,SS is IN_SERVICE by combined attach I think.",
+      "parentUuid": "7cbb66ce_03c75cf1",
+      "range": {
+        "startLine": 189,
+        "startChar": 15,
+        "endLine": 190,
+        "endChar": 60
+      },
+      "revId": "18df76ac82c2b53446acc460f1dff1f91bea870e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
