@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6c59d14_42e78140",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-05-13T00:56:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "21de9681_b6ec5230",
+      "range": {
+        "startLine": 485,
+        "startChar": 12,
+        "endLine": 485,
+        "endChar": 35
+      },
+      "revId": "19862788563ed23a3eeee6a21e9532e3548c7699",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ac88ef9_fba53cda",
