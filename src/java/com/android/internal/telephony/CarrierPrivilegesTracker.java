@@ -465,15 +465,12 @@ public class CarrierPrivilegesTracker extends Handler {
 
         List<UiccAccessRule> updatedUiccRules = Collections.EMPTY_LIST;
 
-        mPrivilegedPackageInfoLock.writeLock().lock();
-        try {
-            mSimIsReadyButNotLoaded = simState == SIM_STATE_READY;
-        } finally {
-            mPrivilegedPackageInfoLock.writeLock().unlock();
-        }
-
         // Only include the UICC rules if the SIM is fully loaded
-        if (simState == SIM_STATE_LOADED) {
+        if (simState == SIM_STATE_READY) {
+            mPrivilegedPackageInfoLock.writeLock().lock();
+            mSimIsReadyButNotLoaded = true;
+            mPrivilegedPackageInfoLock.writeLock().unlock();
+        } else if (simState == SIM_STATE_LOADED) {
             mClearUiccRulesUptimeMillis = CLEAR_UICC_RULE_NOT_SCHEDULED;
             removeMessages(ACTION_CLEAR_UICC_RULES);
 
@@ -484,6 +481,9 @@ public class CarrierPrivilegesTracker extends Handler {
                     + " simState=" + simState
                     + " updated SIM-loaded rules=" + updatedUiccRules);
             maybeUpdateRulesAndNotifyRegistrants(mUiccRules, updatedUiccRules);
+            mPrivilegedPackageInfoLock.writeLock().lock();
+            mSimIsReadyButNotLoaded = false;
+            mPrivilegedPackageInfoLock.writeLock().unlock();
         } else {
             if (!mUiccRules.isEmpty()
                     && mClearUiccRulesUptimeMillis == CLEAR_UICC_RULE_NOT_SCHEDULED) {
