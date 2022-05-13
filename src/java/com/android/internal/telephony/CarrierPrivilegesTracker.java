@@ -465,38 +465,39 @@ public class CarrierPrivilegesTracker extends Handler {
 
         List<UiccAccessRule> updatedUiccRules = Collections.EMPTY_LIST;
 
+        // Only include the UICC rules if the SIM is fully loaded
         mPrivilegedPackageInfoLock.writeLock().lock();
         try {
             mSimIsReadyButNotLoaded = simState == SIM_STATE_READY;
+
+            if (simState == SIM_STATE_LOADED) {
+                mClearUiccRulesUptimeMillis = CLEAR_UICC_RULE_NOT_SCHEDULED;
+                removeMessages(ACTION_CLEAR_UICC_RULES);
+
+                updatedUiccRules = getSimRules();
+
+                mLocalLog.log("SIM fully loaded:"
+                        + " slotId=" + slotId
+                        + " simState=" + simState
+                        + " updated SIM-loaded rules=" + updatedUiccRules);
+                maybeUpdateRulesAndNotifyRegistrants(mUiccRules, updatedUiccRules);
+            } else {
+                if (!mUiccRules.isEmpty()
+                        && mClearUiccRulesUptimeMillis == CLEAR_UICC_RULE_NOT_SCHEDULED) {
+                    mClearUiccRulesUptimeMillis =
+                            SystemClock.uptimeMillis() + CLEAR_UICC_RULES_DELAY_MILLIS;
+                    sendMessageAtTime(obtainMessage(ACTION_CLEAR_UICC_RULES),
+                            mClearUiccRulesUptimeMillis);
+                    mLocalLog.log("SIM is gone. Delay " + TimeUnit.MILLISECONDS.toSeconds(
+                            CLEAR_UICC_RULES_DELAY_MILLIS) + " seconds to clear UICC rules.");
+                } else {
+                    mLocalLog.log(
+                            "Ignore SIM gone event while UiccRules is empty"
+                            + " or waiting to be emptied.");
+                }
+            }
         } finally {
             mPrivilegedPackageInfoLock.writeLock().unlock();
-        }
-
-        // Only include the UICC rules if the SIM is fully loaded
-        if (simState == SIM_STATE_LOADED) {
-            mClearUiccRulesUptimeMillis = CLEAR_UICC_RULE_NOT_SCHEDULED;
-            removeMessages(ACTION_CLEAR_UICC_RULES);
-
-            updatedUiccRules = getSimRules();
-
-            mLocalLog.log("SIM fully loaded:"
-                    + " slotId=" + slotId
-                    + " simState=" + simState
-                    + " updated SIM-loaded rules=" + updatedUiccRules);
-            maybeUpdateRulesAndNotifyRegistrants(mUiccRules, updatedUiccRules);
-        } else {
-            if (!mUiccRules.isEmpty()
-                    && mClearUiccRulesUptimeMillis == CLEAR_UICC_RULE_NOT_SCHEDULED) {
-                mClearUiccRulesUptimeMillis =
-                        SystemClock.uptimeMillis() + CLEAR_UICC_RULES_DELAY_MILLIS;
-                sendMessageAtTime(obtainMessage(ACTION_CLEAR_UICC_RULES),
-                        mClearUiccRulesUptimeMillis);
-                mLocalLog.log("SIM is gone. Delay " + TimeUnit.MILLISECONDS.toSeconds(
-                        CLEAR_UICC_RULES_DELAY_MILLIS) + " seconds to clear UICC rules.");
-            } else {
-                mLocalLog.log(
-                        "Ignore SIM gone event while UiccRules is empty or waiting to be emptied.");
-            }
         }
     }
 
