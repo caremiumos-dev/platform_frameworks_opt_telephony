@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21de9681_b6ec5230",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-05-13T00:21:33Z",
+      "side": 1,
+      "message": "this should actually be set to \"false\" after updated rules are loaded and before the callbacks are fired...",
+      "range": {
+        "startLine": 485,
+        "startChar": 12,
+        "endLine": 485,
+        "endChar": 35
+      },
+      "revId": "19862788563ed23a3eeee6a21e9532e3548c7699",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac88ef9_fba53cda",
+        "filename": "src/java/com/android/internal/telephony/CarrierPrivilegesTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-05-13T00:21:33Z",
+      "side": 1,
+      "message": "I think that the readyNotLoaded bit should go false here?",
+      "range": {
+        "startLine": 677,
+        "startChar": 10,
+        "endLine": 677,
+        "endChar": 17
+      },
+      "revId": "19862788563ed23a3eeee6a21e9532e3548c7699",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
