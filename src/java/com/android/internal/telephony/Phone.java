@@ -746,6 +746,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 break;
 
             case EVENT_ICC_CHANGED:
+                Rlog.d(LOG_TAG, "EVENT_ICC_CHANGED called");
                 onUpdateIccAvailability();
                 break;
 

@@ -2906,7 +2906,7 @@ public class GsmCdmaPhone extends Phone {
     public void handleMessage(Message msg) {
         AsyncResult ar;
         Message onComplete;
-
+        Rlog.d(LOG_TAG, "handleMessage, msg.what= " + msg.what);
         switch (msg.what) {
             case EVENT_RADIO_AVAILABLE: {
                 handleRadioAvailable();
@@ -4643,17 +4643,20 @@ public class GsmCdmaPhone extends Phone {
     }
 
     private void reapplyUiccAppsEnablementIfNeeded(int retries) {
+        Rlog.d(LOG_TAG, "reapplyUiccAppsEnablementIfNeeded mUiccApplicationsEnabled: "
+                + mUiccApplicationsEnabled);
         UiccSlot slot = mUiccController.getUiccSlotForPhone(mPhoneId);
-
         // If no card is present or we don't have mUiccApplicationsEnabled yet, do nothing.
         if (slot == null || slot.getCardState() != IccCardStatus.CardState.CARDSTATE_PRESENT
                 || mUiccApplicationsEnabled == null) {
+            Rlog.e(LOG_TAG, "reapplyUiccAppsEnablementIfNeeded slot null or card is not present");
             return;
         }
 
-        UiccPort port = mUiccController.getUiccPort(mPhoneId);
-        String iccId = (port == null) ? null : port.getIccId();
+        String iccId = slot.getIccId(slot.getPortIndexFromPhoneId(mPhoneId));
         if (iccId == null) {
+            Rlog.e(LOG_TAG, "reapplyUiccAppsEnablementIfNeeded iccId null, phoneId: " + mPhoneId
+                    + " portIndex: " + slot.getPortIndexFromPhoneId(mPhoneId));
             return;
         }
 
@@ -4663,6 +4666,9 @@ public class GsmCdmaPhone extends Phone {
         // If info is null, it could be a new subscription. By default we enable it.
         boolean expectedValue = info == null ? true : info.areUiccApplicationsEnabled();
 
+        Rlog.d(LOG_TAG, "reapplyUiccAppsEnablementIfNeeded SubscriptionInfo: " + info
+                + " expectedValue: " + expectedValue
+                + " mUiccApplicationsEnabled: " + mUiccApplicationsEnabled);
         // If for any reason current state is different from configured state, re-apply the
         // configured state.
         if (expectedValue != mUiccApplicationsEnabled) {

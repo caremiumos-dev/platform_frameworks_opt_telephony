@@ -664,6 +664,7 @@ public class UiccController extends Handler {
     public UiccCardApplication getUiccCardApplication(int phoneId, int family) {
         synchronized (mLock) {
             UiccPort uiccPort = getUiccPortForPhone(phoneId);
+            Rlog.d(LOG_TAG, "getUiccCardApplication UiccPort: " + uiccPort);
             if (uiccPort != null) {
                 return uiccPort.getApplication(family);
             }
