@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "151f0ff7_74227b56",
+        "filename": "src/java/com/android/internal/telephony/CarrierActionAgent.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1121193
+      },
+      "writtenOn": "2022-05-16T05:34:48Z",
+      "side": 1,
+      "message": "nit: try to use proper API instead of hardcoding -1\nhttps://source.corp.google.com/android/frameworks/base/telephony/java/android/telephony/SubscriptionManager.java;l\u003d111;bpv\u003d1;bpt\u003d1?q\u003dSubscriptionManager\u0026ss\u003dpiper%2FGoogle%2Fandroid",
+      "range": {
+        "startLine": 96,
+        "startChar": 81,
+        "endLine": 96,
+        "endChar": 82
+      },
+      "revId": "84eeefc9a0cc569b3e3ba6889e5a4b49e845572d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
