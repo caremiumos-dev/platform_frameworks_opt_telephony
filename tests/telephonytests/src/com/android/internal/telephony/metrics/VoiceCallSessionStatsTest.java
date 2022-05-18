@@ -30,10 +30,7 @@ import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSIO
 import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__MAIN_CODEC_QUALITY__CODEC_QUALITY_NARROWBAND;
 import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__MAIN_CODEC_QUALITY__CODEC_QUALITY_SUPER_WIDEBAND;
 import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__MAIN_CODEC_QUALITY__CODEC_QUALITY_UNKNOWN;
-import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
-import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_ULTRA_FAST;
 import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
-import static com.android.internal.telephony.TelephonyStatsLog.VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_VERY_SLOW;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -228,8 +225,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MO,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_REMOTE_CALL_DECLINE);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 200;
         expectedCall.setupFailed = true;
         expectedCall.ratAtConnected = TelephonyManager.NETWORK_TYPE_UNKNOWN;
@@ -324,8 +319,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MO,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED_BY_REMOTE);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 200;
         expectedCall.setupFailed = false;
         expectedCall.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_EVS_SWB;
@@ -432,8 +425,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -704,8 +695,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.codecBitmask =
@@ -758,8 +747,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -876,8 +863,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -929,8 +914,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MO,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED_BY_REMOTE);
-        expectedCall0.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall0.setupDurationMillis = 80;
         expectedCall0.setupFailed = false;
         expectedCall0.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -952,8 +935,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall1.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall1.setupDurationMillis = 20;
         expectedCall1.setupFailed = false;
         expectedCall1.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1057,8 +1038,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MO,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall0.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall0.setupDurationMillis = 80;
         expectedCall0.setupFailed = false;
         expectedCall0.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1080,8 +1059,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED_BY_REMOTE);
-        expectedCall1.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall1.setupDurationMillis = 20;
         expectedCall1.setupFailed = false;
         expectedCall1.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1185,8 +1162,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MO,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall0.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall0.setupDurationMillis = 80;
         expectedCall0.setupFailed = false;
         expectedCall0.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1207,8 +1182,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED_BY_REMOTE);
-        expectedCall1.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall1.setupDurationMillis = 20;
         expectedCall1.setupFailed = false;
         expectedCall1.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1298,8 +1271,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         DisconnectCause.NORMAL);
         expectedCall.ratAtEnd = TelephonyManager.NETWORK_TYPE_UMTS;
         expectedCall.bandAtEnd = 0;
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_VERY_SLOW;
         expectedCall.setupDurationMillis = 5000;
         expectedCall.disconnectExtraCode = PreciseDisconnectCause.CALL_REJECTED;
         expectedCall.ratSwitchCount = 1L;
@@ -1416,8 +1387,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
         expectedCall.ratAtConnected = TelephonyManager.NETWORK_TYPE_UMTS;
         expectedCall.ratAtEnd = TelephonyManager.NETWORK_TYPE_UMTS;
         expectedCall.bandAtEnd = 0;
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_VERY_SLOW;
         expectedCall.setupDurationMillis = 5000;
         expectedCall.disconnectExtraCode = PreciseDisconnectCause.NORMAL;
         expectedCall.ratSwitchCount = 1L;
@@ -1481,8 +1450,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_UMTS,
                         DisconnectCause.NORMAL);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_UNKNOWN;
         expectedCall.setupDurationMillis = 0;
         expectedCall.disconnectExtraCode = PreciseDisconnectCause.CALL_REJECTED;
         expectedCall.setupFailed = true;
@@ -1538,8 +1505,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_UMTS,
                         DisconnectCause.NORMAL);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_ULTRA_FAST;
         expectedCall.setupDurationMillis = 500;
         expectedCall.disconnectExtraCode = PreciseDisconnectCause.NORMAL;
         expectedCall.setupFailed = false;
@@ -1598,8 +1563,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_LOCAL_HO_NOT_FEASIBLE);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.srvccFailureCount = 2L;
@@ -1676,8 +1639,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         VOICE_CALL_SESSION__DIRECTION__CALL_DIRECTION_MT,
                         TelephonyManager.NETWORK_TYPE_LTE,
                         ImsReasonInfo.CODE_USER_TERMINATED);
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.srvccCancellationCount = 2L;
@@ -1747,8 +1708,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         TelephonyManager.NETWORK_TYPE_LTE,
                         DisconnectCause.NORMAL);
         expectedCall.disconnectExtraCode = PreciseDisconnectCause.NORMAL;
-        expectedCall.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall.setupDurationMillis = 80;
         expectedCall.setupFailed = false;
         expectedCall.srvccCancellationCount = 1L;
@@ -1843,8 +1802,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         TelephonyManager.NETWORK_TYPE_LTE,
                         DisconnectCause.NORMAL);
         expectedCall0.disconnectExtraCode = PreciseDisconnectCause.NORMAL;
-        expectedCall0.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall0.setupDurationMillis = 80;
         expectedCall0.setupFailed = false;
         expectedCall0.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
@@ -1871,8 +1828,6 @@ public class VoiceCallSessionStatsTest extends TelephonyTest {
                         TelephonyManager.NETWORK_TYPE_LTE,
                         DisconnectCause.NORMAL);
         expectedCall1.disconnectExtraCode = PreciseDisconnectCause.NORMAL;
-        expectedCall1.setupDuration =
-                VOICE_CALL_SESSION__SETUP_DURATION__CALL_SETUP_DURATION_EXTREMELY_FAST;
         expectedCall1.setupDurationMillis = 20;
         expectedCall1.setupFailed = false;
         expectedCall1.codecBitmask = 1L << AudioCodec.AUDIO_CODEC_AMR;
