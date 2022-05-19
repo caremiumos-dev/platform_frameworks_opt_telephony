@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8ba12e_0709849d",
+        "filename": "src/java/com/android/internal/telephony/metrics/VoiceCallSessionStats.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-05-19T19:26:32Z",
+      "side": 0,
+      "message": "We can remove this from persist_atoms.proto as well (mark the number as reserved).\n\nAfter that, need to also update MetricsCollector.",
+      "range": {
+        "startLine": 398,
+        "startChar": 18,
+        "endLine": 398,
+        "endChar": 31
+      },
+      "revId": "c5770ff7ea0047b285106a2793f5b8c361acc057",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
