@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "537d7726_67fadc12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-05-23T17:41:25Z",
+      "side": 1,
+      "message": "PersistAtomsStorageTest.java also needs to be updated.",
+      "revId": "3d5113902aff3ae096a2a15b2f521d0bcddefe75",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ab273d1_97a583b9",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1633930
+      },
+      "writtenOn": "2022-05-23T17:41:25Z",
+      "side": 1,
+      "message": "Since the enum is marked deprecated, should we just use 0 here?",
+      "range": {
+        "startLine": 724,
+        "startChar": 16,
+        "endLine": 724,
+        "endChar": 72
+      },
+      "revId": "3d5113902aff3ae096a2a15b2f521d0bcddefe75",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
