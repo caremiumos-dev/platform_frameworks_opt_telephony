@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "954d158f_aba5e165",
+        "filename": "src/java/com/android/internal/telephony/metrics/MetricsCollector.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1407086
+      },
+      "writtenOn": "2022-05-23T16:35:25Z",
+      "side": 1,
+      "message": "Minor. Maybe good to have a comment like:\ndeprecated and replaced by setupDurationMillis",
+      "range": {
+        "startLine": 723,
+        "startChar": 16,
+        "endLine": 723,
+        "endChar": 72
+      },
+      "revId": "433a88a1b96a1ad010c21a6fee06fa2e8bdd8570",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
