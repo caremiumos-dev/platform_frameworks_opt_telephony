@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "731181bd_872a2cd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-05-26T23:16:26Z",
+      "side": 1,
+      "message": "Pure CP from tm-dev to aosp to unblock other\u0027s development. Pls help to approve.",
+      "revId": "e0f9c86828eebf5a917f6da76b37b1213a7184dd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
