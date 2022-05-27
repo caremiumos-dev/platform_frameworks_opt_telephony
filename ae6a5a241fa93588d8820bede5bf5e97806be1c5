@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e173661d_bf525d4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-05-27T15:52:12Z",
+      "side": 1,
+      "message": "tm-dev \u003d\u003e AOSP cherry-pick only",
+      "revId": "ae6a5a241fa93588d8820bede5bf5e97806be1c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
