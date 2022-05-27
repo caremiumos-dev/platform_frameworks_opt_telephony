@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c6de4b_07f94d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-05-27T03:45:55Z",
+      "side": 1,
+      "message": "depend on ag/17124804 to CP firstly",
+      "revId": "a97c06c7ef5532405e91d3e0a77a5dbd6c1559fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
