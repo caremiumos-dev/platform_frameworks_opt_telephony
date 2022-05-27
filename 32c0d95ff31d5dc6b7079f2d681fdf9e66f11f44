@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb42f886_d5b79d96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-05-27T15:52:46Z",
+      "side": 1,
+      "message": "pure CP from tm-dev \u003d\u003e aosp. thanks",
+      "revId": "32c0d95ff31d5dc6b7079f2d681fdf9e66f11f44",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
