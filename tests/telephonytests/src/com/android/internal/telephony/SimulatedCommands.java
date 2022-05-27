@@ -2348,6 +2348,16 @@ public class SimulatedCommands extends BaseCommands
     }
 
     @Override
+    public void registerForNotAvailable(Handler h, int what, Object obj) {
+        SimulatedCommandsVerifier.getInstance().registerForNotAvailable(h, what, obj);
+    }
+
+    @Override
+    public void unregisterForNotAvailable(Handler h) {
+        SimulatedCommandsVerifier.getInstance().unregisterForNotAvailable(h);
+    }
+
+    @Override
     public void registerForModemReset(Handler h, int what, Object obj) {
         SimulatedCommandsVerifier.getInstance().registerForModemReset(h, what, obj);
         super.registerForModemReset(h, what, obj);
