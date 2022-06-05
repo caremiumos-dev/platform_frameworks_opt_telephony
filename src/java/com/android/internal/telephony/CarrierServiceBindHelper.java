@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.CallbackExecutor;
+import android.annotation.NonNull;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -50,6 +52,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 /**
  * Manages long-lived bindings to carrier services
@@ -78,6 +81,18 @@ public class CarrierServiceBindHelper {
     // CarrierServiceChangeCallback can cover the cases
     private final PackageChangeReceiver mPackageMonitor = new CarrierServicePackageMonitor();
     private final LocalLog mLocalLog = new LocalLog(100);
+    private ServiceBinding mServeBinding = new ServiceBinding() {
+        @Override
+        public boolean bindService(Intent service, int flags, Executor executor,
+                @NonNull ServiceConnection conn) {
+            return mContext.bindService(service, flags, executor, conn);
+        }
+
+        @Override
+        public void unbindService(@NonNull ServiceConnection conn) {
+            mContext.unbindService(conn);
+        }
+    };
 
     private BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
         @Override
@@ -200,7 +215,8 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    void updateForPhoneId(int phoneId, String simState) {
+    @VisibleForTesting
+    public void updateForPhoneId(int phoneId, String simState) {
         logdWithLocalLog("update binding for phoneId: " + phoneId + " simState: " + simState);
         if (!SubscriptionManager.isValidPhoneId(phoneId)) {
             return;
@@ -326,7 +342,7 @@ public class CarrierServiceBindHelper {
 
             String error;
             try {
-                if (mContext.bindService(
+                if (mServeBinding.bindService(
                         carrierService,
                         Context.BIND_AUTO_CREATE
                                 | Context.BIND_FOREGROUND_SERVICE
@@ -390,7 +406,7 @@ public class CarrierServiceBindHelper {
 
             // Always call unbindService, no matter if bindService succeed.
             if (connection != null) {
-                mContext.unbindService(connection);
+                mServeBinding.unbindService(connection);
                 logdWithLocalLog("Unbinding from carrier app");
                 connection = null;
                 mUnbindScheduledUptimeMillis = -1;
@@ -524,5 +540,21 @@ public class CarrierServiceBindHelper {
         }
         pw.println("CarrierServiceBindHelperLogs=");
         mLocalLog.dump(fd, pw, args);
+    }
+
+    /**
+     * A unit test friendly wrapper of context#bind/unbindService
+     */
+    @VisibleForTesting
+    public interface ServiceBinding {
+        boolean bindService(Intent service, int flags, @CallbackExecutor Executor executor,
+                @NonNull ServiceConnection conn);
+
+        void unbindService(@NonNull ServiceConnection conn);
+    }
+
+    @VisibleForTesting
+    public void setServiceBinding(ServiceBinding serveBinding) {
+        this.mServeBinding = serveBinding;
     }
 }
