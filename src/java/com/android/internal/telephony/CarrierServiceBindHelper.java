@@ -182,8 +182,7 @@ public class CarrierServiceBindHelper {
     // Create or dispose mBindings and mLastSimState objects.
     private void updateBindingsAndSimStates() {
         int prevLen = mBindings.size();
-        int newLen = ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                .getActiveModemCount();
+        int newLen = mContext.getSystemService(TelephonyManager.class).getActiveModemCount();
 
         // If prevLen < newLen, allocate AppBinding and simState objects.
         for (int phoneId = prevLen; phoneId < newLen; phoneId++) {
@@ -200,7 +199,11 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    void updateForPhoneId(int phoneId, String simState) {
+    /**
+     * Handle SIM state change
+     */
+    @VisibleForTesting
+    public void updateForPhoneId(int phoneId, String simState) {
         logdWithLocalLog("update binding for phoneId: " + phoneId + " simState: " + simState);
         if (!SubscriptionManager.isValidPhoneId(phoneId)) {
             return;
@@ -213,6 +216,26 @@ public class CarrierServiceBindHelper {
             mLastSimState.put(phoneId, simState);
         }
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_REBIND, phoneId));
+    }
+
+    /**
+     * Check if the binding for the specified phone has established.
+     * This is only used to improve testing for now.
+     */
+    @VisibleForTesting
+    public boolean isBindingConnectionEstablished(int phoneId) {
+        AppBinding binding = mBindings.get(phoneId);
+        return binding != null && binding.connection != null;
+    }
+
+    /**
+     * Check if the binding for the specified phone has established and is connected.
+     * This is only used to improve testing for now.
+     */
+    @VisibleForTesting
+    public boolean isBindingConnectionConnected(int phoneId) {
+        AppBinding binding = mBindings.get(phoneId);
+        return binding != null && binding.connection != null && binding.connection.connected;
     }
 
     private class AppBinding {
