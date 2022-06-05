@@ -200,7 +200,11 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    void updateForPhoneId(int phoneId, String simState) {
+    /**
+     * Handle SIM state change
+     */
+    @VisibleForTesting
+    public void updateForPhoneId(int phoneId, String simState) {
         logdWithLocalLog("update binding for phoneId: " + phoneId + " simState: " + simState);
         if (!SubscriptionManager.isValidPhoneId(phoneId)) {
             return;
@@ -230,7 +234,8 @@ public class CarrierServiceBindHelper {
         public AppBinding(int phoneId) {
             this.phoneId = phoneId;
             this.mCarrierServiceChangeCallback = new CarrierServiceChangeCallback(phoneId);
-            TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
+            TelephonyManager tm = ((TelephonyManager) mContext.getSystemService(
+                    Context.TELEPHONY_SERVICE));
             if (tm != null) {
                 tm.registerCarrierPrivilegesCallback(phoneId, new HandlerExecutor(mHandler),
                         mCarrierServiceChangeCallback);
@@ -238,7 +243,8 @@ public class CarrierServiceBindHelper {
         }
 
         public void tearDown() {
-            TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
+            TelephonyManager tm = ((TelephonyManager) mContext.getSystemService(
+                    Context.TELEPHONY_SERVICE));
             if (tm != null && mCarrierServiceChangeCallback != null) {
                 tm.unregisterCarrierPrivilegesCallback(mCarrierServiceChangeCallback);
             }
