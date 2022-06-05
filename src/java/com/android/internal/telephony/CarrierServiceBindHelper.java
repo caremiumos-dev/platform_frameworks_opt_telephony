@@ -182,8 +182,7 @@ public class CarrierServiceBindHelper {
     // Create or dispose mBindings and mLastSimState objects.
     private void updateBindingsAndSimStates() {
         int prevLen = mBindings.size();
-        int newLen = ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                .getActiveModemCount();
+        int newLen = mContext.getSystemService(TelephonyManager.class).getActiveModemCount();
 
         // If prevLen < newLen, allocate AppBinding and simState objects.
         for (int phoneId = prevLen; phoneId < newLen; phoneId++) {
@@ -200,7 +199,11 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    void updateForPhoneId(int phoneId, String simState) {
+    /**
+     * Handle SIM state change
+     */
+    @VisibleForTesting
+    public void updateForPhoneId(int phoneId, String simState) {
         logdWithLocalLog("update binding for phoneId: " + phoneId + " simState: " + simState);
         if (!SubscriptionManager.isValidPhoneId(phoneId)) {
             return;
