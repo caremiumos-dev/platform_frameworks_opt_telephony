@@ -182,8 +182,7 @@ public class CarrierServiceBindHelper {
     // Create or dispose mBindings and mLastSimState objects.
     private void updateBindingsAndSimStates() {
         int prevLen = mBindings.size();
-        int newLen = ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                .getActiveModemCount();
+        int newLen = mContext.getSystemService(TelephonyManager.class).getActiveModemCount();
 
         // If prevLen < newLen, allocate AppBinding and simState objects.
         for (int phoneId = prevLen; phoneId < newLen; phoneId++) {
@@ -200,11 +199,16 @@ public class CarrierServiceBindHelper {
         }
     }
 
-    void updateForPhoneId(int phoneId, String simState) {
+    /**
+     * Handle SIM state change
+     */
+    @VisibleForTesting
+    public void updateForPhoneId(int phoneId, String simState) {
         logdWithLocalLog("update binding for phoneId: " + phoneId + " simState: " + simState);
         if (!SubscriptionManager.isValidPhoneId(phoneId)) {
             return;
         }
+        // TODO(b/201423849): filter more invalid  SIM states other than empty one
         if (TextUtils.isEmpty(simState) || phoneId >= mLastSimState.size()) return;
         if (simState.equals(mLastSimState.get(phoneId))) {
             // ignore consecutive duplicated events
@@ -213,6 +217,26 @@ public class CarrierServiceBindHelper {
             mLastSimState.put(phoneId, simState);
         }
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_REBIND, phoneId));
+    }
+
+    /**
+     * Check if the binding connection for the specified phone has created.
+     * This is only used to improve testing for now.
+     */
+    @VisibleForTesting
+    public boolean isBindingConnectionCreated(int phoneId) {
+        AppBinding binding = mBindings.get(phoneId);
+        return binding != null && binding.connection != null;
+    }
+
+    /**
+     * Check if the binding connection for the specified phone has created and is connected.
+     * This is only used to improve testing for now.
+     */
+    @VisibleForTesting
+    public boolean isBindingConnectionConnected(int phoneId) {
+        AppBinding binding = mBindings.get(phoneId);
+        return binding != null && binding.connection != null && binding.connection.connected;
     }
 
     private class AppBinding {
