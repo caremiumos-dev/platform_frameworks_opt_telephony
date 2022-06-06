@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123d9910_682dee9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2022-06-06T01:33:02Z",
+      "side": 1,
+      "message": "Which test is directly targeted at the bug that we found? where the first call to the synchronous method fails, and the callback is added to fix that?\n\nThat\u0027d be helpful to test.\n\nIf the context can directly be mocked, suggest pulling at least that test in to the main CL.",
+      "revId": "91949e061a7272bb776582ac3e8b7f7776a74cc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38e30e67_fdc3e9ee",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1221725
+      },
+      "writtenOn": "2022-06-06T01:33:02Z",
+      "side": 1,
+      "message": "This can be done directly by just mocking the context. Then you won\u0027t need most of the changes in this file.",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 37
+      },
+      "revId": "91949e061a7272bb776582ac3e8b7f7776a74cc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
