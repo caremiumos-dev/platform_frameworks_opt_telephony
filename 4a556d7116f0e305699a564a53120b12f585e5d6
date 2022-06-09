@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f8d626f_dea01240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-06-09T20:47:12Z",
+      "side": 1,
+      "message": "This is pure cherry-pick from goog/tm-dev to aosp/master. thanks",
+      "revId": "4a556d7116f0e305699a564a53120b12f585e5d6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
