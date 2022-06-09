@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d95f28_4e54e3d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2022-06-09T20:35:07Z",
+      "side": 1,
+      "message": "please resolve merge conflict and add unit tests",
+      "revId": "e70e8bb5ffe30fc5c429268ecb917e801fac803c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
