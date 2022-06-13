@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5d2241d_e2eeaea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-06-13T22:19:50Z",
+      "side": 1,
+      "message": "The race condition case now is able to UTed, after we build the utilities. \n\nAnd now we are able to UT both single state change scenarios and multiple state changes scenarios.",
+      "parentUuid": "123d9910_682dee9b",
+      "revId": "91949e061a7272bb776582ac3e8b7f7776a74cc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38e30e67_fdc3e9ee",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-06-06T01:33:02Z",
       "side": 1,
       "message": "This can be done directly by just mocking the context. Then you won\u0027t need most of the changes in this file.",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 37
+      },
+      "revId": "91949e061a7272bb776582ac3e8b7f7776a74cc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898dd130_875daea6",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-06-13T22:19:50Z",
+      "side": 1,
+      "message": "Yes, the original patch is more like a prototype to quickly verify if we are able to test the [un]bindService behavior.\n\nThe latest patch switches to mocked context and can test to verify the state (instead of the behavior).",
+      "parentUuid": "38e30e67_fdc3e9ee",
       "range": {
         "startLine": 549,
         "startChar": 0,
