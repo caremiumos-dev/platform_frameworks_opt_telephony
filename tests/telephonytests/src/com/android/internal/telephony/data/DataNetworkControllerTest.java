@@ -926,8 +926,8 @@ public class DataNetworkControllerTest extends TelephonyTest {
             throws Exception {
         List<DataNetwork> dataNetworkList = getDataNetworks();
         for (DataNetwork dataNetwork : getDataNetworks()) {
-            if (dataNetwork.isConnected() && Arrays.stream(networkCapabilities).boxed()
-                    .allMatch(dataNetwork.getNetworkCapabilities()::hasCapability)) {
+            if (dataNetwork.isConnected()
+                    && dataNetwork.areCapabilitiesSupported(networkCapabilities)) {
                 return;
             }
         }
