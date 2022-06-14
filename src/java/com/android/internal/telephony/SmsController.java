@@ -224,14 +224,14 @@ public class SmsController extends ISmsImplBase {
             String scAddr, String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
             boolean persistMessageForNonDefaultSmsApp, long messageId) {
         Rlog.d(LOG_TAG, "sendTextForSubscriber iccSmsIntMgr"
-                + " Subscription: " + subId + " id: " + messageId);
+                + " Subscription: " + subId + " x-message-id: " + messageId);
         IccSmsInterfaceManager iccSmsIntMgr = getIccSmsInterfaceManager(subId);
         if (iccSmsIntMgr != null) {
             iccSmsIntMgr.sendText(callingPackage, destAddr, scAddr, text, sentIntent,
                     deliveryIntent, persistMessageForNonDefaultSmsApp, messageId);
         } else {
             Rlog.e(LOG_TAG, "sendTextForSubscriber iccSmsIntMgr is null for"
-                    + " Subscription: " + subId + " id: " + messageId);
+                    + " Subscription: " + subId + " x-message-id: " + messageId);
             sendErrorInPendingIntent(sentIntent, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
         }
     }
@@ -288,7 +288,7 @@ public class SmsController extends ISmsImplBase {
                     messageId);
         } else {
             Rlog.e(LOG_TAG, "sendMultipartTextForSubscriber iccSmsIntMgr is null for"
-                    + " Subscription: " + subId + " id: " + messageId);
+                    + " Subscription: " + subId + " x-message-id: " + messageId);
             sendErrorInPendingIntents(sentIntents, SmsManager.RESULT_ERROR_GENERIC_FAILURE);
         }
     }
