@@ -92,6 +92,7 @@ import com.android.internal.telephony.cdma.CdmaMmiCode;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.data.AccessNetworksManager;
 import com.android.internal.telephony.data.DataNetworkController;
+import com.android.internal.telephony.data.DataUtils;
 import com.android.internal.telephony.data.LinkBandwidthEstimator;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
 import com.android.internal.telephony.dataconnection.DcTracker;
@@ -736,23 +737,49 @@ public class GsmCdmaPhone extends Phone {
 
             ret = PhoneConstants.DataState.DISCONNECTED;
         } else { /* mSST.gprsState == ServiceState.STATE_IN_SERVICE */
-            int currentTransport = mAccessNetworksManager.getCurrentTransport(
-                    ApnSetting.getApnTypesBitmaskFromString(apnType));
-            if (getDcTracker(currentTransport) != null) {
-                switch (getDcTracker(currentTransport).getState(apnType)) {
-                    case CONNECTED:
-                    case DISCONNECTING:
-                        if (isDataSuspended()) {
-                            ret = PhoneConstants.DataState.SUSPENDED;
-                        } else {
+            int apnTypes = ApnSetting.getApnTypesBitmaskFromString(apnType);
+            if (isUsingNewDataStack()) {
+                if (getDataNetworkController() != null) {
+                    int[] netCaps = Arrays.stream(ApnSetting.getApnTypesFromBitmask(apnTypes))
+                            .map(DataUtils::apnTypeToNetworkCapability)
+                            .toArray();
+                    switch (getDataNetworkController().getDataNetworkState(netCaps)) {
+                        case TelephonyManager.DATA_CONNECTING:
+                            ret = PhoneConstants.DataState.CONNECTING;
+                            break;
+                        case TelephonyManager.DATA_CONNECTED:
                             ret = PhoneConstants.DataState.CONNECTED;
-                        }
-                        break;
-                    case CONNECTING:
-                        ret = PhoneConstants.DataState.CONNECTING;
-                        break;
-                    default:
-                        ret = PhoneConstants.DataState.DISCONNECTED;
+                            break;
+                        case TelephonyManager.DATA_SUSPENDED:
+                            ret = PhoneConstants.DataState.SUSPENDED;
+                            break;
+                        case TelephonyManager.DATA_DISCONNECTED:
+                        case TelephonyManager.DATA_DISCONNECTING:
+                            ret = PhoneConstants.DataState.DISCONNECTING;
+                            break;
+                        default:
+                            ret = PhoneConstants.DataState.DISCONNECTED;
+
+                    }
+                }
+            } else {
+                int currentTransport = mAccessNetworksManager.getCurrentTransport(apnTypes);
+                if (getDcTracker(currentTransport) != null) {
+                    switch (getDcTracker(currentTransport).getState(apnType)) {
+                        case CONNECTED:
+                        case DISCONNECTING:
+                            if (isDataSuspended()) {
+                                ret = PhoneConstants.DataState.SUSPENDED;
+                            } else {
+                                ret = PhoneConstants.DataState.CONNECTED;
+                            }
+                            break;
+                        case CONNECTING:
+                            ret = PhoneConstants.DataState.CONNECTING;
+                            break;
+                        default:
+                            ret = PhoneConstants.DataState.DISCONNECTED;
+                    }
                 }
             }
         }

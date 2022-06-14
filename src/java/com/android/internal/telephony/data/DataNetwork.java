@@ -3003,6 +3003,14 @@ public class DataNetwork extends StateMachine {
     }
 
     /**
+     * @param netCaps The network capabilities to check support for.
+     * @return {@code true} if this data network supports all given capabilities.
+     */
+    public boolean areCapabilitiesSupported(@NonNull @NetCapability int[] netCaps) {
+        return Arrays.stream(netCaps).allMatch(mNetworkCapabilities::hasCapability);
+    }
+
+    /**
      * Get precise data connection state
      *
      * @return The {@link PreciseDataConnectionState}

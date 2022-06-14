@@ -3140,9 +3140,9 @@ public class DataNetworkController extends Handler {
     }
 
     /**
-     * Update the internet data network state. For now only {@link TelephonyManager#DATA_CONNECTED}
-     * , {@link TelephonyManager#DATA_SUSPENDED}, and
-     * {@link TelephonyManager#DATA_DISCONNECTED} are supported.
+     * Update the internet data network state. For now only {@link TelephonyManager#DATA_CONNECTED},
+     * {@link TelephonyManager#DATA_SUSPENDED}, and {@link TelephonyManager#DATA_DISCONNECTED}
+     * are supported.
      */
     private void updateOverallInternetDataState() {
         boolean anyInternetConnected = mDataNetworkList.stream()
@@ -3408,14 +3408,37 @@ public class DataNetworkController extends Handler {
 
     /**
      * Get the internet data network state. Note that this is the best effort if more than one
-     * data network supports internet. For now only {@link TelephonyManager#DATA_CONNECTED}
-     * , {@link TelephonyManager#DATA_SUSPENDED}, and {@link TelephonyManager#DATA_DISCONNECTED}
+     * data network supports internet. For now only {@link TelephonyManager#DATA_CONNECTED},
+     * {@link TelephonyManager#DATA_SUSPENDED}, and {@link TelephonyManager#DATA_DISCONNECTED}
      * are supported.
      *
      * @return The data network state.
      */
     public @DataState int getInternetDataNetworkState() {
         return mInternetDataNetworkState;
+    }
+
+    /**
+     * Get the data network state for the given capabilities. Note that this is the best effort if
+     * more than one data network supports the capabilities. For now only
+     * {@link TelephonyManager#DATA_CONNECTED}, {@link TelephonyManager#DATA_SUSPENDED}, and
+     * {@link TelephonyManager#DATA_DISCONNECTED} are supported.
+     *
+     * @param netCaps The capabilities to check the data network state for.
+     * @return The data network state.
+     */
+    public @DataState int getDataNetworkState(@NonNull @NetCapability int[] netCaps) {
+        List<DataNetwork> connectedDataNetworks = mDataNetworkList.stream()
+                .filter(dn -> dn.isConnected() && dn.areCapabilitiesSupported(netCaps))
+                .collect(Collectors.toList());
+        boolean allSuspended = !connectedDataNetworks.isEmpty();
+        for (DataNetwork dataNetwork : connectedDataNetworks) {
+            if (dataNetwork.isConnected()) {
+                return TelephonyManager.DATA_CONNECTED;
+            }
+            allSuspended &= dataNetwork.isSuspended();
+        }
+        return allSuspended ? TelephonyManager.DATA_SUSPENDED : TelephonyManager.DATA_DISCONNECTED;
     }
 
     /**
