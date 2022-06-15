@@ -39,6 +39,30 @@
       },
       "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b6c335_f0fdc47a",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-06-15T20:04:04Z",
+      "side": 1,
+      "message": "It looks like I picked up a bad name. I was trying to say \"isBindingConnectionNotNull\".\n\nThere are three states for the connection:\n- null (no ServiceConnection object allocated)\n- Disconnected (e.g. before #bind called or binding failed or after receiving onServiceDisconnected())\n- Connected (binding succeed and received onServiceConnected)\n\nThis API is used to distinguish case 1 from the other two.\n\nWhile method isBindingConnectionConnected can further distinguish disconnected from connected states.\n\nSince the states are simple and common for any other standard ServiceConnection:\n- binding#connection \u003d\u003d null \u003d\u003e case 1\n- binding#connection#connected \u003d\u003d false \u003d\u003e case 2\n- binding#connection#connected \u003d\u003d true \u003d\u003e case 3\n\nSo far no explicit states are defined here.",
+      "parentUuid": "fd38eaf4_e7978777",
+      "range": {
+        "startLine": 227,
+        "startChar": 19,
+        "endLine": 227,
+        "endChar": 49
+      },
+      "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
