@@ -63,6 +63,30 @@
       },
       "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb27c29_159eeb15",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-06-16T16:41:28Z",
+      "side": 1,
+      "message": "Rename to isBindingConnectionCreated, instead of xxxEstablished to get more clear.",
+      "parentUuid": "c1b6c335_f0fdc47a",
+      "range": {
+        "startLine": 227,
+        "startChar": 19,
+        "endLine": 227,
+        "endChar": 49
+      },
+      "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
