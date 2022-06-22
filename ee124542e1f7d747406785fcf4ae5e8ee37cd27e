@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a93caa4_1ec169c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2022-06-22T17:11:54Z",
+      "side": 1,
+      "message": "please add bug id, and test (ut, manual, etc.)",
+      "revId": "ee124542e1f7d747406785fcf4ae5e8ee37cd27e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
