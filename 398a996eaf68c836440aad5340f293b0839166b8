@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "263b412e_ebcad519",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1863710
+      },
+      "writtenOn": "2022-06-28T12:12:35Z",
+      "side": 1,
+      "message": "PTaL. The variable name was breaking when compiling with Java 17 on some downstream branches. However, to try to keep the code consistent, I\u0027d prefer to perform the renaming in aosp/master.",
+      "revId": "398a996eaf68c836440aad5340f293b0839166b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
