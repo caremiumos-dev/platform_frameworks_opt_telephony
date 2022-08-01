@@ -253,7 +253,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             }
 
             // Read the EFEmail file.
-            mFh.loadEFLinearFixedAll(emailEfid,
+            mFh.loadEFLinearFixedPartUsingCommandSeek(emailEfid,
                     obtainMessage(EVENT_EMAIL_LOAD_DONE));
             try {
                 mLock.wait();
@@ -411,7 +411,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
     // Read Phonebook Index Admistration EF_IAP file
     private void readIapFileAndWait(int efid) {
-        mFh.loadEFLinearFixedAll(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
+        mFh.loadEFLinearFixedPartUsingCommandSeek(efid, obtainMessage(EVENT_IAP_LOAD_DONE));
         try {
             mLock.wait();
         } catch (InterruptedException e) {
