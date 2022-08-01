@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfef311_ef968a0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2022-08-01T17:02:04Z",
+      "side": 1,
+      "message": "Is it possible to provide a detailed design document?",
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
