@@ -108,13 +108,23 @@ public class AdnRecordLoader extends Handler {
         mExtensionEF = extensionEF;
         mUserResponse = response;
 
-        /* If we are loading from EF_ADN, specifically
-         * specify the path as well, since, on some cards,
-         * the fileid is not unique.
-         */
-        mFh.loadEFLinearFixedAll(
-                ef, getEFPath(ef),
-                obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        String efPath = getEFPath(ef);
+        if (ef != IccConstants.EF_PBR && efPath.equals(getEFPath(IccConstants.EF_PBR))) {
+            /* The result of getEFPath for EF IDs in SIM Phonebook entries is same as EF_PBR's.
+             * So, compare efPath to the efPath of EF_PBR, if they are same, use COMMAND SEEK.
+             */
+            mFh.loadEFLinearFixedPartUsingCommandSeek(
+                    ef, efPath,
+                    obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        } else {
+            /* If we are loading from EF_ADN, specifically
+             * specify the path as well, since, on some cards,
+             * the fileid is not unique.
+             */
+            mFh.loadEFLinearFixedAll(
+                    ef, efPath,
+                    obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+        }
     }
 
     /**
