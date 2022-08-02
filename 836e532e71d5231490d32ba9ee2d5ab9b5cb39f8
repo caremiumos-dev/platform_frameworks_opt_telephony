@@ -46,6 +46,30 @@
       },
       "revId": "836e532e71d5231490d32ba9ee2d5ab9b5cb39f8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f8ff22_3f8438d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-02T23:29:57Z",
+      "side": 1,
+      "message": "Above atest IccPhoneBookInterfaceManagerTest was done after applying below patch.\nhttps://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/2171283",
+      "parentUuid": "8c684bc4_1767271e",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "836e532e71d5231490d32ba9ee2d5ab9b5cb39f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
