@@ -22,6 +22,30 @@
       },
       "revId": "836e532e71d5231490d32ba9ee2d5ab9b5cb39f8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c684bc4_1767271e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-02T23:03:29Z",
+      "side": 1,
+      "message": "I have tested IccPhoneBookInterfaceManagerTest also.\n[1/4] com.android.internal.telephony.uicc.IccPhoneBookInterfaceManagerTest#testAdnEFLoadWithFailure: PASSED (3ms)\n[2/4] com.android.internal.telephony.uicc.IccPhoneBookInterfaceManagerTest#testAdnEFLoadByPbCacheWithFailure: PASSED (1ms)\n[3/4] com.android.internal.telephony.uicc.IccPhoneBookInterfaceManagerTest#testUpdateAdnRecordByPbCache: PASSED (1ms)\n[4/4] com.android.internal.telephony.uicc.IccPhoneBookInterfaceManagerTest#testUpdateAdnRecord: PASSED (1ms)\n\nSummary (Test executed with 1 devices.)\n-------\narm64-v8a FrameworksTelephonyTests: Passed: 4, Failed: 0, Ignored: 0, Assumption Failed: 0,\n\nAll tests passed!",
+      "parentUuid": "1a128d68_38fa86d6",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 12
+      },
+      "revId": "836e532e71d5231490d32ba9ee2d5ab9b5cb39f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
