@@ -30,6 +30,7 @@ import android.provider.Settings;
 import android.sysprop.TelephonyProperties;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyRegistryManager;
@@ -553,8 +554,11 @@ public class DataSettingsManager extends Handler {
             try {
                 Settings.Global.getInt(mResolver, setting);
             } catch (Settings.SettingNotFoundException ex) {
-                // For multi-SIM phones, use the default value if uninitialized.
-                useCarrierSpecificDefault = true;
+                // For multi-SIM phones, use the default value if uninitialized and SIM is loaded.
+                if (TelephonyManager.SIM_STATE_LOADED
+                        == SubscriptionManager.getSimStateForSlotIndex(mPhone.getPhoneId())) {
+                    useCarrierSpecificDefault = true;
+                }
             }
         } else if (!isDataRoamingFromUserAction()) {
             // For single-SIM phones, use the default value if user action is not set.
