@@ -677,6 +677,9 @@ public class UiccCarrierPrivilegeRules extends Handler {
     private void updateState(int newState, String statusMessage) {
         mState.set(newState);
         if (mLoadedCallback != null) {
+            // Add this to indicate which instance of this class triggered the callback.
+            AsyncResult ar = AsyncResult.forMessage(mLoadedCallback);
+            ar.userObj = this;
             mLoadedCallback.sendToTarget();
         }
 

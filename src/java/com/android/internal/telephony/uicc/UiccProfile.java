@@ -250,6 +250,13 @@ public class UiccProfile extends IccCard {
 
                 case EVENT_CARRIER_PRIVILEGES_LOADED:
                     if (VDBG) log("handleMessage: EVENT_CARRIER_PRIVILEGES_LOADED");
+                    AsyncResult pr = (AsyncResult) msg.obj;
+                    if (pr != null && pr.userObj != null) {
+                        // Ignore the event made by a previous UiccCarrierPrivilegeRules instance.
+                        if (mCarrierPrivilegeRules != (UiccCarrierPrivilegeRules) pr.userObj) {
+                            break;
+                        }
+                    }
                     Phone phone = PhoneFactory.getPhone(mPhoneId);
                     if (phone != null) {
                         CarrierPrivilegesTracker cpt = phone.getCarrierPrivilegesTracker();
