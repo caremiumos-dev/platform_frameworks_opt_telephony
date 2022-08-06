@@ -52,6 +52,121 @@
       "parentUuid": "da4003bb_c42fe0e8",
       "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8955a195_516ccbb4",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-08-06T14:28:45Z",
+      "side": 1,
+      "message": "can send ar here",
+      "range": {
+        "startLine": 779,
+        "startChar": 47,
+        "endLine": 779,
+        "endChar": 68
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acf457a1_51859e97",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-08-06T14:28:45Z",
+      "side": 1,
+      "message": "Fallback to read every record in case modem dont support COMMAND_SEEK",
+      "range": {
+        "startLine": 823,
+        "startChar": 26,
+        "endLine": 824,
+        "endChar": 85
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7dcbc4_bfc6dd81",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-08-06T14:28:45Z",
+      "side": 1,
+      "message": "Better to put logd only instead loge\nsize -\u003e side",
+      "range": {
+        "startLine": 826,
+        "startChar": 83,
+        "endLine": 826,
+        "endChar": 87
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610809cb_da6680c0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-08-06T14:28:45Z",
+      "side": 1,
+      "message": "Good to print fieldID in the log for easy recognision \nAlso Better to put logd only instead loge",
+      "range": {
+        "startLine": 830,
+        "startChar": 24,
+        "endLine": 830,
+        "endChar": 28
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e47260a_e50ad22a",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-08-06T14:28:45Z",
+      "side": 1,
+      "message": "Better to put logd only instead loge\nfallback to read every record",
+      "range": {
+        "startLine": 842,
+        "startChar": 69,
+        "endLine": 842,
+        "endChar": 89
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
