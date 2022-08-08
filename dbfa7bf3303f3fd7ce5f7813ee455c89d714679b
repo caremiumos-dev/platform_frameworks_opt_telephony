@@ -93,6 +93,30 @@
       },
       "revId": "dbfa7bf3303f3fd7ce5f7813ee455c89d714679b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20b34fa7_d3a7e0b1",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:57:10Z",
+      "side": 1,
+      "message": "It\u0027s because the only case that loads hundreds of EFs is SIM phonebook contacts.",
+      "parentUuid": "41a45ff2_750f52bf",
+      "range": {
+        "startLine": 389,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 72
+      },
+      "revId": "dbfa7bf3303f3fd7ce5f7813ee455c89d714679b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

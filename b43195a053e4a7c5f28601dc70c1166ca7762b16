@@ -148,6 +148,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e8703fc_5892cb54",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:57:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "af632b27_e3abe15c",
+      "range": {
+        "startLine": 823,
+        "startChar": 26,
+        "endLine": 824,
+        "endChar": 85
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e7dcbc4_bfc6dd81",
@@ -255,6 +279,30 @@
       "writtenOn": "2022-08-06T14:28:45Z",
       "side": 1,
       "message": "Better to put logd only instead loge\nfallback to read every record",
+      "range": {
+        "startLine": 842,
+        "startChar": 69,
+        "endLine": 842,
+        "endChar": 89
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d26ec92_21541bdd",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:57:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e47260a_e50ad22a",
       "range": {
         "startLine": 842,
         "startChar": 69,
