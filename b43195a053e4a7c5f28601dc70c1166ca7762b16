@@ -77,6 +77,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71ab30d5_6357b70e",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8955a195_516ccbb4",
+      "range": {
+        "startLine": 779,
+        "startChar": 47,
+        "endLine": 779,
+        "endChar": 68
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acf457a1_51859e97",
@@ -90,6 +114,30 @@
       "writtenOn": "2022-08-06T14:28:45Z",
       "side": 1,
       "message": "Fallback to read every record in case modem dont support COMMAND_SEEK",
+      "range": {
+        "startLine": 823,
+        "startChar": 26,
+        "endLine": 824,
+        "endChar": 85
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af632b27_e3abe15c",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:33:13Z",
+      "side": 1,
+      "message": "We implemented logic to load all every record by calling loadEFLinearFixedAll if in failed case about COMMAND_SEEK.\nI don\u0027t understand this comment, could you please write comment again as more detailed?",
+      "parentUuid": "acf457a1_51859e97",
       "range": {
         "startLine": 823,
         "startChar": 26,
@@ -123,6 +171,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f49e7c3_dd867a3f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e7dcbc4_bfc6dd81",
+      "range": {
+        "startLine": 826,
+        "startChar": 83,
+        "endLine": 826,
+        "endChar": 87
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "610809cb_da6680c0",
@@ -136,6 +208,30 @@
       "writtenOn": "2022-08-06T14:28:45Z",
       "side": 1,
       "message": "Good to print fieldID in the log for easy recognision \nAlso Better to put logd only instead loge",
+      "range": {
+        "startLine": 830,
+        "startChar": 24,
+        "endLine": 830,
+        "endChar": 28
+      },
+      "revId": "b43195a053e4a7c5f28601dc70c1166ca7762b16",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b670357d_b75e30a7",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-08T06:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "610809cb_da6680c0",
       "range": {
         "startLine": 830,
         "startChar": 24,
