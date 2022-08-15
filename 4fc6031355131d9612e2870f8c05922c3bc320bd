@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e2001b3_7b2f336a",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1138358
+      },
+      "writtenOn": "2022-08-15T03:11:33Z",
+      "side": 1,
+      "message": "This may reject some number that seems valid.",
+      "revId": "4fc6031355131d9612e2870f8c05922c3bc320bd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
