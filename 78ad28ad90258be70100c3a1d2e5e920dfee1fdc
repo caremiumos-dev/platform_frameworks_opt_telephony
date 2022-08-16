@@ -83,6 +83,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d79b94_a30f0fd0",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-16T04:12:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63026b0f_78b77941",
+      "range": {
+        "startLine": 618,
+        "startChar": 18,
+        "endLine": 620,
+        "endChar": 17
+      },
+      "revId": "78ad28ad90258be70100c3a1d2e5e920dfee1fdc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "965ffab1_8b03f60b",
