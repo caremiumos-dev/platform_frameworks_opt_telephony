@@ -37,6 +37,7 @@ import com.android.telephony.Rlog;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -495,7 +496,8 @@ public class UiccCarrierPrivilegeRules extends Handler {
                         }
                     } else {
                         if (mAIDInUse == ARAM) {
-                            String errorMsg = "Invalid response: payload=" + response.payload
+                            String errorMsg = "Invalid response: payload="
+                                    + Arrays.toString(response.payload)
                                     + " sw1=" + response.sw1 + " sw2=" + response.sw2;
                             updateState(STATE_ERROR, errorMsg);
                         }

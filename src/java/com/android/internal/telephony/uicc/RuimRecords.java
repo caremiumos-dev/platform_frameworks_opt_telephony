@@ -81,8 +81,8 @@ public class RuimRecords extends IccRecords {
                 + " mMyMobileNumber=" + "xxxx"
                 + " mMin2Min1=" + mMin2Min1
                 + " mPrlVersion=" + mPrlVersion
-                + " mEFpl=" + mEFpl
-                + " mEFli=" + mEFli
+                + " mEFpl=" + Arrays.toString(mEFpl)
+                + " mEFli=" + Arrays.toString(mEFli)
                 + " mCsimSpnDisplayCondition=" + mCsimSpnDisplayCondition
                 + " mMdn=" + mMdn
                 + " mMin=" + mMin
