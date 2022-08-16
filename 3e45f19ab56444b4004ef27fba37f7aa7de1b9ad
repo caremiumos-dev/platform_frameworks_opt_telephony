@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5467a80a_a35d0236",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-08-16T23:14:14Z",
+      "side": 1,
+      "message": "Dear Arun Kumar Voddu,\nThis is a test code to verify COMMAND_SEEK.\nI wanted to add one more choice for SIM contacts developer to use either load All or load part - COMMAND_SEEK.\nI wonder your opinion whether merging this commit is needed or not.",
+      "revId": "3e45f19ab56444b4004ef27fba37f7aa7de1b9ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
