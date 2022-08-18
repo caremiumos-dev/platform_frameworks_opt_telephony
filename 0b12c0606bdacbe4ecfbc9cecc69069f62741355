@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c657f854_1b99783e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-08-18T23:27:10Z",
+      "side": 1,
+      "message": "Hui, this is a pure cherry-pick from tm-qpr-dev to aosp/master. Pls help to approve on you convenience. Thanks",
+      "revId": "0b12c0606bdacbe4ecfbc9cecc69069f62741355",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
