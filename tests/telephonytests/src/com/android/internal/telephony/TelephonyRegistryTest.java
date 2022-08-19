@@ -45,6 +45,8 @@ import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation;
 import android.telephony.CellIdentity;
 import android.telephony.CellIdentityGsm;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoLte;
 import android.telephony.CellLocation;
 import android.telephony.LinkCapacityEstimate;
 import android.telephony.NetworkRegistrationInfo;
@@ -73,6 +75,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -98,6 +101,7 @@ public class TelephonyRegistryTest extends TelephonyTest {
     private int mRadioPowerState = RADIO_POWER_UNAVAILABLE;
     private int mDataConnectionState = TelephonyManager.DATA_UNKNOWN;
     private int mNetworkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+    private List<CellInfo> mCellInfo;
     private List<PhysicalChannelConfig> mPhysicalChannelConfigs;
     private CellLocation mCellLocation;
 
@@ -166,7 +170,8 @@ public class TelephonyRegistryTest extends TelephonyTest {
             TelephonyCallback.LinkCapacityEstimateChangedListener,
             TelephonyCallback.PhysicalChannelConfigListener,
             TelephonyCallback.CellLocationListener,
-            TelephonyCallback.ServiceStateListener {
+            TelephonyCallback.ServiceStateListener,
+            TelephonyCallback.CellInfoListener {
         // This class isn't mockable to get invocation counts because the IBinder is null and
         // crashes the TelephonyRegistry. Make a cheesy verify(times()) alternative.
         public AtomicInteger invocationCount = new AtomicInteger(0);
@@ -210,23 +215,33 @@ public class TelephonyRegistryTest extends TelephonyTest {
         }
         @Override
         public void onDisplayInfoChanged(TelephonyDisplayInfo displayInfo) {
+            invocationCount.incrementAndGet();
             mTelephonyDisplayInfo = displayInfo;
         }
 
         @Override
         public void onLinkCapacityEstimateChanged(
                 List<LinkCapacityEstimate> linkCapacityEstimateList) {
+            invocationCount.incrementAndGet();
             mLinkCapacityEstimateList = linkCapacityEstimateList;
         }
 
         @Override
         public void onCellLocationChanged(CellLocation location) {
+            invocationCount.incrementAndGet();
             mCellLocation = location;
         }
 
         @Override
         public void onPhysicalChannelConfigChanged(@NonNull List<PhysicalChannelConfig> configs) {
+            invocationCount.incrementAndGet();
             mPhysicalChannelConfigs = configs;
+        }
+
+        @Override
+        public void onCellInfoChanged(List<CellInfo> cellInfo) {
+            invocationCount.incrementAndGet();
+            mCellInfo = cellInfo;
         }
     }
 
@@ -1259,5 +1274,27 @@ public class TelephonyRegistryTest extends TelephonyTest {
         processAllMessages();
 
         assertEquals(1, mTelephonyCallback.invocationCount.get());
+    }
+
+    @Test @SmallTest
+    public void testCellInfoChanged() {
+        doReturn(mMockSubInfo).when(mSubscriptionManager).getActiveSubscriptionInfo(anyInt());
+        doReturn(0 /*slotIndex*/).when(mMockSubInfo).getSimSlotIndex();
+        doReturn(true).when(mLocationManager).isLocationEnabledForUser(any(UserHandle.class));
+
+        int[] events = {TelephonyCallback.EVENT_CELL_INFO_CHANGED};
+
+        mCellInfo = null; // null is an invalid value since the API is NonNull;
+        mTelephonyRegistry.listenWithEventList(false, false, 0, mContext.getOpPackageName(),
+                mContext.getAttributionTag(), mTelephonyCallback.callback, events, true);
+        processAllMessages();
+        assertEquals(1, mTelephonyCallback.invocationCount.get());
+        assertNotNull(mCellInfo);
+        final List<CellInfo> dummyCellInfo = Arrays.asList(new CellInfoLte());
+
+        mTelephonyRegistry.notifyCellInfo(dummyCellInfo);
+        processAllMessages();
+        assertEquals(2, mTelephonyCallback.invocationCount.get());
+        assertEquals(mCellInfo, dummyCellInfo);
     }
 }
