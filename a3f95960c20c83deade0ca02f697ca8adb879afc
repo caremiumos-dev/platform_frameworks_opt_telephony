@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b65ada2a_4d1030b0",
+        "filename": "src/java/com/android/internal/telephony/IccSmsInterfaceManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2022-08-22T21:26:20Z",
+      "side": 1,
+      "message": "This is not going to print any readable message. Try using IccUtils.bytesToHexString. Same for the rest byte[] places.",
+      "range": {
+        "startLine": 628,
+        "startChar": 26,
+        "endLine": 628,
+        "endChar": 46
+      },
+      "revId": "a3f95960c20c83deade0ca02f697ca8adb879afc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
