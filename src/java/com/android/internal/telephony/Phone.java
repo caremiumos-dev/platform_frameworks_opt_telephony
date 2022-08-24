@@ -3771,7 +3771,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (mAccessNetworksManager != null) {
             int transport = mAccessNetworksManager.getCurrentTransport(apnType);
             if (getDcTracker(transport) != null) {
-                return getDcTracker(transport).isDataAllowed(reasons);
+                return getDcTracker(transport).isInternetDataAllowed();
             }
         }
         return false;
