@@ -1323,6 +1323,15 @@ public class DcTracker extends Handler {
     }
 
     /**
+     * @return {@code true} if internet data is allowed with internet APN ready
+     */
+    public boolean isInternetDataAllowed() {
+        ArrayList<ApnSetting> waitingApns = buildWaitingApns(
+                ApnSetting.getApnTypeString(ApnSetting.TYPE_DEFAULT), getDataRat());
+        return !waitingApns.isEmpty() && isDataAllowed(null);
+    }
+
+    /**
      * Check if it is allowed to make a data connection for a given APN type.
      *
      * @param apnContext APN context. If passing null, then will only check general but not APN
