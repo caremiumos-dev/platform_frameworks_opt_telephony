@@ -111,6 +111,30 @@
       },
       "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eed65d84_e2dd3cc4",
+        "filename": "src/java/com/android/internal/telephony/CarrierServiceBindHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-08-26T17:28:27Z",
+      "side": 1,
+      "message": "Yes, there is. Between the call of bindService() and the receiving callback onServiceConnected, it is connecting state. And similarly, we have short window of disconnecting or even unbinding status :-).\n\nBut here, we don\u0027t want to explicitly introduce those states because:\n- They are transient states. We want to test the finalized states instead\n- They don\u0027t actually impact our logic here. For example, we can safely category connecting as disconnected state for now.\n\nIn short, unless we really find benefit to introduce fine-grained states. The current unbound/connected/disconnected (the later two indicate it has been bound) are good enough here.",
+      "parentUuid": "acb807e7_fc8d8144",
+      "range": {
+        "startLine": 227,
+        "startChar": 19,
+        "endLine": 227,
+        "endChar": 49
+      },
+      "revId": "ec6fd862f6d742fd8203ade243a70ba24e814c6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
