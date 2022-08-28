@@ -33,6 +33,23 @@
       "message": "Maybe this fixes other issues too...",
       "revId": "81a989d47689a9ea8e6fd86376fac2f69253c8c3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9425a7f_8aef6360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1964930
+      },
+      "writtenOn": "2022-08-28T11:56:12Z",
+      "side": 1,
+      "message": "Any news on this?\nThe same patch is needed also on Android 13 (tested on android-13.0.0_r2 tag).",
+      "revId": "81a989d47689a9ea8e6fd86376fac2f69253c8c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
