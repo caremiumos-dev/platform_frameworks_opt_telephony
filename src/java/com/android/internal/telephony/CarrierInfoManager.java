@@ -286,6 +286,21 @@ public class CarrierInfoManager {
             Log.i(LOG_TAG, "resetCarrierKeysForImsiEncryption: Access rate exceeded");
             return;
         }
+        doResetCarrierKeysForImsiEncryption(context, mPhoneId);
+    }
+
+    /**
+     * Resets the Carrier Keys in the database w/o rate limit.
+     * @param context Context
+     * @param mPhoneId phoneId
+     * @see resetCarrierKeysForImsiEncryption(Context, int)
+     */
+    public void forceResetCarrierKeysForImsiEncryption(Context context, int mPhoneId) {
+        doResetCarrierKeysForImsiEncryption(context, mPhoneId);
+    }
+
+    private void doResetCarrierKeysForImsiEncryption(Context context, int mPhoneId) {
+        long now = System.currentTimeMillis();
         mLastAccessResetCarrierKey = now;
         int[] subIds = context.getSystemService(SubscriptionManager.class)
                 .getSubscriptionIds(mPhoneId);

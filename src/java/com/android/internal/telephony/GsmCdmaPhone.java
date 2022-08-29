@@ -1949,6 +1949,11 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
+    public void forceResetCarrierKeysForImsiEncryption() {
+        mCIM.forceResetCarrierKeysForImsiEncryption(mContext, mPhoneId);
+    }
+
+    @Override
     public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,
             String gid2, String pnn, String spn, String carrierPrivilegeRules, String apn) {
         mCarrierResolver.setTestOverrideApn(apn);

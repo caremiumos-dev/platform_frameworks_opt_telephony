@@ -124,6 +124,21 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
                 });
     }
 
+    /**
+     *  Resets the Carrier Keys in the database w/o rate limit.
+     *  @param subId
+     *  @param callingPackage
+     *  @see #resetCarrierKeysForImsiEncryption(int, String)
+     */
+    public void forceResetCarrierKeysForImsiEncryption(int subId, String callingPackage) {
+        callPhoneMethodForSubIdWithModifyCheck(subId, callingPackage,
+                "forceResetCarrierKeysForImsiEncryption",
+                (phone)-> {
+                    phone.forceResetCarrierKeysForImsiEncryption();
+                    return null;
+                });
+    }
+
     public String getDeviceSvn(String callingPackage, String callingFeatureId) {
         return getDeviceSvnUsingSubId(getDefaultSubscription(), callingPackage, callingFeatureId);
     }
