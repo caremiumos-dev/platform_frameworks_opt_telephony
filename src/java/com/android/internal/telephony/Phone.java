@@ -3999,6 +3999,15 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
+     * Resets the Carrier Keys in the database from Network Reset.
+     * @see #resetCarrierKeysForImsiEncryption()
+     * @hide
+     */
+    public void forceResetCarrierKeysForImsiEncryption() {
+        return;
+    }
+
+    /**
      * Return if UT capability of ImsPhone is enabled or not
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
