@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "553feb40_a7179c91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1071150
+      },
+      "writtenOn": "2022-09-13T16:07:54Z",
+      "side": 1,
+      "message": "Retrying presubmit due to unrelated error:\n\n```\nAttempt d7483265-5a5c-4afb-99ba-37e0652e972b:  java.lang.IllegalArgumentException: No enum constant com.android.tradefed.testtype.suite.params.ModuleParameters.NO_SECONDARY_USER\n\tat java.base/java.lang.Enum.valueOf(Enum.java:240)\n```",
+      "revId": "a3bf60da3239dbd43be25ee2cb73a2473ee7f0d7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
