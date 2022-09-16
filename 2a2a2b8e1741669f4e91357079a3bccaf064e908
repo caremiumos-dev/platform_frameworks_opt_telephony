@@ -16,6 +16,29 @@
       "message": "+ Ling and Jack who are the author of commit 3038f6ac30ca5ac7d65d8d2ff57c5e11ff514c94 mentioned the bug.",
       "revId": "2a2a2b8e1741669f4e91357079a3bccaf064e908",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677cbc55_dc16c050",
+        "filename": "src/java/com/android/internal/telephony/data/DataProfileManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1929200
+      },
+      "writtenOn": "2022-09-16T20:14:32Z",
+      "side": 1,
+      "message": "The preferred check is done at DataNetworkController        \n```\n evaluateDataNetwork() {\n ...\n// If users switch preferred profile in APN editor, we need to tear down network.\n        if (dataNetwork.isInternetSupported()\n                \u0026\u0026 !mDataProfileManager.isDataProfilePreferred(dataProfile)\n                \u0026\u0026 mDataProfileManager.isAnyPreferredDataProfileExisting()) {\n            evaluation.addDataDisallowedReason(DataDisallowedReason.DATA_PROFILE_NOT_PREFERRED);\n        }\n```\n\nisDataProfileCompatible is meant to check whether the passed in data profile still exists in the current APN database.",
+      "range": {
+        "startLine": 982,
+        "startChar": 60,
+        "endLine": 982,
+        "endChar": 97
+      },
+      "revId": "2a2a2b8e1741669f4e91357079a3bccaf064e908",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
