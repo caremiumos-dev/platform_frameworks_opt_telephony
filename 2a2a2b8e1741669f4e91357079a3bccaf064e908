@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fc93913_909f5d89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-09-16T19:56:33Z",
+      "side": 1,
+      "message": "+ Ling and Jack who are the author of commit 3038f6ac30ca5ac7d65d8d2ff57c5e11ff514c94 mentioned the bug.",
+      "revId": "2a2a2b8e1741669f4e91357079a3bccaf064e908",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
