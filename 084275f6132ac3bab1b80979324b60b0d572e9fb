@@ -22,6 +22,30 @@
       },
       "revId": "084275f6132ac3bab1b80979324b60b0d572e9fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fbf2d06_fec8535a",
+        "filename": "src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2022-09-19T16:05:38Z",
+      "side": 0,
+      "message": "Intentional. When SIM card present, the SIM application is not loaded yet.",
+      "parentUuid": "12650621_279a831b",
+      "range": {
+        "startLine": 468,
+        "startChar": 70,
+        "endLine": 468,
+        "endChar": 89
+      },
+      "revId": "084275f6132ac3bab1b80979324b60b0d572e9fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
