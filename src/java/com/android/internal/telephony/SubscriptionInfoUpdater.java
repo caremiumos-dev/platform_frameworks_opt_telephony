@@ -465,7 +465,7 @@ public class SubscriptionInfoUpdater extends Handler {
         });
         broadcastSimStateChanged(phoneId, IccCardConstants.INTENT_VALUE_ICC_READY, null);
         broadcastSimCardStateChanged(phoneId, TelephonyManager.SIM_STATE_PRESENT);
-        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_NOT_READY);
+        broadcastSimApplicationStateChanged(phoneId, TelephonyManager.SIM_STATE_READY);
     }
 
     protected void handleSimNotReady(int phoneId) {
