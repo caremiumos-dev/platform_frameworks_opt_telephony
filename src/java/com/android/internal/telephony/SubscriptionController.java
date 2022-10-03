@@ -1046,7 +1046,6 @@ public class SubscriptionController extends ISub.Stub {
      * @param callingFeatureId The feature in the package
      * @return all SIM count in database, include what was inserted before
      */
-    @Override
     public int getAllSubInfoCount(String callingPackage, String callingFeatureId) {
         if (DBG) logd("[getAllSubInfoCount]+");
 
@@ -3404,12 +3403,7 @@ public class SubscriptionController extends ISub.Stub {
             pw.println(" defaultDataSubId=" + getDefaultDataSubId());
             pw.println(" defaultVoiceSubId=" + getDefaultVoiceSubId());
             pw.println(" defaultSmsSubId=" + getDefaultSmsSubId());
-
-            pw.println(" defaultDataPhoneId=" + SubscriptionManager
-                    .from(mContext).getDefaultDataPhoneId());
             pw.println(" defaultVoicePhoneId=" + SubscriptionManager.getDefaultVoicePhoneId());
-            pw.println(" defaultSmsPhoneId=" + SubscriptionManager
-                    .from(mContext).getDefaultSmsPhoneId());
             pw.flush();
 
             for (Entry<Integer, ArrayList<Integer>> entry : mSlotIndexToSubIds.entrySet()) {
