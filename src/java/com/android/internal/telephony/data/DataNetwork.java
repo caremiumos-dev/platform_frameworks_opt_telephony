@@ -1012,6 +1012,7 @@ public class DataNetwork extends StateMachine {
         @Override
         public void enter() {
             logv("Registering all events.");
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
             mDataConfigManagerCallback = new DataConfigManagerCallback(getHandler()::post) {
                 @Override
                 public void onCarrierConfigChanged() {
@@ -1021,6 +1022,10 @@ public class DataNetwork extends StateMachine {
             mRil.registerForPcoData(getHandler(), EVENT_PCO_DATA_RECEIVED, null);
 
             mDataConfigManager.registerCallback(mDataConfigManagerCallback);
+=======
+            mDataConfigManager.registerForConfigUpdate(getHandler(), EVENT_DATA_CONFIG_UPDATED);
+            mRil.registerForPcoData(getHandler(), EVENT_PCO_DATA_RECEIVED, null);
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
             mPhone.getDisplayInfoController().registerForTelephonyDisplayInfoChanged(
                     getHandler(), EVENT_DISPLAY_INFO_CHANGED, null);
             mPhone.getServiceStateTracker().registerForServiceStateChanged(getHandler(),
@@ -1072,8 +1077,13 @@ public class DataNetwork extends StateMachine {
             mPhone.getServiceStateTracker().unregisterForServiceStateChanged(getHandler());
             mPhone.getDisplayInfoController().unregisterForTelephonyDisplayInfoChanged(
                     getHandler());
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
             mRil.unregisterForPcoData(getHandler());
             mDataConfigManager.unregisterCallback(mDataConfigManagerCallback);
+=======
+            mDataConfigManager.unregisterForConfigUpdate(getHandler());
+            mRil.unregisterForPcoData(getHandler());
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
         }
 
         @Override
@@ -1129,9 +1139,12 @@ public class DataNetwork extends StateMachine {
                     onPcoDataReceived((PcoData) ar.result);
                     break;
                 }
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
                 case EVENT_NOTIFY_HANDOVER_CANCELLED_RESPONSE:
                     log("Notified handover cancelled.");
                     break;
+=======
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
                 case EVENT_BANDWIDTH_ESTIMATE_FROM_MODEM_CHANGED:
                 case EVENT_TEAR_DOWN_NETWORK:
                 case EVENT_STUCK_IN_TRANSIENT_STATE:
@@ -1597,7 +1610,10 @@ public class DataNetwork extends StateMachine {
     private void registerForWwanEvents() {
         registerForBandwidthUpdate();
         mKeepaliveTracker.registerForKeepaliveStatus();
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
         mRil.registerForNotAvailable(this.getHandler(), EVENT_RADIO_NOT_AVAILABLE, null);
+=======
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
     }
 
     /**
@@ -1606,7 +1622,10 @@ public class DataNetwork extends StateMachine {
     private void unregisterForWwanEvents() {
         unregisterForBandwidthUpdate();
         mKeepaliveTracker.unregisterForKeepaliveStatus();
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
         mRil.unregisterForNotAvailable(this.getHandler());
+=======
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
     }
 
     @Override
@@ -3219,9 +3238,10 @@ public class DataNetwork extends StateMachine {
     }
 
     /**
-     * Called when receiving PCO (Protocol Configuration Options) data from the cellular network.
+     * Called when PCO data changes.
      *
      * @param pcoData The PCO data.
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
      */
     private void onPcoDataChanged(@NonNull PcoData pcoData) {
         log("onPcoDataChanged: " + pcoData);
@@ -3244,6 +3264,53 @@ public class DataNetwork extends StateMachine {
      * Called when receiving PCO (Protocol Configuration Options) data from the cellular network.
      *
      * @param pcoData PCO data.
+=======
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
+     */
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
+    private void onPcoDataReceived(@NonNull PcoData pcoData) {
+        // Save all the PCO data received, even though it might be unrelated to this data network.
+        // The network might be still in connecting state. Save all now and use it when entering
+        // connected state.
+        log("onPcoDataReceived: " + pcoData);
+        PcoData oldData = mPcoData.computeIfAbsent(pcoData.cid, m -> new ArrayMap<>())
+                .put(pcoData.pcoId, pcoData);
+        if (getId() == INVALID_CID || pcoData.cid != getId()) return;
+        if (!Objects.equals(oldData, pcoData)) {
+            onPcoDataChanged(pcoData);
+=======
+    private void onPcoDataChanged(@NonNull PcoData pcoData) {
+        log("onPcoDataChanged: " + pcoData);
+        mDataNetworkCallback.invokeFromExecutor(
+                () -> mDataNetworkCallback.onPcoDataChanged(DataNetwork.this));
+        if (mDataProfile.getApnSetting() != null) {
+            for (int apnType : mDataProfile.getApnSetting().getApnTypes()) {
+                Intent intent = new Intent(TelephonyManager.ACTION_CARRIER_SIGNAL_PCO_VALUE);
+                intent.putExtra(TelephonyManager.EXTRA_APN_TYPE, apnType);
+                intent.putExtra(TelephonyManager.EXTRA_APN_PROTOCOL,
+                        ApnSetting.getProtocolIntFromString(pcoData.bearerProto));
+                intent.putExtra(TelephonyManager.EXTRA_PCO_ID, pcoData.pcoId);
+                intent.putExtra(TelephonyManager.EXTRA_PCO_VALUE, pcoData.contents);
+                mPhone.getCarrierSignalAgent().notifyCarrierSignalReceivers(intent);
+            }
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
+        }
+    }
+
+    /**
+<<<<<<< HEAD   (5ca0fb Merge "Tear down if existing data network no longer matching)
+     * @return The last known data network type of the data network.
+     */
+    public @NetworkType int getLastKnownDataNetworkType() {
+        return mLastKnownDataNetworkType;
+    }
+
+    /**
+     * @return The PCO data received from the network.
+=======
+     * Called when receiving PCO (Protocol Configuration Options) data from the cellular network.
+     *
+     * @param pcoData PCO data.
      */
     private void onPcoDataReceived(@NonNull PcoData pcoData) {
         // Save all the PCO data received, even though it might be unrelated to this data network.
@@ -3259,14 +3326,9 @@ public class DataNetwork extends StateMachine {
     }
 
     /**
-     * @return The last known data network type of the data network.
-     */
-    public @NetworkType int getLastKnownDataNetworkType() {
-        return mLastKnownDataNetworkType;
-    }
-
-    /**
-     * @return The PCO data received from the network.
+     * @return The PCO data map of the network. The key is the PCO id, the value is the PCO data.
+     * An empty map if PCO data is not available (or when the network is on IWLAN).
+>>>>>>> BRANCH (bd4ce3 Merge cherrypicks of [19716374, 19716774] into tm-release.)
      */
     public @NonNull Map<Integer, PcoData> getPcoData() {
         if (mTransport == AccessNetworkConstants.TRANSPORT_TYPE_WLAN
