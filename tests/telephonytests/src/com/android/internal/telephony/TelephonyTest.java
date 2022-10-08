@@ -33,6 +33,7 @@ import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.IActivityManager;
 import android.app.KeyguardManager;
+import android.app.PropertyInvalidatedCache;
 import android.app.usage.NetworkStatsManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -41,6 +42,7 @@ import android.content.IIntentSender;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -128,7 +130,6 @@ import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccPort;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.internal.telephony.uicc.UiccSlot;
-import com.android.server.pm.PackageManagerService;
 import com.android.server.pm.permission.LegacyPermissionManagerService;
 
 import org.mockito.Mockito;
@@ -204,7 +205,7 @@ public abstract class TelephonyTest {
     protected ImsEcbm mImsEcbm;
     protected SubscriptionController mSubscriptionController;
     protected ServiceState mServiceState;
-    protected PackageManagerService mMockPackageManager;
+    protected IPackageManager.Stub mMockPackageManager;
     protected LegacyPermissionManagerService mMockLegacyPermissionManager;
     protected SimulatedCommandsVerifier mSimulatedCommandsVerifier;
     protected InboundSmsHandler mInboundSmsHandler;
@@ -437,7 +438,7 @@ public abstract class TelephonyTest {
         mImsEcbm = Mockito.mock(ImsEcbm.class);
         mSubscriptionController = Mockito.mock(SubscriptionController.class);
         mServiceState = Mockito.mock(ServiceState.class);
-        mMockPackageManager = Mockito.mock(PackageManagerService.class);
+        mMockPackageManager = Mockito.mock(IPackageManager.Stub.class);
         mMockLegacyPermissionManager = Mockito.mock(LegacyPermissionManagerService.class);
         mSimulatedCommandsVerifier = Mockito.mock(SimulatedCommandsVerifier.class);
         mInboundSmsHandler = Mockito.mock(InboundSmsHandler.class);
@@ -501,7 +502,7 @@ public abstract class TelephonyTest {
         mMockedWlanDataServiceManager = Mockito.mock(DataServiceManager.class);
 
         TelephonyManager.disableServiceHandleCaching();
-        SubscriptionController.disableCaching();
+        PropertyInvalidatedCache.disableForTestMode();
         // For testing do not allow Log.WTF as it can cause test process to crash
         Log.setWtfHandler((tagString, what, system) -> Log.d(TAG, "WTF captured, ignoring. Tag: "
                 + tagString + ", exception: " + what));
@@ -898,7 +899,6 @@ public abstract class TelephonyTest {
         }
         restoreInstances();
         TelephonyManager.enableServiceHandleCaching();
-        SubscriptionController.enableCaching();
 
         mNetworkRegistrationInfo = null;
         mActivityManager = null;
