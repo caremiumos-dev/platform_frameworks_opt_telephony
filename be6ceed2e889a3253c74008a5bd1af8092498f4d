@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2fd088b_815db062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1886292
+      },
+      "writtenOn": "2022-10-13T06:47:47Z",
+      "side": 1,
+      "message": "Post ag/19745279 to AOSP.\nPlease review this.",
+      "revId": "be6ceed2e889a3253c74008a5bd1af8092498f4d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
