@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "906299d3_96115d44",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2022-10-14T08:44:31Z",
+      "side": 1,
+      "message": "Here you are allocating the ArrayList of size to the max.\nyou optmize the time but not memory .. is there any reason for it ?",
+      "range": {
+        "startLine": 839,
+        "startChar": 20,
+        "endLine": 839,
+        "endChar": 54
+      },
+      "revId": "f4b128ca318ce33c2974dfcd05b318c1ea5a7ad4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
