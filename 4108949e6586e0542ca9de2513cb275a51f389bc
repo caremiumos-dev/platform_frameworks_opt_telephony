@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2119f91_83374496",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-10-17T06:14:37Z",
+      "side": 1,
+      "message": "Can you also make sure the following tests pass after they were changed:\natest FrameworksTelephonyTests:SimSmsTest\natest FrameworksTelephonyTests:UiccCarrierPrivilegeRulesTest",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 4
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2073bf2b_acbcf8a6",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-10-17T06:14:37Z",
+      "side": 1,
+      "message": "indenting was changed",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 8
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cd5701a_e5652cbd",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-10-17T06:14:37Z",
+      "side": 1,
+      "message": "Whats the difference between Map.of and Map.ofEntries?\nI this this can just be the following instead: \nMap.of(\nInboundSmsHandler.PDU_COLUMN, 0,\nInboundSmsHandler.SEQUENCE_COLUMN, 1,\nInboundSmsHandler.DESTINATION_PORT_COLUMN, 2\n(etc)",
+      "range": {
+        "startLine": 77,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
