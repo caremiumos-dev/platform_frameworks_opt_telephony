@@ -22,6 +22,30 @@
       },
       "revId": "f4b128ca318ce33c2974dfcd05b318c1ea5a7ad4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c55172cf_e027bcda",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-10-17T04:21:47Z",
+      "side": 1,
+      "message": "I think it needs to be allocated as lc.mCountRecords.\nIt\u0027s because we put the payload of response for READ_RECORD to index.\nWe should consider exceptional case as below.\n\n- Some SIM card has 250 EF_ADN records.\n -- Only record number #1 and #250 is filled with valid PB data.\n    Then lc.result will be 01000000...fa. (fa is lc.results[249])\n    \n* I moved initLCResults to line 783. Because it\u0027s better initializing arrayList while handling EVENT_GET_RECORD_SIZE_DONE_FOR_COMMAND_SEEK than EVENT_COMMAND_SEEK_DONE.",
+      "parentUuid": "906299d3_96115d44",
+      "range": {
+        "startLine": 839,
+        "startChar": 20,
+        "endLine": 839,
+        "endChar": 54
+      },
+      "revId": "f4b128ca318ce33c2974dfcd05b318c1ea5a7ad4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
