@@ -70,6 +70,30 @@
       },
       "revId": "f4b128ca318ce33c2974dfcd05b318c1ea5a7ad4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d3285c_65ab5c5f",
+        "filename": "src/java/com/android/internal/telephony/uicc/IccFileHandler.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1501806
+      },
+      "writtenOn": "2022-10-17T04:58:48Z",
+      "side": 1,
+      "message": "more correctly..\nlc.results[0] -\u003e payload data of record number#1.\nlc.results[1] -\u003e payload data which is filled with 0xff.\n...\nlc.results[248] -\u003e payload data which is filled with 0xff.\nlc.results[249] -\u003e payload data of record number#250.\n\nUpper classes need all PB datas regardless of valid or not, so it needs to be allocated lc.mCountRecords.",
+      "parentUuid": "804b46b2_f6d85251",
+      "range": {
+        "startLine": 839,
+        "startChar": 20,
+        "endLine": 839,
+        "endChar": 54
+      },
+      "revId": "f4b128ca318ce33c2974dfcd05b318c1ea5a7ad4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
