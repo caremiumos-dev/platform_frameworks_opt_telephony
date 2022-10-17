@@ -140,6 +140,30 @@
       },
       "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56dbc960_8c58918b",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-10-17T18:49:44Z",
+      "side": 1,
+      "message": "Ack, thanks for clarifying",
+      "parentUuid": "3b1b4c21_4f0a0b4e",
+      "range": {
+        "startLine": 77,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
