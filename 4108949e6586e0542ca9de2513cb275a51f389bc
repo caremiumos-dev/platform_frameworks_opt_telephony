@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dfa4a75_10488aeb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1535516
+      },
+      "writtenOn": "2022-10-17T18:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2119f91_83374496",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 4
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2073bf2b_acbcf8a6",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b1fa2da_716976d1",
+        "filename": "src/java/com/android/internal/telephony/InboundSmsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1535516
+      },
+      "writtenOn": "2022-10-17T18:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2073bf2b_acbcf8a6",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 8
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cd5701a_e5652cbd",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-10-17T06:14:37Z",
       "side": 1,
       "message": "Whats the difference between Map.of and Map.ofEntries?\nI this this can just be the following instead: \nMap.of(\nInboundSmsHandler.PDU_COLUMN, 0,\nInboundSmsHandler.SEQUENCE_COLUMN, 1,\nInboundSmsHandler.DESTINATION_PORT_COLUMN, 2\n(etc)",
+      "range": {
+        "startLine": 77,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "4108949e6586e0542ca9de2513cb275a51f389bc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b1b4c21_4f0a0b4e",
+        "filename": "src/java/com/android/internal/telephony/SmsBroadcastUndelivered.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1535516
+      },
+      "writtenOn": "2022-10-17T18:23:58Z",
+      "side": 1,
+      "message": "`Map.of` only goes up to 10 key/value pairs unfortunately, and this has 11. `Map.ofEntries` can do as many entries as you want.",
+      "parentUuid": "5cd5701a_e5652cbd",
       "range": {
         "startLine": 77,
         "startChar": 16,
