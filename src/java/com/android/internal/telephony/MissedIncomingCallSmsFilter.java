@@ -229,9 +229,9 @@ public class MissedIncomingCallSmsFilter {
     }
 
     // Create phone account. The logic is copied from PhoneUtils.makePstnPhoneAccountHandle.
-    private static PhoneAccountHandle makePstnPhoneAccountHandle(Phone phone) {
+    private static PhoneAccountHandle makePstnPhoneAccountHandle(Phone phone, String id) {
         return new PhoneAccountHandle(PSTN_CONNECTION_SERVICE_COMPONENT,
-                String.valueOf(phone.getFullIccSerialNumber()));
+                String.valueOf(id));
     }
 
     /**
@@ -257,7 +257,7 @@ public class MissedIncomingCallSmsFilter {
             // Need to use the Epoch time instead of the elapsed time because it's possible
             // the missed incoming call occurred before the phone boots up.
             bundle.putLong(TelecomManager.EXTRA_CALL_CREATED_EPOCH_TIME_MILLIS, missedCallTime);
-            tm.addNewIncomingCall(makePstnPhoneAccountHandle(mPhone), bundle);
+            tm.addNewIncomingCall(makePstnPhoneAccountHandle(mPhone, Integer.toString(mPhone.getSubId())), bundle);
         }
     }
 }
