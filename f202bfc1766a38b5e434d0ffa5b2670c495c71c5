@@ -16,6 +16,23 @@
       "message": "What do y\u0027all think about this?",
       "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "268d2005_1f605bae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-10-28T00:33:43Z",
+      "side": 1,
+      "message": "This won\u0027t actually have any effect because the bundle will always have the key set, even if the carrier app specifically doesn\u0027t set one: http://cs/android-internal/frameworks/base/telephony/java/android/telephony/CarrierConfigManager.java;l\u003d9295;rcl\u003db3370acc279c39e98823a2dbb9835fe0db615579",
+      "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
