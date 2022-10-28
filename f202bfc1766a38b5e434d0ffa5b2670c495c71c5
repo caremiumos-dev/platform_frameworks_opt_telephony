@@ -69,6 +69,24 @@
       "parentUuid": "6ce3c88f_1114881e",
       "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40ce4cdd_699d249f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1124543
+      },
+      "writtenOn": "2022-10-28T01:04:05Z",
+      "side": 1,
+      "message": "Hmm, so it does... But do we have any reliable way to enforce that behavior if somebody mucks around and deviates from AOSP code?",
+      "parentUuid": "e7ffdf3f_aa8f7d39",
+      "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
