@@ -123,6 +123,23 @@
       "parentUuid": "f9fa3d97_c3353071",
       "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "874b8fca_56985026",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-10-28T23:43:53Z",
+      "side": 1,
+      "message": "SO I realized, that in the _specific_ case of this one config, it\u0027s not going to be possible to test in CTS with a single SIM. We\u0027ll need to emulate dual SIM to do that, because the test entails setting opportunistic \u003d true and then ensuring that the value doesn\u0027t get reset to false. Since setting a single SIM\u0027s subscription to opportunistic\u003dtrue should cause it to get disabled... sigh.\n\nThus, I think testing will be dependent on maybe using the mock modem with a carrier app. In short: messy.",
+      "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
