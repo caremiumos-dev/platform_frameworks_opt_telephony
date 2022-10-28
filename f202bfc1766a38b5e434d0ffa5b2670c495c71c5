@@ -105,6 +105,24 @@
       "parentUuid": "40ce4cdd_699d249f",
       "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "459689f5_4869f878",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2022-10-28T01:44:35Z",
+      "side": 1,
+      "message": "Yeh, the PersistableBundle for the update notification only contains CC from carrier or PARIS, not include system default ones. System default one will never change.\n\nSo the fallback value when read from OPPT CC does matter sometime. Using last known value (this change) instead always set to false (and wait for next real override to update into right status) may help to prevent a short period of incorrect OPPT bit set into currentSubInfo.",
+      "parentUuid": "f9fa3d97_c3353071",
+      "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
