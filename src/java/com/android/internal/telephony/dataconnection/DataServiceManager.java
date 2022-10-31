@@ -160,11 +160,10 @@ public class DataServiceManager extends Handler {
             mPermissionManager.grantDefaultPermissionsToEnabledTelephonyDataServices(
                     pkgToGrant, UserHandle.of(UserHandle.myUserId()), Runnable::run,
                     isSuccess -> {
-                        if (isSuccess) {
-                            latch.countDown();
-                        } else {
+                        if (!isSuccess) {
                             loge("Failed to grant permissions to service.");
                         }
+                        latch.countDown();
                     });
             TelephonyUtils.waitUntilReady(latch, CHANGE_PERMISSION_TIMEOUT_MS);
             mAppOps.setMode(AppOpsManager.OPSTR_MANAGE_IPSEC_TUNNELS,
@@ -195,11 +194,10 @@ public class DataServiceManager extends Handler {
             mPermissionManager.revokeDefaultPermissionsFromDisabledTelephonyDataServices(
                     dataServicesArray, UserHandle.of(UserHandle.myUserId()), Runnable::run,
                     isSuccess -> {
-                        if (isSuccess) {
-                            latch.countDown();
-                        } else {
+                        if (!isSuccess) {
                             loge("Failed to revoke permissions from data services.");
                         }
+                        latch.countDown();
                     });
             TelephonyUtils.waitUntilReady(latch, CHANGE_PERMISSION_TIMEOUT_MS);
             for (String pkg : dataServices) {
