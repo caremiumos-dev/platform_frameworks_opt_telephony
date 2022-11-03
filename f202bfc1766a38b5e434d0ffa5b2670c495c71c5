@@ -140,6 +140,24 @@
       "message": "SO I realized, that in the _specific_ case of this one config, it\u0027s not going to be possible to test in CTS with a single SIM. We\u0027ll need to emulate dual SIM to do that, because the test entails setting opportunistic \u003d true and then ensuring that the value doesn\u0027t get reset to false. Since setting a single SIM\u0027s subscription to opportunistic\u003dtrue should cause it to get disabled... sigh.\n\nThus, I think testing will be dependent on maybe using the mock modem with a carrier app. In short: messy.",
       "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3919deee_5200e891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-11-03T18:56:57Z",
+      "side": 1,
+      "message": "Ok, so I realized that there\u0027s a problem in testing this: unless/until we support DSDS testing, this still isn\u0027t system test-able because the test only generates a change if the subscription is marked opportunistic, and the moment that the primary subscription is marked opportunistic, I expect it to be disabled, causing a huge mess. (there\u0027s no change in behavior if the subscription _wasn\u0027t_ marked opportunistic, so the initial state has to be opportunistic\u003dtrue).\n\nThat said, I think this is a pretty safe change, so I\u0027m going to see what it takes to get it checked in.",
+      "parentUuid": "459689f5_4869f878",
+      "revId": "f202bfc1766a38b5e434d0ffa5b2670c495c71c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
