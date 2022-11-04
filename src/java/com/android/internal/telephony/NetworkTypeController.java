@@ -1124,6 +1124,8 @@ public class NetworkTypeController extends StateMachine {
             removeMessages(EVENT_PRIMARY_TIMER_EXPIRED);
             mIsPrimaryTimerActive = false;
             mPrimaryTimerState = "";
+            transitionToCurrentState();
+            return;
         }
 
         if (mIsSecondaryTimerActive && !mSecondaryTimerState.equals(currentState)) {
@@ -1135,6 +1137,8 @@ public class NetworkTypeController extends StateMachine {
             removeMessages(EVENT_SECONDARY_TIMER_EXPIRED);
             mIsSecondaryTimerActive = false;
             mSecondaryTimerState = "";
+            transitionToCurrentState();
+            return;
         }
 
         if (mIsPrimaryTimerActive || mIsSecondaryTimerActive) {
