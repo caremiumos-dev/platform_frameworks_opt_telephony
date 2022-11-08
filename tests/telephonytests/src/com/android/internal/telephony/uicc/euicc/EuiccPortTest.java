@@ -464,13 +464,13 @@ public class EuiccPortTest extends TelephonyTest {
     public void testGetRulesAuthTable() {
         int channel = mockLogicalChannelResponses("BF434B"
                 + "A0233021" // Rule #1
-                + "800206C0" // Policy rules: DO_NOT_DELETE | DO_NOT_DISABLE
+                + "80020660" // Policy rules: DO_NOT_DELETE | DO_NOT_DISABLE
                 + "A118" // Operator IDs
                 + "B70A800312F3458103010203" // ID #1: 213, 54, [1,2,3], null
                 + "B70A800312F3458203040506" // ID #2: 213, 54, null, [4,5,6]
                 + "820108" // Flag (no user consent)
                 + "A0243022" // Rule #2
-                + "80020780" // Policy rules: DO_NOT_DISABLE
+                + "80020740" // Policy rules: DO_NOT_DISABLE
                 + "A118" // Operator IDs
                 + "B70A800312E3458103010203" // ID #1: 213, 54E, [1,2,3], null
                 + "B70A8003EEEE458203040506" // ID #2: EEE, 54E, null, [4,5,6]
