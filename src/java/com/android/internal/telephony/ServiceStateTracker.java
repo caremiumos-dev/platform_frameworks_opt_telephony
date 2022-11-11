@@ -2948,7 +2948,7 @@ public class ServiceStateTracker extends Handler {
 
                 // Force display no service
                 final boolean forceDisplayNoService = shouldForceDisplayNoService() && !mIsSimReady;
-                if (!forceDisplayNoService && Phone.isEmergencyCallOnly()) {
+                if (!forceDisplayNoService && isEmergencyCallOnly()) {
                     // No service but emergency call allowed
                     plmn = Resources.getSystem()
                             .getText(com.android.internal.R.string.emergency_calls_only).toString();
@@ -6086,5 +6086,22 @@ public class ServiceStateTracker extends Handler {
      */
     public @Nullable CellIdentity getLastKnownCellIdentity() {
         return mLastKnownCellIdentity;
+    }
+
+    private boolean isEmergencyCallOnly() {
+        boolean isEmergencyCallOnly = false;
+        if (mPhone != null) {
+            ServiceState ss = mPhone.getServiceStateTracker().getServiceState();
+            // One of the phone is in service, hence the device is not emergency call only.
+            log("isEmergencyCallOnly : ss.getState()=" + ss.getState());
+            if (ss.getState() == ServiceState.STATE_IN_SERVICE
+                    || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE) {
+                return false;
+            }
+            isEmergencyCallOnly = ss.isEmergencyOnly();
+            log("isEmergencyCallOnly : isEmergencyCallOnly=" + isEmergencyCallOnly);
+        }
+
+        return isEmergencyCallOnly;
     }
 }
