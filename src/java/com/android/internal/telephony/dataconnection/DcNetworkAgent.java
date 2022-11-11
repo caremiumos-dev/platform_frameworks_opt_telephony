@@ -413,17 +413,22 @@ public class DcNetworkAgent extends NetworkAgent implements NotifyQosSessionInte
     public void onQosCallbackRegistered(final int qosCallbackId, final @NonNull QosFilter filter) {
         mQosCallbackExecutor.execute(() -> mQosCallbackTracker.addFilter(qosCallbackId,
               new QosCallbackTracker.IFilter() {
-                  @Override
-                  public boolean matchesLocalAddress(
-                          InetAddress address, int startPort, int endPort) {
-                      return filter.matchesLocalAddress(address, startPort, endPort);
-                  }
+                    @Override
+                    public boolean matchesLocalAddress(
+                            InetAddress address, int startPort, int endPort) {
+                        return filter.matchesLocalAddress(address, startPort, endPort);
+                    }
 
-                  @Override
-                  public boolean matchesRemoteAddress(
-                          InetAddress address, int startPort, int endPort) {
-                      return filter.matchesRemoteAddress(address, startPort, endPort);
-                  }
+                    @Override
+                    public boolean matchesRemoteAddress(
+                            InetAddress address, int startPort, int endPort) {
+                        return filter.matchesRemoteAddress(address, startPort, endPort);
+                    }
+
+                    @Override
+                    public boolean matchesProtocol(int protocol) {
+                        return filter.matchesProtocol(protocol);
+                    }
               }));
     }
 
