@@ -1432,7 +1432,7 @@ public class DataNetworkController extends Handler {
                         .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
                         .build(), mPhone);
         DataEvaluation evaluation = evaluateNetworkRequest(internetRequest,
-                DataEvaluationReason.EXTERNAL_QUERY);
+                DataEvaluationReason.GET_INTERNET_DATA_DISALLOWED_REASONS);
         return evaluation.getDataDisallowedReasons();
     }
 
@@ -1541,8 +1541,11 @@ public class DataNetworkController extends Handler {
         }
 
         // Check if only one data network is allowed.
+        // Ignore if called from getInternetDataDisallowedReasons() with a dummy internet network
+        // request to know why the internet network is not allowed in the current device state.
         if (isOnlySingleDataNetworkAllowed(transport)
-                && !hasCapabilityExemptsFromSinglePdnRule(networkRequest.getCapabilities())) {
+                && !hasCapabilityExemptsFromSinglePdnRule(networkRequest.getCapabilities())
+                && (reason != DataEvaluationReason.GET_INTERNET_DATA_DISALLOWED_REASONS)) {
             // if exists not-exempt network.
             if (mDataNetworkList.stream()
                     .anyMatch(dataNetwork -> !hasCapabilityExemptsFromSinglePdnRule(
@@ -1626,8 +1629,9 @@ public class DataNetworkController extends Handler {
         }
 
         networkRequest.setEvaluation(evaluation);
-        // EXTERNAL_QUERY generates too many log spam.
-        if (reason != DataEvaluationReason.EXTERNAL_QUERY) {
+        // Excluding reasons that generates too many log spam.
+        if (reason != DataEvaluationReason.EXTERNAL_QUERY
+                && reason != DataEvaluationReason.GET_INTERNET_DATA_DISALLOWED_REASONS) {
             log(evaluation.toString() + ", network type="
                     + TelephonyManager.getNetworkTypeName(getDataNetworkType(transport))
                     + ", reg state="

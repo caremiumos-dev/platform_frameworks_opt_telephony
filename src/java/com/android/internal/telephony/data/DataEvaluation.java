@@ -238,7 +238,9 @@ public class DataEvaluation {
         /** Query from {@link TelephonyManager#isDataConnectivityPossible()}. */
         EXTERNAL_QUERY(false),
         /** Tracking area code changed. */
-        TAC_CHANGED(true);
+        TAC_CHANGED(true),
+        /** Gets the reason why internet data is not allowed.*/
+        GET_INTERNET_DATA_DISALLOWED_REASONS(false);
 
         /**
          * {@code true} if the evaluation is due to environmental changes (i.e. SIM removal,
