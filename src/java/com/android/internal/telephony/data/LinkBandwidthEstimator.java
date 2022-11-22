@@ -441,6 +441,7 @@ public class LinkBandwidthEstimator extends Handler {
             return;
         }
         mIsOnDefaultRoute = isOnDefaultRoute;
+        logd("mIsOnDefaultRoute " + mIsOnDefaultRoute);
         handleTrafficStatsPollConditionChanged();
     }
 
@@ -465,6 +466,9 @@ public class LinkBandwidthEstimator extends Handler {
         if (mScreenOn && mIsOnDefaultRoute && mIsOnActiveData) {
             updateDataRatCellIdentityBandwidth();
             handleTrafficStatsPoll();
+        } else {
+            mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
+            logd("Traffic status poll stops");
         }
     }
 
