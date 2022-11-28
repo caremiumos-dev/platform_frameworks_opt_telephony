@@ -16,6 +16,24 @@
       "message": "Hi Tim, do you mind filing a buganizer record (https://source.android.com/docs/setup/contribute/report-bugs), describing the failure cases (h/w, s/w and test scenarios) with a bugreport(https://source.android.com/docs/setup/contribute/report-bugs), so we can better evaluate if the CL is reasonable request?\n\nThe original CL was targeted on Android TM(13) release. It removed the cascading signals strength polling request which is quite power deficient since Radio HAL 1.2 (and above) has introduced better API (e.g. setSignalStrengthReportingCriteria) for better signal strength reporting.\n\nAn device with Android TM but Radio HAL 1.1 or lower is extreme rare case, but we would like to hear the real end user case before discussing more. Thanks!",
       "revId": "4fa4d28b86df60468edac20a6a478d9f0dcd8dfe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "176f8122_44e33fc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2022-11-28T21:55:23Z",
+      "side": 1,
+      "message": "Please let us know which OEM would still use 1.0 for Android U.",
+      "parentUuid": "e1b00961_56378268",
+      "revId": "4fa4d28b86df60468edac20a6a478d9f0dcd8dfe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
