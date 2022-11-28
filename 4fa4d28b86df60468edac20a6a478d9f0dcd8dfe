@@ -34,6 +34,24 @@
       "parentUuid": "e1b00961_56378268",
       "revId": "4fa4d28b86df60468edac20a6a478d9f0dcd8dfe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f233c6e_b3c94613",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1060151
+      },
+      "writtenOn": "2022-11-28T22:50:41Z",
+      "side": 1,
+      "message": "I\u0027m not sure what \"target level 3\" is, but I\u0027m a bit skeptical that this patch should go upstream.\n\nWhen Android U is released, HAL 1.0 will be eight API levels behind (U would be the ninth). My recollection is that HAL support extends to a maximum of 3+3 for VSR-compliant devices and no further. This puts HAL 1.0-1.2 completely out of the range of things we consider from a maintenance perspective, and I want to make sure that the incentives are in the right place for developers that are building and launching devices.",
+      "parentUuid": "176f8122_44e33fc3",
+      "revId": "4fa4d28b86df60468edac20a6a478d9f0dcd8dfe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
