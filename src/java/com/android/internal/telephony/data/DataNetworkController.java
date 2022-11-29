@@ -1524,12 +1524,18 @@ public class DataNetworkController extends Handler {
         // Check if only one data network is allowed.
         if (isOnlySingleDataNetworkAllowed(transport)
                 && !hasCapabilityExemptsFromSinglePdnRule(networkRequest.getCapabilities())) {
-            // if exists not-exempt network.
-            if (mDataNetworkList.stream()
-                    .anyMatch(dataNetwork -> !hasCapabilityExemptsFromSinglePdnRule(
-                            dataNetwork.getNetworkCapabilities().getCapabilities()))) {
-                evaluation.addDataDisallowedReason(
-                        DataDisallowedReason.ONLY_ALLOWED_SINGLE_NETWORK);
+            // If one of the existing networks can satisfy the network request, we should allow
+            // the network request. The network request will be eventually attached to the existing
+            // network.
+            if (mDataNetworkList.stream().noneMatch(dataNetwork -> networkRequest.canBeSatisfiedBy(
+                            dataNetwork.getNetworkCapabilities()))) {
+                // if exists not-exempt network.
+                if (mDataNetworkList.stream()
+                        .anyMatch(dataNetwork -> !hasCapabilityExemptsFromSinglePdnRule(
+                                dataNetwork.getNetworkCapabilities().getCapabilities()))) {
+                    evaluation.addDataDisallowedReason(
+                            DataDisallowedReason.ONLY_ALLOWED_SINGLE_NETWORK);
+                }
             }
         }
 
