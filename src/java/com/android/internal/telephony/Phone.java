@@ -5014,6 +5014,20 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         pw.println(" isUsingNewDataStack=" + isUsingNewDataStack());
         pw.println(" service state=" + getServiceState());
         pw.flush();
+        pw.println(" mAllowedNetworkTypesForReasons=");
+        for (Map.Entry<Integer, Long> reasonAndTypes : mAllowedNetworkTypesForReasons.entrySet()) {
+            pw.println(
+                    "   "
+                            + convertAllowedNetworkTypeMapIndextoDbName(reasonAndTypes.getKey())
+                            + "="
+                            + reasonAndTypes.getValue()
+                            + " // 0x"
+                            + Long.toHexString(reasonAndTypes.getValue())
+                            + " // "
+                            + TelephonyManager.convertNetworkTypeBitmaskToString(
+                                    reasonAndTypes.getValue()));
+        }
+        pw.flush();
         pw.println("++++++++++++++++++++++++++++++++");
 
         if (mImsPhone != null) {
