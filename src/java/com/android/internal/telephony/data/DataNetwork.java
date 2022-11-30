@@ -1241,6 +1241,39 @@ public class DataNetwork extends StateMachine {
                     mFailCause = DataFailCause.NO_RETRY_FAILURE;
                     transitionTo(mDisconnectedState);
                     break;
+                case EVENT_DATA_STATE_CHANGED:
+                    AsyncResult ar = (AsyncResult) msg.obj;
+                    int transport = (int) ar.userObj;
+                    List<DataCallResponse> responseList = (List<DataCallResponse>) ar.result;
+                    boolean dnnMatch = false;
+
+                    TrafficDescriptor trafficDescriptor = mDataProfile.getTrafficDescriptor();
+                    if (trafficDescriptor != null
+                            && !TextUtils.isEmpty(trafficDescriptor.getDataNetworkName())) {
+
+                        final String requestedDnn = trafficDescriptor.getDataNetworkName();
+
+                        if (requestedDnn != null) {
+                            List<TrafficDescriptor> td = responseList.stream()
+                                    .flatMap(r -> r.getTrafficDescriptors().stream())
+                                    .collect(Collectors.toList());
+                            dnnMatch = td.stream().anyMatch(t -> requestedDnn.equals(
+                                    t.getDataNetworkName()));
+                        }
+                    }
+
+                    //Defer message if data call list change indication is received before
+                    //setup data call response and DNN in the indication
+                    //matches with the request.
+                    if (transport == mTransport && mCid.get(mTransport) == INVALID_CID
+                            && isConnecting() && dnnMatch) {
+                        log("Defer message " + eventToString(msg.what));
+                        deferMessage(msg);
+                        break;
+                    }
+
+                    onDataStateChanged(transport, responseList);
+                    break;
                 default:
                     return NOT_HANDLED;
             }
