@@ -1403,7 +1403,7 @@ public class PhoneSwitcher extends Handler {
                     }
 
                     if (newActivePhones.size() < mMaxDataAttachModemCount
-                            && newActivePhones.contains(mPreferredDataPhoneId)
+                            && !newActivePhones.contains(mPreferredDataPhoneId)
                             && SubscriptionManager.isUsableSubIdValue(mPreferredDataPhoneId)) {
                         newActivePhones.add(mPreferredDataPhoneId);
                     }
