@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "899dda47_f72f854b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-05T02:46:59Z",
+      "side": 1,
+      "message": "Checked with our Reference devices in Live Network.\nWe could observe updated TCP buffer in LinkProperties from ConnectingState",
+      "revId": "7135b580fe025c1e3505cf976bd98be64b0e85c4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
