@@ -622,6 +622,7 @@ public class DataNetworkControllerTest extends TelephonyTest {
 
     private void initializeConfig() {
         mCarrierConfig = mContextFixture.getCarrierConfigBundle();
+        when(mCarrierConfigManager.getConfigForSubId(anyInt(), any())).thenReturn(mCarrierConfig);
         mCarrierConfig.putStringArray(
                 CarrierConfigManager.KEY_TELEPHONY_NETWORK_CAPABILITY_PRIORITIES_STRING_ARRAY,
                 new String[]{
@@ -773,6 +774,12 @@ public class DataNetworkControllerTest extends TelephonyTest {
         // between DataNetworkController and its sub-modules, we intend to make those modules "real"
         // as well, except some modules below we replaced with mocks.
         mDataNetworkControllerUT = new DataNetworkController(mPhone, Looper.myLooper());
+        // First two come from DataServiceManager and the third comes from DataConfigManager which
+        // is what we want to capture and assign to mCarrierConfigChangeListener
+        verify(mCarrierConfigManager, times(3)).registerCarrierConfigChangeListener(any(),
+                listenerArgumentCaptor.capture());
+        mCarrierConfigChangeListener = listenerArgumentCaptor.getAllValues().get(2);
+        assertThat(mCarrierConfigChangeListener).isNotNull();
         doReturn(mDataNetworkControllerUT).when(mPhone).getDataNetworkController();
 
         doReturn(1).when(mPhone).getSubId();
