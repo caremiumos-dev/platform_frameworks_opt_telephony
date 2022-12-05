@@ -30,6 +30,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
+import android.telephony.UplmnInfo;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -39,6 +40,7 @@ import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.gsm.SimTlv;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.uicc.PlmnActRecord;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -78,6 +80,8 @@ public class SIMRecords extends IccRecords {
      */
     private byte[] mCphsInfo = null;
     boolean mCspPlmnEnabled = true;
+
+    ArrayList<UplmnInfo> mUplmnInfos;
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     byte[] mEfMWIS = null;
@@ -136,6 +140,24 @@ public class SIMRecords extends IccRecords {
     private static final int CPHS_SST_MBN_MASK = 0x30;
     private static final int CPHS_SST_MBN_ENABLED = 0x30;
 
+    /* 5n bytes:
+    1 to 3  nth PLMN (highest priority)
+    4 to 5  nth PLMN Access Technology Identifier */
+    private static final int UPLMN_SEL_DATA_LEN = 5;
+    private static final int GSM_MASK = 1;
+    /**
+     * GSM compact access technology.
+     */
+    private static final int GSM_COMPACT_MASK = 2;
+    /**
+     * UMTS radio access technology.
+     */
+    private static final int UMTS_MASK = 4;
+    /**
+     * LTE radio access technology.
+     */
+    private static final int LTE_MASK = 8;
+
     // EF_CFIS related constants
     // Spec reference TS 51.011 section 10.3.46.
     private static final int CFIS_BCD_NUMBER_LENGTH_OFFSET = 2;
@@ -184,6 +206,10 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_FPLMN_SIZE_DONE = 42 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_SET_FPLMN_DONE = 43 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_GET_UPLMN_DONE = 44 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_GET_UPLMN_SIZE_DONE = 45 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_SET_UPLMN_DONE = 46 + SIM_RECORD_EVENT_BASE;
+
     // ***** Constructor
 
     public SIMRecords(UiccCardApplication app, Context c, CommandsInterface ci) {
@@ -1237,6 +1263,52 @@ public class SIMRecords extends IccRecords {
                     }
                     break;
 
+                case EVENT_GET_UPLMN_DONE:
+                    isRecordLoadResponse = true;
+                    ar = (AsyncResult) msg.obj;
+                    data = (byte[]) ar.result;
+                    if (ar.exception != null || data == null) {
+                        loge("Failed getting user controlled PLMNs: " + ar.exception);
+                    } else {
+                        int numRec = data.length / UPLMN_SEL_DATA_LEN;
+                        PlmnActRecord[] plmnActRecords = PlmnActRecord.getRecords(data);
+                        
+                        int i = 0;
+                        String INVALID_PLMN_PREFIX = "FFFFF";
+                        for (PlmnActRecord record : plmnActRecords) {
+                            if(!record.plmn.regionMatches(
+                                true, 0, INVALID_PLMN_PREFIX, 0, INVALID_PLMN_PREFIX.length())
+                                && record.accessTechs != -1 && !TextUtils.isEmpty(record.plmn)
+                                && record.plmn.length() >= 5){
+                                mUplmnInfos.add(new UplmnInfo(
+                                                    record.plmn,
+                                                    convertAccessTech2NetworkMode(record.accessTechs),
+                                                    i,
+                                                    numRec));
+                            }
+                            i++;
+                        }
+
+                    }
+                    if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+                        logv("getUserControlledPlmns(): send async response");
+                        isRecordLoadResponse = false;
+                        int key = msg.arg2;
+                        Message response = retrievePendingTransaction(key).first;
+                        if (response != null) {
+                            if (ar.exception == null && data != null && mUplmnInfos != null) {
+                                AsyncResult.forMessage(response, mUplmnInfos, null);
+                            } else {
+                                AsyncResult.forMessage(response, null, ar.exception);
+                            }
+                            response.sendToTarget();
+                        } else {
+                            loge("Failed to retrieve a response message for UPLMN");
+                            break;
+                        }
+                    }
+                    break;
+
                 case EVENT_GET_FPLMN_SIZE_DONE:
                     ar = (AsyncResult) msg.obj;
                     if (ar.exception != null) {
@@ -1540,6 +1612,17 @@ public class SIMRecords extends IccRecords {
         mFh.loadEFTransparent(EF_FPLMN, obtainMessage(
                     EVENT_GET_FPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
     }
+
+    /**
+     * String[] of forbidden PLMNs will be sent to the Message's handler
+     * in the result field of an AsyncResult in the response.obj.
+     */
+    public void getUserControlledPlmns(Message response) {
+        int key = storePendingTransaction(response);
+        mFh.loadEFTransparent(EF_PLMN_W_ACT, obtainMessage(
+                    EVENT_GET_UPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
+
 
     /**
      * Set the forbidden PLMNs on the sim
@@ -1951,6 +2034,25 @@ public class SIMRecords extends IccRecords {
 
         // For compatiblility with legacy code.
         if (mPnns.length > 0) mPnnHomeName = mPnns[0].getName();
+    }
+
+    private int convertAccessTech2NetworkMode(int accessTechs) {
+        int networkMode = 0;
+
+        if ((accessTechs & PlmnActRecord.ACCESS_TECH_EUTRAN) != 0) {
+            networkMode = networkMode | LTE_MASK;
+        }
+        if ((accessTechs & PlmnActRecord.ACCESS_TECH_UTRAN) != 0) {
+            networkMode = networkMode | UMTS_MASK;
+        }
+        if ((accessTechs & PlmnActRecord.ACCESS_TECH_GSM) != 0) {
+            networkMode = networkMode | GSM_MASK;
+        }
+        if ((accessTechs & PlmnActRecord.ACCESS_TECH_GSM_COMPACT) != 0) {
+            networkMode = networkMode | GSM_COMPACT_MASK;
+        }
+
+        return networkMode;
     }
 
     /**
