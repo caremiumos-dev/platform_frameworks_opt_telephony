@@ -39,6 +39,7 @@ import android.util.LocalLog;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.data.DataConfigManager.DataConfigManagerCallback;
 import com.android.internal.telephony.data.DataNetworkController.DataNetworkControllerCallback;
 import com.android.internal.telephony.data.DataSettingsManager.DataSettingsManagerCallback;
@@ -555,9 +556,8 @@ public class DataStallRecoveryManager extends Handler {
             return false;
         }
 
-        // Skip recovery if it can cause a call to drop
-        if (mPhone.getState() != PhoneConstants.State.IDLE
-                && getRecoveryAction() > RECOVERY_ACTION_CLEANUP) {
+        // Skip recovery if it can cause a call to drop on any phone
+        if (!isPhoneStateIdle() && getRecoveryAction() > RECOVERY_ACTION_CLEANUP) {
             logl("skip data stall recovery as there is an active call");
             return false;
         }
@@ -578,6 +578,23 @@ public class DataStallRecoveryManager extends Handler {
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Check whether the phone state is {@link PhoneConstants.State#IDLE} for all phones.
+     * If any phone is not IDLE (voice call active on any phone), do not trigger recovery.
+     *
+     * @return {@code true} if all phones are IDLE and {@code false} if any phones are not IDLE.
+     */
+    private boolean isPhoneStateIdle() {
+        for (int i = 0; i < mPhone.getContext().getSystemService(TelephonyManager.class).getPhoneCount(); i++) {
+            Phone phone = PhoneFactory.getPhone(i);
+            if (phone != null && phone.getState() != PhoneConstants.State.IDLE) {
+                log("isPhoneStateIdle false: Voice call active on phone " + i);
+                return false;
+            }
+        }
         return true;
     }
 
