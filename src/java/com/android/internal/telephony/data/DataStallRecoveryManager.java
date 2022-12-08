@@ -556,7 +556,7 @@ public class DataStallRecoveryManager extends Handler {
         }
 
         // Skip recovery if it can cause a call to drop
-        if (mPhone.getState() != PhoneConstants.State.IDLE
+        if (!isPhoneStateIdle()
                 && getRecoveryAction() > RECOVERY_ACTION_CLEANUP) {
             logl("skip data stall recovery as there is an active call");
             return false;
@@ -578,6 +578,17 @@ public class DataStallRecoveryManager extends Handler {
             return false;
         }
 
+        return true;
+    }
+
+    private boolean isPhoneStateIdle() {
+        for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+            Phone phone = PhoneFactory.getPhone(i);
+            if (phone != null && phone.getState() != PhoneConstants.State.IDLE) {
+                log("isPhoneStateIdle false: Voice call active on phone " + i);
+                return false;
+            }
+        }
         return true;
     }
 
