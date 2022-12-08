@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c58069f_a592686a",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-12-08T23:01:08Z",
+      "side": 1,
+      "message": "drop on any phone",
+      "range": {
+        "startLine": 559,
+        "startChar": 51,
+        "endLine": 559,
+        "endChar": 55
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e05f39b1_9f9e1196",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-12-08T23:01:08Z",
+      "side": 1,
+      "message": "Check whether the phone state is {@code PhoneConStants.State.IDLE} for all phones. If any phone is not IDLE (voice call active on any phone), do not trigger recovery.\n\n@return {@code true} if all phones are IDLE and {@code false} if any phones are not IDLE.",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 590,
+        "endChar": 7
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63848ed9_27a7b73f",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-12-08T23:01:08Z",
+      "side": 1,
+      "message": "`for (Phone phone : PhoneFactory.getPhones()) {`",
+      "range": {
+        "startLine": 592,
+        "startChar": 8,
+        "endLine": 593,
+        "endChar": 51
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
