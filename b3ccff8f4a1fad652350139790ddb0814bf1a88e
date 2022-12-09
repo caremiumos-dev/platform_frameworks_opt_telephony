@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52d10ada_4791a53c",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1385398
+      },
+      "writtenOn": "2022-12-09T11:47:17Z",
+      "side": 1,
+      "message": "Accordinbg to b/198358638#comment109, RIL will report the tmp no service when dial the call on nDDS slot.\n\nFor the DDS slot we will check the data service to avoid excute the next recovery action.(mDataNetworkController.isInternetDataAllowed())\n\nDo you see any abnormal behavior? Can you help provide the bugreport for analysis?",
+      "range": {
+        "startLine": 571,
+        "startChar": 8,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7fcc5152_adafa382",
         "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
         "patchSetId": 6
