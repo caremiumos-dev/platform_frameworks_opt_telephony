@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f97c2ec_78c9b46c",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T01:40:54Z",
+      "side": 1,
+      "message": "Thank you\nI changed.",
+      "parentUuid": "7c58069f_a592686a",
+      "range": {
+        "startLine": 559,
+        "startChar": 51,
+        "endLine": 559,
+        "endChar": 55
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e05f39b1_9f9e1196",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a4d9806_018bf9fb",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T01:40:54Z",
+      "side": 1,
+      "message": "Thank you.\nI changed.",
+      "parentUuid": "e05f39b1_9f9e1196",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 590,
+        "endChar": 7
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63848ed9_27a7b73f",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-12-08T23:01:08Z",
       "side": 1,
       "message": "`for (Phone phone : PhoneFactory.getPhones()) {`",
+      "range": {
+        "startLine": 592,
+        "startChar": 8,
+        "endLine": 593,
+        "endChar": 51
+      },
+      "revId": "385fb9e6096fa937e65d11bed3342fa7ceb0eb30",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c4be07_a7e9d8a9",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T01:40:54Z",
+      "side": 1,
+      "message": "Thank yor for you suggestion.\n\nI tried your suggestion, but it couldn\u0027t be used due to Java compiling error and build fail.\n\nIt looks that getPhones() is restircted only upto R version.\n\n80     @UnsupportedAppUsage(maxTargetSdk \u003d Build.VERSION_CODES.R, trackingBug \u003d 170729553)\n\n381     public static Phone[] getPhones() {",
+      "parentUuid": "63848ed9_27a7b73f",
       "range": {
         "startLine": 592,
         "startChar": 8,
