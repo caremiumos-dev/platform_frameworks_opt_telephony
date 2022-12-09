@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fef60f_a840e810",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T08:01:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c255973_2088ce1c",
+      "range": {
+        "startLine": 560,
+        "startChar": 12,
+        "endLine": 561,
+        "endChar": 67
+      },
+      "revId": "a5cd094897b1a10094d6ca17f310c5c699f1cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df865a49_07a9d4cc",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b1fd29f_a849ae44",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T08:01:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "df865a49_07a9d4cc",
+      "range": {
+        "startLine": 586,
+        "startChar": 40,
+        "endLine": 586,
+        "endChar": 72
+      },
+      "revId": "a5cd094897b1a10094d6ca17f310c5c699f1cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0787197_ba11e955",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-12-09T03:52:28Z",
       "side": 1,
       "message": "mPhone.getContext.getSystemService(TelephonyManager.class)",
+      "range": {
+        "startLine": 592,
+        "startChar": 28,
+        "endLine": 592,
+        "endChar": 57
+      },
+      "revId": "a5cd094897b1a10094d6ca17f310c5c699f1cebd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3011dd45_00b67dca",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-09T08:01:15Z",
+      "side": 1,
+      "message": "Thank you. \nThis change works.",
+      "parentUuid": "d0787197_ba11e955",
       "range": {
         "startLine": 592,
         "startChar": 28,
