@@ -16,6 +16,29 @@
       "message": "Thank you\nI applied suggestion, and changed code also worked well.",
       "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fcc5152_adafa382",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1542950
+      },
+      "writtenOn": "2022-12-09T08:31:30Z",
+      "side": 1,
+      "message": "split into two lines",
+      "range": {
+        "startLine": 591,
+        "startChar": 0,
+        "endLine": 591,
+        "endChar": 112
+      },
+      "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
