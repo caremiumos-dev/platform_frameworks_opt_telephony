@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "921156ea_82e531f1",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-12T08:27:06Z",
+      "side": 1,
+      "message": "Current issue was brought from other device not from the device in the b/198358638, and no bugreport with it.\nYou can reproduce with same test case at the bottom with your device.\n\nThe reason why I uploaded this CL is\n\nFirst of all, about The CL in the b/198358638, it\u0027s considered as customized one for specific device not for all our chipset.\nRIL\u0027s fake state reporting is not a documented HAL behavior definition. I think it\u0027s not a contracted standard behavior. \n\nIf you\u0027re thinking fake state reporting is designed one officially. \nPlease update HAL comment about Modem\u0027s Actual State and RIL state can be different.\n\nin android/hardware/radio/network/IRadioNetworkResponse.aidl\n\n146     /**\n147      * @param info Response info struct containing response type, serial no. and error\n148      * @param dataRegResponse Current data registration response as defined by RegStateResult\n149      *\n150      * Valid errors returned:\n151      *   RadioError:NONE\n152      *   RadioError:RADIO_NOT_AVAILABLE\n153      *   RadioError:INTERNAL_ERR\n154      *   RadioError:NOT_PROVISIONED\n155      */\n156     void getDataRegistrationStateResponse(\n157             in RadioResponseInfo info, in RegStateResult dataRegResponse);\n\nor\nin android/hardware/radio/network/RegState.aidl\n\n\nThe CLs, Modem/RIL workaround couldn\u0027t be applied into older released device which does not include Modem patch and it\u0027s customer does not want to change it due to reverification cost (but wants to upgrade to T).\n\nSecond, techinically.\n\nModem will keep PS REG as DataReg, for DualVoLTE(VoNR) devices. \nDataRegistraion state is not only for InternetData control.\nIt\u0027s used as a precondition to do IMS reg. RIL can make Data NOT_REG once during call and actual state from modem is ignored for any other changes from modem during call. So it can affect the state transition in telephony framework and IMS service during Handover like SRVCC, VoWFC, DRDV and any REG recovery action on DDS non-calling SIM side(ex. IMS deregstered accidently then recovering during call in nonDDS, it leads MT call miss) because framework is already in NOT_REG state.\nAnd it blocks other new NetworkRequest on DDS like MMS, SUPL because NOT_IN_SERVICE is hard disallowed Reason.\nI think during call, sending MMS in other side is fairly normal and frequent scenario.\n\nUpto S version, DcTracker only holds checking logic for other Phone\u0027s State. It worked for the test case. Currently, it\u0027s not equivalent between DcTracker and T DataStallRecoveryManager. DcTracker is never used from T, and removed from U.\n\nFrom T version, DataStallRecoveryManager is handling only NetworkValidation State which is reported from NetworkMonitor. DataStallRecoveryManager is very light-weight, but lost a few behavior to stop recovery. NetworkMonitor does(could) not check any RegState, and no feature implementation like stopDataStallAlarm/stopNetStatPoll triggered by any telephony specific state. \nGeneral NetworkMonitor does not know PhoneState as it\u0027s design scope.\nSo RIL\u0027s fake state reporting will not be helpful and old logic is the simplest way.\n\nWorkaround brings several GET_PS, GET_CS, GET_OPERATOR operation by NTW_STATE_CHANGED indication, it\u0027s not good for performance, so also not good for call quality. It works as intervention. \nI suggest to add addtional HAL indication to stop DataRecovery purpose without embedding fake state in big call flow.\n\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nThere\u0027s two testing scenario.\n\nPrecondition : Disabled(and default) \u0027Data during calls\u0027 on non-DDS setting menu.\n\nTest Case 1 : Long call(CS PS any) on non-DDS.\n  Triggering any data action like web browsing during call on non-DDS will trigger DNS packet generation, then Network validation will become invalid in NetworkMonitor, then addtiional Probing packets will push state to more invalid state. then DataStallRecoveryModule keep receiving invalid report from NetworkMonitor. then doRecovery() action.\n\nTest Case 2 : Consecutive Call Setup/End on non-DDS several times.\n  Modem\u0027s Data recovery takes a time to be normal, but consecutive action can makes no room for actual packet flowing, But just state change will be reported and it will trigger AOSP\u0027s logic then generate probing packets. Packets itself can be dropped in call state. and NetworkMonitor from T will keep running without other state checking, then Network will go invalid state easily.",
+      "parentUuid": "52d10ada_4791a53c",
+      "range": {
+        "startLine": 571,
+        "startChar": 8,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fcc5152_adafa382",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-12-09T08:31:30Z",
       "side": 1,
       "message": "split into two lines",
+      "range": {
+        "startLine": 591,
+        "startChar": 0,
+        "endLine": 591,
+        "endChar": 112
+      },
+      "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98dd4bc6_0e6a9912",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-12T08:27:06Z",
+      "side": 1,
+      "message": "I didn\u0027t get good line wrapping suggestion from AndroidStudio and couldn\u0027t find from Google style guide.\nhttps://google.github.io/styleguide/javaguide.html#s4.5-line-wrapping\nSo, I just followed this.\nhttps://www.cs.swarthmore.edu/~newhall/unixhelp/javacodestyle.html#:~:text\u003dshould%20be%20re%2Dwritten%20with%20a%20carriage%20return%20between%20parts%20of%20the%20for%2Dloop%20statment%20and%20each%20part%20indented%20so%20that%20it%20is%20clear%20that%20it%20is%20part%20of%20the%20for%20statement%3A",
+      "parentUuid": "7fcc5152_adafa382",
       "range": {
         "startLine": 591,
         "startChar": 0,

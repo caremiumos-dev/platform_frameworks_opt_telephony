@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ab9cc0_2cb84f95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1328558
+      },
+      "writtenOn": "2022-12-12T08:27:06Z",
+      "side": 1,
+      "message": "Please check my comment about my CL and about workardound CLs of b/198358638",
+      "revId": "5d820a099d4b788431802dedc2bc20c8fd82b80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
