@@ -1533,7 +1533,8 @@ public class ServiceStateTracker extends Handler {
                 if (DBG) log("EVENT_IMS_SERVICE_STATE_CHANGED");
                 // IMS state will only affect the merged service state if the service state of
                 // GsmCdma phone is not STATE_IN_SERVICE.
-                if (mSS.getState() != ServiceState.STATE_IN_SERVICE) {
+               
+                if (mSS.getDataRegState() != ServiceState.STATE_IN_SERVICE &&  mSS.getVoiceRegState() != ServiceState.STATE_IN_SERVICE) {
                     mPhone.notifyServiceStateChanged(mPhone.getServiceState());
                 }
                 break;
