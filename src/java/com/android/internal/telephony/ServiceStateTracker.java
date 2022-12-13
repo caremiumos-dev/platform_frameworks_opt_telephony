@@ -3810,11 +3810,11 @@ public class ServiceStateTracker extends Handler {
                 mLocaleTracker.updateOperatorNumeric(localeOperator);
             }
 
+            setRoamingType(mSS);
             tm.setNetworkRoamingForPhone(mPhone.getPhoneId(),
                     mPhone.isPhoneTypeGsm() ? mSS.getVoiceRoaming() :
                             (mSS.getVoiceRoaming() || mSS.getDataRoaming()));
 
-            setRoamingType(mSS);
             log("Broadcasting ServiceState : " + mSS);
             // notify using PhoneStateListener and the legacy intent ACTION_SERVICE_STATE_CHANGED
             // notify service state changed only if the merged service state is changed.
@@ -5534,7 +5534,10 @@ public class ServiceStateTracker extends Handler {
         final boolean isVoiceInService =
                 (currentServiceState.getState() == ServiceState.STATE_IN_SERVICE);
         if (isVoiceInService) {
-            if (currentServiceState.getVoiceRoaming()) {
+            int currentVoiceRegState = currentServiceState.getNetworkRegistrationInfo(
+                    NetworkRegistrationInfo.DOMAIN_CS,
+                    AccessNetworkConstants.TRANSPORT_TYPE_WWAN).getRegistrationState();
+            if (currentVoiceRegState == NetworkRegistrationInfo.REGISTRATION_STATE_ROAMING) {
                 if (mPhone.isPhoneTypeGsm()) {
                     // check roaming type by MCC
                     if (inSameCountry(currentServiceState.getOperatorNumeric())) {
@@ -5579,7 +5582,10 @@ public class ServiceStateTracker extends Handler {
                 (currentServiceState.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
         final int dataRegType = getRilDataRadioTechnologyForWwan(currentServiceState);
         if (isDataInService) {
-            if (!currentServiceState.getDataRoaming()) {
+            int currentDataRegState = currentServiceState.getNetworkRegistrationInfo(
+                    NetworkRegistrationInfo.DOMAIN_PS,
+                    AccessNetworkConstants.TRANSPORT_TYPE_WWAN).getRegistrationState();
+            if (currentDataRegState != NetworkRegistrationInfo.REGISTRATION_STATE_ROAMING) {
                 currentServiceState.setDataRoamingType(ServiceState.ROAMING_TYPE_NOT_ROAMING);
             } else {
                 if (mPhone.isPhoneTypeGsm()) {
