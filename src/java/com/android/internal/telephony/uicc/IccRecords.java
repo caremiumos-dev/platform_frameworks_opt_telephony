@@ -29,6 +29,7 @@ import android.os.SystemClock;
 import android.telephony.CellIdentity;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyManager;
+import android.telephony.UplmnInfo;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -44,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -172,6 +174,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     protected String[] mEhplmns;
     protected String[] mFplmns;
+    protected ArrayList<UplmnInfo> mUplmnInfos = new ArrayList<UplmnInfo>();
 
     CarrierTestOverride mCarrierTestOverride;
 
