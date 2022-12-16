@@ -1,3 +1,4 @@
+<<<<<<< TARGET BRANCH (24bf3a Merge changes from topic "am-cdd9bba51421445981c0dbe9fa55549)
 /*
  * Copyright (C) 2010 The Android Open Source Project
  *
@@ -541,3 +542,5 @@ public class ApnSettingTest extends TelephonyTest {
         parcel.recycle();
     }
 }
+=======
+>>>>>>> SOURCE BRANCH (fd1186 Merge "Removed old data stack")
