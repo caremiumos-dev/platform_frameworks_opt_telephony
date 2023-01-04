@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d7cfb16_a3a3f258",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6091,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2023-01-04T00:31:00Z",
+      "side": 1,
+      "message": "I am not convinced that this is the correct way to compute this information. `Phone.isEmergencyCallOnly()` takes into account the device emergency only state and will compute `isEmergencyCallOnly` for all Phones, vs the change here, which will compute `isEmergencyCallOnly` for only the phone being evaluated.\n\nIt is not clear how changing this logic achieves the goal of test step 4 in the description:\n\n```\nThere are 2 scenairo. If no cells are available, neither\n  FPLMN cell, UE should display \"No Service\" (\"Sin Servicio\").\n  If there are someFPLMN cells, it is camping in limitate state\n  on FPLMN so it shoudl display \"Only emergency call\"\n  (\"Solo llamadas de emergencia\")\n```",
+      "range": {
+        "startLine": 6091,
+        "startChar": 20,
+        "endLine": 6091,
+        "endChar": 39
+      },
+      "revId": "4a462cb55581cf9497a64c008f3afb31d1757f8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
