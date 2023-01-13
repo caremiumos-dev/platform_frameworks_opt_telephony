@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2924cd94_732c3e62",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2023-01-13T18:06:33Z",
+      "side": 1,
+      "message": "nit: fix long line",
+      "revId": "ef369d3a2680de38a207fe49673f80b1ad83ad62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4c88e5_6d475c9c",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2023-01-13T18:06:33Z",
+      "side": 1,
+      "message": "can we return here instead directly? I know it\u0027s following the format of the file but it seems to be better without the nested else statement.",
+      "revId": "ef369d3a2680de38a207fe49673f80b1ad83ad62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a418b928_581340a7",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1644,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2023-01-13T18:06:33Z",
+      "side": 1,
+      "message": "remove debugging log?",
+      "revId": "ef369d3a2680de38a207fe49673f80b1ad83ad62",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
