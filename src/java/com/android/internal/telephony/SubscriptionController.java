@@ -4150,7 +4150,7 @@ public class SubscriptionController extends ISub.Stub {
     private boolean enableEmbeddedSubscription(SubscriptionInfo info, boolean enable) {
         // We need to send intents to Euicc for operations:
 
-        // 1) In single SIM mode, turning on a eSIM subscription while pSIM is the active slot.
+        // 1) In single SIM mode, turning on an eSIM subscription while pSIM is the active slot.
         //    Euicc will ask user to switch to DSDS if supported or to confirm SIM slot
         //    switching.
         // 2) In DSDS mode, turning on / off an eSIM profile. Euicc can ask user whether
