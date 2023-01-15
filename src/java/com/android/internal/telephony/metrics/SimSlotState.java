@@ -73,7 +73,7 @@ public class SimSlotState {
         this.numActiveEsims = numActiveEsims;
     }
 
-    /** Returns whether the given phone is using a eSIM. */
+    /** Returns whether the given phone is using an eSIM. */
     public static boolean isEsim(int phoneId) {
         UiccSlot slot = UiccController.getInstance().getUiccSlotForPhone(phoneId);
         if (slot != null) {
