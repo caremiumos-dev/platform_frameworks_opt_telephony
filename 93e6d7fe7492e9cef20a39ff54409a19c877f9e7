@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "188e6ea8_0f1545a0",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2023-01-17T09:31:26Z",
+      "side": 1,
+      "message": "looks like API expects the respone with failure as well",
+      "range": {
+        "startLine": 1312,
+        "startChar": 34,
+        "endLine": 1312,
+        "endChar": 41
+      },
+      "revId": "93e6d7fe7492e9cef20a39ff54409a19c877f9e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25678ac8_63d21549",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1423906
+      },
+      "writtenOn": "2023-01-17T09:31:26Z",
+      "side": 1,
+      "message": "looks like API expects the respone with failure as well",
+      "range": {
+        "startLine": 1375,
+        "startChar": 37,
+        "endLine": 1375,
+        "endChar": 45
+      },
+      "revId": "93e6d7fe7492e9cef20a39ff54409a19c877f9e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
