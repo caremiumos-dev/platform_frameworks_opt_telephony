@@ -64,6 +64,7 @@ import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.LinkCapacityEstimate;
 import android.telephony.NetworkRegistrationInfo;
+import android.telephony.RadioAccessFamily;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -96,6 +97,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(AndroidTestingRunner.class)
@@ -1517,6 +1519,106 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         mPhoneUT.loadAllowedNetworksFromSubscriptionDatabase();
 
         assertEquals(false, mPhoneUT.isAllowedNetworkTypesLoadedFromDb());
+    }
+
+    @Test
+    public void testLoadAllowedNetworksFromSubscriptionDatabase_allValidData() {
+        int subId = 1;
+        doReturn(subId).when(mSubscriptionController).getSubIdUsingPhoneId(anyInt());
+
+        // 13 == TelephonyManager.NETWORK_TYPE_LTE
+        // NR_BITMASK == 4096 == 1 << (13 - 1)
+        String validSerializedNetworkMap = "user=4096,power=4096,carrier=4096,enable_2g=4096";
+        doReturn(validSerializedNetworkMap).when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(), eq(SubscriptionManager.ALLOWED_NETWORK_TYPES));
+
+        assertFalse(mPhoneUT.isAllowedNetworkTypesLoadedFromDb());
+        mPhoneUT.loadAllowedNetworksFromSubscriptionDatabase();
+        assertTrue(mPhoneUT.isAllowedNetworkTypesLoadedFromDb());
+
+        for (int i = 0; i < 4; ++i) {
+            assertEquals(TelephonyManager.NETWORK_TYPE_BITMASK_LTE,
+                    mPhoneUT.getAllowedNetworkTypes(i));
+        }
+    }
+
+    @Test
+    public void testLoadAllowedNetworksFromSubscriptionDatabase_invalidKeys() {
+        int subId = 1;
+        doReturn(subId).when(mSubscriptionController).getSubIdUsingPhoneId(anyInt());
+
+        // 13 == TelephonyManager.NETWORK_TYPE_LTE
+        // NR_BITMASK == 4096 == 1 << (13 - 1)
+        String validSerializedNetworkMap =
+                "user=4096,power=4096,carrier=4096,enable_2g=4096,-1=4096";
+        doReturn(validSerializedNetworkMap).when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(), eq(SubscriptionManager.ALLOWED_NETWORK_TYPES));
+
+        assertFalse(mPhoneUT.isAllowedNetworkTypesLoadedFromDb());
+        mPhoneUT.loadAllowedNetworksFromSubscriptionDatabase();
+        assertTrue(mPhoneUT.isAllowedNetworkTypesLoadedFromDb());
+
+        for (int i = 0; i < 4; ++i) {
+            assertEquals(TelephonyManager.NETWORK_TYPE_BITMASK_LTE,
+                    mPhoneUT.getAllowedNetworkTypes(i));
+        }
+    }
+
+    @Test
+    public void testLoadAllowedNetworksFromSubscriptionDatabase_invalidValues() {
+        int subId = 1;
+        doReturn(subId).when(mSubscriptionController).getSubIdUsingPhoneId(anyInt());
+
+        // 19 == TelephonyManager.NETWORK_TYPE_NR
+        // NR_BITMASK == 524288 == 1 << 19
+        String validSerializedNetworkMap = "user=4096,power=4096,carrier=4096,enable_2g=-1";
+        doReturn(validSerializedNetworkMap).when(mSubscriptionController).getSubscriptionProperty(
+                anyInt(), eq(SubscriptionManager.ALLOWED_NETWORK_TYPES));
+
+        mPhoneUT.loadAllowedNetworksFromSubscriptionDatabase();
+
+        for (int i = 0; i < 3; ++i) {
+            assertEquals(TelephonyManager.NETWORK_TYPE_BITMASK_LTE,
+                    mPhoneUT.getAllowedNetworkTypes(i));
+        }
+
+        long defaultAllowedNetworkTypes = RadioAccessFamily.getRafFromNetworkType(
+                RILConstants.PREFERRED_NETWORK_MODE);
+        assertEquals(defaultAllowedNetworkTypes, mPhoneUT.getAllowedNetworkTypes(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G));
+
+    }
+
+    @Test
+    public void testSetAllowedNetworkTypes_writeToSimDB_noInvalidKeys() {
+        try {
+            replaceInstance(TelephonyManager.class, "sISub", null, mSubscriptionController);
+            replaceInstance(TelephonyManager.class, "sServiceHandleCacheEnabled", null, true);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        ArgumentCaptor<String> serializedNetworksCaptor = ArgumentCaptor.forClass(String.class);
+
+        mPhoneUT.loadAllowedNetworksFromSubscriptionDatabase();
+
+        // Since AllowedNetworkTypesReason is an IntDef, there's no way to ensure that we have
+        // handled the serialization of every possible value. Barring that, we make an effort
+        // here to ensure coverage for future reasons. If a reason is added, this test will fail
+        // until a serialization case is added for it.
+        for (int i = 0; i < 100; i++) {
+            mPhoneUT.setAllowedNetworkTypes(i, TelephonyManager.NETWORK_TYPE_BITMASK_LTE, null);
+        }
+
+        verify(mSubscriptionController, atLeast(1)).setSubscriptionProperty(anyInt(),
+                eq(SubscriptionManager.ALLOWED_NETWORK_TYPES), serializedNetworksCaptor.capture());
+
+        String expectedSerializedOutput = "user_restrictions=4096";
+        assertTrue("AssertionError: serialized allowed network types do not match expectations. "
+                + "Order is not enforced." + "Expected: " + expectedSerializedOutput + "Actual: "
+                + serializedNetworksCaptor.getValue(), Arrays.stream(
+                serializedNetworksCaptor.getValue().split(",")).toList().containsAll(
+                Arrays.asList("user_restrictions=4096")));
     }
 
     /**

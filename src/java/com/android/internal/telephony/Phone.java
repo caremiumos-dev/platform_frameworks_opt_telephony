@@ -18,6 +18,7 @@ package com.android.internal.telephony;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.annotation.StringDef;
 import android.app.BroadcastOptions;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
@@ -105,6 +106,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -445,7 +448,23 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private static final String ALLOWED_NETWORK_TYPES_TEXT_POWER = "power";
     private static final String ALLOWED_NETWORK_TYPES_TEXT_CARRIER = "carrier";
     private static final String ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G = "enable_2g";
+    private static final String ALLOWED_NETWORK_TYPES_TEXT_USER_RESTRICTIONS = "user_restrictions";
     private static final int INVALID_ALLOWED_NETWORK_TYPES = -1;
+
+    /**
+     *
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef(prefix = "ALLOWED_NETWORK_TYPES_TEXT_", value = {
+            ALLOWED_NETWORK_TYPES_TEXT_USER,
+            ALLOWED_NETWORK_TYPES_TEXT_POWER,
+            ALLOWED_NETWORK_TYPES_TEXT_CARRIER,
+            ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G,
+            ALLOWED_NETWORK_TYPES_TEXT_USER_RESTRICTIONS,
+    })
+    private @interface AllowedNetworkTypesText {
+    }
+
     protected boolean mIsCarrierNrSupported = false;
     protected boolean mIsAllowedNetworkTypesLoadedFromDb = false;
     private boolean mUnitTestMode;
@@ -2413,7 +2432,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
     }
 
-    private int convertAllowedNetworkTypeDbNameToMapIndex(String name) {
+    private int convertAllowedNetworkTypeDbNameToMapIndex(
+            @AllowedNetworkTypesText String name) {
         switch (name) {
             case ALLOWED_NETWORK_TYPES_TEXT_USER:
                 return TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER;
@@ -2428,7 +2448,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         }
     }
 
-    private String convertAllowedNetworkTypeMapIndexToDbName(int reason) {
+    private @AllowedNetworkTypesText String convertAllowedNetworkTypeMapIndexToDbName(
+            @TelephonyManager.AllowedNetworkTypesReason int reason) {
         switch (reason) {
             case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER:
                 return ALLOWED_NETWORK_TYPES_TEXT_USER;
@@ -2438,8 +2459,13 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 return ALLOWED_NETWORK_TYPES_TEXT_CARRIER;
             case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G:
                 return ALLOWED_NETWORK_TYPES_TEXT_ENABLE_2G;
+            case TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER_RESTRICTIONS:
+                return ALLOWED_NETWORK_TYPES_TEXT_USER_RESTRICTIONS;
             default:
-                return Integer.toString(INVALID_ALLOWED_NETWORK_TYPES);
+                throw new IllegalArgumentException(
+                        "No DB name conversion available for allowed network type reason: " + reason
+                                + ". Did you forget to add an ALLOWED_NETWORK_TYPE_TEXT entry for"
+                                + " a new reason?");
         }
     }
 
