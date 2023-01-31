@@ -82,8 +82,6 @@ public class DeviceStateMonitor extends Handler {
     @VisibleForTesting
     static final int EVENT_WIFI_CONNECTION_CHANGED      = 7;
     static final int EVENT_UPDATE_ALWAYS_REPORT_SIGNAL_STRENGTH = 8;
-    static final int EVENT_RADIO_ON                     = 9;
-    static final int EVENT_RADIO_OFF_OR_NOT_AVAILABLE   = 10;
 
     private static final int WIFI_UNAVAILABLE = 0;
     private static final int WIFI_AVAILABLE = 1;
@@ -180,12 +178,6 @@ public class DeviceStateMonitor extends Handler {
      * DeviceStateMonitor from DisplayMonitor.
      */
     private boolean mIsCarModeOn;
-
-    /**
-     * Radio is on. False means that radio is either off or not available and it is ok to reduce
-     * commands to the radio to avoid unnecessary power consumption.
-     */
-    private boolean mIsRadioOn;
 
     /**
      * True indicates we should always enable the signal strength reporting from radio.
@@ -287,7 +279,6 @@ public class DeviceStateMonitor extends Handler {
         mIsPowerSaveOn = isPowerSaveModeOn();
         mIsCharging = isDeviceCharging();
         mIsScreenOn = isScreenOn();
-        mIsRadioOn = isRadioOn();
         mIsCarModeOn = isCarModeOn();
         // Assuming tethering is always off after boot up.
         mIsTetheringOn = false;
@@ -301,8 +292,7 @@ public class DeviceStateMonitor extends Handler {
                 + ", mIsCarModeOn=" + mIsCarModeOn
                 + ", mIsWifiConnected=" + mIsWifiConnected
                 + ", mIsAlwaysSignalStrengthReportingEnabled="
-                + mIsAlwaysSignalStrengthReportingEnabled
-                + ", mIsRadioOn=" + mIsRadioOn, false);
+                + mIsAlwaysSignalStrengthReportingEnabled, false);
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
@@ -315,8 +305,6 @@ public class DeviceStateMonitor extends Handler {
 
         mPhone.mCi.registerForRilConnected(this, EVENT_RIL_CONNECTED, null);
         mPhone.mCi.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);
-        mPhone.mCi.registerForOn(this, EVENT_RADIO_ON, null);
-        mPhone.mCi.registerForOffOrNotAvailable(this, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
 
         ConnectivityManager cm = (ConnectivityManager) phone.getContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
@@ -327,7 +315,7 @@ public class DeviceStateMonitor extends Handler {
      * @return True if low data is expected
      */
     private boolean isLowDataExpected() {
-        return (!mIsCharging && !mIsTetheringOn && !mIsScreenOn) || !mIsRadioOn;
+        return !mIsCharging && !mIsTetheringOn && !mIsScreenOn;
     }
 
     /**
@@ -411,14 +399,12 @@ public class DeviceStateMonitor extends Handler {
      * @return True if the response update should be enabled.
      */
     public boolean shouldEnableHighPowerConsumptionIndications() {
-        // We should enable indications reports if radio is on and one of the following conditions
-        // is true:
+        // We should enable indications reports if one of the following condition is true.
         // 1. The device is charging.
         // 2. When the screen is on.
         // 3. When the tethering is on.
         // 4. When car mode (Android Auto) is on.
-        return (mIsCharging || mIsScreenOn || mIsTetheringOn || mIsCarModeOn)
-                && mIsRadioOn;
+        return mIsCharging || mIsScreenOn || mIsTetheringOn || mIsCarModeOn;
     }
 
     /**
@@ -469,12 +455,6 @@ public class DeviceStateMonitor extends Handler {
             case EVENT_RADIO_AVAILABLE:
                 onReset();
                 break;
-            case EVENT_RADIO_ON:
-                onUpdateDeviceState(msg.what, /* state= */ true);
-                break;
-            case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                onUpdateDeviceState(msg.what, /* state= */ false);
-                break;
             case EVENT_SCREEN_STATE_CHANGED:
             case EVENT_POWER_SAVE_MODE_CHANGED:
             case EVENT_CHARGING_STATE_CHANGED:
@@ -509,11 +489,6 @@ public class DeviceStateMonitor extends Handler {
                 if (mIsCharging == state) return;
                 mIsCharging = state;
                 sendDeviceState(CHARGING_STATE, mIsCharging);
-                break;
-            case EVENT_RADIO_ON:
-            case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                if (mIsRadioOn == state) return;
-                mIsRadioOn = state;
                 break;
             case EVENT_TETHERING_STATE_CHANGED:
                 if (mIsTetheringOn == state) return;
@@ -765,13 +740,6 @@ public class DeviceStateMonitor extends Handler {
     }
 
     /**
-     * @return True if the radio is on.
-     */
-    private boolean isRadioOn() {
-        return mPhone.isRadioOn();
-    }
-
-    /**
      * @return True if car mode (Android Auto) is on.
      */
     private boolean isCarModeOn() {
@@ -836,7 +804,6 @@ public class DeviceStateMonitor extends Handler {
         ipw.println("mIsWifiConnected=" + mIsWifiConnected);
         ipw.println("mIsAlwaysSignalStrengthReportingEnabled="
                 + mIsAlwaysSignalStrengthReportingEnabled);
-        ipw.println("mIsRadioOn=" + mIsRadioOn);
         ipw.println("Local logs:");
         ipw.increaseIndent();
         mLocalLog.dump(fd, ipw, args);

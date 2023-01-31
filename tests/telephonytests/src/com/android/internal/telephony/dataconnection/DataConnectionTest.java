@@ -66,13 +66,14 @@ import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.internal.R;
-import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RetryManager;
 import com.android.internal.telephony.TelephonyTest;
 import com.android.internal.telephony.dataconnection.DataConnection.ConnectionParams;
 import com.android.internal.telephony.dataconnection.DataConnection.DisconnectParams;
 import com.android.internal.telephony.dataconnection.DataConnection.SetupResult;
 import com.android.internal.telephony.metrics.DataCallSessionStats;
+import com.android.internal.util.IState;
+import com.android.internal.util.StateMachine;
 
 import org.junit.After;
 import org.junit.Before;
@@ -165,7 +166,7 @@ public class DataConnectionTest extends TelephonyTest {
             "");                    // mnvo_match_data
 
     private ApnSetting mApn3 = ApnSetting.makeApnSetting(
-            2165,                   // id
+            2164,                   // id
             "44010",                // numeric
             "sp-mode",              // name
             "spmode.ne.jp",         // apn
@@ -195,7 +196,7 @@ public class DataConnectionTest extends TelephonyTest {
             1);                     // skip_464xlat
 
     private ApnSetting mApn4 = ApnSetting.makeApnSetting(
-            2166,                   // id
+            2164,                   // id
             "44010",                // numeric
             "sp-mode",              // name
             "spmode.ne.jp",         // apn
@@ -222,7 +223,7 @@ public class DataConnectionTest extends TelephonyTest {
             "");                    // mnvo_match_data
 
     private ApnSetting mApn5 = ApnSetting.makeApnSetting(
-            2167,                   // id
+            2164,                   // id
             "44010",                // numeric
             "sp-mode",              // name
             "spmode.ne.jp",         // apn
@@ -250,33 +251,6 @@ public class DataConnectionTest extends TelephonyTest {
             0,                      // apn_set_id
             -1,                     // carrier_id
             0);                     // skip_464xlat
-
-    private ApnSetting mApn6 = ApnSetting.makeApnSetting(
-            2168,                   // id
-            "44010",                // numeric
-            "sp-mode",              // name
-            "spmode.ne.jp",         // apn
-            null,                   // proxy
-            -1,                     // port
-            null,                   // mmsc
-            null,                   // mmsproxy
-            -1,                     // mmsport
-            "",                     // user
-            "",                     // password
-            -1,                     // authtype
-            ApnSetting.TYPE_EMERGENCY, // types
-            ApnSetting.PROTOCOL_IP, // protocol
-            ApnSetting.PROTOCOL_IP, // roaming_protocol
-            true,                   // carrier_enabled
-            0,                      // networktype_bitmask
-            0,                      // profile_id
-            false,                  // modem_cognitive
-            0,                      // max_conns
-            0,                      // wait_time
-            0,                      // max_conns_time
-            0,                      // mtu
-            -1,                     // mvno_type
-            "");                    // mnvo_match_data
 
     private class DataConnectionTestHandler extends HandlerThread {
 
@@ -366,6 +340,12 @@ public class DataConnectionTest extends TelephonyTest {
         super.tearDown();
     }
 
+    private IState getCurrentState() throws Exception {
+        Method method = StateMachine.class.getDeclaredMethod("getCurrentState");
+        method.setAccessible(true);
+        return (IState) method.invoke(mDc);
+    }
+
     private long getSuggestedRetryDelay(DataCallResponse response) throws Exception {
         Class[] cArgs = new Class[1];
         cArgs[0] = DataCallResponse.class;
@@ -386,12 +366,6 @@ public class DataConnectionTest extends TelephonyTest {
         return (boolean) method.invoke(mDc);
     }
 
-    private boolean isSuspended() throws Exception {
-        Method method = DataConnection.class.getDeclaredMethod("isSuspended");
-        method.setAccessible(true);
-        return (boolean) method.invoke(mDc);
-    }
-
     private SetupResult setLinkProperties(DataCallResponse response, LinkProperties linkProperties)
             throws Exception {
         Class[] cArgs = new Class[2];
@@ -404,8 +378,14 @@ public class DataConnectionTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testConnectEvent() {
-        assertTrue(mDc.isInactive());
+    public void testSanity() throws Exception {
+        assertEquals("DcInactiveState", getCurrentState().getName());
+    }
+
+    @Test
+    @SmallTest
+    public void testConnectEvent() throws Exception {
+        testSanity();
         connectEvent(true);
 
         verify(mCT, times(1)).registerForVoiceCallStarted(any(Handler.class),
@@ -483,7 +463,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         // Verify that ENTERPRISE wasn't set up
         connectEvent(false);
-        assertTrue(mDc.isInactive());
+        assertEquals("DcInactiveState", getCurrentState().getName());
 
         // Change the CID
         result.cid = DEFAULT_DC_CID + 1;
@@ -507,7 +487,7 @@ public class DataConnectionTest extends TelephonyTest {
 
         // Verify that ENTERPRISE wasn't set up
         connectEvent(false);
-        assertTrue(mDc.isInactive());
+        assertEquals("DcInactiveState", getCurrentState().getName());
 
         // Set up default data
         replaceInstance(ConnectionParams.class, "mApnContext", mCp, mApnContext);
@@ -531,7 +511,7 @@ public class DataConnectionTest extends TelephonyTest {
 
     @Test
     @SmallTest
-    public void testDisconnectEvent() {
+    public void testDisconnectEvent() throws Exception {
         testConnectEvent();
 
         mDc.setPduSessionId(5);
@@ -545,7 +525,7 @@ public class DataConnectionTest extends TelephonyTest {
         verify(mSimulatedCommandsVerifier, times(1))
                 .releasePduSessionId(any(), eq(5));
 
-        assertTrue(mDc.isInactive());
+        assertEquals("DcInactiveState", getCurrentState().getName());
     }
 
     @Test
@@ -894,10 +874,10 @@ public class DataConnectionTest extends TelephonyTest {
         }
     }
 
-    private void disconnectEvent() {
+    private void disconnectEvent() throws Exception {
         mDc.sendMessage(DataConnection.EVENT_DISCONNECT, mDcp);
         waitForMs(100);
-        assertTrue(mDc.isInactive());
+        assertEquals("DcInactiveState", getCurrentState().getName());
     }
 
     @Test
@@ -1236,43 +1216,5 @@ public class DataConnectionTest extends TelephonyTest {
 
         assertEquals(ApnSetting.TYPE_MMS | ApnSetting.TYPE_SUPL | ApnSetting.TYPE_FOTA,
                 getDisallowedApnTypes());
-    }
-
-    @Test
-    public void testIsSuspended() throws Exception {
-        // Return false if not active state
-        assertTrue(mDc.isInactive());
-        assertFalse(isSuspended());
-
-        // Return false for emergency APN
-        doReturn(mApn6).when(mApnContext).getApnSetting();
-        doReturn(ApnSetting.TYPE_EMERGENCY).when(mApnContext).getApnTypeBitmask();
-        connectEvent(true);
-        assertFalse(isSuspended());
-
-        // Back to DEFAULT APN
-        disconnectEvent();
-        assertTrue(mDc.isInactive());
-        doReturn(mApn1).when(mApnContext).getApnSetting();
-        doReturn(ApnSetting.TYPE_DEFAULT).when(mApnContext).getApnTypeBitmask();
-        connectEvent(true);
-
-        // Return true if combined reg state is not in service
-        doReturn(ServiceState.STATE_OUT_OF_SERVICE).when(mServiceState).getDataRegistrationState();
-        assertTrue(isSuspended());
-
-        // Return false if in service and concurrent voice and data is allowed
-        doReturn(ServiceState.STATE_IN_SERVICE).when(mServiceState).getDataRegistrationState();
-        doReturn(true).when(mSST).isConcurrentVoiceAndDataAllowed();
-        assertFalse(isSuspended());
-
-        // Return false if in service and concurrent voice/data not allowed but call state is idle
-        doReturn(false).when(mSST).isConcurrentVoiceAndDataAllowed();
-        doReturn(PhoneConstants.State.IDLE).when(mCT).getState();
-        assertFalse(isSuspended());
-
-        // Return true if in service, concurrent voice/data not allowed, and call state not idle
-        doReturn(PhoneConstants.State.RINGING).when(mCT).getState();
-        assertTrue(isSuspended());
     }
 }
