@@ -287,8 +287,7 @@ public class ServiceStateTracker extends Handler {
     public    static final int EVENT_ICC_CHANGED                       = 42;
     protected static final int EVENT_GET_CELL_INFO_LIST                = 43;
     protected static final int EVENT_UNSOL_CELL_INFO_LIST              = 44;
-    // Only sent if the IMS state is moving from true -> false and power off delay for IMS
-    // registration feature is enabled.
+    // Only sent if the IMS state is moving from true -> false
     protected static final int EVENT_CHANGE_IMS_STATE                  = 45;
     protected static final int EVENT_IMS_STATE_CHANGED                 = 46;
     protected static final int EVENT_IMS_STATE_DONE                    = 47;
@@ -3335,14 +3334,7 @@ public class ServiceStateTracker extends Handler {
 
         if (mImsRegistrationOnOff && !registered) {
             // moving to deregistered, only send this event if we need to re-evaluate
-            if (getRadioPowerOffDelayTimeoutForImsRegistration() > 0) {
-                // only send this event if the power off delay for IMS deregistration feature is
-                // enabled.
-                sendMessage(obtainMessage(EVENT_CHANGE_IMS_STATE));
-            } else {
-                log("setImsRegistrationState: EVENT_CHANGE_IMS_STATE not sent because power off "
-                        + "delay for IMS deregistration is not enabled.");
-            }
+            sendMessage(obtainMessage(EVENT_CHANGE_IMS_STATE));
         }
         mImsRegistrationOnOff = registered;
     }
