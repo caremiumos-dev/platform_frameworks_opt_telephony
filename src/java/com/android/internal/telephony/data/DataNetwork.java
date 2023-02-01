@@ -839,6 +839,14 @@ public class DataNetwork extends StateMachine {
          * @param dataNetwork The data network.
          */
         public abstract void onTrackNetworkUnwanted(@NonNull DataNetwork dataNetwork);
+
+        /**
+         * Called when a network request is detached after no longer satisfied.
+         *
+         * @param networkRequest The detached network request.
+         */
+        public abstract void onUnsatisfiedNetworkRequestDetached(
+                @NonNull TelephonyNetworkRequest networkRequest);
     }
 
     /**
@@ -1098,7 +1106,7 @@ public class DataNetwork extends StateMachine {
                     break;
                 }
                 case EVENT_DETACH_NETWORK_REQUEST: {
-                    onDetachNetworkRequest((TelephonyNetworkRequest) msg.obj);
+                    onDetachNetworkRequest((TelephonyNetworkRequest) msg.obj, msg.arg1 != 0);
                     updateNetworkScore();
                     break;
                 }
@@ -1673,11 +1681,20 @@ public class DataNetwork extends StateMachine {
      * Called when detaching the network request from this data network.
      *
      * @param networkRequest Network request to detach.
+     * @param isUnsatisfied {@code true} if detaching is due to unsatisfied.
      */
-    private void onDetachNetworkRequest(@NonNull TelephonyNetworkRequest networkRequest) {
+    private void onDetachNetworkRequest(@NonNull TelephonyNetworkRequest networkRequest,
+            boolean isUnsatisfied) {
         mAttachedNetworkRequestList.remove(networkRequest);
         networkRequest.setState(TelephonyNetworkRequest.REQUEST_STATE_UNSATISFIED);
         networkRequest.setAttachedNetwork(null);
+
+        if (isUnsatisfied) {
+            // Inform DataNetworkController that a network request was detached due to
+            // unsatisfied so it can schedule a re-evaluation.
+            mDataNetworkCallback.invokeFromExecutor(
+                    () -> mDataNetworkCallback.onUnsatisfiedNetworkRequestDetached(networkRequest));
+        }
 
         if (mAttachedNetworkRequestList.isEmpty()) {
             log("All network requests are detached.");
@@ -1699,12 +1716,15 @@ public class DataNetwork extends StateMachine {
      * network.
      *
      * @param networkRequest Network request to detach.
+     * @param isUnsatisfied {@code true} if detaching is due to unsatisfied.
      */
-    public void detachNetworkRequest(@NonNull TelephonyNetworkRequest networkRequest) {
+    public void detachNetworkRequest(@NonNull TelephonyNetworkRequest networkRequest,
+            boolean isUnsatisfied) {
         if (getCurrentState() == null || isDisconnected()) {
             return;
         }
-        sendMessage(obtainMessage(EVENT_DETACH_NETWORK_REQUEST, networkRequest));
+        sendMessage(obtainMessage(EVENT_DETACH_NETWORK_REQUEST, isUnsatisfied ? 1 : 0, 0,
+                networkRequest));
     }
 
     /**
@@ -1761,7 +1781,7 @@ public class DataNetwork extends StateMachine {
             if (!networkRequest.canBeSatisfiedBy(mNetworkCapabilities)) {
                 log("removeUnsatisfiedNetworkRequests: " + networkRequest
                         + " can't be satisfied anymore. Will be detached.");
-                detachNetworkRequest(networkRequest);
+                detachNetworkRequest(networkRequest, true);
             }
         }
     }
