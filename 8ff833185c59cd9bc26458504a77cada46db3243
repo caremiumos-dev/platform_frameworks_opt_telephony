@@ -47,6 +47,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88fe51ab_04605255",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1970738
+      },
+      "writtenOn": "2023-02-09T07:48:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc01b8f8_a92e68e1",
+      "range": {
+        "startLine": 1271,
+        "startChar": 0,
+        "endLine": 1271,
+        "endChar": 28
+      },
+      "revId": "8ff833185c59cd9bc26458504a77cada46db3243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c63058f9_7725ff43",
@@ -83,6 +107,30 @@
       "writtenOn": "2023-02-09T04:21:54Z",
       "side": 1,
       "message": "Suppose mNumRec isn\u0027t initiated by query, whether it returns a failure directly or starts an internal query first?",
+      "range": {
+        "startLine": 1702,
+        "startChar": 39,
+        "endLine": 1702,
+        "endChar": 46
+      },
+      "revId": "8ff833185c59cd9bc26458504a77cada46db3243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e296716b_138f423d",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1702,
+      "author": {
+        "id": 1970738
+      },
+      "writtenOn": "2023-02-09T07:48:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "065b1895_1042cdfa",
       "range": {
         "startLine": 1702,
         "startChar": 39,
