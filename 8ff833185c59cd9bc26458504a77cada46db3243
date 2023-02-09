@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e3429f3_7900ae3f",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-02-09T04:21:54Z",
+      "side": 1,
+      "message": "add a comment on this member, which introduces its usage",
+      "range": {
+        "startLine": 71,
+        "startChar": 16,
+        "endLine": 71,
+        "endChar": 23
+      },
+      "revId": "8ff833185c59cd9bc26458504a77cada46db3243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc01b8f8_a92e68e1",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-02-09T04:21:54Z",
+      "side": 1,
+      "message": "no matter whether it succeeds, makes mUplmnInfos got cleared after query is done\nits like mUplmnInfos.clear(); is called here",
+      "range": {
+        "startLine": 1271,
+        "startChar": 0,
+        "endLine": 1271,
+        "endChar": 28
+      },
+      "revId": "8ff833185c59cd9bc26458504a77cada46db3243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "065b1895_1042cdfa",
+        "filename": "src/java/com/android/internal/telephony/uicc/SIMRecords.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1702,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-02-09T04:21:54Z",
+      "side": 1,
+      "message": "Suppose mNumRec isn\u0027t initiated by query, whether it returns a failure directly or starts an internal query first?",
+      "range": {
+        "startLine": 1702,
+        "startChar": 39,
+        "endLine": 1702,
+        "endChar": 46
+      },
+      "revId": "8ff833185c59cd9bc26458504a77cada46db3243",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
