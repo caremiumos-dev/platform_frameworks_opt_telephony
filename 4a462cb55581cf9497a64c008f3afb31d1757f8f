@@ -22,6 +22,30 @@
       },
       "revId": "4a462cb55581cf9497a64c008f3afb31d1757f8f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8ceb18_f00994f2",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6091,
+      "author": {
+        "id": 1269628
+      },
+      "writtenOn": "2023-02-10T10:33:44Z",
+      "side": 1,
+      "message": "This patch is used for fixing the issue of the following scenario.\nTwo sim cards are inserted, \none sim card(Carrier1) is normally camping on its home plmn,\nwhereas another sim card(Carrier2) is camping in a limitate state on FPLMN.\n\nAs per the Spanish carrier\u0027s requirement,  at this time operator\u0027s name should display in the following format in the status bar.\n\nCarrier1 |  Emergency Calls Only\n\nBut based on the current repository\u0027s code,   the operator name will be showed as below, which is exactly caused by the invoking \"Phone.isEmergencyCallOnly()\"\n\nSpecifically, \"Phone.isEmergencyCallOnly()\" takes into account the device emergency-only state of another sim card, \n\nbut for this scenario the combined reg state of another sim card(slot0) is STATE_IN_SERVICE, so Phone.isEmergencyCallOnly()\" returns false.\n\nIn turn, No service is assigned for slot 1.\n\nCarrier1 | No service\n\nAfter we replace the invoking \"Phone.isEmergencyCallOnly()\" with \"isEmergencyCallOnly()\" newly defined, this issue is fixed.",
+      "parentUuid": "8d7cfb16_a3a3f258",
+      "range": {
+        "startLine": 6091,
+        "startChar": 20,
+        "endLine": 6091,
+        "endChar": 39
+      },
+      "revId": "4a462cb55581cf9497a64c008f3afb31d1757f8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
