@@ -30,6 +30,7 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.telephony.SubscriptionInfo;
+import android.telephony.UplmnInfo;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -39,6 +40,7 @@ import com.android.internal.telephony.SmsConstants;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.gsm.SimTlv;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
+import com.android.internal.telephony.uicc.PlmnActRecord;
 import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
@@ -65,6 +67,7 @@ public class SIMRecords extends IccRecords {
     // ***** Cached SIM State; cleared on channel close
 
     private int mCallForwardingStatus;
+
 
     /**
      * States only used by getSpnFsm FSM
@@ -136,6 +139,11 @@ public class SIMRecords extends IccRecords {
     private static final int CPHS_SST_MBN_MASK = 0x30;
     private static final int CPHS_SST_MBN_ENABLED = 0x30;
 
+    /* 5n bytes:
+    1 to 3  nth PLMN (highest priority)
+    4 to 5  nth PLMN Access Technology Identifier */
+    private static final int UPLMN_SEL_DATA_LEN = 5;
+
     // EF_CFIS related constants
     // Spec reference TS 51.011 section 10.3.46.
     private static final int CFIS_BCD_NUMBER_LENGTH_OFFSET = 2;
@@ -184,6 +192,10 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_GET_FPLMN_DONE = 41 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_GET_FPLMN_SIZE_DONE = 42 + SIM_RECORD_EVENT_BASE;
     private static final int EVENT_SET_FPLMN_DONE = 43 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_GET_UPLMN_DONE = 44 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_GET_UPLMN_SIZE_DONE = 45 + SIM_RECORD_EVENT_BASE;
+    private static final int EVENT_SET_UPLMN_DONE = 46 + SIM_RECORD_EVENT_BASE;
+
     // ***** Constructor
 
     public SIMRecords(UiccCardApplication app, Context c, CommandsInterface ci) {
@@ -1291,6 +1303,83 @@ public class SIMRecords extends IccRecords {
                     }
                     break;
 
+                case EVENT_GET_UPLMN_DONE:
+                    isRecordLoadResponse = true;
+                    ar = (AsyncResult) msg.obj;
+                    data = (byte[]) ar.result;
+                    if (ar.exception != null || data == null) {
+                        loge("Failed getting user controlled PLMNs: " + ar.exception);
+                    } else {
+                        mUplmnInfos = parseUplmnList(data);
+                    }
+
+                    if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+                        if (VDBG) log("getUserControlledPlmns(): send async response");
+                        isRecordLoadResponse = false;
+                        int keyPlmn = msg.arg2;
+                        Message responseGetUplmn = retrievePendingTransaction(keyPlmn).first;
+                        if (responseGetUplmn != null) {
+                            if (ar.exception == null && data != null && mUplmnInfos != null) {
+                                AsyncResult.forMessage(responseGetUplmn, mUplmnInfos, null);
+                            } else {
+                                AsyncResult.forMessage(responseGetUplmn, null, ar.exception);
+                            }
+                            responseGetUplmn.sendToTarget();
+                        } else {
+                            loge("Failed to retrieve a response message for UPLMN");
+                            break;
+                        }
+                    }
+                    break;
+
+                case EVENT_GET_UPLMN_SIZE_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    if (ar.exception != null) {
+                        Message responsePlmnSize = (Message) ar.userObj;
+                        AsyncResult.forMessage(responsePlmnSize).exception = ar.exception;
+                        responsePlmnSize.sendToTarget();
+                        break;
+                    }
+                    int keyPlmnSize = msg.arg2;
+                    Pair<Message, Object> transactionPlmnSize = retrievePendingTransaction
+                            (keyPlmnSize);
+                    Message responseUplmn = transactionPlmnSize.first;
+                    ArrayList<UplmnInfo> uplmns = (ArrayList<UplmnInfo>) transactionPlmnSize.second;
+                    int dataLengthUplmn = (int) ar.result;
+
+                    if (dataLengthUplmn < 0 || dataLengthUplmn % UPLMN_SEL_DATA_LEN != 0) {
+                        loge("Failed to retrieve a correct uplmn size: " + dataLengthUplmn);
+                        AsyncResult.forMessage(responseUplmn, -1, null);
+                        responseUplmn.sendToTarget();
+                        break;
+                    }
+
+                    keyPlmnSize = storePendingTransaction(responseUplmn, uplmns);
+                    byte[] encodededUplmns = IccUtils.encodeUplmns(uplmns, dataLengthUplmn);
+                      mFh.updateEFTransparent(
+                            EF_PLMN_W_ACT,
+                            encodededUplmns,
+                            obtainMessage(
+                                    EVENT_SET_UPLMN_DONE,
+                                    msg.arg1,
+                                    keyPlmnSize));
+                    break;
+
+                  case EVENT_SET_UPLMN_DONE:
+                      ar = (AsyncResult) msg.obj;
+                      if (ar.exception != null) {
+                          loge("Failed setting Forbidden PLMNs: " + ar.exception);
+                      } else {
+                          transactionPlmnSize = retrievePendingTransaction(msg.arg2);
+                          responseUplmn = transactionPlmnSize.first;
+                          mUplmnInfos = (ArrayList<UplmnInfo>) transactionPlmnSize.second;
+                          if (msg.arg1 == HANDLER_ACTION_SEND_RESPONSE) {
+                              AsyncResult.forMessage(responseUplmn, mFplmns.length, null);
+                              responseUplmn.sendToTarget();
+                          }
+                          log("Successfully setted uplmns " + ar.result);
+                      }
+                      break;
                 default:
                     super.handleMessage(msg);   // IccRecords handles generic record load responses
             }
@@ -1542,6 +1631,16 @@ public class SIMRecords extends IccRecords {
     }
 
     /**
+     * String[] of user controlled PLMNs will be sent to the Message's handler
+     * in the result field of an AsyncResult in the response.obj.
+     */
+    public void getUserControlledPlmns(Message response) {
+        int key = storePendingTransaction(response);
+        mFh.loadEFTransparent(EF_PLMN_W_ACT, obtainMessage(
+                    EVENT_GET_UPLMN_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
+
+    /**
      * Set the forbidden PLMNs on the sim
      *
      * @param response Response to be send back.
@@ -1554,6 +1653,18 @@ public class SIMRecords extends IccRecords {
                 obtainMessage(EVENT_GET_FPLMN_SIZE_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
     }
 
+    /**
+     * Set the user controlled PLMNs on the sim
+     *
+     * @param response Response to be send back.
+     * @param uplmns List of uplmns to be written to SIM.
+     */
+    public void setUserControlledPlmns(Message response, ArrayList<UplmnInfo> uplmns) {
+        int key = storePendingTransaction(response, uplmns);
+        mFh.getEFTransparentRecordSize(
+            EF_PLMN_W_ACT,
+            obtainMessage(EVENT_GET_UPLMN_SIZE_DONE, HANDLER_ACTION_SEND_RESPONSE, key));
+    }
 
     @Override
     public void onReady() {
@@ -2012,6 +2123,34 @@ public class SIMRecords extends IccRecords {
         String[] ret = Arrays.copyOf(parsed, numValidPlmns);
         if (VDBG) logv(description + " PLMNs: " + Arrays.toString(ret));
         return ret;
+    }
+
+    /**
+     * convert a byte array of packed plmns to an array list of UplmnInfo
+     */
+    private ArrayList<UplmnInfo> parseUplmnList(byte[] data) {
+        PlmnActRecord[] plmnActRecords = PlmnActRecord.getRecords(data);
+        log("PlmnActRecords=" + Arrays.toString(plmnActRecords));
+
+        int i = 0;
+        String INVALID_PLMN_PREFIX = "FFFFF";
+        for (PlmnActRecord record : plmnActRecords) {
+            if(!record.plmn.regionMatches(
+                true, 0, INVALID_PLMN_PREFIX, 0, INVALID_PLMN_PREFIX.length())
+                && record.accessTechs != -1 && !TextUtils.isEmpty(record.plmn)
+                && record.plmn.length() >= 5){
+                log("plmn: "  + record.plmn + " accessTechs: " +
+                    IccUtils.convertAccessTech2NetworkMode(record.accessTechs) +
+                    " mPriority: " + i );
+                mUplmnInfos.add(new UplmnInfo(
+                                    record.plmn,
+                                    IccUtils.convertAccessTech2NetworkMode(
+                                    record.accessTechs),
+                                    i));
+            }
+            i++;
+        }
+        return mUplmnInfos;
     }
 
     /**
