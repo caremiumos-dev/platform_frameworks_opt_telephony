@@ -383,6 +383,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     }
 
     private void init(Context context) {
+        Log.i(TAG, "init ....");
         mContext = context;
         mPm = context.getPackageManager();
         mTm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -410,7 +411,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
         setInitialState(mSelectedComponent != null ? mAvailableState : mUnavailableState);
 
         start();
-
+        Log.i(TAG, ".... init start()");
         // All app package changes could trigger the package monitor receiver. It is not limited to
         // apps extended from EuiccService.
         mPackageMonitor.register(mContext, null /* thread */, null /* user */);
@@ -562,7 +563,9 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     private class UnavailableState extends State {
         @Override
         public boolean processMessage(Message message) {
+        Log.i(TAG, "UnavailableState processMessage msg.what: " + message.what);
             if (message.what == CMD_PACKAGE_CHANGE) {
+                Log.i(TAG, "UnavailableState processMessage.. CMD_PACKAGE_CHANGE");
                 mSelectedComponent = findBestComponent();
                 if (mSelectedComponent != null) {
                     transitionTo(mAvailableState);
@@ -572,6 +575,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                 }
                 return HANDLED;
             } else if (isEuiccCommand(message.what)) {
+                Log.i(TAG, "UnavailableState processMessage.. isEuiccCommand");
                 BaseEuiccCommandCallback callback = getCallback(message);
                 callback.onEuiccServiceUnavailable();
                 return HANDLED;
@@ -591,6 +595,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     private class AvailableState extends State {
         @Override
         public boolean processMessage(Message message) {
+            Log.i(TAG, "AvailableState processMessage.. message.what: " + message.what);
             if (isEuiccCommand(message.what)) {
                 deferMessage(message);
                 transitionTo(mBindingState);
@@ -614,12 +619,14 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
         @Override
         public void enter() {
             if (createBinding()) {
+                Log.i(TAG, "BindingState enter createBinding.. transition to mDisconnectedState");
                 transitionTo(mDisconnectedState);
             } else {
                 // createBinding() should generally not return false since we've already performed
                 // Intent resolution, but it's always possible that the package state changes
                 // asynchronously. Transition to available for now, and if the package state has
                 // changed, we'll process that event and move to mUnavailableState as needed.
+                Log.i(TAG, "BindingState NOT createBinding.. transition to mAvailableState");
                 transitionTo(mAvailableState);
             }
         }
@@ -646,12 +653,15 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     private class DisconnectedState extends State {
         @Override
         public void enter() {
+            Log.i(TAG, "DisconnectedState enter add CMD_CONNECT_TIMEOUT");
             sendMessageDelayed(CMD_CONNECT_TIMEOUT, BIND_TIMEOUT_MILLIS);
         }
 
         @Override
         public boolean processMessage(Message message) {
+        Log.i(TAG, "DisconnectedState processMessage msg.what: " + message.what);
             if (message.what == CMD_SERVICE_CONNECTED) {
+                Log.i(TAG, "DisconnectedState CMD_SERVICE_CONNECTED, transition to ConnectedState");
                 mEuiccService = (IEuiccService) message.obj;
                 transitionTo(mConnectedState);
                 return HANDLED;
@@ -674,8 +684,11 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                 // change the forceRebind to true so the connector will re-bind the component.
                 boolean forceRebind = bestComponent != null
                         && Objects.equals(bestComponent.packageName, affectedPackage);
+                Log.i(TAG, "DisconnectedState bestComponent: " + bestComponent + " isSameComponent: " + isSameComponent + " forceRebind: " + forceRebind);
                 if (!isSameComponent || forceRebind) {
+                Log.i(TAG, "DisconnectedState processMessage Before unbind()");
                     unbind();
+                    Log.i(TAG, "DisconnectedState processMessage unbind()");
                     mSelectedComponent = bestComponent;
                     if (mSelectedComponent == null) {
                         transitionTo(mUnavailableState);
@@ -686,9 +699,11 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                 }
                 return HANDLED;
             } else if (message.what == CMD_CONNECT_TIMEOUT) {
+                Log.i(TAG, "DisconnectedState CMD_CONNECT_TIMEOUT, transition to mAvailableState");
                 transitionTo(mAvailableState);
                 return HANDLED;
             } else if (isEuiccCommand(message.what)) {
+                Log.i(TAG, "DisconnectedState isEuiccCommand, deferMessage");
                 deferMessage(message);
                 return HANDLED;
             }
@@ -707,21 +722,27 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     private class ConnectedState extends State {
         @Override
         public void enter() {
+            Log.i(TAG, "ConnectedState enter remove CMD_CONNECT_TIMEOUT... add CMD_LINGER_TIMEOUT");
             removeMessages(CMD_CONNECT_TIMEOUT);
             sendMessageDelayed(CMD_LINGER_TIMEOUT, LINGER_TIMEOUT_MILLIS);
         }
 
         @Override
         public boolean processMessage(Message message) {
+            Log.i(TAG, "ConnectedState processMessage msg.what: " + message.what);
             if (message.what == CMD_SERVICE_DISCONNECTED) {
                 mEuiccService = null;
+                Log.i(TAG, "ConnectedState CMD_SERVICE_DISCONNECTED... transition to mDisconnectedState");
                 transitionTo(mDisconnectedState);
                 return HANDLED;
             } else if (message.what == CMD_LINGER_TIMEOUT) {
+                Log.i(TAG, "ConnectedState CMD_LINGER_TIMEOUT processMessage before unbind()");
                 unbind();
+                Log.i(TAG, "ConnectedState CMD_LINGER_TIMEOUT unbind()... transition to mAvailableState");
                 transitionTo(mAvailableState);
                 return HANDLED;
             } else if (message.what == CMD_COMMAND_COMPLETE) {
+                Log.i(TAG, "ConnectedState CMD_COMMAND_COMPLETE ...");
                 Runnable runnable = (Runnable) message.obj;
                 runnable.run();
                 return HANDLED;
@@ -730,6 +751,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                 onCommandStart(callback);
                 final int cardId = message.arg1;
                 final int slotId = getSlotIdFromCardId(cardId);
+                Log.i(TAG, "ConnectedState isEuiccCommand ... message.what: " + message.what);
                 try {
                     switch (message.what) {
                         case CMD_GET_EID: {
@@ -740,6 +762,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetEidCommandCallback) callback)
                                                         .onGetEidComplete(eid);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_EID);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -758,6 +781,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetMetadataCommandCallback) callback)
                                                         .onGetMetadataComplete(cardId, result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_DOWNLOADABLE_SUBSCRIPTION_METADATA);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -778,6 +802,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((DownloadCommandCallback) callback)
                                                     .onDownloadComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_DOWNLOAD_SUBSCRIPTION);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -793,6 +818,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetEuiccProfileInfoListCommandCallback) callback)
                                                         .onListComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_EUICC_PROFILE_INFO_LIST);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -811,6 +837,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetDefaultListCommandCallback) callback)
                                                         .onGetDefaultListComplete(cardId, result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_DEFAULT_DOWNLOADABLE_SUBSCRIPTION_LIST);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -825,6 +852,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetEuiccInfoCommandCallback) callback)
                                                         .onGetEuiccInfoComplete(euiccInfo);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_EUICC_INFO);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -840,6 +868,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((DeleteCommandCallback) callback)
                                                         .onDeleteComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_DELETE_SUBSCRIPTION);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -858,6 +887,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((SwitchCommandCallback) callback)
                                                         .onSwitchComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_SWITCH_TO_SUBSCRIPTION);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -875,6 +905,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((UpdateNicknameCommandCallback) callback)
                                                         .onUpdateNicknameComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_UPDATE_SUBSCRIPTION_NICKNAME);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -889,6 +920,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((EraseCommandCallback) callback)
                                                         .onEraseComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_ERASE_SUBSCRIPTIONS);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -904,6 +936,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((EraseCommandCallback) callback)
                                                         .onEraseComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_ERASE_SUBSCRIPTIONS_WITH_OPTIONS);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -918,6 +951,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((RetainSubscriptionsCommandCallback) callback)
                                                         .onRetainSubscriptionsComplete(result);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_RETAIN_SUBSCRIPTIONS);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -932,6 +966,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                             sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                 ((GetOtaStatusCommandCallback) callback)
                                                         .onGetOtaStatusComplete(status);
+                                                Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_GET_OTA_STATUS);
                                                 onCommandEnd(callback);
                                             });
                                         }
@@ -953,6 +988,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                                 sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                                     ((OtaStatusChangedCallback) callback)
                                                             .onOtaStatusChanged(status);
+                                                    Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_START_OTA_IF_NECESSARY);
                                                     onCommandEnd(callback);
                                                 });
                                             }
@@ -968,6 +1004,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                                     sendMessage(CMD_COMMAND_COMPLETE, (Runnable) () -> {
                                         ((DumpEuiccServiceCommandCallback) callback)
                                                 .onDumpEuiccServiceComplete(logs);
+                                        Log.i(TAG, "ConnectedState isEuiccCommand ... onComplete: " + CMD_DUMP_EUICC_SERVICE);
                                         onCommandEnd(callback);
                                     });
                                 }
@@ -976,6 +1013,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                         }
                         default: {
                             Log.wtf(TAG, "Unimplemented eUICC command: " + message.what);
+                            Log.i(TAG, "ConnectedState isEuiccCommand ... default");
                             callback.onEuiccServiceUnavailable();
                             onCommandEnd(callback);
                             return HANDLED;
@@ -986,6 +1024,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
                     // exceptions, this is a bug in the EuiccService implementation, but we must
                     // not let it crash the phone process.
                     Log.w(TAG, "Exception making binder call to EuiccService", e);
+                    Log.i(TAG, "ConnectedState isEuiccCommand ... Exception");
                     callback.onEuiccServiceUnavailable();
                     onCommandEnd(callback);
                 }
@@ -998,6 +1037,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
 
         @Override
         public void exit() {
+            Log.i(TAG, "ConnectedState exit ");
             removeMessages(CMD_LINGER_TIMEOUT);
             // Dispatch callbacks for all in-flight commands; they will no longer succeed. (The
             // remote process cannot possibly trigger a callback at this stage because the
@@ -1074,15 +1114,19 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     /** Call this at the beginning of the execution of any command. */
     private void onCommandStart(BaseEuiccCommandCallback callback) {
         mActiveCommandCallbacks.add(callback);
+        Log.i(TAG, "onCommandStart: " + mActiveCommandCallbacks.size() + " callback: " + callback + " remove CMD_LINGER_TIMEOUT message");
         removeMessages(CMD_LINGER_TIMEOUT);
     }
 
     /** Call this at the end of execution of any command (whether or not it succeeded). */
     private void onCommandEnd(BaseEuiccCommandCallback callback) {
+        Log.i(TAG, "onCommandEnd-1: " + mActiveCommandCallbacks.size() + " callback: " + callback);
         if (!mActiveCommandCallbacks.remove(callback)) {
             Log.wtf(TAG, "Callback already removed from mActiveCommandCallbacks");
         }
+        Log.i(TAG, "onCommandEnd-2: " + mActiveCommandCallbacks.size());
         if (mActiveCommandCallbacks.isEmpty()) {
+            Log.i(TAG, "onCommandEnd-3: sending CMD_LINGER_TIMEOUT");
             sendMessageDelayed(CMD_LINGER_TIMEOUT, LINGER_TIMEOUT_MILLIS);
         }
     }
@@ -1177,12 +1221,14 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
+        Log.i(TAG, "onServiceConnected ComponentName: " + name.getPackageName());
         IEuiccService euiccService = IEuiccService.Stub.asInterface(service);
         sendMessage(CMD_SERVICE_CONNECTED, euiccService);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+        Log.i(TAG, "onServiceDisconnected ComponentName: " + name.getPackageName());
         sendMessage(CMD_SERVICE_DISCONNECTED);
     }
 
