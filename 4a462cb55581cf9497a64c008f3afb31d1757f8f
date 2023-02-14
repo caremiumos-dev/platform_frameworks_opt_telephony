@@ -46,6 +46,30 @@
       },
       "revId": "4a462cb55581cf9497a64c008f3afb31d1757f8f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "498a8922_dc557a98",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6091,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2023-02-14T23:08:48Z",
+      "side": 1,
+      "message": "`Phone#isEmergencyCallOnly` calls `ServiceStateTracker#getCombinedRegState`, which checks to see if the Phone is IN_SERVICE.\n\nIf there is a bug, it looks like `ServiceStateTracker#getCombinedRegState` may not be detecting your use case and not returning IN_SERVICE.\n\nI recommend debugging that method to enhance that logic instead of bypassing the logic to check IN_SERVICE here.",
+      "parentUuid": "ab8ceb18_f00994f2",
+      "range": {
+        "startLine": 6091,
+        "startChar": 20,
+        "endLine": 6091,
+        "endChar": 39
+      },
+      "revId": "4a462cb55581cf9497a64c008f3afb31d1757f8f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
