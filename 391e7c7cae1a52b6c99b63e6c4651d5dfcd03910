@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "365e9812_93b515fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1931377
+      },
+      "writtenOn": "2023-02-23T01:56:39Z",
+      "side": 1,
+      "message": "Please review this commit for OpenSource.",
+      "revId": "391e7c7cae1a52b6c99b63e6c4651d5dfcd03910",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
