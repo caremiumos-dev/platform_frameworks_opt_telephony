@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6e00c4e_cb1ed050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2023-03-01T00:23:18Z",
+      "side": 1,
+      "message": "This CL has got Presubmit-Verified-Together +1",
+      "revId": "c1d6ced88da6d9443f83b6f21962e103756e01cf",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
