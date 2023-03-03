@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea96d14_7e2643b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1723020
+      },
+      "writtenOn": "2023-03-03T12:51:22Z",
+      "side": 1,
+      "message": "May I ask you to review the following patches, please?\n\n- https://android-review.googlesource.com/c/platform/cts/+/2462793 Use forceResetCarrierKeysForImsiEncryption [NEW]\n- https://android-review.googlesource.com/c/platform/frameworks/base/+/2462434 Introduce forceResetCarrierKeysForImsiEncryption [NEW]\n- https://android-review.googlesource.com/c/platform/frameworks/opt/telephony/+/2462813 Introduce forceResetCarrierKeysForImsiEncryption [NEW]\n- https://android-review.googlesource.com/c/platform/packages/services/Telephony/+/2462833 Use forceResetCarrierKeysForImsiEncryption [NEW]\n\nIt\u0027s discussed by Buganizer issue 235296888",
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
