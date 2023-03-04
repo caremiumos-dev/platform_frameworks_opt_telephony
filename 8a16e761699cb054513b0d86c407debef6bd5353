@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52fdac15_30b4780c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1994917
+      },
+      "writtenOn": "2023-03-04T06:42:25Z",
+      "side": 1,
+      "message": "Revert \"Get and Set the TPMR value to EF_SMSS field in ISIM/USIM\"\n\nThis reverts commit 8a16e761699cb054513b0d86c407debef6bd5353.\n\nReason for revert: \u003cINSERT REASONING HERE\u003e",
+      "revId": "8a16e761699cb054513b0d86c407debef6bd5353",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
