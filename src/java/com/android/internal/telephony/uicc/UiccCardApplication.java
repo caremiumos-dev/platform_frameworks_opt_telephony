@@ -280,6 +280,9 @@ public class UiccCardApplication {
                 mIccFdnEnabled = mDesiredFdnEnabled;
                 if (DBG) log("EVENT_CHANGE_FACILITY_FDN_DONE: " +
                         "mIccFdnEnabled=" + mIccFdnEnabled);
+                if (mIccFdnEnabled && mIccFdnAvailable) {
+                    ((SIMRecords) mIccRecords).loadFdnRecords();
+                }
             } else {
                 attemptsRemaining = parsePinPukErrorResult(ar);
                 loge("Error change facility fdn with exception " + ar.exception);
