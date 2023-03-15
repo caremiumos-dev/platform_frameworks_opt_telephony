@@ -34,6 +34,24 @@
       "parentUuid": "835dc387_ea33bad9",
       "revId": "e1240492ce13248e9224dc70a68f1f0902c7216d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7874d9b7_7939e862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1968726
+      },
+      "writtenOn": "2023-03-15T00:17:52Z",
+      "side": 1,
+      "message": "When booting, FDN is disabled.\nIf the user enables FDN and makes a call, an exception will occur because there is no FDN list.",
+      "parentUuid": "54a897b7_121e306e",
+      "revId": "e1240492ce13248e9224dc70a68f1f0902c7216d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
