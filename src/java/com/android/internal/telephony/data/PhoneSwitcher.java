@@ -675,7 +675,7 @@ public class PhoneSwitcher extends Handler {
             return false;
         }
 
-        SubscriptionInfo info = mSubscriptionController
+        SubscriptionInfo info = SubscriptionController.getInstance()
                 .getActiveSubscriptionInfoForSimSlotIndex(slotIndex,
                 mContext.getOpPackageName(), null);
         boolean uiccAppsEnabled = info != null && info.areUiccApplicationsEnabled();
@@ -1587,7 +1587,7 @@ public class PhoneSwitcher extends Handler {
     protected void updatePreferredDataPhoneId() {
         Phone voicePhone = findPhoneById(mPhoneIdInVoiceCall);
         // check user enabled data on the default phone
-        int defaultDataPhoneId = mSubscriptionController.getPhoneId(mPrimaryDataSubId);
+        int defaultDataPhoneId = SubscriptionController.getInstance().getPhoneId(mPrimaryDataSubId);
         Phone defaultDataPhone = findPhoneById(defaultDataPhoneId);
         boolean isDataEnabled = false;
         if (voicePhone != null && defaultDataPhone != null
