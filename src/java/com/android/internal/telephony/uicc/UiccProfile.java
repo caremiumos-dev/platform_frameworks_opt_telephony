@@ -35,7 +35,6 @@ import android.os.AsyncResult;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
-import android.os.ParcelUuid;
 import android.os.PersistableBundle;
 import android.os.Registrant;
 import android.os.RegistrantList;
@@ -65,8 +64,6 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.TelephonyStatsLog;
 import com.android.internal.telephony.cat.CatService;
-import com.android.internal.telephony.subscription.SubscriptionInfoInternal;
-import com.android.internal.telephony.subscription.SubscriptionManagerService;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.uicc.IccCardStatus.CardState;
@@ -434,7 +431,8 @@ public class UiccProfile extends IccCard {
      * if an override is provided.
      */
     private void handleCarrierNameOverride() {
-        final int subId = SubscriptionManager.getSubscriptionId(mPhoneId);
+        SubscriptionController subCon = SubscriptionController.getInstance();
+        final int subId = subCon.getSubId(mPhoneId);
         if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
             loge("subId not valid for Phone " + mPhoneId);
             return;
@@ -483,7 +481,7 @@ public class UiccProfile extends IccCard {
             mOperatorBrandOverrideRegistrants.notifyRegistrants();
         }
 
-        updateCarrierNameForSubscription(subId, nameSource);
+        updateCarrierNameForSubscription(subCon, subId, nameSource);
     }
 
     /**
@@ -498,7 +496,8 @@ public class UiccProfile extends IccCard {
      * MCC table
      */
     private void handleSimCountryIsoOverride() {
-        final int subId = SubscriptionManager.getSubscriptionId(mPhoneId);
+        SubscriptionController subCon = SubscriptionController.getInstance();
+        final int subId = subCon.getSubId(mPhoneId);
         if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
             loge("subId not valid for Phone " + mPhoneId);
             return;
@@ -513,20 +512,17 @@ public class UiccProfile extends IccCard {
 
         PersistableBundle config = configLoader.getConfigForSubId(subId);
         String iso = config.getString(CarrierConfigManager.KEY_SIM_COUNTRY_ISO_OVERRIDE_STRING);
-        if (!TextUtils.isEmpty(iso)
-                && !iso.equals(TelephonyManager.getSimCountryIsoForPhone(mPhoneId))) {
+        if (!TextUtils.isEmpty(iso) &&
+                !iso.equals(mTelephonyManager.getSimCountryIsoForPhone(mPhoneId))) {
             mTelephonyManager.setSimCountryIsoForPhone(mPhoneId, iso);
-            if (PhoneFactory.isSubscriptionManagerServiceEnabled()) {
-                SubscriptionManagerService.getInstance().setCountryIso(subId, iso);
-            } else {
-                SubscriptionController.getInstance().setCountryIso(iso, subId);
-            }
+            subCon.setCountryIso(iso, subId);
         }
     }
 
-    private void updateCarrierNameForSubscription(int subId, int nameSource) {
+    private void updateCarrierNameForSubscription(SubscriptionController subCon, int subId,
+            int nameSource) {
         /* update display name with carrier override */
-        SubscriptionInfo subInfo = SubscriptionController.getInstance().getActiveSubscriptionInfo(
+        SubscriptionInfo subInfo = subCon.getActiveSubscriptionInfo(
                 subId, mContext.getOpPackageName(), mContext.getAttributionTag());
 
         if (subInfo == null) {
@@ -538,13 +534,7 @@ public class UiccProfile extends IccCard {
 
         if (!TextUtils.isEmpty(newCarrierName) && !newCarrierName.equals(oldSubName)) {
             log("sim name[" + mPhoneId + "] = " + newCarrierName);
-            if (PhoneFactory.isSubscriptionManagerServiceEnabled()) {
-                SubscriptionManagerService.getInstance().setDisplayNameUsingSrc(
-                        newCarrierName, subId, nameSource);
-            } else {
-                SubscriptionController.getInstance().setDisplayNameUsingSrc(
-                        newCarrierName, subId, nameSource);
-            }
+            subCon.setDisplayNameUsingSrc(newCarrierName, subId, nameSource);
         }
     }
 
@@ -1705,36 +1695,9 @@ public class UiccProfile extends IccCard {
         if (TextUtils.isEmpty(iccId)) {
             return false;
         }
-
-        if (PhoneFactory.isSubscriptionManagerServiceEnabled()) {
-            int subId = SubscriptionManager.getSubscriptionId(getPhoneId());
-            SubscriptionInfoInternal subInfo = SubscriptionManagerService.getInstance()
-                    .getSubscriptionInfoInternal(subId);
-            if (subInfo == null) {
-                loge("setOperatorBrandOverride: Cannot find subscription info for sub " + subId);
-                return false;
-            }
-
-            List<SubscriptionInfo> subInfos = new ArrayList<>();
-            subInfos.add(subInfo.toSubscriptionInfo());
-            String groupUuid = subInfo.getGroupUuid();
-            if (!TextUtils.isEmpty(groupUuid)) {
-                subInfos.addAll(SubscriptionManagerService.getInstance()
-                        .getSubscriptionsInGroup(ParcelUuid.fromString(groupUuid),
-                                mContext.getOpPackageName(), mContext.getFeatureId()));
-            }
-
-            if (subInfos.stream().noneMatch(info -> TextUtils.equals(IccUtils.stripTrailingFs(
-                    info.getIccId()), IccUtils.stripTrailingFs(iccId)))) {
-                loge("iccId doesn't match current active subId.");
-                return false;
-            }
-        } else {
-            if (!SubscriptionController.getInstance().checkPhoneIdAndIccIdMatch(
-                    getPhoneId(), iccId)) {
-                loge("iccId doesn't match current active subId.");
-                return false;
-            }
+        if (!SubscriptionController.getInstance().checkPhoneIdAndIccIdMatch(getPhoneId(), iccId)) {
+            loge("iccId doesn't match current active subId.");
+            return false;
         }
 
         SharedPreferences.Editor spEditor =

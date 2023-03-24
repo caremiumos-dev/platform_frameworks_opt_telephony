@@ -41,8 +41,6 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.nano.PersistAtomsProto.DataCallSession;
-import com.android.internal.telephony.subscription.SubscriptionInfoInternal;
-import com.android.internal.telephony.subscription.SubscriptionManagerService;
 import com.android.telephony.Rlog;
 
 import java.util.Arrays;
@@ -325,17 +323,12 @@ public class DataCallSessionStats {
         ServiceStateTracker serviceStateTracker = mPhone.getServiceStateTracker();
         ServiceState serviceState =
                 serviceStateTracker != null ? serviceStateTracker.getServiceState() : null;
-        return serviceState != null && serviceState.getRoaming();
+        return serviceState != null ? serviceState.getRoaming() : false;
     }
 
     private boolean getIsOpportunistic() {
-        if (mPhone.isSubscriptionManagerServiceEnabled()) {
-            SubscriptionInfoInternal subInfo = SubscriptionManagerService.getInstance()
-                    .getSubscriptionInfoInternal(mPhone.getSubId());
-            return subInfo != null && subInfo.isOpportunistic();
-        }
         SubscriptionController subController = SubscriptionController.getInstance();
-        return subController != null && subController.isOpportunistic(mPhone.getSubId());
+        return subController != null ? subController.isOpportunistic(mPhone.getSubId()) : false;
     }
 
     private boolean getIsOos() {
@@ -343,7 +336,8 @@ public class DataCallSessionStats {
         ServiceState serviceState =
                 serviceStateTracker != null ? serviceStateTracker.getServiceState() : null;
         return serviceState != null
-                && serviceState.getDataRegistrationState() == ServiceState.STATE_OUT_OF_SERVICE;
+                ? serviceState.getDataRegistrationState() == ServiceState.STATE_OUT_OF_SERVICE
+                : false;
     }
 
     private void logi(String format, Object... args) {

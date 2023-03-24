@@ -62,7 +62,6 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.SmsManager;
-import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Spanned;
@@ -2723,7 +2722,10 @@ public abstract class SMSDispatcher extends Handler {
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     protected int getSubId() {
-        return SubscriptionManager.getSubscriptionId(mPhone.getPhoneId());
+        if (mPhone.isSubscriptionManagerServiceEnabled()) {
+            return SubscriptionManagerService.getInstance().getSubId(mPhone.getPhoneId());
+        }
+        return SubscriptionController.getInstance().getSubId(mPhone.getPhoneId());
     }
 
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
