@@ -31,7 +31,6 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.metrics.NetworkRequestsStats;
-import com.android.internal.telephony.subscription.SubscriptionManagerService;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.telephony.Rlog;
 
@@ -64,6 +63,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     private static final int EVENT_NETWORK_RELEASE                  = 4;
 
     private final PhoneSwitcher mPhoneSwitcher;
+    private final SubscriptionController mSubscriptionController;
     private final LocalLog mLocalLog = new LocalLog(REQUEST_LOG_SIZE);
 
     // Key: network request. Value: the transport of the network request applies to,
@@ -86,9 +86,10 @@ public class TelephonyNetworkFactory extends NetworkFactory {
         mPhone = phone;
         mInternalHandler = new InternalHandler(looper);
 
+        mSubscriptionController = SubscriptionController.getInstance();
         mAccessNetworksManager = mPhone.getAccessNetworksManager();
 
-        setCapabilityFilter(makeNetworkFilterByPhoneId(mPhone.getPhoneId()));
+        setCapabilityFilter(makeNetworkFilter(mSubscriptionController, mPhone.getPhoneId()));
         setScoreFilter(TELEPHONY_NETWORK_SCORE);
 
         mPhoneSwitcher = PhoneSwitcher.getInstance();
@@ -112,12 +113,10 @@ public class TelephonyNetworkFactory extends NetworkFactory {
                 }
             };
 
-    private NetworkCapabilities makeNetworkFilterByPhoneId(int phoneId) {
-        if (mPhone.isSubscriptionManagerServiceEnabled()) {
-            return makeNetworkFilter(SubscriptionManagerService.getInstance().getSubId(phoneId));
-        } else {
-            return makeNetworkFilter(SubscriptionController.getInstance().getSubId(phoneId));
-        }
+    private NetworkCapabilities makeNetworkFilter(SubscriptionController subscriptionController,
+            int phoneId) {
+        final int subscriptionId = subscriptionController.getSubId(phoneId);
+        return makeNetworkFilter(subscriptionId);
     }
 
     /**
@@ -239,13 +238,8 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     // watch for phone->subId changes, reapply new filter and let
     // that flow through to apply/revoke of requests
     private void onSubIdChange() {
-        int newSubscriptionId;
-        if (mPhone.isSubscriptionManagerServiceEnabled()) {
-            newSubscriptionId = SubscriptionManagerService.getInstance().getSubId(
-                    mPhone.getPhoneId());
-        } else {
-            newSubscriptionId = SubscriptionController.getInstance().getSubId(mPhone.getPhoneId());
-        }
+        final int newSubscriptionId = mSubscriptionController.getSubId(
+                mPhone.getPhoneId());
         if (mSubscriptionId != newSubscriptionId) {
             if (DBG) logl("onSubIdChange " + mSubscriptionId + "->" + newSubscriptionId);
             mSubscriptionId = newSubscriptionId;
