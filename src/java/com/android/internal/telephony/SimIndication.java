@@ -181,6 +181,11 @@ public class SimIndication extends IRadioSimIndication.Stub {
 
         if (mRil.mCatProCmdRegistrant != null) {
             mRil.mCatProCmdRegistrant.notifyRegistrant(new AsyncResult(null, cmd, null));
+        } else {
+            // This case arises where SIMREFRESH and PROACTIVE commands comes back to back where
+            // SIMREFRESH clears the CATSERVICE which intern clears the CallBacks, in that case
+            // the below API will give response about the error to the modem.
+            mRil.sendTerminalResponse(null, null);
         }
     }
 
