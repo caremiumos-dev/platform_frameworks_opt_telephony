@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "679a3bce_0eba1451",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1929200
+      },
+      "writtenOn": "2023-03-31T20:42:15Z",
+      "side": 1,
+      "message": "|| isHandoverInProcess()?",
+      "range": {
+        "startLine": 2110,
+        "startChar": 34,
+        "endLine": 2110,
+        "endChar": 47
+      },
+      "revId": "296211d2f3c093f8ea9f7e7a08aedf3cb5983719",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
