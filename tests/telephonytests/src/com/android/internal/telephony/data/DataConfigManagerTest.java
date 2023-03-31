@@ -18,12 +18,7 @@ package com.android.internal.telephony.data;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
-
 import android.os.Looper;
-import android.os.PersistableBundle;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
@@ -38,14 +33,11 @@ import org.junit.runner.RunWith;
 @TestableLooper.RunWithLooper
 public class DataConfigManagerTest extends TelephonyTest {
     private DataConfigManager mDataConfigManagerUT;
-    private PersistableBundle mBundle;
 
     @Before
     public void setUp() throws Exception {
         logd("DataConfigManagerTest +Setup!");
         super.setUp(getClass().getSimpleName());
-        mBundle = mContextFixture.getCarrierConfigBundle();
-        when(mCarrierConfigManager.getConfigForSubId(anyInt(), any())).thenReturn(mBundle);
         mDataConfigManagerUT = new DataConfigManager(mPhone, Looper.myLooper());
         logd("DataConfigManagerTest -Setup!");
     }
