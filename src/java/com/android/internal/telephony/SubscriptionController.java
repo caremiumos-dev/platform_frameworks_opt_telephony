@@ -3213,7 +3213,6 @@ public class SubscriptionController extends ISub.Stub {
             case SubscriptionManager.NR_ADVANCED_CALLING_ENABLED:
             case SubscriptionManager.USAGE_SETTING:
             case SubscriptionManager.USER_HANDLE:
-            case SubscriptionManager.SATELLITE_ENABLED:
                 value.put(propKey, Integer.parseInt(propValue));
                 break;
             case SubscriptionManager.ALLOWED_NETWORK_TYPES:
@@ -3311,7 +3310,6 @@ public class SubscriptionController extends ISub.Stub {
                         case SimInfo.COLUMN_PHONE_NUMBER_SOURCE_IMS:
                         case SubscriptionManager.USAGE_SETTING:
                         case SubscriptionManager.USER_HANDLE:
-                        case SubscriptionManager.SATELLITE_ENABLED:
                             resultValue = cursor.getString(0);
                             break;
                         default:
