@@ -32,7 +32,6 @@ import android.os.Build;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.DeviceConfig;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.AnomalyReporter;
@@ -123,11 +122,8 @@ public class PhoneFactory {
             if (!sMadeDefaults) {
                 sContext = context;
 
-                // This is a temp flag which will be removed before U AOSP public release.
                 sSubscriptionManagerServiceEnabled = context.getResources().getBoolean(
-                        com.android.internal.R.bool.config_using_subscription_manager_service)
-                        || DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_TELEPHONY,
-                        "enable_subscription_manager_service", false);
+                        com.android.internal.R.bool.config_using_subscription_manager_service);
 
                 // create the telephony device controller.
                 TelephonyDevController.create();
