@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.annotation.NonNull;
 import android.net.TrafficStats;
 import android.os.SystemClock;
 
@@ -33,16 +34,16 @@ public class TelephonyFacade {
     }
 
     /**
-     * Wrapper for {@link TrafficStats#getMobileTxBytes}.
+     * Wrapper for {@link TrafficStats#getMobileTxBytes} to get the bytes of the internet.
      */
-    public long getMobileTxBytes() {
-        return TrafficStats.getMobileTxBytes();
+    public long getTxBytes(@NonNull String ifname) {
+        return TrafficStats.getTxBytes(ifname);
     }
 
     /**
      * Wrapper for {@link TrafficStats#getMobileRxBytes}.
      */
-    public long getMobileRxBytes() {
-        return TrafficStats.getMobileRxBytes();
+    public long getRxBytes(@NonNull String ifname) {
+        return TrafficStats.getRxBytes(ifname);
     }
 }

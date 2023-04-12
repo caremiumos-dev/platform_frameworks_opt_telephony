@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.display.DisplayManager;
 import android.net.ConnectivityManager;
+import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.AsyncResult;
@@ -66,6 +67,8 @@ import com.android.telephony.Rlog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -167,6 +170,8 @@ public class LinkBandwidthEstimator extends Handler {
     private final TelephonyManager mTelephonyManager;
     private final ConnectivityManager mConnectivityManager;
     private final LocalLog mLocalLog = new LocalLog(512);
+    /** The list of the mobile internet networks since last reported. Used for traffic stats */
+    private List<String> mMobileInternetIfaces = new ArrayList<>();
     private boolean mScreenOn = false;
     private boolean mIsOnDefaultRoute = false;
     private boolean mIsOnActiveData = false;
@@ -315,6 +320,23 @@ public class LinkBandwidthEstimator extends Handler {
         registerNrStateFrequencyChange();
         mPhone.getServiceStateTracker().registerForDataRegStateOrRatChanged(AccessNetworkConstants
                 .TRANSPORT_TYPE_WWAN, this, MSG_DATA_REG_STATE_OR_RAT_CHANGED, null);
+        mPhone.getDataNetworkController().registerDataNetworkControllerCallback(
+                new DataNetworkController.DataNetworkControllerCallback(this::post) {
+            @Override
+            public void onInternetDataNetworkConnected(@NonNull List<DataNetwork> internetNetworks) {
+                mMobileInternetIfaces = internetNetworks.stream()
+                        .map(DataNetwork::getLinkProperties)
+                        .filter(Objects::nonNull)
+                        .map(LinkProperties::getInterfaceName).toList();
+                logd("onInternetDataNetworkConnected: " + mMobileInternetIfaces);
+            }
+
+            @Override
+            public void onInternetDataNetworkDisconnected() {
+                mMobileInternetIfaces = new ArrayList<>();
+                logd("onInternetDataNetworkDisconnected");
+            }
+        });
     }
 
     @Override
@@ -453,8 +475,9 @@ public class LinkBandwidthEstimator extends Handler {
 
     private void handleTrafficStatsPoll() {
         invalidateTxRxSamples();
-        long mobileTxBytes = mTelephonyFacade.getMobileTxBytes();
-        long mobileRxBytes = mTelephonyFacade.getMobileRxBytes();
+        long mobileTxBytes = getTxBytes(mMobileInternetIfaces);
+        long mobileRxBytes = getRxBytes(mMobileInternetIfaces);
+
         long txBytesDelta = mobileTxBytes - mLastMobileTxBytes;
         long rxBytesDelta = mobileRxBytes - mLastMobileRxBytes;
 
@@ -530,6 +553,18 @@ public class LinkBandwidthEstimator extends Handler {
                 updateTxRxBandwidthFilterSendToDataConnection();
             }
         }
+    }
+
+    private long getTxBytes(@NonNull List<String> ifnames) {
+        return ifnames.stream().mapToLong(mTelephonyFacade::getTxBytes)
+                .filter(bytes -> bytes > 0)
+                .sum();
+    }
+
+    public long getRxBytes(@NonNull List<String> ifnames) {
+        return ifnames.stream().mapToLong(mTelephonyFacade::getRxBytes)
+                .filter(bytes -> bytes > 0)
+                .sum();
     }
 
     private void makeRequestModemActivity() {
@@ -1279,7 +1314,7 @@ public class LinkBandwidthEstimator extends Handler {
         for (NetworkBandwidth network : mNetworkMap.values()) {
             pw.println(network.toString());
         }
-
+        pw.println("all connected mobile internet networks ifnames: " + mMobileInternetIfaces);
         try {
             mLocalLog.dump(fd, pw, args);
         } catch (Exception e) {
