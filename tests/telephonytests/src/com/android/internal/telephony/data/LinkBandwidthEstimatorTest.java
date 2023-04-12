@@ -60,7 +60,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+
+import java.util.List;
 
 @RunWith(AndroidTestingRunner.class)
 @TestableLooper.RunWithLooper
@@ -82,6 +85,10 @@ public class LinkBandwidthEstimatorTest extends TelephonyTest {
     private long mTxBytes = 0;
     private long mRxBytes = 0;
     private NetworkRegistrationInfo mNri;
+
+    private DataNetworkController.DataNetworkControllerCallback mDncInternetConnectionCallback;
+
+    private List<DataNetwork> datnetworks;
 
     // Mocked classes
     private TelephonyFacade mTelephonyFacade;
@@ -109,14 +116,21 @@ public class LinkBandwidthEstimatorTest extends TelephonyTest {
         when(mServiceState.getNetworkRegistrationInfo(anyInt(), anyInt())).thenReturn(mNri);
         when(mServiceState.getOperatorNumeric()).thenReturn("310260");
         when(mTelephonyFacade.getElapsedSinceBootMillis()).thenReturn(0L);
-        when(mTelephonyFacade.getMobileTxBytes()).thenReturn(0L);
-        when(mTelephonyFacade.getMobileTxBytes()).thenReturn(0L);
+        when(mTelephonyFacade.getTxBytes(any())).thenReturn(0L);
+        when(mTelephonyFacade.getTxBytes(any())).thenReturn(0L);
         when(mPhone.getCurrentCellIdentity()).thenReturn(mCellIdentity);
         // Note that signal level is 0 before 1st MSG_SIGNAL_STRENGTH_CHANGED
         when(mPhone.getSubId()).thenReturn(1);
         when(mSignalStrength.getDbm()).thenReturn(-100);
         when(mSignalStrength.getLevel()).thenReturn(1);
         mLBE = new LinkBandwidthEstimator(mPhone, mTelephonyFacade);
+
+        ArgumentCaptor<DataNetworkController.DataNetworkControllerCallback> dncCallbackCaptor =
+                ArgumentCaptor.forClass(DataNetworkController.DataNetworkControllerCallback.class);
+        verify(mPhone.getDataNetworkController()).registerDataNetworkControllerCallback(
+                dncCallbackCaptor.capture());
+        mDncInternetConnectionCallback = dncCallbackCaptor.getValue();
+        mDncInternetConnectionCallback.onInternetDataNetworkConnected();
         mLBE.obtainMessage(MSG_DEFAULT_NETWORK_CHANGED, mNetworkCapabilities).sendToTarget();
         mLBE.obtainMessage(MSG_SCREEN_STATE_CHANGED, false).sendToTarget();
         mLBE.obtainMessage(MSG_ACTIVE_PHONE_CHANGED, 1).sendToTarget();
@@ -131,17 +145,17 @@ public class LinkBandwidthEstimatorTest extends TelephonyTest {
 
     private void addTxBytes(long txBytes) {
         mTxBytes += txBytes;
-        when(mTelephonyFacade.getMobileTxBytes()).thenReturn(mTxBytes);
+        when(mTelephonyFacade.getTxBytes(any())).thenReturn(mTxBytes);
     }
 
     private void addRxBytes(long rxBytes) {
         mRxBytes += rxBytes;
-        when(mTelephonyFacade.getMobileRxBytes()).thenReturn(mRxBytes);
+        when(mTelephonyFacade.getRxBytes(any())).thenReturn(mRxBytes);
     }
 
     private void subtractRxBytes(long rxBytes) {
         mRxBytes -= rxBytes;
-        when(mTelephonyFacade.getMobileRxBytes()).thenReturn(mRxBytes);
+        when(mTelephonyFacade.getRxBytes(any())).thenReturn(mRxBytes);
     }
 
     @After
@@ -165,6 +179,11 @@ public class LinkBandwidthEstimatorTest extends TelephonyTest {
         processAllMessages();
 
         verify(mTelephonyManager, times(1)).requestModemActivityInfo(any(), any());
+    }
+
+    @Test
+    public void testNoInternetNetworkNoModemPoll() throws Exception {
+
     }
 
     @Test
@@ -294,7 +313,7 @@ public class LinkBandwidthEstimatorTest extends TelephonyTest {
             processAllMessages();
         }
 
-        verify(mTelephonyFacade, times(4)).getMobileTxBytes();
+        verify(mTelephonyFacade, times(4)).getTxBytes(any());
     }
 
     @Test
