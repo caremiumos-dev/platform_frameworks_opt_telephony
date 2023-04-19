@@ -16,6 +16,23 @@
       "message": "Please check my comment about my CL and about workardound CLs of b/198358638",
       "revId": "5d820a099d4b788431802dedc2bc20c8fd82b80b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8caaf8ab_ff9c5bdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2023-04-19T21:22:02Z",
+      "side": 1,
+      "message": "If voice call is on non-DDS, modem should report OOS on DDS. In such case, line 571 should fail because setting up internet is not allowed when the device is OOS. Data stall recovery manager should not perform any recovery action in this case.\n\nSo I am not sure if this fix is actually needed. You might want to upload a bugreport for us to review. The modem might not behave correct in this case.",
+      "revId": "5d820a099d4b788431802dedc2bc20c8fd82b80b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
