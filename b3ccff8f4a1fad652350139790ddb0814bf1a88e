@@ -65,6 +65,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c8635d_f3201fb5",
+        "filename": "src/java/com/android/internal/telephony/data/DataStallRecoveryManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1385398
+      },
+      "writtenOn": "2023-04-19T15:07:55Z",
+      "side": 1,
+      "message": "The CL in the b/198358638, it\u0027s for specific device not for all lassen chipset. So add the logic in DSRM is good. It\u0027s LGTM.",
+      "parentUuid": "921156ea_82e531f1",
+      "range": {
+        "startLine": 571,
+        "startChar": 8,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "b3ccff8f4a1fad652350139790ddb0814bf1a88e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fcc5152_adafa382",
