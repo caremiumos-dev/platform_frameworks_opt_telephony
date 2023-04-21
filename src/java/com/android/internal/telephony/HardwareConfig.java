@@ -154,7 +154,7 @@ public class HardwareConfig {
             rilModel = model;
             rat = new BitSet(bits.length);
             for (int i = 0 ; i < bits.length ; i++) {
-                rat.set(i, (bits[i] == '1' ? true : false));
+                rat.set(i, (bits[bits.length - i - 1] == '1' ? true : false));
             }
             maxActiveVoiceCall = maxV;
             maxActiveDataCall = maxD;
