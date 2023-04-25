@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7773d897_d0d0e416",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2023-04-25T17:34:54Z",
+      "side": 1,
+      "message": "The current implementation is to give preference to downloaded keys over carrier config keys. If we change this design then yes the test would pass. Not sure it will be practical for a carrier to have both keys.. If we assume its not practical to have both then we can go ahead with a simple change in the code.",
+      "parentUuid": "564d260c_425dceb4",
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d42e43b_52fdeacd",
         "filename": "src/java/com/android/internal/telephony/CarrierInfoManager.java",
         "patchSetId": 1
