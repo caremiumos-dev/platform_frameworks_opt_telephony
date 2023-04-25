@@ -18,6 +18,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1189b6a_f61dc183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1723020
+      },
+      "writtenOn": "2023-04-25T11:21:20Z",
+      "side": 1,
+      "message": "I\u0027ll upload a new patch but please find my answer against the question of mLastAccessResetCarrierKey.",
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d42e43b_52fdeacd",
@@ -54,6 +71,30 @@
       "writtenOn": "2023-04-25T10:39:14Z",
       "side": 1,
       "message": "Is it required to update the mLastAccessResetCarrierKey when do from CTS ?",
+      "range": {
+        "startLine": 305,
+        "startChar": 8,
+        "endLine": 305,
+        "endChar": 41
+      },
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22658743_abe069da",
+        "filename": "src/java/com/android/internal/telephony/CarrierInfoManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1723020
+      },
+      "writtenOn": "2023-04-25T11:21:20Z",
+      "side": 1,
+      "message": "Yes, it is. The mLastAccessResetCarrierKey is used to prevent excessive access to the server that provide carrier key. So that the member should be updated no matter from Network Reset or CTS, I think.",
+      "parentUuid": "8867d8b6_8fdc7796",
       "range": {
         "startLine": 305,
         "startChar": 8,
