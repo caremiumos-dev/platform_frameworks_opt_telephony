@@ -35,6 +35,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "564d260c_425dceb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2023-04-25T17:02:40Z",
+      "side": 1,
+      "message": "I\u0027d rather not add more complexity like this.\n\nWhy do we need to do so many resets?  I think the place where downloaded keys are used instead of override keys is the main bug.  If we fixed that then we don\u0027t need to do extra resets and add a new api and more complexity.",
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d42e43b_52fdeacd",
