@@ -128,6 +128,24 @@
       "message": "is it okay if this change impacts Line #617 and #618?",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c736987_5eefad5b",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-04-27T05:02:42Z",
+      "side": 1,
+      "message": "It should be OK since LBE cares about internet traffic only.",
+      "parentUuid": "f5121573_d4b88ecf",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9eaf58e_964ce4af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-04-27T05:02:42Z",
+      "side": 1,
+      "message": "Should we add more detailed CL description?",
+      "revId": "2142ff6e259255f5c62919d16d58560ad590a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e28dad8d_b1f52652",
+        "filename": "tests/telephonytests/src/com/android/internal/telephony/data/LinkBandwidthEstimatorTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-04-27T05:02:42Z",
+      "side": 1,
+      "message": "Is it intended to be empty?",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 5
+      },
+      "revId": "2142ff6e259255f5c62919d16d58560ad590a73b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
