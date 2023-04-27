@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9f47585_57db8f95",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-04-27T01:29:03Z",
+      "side": 1,
+      "message": "how about isolated MMS/SUPL network?",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 52
+      },
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5121573_d4b88ecf",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
