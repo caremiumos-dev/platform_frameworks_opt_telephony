@@ -164,6 +164,24 @@
       "parentUuid": "8c736987_5eefad5b",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa803b43_2932e054",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-04-27T15:55:27Z",
+      "side": 1,
+      "message": "That\u0027s correct. But that\u0027s best Tx/Rx duration info that we can get. Do we have many cases that non-internet traffic will consume a lot of bytes? In the bandwidth estimation, if the non-internet traffic is dominating current total mobile byte count, the change will exclude them and result in low Tx/Rx byte count, if they are below the threshold values (defined around line 142 and can grow over the time), they will be completely ignored.",
+      "parentUuid": "3fe7427e_957ae726",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
