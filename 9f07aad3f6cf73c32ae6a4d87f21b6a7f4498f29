@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f8546a0_ade87194",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-04-27T02:00:46Z",
+      "side": 1,
+      "message": "Hi Ling,\n\nearlier it would count all packets, including IMS. although we don\u0027t have an extract requirement from qcom also, generally testers care about the arrows when running some MMS scenarios, because MMS APN may be metered. even it is unmetered, tester might also complains on this change.\n\nAs to IMS, actually in QCOM platform, expect for VT, the volte call packets won\u0027t got through linux network stack, therefore, it is unmetered by default, i am ok to exclude IMS packets only.",
+      "parentUuid": "0640c1e6_14d32290",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 52
+      },
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5121573_d4b88ecf",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
