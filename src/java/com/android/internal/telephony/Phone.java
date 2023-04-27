@@ -429,6 +429,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     protected final RegistrantList mSuppServiceFailedRegistrants = new RegistrantList();
 
+    protected final RegistrantList mSuppServiceProgressRegistrants = new RegistrantList();
+
     protected final RegistrantList mRadioOffOrNotAvailableRegistrants = new RegistrantList();
 
     protected final RegistrantList mSimRecordsLoadedRegistrants = new RegistrantList();
@@ -1423,6 +1425,28 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @param h Handler to be removed from the registrant list.
      */
     public void unregisterForTtyModeReceived(Handler h) {
+    }
+
+    /**
+     * Register for notifications for a supplementary service progress.
+     * Message.obj will contain an AsyncResult.
+     *
+     * @param h Handler that receives the notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    public void registerForSuppServiceProgress(Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+        mSuppServiceProgressRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for notifications for a supplementary service progress.
+     *
+     * @param h Handler to be removed from the registrant list.
+     */
+    public void unregisterForSuppServiceProgress(Handler h) {
+        mSuppServiceProgressRegistrants.remove(h);
     }
 
     /**

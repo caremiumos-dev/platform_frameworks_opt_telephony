@@ -84,6 +84,7 @@ public class CallManager {
     // FIXME Taken from klp-sprout-dev but setAudioMode was removed in L.
     //private static final int EVENT_RADIO_OFF_OR_NOT_AVAILABLE = 121;
     private static final int EVENT_TTY_MODE_RECEIVED = 122;
+    private static final int EVENT_SUPP_SERVICE_PROGRESS = 130;
 
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
@@ -179,6 +180,9 @@ public class CallManager {
     = new RegistrantList();
 
     protected final RegistrantList mSuppServiceFailedRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mSuppServiceProgressRegistrants
     = new RegistrantList();
 
     protected final RegistrantList mServiceStateChangedRegistrants
@@ -602,6 +606,7 @@ public class CallManager {
         phone.registerForOnHoldTone(handler, EVENT_ONHOLD_TONE, null);
         phone.registerForSuppServiceFailed(handler, EVENT_SUPP_SERVICE_FAILED, null);
         phone.registerForTtyModeReceived(handler, EVENT_TTY_MODE_RECEIVED, null);
+        phone.registerForSuppServiceProgress(handler, EVENT_SUPP_SERVICE_PROGRESS, null);
     }
 
     private void unregisterForPhoneStates(Phone phone) {
@@ -644,7 +649,29 @@ public class CallManager {
 
         // for events supported only by IMS phone
         phone.unregisterForOnHoldTone(handler);
+        phone.unregisterForSuppServiceProgress(handler);
         phone.unregisterForSuppServiceFailed(handler);
+    }
+
+    /**
+     * Register for notifications for a supplementary service progress status.
+     * Message.obj will contain an AsyncResult.
+     *
+     * @param h Handler that receives the notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    public void registerForSuppServiceProgress(Handler h, int what, Object obj){
+        mSuppServiceProgressRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for notifications for a supplementary service progress.
+     *
+     * @param h Handler to be removed from the registrant list.
+     */
+    public void unregisterForSuppServiceProgress(Handler h){
+        mSuppServiceProgressRegistrants.remove(h);
     }
 
     /**
@@ -2143,6 +2170,10 @@ public class CallManager {
                 case EVENT_SUPP_SERVICE_FAILED:
                     if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_SUPP_SERVICE_FAILED)");
                     mSuppServiceFailedRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_SUPP_SERVICE_PROGRESS:
+                    if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_SUPP_SERVICE_PROGRESS)");
+                    mSuppServiceProgressRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_SERVICE_STATE_CHANGED:
                     if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_SERVICE_STATE_CHANGED)");

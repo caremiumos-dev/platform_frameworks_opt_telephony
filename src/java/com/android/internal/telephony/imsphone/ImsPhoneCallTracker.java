@@ -4380,6 +4380,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         @Override
         public void onCallSessionTransferred(ImsCall imsCall) {
             if (DBG) log("onCallSessionTransferred success");
+            mPhone.notifySuppServiceProgress(Phone.SuppService.TRANSFER);
         }
 
         @Override
