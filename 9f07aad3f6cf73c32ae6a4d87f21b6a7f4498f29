@@ -146,6 +146,24 @@
       "parentUuid": "f5121573_d4b88ecf",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fe7427e_957ae726",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-04-27T05:24:13Z",
+      "side": 1,
+      "message": "i have a doubt, because the rx and rx duration are gained from modem activity info which reflects the whole traffic status, even in MSIM, correct?",
+      "parentUuid": "8c736987_5eefad5b",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
