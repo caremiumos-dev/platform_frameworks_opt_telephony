@@ -254,6 +254,10 @@ abstract class ImsPhoneBase extends Phone {
         mSuppServiceFailedRegistrants.notifyResult(code);
     }
 
+    public void notifySuppServiceProgress(SuppService code) {
+        mSuppServiceProgressRegistrants.notifyResult(code);
+    }
+
     void notifyServiceStateChanged(ServiceState ss) {
         super.notifyServiceStateChangedP(ss);
     }
