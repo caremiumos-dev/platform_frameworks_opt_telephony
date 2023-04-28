@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1344f3c0_70149ddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002609
+      },
+      "writtenOn": "2023-04-28T16:38:40Z",
+      "side": 1,
+      "message": "I think test-override keys should have higher precedence than either download or pre-set.\n\nAre we doing the test-override by carrier-config override?  \n\nThe download mechanism should be an override of the baked-in values.  I think we are trying to force 2 levels of override (Test \u003e Download \u003e baked-in) into just 1 which will never work out well.\n\nI wonder if a system-prop or other mechanism would provide an easy testing override that can be cleanly incorporated into the design",
+      "parentUuid": "7773d897_d0d0e416",
+      "revId": "3a5007368bb8ac1a8b13996a919ea7b2334a9424",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d42e43b_52fdeacd",
         "filename": "src/java/com/android/internal/telephony/CarrierInfoManager.java",
         "patchSetId": 1
