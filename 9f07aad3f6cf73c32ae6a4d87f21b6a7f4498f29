@@ -182,6 +182,24 @@
       "parentUuid": "3fe7427e_957ae726",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49f88a9c_67e925f6",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-04-28T02:29:23Z",
+      "side": 1,
+      "message": "yes, Kai, IMS pdn might consume amount of bandwidth, currently, CMCC is pushing DC channel over IMS PDN, obviously, current algorithm isn\u0027t accurate enough.\n\ncurrent prototype of bandwidth estimation is closing to radio L1 concept, which reflects the whole bandwidth of the radio (rat). based on the table you defined, it reflects the TPUT peek rate of the radio, but the data packets are pulled from kernels, and less than actual from modem far away, including amount of signalling packets and so forth.\n\nbesides, the modem activity info is just used for power consumption statistics per RAT, which represents the whole modem activities in MSIM including SUB1 and SUB2, so the bandwidth isn\u0027t precise at all.\n\nso, i don\u0027t understand what\u0027s background about abandoning the LCE interface to estimate the whole bandwidth.\n\nregarding the details of such API definitions, @Ling and Jack to give some inputs because they are aware of lots of those things.",
+      "parentUuid": "fa803b43_2932e054",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
