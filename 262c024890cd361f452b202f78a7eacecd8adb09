@@ -16,6 +16,29 @@
       "message": "May I ask you to check PatchSet 2, please?",
       "revId": "262c024890cd361f452b202f78a7eacecd8adb09",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4840abd_c37fa8d6",
+        "filename": "src/java/com/android/internal/telephony/Phone.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 4002,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2023-04-28T12:49:39Z",
+      "side": 1,
+      "message": "Do only network reset this ?\nWhat actually Network reset mean?",
+      "range": {
+        "startLine": 4002,
+        "startChar": 47,
+        "endLine": 4002,
+        "endChar": 65
+      },
+      "revId": "262c024890cd361f452b202f78a7eacecd8adb09",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
