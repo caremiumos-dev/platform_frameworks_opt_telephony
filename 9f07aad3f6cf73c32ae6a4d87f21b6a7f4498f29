@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "963a6e15_da34b163",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-05-04T01:57:44Z",
+      "side": 1,
+      "message": "Hi Ling,\n\ni am okay on UI arrow display based on internet data traffic only because there is an actual requirement, but here issue is that part of logic in handleTrafficStatsPoll is effecting bandwidth estimation.\n\nso whether to make data activity traffics\u0027 counting independent of bandwidth estimation?",
+      "parentUuid": "04e171c0_01a0fae3",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 52
+      },
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5121573_d4b88ecf",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
