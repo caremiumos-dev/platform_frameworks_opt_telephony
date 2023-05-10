@@ -744,22 +744,18 @@ public class DataSettingsManager extends Handler {
         // mobile data policy : data during call
         if (isMobileDataPolicyEnabled(TelephonyManager
                 .MOBILE_DATA_POLICY_DATA_ON_NON_DEFAULT_DURING_VOICE_CALL)) {
-            overridden = isNonDds && mPhone.getState() != PhoneConstants.State.IDLE;
+            Phone defaultDataPhone = getDefaultDataPhone();
+            if (defaultDataPhone == null) {
+                loge("isDataEnabledOverriddenForApn: unexpected defaultDataPhone is null");
+            } else {
+                overridden = isNonDds && mPhone.getState() != PhoneConstants.State.IDLE
+                        && defaultDataPhone.isUserDataEnabled();
+            }
         }
 
         // mobile data policy : auto data switch
         if (isMobileDataPolicyEnabled(TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH)) {
-            Phone defaultDataPhone;
-            if (mPhone.isSubscriptionManagerServiceEnabled()) {
-                // check user enabled data on the default data phone
-                defaultDataPhone = PhoneFactory.getPhone(SubscriptionManagerService.getInstance()
-                        .getPhoneId(SubscriptionManagerService.getInstance()
-                                .getDefaultDataSubId()));
-            } else {
-                // check user enabled data on the default data phone
-                defaultDataPhone = PhoneFactory.getPhone(SubscriptionController.getInstance()
-                        .getPhoneId(SubscriptionController.getInstance().getDefaultDataSubId()));
-            }
+            Phone defaultDataPhone = getDefaultDataPhone();
             if (defaultDataPhone == null) {
                 loge("isDataEnabledOverriddenForApn: unexpected defaultDataPhone is null");
             } else {
@@ -767,6 +763,21 @@ public class DataSettingsManager extends Handler {
             }
         }
         return overridden;
+    }
+
+    private Phone getDefaultDataPhone() {
+        Phone defaultDataPhone = null;
+        if (mPhone.isSubscriptionManagerServiceEnabled()) {
+            // check user enabled data on the default data phone
+            defaultDataPhone = PhoneFactory.getPhone(SubscriptionManagerService.getInstance()
+                    .getPhoneId(SubscriptionManagerService.getInstance()
+                            .getDefaultDataSubId()));
+        } else {
+            // check user enabled data on the default data phone
+            defaultDataPhone = PhoneFactory.getPhone(SubscriptionController.getInstance()
+                    .getPhoneId(SubscriptionController.getInstance().getDefaultDataSubId()));
+        }
+        return defaultDataPhone;
     }
 
     /**
