@@ -62,6 +62,14 @@ public class MissedIncomingCallSmsFilter {
 
     private static final String SMS_CALLER_ID_TAG = "callerId";
 
+    private static final String SMS_RESTRICTED_TAG = "restricted";
+
+    private static final String SMS_PAYPHONE_TAG = "payphone";
+
+    private static final String SMS_UNKNOWN_TAG = "unknown";
+
+    private static final String SMS_UNAVAILABLE_TAG = "unavailable";
+
     private static final ComponentName PSTN_CONNECTION_SERVICE_COMPONENT =
             new ComponentName("com.android.phone",
                     "com.android.services.telephony.TelephonyConnectionService");
@@ -167,6 +175,7 @@ public class MissedIncomingCallSmsFilter {
             for (String parsedMsg : missedCallMsgs) {
                 long missedCallTime = 0;
                 String callerId = null;
+                int presentation = TelecomManager.PRESENTATION_ALLOWED;
                 for (String smsPattern : smsPatterns) {
                     Pattern pattern;
                     try {
@@ -224,7 +233,40 @@ public class MissedIncomingCallSmsFilter {
                         } catch (IllegalArgumentException e) {
                             Rlog.d(TAG, "Caller id is not provided or can't be parsed.");
                         }
-                        createMissedIncomingCallEvent(missedCallTime, callerId);
+
+                        // Number presentation is optional.
+                        if (TextUtils.isEmpty(callerId)) {
+                            try {
+                                if (!TextUtils.isEmpty(matcher.group(SMS_RESTRICTED_TAG))) {
+                                    presentation = TelecomManager.PRESENTATION_RESTRICTED;
+                                }
+                            } catch (IllegalArgumentException e) {
+                                if (VDBG) Rlog.v(TAG, "private is missing.");
+                            }
+                            try {
+                                if (!TextUtils.isEmpty(matcher.group(SMS_PAYPHONE_TAG))) {
+                                    presentation = TelecomManager.PRESENTATION_PAYPHONE;
+                                }
+                            } catch (IllegalArgumentException e) {
+                                if (VDBG) Rlog.v(TAG, "payphone is missing.");
+                            }
+                            try {
+                                if (!TextUtils.isEmpty(matcher.group(SMS_UNKNOWN_TAG))) {
+                                    presentation = TelecomManager.PRESENTATION_UNKNOWN;
+                                }
+                            } catch (IllegalArgumentException e) {
+                                if (VDBG) Rlog.v(TAG, "unknown is missing.");
+                            }
+                            try {
+                                if (!TextUtils.isEmpty(matcher.group(SMS_UNAVAILABLE_TAG))) {
+                                    presentation = TelecomManager.PRESENTATION_UNAVAILABLE;
+                                }
+                            } catch (IllegalArgumentException e) {
+                                if (VDBG) Rlog.v(TAG, "unavailable is missing.");
+                            }
+                        }
+                        if (VDBG) Rlog.v(TAG, "presentation=" + presentation);
+                        createMissedIncomingCallEvent(missedCallTime, callerId, presentation);
                         result = true;
                         break;
                     }
@@ -240,7 +282,7 @@ public class MissedIncomingCallSmsFilter {
     private String[] splitCalls(String messageBody) {
         String[] messages = null;
         if (messageBody != null) {
-            messages = messageBody.split("\\n" + "\\n");
+            messages = messageBody.split("(\\n|\\s\\n)" + "(\\n|\\s\\n)");
             Rlog.d(TAG,
                     "splitTheMultipleCalls no of calls = " + ((messages != null) ? messages.length
                             : 0));
@@ -268,8 +310,10 @@ public class MissedIncomingCallSmsFilter {
      * @param missedCallTime the time of missed incoming call in. This is the EPOCH time in
      * milliseconds.
      * @param callerId The caller id of the missed incoming call.
+     * @param presentation The presentation requirements for the address.
      */
-    private void createMissedIncomingCallEvent(long missedCallTime, @Nullable String callerId) {
+    private void createMissedIncomingCallEvent(long missedCallTime, @Nullable String callerId,
+            int presentation) {
         TelecomManager tm = (TelecomManager) mPhone.getContext()
                 .getSystemService(Context.TELECOM_SERVICE);
 
@@ -285,6 +329,7 @@ public class MissedIncomingCallSmsFilter {
             // Need to use the Epoch time instead of the elapsed time because it's possible
             // the missed incoming call occurred before the phone boots up.
             bundle.putLong(TelecomManager.EXTRA_CALL_CREATED_EPOCH_TIME_MILLIS, missedCallTime);
+            bundle.putInt(TelecomManager.EXTRA_CALL_PRESENTATION, presentation);
             tm.addNewIncomingCall(makePstnPhoneAccountHandle(mPhone), bundle);
         }
     }
