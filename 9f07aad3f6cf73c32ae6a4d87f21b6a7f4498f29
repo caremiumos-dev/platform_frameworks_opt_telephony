@@ -187,6 +187,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d764a32_4160b0c1",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1254163
+      },
+      "writtenOn": "2023-05-12T23:08:27Z",
+      "side": 1,
+      "message": "can we remove check to show data activity on both subs whenever internet traffic is available? Restricted apps can request for internet pdn on nDDS sub.",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5121573_d4b88ecf",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
