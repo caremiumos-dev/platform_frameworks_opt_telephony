@@ -337,6 +337,24 @@
       "parentUuid": "fa803b43_2932e054",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1cc7dad_bf2cd0b7",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-05-15T20:46:52Z",
+      "side": 1,
+      "message": "Correct, it won\u0027t be perfect. There are some history behind LCE vs. LBW and probably we can discuss them separately.",
+      "parentUuid": "49f88a9c_67e925f6",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
