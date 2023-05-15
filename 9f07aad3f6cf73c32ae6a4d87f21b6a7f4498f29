@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1739f224_f58a3c66",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-05-15T08:12:15Z",
+      "side": 1,
+      "message": "for auto data switch, i think polling internet bandwidth from kernel is more accurate. it implies that module needs to cache the samples of each TAC of cell to determine which SUB\u0027s bandwidth is better than another one.\n\nhere only adjusting the thresholds isn\u0027t sufficient, because it\u0027s like, modem activity info can\u0027t provide Telephony from separating statistics of both SUB\u0027s",
+      "parentUuid": "8193d6c2_2785da40",
+      "range": {
+        "startLine": 331,
+        "startChar": 22,
+        "endLine": 331,
+        "endChar": 52
+      },
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d764a32_4160b0c1",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
