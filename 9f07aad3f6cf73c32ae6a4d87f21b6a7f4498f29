@@ -355,6 +355,24 @@
       "parentUuid": "49f88a9c_67e925f6",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d834af5_e2635773",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-05-18T04:06:45Z",
+      "side": 1,
+      "message": "yes, Kai, would you plz share some histories for LCE vs LBW?\nwhat\u0027s intention of using this kind of things?\nwhich modules are using this?\n\nWith Ling\u0027s change counting internet packets only per SUB even in dual internet circumstance（default data with internet + nonDefault with restricted internet), is it ok?",
+      "parentUuid": "a1cc7dad_bf2cd0b7",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
