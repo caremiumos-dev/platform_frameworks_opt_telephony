@@ -409,6 +409,24 @@
       "parentUuid": "0d834af5_e2635773",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d3bd4e1_7542bc48",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-05-19T02:42:24Z",
+      "side": 1,
+      "message": "Thanks Kai, correct.\nQCOM is going to support the dual internet traffic on both SUBs, that implies the restricted internet network is allowed to be established on non-default data sub with a high data performance. (AOSP still allows this).\nas you mentioned, in this case, seems problematic.",
+      "parentUuid": "2382bbe9_85d807d5",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
