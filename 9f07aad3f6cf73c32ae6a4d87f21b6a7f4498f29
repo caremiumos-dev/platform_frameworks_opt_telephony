@@ -252,6 +252,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90ed0a3f_906a5d33",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-05-19T02:26:45Z",
+      "side": 1,
+      "message": "We still need mScreenOn \u0026 mIsOnDefaultRoute.\n\nOK to remove mIsOnActiveData",
+      "parentUuid": "0d764a32_4160b0c1",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5121573_d4b88ecf",
         "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
         "patchSetId": 3
@@ -371,6 +389,24 @@
       "side": 1,
       "message": "yes, Kai, would you plz share some histories for LCE vs LBW?\nwhat\u0027s intention of using this kind of things?\nwhich modules are using this?\n\nWith Ling\u0027s change counting internet packets only per SUB even in dual internet circumstance（default data with internet + nonDefault with restricted internet), is it ok?",
       "parentUuid": "a1cc7dad_bf2cd0b7",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2382bbe9_85d807d5",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1567049
+      },
+      "writtenOn": "2023-05-19T02:26:45Z",
+      "side": 1,
+      "message": "LBW is used for Android bandwidth API: getLinkDownstreamBandwidthKbps(), getLinkUpstreamBandwidthKbps().\n\nLCE is not used for this API because\n1) sometimes it doesn\u0027t report values properly\n2) it only works in certain platforms.\n\nLCE is still available as the system API LinkCapacityEstimate through TelephonyCallback.\n\nLing\u0027s change is OK unless there are many cases that we have the significant traffic in both default data and non-default data at the same time.",
+      "parentUuid": "0d834af5_e2635773",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
