@@ -463,6 +463,24 @@
       "parentUuid": "c1f050a4_a8f09d78",
       "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdd044ae_b6bdf445",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-05-19T06:23:29Z",
+      "side": 1,
+      "message": "it is for LBW, besides, who is using LBW from link property? BLE (bluetooth)?",
+      "parentUuid": "a1a1efac_88d2f9d3",
+      "revId": "9f07aad3f6cf73c32ae6a4d87f21b6a7f4498f29",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
