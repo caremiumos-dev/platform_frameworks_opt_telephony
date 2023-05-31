@@ -120,8 +120,10 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     @Override
     public void notifyDataActivity(Phone sender) {
+        int phoneId = sender.getPhoneId();
         int subId = sender.getSubId();
-        mTelephonyRegistryMgr.notifyDataActivityChanged(subId, sender.getDataActivityState());
+        mTelephonyRegistryMgr.notifyDataActivityChanged(phoneId, subId,
+                sender.getDataActivityState());
     }
 
     @Override
