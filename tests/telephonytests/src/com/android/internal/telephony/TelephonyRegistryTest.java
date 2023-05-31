@@ -104,6 +104,7 @@ public class TelephonyRegistryTest extends TelephonyTest {
     private int mRadioPowerState = RADIO_POWER_UNAVAILABLE;
     private int mDataConnectionState = TelephonyManager.DATA_UNKNOWN;
     private int mNetworkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+    private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
     private List<PhysicalChannelConfig> mPhysicalChannelConfigs;
     private CellLocation mCellLocation;
     private List<CellInfo> mCellInfo;
@@ -176,7 +177,9 @@ public class TelephonyRegistryTest extends TelephonyTest {
             TelephonyCallback.CellLocationListener,
             TelephonyCallback.ServiceStateListener,
             TelephonyCallback.CellInfoListener,
-            TelephonyCallback.BarringInfoListener {
+            TelephonyCallback.BarringInfoListener,
+            TelephonyCallback.RegistrationFailedListener,
+            TelephonyCallback.DataActivityListener {
         // This class isn't mockable to get invocation counts because the IBinder is null and
         // crashes the TelephonyRegistry. Make a cheesy verify(times()) alternative.
         public AtomicInteger invocationCount = new AtomicInteger(0);
@@ -249,6 +252,20 @@ public class TelephonyRegistryTest extends TelephonyTest {
         public void onBarringInfoChanged(BarringInfo barringInfo) {
             invocationCount.incrementAndGet();
             mBarringInfo = barringInfo;
+        }
+
+        public void onRegistrationFailed(@android.annotation.NonNull CellIdentity cellIdentity,
+                @android.annotation.NonNull String chosenPlmn,
+                @NetworkRegistrationInfo.Domain int domain,
+                int causeCode, int additionalCauseCode) {
+            invocationCount.incrementAndGet();
+            mCellIdentityForRegiFail = cellIdentity;
+            mRegistrationFailReason = causeCode;
+        }
+
+        public void onDataActivity(@Annotation.DataActivityType int direction) {
+            invocationCount.incrementAndGet();
+            mDataActivity = direction;
         }
     }
 
@@ -1347,5 +1364,39 @@ public class TelephonyRegistryTest extends TelephonyTest {
         processAllMessages();
         assertEquals(2, mTelephonyCallback.invocationCount.get());
         assertEquals(mCellInfo, dummyCellInfo);
+    }
+
+    @Test
+    public void testNotifyDataActivityForSubscriber() {
+        final int subId = 1;
+        int[] events = {TelephonyCallback.EVENT_DATA_ACTIVITY_CHANGED};
+        doReturn(mMockSubInfo).when(mSubscriptionManager).getActiveSubscriptionInfo(anyInt());
+        doReturn(0/*slotIndex*/).when(mMockSubInfo).getSimSlotIndex();
+
+        assertEquals(TelephonyManager.DATA_ACTIVITY_NONE, mDataActivity);
+        mTelephonyRegistry.listenWithEventList(false, false, subId, mContext.getOpPackageName(),
+                mContext.getAttributionTag(), mTelephonyCallback.callback, events, true);
+
+        mTelephonyRegistry.notifyDataActivityForSubscriber(0/*phoneId*/, subId,
+                TelephonyManager.DATA_ACTIVITY_INOUT);
+        processAllMessages();
+        assertEquals(TelephonyManager.DATA_ACTIVITY_INOUT, mDataActivity);
+    }
+
+    @Test
+    public void testNotifyDataActivityForSubscriberForInvalidSubId() {
+        final int subId = INVALID_SUBSCRIPTION_ID;
+        int[] events = {TelephonyCallback.EVENT_DATA_ACTIVITY_CHANGED};
+        doReturn(mMockSubInfo).when(mSubscriptionManager).getActiveSubscriptionInfo(anyInt());
+        doReturn(0/*slotIndex*/).when(mMockSubInfo).getSimSlotIndex();
+
+        assertEquals(TelephonyManager.DATA_ACTIVITY_NONE, mDataActivity);
+        mTelephonyRegistry.listenWithEventList(false, false, subId, mContext.getOpPackageName(),
+                mContext.getAttributionTag(), mTelephonyCallback.callback, events, true);
+
+        mTelephonyRegistry.notifyDataActivityForSubscriber(0/*phoneId*/, subId,
+                TelephonyManager.DATA_ACTIVITY_OUT);
+        processAllMessages();
+        assertEquals(TelephonyManager.DATA_ACTIVITY_OUT, mDataActivity);
     }
 }
