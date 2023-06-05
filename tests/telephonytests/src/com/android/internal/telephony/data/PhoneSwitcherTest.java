@@ -27,6 +27,7 @@ import static android.telephony.ims.stub.ImsRegistrationImplBase.REGISTRATION_TE
 import static android.telephony.ims.stub.ImsRegistrationImplBase.REGISTRATION_TECH_IWLAN;
 import static android.telephony.ims.stub.ImsRegistrationImplBase.REGISTRATION_TECH_LTE;
 
+import static com.android.internal.telephony.data.AutoDataSwitchController.EVALUATION_REASON_VOICE_CALL_END;
 import static com.android.internal.telephony.data.PhoneSwitcher.ECBM_DEFAULT_DATA_SWITCH_BASE_TIME_MS;
 
 import static org.junit.Assert.assertEquals;
@@ -65,6 +66,8 @@ import android.telephony.PhoneCapability;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyDisplayInfo;
+import android.telephony.TelephonyManager;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -123,6 +126,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
     PhoneSwitcher.ImsRegTechProvider mMockImsRegTechProvider;
     private SubscriptionInfo mSubscriptionInfo;
     private ISub mMockedIsub;
+    private AutoDataSwitchController mAutoDataSwitchController;
 
     private PhoneSwitcher mPhoneSwitcherUT;
     private SubscriptionManager.OnSubscriptionsChangedListener mSubChangedListener;
@@ -137,6 +141,10 @@ public class PhoneSwitcherTest extends TelephonyTest {
     private int mActiveModemCount = 2;
     private int mSupportedModemCount = 2;
     private int mMaxDataAttachModemCount = 1;
+    private AutoDataSwitchController.AutoDataSwitchControllerCallback mAutoDataSwitchCallback;
+    private TelephonyDisplayInfo mTelephonyDisplayInfo = new TelephonyDisplayInfo(
+            TelephonyManager.NETWORK_TYPE_NR,
+            TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NONE, false);
 
     @Before
     public void setUp() throws Exception {
@@ -158,6 +166,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mMockImsRegTechProvider = mock(PhoneSwitcher.ImsRegTechProvider.class);
         mSubscriptionInfo = mock(SubscriptionInfo.class);
         mMockedIsub = mock(ISub.class);
+        mAutoDataSwitchController = mock(AutoDataSwitchController.class);
 
         PhoneCapability phoneCapability = new PhoneCapability(1, 1, null, false, new int[0]);
         doReturn(phoneCapability).when(mPhoneConfigurationManager).getCurrentPhoneCapability();
@@ -179,6 +188,8 @@ public class PhoneSwitcherTest extends TelephonyTest {
         doReturn(mMockedIsub).when(mIBinder).queryLocalInterface(anyString());
         doReturn(mPhone).when(mPhone).getImsPhone();
         mServiceManagerMockedServices.put("isub", mIBinder);
+
+        doReturn(mTelephonyDisplayInfo).when(mDisplayInfoController).getTelephonyDisplayInfo();
     }
 
     @After
@@ -187,6 +198,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mSubChangedListener = null;
         mConnectivityManager = null;
         mNetworkProviderMessenger = null;
+        mTelephonyDisplayInfo = null;
         super.tearDown();
     }
 
@@ -374,20 +386,8 @@ public class PhoneSwitcherTest extends TelephonyTest {
     }
 
     /** Test Data Auto Switch **/
-
-    /**
-     * Trigger conditions
-     * 1. service state changes
-     * 2. data setting changes
-     *      - user toggle data
-     *      - user toggle auto switch feature
-     * 3. default network changes
-     *      - current network lost
-     *      - network become active on non-cellular network
-     * 4. subscription changes
-     *      - slot/sub mapping changes
-     */
     @Test
+<<<<<<< HEAD
     @SmallTest
     public void testAutoDataSwitchCancelScenario_onPrimary() throws Exception {
         initialize();
@@ -563,6 +563,9 @@ public class PhoneSwitcherTest extends TelephonyTest {
     @Test
     @SmallTest
     public void testAutoDataSwitchRetry() throws Exception {
+=======
+    public void testAutoDataSwitch_retry() throws Exception {
+>>>>>>> 410eaf7a15 (Separate auto switch logic from phone switcher)
         initialize();
         // Phone 0 has sub 1, phone 1 has sub 2.
         // Sub 1 is default data sub.
@@ -570,31 +573,37 @@ public class PhoneSwitcherTest extends TelephonyTest {
         setSlotIndexToSubId(1, 2);
         setDefaultDataSubId(1);
 
-        prepareIdealAutoSwitchCondition();
+        mAutoDataSwitchCallback.onRequireValidation(1/*Phone2*/, true);
         processAllFutureMessages();
 
-        // Verify attempting to switch
+        // Mock validation failed, expect retry attempt
         verify(mCellularNetworkValidator).validate(eq(2), anyLong(), eq(false),
                 eq(mPhoneSwitcherUT.mValidationCallback));
-        mPhoneSwitcherUT.mValidationCallback.onValidationDone(false, 2);
+        mPhoneSwitcherUT.mValidationCallback.onValidationDone(false, 2/*Phone2*/);
         processAllMessages();
 
-        assertTrue(mPhoneSwitcherUT.hasMessages(EVENT_EVALUATE_AUTO_SWITCH));
+        verify(mAutoDataSwitchController).evaluateRetryOnValidationFailed();
 
+        // Test clear failed count upon switch succeeded.
+        mAutoDataSwitchCallback.onRequireValidation(1/*Phone2*/, true);
         processAllFutureMessages();
-        mPhoneSwitcherUT.mValidationCallback.onValidationDone(true, 2);
-        processAllFutureMessages();
+        mPhoneSwitcherUT.mValidationCallback.onValidationDone(true, 2/*Phone2*/);
+        processAllMessages();
 
-        assertEquals(2, mPhoneSwitcherUT.getActiveDataSubId());
+        verify(mAutoDataSwitchController).resetFailedCount();
     }
 
     @Test
+<<<<<<< HEAD
     @SmallTest
     public void testAutoDataSwitchSetNotification() throws Exception {
         SubscriptionInfo mockedInfo = mock(SubscriptionInfo.class);
         doReturn(false).when(mockedInfo).isOpportunistic();
         doReturn(mockedInfo).when(mSubscriptionController).getSubscriptionInfo(anyInt());
         doReturn(mockedInfo).when(mSubscriptionManagerService).getSubscriptionInfo(anyInt());
+=======
+    public void testAutoDataSwitch_setNotification() throws Exception {
+>>>>>>> 410eaf7a15 (Separate auto switch logic from phone switcher)
         initialize();
         // Phone 0 has sub 1, phone 1 has sub 2.
         // Sub 1 is default data sub.
@@ -602,6 +611,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         setSlotIndexToSubId(1, 2);
         setDefaultDataSubId(1);
 
+<<<<<<< HEAD
         testAutoSwitchToSecondarySucceed();
         clearInvocations(mSubscriptionController);
         clearInvocations(mSubscriptionManagerService);
@@ -625,15 +635,60 @@ public class PhoneSwitcherTest extends TelephonyTest {
         } else {
             verify(mSubscriptionController, never()).getSubscriptionInfo(1);
         }
-
-        Message.obtain(mPhoneSwitcherUT, EVENT_MODEM_COMMAND_DONE, new AsyncResult(1, null,  null))
-                .sendToTarget();
+=======
+        // Verify no notification check if switch failed.
+        Message.obtain(mPhoneSwitcherUT, EVENT_MODEM_COMMAND_DONE, new AsyncResult(1/*phoneId*/,
+                null, new Throwable())).sendToTarget();
         processAllMessages();
+        verify(mAutoDataSwitchController, never()).displayAutoDataSwitchNotification(
+                anyInt(), anyBoolean());
+>>>>>>> 410eaf7a15 (Separate auto switch logic from phone switcher)
+
+        // Verify for switch not due to auto
+        Message.obtain(mPhoneSwitcherUT, EVENT_MODEM_COMMAND_DONE, new AsyncResult(1/*phoneId*/,
+                null, null)).sendToTarget();
+        processAllMessages();
+<<<<<<< HEAD
         if (isSubscriptionManagerServiceEnabled()) {
             verify(mSubscriptionManagerService, never()).getSubscriptionInfo(2);
         } else {
             verify(mSubscriptionController, never()).getSubscriptionInfo(2);
         }
+=======
+        verify(mAutoDataSwitchController).displayAutoDataSwitchNotification(1/*phoneId*/, false);
+
+        // Verify for switch due to auto
+        mAutoDataSwitchCallback.onRequireValidation(1/*Phone2*/, false);
+        processAllMessages();
+        mPhoneSwitcherUT.mValidationCallback.onValidationDone(true, 2/*Phone2*/);
+        Message.obtain(mPhoneSwitcherUT, EVENT_MODEM_COMMAND_DONE, new AsyncResult(1/*phoneId*/,
+                null, null)).sendToTarget();
+        processAllMessages();
+
+        verify(mAutoDataSwitchController).displayAutoDataSwitchNotification(1/*phoneId*/, true);
+    }
+
+    @Test
+    @SmallTest
+    public void testAutoDataSwitch_exemptPingTest() throws Exception {
+        initialize();
+
+        // Phone 0 has sub 1, phone 1 has sub 2.
+        // Sub 1 is default data sub.
+        setSlotIndexToSubId(0, 1);
+        setSlotIndexToSubId(1, 2);
+
+        //Attempting to switch to nDDS, switch even if validation failed
+        mAutoDataSwitchCallback.onRequireValidation(1/*Phone2*/, false);
+        processAllFutureMessages();
+
+        verify(mCellularNetworkValidator).validate(eq(2), anyLong(), eq(false),
+                eq(mPhoneSwitcherUT.mValidationCallback));
+        mPhoneSwitcherUT.mValidationCallback.onValidationDone(false, 2/*Phone2*/);
+        processAllMessages();
+
+        assertEquals(2, mPhoneSwitcherUT.getActiveDataSubId()); // switch succeeds
+>>>>>>> 410eaf7a15 (Separate auto switch logic from phone switcher)
     }
 
     /**
@@ -1154,7 +1209,6 @@ public class PhoneSwitcherTest extends TelephonyTest {
     }
 
     @Test
-    @SmallTest
     public void testNonDefaultDataPhoneInCall() throws Exception {
         doReturn(true).when(mMockRadioConfig).isSetPreferredDataCommandSupported();
         initialize();
@@ -1204,11 +1258,9 @@ public class PhoneSwitcherTest extends TelephonyTest {
 
         // Phone(DDS) call ended.
         // Honor auto data switch's suggestion: if DDS is OOS, auto switch to Phone2(nDDS).
-        serviceStateChanged(1, NetworkRegistrationInfo.REGISTRATION_STATE_HOME);
-        serviceStateChanged(0, NetworkRegistrationInfo
-                .REGISTRATION_STATE_NOT_REGISTERED_OR_SEARCHING);
-        doReturn(null).when(mConnectivityManager).getNetworkCapabilities(any());
         notifyPhoneAsInactive(mPhone);
+        verify(mAutoDataSwitchController).evaluateAutoDataSwitch(EVALUATION_REASON_VOICE_CALL_END);
+        mAutoDataSwitchCallback.onRequireValidation(1 /*Phone2*/, true);
 
         // verify immediately switch back to DDS upon call ends
         verify(mMockRadioConfig).setPreferredDataModem(eq(0), any());
@@ -1972,11 +2024,22 @@ public class PhoneSwitcherTest extends TelephonyTest {
                 (Map<Integer, DataSettingsManager.DataSettingsManagerCallback>)
                         field.get(mPhoneSwitcherUT);
 
+<<<<<<< HEAD
         int deviceConfigValue = 10000;
         field = PhoneSwitcher.class.getDeclaredField(
                 "mAutoDataSwitchAvailabilityStabilityTimeThreshold");
         field.setAccessible(true);
         field.setInt(mPhoneSwitcherUT, deviceConfigValue);
+=======
+        field = PhoneSwitcher.class.getDeclaredField("mAutoDataSwitchCallback");
+        field.setAccessible(true);
+        mAutoDataSwitchCallback = (AutoDataSwitchController.AutoDataSwitchControllerCallback)
+                field.get(mPhoneSwitcherUT);
+
+        replaceInstance(PhoneSwitcher.class, "mAutoDataSwitchController", mPhoneSwitcherUT,
+                mAutoDataSwitchController);
+        processAllMessages();
+>>>>>>> 410eaf7a15 (Separate auto switch logic from phone switcher)
 
         verify(mTelephonyRegistryManager).addOnSubscriptionsChangedListener(any(), any());
     }
@@ -1992,6 +2055,9 @@ public class PhoneSwitcherTest extends TelephonyTest {
         doReturn(true).when(mPhone2).isUserDataEnabled();
         doReturn(mDataSettingsManager2).when(mPhone2).getDataSettingsManager();
         doReturn(mSST2).when(mPhone2).getServiceStateTracker();
+        doReturn(mDisplayInfoController).when(mPhone2).getDisplayInfoController();
+        doReturn(mSignalStrengthController).when(mPhone2).getSignalStrengthController();
+        doReturn(mSignalStrength).when(mPhone2).getSignalStrength();
         for (int i = 0; i < supportedModemCount; i++) {
             mSlotIndexToSubId[i] = new int[1];
             mSlotIndexToSubId[i][0] = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -2144,12 +2210,9 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mDefaultDataSub = defaultDataSub;
         doReturn(mDefaultDataSub).when(mSubscriptionController).getDefaultDataSubId();
         doReturn(mDefaultDataSub).when(mSubscriptionManagerService).getDefaultDataSubId();
-        if (defaultDataSub == 1) {
-            doReturn(true).when(mPhone).isUserDataEnabled();
-            doReturn(false).when(mPhone2).isUserDataEnabled();
-        } else {
-            doReturn(false).when(mPhone).isUserDataEnabled();
-            doReturn(true).when(mPhone2).isUserDataEnabled();
+        for (Phone phone : mPhones) {
+            doAnswer(invocation -> phone.getSubId() == mDefaultDataSub)
+                    .when(phone).isUserDataEnabled();
         }
         sendDefaultDataSubChanged();
     }
