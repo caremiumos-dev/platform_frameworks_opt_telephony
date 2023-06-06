@@ -66,6 +66,7 @@ import android.os.ResultReceiver;
 import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.sysprop.TelephonyProperties;
+import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CarrierConfigManager;
 import android.telephony.NetworkRegistrationInfo;
@@ -771,7 +772,7 @@ public class ImsPhone extends ImsPhoneBase {
             try {
                 if (getRingingCall().getState() != ImsPhoneCall.State.IDLE) {
                     if (DBG) logd("MmiCode 2: accept ringing call");
-                    mCT.acceptCall(ImsCallProfile.CALL_TYPE_VOICE);
+                    mCT.acceptCall(VideoProfile.STATE_AUDIO_ONLY);
                 } else if (getBackgroundCall().getState() == ImsPhoneCall.State.HOLDING) {
                     // If there's an active ongoing call as well, hold it and the background one
                     // should automatically unhold. Otherwise just unhold the background call.
