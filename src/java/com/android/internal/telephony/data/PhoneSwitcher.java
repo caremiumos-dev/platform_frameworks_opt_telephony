@@ -218,8 +218,6 @@ public class PhoneSwitcher extends Handler {
     private int mPendingSwitchSubId = INVALID_SUBSCRIPTION_ID;
     /** The reason for the last time changing preferred data sub **/
     private int mLastSwitchPreferredDataReason = -1;
-    /** {@code true} if we've displayed the notification the first time auto switch occurs **/
-    private boolean mDisplayedAutoSwitchNotification = false;
     private boolean mPendingSwitchNeedValidation;
     @VisibleForTesting
     public final CellularNetworkValidator.ValidationCallback mValidationCallback =
@@ -356,11 +354,18 @@ public class PhoneSwitcher extends Handler {
     // Default timeout value of network validation in millisecond.
     private final static int DEFAULT_VALIDATION_EXPIRATION_TIME = 2000;
 
+    /** Controller that tracks {@link TelephonyManager#MOBILE_DATA_POLICY_AUTO_DATA_SWITCH} */
+    @NonNull private final AutoDataSwitchController mAutoDataSwitchController;
+    /** Callback to deal with requests made by the auto data switch controller. */
+    @NonNull private final AutoDataSwitchController.AutoDataSwitchControllerCallback
+            mAutoDataSwitchCallback;
+
     private ConnectivityManager mConnectivityManager;
     private int mImsRegistrationTech = REGISTRATION_TECH_NONE;
 
     private List<Set<CommandException.Error>> mCurrentDdsSwitchFailure;
 
+<<<<<<< HEAD
     /**
      * Time threshold in ms to define a internet connection status to be stable(e.g. out of service,
      * in service, wifi is the default active network.etc), while -1 indicates auto switch
@@ -374,6 +379,8 @@ public class PhoneSwitcher extends Handler {
     private int mAutoDataSwitchValidationMaxRetry =
             DataConfigManager.DEFAULT_AUTO_DATA_SWITCH_MAX_RETRY;
 
+=======
+>>>>>>> 6732b1ff50 (Auto switch base on RAT and SignalStrength)
     /** Data settings manager callback. Key is the phone id. */
     private final @NonNull Map<Integer, DataSettingsManagerCallback> mDataSettingsManagerCallbacks =
             new ArrayMap<>();
@@ -697,6 +704,7 @@ public class PhoneSwitcher extends Handler {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case EVENT_SUBSCRIPTION_CHANGED: {
+                mAutoDataSwitchController.notifySubscriptionsChanged();
                 onEvaluate(REQUESTS_UNCHANGED, "subscription changed");
                 break;
             }
@@ -2143,7 +2151,6 @@ public class PhoneSwitcher extends Handler {
         pw.println("mAutoDataSwitchValidationMaxRetry=" + mAutoDataSwitchValidationMaxRetry);
         pw.println("mLastSwitchPreferredDataReason="
                 + switchReasonToString(mLastSwitchPreferredDataReason));
-        pw.println("mDisplayedAutoSwitchNotification=" + mDisplayedAutoSwitchNotification);
         pw.println("Local logs:");
         pw.increaseIndent();
         mLocalLog.dump(fd, pw, args);
