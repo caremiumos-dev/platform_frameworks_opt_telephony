@@ -1871,10 +1871,7 @@ public class DataNetworkController extends Handler {
                     && dataNetwork.isEmergencySupl()) {
                 // Check if it's SUPL during emergency call.
                 evaluation.addDataAllowedReason(DataAllowedReason.EMERGENCY_SUPL);
-            } else if (!dataNetwork.getNetworkCapabilities().hasCapability(
-                    NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
-                    && !dataNetwork.hasNetworkCapabilityInNetworkRequests(
-                            NetworkCapabilities.NET_CAPABILITY_DUN)) {
+            } else if (dataNetwork.isRestrictedRequestAttached()) {
                 // Check if request is restricted and there are no DUN network requests attached to
                 // the network.
                 evaluation.addDataAllowedReason(DataAllowedReason.RESTRICTED_REQUEST);
