@@ -40,6 +40,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyFrameworkInitializer;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.subscription.SubscriptionManagerService;
@@ -999,6 +1000,7 @@ public class SmsController extends ISmsImplBase {
             long identity = Binder.clearCallingIdentity();
             try {
                 smscAddr =  iccSmsIntMgr.getSmscAddressFromIccEf(callingPackage);
+                Log.d("FdnUtils", "[isNumberBlockedByFDN] smscAddr:" + smscAddr);
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
