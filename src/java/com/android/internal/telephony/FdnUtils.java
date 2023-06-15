@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * designed as per 3GPP 22.101.
  */
 public class FdnUtils {
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
     private static final String LOG_TAG = FdnUtils.class.getSimpleName();
 
     /**
@@ -125,6 +125,10 @@ public class FdnUtils {
             Rlog.w(LOG_TAG, "isFDN: could not parse dialStr");
         }
 
+        Rlog.d(LOG_TAG, "isFDN: dialStr:" + dialStr);
+        Rlog.d(LOG_TAG, "isFDN: dialStrE164:" + dialStrE164);
+        Rlog.d(LOG_TAG, "isFDN: dialStrNational:" + dialStrNational);
+
         /**
          * Returns true if dialStrE164 or dialStrNational or dialStr starts with fdnNumber
          * E.g.1: returns true if fdnNumber="123" and dialStr="12345"
@@ -132,6 +136,7 @@ public class FdnUtils {
          */
         for (AdnRecord fdn: fdnList) {
             String fdnNumber = fdn.getNumber();
+            Rlog.d(LOG_TAG, "isFDN: fdnNumber:" + fdnNumber);
             if (TextUtils.isEmpty(fdnNumber)) {
                 continue;
             }
