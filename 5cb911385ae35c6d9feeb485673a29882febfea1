@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "245e856b_ebd7c69d",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1887141
+      },
+      "writtenOn": "2023-06-17T03:55:21Z",
+      "side": 1,
+      "message": "need to add comment like \"regardless of weather the ringing call is voice or video, using VideoProfile.STATE_AUDIO_ONLY parameter to set call type ImsCallProfile.CALL_TYPE_VOICE in ImsPhoneCallTracker.",
+      "range": {
+        "startLine": 775,
+        "startChar": 20,
+        "endLine": 775,
+        "endChar": 66
+      },
+      "revId": "5cb911385ae35c6d9feeb485673a29882febfea1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
