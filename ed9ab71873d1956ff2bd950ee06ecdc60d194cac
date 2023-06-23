@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06aaba19_b6c44eef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1887141
+      },
+      "writtenOn": "2023-06-23T08:53:41Z",
+      "side": 1,
+      "message": "You need to update test case.\n\nPlease check pre-submit error message.",
+      "revId": "ed9ab71873d1956ff2bd950ee06ecdc60d194cac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
