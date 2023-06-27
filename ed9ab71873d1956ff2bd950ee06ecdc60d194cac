@@ -16,6 +16,24 @@
       "message": "You need to update test case.\n\nPlease check pre-submit error message.",
       "revId": "ed9ab71873d1956ff2bd950ee06ecdc60d194cac",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a97802c_ac2b054f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1277460
+      },
+      "writtenOn": "2023-06-27T19:20:25Z",
+      "side": 1,
+      "message": "We can\u0027t check which testcase failed: would it be possible to share which testcase is failing and the relevant logs?",
+      "parentUuid": "06aaba19_b6c44eef",
+      "revId": "ed9ab71873d1956ff2bd950ee06ecdc60d194cac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
