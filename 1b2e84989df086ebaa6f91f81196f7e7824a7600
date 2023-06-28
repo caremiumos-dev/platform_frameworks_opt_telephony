@@ -22,6 +22,30 @@
       },
       "revId": "1b2e84989df086ebaa6f91f81196f7e7824a7600",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fccea992_06221f94",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetworkController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1874,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-06-28T01:36:42Z",
+      "side": 1,
+      "message": "When nDDS mobile data is on, data network has NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED appended, so it doesn\u0027t work.\n\nlet\u0027s say on qcom mainline there is no mutual dependence between both mobile data options as the earlier some VT requirements, so by default both mobile data options are on.",
+      "parentUuid": "1a33fb1f_4762e35c",
+      "range": {
+        "startLine": 1874,
+        "startChar": 0,
+        "endLine": 1874,
+        "endChar": 67
+      },
+      "revId": "1b2e84989df086ebaa6f91f81196f7e7824a7600",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

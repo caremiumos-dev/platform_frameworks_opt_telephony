@@ -22,6 +22,30 @@
       },
       "revId": "13cf841a82732af95ca15579886d3f4afb07fea5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea98ea0e_0e016408",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2023-06-28T01:36:42Z",
+      "side": 0,
+      "message": "Hi Jack,\n\non qcom mainline, nDDS mobile data is on like on DDS sub, so generally it wont run this block except that we turn off nDDS mobile actively.",
+      "parentUuid": "b5417741_d75339ad",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2029,
+        "endChar": 92
+      },
+      "revId": "13cf841a82732af95ca15579886d3f4afb07fea5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
