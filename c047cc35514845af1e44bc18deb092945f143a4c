@@ -16,6 +16,24 @@
       "message": "This does not give interfaces with RESTRICTED capability. but data can be transferred with resticted internet interface also so can we add that as well?\n\nhttps://cs.android.com/android/platform/superproject/main/+/refs/heads/main:frameworks/opt/telephony/src/java/com/android/internal/telephony/data/DataNetwork.java;drc\u003dedfca32841e453b6f38a91f60fc22cd1c4884453;l\u003d3103?q\u003disInternetSupported",
       "revId": "c047cc35514845af1e44bc18deb092945f143a4c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c70aea4_b5297a86",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1929200
+      },
+      "writtenOn": "2023-07-07T18:48:02Z",
+      "side": 1,
+      "message": "We can remove the capabilities check in `isInternetSupported`, but then we need to change the callback from `onInternetDataNetworkConnected`/`onInternetDataNetworkDisconnected` to `onInternetDataNetworkChanged` to account for the scenario where \u003e1 internet connection alive. Will make that change a prerequisite.",
+      "parentUuid": "be8426dd_dbe91267",
+      "revId": "c047cc35514845af1e44bc18deb092945f143a4c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
