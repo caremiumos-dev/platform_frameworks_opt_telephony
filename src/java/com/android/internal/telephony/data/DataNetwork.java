@@ -1683,6 +1683,32 @@ public class DataNetwork extends StateMachine {
             mDataNetworkCallback.invokeFromExecutor(() -> mDataNetworkCallback
                     .onAttachFailed(DataNetwork.this, failedList));
         }
+        if (mDataAllowedReason == DataAllowedReason.RESTRICTED_REQUEST
+                && requestList.stream().anyMatch(r -> r.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED))) {
+            mDataAllowedReason = DataAllowedReason.NORMAL;
+            updateNetworkCapabilities();
+        }
+    }
+
+    public boolean isRestrictedRequestAttached() {
+        if (mAttachedNetworkRequestList.isEmpty()) {
+            return false;
+        }
+        
+        if (mAttachedNetworkRequestList.stream().anyMatch(r -> r.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED))) {
+            return false;
+        }
+        return mAttachedNetworkRequestList.stream().allMatch(this::isValidRestrictedRequest)
+                && mAttachedNetworkRequestList.stream().anyMatch(r -> !r.hasCapability(
+                NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                && !r.hasCapability(NetworkCapabilities.NET_CAPABILITY_DUN));
+    }
+
+    private boolean isValidRestrictedRequest(@NonNull TelephonyNetworkRequest networkRequest) {
+        return !(networkRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_DUN)
+                || networkRequest.hasCapability(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE));
     }
 
     /**
@@ -2021,13 +2047,7 @@ public class DataNetwork extends StateMachine {
         if (!mDataNetworkController.getDataSettingsManager().isDataEnabled()
                 || (mPhone.getServiceState().getDataRoaming()
                 && !mDataNetworkController.getDataSettingsManager().isDataRoamingEnabled())) {
-            // If data is allowed because the request is a restricted network request, we need
-            // to mark the network as restricted when data is disabled or data roaming is disabled
-            // and the device is roaming. If we don't do that, non-privileged apps will be able
-            // to use this network when data is disabled.
-            if (mDataAllowedReason == DataAllowedReason.RESTRICTED_REQUEST) {
-                builder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
-            } else if (mDataAllowedReason == DataAllowedReason.UNMETERED_USAGE
+            if (mDataAllowedReason == DataAllowedReason.UNMETERED_USAGE
                     || mDataAllowedReason == DataAllowedReason.MMS_REQUEST
                     || mDataAllowedReason == DataAllowedReason.EMERGENCY_SUPL) {
                 // If data is allowed due to unmetered usage, or MMS always-allowed, we need to
@@ -2053,6 +2073,9 @@ public class DataNetwork extends StateMachine {
         if (NetworkCapabilitiesUtils.inferRestrictedCapability(builder.build())
                 || (vcnPolicy != null && !vcnPolicy.getNetworkCapabilities()
                         .hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED))) {
+            builder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
+        } else if (mDataAllowedReason == DataAllowedReason.RESTRICTED_REQUEST) {
+            // Mark network as restricted always for restricted request.
             builder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         }
 
