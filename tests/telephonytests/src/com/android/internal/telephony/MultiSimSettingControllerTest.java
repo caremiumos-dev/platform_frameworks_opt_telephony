@@ -41,6 +41,7 @@ import static org.mockito.Mockito.verify;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncResult;
 import android.os.HandlerThread;
 import android.os.ParcelUuid;
 import android.os.PersistableBundle;
@@ -56,6 +57,7 @@ import android.testing.TestableLooper;
 import androidx.test.InstrumentationRegistry;
 
 import com.android.internal.telephony.data.DataSettingsManager;
+import com.android.internal.telephony.test.SimulatedCommands;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -241,9 +243,18 @@ public class MultiSimSettingControllerTest extends TelephonyTest {
 
     @Test
     public void testSubInfoChangeAfterRadioUnavailable() throws Exception {
+        int phone1SubId = 1;
+        int phone2SubId = 2;
+        // Mock DSDS, mock Phone 2
+        SimulatedCommands simulatedCommands2 = mock(SimulatedCommands.class);
+        mPhone2.mCi = simulatedCommands2;
+        doReturn(mDataSettingsManagerMock2).when(mPhone2).getDataSettingsManager();
+        mPhones = new Phone[]{mPhone, mPhone2};
+        replaceInstance(PhoneFactory.class, "sPhones", null, mPhones);
+        // Load carrier config for all subs
         mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
-        mMultiSimSettingControllerUT.notifyCarrierConfigChanged(0, 1);
-        mMultiSimSettingControllerUT.notifyCarrierConfigChanged(1, 2);
+        sendCarrierConfigChanged(0, phone1SubId);
+        sendCarrierConfigChanged(1, phone2SubId);
         processAllMessages();
 
         // Ensure all subscription loaded only updates state once
@@ -254,30 +265,30 @@ public class MultiSimSettingControllerTest extends TelephonyTest {
         verify(mSubControllerMock, never()).setDefaultVoiceSubId(anyInt());
         verify(mSubControllerMock, never()).setDefaultSmsSubId(anyInt());
 
-        // Notify radio unavailable.
+        // DSDS -> single active modem, radio available on phone 0 but unavailable on phone 1
+        doReturn(TelephonyManager.RADIO_POWER_UNAVAILABLE).when(simulatedCommands2).getRadioState();
+        markSubscriptionInactive(phone2SubId);
+        AsyncResult result = new AsyncResult(null, 1/*activeModemCount*/, null);
+        clearInvocations(mSubscriptionManagerService);
+        mMultiSimSettingControllerUT.obtainMessage(
+                MultiSimSettingController.EVENT_MULTI_SIM_CONFIG_CHANGED, result).sendToTarget();
+        mMultiSimSettingControllerUT.notifySubscriptionInfoChanged();
+        processAllMessages();
+
+        // Should still set defaults to the only remaining sub
+        verify(mSubscriptionManagerService).setDefaultDataSubId(phone1SubId);
+        verify(mSubscriptionManagerService).setDefaultVoiceSubId(phone1SubId);
+        verify(mSubscriptionManagerService).setDefaultSmsSubId(phone1SubId);
+
+        // Notify radio unavailable on all subs.
         replaceInstance(BaseCommands.class, "mState", mSimulatedCommands,
                 TelephonyManager.RADIO_POWER_UNAVAILABLE);
         mMultiSimSettingControllerUT.obtainMessage(
                 MultiSimSettingController.EVENT_RADIO_STATE_CHANGED).sendToTarget();
 
         // Mark all subs as inactive.
-        doReturn(false).when(mSubControllerMock).isActiveSubId(1);
-        doReturn(new SubscriptionInfo.Builder().setId(1).setSimSlotIndex(-1).build())
-                .when(mSubControllerMock).getSubscriptionInfo(1);
-        doReturn(false).when(mSubControllerMock).isActiveSubId(2);
-        doReturn(new SubscriptionInfo.Builder().setId(2).setSimSlotIndex(-1).build())
-                .when(mSubControllerMock).getSubscriptionInfo(2);
-        doReturn(SubscriptionManager.INVALID_PHONE_INDEX).when(mSubControllerMock).getPhoneId(1);
-        doReturn(SubscriptionManager.INVALID_PHONE_INDEX).when(mMockedIsub).getPhoneId(1);
-        doReturn(SubscriptionManager.INVALID_PHONE_INDEX).when(mSubControllerMock).getPhoneId(2);
-        doReturn(SubscriptionManager.INVALID_PHONE_INDEX).when(mMockedIsub).getPhoneId(2);
-        doReturn(SubscriptionManager.INVALID_SUBSCRIPTION_ID).when(mPhoneMock1).getSubId();
-        doReturn(SubscriptionManager.INVALID_SUBSCRIPTION_ID).when(mPhoneMock2).getSubId();
-        List<SubscriptionInfo> infoList = new ArrayList<>();
-        doReturn(infoList).when(mSubControllerMock).getActiveSubscriptionInfoList(anyString(),
-                nullable(String.class));
-        doReturn(new int[]{}).when(mSubControllerMock).getActiveSubIdList(anyBoolean());
-        clearInvocations(mSubControllerMock);
+        markSubscriptionInactive(1);
+        clearInvocations(mSubscriptionManagerService);
 
         // The below sub info change should be ignored.
         mMultiSimSettingControllerUT.notifySubscriptionInfoChanged();
