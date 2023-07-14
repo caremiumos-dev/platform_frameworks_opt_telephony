@@ -83,6 +83,7 @@ import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.MultiSimSettingController;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.ProxyController;
 import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyPermissions;
@@ -2660,6 +2661,8 @@ public class SubscriptionManagerService extends ISub.Stub {
         final long token = Binder.clearCallingIdentity();
         try {
             if (mDefaultDataSubId.set(subId)) {
+                remapRafIfApplicable();
+
                 MultiSimSettingController.getInstance().notifyDefaultDataSubChanged();
 
                 Intent intent = new Intent(
@@ -2673,6 +2676,22 @@ public class SubscriptionManagerService extends ISub.Stub {
         } finally {
             Binder.restoreCallingIdentity(token);
         }
+    }
+
+    /**
+     * Remap Radio Access Family if needed.
+     */
+    private void remapRafIfApplicable() {
+        boolean applicable = mSlotIndexToSubId.containsValue(getDefaultDataSubId());
+        if (!applicable) return;
+        ProxyController proxyController = ProxyController.getInstance();
+        RadioAccessFamily[] rafs = new RadioAccessFamily[mTelephonyManager.getActiveModemCount()];
+        for (int phoneId = 0; phoneId < rafs.length; phoneId++) {
+            int raf = mSlotIndexToSubId.get(phoneId) == getDefaultDataSubId()
+                    ? proxyController.getMaxRafSupported() : proxyController.getMinRafSupported();
+            rafs[phoneId] = new RadioAccessFamily(phoneId, raf);
+        }
+        proxyController.setRadioCapability(rafs);
     }
 
     /**
