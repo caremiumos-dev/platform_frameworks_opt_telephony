@@ -589,6 +589,7 @@ public class SubscriptionManagerServiceTest extends TelephonyTest {
         mContextFixture.addCallingOrSelfPermission(Manifest.permission.MODIFY_PHONE_STATE);
 
         mSubscriptionManagerServiceUT.setDefaultDataSubId(1);
+        verify(mProxyController).setRadioCapability(any());
 
         assertThat(Settings.Global.getInt(mContext.getContentResolver(),
                         Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION)).isEqualTo(1);
