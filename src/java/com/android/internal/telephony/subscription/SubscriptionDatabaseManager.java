@@ -1815,14 +1815,13 @@ public class SubscriptionDatabaseManager extends Handler {
      * Load the database from content provider to the cache.
      */
     private void loadDatabaseInternal() {
-        log("loadDatabaseInternal");
+        logl("loadDatabaseInternal");
         try (Cursor cursor = mContext.getContentResolver().query(
                 SimInfo.CONTENT_URI, null, null, null, null)) {
             mReadWriteLock.writeLock().lock();
             try {
                 Map<Integer, SubscriptionInfoInternal> newAllSubscriptionInfoInternalCache =
                         new HashMap<>();
-                boolean changed = false;
                 while (cursor != null && cursor.moveToNext()) {
                     SubscriptionInfoInternal subInfo = createSubscriptionInfoFromCursor(cursor);
                     newAllSubscriptionInfoInternalCache.put(subInfo.getSubscriptionId(), subInfo);
@@ -1830,19 +1829,16 @@ public class SubscriptionDatabaseManager extends Handler {
                             .get(subInfo.getSubscriptionId()), subInfo)) {
                         mCallback.invokeFromExecutor(() -> mCallback.onSubscriptionChanged(
                                 subInfo.getSubscriptionId()));
-                        changed = true;
                     }
                 }
 
-                if (changed) {
-                    mAllSubscriptionInfoInternalCache.clear();
-                    mAllSubscriptionInfoInternalCache.putAll(newAllSubscriptionInfoInternalCache);
+                mAllSubscriptionInfoInternalCache.clear();
+                mAllSubscriptionInfoInternalCache.putAll(newAllSubscriptionInfoInternalCache);
 
-                    logl("Loaded " + mAllSubscriptionInfoInternalCache.size()
-                            + " records from the subscription database.");
-                    mAllSubscriptionInfoInternalCache.forEach(
-                            (subId, subInfo) -> log("  " + subInfo.toString()));
-                }
+                logl("Loaded " + mAllSubscriptionInfoInternalCache.size()
+                        + " records from the subscription database.");
+                mAllSubscriptionInfoInternalCache.forEach(
+                        (subId, subInfo) -> log("  " + subInfo.toString()));
             } finally {
                 mReadWriteLock.writeLock().unlock();
             }

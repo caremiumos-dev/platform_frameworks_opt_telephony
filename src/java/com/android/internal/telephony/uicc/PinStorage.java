@@ -54,7 +54,6 @@ import android.telephony.CarrierConfigManager;
 import android.telephony.TelephonyManager;
 import android.telephony.TelephonyManager.SimState;
 import android.util.Base64;
-import android.util.IndentingPrintWriter;
 import android.util.SparseArray;
 
 import com.android.internal.R;
@@ -1206,18 +1205,16 @@ public class PinStorage extends Handler {
         Rlog.e(TAG, msg, tr);
     }
 
-    void dump(FileDescriptor fd, PrintWriter printWriter, String[] args) {
-        IndentingPrintWriter pw = new IndentingPrintWriter(printWriter, "  ");
+    void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("PinStorage:");
-        pw.increaseIndent();
-        pw.println("mIsDeviceSecure=" + mIsDeviceSecure);
-        pw.println("mIsDeviceLocked=" + mIsDeviceLocked);
-        pw.println("isLongTermSecretKey=" + (boolean) (mLongTermSecretKey != null));
-        pw.println("isShortTermSecretKey=" + (boolean) (mShortTermSecretKey != null));
-        pw.println("isCacheAllowedByDevice=" + isCacheAllowedByDevice());
+        pw.println(" mIsDeviceSecure=" + mIsDeviceSecure);
+        pw.println(" mIsDeviceLocked=" + mIsDeviceLocked);
+        pw.println(" isLongTermSecretKey=" + (boolean) (mLongTermSecretKey != null));
+        pw.println(" isShortTermSecretKey=" + (boolean) (mShortTermSecretKey != null));
+        pw.println(" isCacheAllowedByDevice=" + isCacheAllowedByDevice());
         int slotCount = getSlotCount();
         for (int i = 0; i < slotCount; i++) {
-            pw.println("isCacheAllowedByCarrier[" + i + "]=" + isCacheAllowedByCarrier(i));
+            pw.println(" isCacheAllowedByCarrier[" + i + "]=" + isCacheAllowedByCarrier(i));
         }
         if (VDBG) {
             SparseArray<StoredPin> storedPins = loadPinInformation();
@@ -1225,6 +1222,5 @@ public class PinStorage extends Handler {
                 pw.println(" pin=" + storedPins.valueAt(i).toString());
             }
         }
-        pw.decreaseIndent();
     }
 }
