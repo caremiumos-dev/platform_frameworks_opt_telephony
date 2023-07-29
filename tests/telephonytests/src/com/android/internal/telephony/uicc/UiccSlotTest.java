@@ -158,12 +158,8 @@ public class UiccSlotTest extends TelephonyTest {
         assertTrue(mUiccSlot.isActive());
         assertNull(mUiccSlot.getUiccCard());
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimState(phoneId, IccCardConstants.State.ABSENT, null);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccState(
-                    IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
     }
 
     @Test
@@ -384,12 +380,8 @@ public class UiccSlotTest extends TelephonyTest {
         // Make sure when received CARDSTATE_ABSENT state in the first time,
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
         mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimState(phoneId, IccCardConstants.State.ABSENT, null);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccState(
-                    IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
         assertNull(mUiccSlot.getUiccCard());
     }
@@ -422,15 +414,8 @@ public class UiccSlotTest extends TelephonyTest {
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
 
         // assert that we tried to update subscriptions
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimStateForInactivePort(
-                    activeIss.mSimPortInfos[0].mLogicalSlotIndex,
-                    inactiveIss.mSimPortInfos[0].mIccId);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccStateForInactivePort(
-                    activeIss.mSimPortInfos[0].mLogicalSlotIndex,
-                    inactiveIss.mSimPortInfos[0].mIccId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccStateForInactivePort(
+                activeIss.mSimPortInfos[0].mLogicalSlotIndex, inactiveIss.mSimPortInfos[0].mIccId);
     }
 
     @Test
@@ -453,12 +438,8 @@ public class UiccSlotTest extends TelephonyTest {
         // state is sent to SubscriptionInfoUpdater.
         mIccCardStatus.mCardState = IccCardStatus.CardState.CARDSTATE_ABSENT;
         mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimState(phoneId, IccCardConstants.State.ABSENT, null);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccState(
-                    IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
         verify(mUiccProfile).dispose();
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
         assertNull(mUiccSlot.getUiccCard());
@@ -482,12 +463,8 @@ public class UiccSlotTest extends TelephonyTest {
         mUiccSlot.onRadioStateUnavailable(phoneId);
 
         // Verify that UNKNOWN state is sent to SubscriptionInfoUpdater in this case.
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimState(phoneId, IccCardConstants.State.UNKNOWN, null);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccState(
-                    IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null, phoneId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_UNKNOWN, null, phoneId);
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
         assertNull(mUiccSlot.getUiccCard());
 
@@ -496,12 +473,8 @@ public class UiccSlotTest extends TelephonyTest {
         mUiccSlot.update(mSimulatedCommands, mIccCardStatus, phoneId, slotIndex);
 
         // Verify that ABSENT state is sent to SubscriptionInfoUpdater in this case.
-        if (isSubscriptionManagerServiceEnabled()) {
-            verify(mUiccController).updateSimState(phoneId, IccCardConstants.State.ABSENT, null);
-        } else {
-            verify(mSubInfoRecordUpdater).updateInternalIccState(
-                    IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
-        }
+        verify(mSubInfoRecordUpdater).updateInternalIccState(
+                IccCardConstants.INTENT_VALUE_ICC_ABSENT, null, phoneId);
         assertEquals(IccCardStatus.CardState.CARDSTATE_ABSENT, mUiccSlot.getCardState());
         assertNull(mUiccSlot.getUiccCard());
     }

@@ -119,7 +119,6 @@ public class SubscriptionInfoUpdaterTest extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp(getClass().getSimpleName());
-        enableSubscriptionManagerService(false);
         mUserInfo = mock(UserInfo.class);
         mSubInfo = mock(SubscriptionInfo.class);
         mContentProvider = mock(ContentProvider.class);
