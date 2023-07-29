@@ -1113,8 +1113,8 @@ public class SubscriptionInfoInternal {
                 + " deviceToDeviceStatusSharingPreference=" + mDeviceToDeviceStatusSharingPreference
                 + " isVoImsOptInEnabled=" + mIsVoImsOptInEnabled
                 + " deviceToDeviceStatusSharingContacts=" + mDeviceToDeviceStatusSharingContacts
-                + " numberFromCarrier=" + Rlog.pii(TelephonyUtils.IS_DEBUGGABLE, mNumberFromCarrier)
-                + " numberFromIms=" + Rlog.pii(TelephonyUtils.IS_DEBUGGABLE, mNumberFromIms)
+                + " numberFromCarrier=" + mNumberFromCarrier
+                + " numberFromIms=" + mNumberFromIms
                 + " userId=" + mUserId
                 + " isSatelliteEnabled=" + mIsSatelliteEnabled
                 + " isGroupDisabled=" + mIsGroupDisabled
