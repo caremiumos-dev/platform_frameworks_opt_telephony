@@ -387,7 +387,6 @@ public class SubscriptionManagerService extends ISub.Stub {
      * @param looper The looper for the handler.
      */
     public SubscriptionManagerService(@NonNull Context context, @NonNull Looper looper) {
-        logl("Created SubscriptionManagerService");
         sInstance = this;
         mContext = context;
         mTelephonyManager = context.getSystemService(TelephonyManager.class);
@@ -538,16 +537,16 @@ public class SubscriptionManagerService extends ISub.Stub {
             }
         });
 
-        SubscriptionManager.invalidateSubscriptionManagerServiceCaches();
-        SubscriptionManager.invalidateSubscriptionManagerServiceEnabledCaches();
-
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateEmbeddedSubscriptions();
             }
         }, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
-        logl("Registered iSub service");
+
+        SubscriptionManager.invalidateSubscriptionManagerServiceCaches();
+        SubscriptionManager.invalidateSubscriptionManagerServiceEnabledCaches();
+        logl("created");
     }
 
     /**
@@ -900,11 +899,9 @@ public class SubscriptionManagerService extends ISub.Stub {
                 .forEach(subInfo -> {
                     mSubscriptionDatabaseManager.setSimSlotIndex(subInfo.getSubscriptionId(),
                             SubscriptionManager.INVALID_SIM_SLOT_INDEX);
-                    mSubscriptionDatabaseManager.setPortIndex(subInfo.getSubscriptionId(),
-                            TelephonyManager.INVALID_PORT_INDEX);
                 });
         updateGroupDisabled();
-        logl("markSubscriptionsInactive: current mapping " + slotMappingToString());
+        logl("markSubscriptionsInactive: " + slotMappingToString());
     }
 
     /**
@@ -940,19 +937,17 @@ public class SubscriptionManagerService extends ISub.Stub {
     }
 
     /**
-     * Get the port index by ICCID.
+     * Get the embedded profile port index by ICCID.
      *
      * @param iccId The ICCID.
      * @return The port index.
      */
-    private int getPortIndex(@NonNull String iccId) {
-        UiccSlot[] slots = mUiccController.getUiccSlots();
+    private int getEmbeddedProfilePortIndex(String iccId) {
+        UiccSlot[] slots = UiccController.getInstance().getUiccSlots();
         for (UiccSlot slot : slots) {
-            if (slot != null) {
-                int portIndex = slot.getPortIndexFromIccId(iccId);
-                if (portIndex != TelephonyManager.INVALID_PORT_INDEX) {
-                    return portIndex;
-                }
+            if (slot != null && slot.isEuicc()
+                    && slot.getPortIndexFromIccId(iccId) != TelephonyManager.INVALID_PORT_INDEX) {
+                return slot.getPortIndexFromIccId(iccId);
             }
         }
         return TelephonyManager.INVALID_PORT_INDEX;
@@ -1010,13 +1005,6 @@ public class SubscriptionManagerService extends ISub.Stub {
 
             Set<Integer> embeddedSubs = new ArraySet<>();
             log("updateEmbeddedSubscriptions: start to get euicc profiles.");
-
-            for (UiccSlot slot : mUiccController.getUiccSlots()) {
-                if (slot != null) {
-                    log("  " + slot.toString());
-                }
-            }
-
             for (int cardId : cardIds) {
                 GetEuiccProfileInfoListResult result = mEuiccController
                         .blockingGetEuiccProfileInfoList(cardId);
@@ -1068,7 +1056,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                         builder.setDisplayNameSource(SubscriptionManager.NAME_SOURCE_CARRIER);
                     }
                     builder.setProfileClass(embeddedProfile.getProfileClass());
-                    builder.setPortIndex(getPortIndex(embeddedProfile.getIccid()));
+                    builder.setPortIndex(getEmbeddedProfilePortIndex(embeddedProfile.getIccid()));
 
                     CarrierIdentifier cid = embeddedProfile.getCarrierIdentifier();
                     if (cid != null) {
@@ -1209,7 +1197,7 @@ public class SubscriptionManagerService extends ISub.Stub {
             }
 
             if (mSimState[phoneId] == TelephonyManager.SIM_STATE_UNKNOWN) {
-                log("areAllSubscriptionsLoaded: SIM " + phoneId + " state is still unknown.");
+                log("areAllSubscriptionsLoaded: SIM state is still unknown.");
                 return false;
             }
         }
@@ -1218,26 +1206,20 @@ public class SubscriptionManagerService extends ISub.Stub {
     }
 
     /**
-     * Update the subscription on the logical SIM slot index (i.e. phone id).
+     * Update the subscriptions on the logical SIM slot index (i.e. phone id).
      *
      * @param phoneId The phone id (i.e. Logical SIM slot index)
      */
-    private void updateSubscription(int phoneId) {
+    private void updateSubscriptions(int phoneId) {
         int simState = mSimState[phoneId];
-        log("updateSubscription: phoneId=" + phoneId + ", simState="
+        log("updateSubscriptions: phoneId=" + phoneId + ", simState="
                 + TelephonyManager.simStateToString(simState));
-        for (UiccSlot slot : mUiccController.getUiccSlots()) {
-            if (slot != null) {
-                log("  " + slot.toString());
-            }
-        }
-
         if (simState == TelephonyManager.SIM_STATE_ABSENT) {
             if (mSlotIndexToSubId.containsKey(phoneId)) {
                 int subId = mSlotIndexToSubId.get(phoneId);
                 // Re-enable the SIM when it's removed, so it will be in enabled state when it gets
                 // re-inserted again. (pre-U behavior)
-                log("updateSubscription: Re-enable Uicc application on sub " + subId);
+                log("updateSubscriptions: Re-enable Uicc application on sub " + subId);
                 mSubscriptionDatabaseManager.setUiccApplicationsEnabled(subId, true);
                 // When sim is absent, set the port index to invalid port index. (pre-U behavior)
                 mSubscriptionDatabaseManager.setPortIndex(subId,
@@ -1249,49 +1231,45 @@ public class SubscriptionManagerService extends ISub.Stub {
             // final state.
             IccCard iccCard = PhoneFactory.getPhone(phoneId).getIccCard();
             if (!iccCard.isEmptyProfile() && areUiccAppsEnabledOnCard(phoneId)) {
-                log("updateSubscription: SIM_STATE_NOT_READY is not a final state. Will update "
+                log("updateSubscriptions: SIM_STATE_NOT_READY is not a final state. Will update "
                         + "subscription later.");
                 return;
             }
 
             if (!areUiccAppsEnabledOnCard(phoneId)) {
-                logl("updateSubscription: UICC app disabled on slot " + phoneId);
+                logl("updateSubscriptions: UICC app disabled on slot " + phoneId);
                 markSubscriptionsInactive(phoneId);
             }
         }
 
         String iccId = getIccId(phoneId);
-        log("updateSubscription: Found iccId=" + SubscriptionInfo.givePrintableIccid(iccId)
+        log("updateSubscriptions: Found iccId=" + SubscriptionInfo.givePrintableIccid(iccId)
                 + " on phone " + phoneId);
 
         // For eSIM switching, SIM absent will not happen. Below is to exam if we find ICCID
-        // mismatch on the SIM slot. If that's the case, we need to mark all subscriptions on that
-        // logical slot invalid first. The correct subscription will be assigned the correct slot
-        // later.
-        SubscriptionInfoInternal subInfo = mSubscriptionDatabaseManager.getAllSubscriptions()
-                .stream()
-                .filter(sub -> sub.getSimSlotIndex() == phoneId && !iccId.equals(sub.getIccId()))
-                .findFirst()
-                .orElse(null);
-        if (subInfo != null) {
-            log("updateSubscription: Found previous active sub " + subInfo.getSubscriptionId()
-                    + " that doesn't match current iccid on slot " + phoneId + ".");
+        // mismatch on the SIM slot, we need to mark all subscriptions on that logical slot invalid
+        // first. The correct subscription will be assigned the correct slot later.
+        if (mSubscriptionDatabaseManager.getAllSubscriptions().stream()
+                .anyMatch(subInfo -> subInfo.getSimSlotIndex() == phoneId
+                        && !iccId.equals(subInfo.getIccId()))) {
+            log("updateSubscriptions: iccId changed for phone " + phoneId);
             markSubscriptionsInactive(phoneId);
         }
 
         if (!TextUtils.isEmpty(iccId)) {
             // Check if the subscription already existed.
-            subInfo = mSubscriptionDatabaseManager.getSubscriptionInfoInternalByIccId(iccId);
+            SubscriptionInfoInternal subInfo = mSubscriptionDatabaseManager
+                    .getSubscriptionInfoInternalByIccId(iccId);
             int subId;
             if (subInfo == null) {
                 // This is a new SIM card. Insert a new record.
                 subId = insertSubscriptionInfo(iccId, phoneId, null,
                         SubscriptionManager.SUBSCRIPTION_TYPE_LOCAL_SIM);
-                logl("updateSubscription: Inserted a new subscription. subId=" + subId
+                logl("updateSubscriptions: Inserted a new subscription. subId=" + subId
                         + ", phoneId=" + phoneId);
             } else {
                 subId = subInfo.getSubscriptionId();
-                log("updateSubscription: Found existing subscription. subId= " + subId
+                log("updateSubscriptions: Found existing subscription. subId= " + subId
                         + ", phoneId=" + phoneId);
             }
 
@@ -1300,7 +1278,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                 mSlotIndexToSubId.put(phoneId, subId);
                 // Update the SIM slot index. This will make the subscription active.
                 mSubscriptionDatabaseManager.setSimSlotIndex(subId, phoneId);
-                logl("updateSubscription: current mapping " + slotMappingToString());
+                logl("updateSubscriptions: " + slotMappingToString());
             }
 
             // Update the card id.
@@ -1313,7 +1291,11 @@ public class SubscriptionManagerService extends ISub.Stub {
             }
 
             // Update the port index.
-            mSubscriptionDatabaseManager.setPortIndex(subId, getPortIndex(iccId));
+            UiccSlot slot = mUiccController.getUiccSlotForPhone(phoneId);
+            if (slot != null && !slot.isEuicc()) {
+                int portIndex = slot.getPortIndexFromIccId(iccId);
+                mSubscriptionDatabaseManager.setPortIndex(subId, portIndex);
+            }
 
             if (simState == TelephonyManager.SIM_STATE_LOADED) {
                 String mccMnc = mTelephonyManager.getSimOperatorNumeric(subId);
@@ -1323,7 +1305,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                     }
                     setMccMnc(subId, mccMnc);
                 } else {
-                    loge("updateSubscription: mcc/mnc is empty");
+                    loge("updateSubscriptions: mcc/mnc is empty");
                 }
 
                 String iso = TelephonyManager.getSimCountryIsoForPhone(phoneId);
@@ -1331,7 +1313,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                 if (!TextUtils.isEmpty(iso)) {
                     setCountryIso(subId, iso);
                 } else {
-                    loge("updateSubscription: sim country iso is null");
+                    loge("updateSubscriptions: sim country iso is null");
                 }
 
                 String msisdn = mTelephonyManager.getLine1Number(subId);
@@ -1357,10 +1339,10 @@ public class SubscriptionManagerService extends ISub.Stub {
                             mSubscriptionDatabaseManager.setHplmns(subId, hplmns);
                         }
                     } else {
-                        loge("updateSubscription: ICC records are not available.");
+                        loge("updateSubscriptions: ICC records are not available.");
                     }
                 } else {
-                    loge("updateSubscription: ICC card is not available.");
+                    loge("updateSubscriptions: ICC card is not available.");
                 }
 
                 // Attempt to restore SIM specific settings when SIM is loaded.
@@ -1368,16 +1350,12 @@ public class SubscriptionManagerService extends ISub.Stub {
                         SubscriptionManager.SIM_INFO_BACKUP_AND_RESTORE_CONTENT_URI,
                         SubscriptionManager.RESTORE_SIM_SPECIFIC_SETTINGS_METHOD_NAME,
                         iccId, null);
-                log("Reload the database.");
                 mSubscriptionDatabaseManager.reloadDatabase();
             }
-
-            log("updateSubscription: " + mSubscriptionDatabaseManager
-                    .getSubscriptionInfoInternal(subId));
         } else {
-            log("updateSubscription: No ICCID available for phone " + phoneId);
+            log("updateSubscriptions: No ICCID available for phone " + phoneId);
             mSlotIndexToSubId.remove(phoneId);
-            logl("updateSubscription: current mapping " + slotMappingToString());
+            logl("updateSubscriptions: " + slotMappingToString());
         }
 
         if (areAllSubscriptionsLoaded()) {
@@ -1944,7 +1922,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                 int subId = insertSubscriptionInfo(iccId, slotIndex, displayName, subscriptionType);
                 updateGroupDisabled();
                 mSlotIndexToSubId.put(slotIndex, subId);
-                logl("addSubInfo: current mapping " + slotMappingToString());
+                logl("addSubInfo: " + slotMappingToString());
             } else {
                 // Record already exists.
                 loge("Subscription record already existed.");
@@ -3750,7 +3728,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                 // active again. (pre-U behavior)
                 mSubscriptionDatabaseManager.setUiccApplicationsEnabled(
                         mSlotIndexToSubId.get(slotIndex), true);
-                updateSubscription(slotIndex);
+                updateSubscriptions(slotIndex);
             }
         });
     }
@@ -3782,7 +3760,7 @@ public class SubscriptionManagerService extends ISub.Stub {
                 case TelephonyManager.SIM_STATE_CARD_IO_ERROR:
                 case TelephonyManager.SIM_STATE_LOADED:
                 case TelephonyManager.SIM_STATE_NOT_READY:
-                    updateSubscription(slotIndex);
+                    updateSubscriptions(slotIndex);
                     break;
                 case TelephonyManager.SIM_STATE_CARD_RESTRICTED:
                 default:
@@ -3838,9 +3816,9 @@ public class SubscriptionManagerService extends ISub.Stub {
      */
     @NonNull
     private String slotMappingToString() {
-        return "[" + mSlotIndexToSubId.entrySet().stream()
-                .map(e -> "slot " + e.getKey() + ": subId=" + e.getValue())
-                .collect(Collectors.joining(", ")) + "]";
+        return mSlotIndexToSubId.entrySet().stream()
+                .map(e -> "Slot " + e.getKey() + ": subId=" + e.getValue())
+                .collect(Collectors.joining(", "));
     }
 
     /**
