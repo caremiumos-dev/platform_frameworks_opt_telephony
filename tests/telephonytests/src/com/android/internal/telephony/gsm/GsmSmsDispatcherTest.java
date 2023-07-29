@@ -549,12 +549,7 @@ public class GsmSmsDispatcherTest extends TelephonyTest {
         doReturn(mIsimUiccRecords).when(mPhone).getIccRecords();
         Message msg = mGsmSmsDispatcher.obtainMessage(17);
         mPhone.getIccRecords().setSmssTpmrValue(-1, msg);
-        if (isSubscriptionManagerServiceEnabled()) {
-            mSubscriptionManagerService.setLastUsedTPMessageReference(mPhone.getSubId(), -1);
-        } else {
-            SubscriptionController.getInstance().updateMessageRef(mPhone.getSubId(), -1);
-        }
-
+        SubscriptionController.getInstance().updateMessageRef(mPhone.getSubId(), -1);
         mGsmSmsDispatcher.sendText("111", "222" /*scAddr*/, TAG,
                 null, null, null, null, false, -1, false, -1, false, 0L);
 
