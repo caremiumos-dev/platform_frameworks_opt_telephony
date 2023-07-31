@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a793facd_d11e40af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-07-31T03:24:45Z",
+      "side": 1,
+      "message": "Hui, please help to approve this pure cherry-pick from goog/main to aosp/main. thanks",
+      "revId": "01d2f196cd44cfc31dfcfed77b33d34b6cbd6b23",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
