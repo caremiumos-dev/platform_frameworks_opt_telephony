@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aea3119_b3a85b7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-07-31T03:26:40Z",
+      "side": 1,
+      "message": "Pure CP from goog/main to aosp/main. Thanks!",
+      "revId": "960f5d3ab1929ab6d753e9c357d1d6022cf55c01",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
