@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfda79d8_f67c1ae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-08-02T19:02:00Z",
+      "side": 1,
+      "message": "Jack/Ling, here the follow-up CP CL that remove the deprecated method CPT. [un]registerCarrierPrivilegesListener.\n\nI put them in one topic so no break here.",
+      "revId": "c2a42b8d768274cd92ca8177b47c3964b358a0ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
