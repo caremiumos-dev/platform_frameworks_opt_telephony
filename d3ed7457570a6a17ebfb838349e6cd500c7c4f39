@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a429cb3_d9af6a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-08-02T14:43:57Z",
+      "side": 1,
+      "message": "Pure CP from goog/main to aosp/main for UDC FR. Thanks!",
+      "revId": "d3ed7457570a6a17ebfb838349e6cd500c7c4f39",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
