@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f71327_946d3023",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-08-02T19:43:23Z",
+      "side": 1,
+      "message": "Sarah/Ling/Jack, I restored and upmerge this CP-only CL to TOT because it is a dependency to CP other CLs (e.g. ag/20652770). Both ServiceStateTrackerTest and NetworkControllertypeTest pass locally and will see if TH will pass as well.\n\nPlease let me know if you have any concern. If not, please to approve this CP only CL. Thanks!",
+      "revId": "a1dfed9fca5bb5c3b8c61711a89240d7ad3340c9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
