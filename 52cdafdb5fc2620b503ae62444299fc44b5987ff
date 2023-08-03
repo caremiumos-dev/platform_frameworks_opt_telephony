@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7188fa63_a3833ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-08-03T14:34:46Z",
+      "side": 1,
+      "message": "Pure CP from internal to aosp for UDC FRs. Thanks!",
+      "revId": "52cdafdb5fc2620b503ae62444299fc44b5987ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
