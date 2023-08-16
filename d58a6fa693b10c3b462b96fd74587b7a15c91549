@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab9832e_9371fc3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081223
+      },
+      "writtenOn": "2023-08-16T19:20:44Z",
+      "side": 1,
+      "message": "Can you take a look?\nSee https://cs.android.com/android/platform/superproject/main/+/main:hardware/ril/libril/ril_service.cpp;l\u003d2202?q\u003dril_service.cpp for the reference libril implementation\nThanks",
+      "revId": "d58a6fa693b10c3b462b96fd74587b7a15c91549",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
