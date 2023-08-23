@@ -4995,11 +4995,10 @@ public class ServiceStateTracker extends Handler {
                         phone.getDataNetworkController().registerDataNetworkControllerCallback(
                                 mDataDisconnectedCallback);
                     }
+                    // Tear down outside of the disconnected check to prevent race conditions.
+                    mPhone.getDataNetworkController().tearDownAllDataNetworks(
+                            DataNetwork.TEAR_DOWN_REASON_AIRPLANE_MODE_ON);
                 }
-
-                // Tear down outside of the disconnected check to prevent race conditions.
-                mPhone.getDataNetworkController().tearDownAllDataNetworks(
-                        DataNetwork.TEAR_DOWN_REASON_AIRPLANE_MODE_ON);
 
                 if (mPendingRadioPowerOffAfterDataOff) {
                     sendEmptyMessageDelayed(EVENT_SET_RADIO_POWER_OFF,
