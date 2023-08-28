@@ -961,6 +961,12 @@ public class ImsPhone extends ImsPhoneBase {
         imsDialArgsBuilder = ImsDialArgs.Builder.from(dialArgs);
         // Get the CLIR info if needed
         imsDialArgsBuilder.setClirMode(mCT.getClirMode());
+        ImsDialArgs imsDialArgs = imsDialArgsBuilder.build();
+        // handle in-call MMI first if applicable
+        if (!imsDialArgs.isEmergency
+                && handleInCallMmiCommandsInternal(newDialString, imsDialArgs.deferDial)) {
+            return null;
+        }
 
         if (mDefaultPhone.getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) {
             return mCT.dial(dialString, imsDialArgsBuilder.build());
