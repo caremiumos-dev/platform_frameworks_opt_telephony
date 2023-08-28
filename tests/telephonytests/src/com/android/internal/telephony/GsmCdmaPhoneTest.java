@@ -461,6 +461,45 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testInCallMmiCodeConflictsWithEmergencyCall() throws Exception {
+        try {
+            mSST.mSS = mServiceState;
+            doReturn(ServiceState.STATE_IN_SERVICE).when(mServiceState).getState();
+
+            mCT.mForegroundCall = mGsmCdmaCall;
+            mCT.mBackgroundCall = mGsmCdmaCall;
+            mCT.mRingingCall = mGsmCdmaCall;
+            doReturn(GsmCdmaCall.State.ACTIVE).when(mGsmCdmaCall).getState();
+            PersistableBundle bundle = mContextFixture.getCarrierConfigBundle();
+            bundle.putBoolean(CarrierConfigManager.KEY_USE_ONLY_DIALED_SIM_ECC_LIST_BOOL, false);
+            bundle.putBoolean(
+                    CarrierConfigManager.KEY_CARRIER_USE_IMS_FIRST_FOR_EMERGENCY_BOOL, false);
+            doReturn(false).when(mImsPhone).isImsAvailable();
+            doReturn(false).when(mImsManager).isVolteEnabledByPlatform();
+            doReturn(false).when(mImsManager).isEnhanced4gLteModeSettingEnabledByUser();
+            doReturn(false).when(mImsManager).isNonTtyOrTtyOnVolteEnabled();
+            doReturn(false).when(mImsPhone).isVoiceOverCellularImsEnabled();
+            replaceInstance(Phone.class, "mImsPhone", mPhoneUT, mImsPhone);
+
+            // Handle emergency number prior to in-call MMI code.
+            doReturn(true).when(mTelephonyManager).isEmergencyNumber(anyString());
+            Connection connection = mPhoneUT.dial("15",
+                    new PhoneInternalInterface.DialArgs.Builder().build());
+            verify(mCT).dialGsm(eq("15"), any(PhoneInternalInterface.DialArgs.class));
+
+            // Handle an in-call MMI code.
+            doReturn(false).when(mTelephonyManager).isEmergencyNumber(anyString());
+            connection = mPhoneUT.dial("15",
+                    new PhoneInternalInterface.DialArgs.Builder().build());
+            verify(mCT, times(0)).dialGsm(eq("15"), any(PhoneInternalInterface.DialArgs.class));
+            verify(mCT).hangupConnectionByIndex(any(), eq(5));
+        } catch (CallStateException e) {
+            fail();
+        }
+    }
+
+    @Test
+    @SmallTest
     public void testDial() throws Exception {
         try {
             mSST.mSS = mServiceState;

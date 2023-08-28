@@ -953,7 +953,7 @@ public class ImsPhone extends ImsPhoneBase {
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
         // handle in-call MMI first if applicable
-        if (handleInCallMmiCommands(newDialString)) {
+        if (!dialArgs.isEmergency && handleInCallMmiCommands(newDialString)) {
             return null;
         }
 
