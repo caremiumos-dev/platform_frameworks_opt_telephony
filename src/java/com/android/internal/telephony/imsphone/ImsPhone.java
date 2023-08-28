@@ -953,7 +953,7 @@ public class ImsPhone extends ImsPhoneBase {
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
         // handle in-call MMI first if applicable
-        if (handleInCallMmiCommands(newDialString)) {
+        if (!dialArgs.isEmergency && handleInCallMmiCommands(newDialString)) {
             return null;
         }
 
@@ -961,6 +961,7 @@ public class ImsPhone extends ImsPhoneBase {
         imsDialArgsBuilder = ImsDialArgs.Builder.from(dialArgs);
         // Get the CLIR info if needed
         imsDialArgsBuilder.setClirMode(mCT.getClirMode());
+        ImsDialArgs imsDialArgs = imsDialArgsBuilder.build();
 
         if (mDefaultPhone.getPhoneType() == PhoneConstants.PHONE_TYPE_CDMA) {
             return mCT.dial(dialString, imsDialArgsBuilder.build());
