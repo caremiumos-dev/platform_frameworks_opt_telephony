@@ -2109,4 +2109,51 @@ public class GsmCdmaPhoneTest extends TelephonyTest {
         doReturn(false).when(mUiccCardApplication3gpp).getIccFdnAvailable();
         doReturn(false).when(mUiccCardApplication3gpp).getIccFdnEnabled();
     }
+
+    @Test
+    public void testAllowedNetworkTypes_carrierDefaultDisable2g() throws Exception {
+        // Device supports "allow 2g" toggle in settings
+        doReturn(true).when(mTelephonyManager).isRadioInterfaceCapabilitySupported(
+                TelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
+        // 2g is disabled as default by carrier
+        mContextFixture.getCarrierConfigBundle().putBoolean(
+                CarrierConfigManager.KEY_CARRIER_DEFAULT_ENABLE_2G_BOOL, false);
+        // Update cc settings
+        mPhoneUT.sendMessage(mPhoneUT.obtainMessage(Phone.EVENT_CARRIER_CONFIG_CHANGED));
+        processAllMessages();
+        ArgumentCaptor<Integer> captureBitMask = ArgumentCaptor.forClass(Integer.class);
+
+        // Assert that 2g is excluded from networks as default if reasons have enable_2g included
+        assertTrue((mPhoneUT.getAllowedNetworkTypes(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G)
+                & TelephonyManager.NETWORK_CLASS_BITMASK_2G) == 0);
+        clearInvocations(mSimulatedCommandsVerifier);
+
+        int i = 0;
+        while (TelephonyManager.isValidAllowedNetworkTypesReason(i)) {
+            // Set allowed network with 2g by reasons other than allow_2g
+            if (i != TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G) {
+                mPhoneUT.setAllowedNetworkTypes(i,
+                        TelephonyManager.NETWORK_MODE_NR_LTE_GSM_WCDMA, null);
+                // Assert that 2g was not passed as an allowed network type to the modem
+                verify(mSimulatedCommandsVerifier).setAllowedNetworkTypesBitmap(
+                        captureBitMask.capture(), nullable(Message.class));
+                assertTrue((captureBitMask.getValue()
+                        & TelephonyManager.NETWORK_CLASS_BITMASK_2G) == 0);
+                clearInvocations(mSimulatedCommandsVerifier);
+            }
+            i++;
+        }
+
+        // Set allowed network with 2g by allow_2g setting
+        mPhoneUT.setAllowedNetworkTypes(TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G,
+                TelephonyManager.NETWORK_MODE_NR_LTE_GSM_WCDMA, null);
+        // Assert that 2g was passed as an allowed network type to the modem
+        verify(mSimulatedCommandsVerifier).setAllowedNetworkTypesBitmap(
+                captureBitMask.capture(), nullable(Message.class));
+        assertTrue((captureBitMask.getValue() & TelephonyManager.NETWORK_CLASS_BITMASK_2G) != 0);
+        assertTrue((mPhoneUT.getAllowedNetworkTypes(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G)
+                & TelephonyManager.NETWORK_CLASS_BITMASK_2G) != 0);
+    }
 }
