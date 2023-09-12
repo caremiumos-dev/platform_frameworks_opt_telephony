@@ -489,6 +489,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private static final int INVALID_ALLOWED_NETWORK_TYPES = -1;
     protected boolean mIsCarrierNrSupported = false;
     protected boolean mIsAllowedNetworkTypesLoadedFromDb = false;
+    protected boolean mDefaultEnable2G  = true;
     private boolean mUnitTestMode;
 
     protected VoiceCallSessionStats mVoiceCallSessionStats;
@@ -2353,11 +2354,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * @return effective network type
      */
     private @TelephonyManager.NetworkTypeBitMask long getEffectiveAllowedNetworkTypes() {
+        boolean hasEnable2gReason = false;
         long allowedNetworkTypes = TelephonyManager.getAllNetworkTypesBitmask();
         synchronized (mAllowedNetworkTypesForReasons) {
             for (long networkTypes : mAllowedNetworkTypesForReasons.values()) {
                 allowedNetworkTypes = allowedNetworkTypes & networkTypes;
             }
+            hasEnable2gReason = mAllowedNetworkTypesForReasons.containsKey(
+                    TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G);
         }
         if (!mIsCarrierNrSupported) {
             allowedNetworkTypes &= ~TelephonyManager.NETWORK_TYPE_BITMASK_NR;
@@ -2366,6 +2370,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             logd("SubId " + getSubId()
                     + " disabling 2g in getEffectiveAllowedNetworkTypes according to admin user "
                     + "restriction");
+            allowedNetworkTypes &= ~TelephonyManager.NETWORK_CLASS_BITMASK_2G;
+        }
+        if (!mDefaultEnable2G && !hasEnable2gReason) {
+            logd("SubId " + getSubId()
+                    + " disabling 2G by default according to carrier config");
             allowedNetworkTypes &= ~TelephonyManager.NETWORK_CLASS_BITMASK_2G;
         }
         logd("SubId" + getSubId() + ",getEffectiveAllowedNetworkTypes: "
@@ -2421,6 +2430,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         if (!TelephonyManager.isValidAllowedNetworkTypesReason(reason)) {
             throw new IllegalArgumentException("AllowedNetworkTypes NumberFormat exception");
+        }
+
+        if (!mDefaultEnable2G
+                && reason == TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G) {
+            defaultAllowedNetworkTypes &= ~TelephonyManager.NETWORK_CLASS_BITMASK_2G;
         }
 
         synchronized (mAllowedNetworkTypesForReasons) {

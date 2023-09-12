@@ -3374,6 +3374,7 @@ public class GsmCdmaPhone extends Phone {
                     }
                     updateSsOverCdmaSupported(b);
                     updateCarrierN1ModeSupported(b);
+                    updateDefaultEnable2gSettings(b);
                 } else {
                     loge("Failed to retrieve a carrier config bundle for subId=" + getSubId());
                 }
@@ -5288,6 +5289,19 @@ public class GsmCdmaPhone extends Phone {
         boolean enbleVonr = mIsVonrEnabledByCarrier
                 && (setting == 1 || (setting == -1 && mDefaultVonr));
         mCi.setVoNrEnabled(enbleVonr, obtainMessage(EVENT_SET_VONR_ENABLED_DONE), null);
+    }
+
+    private void updateDefaultEnable2gSettings(@NonNull PersistableBundle config) {
+        if (config == null) {
+            return;
+        }
+        final TelephonyManager telephonyManager = mContext.getSystemService(TelephonyManager.class)
+                .createForSubscriptionId(getSubId());
+        if (telephonyManager.isRadioInterfaceCapabilitySupported(
+                TelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK)) {
+            mDefaultEnable2G = config.getBoolean(
+                    CarrierConfigManager.KEY_CARRIER_DEFAULT_ENABLE_2G_BOOL);
+        }
     }
 
     private void updateCdmaRoamingSettingsAfterCarrierConfigChanged(
