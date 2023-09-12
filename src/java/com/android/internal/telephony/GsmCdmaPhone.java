@@ -3050,6 +3050,7 @@ public class GsmCdmaPhone extends Phone {
                 updateNrSettingsAfterCarrierConfigChanged(b);
                 updateVoNrSettings(b);
                 updateSsOverCdmaSupported(b);
+                updateDefaultEnable2gSettings(b);
                 loadAllowedNetworksFromSubscriptionDatabase();
                 // Obtain new radio capabilities from the modem, since some are SIM-dependent
                 mCi.getRadioCapability(obtainMessage(EVENT_GET_RADIO_CAPABILITY));
@@ -4866,5 +4867,18 @@ public class GsmCdmaPhone extends Phone {
             SsData.ServiceType serviceType) {
         ArrayList<String> controlStrings = GsmMmiCode.getControlStrings(requestType, serviceType);
         return FdnUtils.isSuppServiceRequestBlockedByFdn(mPhoneId, controlStrings, getCountryIso());
+    }
+
+    private void updateDefaultEnable2gSettings(PersistableBundle config) {
+        if (config == null) {
+            return;
+        }
+        final TelephonyManager telephonyManager = mContext.getSystemService(TelephonyManager.class)
+                .createForSubscriptionId(getSubId());
+        if (telephonyManager.isRadioInterfaceCapabilitySupported(
+                TelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK)) {
+            mIsDefaultDisable2g = !config.getBoolean(
+                    CarrierConfigManager.KEY_CARRIER_DEFAULT_ENABLE_2G_BOOL);
+        }
     }
 }
