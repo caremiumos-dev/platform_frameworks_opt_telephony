@@ -2751,14 +2751,16 @@ public class ServiceStateTracker extends Handler {
 
             final String log = String.format("updateSpnDisplay: changed sending intent, "
                             + "rule=%d, showPlmn='%b', plmn='%s', showSpn='%b', spn='%s', "
-                            + "dataSpn='%s', subId='%d'",
+                            + "dataSpn='%s', subId='%d' , swapPlmnAndSpnDisplayOrder='%b'",
                     getCarrierNameDisplayBitmask(mSS),
                     data.shouldShowPlmn(),
                     data.getPlmn(),
                     data.shouldShowSpn(),
                     data.getSpn(),
                     data.getDataSpn(),
-                    subId);
+                    subId,
+                    mCarrierConfig.getBoolean(
+                            CarrierConfigManager.KEY_SWAP_PLMN_AND_SPN_DISPLAY_ORDER));
             mCdnrLogs.log(log);
             if (DBG) log("updateSpnDisplay: " + log);
 
@@ -2768,6 +2770,9 @@ public class ServiceStateTracker extends Handler {
             intent.putExtra(TelephonyManager.EXTRA_DATA_SPN, data.getDataSpn());
             intent.putExtra(TelephonyManager.EXTRA_SHOW_PLMN, data.shouldShowPlmn());
             intent.putExtra(TelephonyManager.EXTRA_PLMN, data.getPlmn());
+            intent.putExtra(TelephonyManager.EXTRA_SWAP_PLMN_AND_SPN_DISPLAY_ORDER,
+                    mCarrierConfig.getBoolean(
+                            CarrierConfigManager.KEY_SWAP_PLMN_AND_SPN_DISPLAY_ORDER));
             SubscriptionManager.putPhoneIdAndSubIdExtra(intent, mPhone.getPhoneId());
             mPhone.getContext().sendStickyBroadcastAsUser(intent, UserHandle.ALL);
 
@@ -2785,7 +2790,8 @@ public class ServiceStateTracker extends Handler {
     }
 
     @NonNull
-    private String getCarrierName(boolean showPlmn, String plmn, boolean showSpn, String spn) {
+    @VisibleForTesting
+    public String getCarrierName(boolean showPlmn, String plmn, boolean showSpn, String spn) {
         String carrierName = "";
         if (showPlmn) {
             carrierName = plmn;
@@ -2794,8 +2800,14 @@ public class ServiceStateTracker extends Handler {
                 if (!Objects.equals(spn, plmn)) {
                     String separator = mPhone.getContext().getString(
                             com.android.internal.R.string.kg_text_message_separator).toString();
-                    carrierName = new StringBuilder().append(carrierName).append(separator)
-                            .append(spn).toString();
+                    if (mCarrierConfig.getBoolean(
+                            CarrierConfigManager.KEY_SWAP_PLMN_AND_SPN_DISPLAY_ORDER)) {
+                        carrierName = new StringBuilder().append(spn).append(separator)
+                                .append(carrierName).toString();
+                    } else {
+                        carrierName = new StringBuilder().append(carrierName).append(separator)
+                                .append(spn).toString();
+                    }
                 }
             }
         } else if (showSpn) {

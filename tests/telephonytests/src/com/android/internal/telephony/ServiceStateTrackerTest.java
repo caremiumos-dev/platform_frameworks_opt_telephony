@@ -2994,6 +2994,86 @@ public class ServiceStateTrackerTest extends TelephonyTest {
         assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_SPN)).isTrue();
         assertThat(b.getString(TelephonyManager.EXTRA_PLMN)).isEqualTo(plmn);
         assertThat(b.getBoolean(TelephonyManager.EXTRA_SHOW_PLMN)).isTrue();
+
+        // Test for default display order [PLMN before / above SPN]
+        assertFalse(b.getBoolean(TelephonyManager.EXTRA_SWAP_PLMN_AND_SPN_DISPLAY_ORDER));
+
+        // Override carrier config
+        mBundle.putBoolean(
+                CarrierConfigManager.KEY_SWAP_PLMN_AND_SPN_DISPLAY_ORDER, true);
+        sendCarrierConfigUpdate(PHONE_ID);
+
+        // update the spn
+        sst.updateSpnDisplay();
+        b = getExtrasFromLastSpnUpdateIntent();
+
+        // Test for swapped display order [SPN before / above PLMN]
+        assertTrue(b.getBoolean(TelephonyManager.EXTRA_SWAP_PLMN_AND_SPN_DISPLAY_ORDER));
+    }
+
+    @Test
+    public void testGetCarrierName_showPlmn() {
+        // Test for plmn only
+        String carrierName = sst.getCarrierName(
+                true, // showPlmn
+                "plmn", // plmn
+                false, // showSpn
+                "spn" // spn
+        );
+        assertThat(carrierName).isEqualTo("plmn");
+    }
+
+    @Test
+    public void testGetCarrierName_showSpn() {
+        // Test for spn only
+        String carrierName = sst.getCarrierName(
+                false, // showPlmn
+                "plmn", // plmn
+                true, // showSpn
+                "spn" // spn
+        );
+        assertThat(carrierName).isEqualTo("spn");
+    }
+
+    @Test
+    public void testGetCarrierName_showPlmnAndShowSpnEqual() {
+        // Test for plmn and spn is equal
+        String carrierName = sst.getCarrierName(
+                true, // showPlmn
+                "test", // plmn
+                true, // showSpn
+                "test" // spn
+        );
+        assertThat(carrierName).isEqualTo("test");
+    }
+
+    @Test
+    public void testGetCarrierName_showPlmnAndShowSpnNotEqual() {
+        String separator = mPhone.getContext().getString(
+                com.android.internal.R.string.kg_text_message_separator).toString();
+
+        // Test for plmn and spn is different
+        String carrierName = sst.getCarrierName(
+                true, // showPlmn
+                "plmn", // plmn
+                true, // showSpn
+                "spn" // spn
+        );
+        assertThat(carrierName).isEqualTo(
+                new StringBuilder().append("plmn").append(separator).append("spn").toString());
+
+        // Test for plmn and spn is different in swapped order
+        mBundle.putBoolean(CarrierConfigManager.KEY_SWAP_PLMN_AND_SPN_DISPLAY_ORDER, true);
+        sendCarrierConfigUpdate(PHONE_ID);
+
+        carrierName = sst.getCarrierName(
+                true, // showPlmn
+                "plmn", // plmn
+                true, // showSpn
+                "spn"  // spn
+        );
+        assertThat(carrierName).isEqualTo(
+                new StringBuilder().append("spn").append(separator).append("plmn").toString());
     }
 
     @Test
