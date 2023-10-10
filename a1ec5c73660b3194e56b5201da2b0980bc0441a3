@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b8b431_30c3565c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-10-10T15:15:06Z",
+      "side": 1,
+      "message": "Jack, would you please help to review this CL contributed by our partner? The CL fix the similar issue as what aosp/2758159 (CP from ag/23844549) did for ONS. Thanks!",
+      "revId": "a1ec5c73660b3194e56b5201da2b0980bc0441a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
