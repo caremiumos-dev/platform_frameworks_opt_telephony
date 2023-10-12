@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecefeff0_8a07c0a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2023-10-12T16:18:39Z",
+      "side": 1,
+      "message": "Jack, would you please help to review the updated patch again? It only update the UT, no touch on original change you have approved. \n\nAdd unit-test cases for coverage of the change:\n- When user is locked, receiving carrier config change should NOT update internal states ( mMccMncForDownload and mCarrierId)\n- When user is unlocked, receiving carrier config change should update internal states\n- When user is locked, receive carrier config change and then USER_UNLOCKED event should update internal state.\n\n(case 1 and 3 should be able to merge into one bigger case, but I feel separate them is more clear to cover typical scenarios)",
+      "revId": "18764408864f2eb55e06585020bba9ee333bbbb2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
