@@ -20,6 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import android.app.AlarmManager;
 import android.app.DownloadManager;
+import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -108,6 +109,7 @@ public class CarrierKeyDownloadManager extends Handler {
     private String mURL;
     private boolean mAllowedOverMeteredNetwork = false;
     private boolean mDeleteOldKeyAfterDownload = false;
+    private boolean mIsRequiredToHandleUnlock;
     private TelephonyManager mTelephonyManager;
     private UserManager mUserManager;
 
@@ -123,6 +125,7 @@ public class CarrierKeyDownloadManager extends Handler {
         IntentFilter filter = new IntentFilter();
         filter.addAction(INTENT_KEY_RENEWAL_ALARM_PREFIX);
         filter.addAction(TelephonyIntents.ACTION_CARRIER_CERTIFICATE_DOWNLOAD);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
         mContext.registerReceiver(mBroadcastReceiver, filter, null, phone);
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
         mTelephonyManager = mContext.getSystemService(TelephonyManager.class)
@@ -185,6 +188,17 @@ public class CarrierKeyDownloadManager extends Handler {
                         SubscriptionManager.INVALID_SIM_SLOT_INDEX)) {
                     Log.d(LOG_TAG, "Handling reset intent: " + action);
                     sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
+                }  else if (action.equals(Intent.ACTION_USER_PRESENT)) {
+                    // The Carrier key download fails when SIM is inserted while device is locked
+                    // hence adding a retry logic when device is unlocked.
+                    Log.d(LOG_TAG,
+                            "device unlocked, isRequiredToHandleUnlock = "
+                                    + mIsRequiredToHandleUnlock
+                                    + ", slotIndex = " + slotIndex);
+                    if (mIsRequiredToHandleUnlock) {
+                        mIsRequiredToHandleUnlock = false;
+                        sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
+                    }
                 }
             }
         }
@@ -224,6 +238,14 @@ public class CarrierKeyDownloadManager extends Handler {
                 // keys, we'll still want to renew the alarms, and try downloading the key a day
                 // later.
                 if (!downloadStartedSuccessfully) {
+                    // If download fails due to the device lock, we will reattempt once the device
+                    // is unlocked.
+                    KeyguardManager keyguardManager = mContext.getSystemService(
+                            KeyguardManager.class);
+                    if (keyguardManager.isKeyguardSecure()) {
+                        Log.e(LOG_TAG, "Key download failed in device lock state");
+                        mIsRequiredToHandleUnlock = true;
+                    }
                     resetRenewalAlarm();
                 }
             } else {
