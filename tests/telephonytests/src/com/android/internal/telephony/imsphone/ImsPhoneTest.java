@@ -183,6 +183,23 @@ public class ImsPhoneTest extends TelephonyTest {
 
     @Test
     @SmallTest
+    public void testInCallMmiCodeConflictsWithEmergencyCall() throws Exception {
+        doReturn(Call.State.ACTIVE).when(mForegroundCall).getState();
+        // Handle an in-call MMI code.
+        doReturn(false).when(mTelephonyManager).isEmergencyNumber(anyString());
+        Connection connection = mImsPhoneUT.dial("15",
+                new ImsPhone.ImsDialArgs.Builder().setIsEmergency(false).build());
+        verify(mImsCT, times(0)).dial(eq("15"), any(ImsPhone.ImsDialArgs.class));
+
+        // Handle emergency number prior to in-call MMI code.
+        doReturn(true).when(mTelephonyManager).isEmergencyNumber(anyString());
+        connection = mImsPhoneUT.dial("15",
+                new ImsPhone.ImsDialArgs.Builder().setIsEmergency(true).build());
+        verify(mImsCT).dial(eq("15"), any(ImsPhone.ImsDialArgs.class));
+    }
+
+    @Test
+    @SmallTest
     public void testHandleInCallMmiCommandCallDeflection() throws Exception {
         doReturn(Call.State.INCOMING).when(mRingingCall).getState();
 
