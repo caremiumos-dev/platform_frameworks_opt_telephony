@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "834eca0a_65b5334c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2023-11-13T17:41:35Z",
+      "side": 1,
+      "message": "Hello Hunsuk - Here are the latest revisions to OWNERS, please take a look to see if I missed anything!",
+      "revId": "1e7a079f804c19996d11121a469ede62719f368e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
