@@ -31,6 +31,8 @@ import static org.mockito.Mockito.when;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ImsiEncryptionInfo;
@@ -41,12 +43,16 @@ import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 import android.util.Pair;
 
+import com.android.internal.telephony.flags.FeatureFlags;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
@@ -87,7 +93,8 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
                     + "\"public-key\": \"" + CERT + "\"}]}";
 
     private CarrierConfigManager.CarrierConfigChangeListener mCarrierConfigChangeListener;
-
+    private FeatureFlags mFeatureFlags;
+    private ConnectivityManager mConnectivityManager;
     @Before
     public void setUp() throws Exception {
         logd("CarrierActionAgentTest +Setup!");
@@ -95,14 +102,19 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
         mBundle = mContextFixture.getCarrierConfigBundle();
         when(mCarrierConfigManager.getConfigForSubId(anyInt(), any())).thenReturn(mBundle);
         when(mUserManager.isUserUnlocked()).thenReturn(true);
+        when(mKeyguardManager.isDeviceLocked()).thenReturn(false);
         // Capture listener to emulate the carrier config change notification used later
         ArgumentCaptor<CarrierConfigManager.CarrierConfigChangeListener> listenerArgumentCaptor =
                 ArgumentCaptor.forClass(CarrierConfigManager.CarrierConfigChangeListener.class);
-        mCarrierKeyDM = new CarrierKeyDownloadManager(mPhone);
+        mFeatureFlags = Mockito.mock(FeatureFlags.class);
+        mCarrierKeyDM = new CarrierKeyDownloadManager(mPhone, mFeatureFlags);
         verify(mCarrierConfigManager).registerCarrierConfigChangeListener(any(),
                 listenerArgumentCaptor.capture());
         mCarrierConfigChangeListener = listenerArgumentCaptor.getAllValues().get(0);
-
+        mConnectivityManager = (ConnectivityManager) mPhone.getContext().getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        Network network = Mockito.mock(Network.class);
+        when(mConnectivityManager.getActiveNetwork()).thenReturn(network);
         processAllMessages();
         logd("CarrierActionAgentTest -Setup!");
     }
@@ -364,6 +376,7 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
     @SmallTest
     public void testCarrierConfigChangedWithUserLocked() {
         when(mUserManager.isUserUnlocked()).thenReturn(false);
+        when(mKeyguardManager.isDeviceLocked()).thenReturn(true);
         CarrierConfigManager carrierConfigManager = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         int slotId = mPhone.getPhoneId();
@@ -386,6 +399,7 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
     public void testUserLockedAfterCarrierConfigChanged() {
         // User is locked at beginning
         when(mUserManager.isUserUnlocked()).thenReturn(false);
+        when(mKeyguardManager.isDeviceLocked()).thenReturn(true);
         CarrierConfigManager carrierConfigManager = (CarrierConfigManager)
                 mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
         int slotId = mPhone.getPhoneId();
@@ -402,9 +416,10 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
         processAllMessages();
 
         // User unlocked event received
-        Intent mIntent = new Intent(Intent.ACTION_USER_UNLOCKED);
+        Intent mIntent = new Intent(Intent.ACTION_USER_PRESENT);
         mContext.sendBroadcast(mIntent);
         when(mUserManager.isUserUnlocked()).thenReturn(true);
+        when(mKeyguardManager.isDeviceLocked()).thenReturn(false);
         processAllMessages();
 
         assertEquals("310260", mCarrierKeyDM.mMccMncForDownload);
