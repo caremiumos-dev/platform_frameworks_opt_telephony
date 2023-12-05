@@ -2000,11 +2000,12 @@ public class SubscriptionDatabaseManager extends Handler {
      */
     public void setGroupDisabled(int subId, boolean isGroupDisabled) {
         // group disabled does not have a corresponding SimInfo column. So we only update the cache.
-
+        boolean isChanged = false;
         // Grab the write lock so no other threads can read or write the cache.
         mReadWriteLock.writeLock().lock();
         try {
             SubscriptionInfoInternal subInfoCache = mAllSubscriptionInfoInternalCache.get(subId);
+            isChanged = subInfoCache.isGroupDisabled() != isGroupDisabled;
             if (subInfoCache == null) {
                 throw new IllegalArgumentException("setGroupDisabled: Subscription doesn't exist. "
                         + "subId=" + subId);
@@ -2014,6 +2015,11 @@ public class SubscriptionDatabaseManager extends Handler {
                             .setGroupDisabled(isGroupDisabled).build());
         } finally {
             mReadWriteLock.writeLock().unlock();
+        }
+
+        if (isChanged) {
+            log("setGroupDisabled value changed, firing the callback");
+            mCallback.invokeFromExecutor(() -> mCallback.onSubscriptionChanged(subId));
         }
     }
 
