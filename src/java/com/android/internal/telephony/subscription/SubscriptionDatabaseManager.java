@@ -2009,9 +2009,12 @@ public class SubscriptionDatabaseManager extends Handler {
                 throw new IllegalArgumentException("setGroupDisabled: Subscription doesn't exist. "
                         + "subId=" + subId);
             }
-            mAllSubscriptionInfoInternalCache.put(subId,
-                    new SubscriptionInfoInternal.Builder(subInfoCache)
-                            .setGroupDisabled(isGroupDisabled).build());
+            if (subInfoCache.isGroupDisabled() != isGroupDisabled) {
+                mAllSubscriptionInfoInternalCache.put(subId,
+                        new SubscriptionInfoInternal.Builder(subInfoCache)
+                                .setGroupDisabled(isGroupDisabled).build());
+                mCallback.invokeFromExecutor(() -> mCallback.onSubscriptionChanged(subId));
+            }
         } finally {
             mReadWriteLock.writeLock().unlock();
         }
