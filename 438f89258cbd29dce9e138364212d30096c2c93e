@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef6fdc0d_9af5a963",
+        "filename": "src/java/com/android/internal/telephony/subscription/SubscriptionDatabaseManager.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2023-12-07T18:07:07Z",
+      "side": 1,
+      "message": "changed to [true or false]",
+      "range": {
+        "startLine": 2021,
+        "startChar": 40,
+        "endLine": 2021,
+        "endChar": 47
+      },
+      "revId": "438f89258cbd29dce9e138364212d30096c2c93e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
