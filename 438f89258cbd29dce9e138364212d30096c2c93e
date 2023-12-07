@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c08c0b_7c71eb02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2023-12-07T18:09:20Z",
+      "side": 1,
+      "message": "Also we should add unit test case for that. You can copy from testUpdateSatelliteNtn",
+      "revId": "438f89258cbd29dce9e138364212d30096c2c93e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef6fdc0d_9af5a963",
