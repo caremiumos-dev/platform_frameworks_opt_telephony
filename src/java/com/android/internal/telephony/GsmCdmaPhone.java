@@ -2050,9 +2050,9 @@ public class GsmCdmaPhone extends Phone {
     }
 
     @Override
-    public void deleteCarrierInfoForImsiEncryption(int carrierId) {
+    public void deleteCarrierInfoForImsiEncryption(int carrierId, String simOperator) {
         CarrierInfoManager.deleteCarrierInfoForImsiEncryption(mContext, getSubId(),
-                carrierId);
+                carrierId, simOperator);
     }
 
     @Override
