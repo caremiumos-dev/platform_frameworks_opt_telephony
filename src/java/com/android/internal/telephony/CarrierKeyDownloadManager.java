@@ -20,24 +20,28 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import android.app.AlarmManager;
 import android.app.DownloadManager;
+import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
-import android.os.UserManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.ImsiEncryptionInfo;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+
 
 import com.android.internal.annotations.VisibleForTesting;
 
@@ -55,6 +59,7 @@ import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
@@ -108,14 +113,17 @@ public class CarrierKeyDownloadManager extends Handler {
     private String mURL;
     private boolean mAllowedOverMeteredNetwork = false;
     private boolean mDeleteOldKeyAfterDownload = false;
+    private boolean mIsRequiredToHandleUnlock;
     private TelephonyManager mTelephonyManager;
-    private UserManager mUserManager;
 
     @VisibleForTesting
-    public String mMccMncForDownload;
-    public int mCarrierId;
+    public String mMccMncForDownload = "";
+    public int mCarrierId = TelephonyManager.UNKNOWN_CARRIER_ID;;
     @VisibleForTesting
     public long mDownloadId;
+    private DefaultNetworkCallback mDefaultNetworkCallback;
+    private final ConnectivityManager mConnectivityManager;
+    private KeyguardManager mKeyguardmanager;
 
     public CarrierKeyDownloadManager(Phone phone) {
         mPhone = phone;
@@ -123,45 +131,43 @@ public class CarrierKeyDownloadManager extends Handler {
         IntentFilter filter = new IntentFilter();
         filter.addAction(INTENT_KEY_RENEWAL_ALARM_PREFIX);
         filter.addAction(TelephonyIntents.ACTION_CARRIER_CERTIFICATE_DOWNLOAD);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
         mContext.registerReceiver(mBroadcastReceiver, filter, null, phone);
         mDownloadManager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
-        mTelephonyManager = mContext.getSystemService(TelephonyManager.class)
-                .createForSubscriptionId(mPhone.getSubId());
-        mUserManager = mContext.getSystemService(UserManager.class);
+        mTelephonyManager = mContext.getSystemService(
+                TelephonyManager.class).createForSubscriptionId(mPhone.getSubId());
+        mKeyguardmanager = mContext.getSystemService(KeyguardManager.class);
         CarrierConfigManager carrierConfigManager = mContext.getSystemService(
                 CarrierConfigManager.class);
         // Callback which directly handle config change should be executed on handler thread
         carrierConfigManager.registerCarrierConfigChangeListener(this::post,
                 (slotIndex, subId, carrierId, specificCarrierId) -> {
-                    boolean isUserUnlocked = mUserManager.isUserUnlocked();
-
-                    if (isUserUnlocked && slotIndex == mPhone.getPhoneId()) {
-                        Log.d(LOG_TAG, "Carrier Config changed: slotIndex=" + slotIndex);
-                        handleAlarmOrConfigChange();
-                    } else {
-                        Log.d(LOG_TAG, "User is locked");
-                        mContext.registerReceiver(mUserUnlockedReceiver, new IntentFilter(
-                                Intent.ACTION_USER_UNLOCKED));
+                    logd("CarrierConfig changed slotIndex = " + slotIndex + " subId = " + subId
+                            + " CarrierId = " + carrierId + " phoneId = " + mPhone.getPhoneId());
+                    // Below checks are necessary to optimise the logic.
+                    if ((slotIndex == mPhone.getPhoneId()) && (carrierId > 0 || !TextUtils.isEmpty(
+                            mMccMncForDownload))) {
+                        mCarrierId = carrierId;
+                        getSimOperator();
+                        boolean isDeviceLocked = mKeyguardmanager.isDeviceLocked();
+                        if (isDeviceLocked || slotIndex != mPhone.getPhoneId()) {
+                            logd("isDeviceLocked = " + isDeviceLocked);
+                            mIsRequiredToHandleUnlock = isDeviceLocked;
+                        } else {
+                            logd("Carrier Config changed: slotIndex=" + slotIndex);
+                            sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
+                        }
                     }
                 });
+        mConnectivityManager = mContext.getSystemService(ConnectivityManager.class);
     }
-
-    private final BroadcastReceiver mUserUnlockedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction())) {
-                Log.d(LOG_TAG, "Received UserUnlockedReceiver");
-                handleAlarmOrConfigChange();
-            }
-        }
-    };
 
     private final BroadcastReceiver mDownloadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
-                Log.d(LOG_TAG, "Download Complete");
+                logd("Download Complete");
                 sendMessage(obtainMessage(EVENT_DOWNLOAD_COMPLETE,
                         intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0)));
             }
@@ -177,13 +183,25 @@ public class CarrierKeyDownloadManager extends Handler {
             if (action.equals(INTENT_KEY_RENEWAL_ALARM_PREFIX)) {
                 int slotIndexExtra = intent.getIntExtra(SubscriptionManager.EXTRA_SLOT_INDEX, -1);
                 if (slotIndexExtra == slotIndex) {
-                    Log.d(LOG_TAG, "Handling key renewal alarm: " + action);
+                    logd("Handling key renewal alarm: " + action);
+                    getSimOperator();
+                    getSimCarrierId();
                     sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
                 }
             } else if (action.equals(TelephonyIntents.ACTION_CARRIER_CERTIFICATE_DOWNLOAD)) {
                 if (phoneId == intent.getIntExtra(PhoneConstants.PHONE_KEY,
                         SubscriptionManager.INVALID_SIM_SLOT_INDEX)) {
-                    Log.d(LOG_TAG, "Handling reset intent: " + action);
+                    logd("Handling reset intent: " + action);
+                    sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
+                }
+            } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
+                // The Carrier key download fails when SIM is inserted while device is locked
+                // hence adding a retry logic when device is unlocked.
+                logd("device unlocked, isRequiredToHandleUnlock = " + mIsRequiredToHandleUnlock
+                        + ", slotIndex = " + slotIndex + "  hasActiveDataNetwork = " + (
+                        mConnectivityManager.getActiveNetwork() != null));
+                if (mIsRequiredToHandleUnlock) {
+                    mIsRequiredToHandleUnlock = false;
                     sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
                 }
             }
@@ -198,8 +216,8 @@ public class CarrierKeyDownloadManager extends Handler {
                 break;
             case EVENT_DOWNLOAD_COMPLETE:
                 long carrierKeyDownloadIdentifier = (long) msg.obj;
-                String currentMccMnc = getSimOperator();
-                int carrierId = getSimCarrierId();
+                String currentMccMnc = mTelephonyManager.getSimOperator(mPhone.getSubId());;
+                int carrierId = mTelephonyManager.getSimCarrierId();
                 if (isValidDownload(currentMccMnc, carrierKeyDownloadIdentifier, carrierId)) {
                     onDownloadComplete(carrierKeyDownloadIdentifier, currentMccMnc, carrierId);
                     onPostDownloadProcessing(carrierKeyDownloadIdentifier);
@@ -210,8 +228,7 @@ public class CarrierKeyDownloadManager extends Handler {
 
     private void onPostDownloadProcessing(long carrierKeyDownloadIdentifier) {
         resetRenewalAlarm();
-        cleanupDownloadInfo();
-
+        mDownloadId = -1;
         // unregister from DOWNLOAD_COMPLETE
         mContext.unregisterReceiver(mDownloadReceiver);
     }
@@ -219,32 +236,63 @@ public class CarrierKeyDownloadManager extends Handler {
     private void handleAlarmOrConfigChange() {
         if (carrierUsesKeys()) {
             if (areCarrierKeysAbsentOrExpiring()) {
-                boolean downloadStartedSuccessfully = downloadKey();
-                // if the download was attempted, but not started successfully, and if carriers uses
-                // keys, we'll still want to renew the alarms, and try downloading the key a day
-                // later.
-                if (!downloadStartedSuccessfully) {
-                    resetRenewalAlarm();
-                }
-            } else {
-                return;
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    boolean hasActiveDataNetwork = (mConnectivityManager.getActiveNetwork() != null);
+                    boolean downloadStartedSuccessfully = hasActiveDataNetwork && downloadKey();
+                    // if the download was attempted, but not started successfully, and if carriers uses
+                    // keys, we'll still want to renew the alarms, and try downloading the key a day
+                    // later.
+                    int slotIndex = SubscriptionManager.getSlotIndex(mPhone.getSubId());
+                    if (downloadStartedSuccessfully) {
+                        unregisterDefaultNetworkCb(slotIndex);
+                    } else {
+                        // If download fails due to the device lock, we will reattempt once the device
+                        // is unlocked.
+                        mIsRequiredToHandleUnlock = mKeyguardmanager.isDeviceLocked();
+                        loge( "hasActiveDataConnection = " + hasActiveDataNetwork
+                            + "    isDeviceLocked = " + mIsRequiredToHandleUnlock);
+                        if (!hasActiveDataNetwork) {
+                            registerDefaultNetworkCb(slotIndex);
+                        }
+                        resetRenewalAlarm();
+                    }
+                }, 500);
             }
+            logd("handleAlarmOrConfigChange :: areCarrierKeysAbsentOrExpiring returned false");
         } else {
-            // delete any existing alarms.
             cleanupRenewalAlarms();
-            mPhone.deleteCarrierInfoForImsiEncryption(getSimCarrierId());
+            SubscriptionManager subscriptionManager = mPhone.getContext().getSystemService(
+                    SubscriptionManager.class);
+            List<SubscriptionInfo> subscriptionInfoList =
+                    subscriptionManager.getActiveSubscriptionInfoList();
+            loge("handleAlarmOrConfigChange ActiveSubscriptionInfoList = " + (
+                    (subscriptionInfoList != null) ? subscriptionInfoList.size() : null));
+            for (SubscriptionInfo subInfo : subscriptionInfoList) {
+                if (mPhone.getSubId() != subInfo.getSubscriptionId()
+                        && subInfo.getCarrierId() == mPhone.getCarrierId()) {
+                    // We do not proceed to remove the Key from the DB as another slot contains
+                    // same operator sim which is in active state.
+                    loge("handleAlarmOrConfigChange same operator sim in another slot");
+                    cleanupDownloadInfo();
+                    return;
+                }
+            }
+            // delete any existing alarms.
+            mPhone.deleteCarrierInfoForImsiEncryption(getSimCarrierId(), getSimOperator());
+            cleanupDownloadInfo();
         }
     }
 
     private void cleanupDownloadInfo() {
-        Log.d(LOG_TAG, "Cleaning up download info");
+        logd("Cleaning up download info");
         mDownloadId = -1;
-        mMccMncForDownload = null;
+        mMccMncForDownload = "";
         mCarrierId = TelephonyManager.UNKNOWN_CARRIER_ID;
     }
 
     private void cleanupRenewalAlarms() {
-        Log.d(LOG_TAG, "Cleaning up existing renewal alarms");
+        logd("Cleaning up existing renewal alarms");
         int slotIndex = SubscriptionManager.getSlotIndex(mPhone.getSubId());
         Intent intent = new Intent(INTENT_KEY_RENEWAL_ALARM_PREFIX);
         intent.putExtra(SubscriptionManager.EXTRA_SLOT_INDEX, slotIndex);
@@ -304,7 +352,7 @@ public class CarrierKeyDownloadManager extends Handler {
         cleanupRenewalAlarms();
         int slotIndex = SubscriptionManager.getSlotIndex(mPhone.getSubId());
         long minExpirationDate = getExpirationDate();
-        Log.d(LOG_TAG, "minExpirationDate: " + new Date(minExpirationDate));
+        logd("minExpirationDate: " + new Date(minExpirationDate));
         final AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(
                 Context.ALARM_SERVICE);
         Intent intent = new Intent(INTENT_KEY_RENEWAL_ALARM_PREFIX);
@@ -312,7 +360,7 @@ public class CarrierKeyDownloadManager extends Handler {
         PendingIntent carrierKeyDownloadIntent = PendingIntent.getBroadcast(mContext, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, minExpirationDate, carrierKeyDownloadIntent);
-        Log.d(LOG_TAG, "setRenewalAlarm: action=" + intent.getAction() + " time="
+        logd("setRenewalAlarm: action=" + intent.getAction() + " time="
                 + new Date(minExpirationDate));
     }
 
@@ -321,7 +369,12 @@ public class CarrierKeyDownloadManager extends Handler {
      **/
     @VisibleForTesting
     public String getSimOperator() {
-        return mTelephonyManager.getSimOperator(mPhone.getSubId());
+        String simOperator = mPhone.getOperatorNumeric();
+        if (!TextUtils.isEmpty(simOperator) && !simOperator.equals(mMccMncForDownload)) {
+            mMccMncForDownload = simOperator;
+            logd("getSimOperator, Initialized mMccMncForDownload = " +mMccMncForDownload);
+        }
+        return mMccMncForDownload;
     }
 
     /**
@@ -329,7 +382,7 @@ public class CarrierKeyDownloadManager extends Handler {
      **/
     @VisibleForTesting
     public int getSimCarrierId() {
-        return mTelephonyManager.getSimCarrierId();
+        return (mCarrierId > 0) ? mCarrierId : mPhone.getCarrierId();
     }
 
     /**
@@ -340,7 +393,7 @@ public class CarrierKeyDownloadManager extends Handler {
     @VisibleForTesting
     public boolean isValidDownload(String currentMccMnc, long currentDownloadId, int carrierId) {
         if (currentDownloadId != mDownloadId) {
-            Log.e(LOG_TAG, "download ID=" + currentDownloadId
+            loge( "download ID=" + currentDownloadId
                     + " for completed download does not match stored id=" + mDownloadId);
             return false;
         }
@@ -348,12 +401,12 @@ public class CarrierKeyDownloadManager extends Handler {
         if (TextUtils.isEmpty(currentMccMnc) || TextUtils.isEmpty(mMccMncForDownload)
                 || !TextUtils.equals(currentMccMnc, mMccMncForDownload)
                 || mCarrierId != carrierId) {
-            Log.e(LOG_TAG, "currentMccMnc=" + currentMccMnc + " storedMccMnc =" + mMccMncForDownload
+            loge( "currentMccMnc=" + currentMccMnc + " storedMccMnc =" + mMccMncForDownload
                     + "currentCarrierId = " + carrierId + "  storedCarrierId = " + mCarrierId);
             return false;
         }
 
-        Log.d(LOG_TAG, "Matched MccMnc =  " + currentMccMnc + ", carrierId = " + carrierId
+        logd("Matched MccMnc =  " + currentMccMnc + ", carrierId = " + carrierId
                 + ", downloadId: " + currentDownloadId);
         return true;
     }
@@ -363,7 +416,7 @@ public class CarrierKeyDownloadManager extends Handler {
      **/
     private void onDownloadComplete(long carrierKeyDownloadIdentifier, String mccMnc,
             int carrierId) {
-        Log.d(LOG_TAG, "onDownloadComplete: " + carrierKeyDownloadIdentifier);
+        logd("onDownloadComplete: " + carrierKeyDownloadIdentifier);
         String jsonStr;
         DownloadManager.Query query = new DownloadManager.Query();
         query.setFilterById(carrierKeyDownloadIdentifier);
@@ -378,22 +431,21 @@ public class CarrierKeyDownloadManager extends Handler {
                 try {
                     jsonStr = convertToString(mDownloadManager, carrierKeyDownloadIdentifier);
                     if (TextUtils.isEmpty(jsonStr)) {
-                        Log.d(LOG_TAG, "fallback to no gzip");
+                        logd("fallback to no gzip");
                         jsonStr = convertToStringNoGZip(mDownloadManager,
                                 carrierKeyDownloadIdentifier);
                     }
                     parseJsonAndPersistKey(jsonStr, mccMnc, carrierId);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "Error in download:" + carrierKeyDownloadIdentifier
+                    loge( "Error in download:" + carrierKeyDownloadIdentifier
                             + ". " + e);
                 } finally {
                     mDownloadManager.remove(carrierKeyDownloadIdentifier);
                 }
             }
-            Log.d(LOG_TAG, "Completed downloading keys");
+            logd("Completed downloading keys");
         }
         cursor.close();
-        return;
     }
 
     /**
@@ -415,7 +467,7 @@ public class CarrierKeyDownloadManager extends Handler {
                     CarrierConfigManager.IMSI_KEY_DOWNLOAD_URL_STRING,
                     CarrierConfigManager.KEY_ALLOW_METERED_NETWORK_FOR_CERT_DOWNLOAD_BOOL);
         } catch (RuntimeException e) {
-            Log.e(LOG_TAG, "CarrierConfigLoader is not available.");
+            loge( "CarrierConfigLoader is not available.");
         }
         if (b == null || b.isEmpty()) {
             return false;
@@ -425,10 +477,10 @@ public class CarrierKeyDownloadManager extends Handler {
         mURL = b.getString(CarrierConfigManager.IMSI_KEY_DOWNLOAD_URL_STRING);
         mAllowedOverMeteredNetwork = b.getBoolean(
                 CarrierConfigManager.KEY_ALLOW_METERED_NETWORK_FOR_CERT_DOWNLOAD_BOOL);
+
         if (mKeyAvailability == 0 || TextUtils.isEmpty(mURL)) {
-            Log.d(LOG_TAG,
-                    "Carrier not enabled or invalid values. mKeyAvailability=" + mKeyAvailability
-                            + " mURL=" + mURL);
+            logd("Carrier not enabled or invalid values. mKeyAvailability=" + mKeyAvailability
+                    + " mURL=" + mURL);
             return false;
         }
         for (int key_type : CARRIER_KEY_TYPES) {
@@ -442,7 +494,7 @@ public class CarrierKeyDownloadManager extends Handler {
     private static String convertToStringNoGZip(DownloadManager downloadManager, long downloadId) {
         StringBuilder sb = new StringBuilder();
         try (InputStream source = new FileInputStream(
-                    downloadManager.openDownloadedFile(downloadId).getFileDescriptor())) {
+                downloadManager.openDownloadedFile(downloadId).getFileDescriptor())) {
             // If the carrier does not have the data gzipped, fallback to assuming it is not zipped.
             // parseJsonAndPersistKey may still fail if the data is malformed, so we won't be
             // persisting random bogus strings thinking it's the cert
@@ -461,8 +513,8 @@ public class CarrierKeyDownloadManager extends Handler {
 
     private static String convertToString(DownloadManager downloadManager, long downloadId) {
         try (InputStream source = new FileInputStream(
-                    downloadManager.openDownloadedFile(downloadId).getFileDescriptor());
-                    InputStream gzipIs = new GZIPInputStream(source)) {
+                downloadManager.openDownloadedFile(downloadId).getFileDescriptor());
+             InputStream gzipIs = new GZIPInputStream(source)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(gzipIs, UTF_8));
             StringBuilder sb = new StringBuilder();
 
@@ -496,7 +548,7 @@ public class CarrierKeyDownloadManager extends Handler {
     public void parseJsonAndPersistKey(String jsonStr, String mccMnc, int carrierId) {
         if (TextUtils.isEmpty(jsonStr) || TextUtils.isEmpty(mccMnc)
                 || carrierId == TelephonyManager.UNKNOWN_CARRIER_ID) {
-            Log.e(LOG_TAG, "jsonStr or mcc, mnc: is empty or carrierId is UNKNOWN_CARRIER_ID");
+            loge( "jsonStr or mcc, mnc: is empty or carrierId is UNKNOWN_CARRIER_ID");
             return;
         }
         try {
@@ -521,22 +573,23 @@ public class CarrierKeyDownloadManager extends Handler {
                     if (typeString.equals(JSON_TYPE_VALUE_EPDG)) {
                         type = TelephonyManager.KEY_TYPE_EPDG;
                     } else if (!typeString.equals(JSON_TYPE_VALUE_WLAN)) {
-                        Log.e(LOG_TAG, "Invalid key-type specified: " + typeString);
+                        loge( "Invalid key-type specified: " + typeString);
                     }
                 }
                 String identifier = key.getString(JSON_IDENTIFIER);
                 Pair<PublicKey, Long> keyInfo =
                         getKeyInformation(cleanCertString(cert).getBytes());
                 if (mDeleteOldKeyAfterDownload) {
-                    mPhone.deleteCarrierInfoForImsiEncryption(TelephonyManager.UNKNOWN_CARRIER_ID);
+                    mPhone.deleteCarrierInfoForImsiEncryption(TelephonyManager.UNKNOWN_CARRIER_ID,
+                            null);
                     mDeleteOldKeyAfterDownload = false;
                 }
                 savePublicKey(keyInfo.first, type, identifier, keyInfo.second, mcc, mnc, carrierId);
             }
         } catch (final JSONException e) {
-            Log.e(LOG_TAG, "Json parsing error: " + e.getMessage());
+            loge( "Json parsing error: " + e.getMessage());
         } catch (final Exception e) {
-            Log.e(LOG_TAG, "Exception getting certificate: " + e);
+            loge( "Exception getting certificate: " + e);
         }
     }
 
@@ -576,10 +629,10 @@ public class CarrierKeyDownloadManager extends Handler {
             ImsiEncryptionInfo imsiEncryptionInfo =
                     mPhone.getCarrierInfoForImsiEncryption(key_type, false);
             if (imsiEncryptionInfo == null) {
-                Log.d(LOG_TAG, "Key not found for: " + key_type);
+                logd("Key not found for: " + key_type);
                 return true;
             } else if (imsiEncryptionInfo.getCarrierId() == TelephonyManager.UNKNOWN_CARRIER_ID) {
-                Log.d(LOG_TAG, "carrier key is unknown carrier, so prefer to reDownload");
+                logd("carrier key is unknown carrier, so prefer to reDownload");
                 mDeleteOldKeyAfterDownload = true;
                 return true;
             }
@@ -591,16 +644,13 @@ public class CarrierKeyDownloadManager extends Handler {
     }
 
     private boolean downloadKey() {
-        Log.d(LOG_TAG, "starting download from: " + mURL);
-        String mccMnc = getSimOperator();
-        int carrierId = getSimCarrierId();
-        if (!TextUtils.isEmpty(mccMnc) || carrierId != TelephonyManager.UNKNOWN_CARRIER_ID) {
-            Log.d(LOG_TAG, "downloading key for mccmnc : " + mccMnc + ", carrierId : "
-                    + carrierId);
-        } else {
-            Log.e(LOG_TAG, "mccmnc or carrierId is UnKnown");
+        logd("starting download from: " + mURL);
+        if (TextUtils.isEmpty(mMccMncForDownload)
+                || mCarrierId == TelephonyManager.UNKNOWN_CARRIER_ID) {
+            loge("mccmnc or carrierId is UnKnown");
             return false;
         }
+
         try {
             // register the broadcast receiver to listen for download complete
             IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
@@ -616,13 +666,12 @@ public class CarrierKeyDownloadManager extends Handler {
             request.addRequestHeader("Accept-Encoding", "gzip");
             Long carrierKeyDownloadRequestId = mDownloadManager.enqueue(request);
 
-            Log.d(LOG_TAG, "saving values mccmnc: " + mccMnc + ", downloadId: "
-                    + carrierKeyDownloadRequestId + ", carrierId: " + carrierId);
-            mMccMncForDownload = mccMnc;
-            mCarrierId = carrierId;
+            logd("saving values mccmnc: " + mMccMncForDownload + ", downloadId: "
+                    + carrierKeyDownloadRequestId + ", carrierId: " + mCarrierId);
             mDownloadId = carrierKeyDownloadRequestId;
         } catch (Exception e) {
-            Log.e(LOG_TAG, "exception trying to download key from url: " + mURL);
+            loge( "exception trying to download key from url: " + mURL + ", Exception = "
+                    + e.getMessage());
             return false;
         }
         return true;
@@ -670,5 +719,60 @@ public class CarrierKeyDownloadManager extends Handler {
         return cert.substring(
                 cert.indexOf(CERT_BEGIN_STRING),
                 cert.indexOf(CERT_END_STRING) + CERT_END_STRING.length());
+    }
+
+    /**
+     * Registering the callback to listen on data connection availability.
+     *
+     * @param slotId Sim slotIndex that tries to download the key.
+     */
+    private void registerDefaultNetworkCb(int slotId) {
+        logd("RegisterDefaultNetworkCb for slotId = " +slotId);
+        if (mDefaultNetworkCallback == null
+                && slotId != SubscriptionManager.INVALID_SIM_SLOT_INDEX) {
+            mDefaultNetworkCallback = new DefaultNetworkCallback(slotId);
+            mConnectivityManager.registerDefaultNetworkCallback(mDefaultNetworkCallback, this);
+        }
+    }
+
+    /**
+     * Unregister the data connection monitor listener.
+     */
+    private void unregisterDefaultNetworkCb(int slotId) {
+        logd("unregisterDefaultNetworkCb for slotId = " +slotId);
+        if (mDefaultNetworkCallback != null) {
+            mConnectivityManager.unregisterNetworkCallback(mDefaultNetworkCallback);
+            mDefaultNetworkCallback = null;
+        }
+    }
+
+    final class DefaultNetworkCallback extends ConnectivityManager.NetworkCallback {
+        final int mSlotIndex;
+
+        public DefaultNetworkCallback(int slotId) {
+            mSlotIndex = slotId;
+        }
+
+        /** Called when the framework connects and has declared a new network ready for use. */
+        @Override
+        public void onAvailable(Network network) {
+            logd("Data network connected, slotId = " + mSlotIndex);
+            if (mConnectivityManager.getActiveNetwork() != null && SubscriptionManager.getSlotIndex(
+                    mPhone.getSubId()) == mSlotIndex) {
+                mIsRequiredToHandleUnlock = false;
+                unregisterDefaultNetworkCb(mSlotIndex);
+                sendEmptyMessage(EVENT_ALARM_OR_CONFIG_CHANGE);
+            }
+        }
+    }
+
+    private void loge(String logStr) {
+        String TAG = LOG_TAG + " [" + mPhone.getPhoneId() + "]";
+        Log.e(TAG, logStr);
+    }
+
+    private void logd(String logStr) {
+        String TAG = LOG_TAG + " [" + mPhone.getPhoneId() + "]";
+        Log.d(TAG, logStr);
     }
 }

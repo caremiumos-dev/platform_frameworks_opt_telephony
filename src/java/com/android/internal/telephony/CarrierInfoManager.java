@@ -297,7 +297,8 @@ public class CarrierInfoManager {
         final TelephonyManager telephonyManager = context.getSystemService(TelephonyManager.class)
                 .createForSubscriptionId(subId);
         int carrierId = telephonyManager.getSimCarrierId();
-        deleteCarrierInfoForImsiEncryption(context, subId, carrierId);
+        String simOperator = telephonyManager.getSimOperator();
+        deleteCarrierInfoForImsiEncryption(context, subId, carrierId, simOperator);
         Intent resetIntent = new Intent(TelephonyIntents.ACTION_CARRIER_CERTIFICATE_DOWNLOAD);
         SubscriptionManager.putPhoneIdAndSubIdExtra(resetIntent, mPhoneId);
         context.sendBroadcastAsUser(resetIntent, UserHandle.ALL);
@@ -311,14 +312,17 @@ public class CarrierInfoManager {
      *
      */
     public static void deleteCarrierInfoForImsiEncryption(Context context, int subId,
-            int carrierId) {
+            int carrierId, String simOperator) {
         Log.i(LOG_TAG, "deleting carrier key from db for subId=" + subId);
         String mcc = "";
         String mnc = "";
 
-        final TelephonyManager telephonyManager = context.getSystemService(TelephonyManager.class)
-                .createForSubscriptionId(subId);
-        String simOperator = telephonyManager.getSimOperator();
+        if (TextUtils.isEmpty(simOperator)) {
+            final TelephonyManager telephonyManager = context.getSystemService(
+                            TelephonyManager.class)
+                    .createForSubscriptionId(subId);
+            simOperator = telephonyManager.getSimOperator();
+        }
         if (!TextUtils.isEmpty(simOperator)) {
             mcc = simOperator.substring(0, 3);
             mnc = simOperator.substring(3);
