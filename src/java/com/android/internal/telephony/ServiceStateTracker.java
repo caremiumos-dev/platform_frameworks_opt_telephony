@@ -5874,6 +5874,7 @@ public class ServiceStateTracker extends Handler {
         // Turn the parcel to byte array. Safe to do this because the content values were never
         // written into a persistent storage. ServiceStateProvider keeps values in the memory.
         values.put(SERVICE_STATE, p.marshall());
+        p.recycle();
         return values;
     }
 
