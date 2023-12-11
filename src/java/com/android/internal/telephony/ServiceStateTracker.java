@@ -394,6 +394,10 @@ public class ServiceStateTracker extends Handler {
                     // with final broadcast
                     mPhone.notifyServiceStateChangedForSubId(mOutOfServiceSS,
                             ServiceStateTracker.this.mPrevSubId);
+                    if (getCombinedRegState(mSS) == ServiceState.STATE_IN_SERVICE) {
+                        mSS = new ServiceState();
+                        mSS.setOutOfService(false);
+                    }
                 }
             } else {
                 Context context = mPhone.getContext();
