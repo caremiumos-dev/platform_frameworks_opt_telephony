@@ -94,6 +94,8 @@ public class DataProfileManager extends Handler {
     /** Cellular data service. */
     private final @NonNull DataServiceManager mWwanDataServiceManager;
 
+    private boolean mUpdateDataProfilesLoaded = false;
+
     /**
      * All data profiles for the current carrier. Note only data profiles loaded from the APN
      * database will be stored here. The on-demand data profiles (generated dynamically, for
@@ -643,6 +645,19 @@ public class DataProfileManager extends Handler {
         ApnSetting apnSetting = null;
         if (networkRequest.hasAttribute(TelephonyNetworkRequest
                 .CAPABILITY_ATTRIBUTE_APN_SETTING)) {
+            int simState = TelephonyManager.getSimStateForSlotIndex(mPhone.getPhoneId());
+            DataProfile existProfile = mAllDataProfiles.stream()
+                    .filter(dp -> dp.canSatisfy(networkRequest.getCapabilities()))
+                    .findFirst()
+                    .orElse(null);
+            log("simState= " + simState + ", existProfile=" + existProfile
+                    + ", mUpdateDataProfilesLoaded =" + mUpdateDataProfilesLoaded);
+            if (existProfile == null
+                    && simState == TelephonyManager.SIM_STATE_LOADED && !mUpdateDataProfilesLoaded) {
+                mUpdateDataProfilesLoaded = true;
+                updateDataProfiles(FORCED_UPDATE_IA);
+            }
+
             apnSetting = getApnSettingForNetworkRequest(networkRequest, networkType,
                     ignorePermanentFailure);
         }
