@@ -112,6 +112,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -280,7 +281,7 @@ public class DataNetworkController extends Handler {
      * The current data network list, including the ones that are connected, connecting, or
      * disconnecting.
      */
-    private final @NonNull List<DataNetwork> mDataNetworkList = new ArrayList<>();
+    private final @NonNull List<DataNetwork> mDataNetworkList = new CopyOnWriteArrayList<>();
 
     /** {@code true} indicating at least one data network exists. */
     private boolean mAnyDataNetworkExisting;
