@@ -1649,7 +1649,7 @@ public class GsmCdmaPhone extends Phone {
 
         if (isPhoneTypeGsm()) {
             // handle in-call MMI first if applicable
-            if (handleInCallMmiCommands(newDialString)) {
+            if (!dialArgs.isEmergency && handleInCallMmiCommands(newDialString)) {
                 return null;
             }
 
