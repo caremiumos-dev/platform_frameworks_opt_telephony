@@ -202,7 +202,8 @@ public class SuppServiceNotification {
             + (notificationType == 0 ? " originated " : " terminated ")
             + " code: " + code
             + " index: " + index
-            + " history: " + Arrays.toString(history)
+            + " history: " + android.telephony.TelephonyBaseUtilsStub.toLogSafePhoneNumber(
+                Arrays.toString(history))
             + " \""
             + PhoneNumberUtils.stringFromStringAndTOA(number, type) + "\" ";
     }
