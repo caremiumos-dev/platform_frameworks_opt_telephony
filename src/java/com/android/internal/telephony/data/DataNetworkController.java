@@ -34,6 +34,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.telecom.TelecomManager;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
@@ -3264,6 +3265,13 @@ public class DataNetworkController extends Handler {
             mInternetLinkStatus = status;
             mDataNetworkControllerCallbacks.forEach(callback -> callback.invokeFromExecutor(
                     () -> callback.onPhysicalLinkStatusChanged(mInternetLinkStatus)));
+        }
+        boolean isDualDataConnected =
+                SystemProperties.getInt("ril.multisim.dualdata_status", 0) == 1;
+        if (isDualDataConnected && mPhone.getPhoneId()
+                != SubscriptionManager.getPhoneId(SubscriptionManager.getDefaultDataSubscriptionId())) {
+            log("updateDataActivity: skip data activity notification for vice slot");
+            return;
         }
 
         updateDataActivity();
