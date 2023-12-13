@@ -286,6 +286,8 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
                 // config has been loaded.
                 Log.i(TAG, "Received CCC for slot " + slotId + " and sim state "
                         + slotSimState + ", ignoring.");
+                setSubId(slotId, subId);
+                updateServiceContollerMap(slotId, subId);
                 return;
             }
 
@@ -1797,6 +1799,12 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
             }
         }
         return infos;
+    }
+
+    private void updateServiceContollerMap(int slotId, int subId) {
+        for(ImsServiceController imsServiceController : getImsServiceControllers(slotId)) {
+            imsServiceController.updateSlotIdToSubIdMap(slotId, subId);
+        }
     }
 
     private void setSubId(int slotId, int subId) {

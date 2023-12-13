@@ -482,6 +482,12 @@ public class ImsServiceController {
         }
     }
 
+    public void updateSlotIdToSubIdMap(int slotId, int subId) {
+        synchronized (mSlotIdToSubIdMap) {
+            mSlotIdToSubIdMap.put(slotId, subId);
+        }
+    }
+
     /**
      * For every feature that is added, the service calls the associated create. For every
      * ImsFeature that is removed, {@link IImsServiceController#removeImsFeature} is called.
