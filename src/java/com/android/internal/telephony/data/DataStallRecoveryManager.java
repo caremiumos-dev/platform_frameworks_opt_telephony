@@ -335,14 +335,14 @@ public class DataStallRecoveryManager extends Handler {
         switch (msg.what) {
             case EVENT_SEND_DATA_STALL_BROADCAST:
                 mRecoveryTriggered = true;
+                // Broadcast intent that data stall has been detected.
+                broadcastDataStallDetected(getRecoveryAction());
                 // Verify that DSRM needs to process the recovery action
-                if (!isRecoveryNeeded(false)) {
+                if (!isRecoveryNeeded(false, false)) {
                     cancelNetworkCheckTimer();
                     startNetworkCheckTimer(getRecoveryAction());
                     return;
                 }
-                // Broadcast intent that data stall has been detected.
-                broadcastDataStallDetected(getRecoveryAction());
                 // Schedule the message to to wait for the predicted value.
                 sendMessageDelayed(
                         obtainMessage(EVENT_DO_RECOVERY), mPredictWaitingMillis);
@@ -546,7 +546,7 @@ public class DataStallRecoveryManager extends Handler {
         setNetworkValidationState(isValid);
         if (isValid) {
             reset();
-        } else if (isRecoveryNeeded(true)) {
+        } else if (isRecoveryNeeded(true, true)) {
             // Set the network as invalid, because recovery is needed
             mIsValidNetwork = false;
             log("trigger data stall recovery");
@@ -735,7 +735,7 @@ public class DataStallRecoveryManager extends Handler {
      * @return {@code true} if need to do recovery action, {@code false} no need to do recovery
      *     action.
      */
-    private boolean isRecoveryNeeded(boolean isNeedToCheckTimer) {
+    private boolean isRecoveryNeeded(boolean isNeedToCheckTimer, boolean isNeedOnLowCoverage) {
         logv("enter: isRecoveryNeeded()");
 
         // Skip if network is invalid and recovery was not started yet
@@ -765,7 +765,8 @@ public class DataStallRecoveryManager extends Handler {
         }
 
         // Skip when poor signal strength
-        if (mPhone.getSignalStrength().getLevel() <= CellSignalStrength.SIGNAL_STRENGTH_POOR) {
+        if (mPhone.getSignalStrength().getLevel() <= CellSignalStrength.SIGNAL_STRENGTH_POOR
+                && !isNeedOnLowCoverage) {
             logl("skip data stall recovery as in poor signal condition");
             return false;
         }
