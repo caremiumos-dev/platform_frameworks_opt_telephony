@@ -2261,8 +2261,8 @@ public class SubscriptionManagerService extends ISub.Stub {
             "carrier privileges",
     })
     public int setOpportunistic(boolean opportunistic, int subId, @NonNull String callingPackage) {
-        TelephonyPermissions.enforceAnyPermissionGrantedOrCarrierPrivileges(
-                mContext, Binder.getCallingUid(), subId, true, "setOpportunistic",
+        TelephonyPermissions.enforceAnyPermissionGrantedOrCarrierPrivileges(mContext, subId,
+                Binder.getCallingUid(), true, "setOpportunistic",
                 Manifest.permission.MODIFY_PHONE_STATE);
 
         long token = Binder.clearCallingIdentity();
@@ -3515,8 +3515,8 @@ public class SubscriptionManagerService extends ISub.Stub {
     })
     public int setUsageSetting(@UsageSetting int usageSetting, int subId,
             @NonNull String callingPackage) {
-        TelephonyPermissions.enforceAnyPermissionGrantedOrCarrierPrivileges(
-                mContext, Binder.getCallingUid(), subId, true, "setUsageSetting",
+        TelephonyPermissions.enforceAnyPermissionGrantedOrCarrierPrivileges(mContext, subId,
+                Binder.getCallingUid(), true, "setUsageSetting",
                 Manifest.permission.MODIFY_PHONE_STATE);
 
         if (usageSetting < SubscriptionManager.USAGE_SETTING_DEFAULT
