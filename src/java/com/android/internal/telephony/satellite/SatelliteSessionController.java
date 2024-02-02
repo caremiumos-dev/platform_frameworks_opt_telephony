@@ -38,7 +38,7 @@ import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.provider.DeviceConfig;
 import android.telephony.Rlog;
-import android.telephony.satellite.ISatelliteStateCallback;
+import android.telephony.satellite.ISatelliteModemStateCallback;
 import android.telephony.satellite.SatelliteManager;
 import android.telephony.satellite.stub.ISatelliteGateway;
 import android.telephony.satellite.stub.SatelliteGatewayService;
@@ -121,7 +121,7 @@ public class SatelliteSessionController extends StateMachine {
     protected AtomicBoolean mIsSendingTriggeredDuringTransferringState;
     private long mSatelliteStayAtListeningFromSendingMillis;
     private long mSatelliteStayAtListeningFromReceivingMillis;
-    private final ConcurrentHashMap<IBinder, ISatelliteStateCallback> mListeners;
+    private final ConcurrentHashMap<IBinder, ISatelliteModemStateCallback> mListeners;
     @SatelliteManager.SatelliteModemState private int mCurrentState;
     final boolean mIsSatelliteSupported;
     private boolean mIsDemoMode = false;
@@ -249,7 +249,8 @@ public class SatelliteSessionController extends StateMachine {
      *
      * @param callback The callback to handle the satellite modem state changed event.
      */
-    public void registerForSatelliteModemStateChanged(@NonNull ISatelliteStateCallback callback) {
+    public void registerForSatelliteModemStateChanged(
+            @NonNull ISatelliteModemStateCallback callback) {
         try {
             callback.onSatelliteModemStateChanged(mCurrentState);
             mListeners.put(callback.asBinder(), callback);
@@ -263,9 +264,10 @@ public class SatelliteSessionController extends StateMachine {
      * If callback was not registered before, the request will be ignored.
      *
      * @param callback The callback that was passed to
-     *                 {@link #registerForSatelliteModemStateChanged(ISatelliteStateCallback)}.
+     * {@link #registerForSatelliteModemStateChanged(ISatelliteModemStateCallback)}.
      */
-    public void unregisterForSatelliteModemStateChanged(@NonNull ISatelliteStateCallback callback) {
+    public void unregisterForSatelliteModemStateChanged(
+            @NonNull ISatelliteModemStateCallback callback) {
         mListeners.remove(callback.asBinder());
     }
 
@@ -580,7 +582,7 @@ public class SatelliteSessionController extends StateMachine {
     }
 
     private void notifyStateChangedEvent(@SatelliteManager.SatelliteModemState int state) {
-        List<ISatelliteStateCallback> toBeRemoved = new ArrayList<>();
+        List<ISatelliteModemStateCallback> toBeRemoved = new ArrayList<>();
         mListeners.values().forEach(listener -> {
             try {
                 listener.onSatelliteModemStateChanged(state);

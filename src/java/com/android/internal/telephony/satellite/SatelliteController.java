@@ -28,7 +28,6 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.wifi.WifiManager;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
 import android.os.AsyncResult;
 import android.os.Binder;
 import android.os.Bundle;
@@ -46,8 +45,8 @@ import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.satellite.ISatelliteDatagramCallback;
+import android.telephony.satellite.ISatelliteModemStateCallback;
 import android.telephony.satellite.ISatelliteProvisionStateCallback;
-import android.telephony.satellite.ISatelliteStateCallback;
 import android.telephony.satellite.ISatelliteTransmissionUpdateCallback;
 import android.telephony.satellite.SatelliteCapabilities;
 import android.telephony.satellite.SatelliteDatagram;
@@ -1562,7 +1561,7 @@ public class SatelliteController extends Handler {
      * @return The {@link SatelliteManager.SatelliteError} result of the operation.
      */
     @SatelliteManager.SatelliteError public int registerForSatelliteModemStateChanged(int subId,
-            @NonNull ISatelliteStateCallback callback) {
+            @NonNull ISatelliteModemStateCallback callback) {
         if (mSatelliteSessionController != null) {
             mSatelliteSessionController.registerForSatelliteModemStateChanged(callback);
         } else {
@@ -1579,10 +1578,10 @@ public class SatelliteController extends Handler {
      *
      * @param subId The subId of the subscription to unregister for satellite modem state changed.
      * @param callback The callback that was passed to
-     *                 {@link #registerForSatelliteModemStateChanged(int, ISatelliteStateCallback)}.
+     * {@link #registerForSatelliteModemStateChanged(int, ISatelliteModemStateCallback)}.
      */
     public void unregisterForSatelliteModemStateChanged(int subId,
-            @NonNull ISatelliteStateCallback callback) {
+            @NonNull ISatelliteModemStateCallback callback) {
         if (mSatelliteSessionController != null) {
             mSatelliteSessionController.unregisterForSatelliteModemStateChanged(callback);
         } else {
