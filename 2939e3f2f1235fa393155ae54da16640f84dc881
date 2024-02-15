@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec50c180_12ce6ce7",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2024-02-15T04:45:18Z",
+      "side": 1,
+      "message": "This will need feature flags and slow rampup. \nI will ask Google team member to absorb this CL",
+      "range": {
+        "startLine": 775,
+        "startChar": 0,
+        "endLine": 778,
+        "endChar": 66
+      },
+      "revId": "2939e3f2f1235fa393155ae54da16640f84dc881",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
