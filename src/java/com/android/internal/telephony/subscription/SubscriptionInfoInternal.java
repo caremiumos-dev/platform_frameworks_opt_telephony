@@ -600,7 +600,8 @@ public class SubscriptionInfoInternal {
      * @return the number of this subscription.
      */
     public String getNumber() {
-        return mNumber;
+        if (TextUtils.isEmpty(mNumberFromCarrier)) return mNumber;
+        return mNumberFromCarrier;
     }
 
     /**
@@ -1173,7 +1174,7 @@ public class SubscriptionInfoInternal {
                 .setCarrierName(mCarrierName)
                 .setDisplayNameSource(mDisplayNameSource)
                 .setIconTint(mIconTint)
-                .setNumber(mNumber)
+                .setNumber(getNumber())
                 .setDataRoaming(mDataRoaming)
                 .setMcc(mMcc)
                 .setMnc(mMnc)
@@ -1217,7 +1218,7 @@ public class SubscriptionInfoInternal {
                 + " displayNameSource="
                 + SubscriptionManager.displayNameSourceToString(mDisplayNameSource)
                 + " iconTint=" + mIconTint
-                + " number=" + Rlog.pii(TelephonyUtils.IS_DEBUGGABLE, mNumber)
+                + " number=" + Rlog.pii(TelephonyUtils.IS_DEBUGGABLE, getNumber())
                 + " dataRoaming=" + mDataRoaming
                 + " mcc=" + mMcc
                 + " mnc=" + mMnc
