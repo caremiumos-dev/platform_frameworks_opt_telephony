@@ -2466,13 +2466,7 @@ public abstract class SMSDispatcher extends Handler {
         /** Return if the SMS was originated from the default SMS application. */
         public boolean isFromDefaultSmsApplication(Context context) {
             if (mIsFromDefaultSmsApplication == null) {
-                UserHandle userHandle;
-                final long identity = Binder.clearCallingIdentity();
-                try {
-                    userHandle = TelephonyUtils.getSubscriptionUserHandle(context, mSubId);
-                } finally {
-                    Binder.restoreCallingIdentity(identity);
-                }
+                UserHandle userHandle = TelephonyUtils.getSubscriptionUserHandle(context, mSubId);
                 // Perform a lazy initialization, due to the cost of the operation.
                 mIsFromDefaultSmsApplication = SmsApplication.isDefaultSmsApplicationAsUser(context,
                                     getAppPackageName(), userHandle);
