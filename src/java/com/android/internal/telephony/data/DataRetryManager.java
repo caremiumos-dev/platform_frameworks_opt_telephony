@@ -1478,28 +1478,40 @@ public class DataRetryManager extends Handler {
             if (mFlags.useAlarmCallback()) {
                 // No need to wake up the device, the retry can wait util next time the device wake
                 // up to save power.
-                mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME,
-                        dataRetryEntry.retryElapsedTime,
-                        "dataRetryHash-" + dataRetryEntry.hashCode() /*debug tag*/,
-                        Runnable::run,
-                        null /*worksource*/,
-                        () -> {
-                            logl("onAlarm retry " + dataRetryEntry);
-                            sendMessage(obtainMessage(dataRetryEntry instanceof DataSetupRetryEntry
-                                            ? EVENT_DATA_SETUP_RETRY : EVENT_DATA_HANDOVER_RETRY,
-                                    dataRetryEntry));
-                        });
+                try {
+                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME,
+                            dataRetryEntry.retryElapsedTime,
+                            "dataRetryHash-" + dataRetryEntry.hashCode() /*debug tag*/,
+                            Runnable::run,
+                            null /*worksource*/,
+                            () -> {
+                                logl("onAlarm retry " + dataRetryEntry);
+                                sendMessage(obtainMessage(
+                                        dataRetryEntry instanceof DataSetupRetryEntry
+                                        ? EVENT_DATA_SETUP_RETRY : EVENT_DATA_HANDOVER_RETRY,
+                                        dataRetryEntry));
+                            });
+                } catch (Exception e) {
+                    log("Data Retry schedule : setAndAllowWhileIdle catch exception");
+                    e.printStackTrace();
+                }
             } else {
                 Intent intent = new Intent(ACTION_RETRY);
                 intent.putExtra(ACTION_RETRY_EXTRA_HASHCODE, dataRetryEntry.hashCode());
                 // No need to wake up the device, the retry can wait util next time the device wake
                 // up  to save power.
-                mAlarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME,
-                        dataRetryEntry.retryElapsedTime,
-                        PendingIntent.getBroadcast(mPhone.getContext(),
-                                dataRetryEntry.hashCode()/*Unique identifier of the retry attempt*/,
-                                intent,
-                                PendingIntent.FLAG_IMMUTABLE));
+                try {
+                    mAlarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME,
+                            dataRetryEntry.retryElapsedTime,
+                            PendingIntent.getBroadcast(mPhone.getContext(),
+                                    dataRetryEntry.hashCode()/*Unique identifier of the retry
+                                    attempt*/,
+                                    intent,
+                                    PendingIntent.FLAG_IMMUTABLE));
+                } catch (Exception e) {
+                    log("Data Retry schedule : setAndAllowWhileIdle catch exception");
+                    e.printStackTrace();
+                }
             }
         }
     }
