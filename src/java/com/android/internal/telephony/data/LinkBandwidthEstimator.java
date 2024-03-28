@@ -199,6 +199,10 @@ public class LinkBandwidthEstimator extends Handler {
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
+    //< RNTFIX:: LBE Cold Start issue
+    private boolean mIsNewNetworkConnected;
+    //> RNTFIX
+
     /** Link bandwidth estimator callbacks. */
     private final @NonNull Set<LinkBandwidthEstimatorCallback> mLinkBandwidthEstimatorCallbacks =
             new ArraySet<>();
@@ -625,15 +629,29 @@ public class LinkBandwidthEstimator extends Handler {
         mFilterUpdateTimeMs = mTelephonyFacade.getElapsedSinceBootMillis();
         mTxState.updateBandwidthFilter();
         mRxState.updateBandwidthFilter();
-
+s
         boolean isNetworkChanged = mTxState.hasLargeBwChange()
                 || mRxState.hasLargeBwChange()
                 || mBandwidthUpdateDataRat != mDataRat
                 || mBandwidthUpdateSignalLevel != mSignalLevel
-                || !mBandwidthUpdatePlmn.equals(mPlmn);
+                || !mBandwidthUpdatePlmn.equals(mPlmn)
+                //< RNTFIX:: LBE Cold Start issue
+                || mIsNewNetworkConnected;
+                //> RNTFIX
         if (isValidNetwork() && isNetworkChanged) {
-            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0 ? -1 : mTxState.mFilterKbps;
-            mRxState.mLastReportedBwKbps  = mRxState.mAvgUsedKbps < 0 ? -1 : mRxState.mFilterKbps;
+            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0
+                                            //< RNTFIX:: LBE Cold Start issue
+                                            ? mIsNewNetworkConnected == true ? 14 : -1
+                                            //> RNTFIX
+                                            : mTxState.mFilterKbps;
+            mRxState.mLastReportedBwKbps  = mRxState.mAvgUsedKbps < 0
+                                            //< RNTFIX:: LBE Cold Start issue
+                                            ? mIsNewNetworkConnected == true ? 14 : -1
+                                            //> RNTFIX
+                                            : mRxState.mFilterKbps;
+            //< RNTFIX:: LBE Cold Start issue
+            updateNetworkStateConnected(false);
+            //> RNTFIX
             sendLinkBandwidthToDataConnection(
                     mTxState.mLastReportedBwKbps,
                     mRxState.mLastReportedBwKbps);
@@ -1027,6 +1045,14 @@ public class LinkBandwidthEstimator extends Handler {
             updateTxRxBandwidthFilterSendToDataConnection();
         }
     }
+
+    //< RNTFIX:: LBE Cold Start issue
+    public void updateNetworkStateConnected(boolean isNewNetworkConnected) {
+        // To update newly connected state Network with the avg/latest values from the Network Map
+        mIsNewNetworkConnected = isNewNetworkConnected;
+        logd("updateNetworkStateConnected");
+    }
+   //> RNTFIX
 
     private NetworkRegistrationInfo getDataNri() {
         return  mPhone.getServiceState().getNetworkRegistrationInfo(
