@@ -629,7 +629,6 @@ public class LinkBandwidthEstimator extends Handler {
         mFilterUpdateTimeMs = mTelephonyFacade.getElapsedSinceBootMillis();
         mTxState.updateBandwidthFilter();
         mRxState.updateBandwidthFilter();
-s
         boolean isNetworkChanged = mTxState.hasLargeBwChange()
                 || mRxState.hasLargeBwChange()
                 || mBandwidthUpdateDataRat != mDataRat
