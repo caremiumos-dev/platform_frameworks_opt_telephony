@@ -199,6 +199,10 @@ public class LinkBandwidthEstimator extends Handler {
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
+    //< LBE Cold Start issue
+    private boolean mIsNewNetworkConnected;
+    //>
+
     /** Link bandwidth estimator callbacks. */
     private final @NonNull Set<LinkBandwidthEstimatorCallback> mLinkBandwidthEstimatorCallbacks =
             new ArraySet<>();
@@ -630,10 +634,24 @@ public class LinkBandwidthEstimator extends Handler {
                 || mRxState.hasLargeBwChange()
                 || mBandwidthUpdateDataRat != mDataRat
                 || mBandwidthUpdateSignalLevel != mSignalLevel
-                || !mBandwidthUpdatePlmn.equals(mPlmn);
+                || !mBandwidthUpdatePlmn.equals(mPlmn)
+                //< LBE Cold Start issue
+                || mIsNewNetworkConnected;
+                //>
         if (isValidNetwork() && isNetworkChanged) {
-            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0 ? -1 : mTxState.mFilterKbps;
-            mRxState.mLastReportedBwKbps  = mRxState.mAvgUsedKbps < 0 ? -1 : mRxState.mFilterKbps;
+            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0
+                                            //< LBE Cold Start issue
+                                            ? mIsNewNetworkConnected == true ? 14 : -1
+                                            //>
+                                            : mTxState.mFilterKbps;
+            mRxState.mLastReportedBwKbps  = mRxState.mAvgUsedKbps < 0
+                                            //< LBE Cold Start issue
+                                            ? mIsNewNetworkConnected == true ? 14 : -1
+                                            //>
+                                            : mRxState.mFilterKbps;
+            //< LBE Cold Start issue
+            updateNetworkStateConnected(false);
+            //>
             sendLinkBandwidthToDataConnection(
                     mTxState.mLastReportedBwKbps,
                     mRxState.mLastReportedBwKbps);
@@ -1027,6 +1045,14 @@ public class LinkBandwidthEstimator extends Handler {
             updateTxRxBandwidthFilterSendToDataConnection();
         }
     }
+
+    //< LBE Cold Start issue
+    public void updateNetworkStateConnected(boolean isNewNetworkConnected) {
+        // To update newly connected state Network with the avg/latest values from the Network Map
+        mIsNewNetworkConnected = isNewNetworkConnected;
+        logd("updateNetworkStateConnected");
+    }
+   //>
 
     private NetworkRegistrationInfo getDataNri() {
         return  mPhone.getServiceState().getNetworkRegistrationInfo(
