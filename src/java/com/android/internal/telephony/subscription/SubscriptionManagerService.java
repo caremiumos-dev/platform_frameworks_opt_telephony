@@ -3562,16 +3562,15 @@ public class SubscriptionManagerService extends ISub.Stub {
                 Manifest.permission.READ_PRIVILEGED_PHONE_STATE);
 
         final long identity = Binder.clearCallingIdentity();
-
-        SubscriptionInfoInternal subInfo = mSubscriptionDatabaseManager
-                .getSubscriptionInfoInternal(subId);
-
-        if (subInfo == null) {
-            loge("Invalid sub id " + subId + ", callingPackage=" + callingPackage);
-            return "";
-        }
-
         try {
+            SubscriptionInfoInternal subInfo = mSubscriptionDatabaseManager
+                    .getSubscriptionInfoInternal(subId);
+
+            if (subInfo == null) {
+                loge("Invalid sub id " + subId + ", callingPackage=" + callingPackage);
+                return "";
+            }
+
             switch(source) {
                 case SubscriptionManager.PHONE_NUMBER_SOURCE_UICC:
                     Phone phone = PhoneFactory.getPhone(getSlotIndex(subId));
