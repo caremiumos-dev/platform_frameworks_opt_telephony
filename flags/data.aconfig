@@ -1,5 +1,22 @@
 package: "com.android.internal.telephony.flags"
 
+<<<<<<< HEAD
+||||||| parent of f2e62b4793 (Don't tear down even when no requests)
+# OWNER=linggm TARGET=24Q3
+=======
+# OWNER=linggm TARGET=24Q4
+flag {
+  name: "keep_empty_requests_network"
+  namespace: "telephony"
+  description: "Don't tear down network even if no requests attached to it."
+  bug: "331301784"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+# OWNER=linggm TARGET=24Q3
+>>>>>>> f2e62b4793 (Don't tear down even when no requests)
 flag {
   name: "auto_switch_allow_roaming"
   namespace: "telephony"

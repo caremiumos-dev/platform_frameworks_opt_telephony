@@ -1152,6 +1152,139 @@ public class DataNetworkTest extends TelephonyTest {
     }
 
     @Test
+<<<<<<< HEAD
+||||||| parent of f2e62b4793 (Don't tear down even when no requests)
+    public void testNetworkRequestDetachedBeforePduSessionIdAllocated() throws Exception {
+        doReturn(mIwlanNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
+                eq(NetworkRegistrationInfo.DOMAIN_PS),
+                eq(AccessNetworkConstants.TRANSPORT_TYPE_WLAN));
+        doReturn(AccessNetworkConstants.TRANSPORT_TYPE_WLAN).when(mAccessNetworksManager)
+                .getPreferredTransportByNetworkCapability(NetworkCapabilities.NET_CAPABILITY_IMS);
+
+        NetworkRequestList networkRequestList = new NetworkRequestList();
+        TelephonyNetworkRequest networkRequest = new TelephonyNetworkRequest(
+                new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_IMS)
+                .build(), mPhone, mFeatureFlags);
+        networkRequestList.add(networkRequest);
+
+        SimulatedCommands simulatedCommands2 = mock(SimulatedCommands.class);
+        mPhone.mCi = simulatedCommands2;
+        mDataNetworkUT = new DataNetwork(mPhone, mFeatureFlags, Looper.myLooper(),
+                mDataServiceManagers, mImsDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WLAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        replaceInstance(DataNetwork.class, "mDataCallSessionStats",
+                mDataNetworkUT, mDataCallSessionStats);
+        processAllMessages();
+        // Capture the message for allocatePduSessionId response. We want to delay it.
+        ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
+        verify(simulatedCommands2).allocatePduSessionId(messageCaptor.capture());
+        // Detach attached network request.
+        mDataNetworkUT.detachNetworkRequest(networkRequest, false);
+        processAllMessages();
+
+        // Pass response msg for the PDU session ID allocation.
+        Message msg = messageCaptor.getValue();
+        AsyncResult.forMessage(msg, 1, null);
+        msg.sendToTarget();
+        processAllMessages();
+
+        // Check setupDataCall was not called.
+        verify(mMockedWlanDataServiceManager, never()).setupDataCall(eq(AccessNetworkType.IWLAN),
+                eq(mImsDataProfile), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), nullable(LinkProperties.class),
+                eq(1), nullable(NetworkSliceInfo.class),
+                any(TrafficDescriptor.class), eq(true), any(Message.class));
+
+        // Check state changed to DISCONNECTED from CONNECTING
+        ArgumentCaptor<PreciseDataConnectionState> pdcsCaptor =
+                ArgumentCaptor.forClass(PreciseDataConnectionState.class);
+        verify(mPhone, times(2)).notifyDataConnection(pdcsCaptor.capture());
+        List<PreciseDataConnectionState> pdcsList = pdcsCaptor.getAllValues();
+        assertThat(pdcsList.get(0).getState()).isEqualTo(TelephonyManager.DATA_CONNECTING);
+        assertThat(pdcsList.get(1).getState()).isEqualTo(TelephonyManager.DATA_DISCONNECTED);
+    }
+
+    @Test
+=======
+    public void testNetworkRequestDetachedBeforePduSessionIdAllocated() throws Exception {
+        doReturn(mIwlanNetworkRegistrationInfo).when(mServiceState).getNetworkRegistrationInfo(
+                eq(NetworkRegistrationInfo.DOMAIN_PS),
+                eq(AccessNetworkConstants.TRANSPORT_TYPE_WLAN));
+        doReturn(AccessNetworkConstants.TRANSPORT_TYPE_WLAN).when(mAccessNetworksManager)
+                .getPreferredTransportByNetworkCapability(NetworkCapabilities.NET_CAPABILITY_IMS);
+
+        NetworkRequestList networkRequestList = new NetworkRequestList();
+        TelephonyNetworkRequest networkRequest = new TelephonyNetworkRequest(
+                new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_IMS)
+                .build(), mPhone, mFeatureFlags);
+        networkRequestList.add(networkRequest);
+
+        SimulatedCommands simulatedCommands2 = mock(SimulatedCommands.class);
+        mPhone.mCi = simulatedCommands2;
+        mDataNetworkUT = new DataNetwork(mPhone, mFeatureFlags, Looper.myLooper(),
+                mDataServiceManagers, mImsDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WLAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        replaceInstance(DataNetwork.class, "mDataCallSessionStats",
+                mDataNetworkUT, mDataCallSessionStats);
+        processAllMessages();
+        // Capture the message for allocatePduSessionId response. We want to delay it.
+        ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
+        verify(simulatedCommands2).allocatePduSessionId(messageCaptor.capture());
+        // Detach attached network request.
+        mDataNetworkUT.detachNetworkRequest(networkRequest, false);
+        processAllMessages();
+
+        // Pass response msg for the PDU session ID allocation.
+        Message msg = messageCaptor.getValue();
+        AsyncResult.forMessage(msg, 1, null);
+        msg.sendToTarget();
+        processAllMessages();
+
+        // Check setupDataCall was not called.
+        verify(mMockedWlanDataServiceManager, never()).setupDataCall(eq(AccessNetworkType.IWLAN),
+                eq(mImsDataProfile), eq(false), eq(false),
+                eq(DataService.REQUEST_REASON_NORMAL), nullable(LinkProperties.class),
+                eq(1), nullable(NetworkSliceInfo.class),
+                any(TrafficDescriptor.class), eq(true), any(Message.class));
+
+        // Check state changed to DISCONNECTED from CONNECTING
+        ArgumentCaptor<PreciseDataConnectionState> pdcsCaptor =
+                ArgumentCaptor.forClass(PreciseDataConnectionState.class);
+        verify(mPhone, times(2)).notifyDataConnection(pdcsCaptor.capture());
+        List<PreciseDataConnectionState> pdcsList = pdcsCaptor.getAllValues();
+        assertThat(pdcsList.get(0).getState()).isEqualTo(TelephonyManager.DATA_CONNECTING);
+        assertThat(pdcsList.get(1).getState()).isEqualTo(TelephonyManager.DATA_DISCONNECTED);
+    }
+
+    @Test
+    public void testNetworkRequestDetachedBeforeConnected() throws Exception {
+        doReturn(true).when(mFeatureFlags).keepEmptyRequestsNetwork();
+        NetworkRequestList networkRequestList = new NetworkRequestList(new TelephonyNetworkRequest(
+                new NetworkRequest.Builder()
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_IMS)
+                        .build(), mPhone, mFeatureFlags));
+        mDataNetworkUT = new DataNetwork(mPhone, mFeatureFlags, Looper.myLooper(),
+                mDataServiceManagers, mImsDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN, DataAllowedReason.NORMAL,
+                mDataNetworkCallback);
+        replaceInstance(DataNetwork.class, "mDataCallSessionStats",
+                mDataNetworkUT, mDataCallSessionStats);
+
+        // Remove the request before the network connect.
+        mDataNetworkUT.detachNetworkRequest(networkRequestList.getFirst(), false/*should retry*/);
+        setSuccessfulSetupDataResponse(mMockedWwanDataServiceManager, 123);
+        processAllMessages();
+
+        // Verify the request proceed to connected state even without requests.
+        assertThat(mDataNetworkUT.isConnected()).isTrue();
+    }
+
+    @Test
+>>>>>>> f2e62b4793 (Don't tear down even when no requests)
     public void testAdminAndOwnerUids() throws Exception {
         doReturn(ADMIN_UID2).when(mCarrierPrivilegesTracker).getCarrierServicePackageUid();
         setupDataNetwork();
