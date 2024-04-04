@@ -2034,6 +2034,12 @@ public class DataNetwork extends StateMachine {
                         };
                 mPhone.getLinkBandwidthEstimator().registerCallback(
                         mLinkBandwidthEstimatorCallback);
+
+                if (mNetworkCapabilities != null
+                        && mNetworkCapabilities.hasCapability(
+                            NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                    mPhone.getLinkBandwidthEstimator().updateNetworkStateConnected(true);
+                }
             }
         } else {
             loge("Invalid bandwidth source configuration: " + bandwidthEstimateSource);

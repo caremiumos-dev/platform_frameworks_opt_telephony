@@ -144,6 +144,8 @@ public class LinkBandwidthEstimator extends Handler {
     private static final int MAX_BW_TO_STATIC_BW_RATIO = 15;
     private static final int BYTE_DELTA_THRESHOLD_MIN_KB = 10;
     private static final int MAX_ERROR_PERCENT = 100 * 100;
+    private static final int MIN_BW_KBPS = 14;
+    private static final int INVALID_BW_KBPS = -1;
     private static final String[] AVG_BW_PER_RAT = {
             "GPRS:24,24", "EDGE:70,18", "UMTS:115,115", "CDMA:14,14",
             "CDMA - 1xRTT:30,30", "CDMA - EvDo rev. 0:750,48", "CDMA - EvDo rev. A:950,550",
@@ -199,6 +201,8 @@ public class LinkBandwidthEstimator extends Handler {
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
+    private boolean mIsNewNetworkConnected;
+
     /** Link bandwidth estimator callbacks. */
     private final @NonNull Set<LinkBandwidthEstimatorCallback> mLinkBandwidthEstimatorCallbacks =
             new ArraySet<>();
@@ -235,8 +239,8 @@ public class LinkBandwidthEstimator extends Handler {
 
     private static void initAvgBwPerRatTable() {
         for (String config : AVG_BW_PER_RAT) {
-            int rxKbps = 14;
-            int txKbps = 14;
+            int rxKbps = MIN_BW_KBPS;
+            int txKbps = MIN_BW_KBPS;
             String[] kv = config.split(":");
             if (kv.length == 2) {
                 String[] split = kv[1].split(",");
@@ -630,10 +634,18 @@ public class LinkBandwidthEstimator extends Handler {
                 || mRxState.hasLargeBwChange()
                 || mBandwidthUpdateDataRat != mDataRat
                 || mBandwidthUpdateSignalLevel != mSignalLevel
-                || !mBandwidthUpdatePlmn.equals(mPlmn);
+                || !mBandwidthUpdatePlmn.equals(mPlmn)
+                || mIsNewNetworkConnected;
+
         if (isValidNetwork() && isNetworkChanged) {
-            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0 ? -1 : mTxState.mFilterKbps;
-            mRxState.mLastReportedBwKbps  = mRxState.mAvgUsedKbps < 0 ? -1 : mRxState.mFilterKbps;
+            mTxState.mLastReportedBwKbps = mTxState.mAvgUsedKbps < 0
+                    ? (mIsNewNetworkConnected ? MIN_BW_KBPS : INVALID_BW_KBPS)
+                    : mTxState.mFilterKbps;
+            mRxState.mLastReportedBwKbps = mRxState.mAvgUsedKbps < 0
+                    ? (mIsNewNetworkConnected ? MIN_BW_KBPS : INVALID_BW_KBPS)
+                    : mRxState.mFilterKbps;
+
+            updateNetworkStateConnected(false);
             sendLinkBandwidthToDataConnection(
                     mTxState.mLastReportedBwKbps,
                     mRxState.mLastReportedBwKbps);
@@ -758,7 +770,7 @@ public class LinkBandwidthEstimator extends Handler {
             if (count >= BW_STATS_COUNT_THRESHOLD) {
                 return (int) (network.getValue(mLink, mSignalLevel) / count);
             }
-            return -1;
+            return INVALID_BW_KBPS;
         }
 
         private int getAvgUsedBandwidthAdjacentThreeLevelKbps() {
@@ -785,19 +797,19 @@ public class LinkBandwidthEstimator extends Handler {
             if (count >= BW_STATS_COUNT_THRESHOLD) {
                 return (int) (value / count);
             }
-            return -1;
+            return INVALID_BW_KBPS;
         }
 
         private int getAvgUsedBandwidthAtLevel(NetworkBandwidth network,
                 int signalLevel) {
             if (signalLevel < 0 || signalLevel >= NUM_SIGNAL_LEVEL) {
-                return -1;
+                return INVALID_BW_KBPS;
             }
             int count = network.getCount(mLink, signalLevel);
             if (count >= BW_STATS_COUNT_THRESHOLD) {
                 return (int) (network.getValue(mLink, signalLevel) / count);
             }
-            return -1;
+            return INVALID_BW_KBPS;
         }
 
         private int getCurrentCount() {
@@ -1026,6 +1038,12 @@ public class LinkBandwidthEstimator extends Handler {
             resetBandwidthFilter();
             updateTxRxBandwidthFilterSendToDataConnection();
         }
+    }
+
+    /** Update the newly connected network with the avg/latest BW values from the network map */
+    public void updateNetworkStateConnected(boolean isNewNetworkConnected) {
+        mIsNewNetworkConnected = isNewNetworkConnected;
+        logd("updateNetworkStateConnected");
     }
 
     private NetworkRegistrationInfo getDataNri() {
