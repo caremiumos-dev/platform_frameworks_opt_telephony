@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8946f424_98fe9af8",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-04-04T23:27:58Z",
+      "side": 1,
+      "message": "This method does not exist in AOSP.",
+      "range": {
+        "startLine": 2041,
+        "startChar": 55,
+        "endLine": 2041,
+        "endChar": 82
+      },
+      "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
