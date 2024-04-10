@@ -69,6 +69,29 @@
       },
       "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "209a3b8d_73e199bc",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-04-10T17:45:50Z",
+      "side": 1,
+      "message": "This is not needed. There is already a callback onConnectedInternetDataNetworksChanged for this purposes.\n\nI am not sure what issue you are trying to resolve, but I think the callback from connectivity service is already enough.",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 5
+      },
+      "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
