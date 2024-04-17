@@ -3760,8 +3760,14 @@ public class SubscriptionManagerService extends ISub.Stub {
     @Nullable
     @RequiresPermission(Manifest.permission.MANAGE_SUBSCRIPTION_USER_ASSOCIATION)
     public UserHandle getSubscriptionUserHandle(int subId) {
-        enforcePermissions("getSubscriptionUserHandle",
+        try {
+            enforcePermissions("getSubscriptionUserHandle",
                 Manifest.permission.MANAGE_SUBSCRIPTION_USER_ASSOCIATION);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new SecurityException("getSubscriptionUserHandle: Does not have user association permission.");
+        }
+
         long token = Binder.clearCallingIdentity();
         try {
             SubscriptionInfoInternal subInfo = mSubscriptionDatabaseManager
