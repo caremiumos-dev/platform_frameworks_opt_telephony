@@ -29,6 +29,7 @@ import android.content.res.Configuration;
 import android.hardware.radio.modem.ImeiInfo;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -5102,6 +5103,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         int subId = getSubId();
 
         UserHandle userHandle = null;
+        final long identity = Binder.clearCallingIdentity();
         try {
             SubscriptionManager subManager = mContext.getSystemService(SubscriptionManager.class);
             if (subManager != null) {
@@ -5109,6 +5111,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             }
         } catch (IllegalArgumentException ex) {
             loge("getUserHandle: ex=" + ex);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
         }
 
         return userHandle;
