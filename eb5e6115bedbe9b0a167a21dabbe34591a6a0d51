@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e30db77c_09dc3ebf",
+        "filename": "src/java/com/android/internal/telephony/ServiceStateTracker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5013,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-04-20T00:29:58Z",
+      "side": 1,
+      "message": "This is not needed.",
+      "range": {
+        "startLine": 5013,
+        "startChar": 11,
+        "endLine": 5013,
+        "endChar": 23
+      },
+      "revId": "eb5e6115bedbe9b0a167a21dabbe34591a6a0d51",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
