@@ -16,6 +16,24 @@
       "message": "Do you know the call stack trace to this method?",
       "revId": "a425a2e8f740eae1aadeeae5ee8e0156fc2a6751",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7f10f54_4d073960",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2024-04-23T20:40:54Z",
+      "side": 1,
+      "message": "Here is the stack trace:\n\n```\n04-18 15:55:00.839  3593  4334 W System.err: java.lang.SecurityException: getSubscriptionUserHandle. Does not have any of the following permissions. [android.permission.MANAGE_SUBSCRIPTION_USER_ASSOCIATION]\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.subscription.SubscriptionManagerService.enforcePermissions(SubscriptionManagerService.java:4204)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.subscription.SubscriptionManagerService.getSubscriptionUserHandle(SubscriptionManagerService.java:3938)\n04-18 15:55:00.839  3593  4334 W System.err:    at android.telephony.SubscriptionManager.getSubscriptionUserHandle(SubscriptionManager.java:4677)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.Phone.getUserHandle(Phone.java:5279)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.Phone.isManagedProfile(Phone.java:5296)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.metrics.SmsStats.getOutgoingDefaultProto(SmsStats.java:264)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.metrics.SmsStats.onOutgoingSms(SmsStats.java:171)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.metrics.SmsStats.onOutgoingSms(SmsStats.java:162)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SMSDispatcher.handleSmsTrackersFailure(SMSDispatcher.java:2423)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SMSDispatcher.sendRawPdu(SMSDispatcher.java:2102)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SMSDispatcher.sendSubmitPdu(SMSDispatcher.java:1004)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SMSDispatcher.sendSubmitPdu(SMSDispatcher.java:994)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SMSDispatcher.sendText(SMSDispatcher.java:1653)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SmsDispatchersController.sendText(SmsDispatchersController.java:1805)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.qualcomm.qti.internal.telephony.QtiSmsDispatchersController.sendText(QtiSmsDispatchersController.java:215)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.IccSmsInterfaceManager.sendTextInternal(IccSmsInterfaceManager.java:595)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.IccSmsInterfaceManager.sendText(IccSmsInterfaceManager.java:500)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SmsController.sendIccText(SmsController.java:329)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SmsController.sendTextForSubscriber(SmsController.java:306)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.SmsController.sendTextForSubscriber(SmsController.java:225)\n04-18 15:55:00.839  3593  4334 W System.err:    at com.android.internal.telephony.ISms$Stub.onTransact(ISms.java:920)\n04-18 15:55:00.839  3593  4334 W System.err:    at android.os.Binder.execTransactInternal(Binder.java:1505)\n04-18 15:55:00.839  3593  4334 W System.err:    at android.os.Binder.execTransact(Binder.java:1444)\n```",
+      "parentUuid": "fa17e4ab_a338a64b",
+      "revId": "a425a2e8f740eae1aadeeae5ee8e0156fc2a6751",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
