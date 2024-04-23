@@ -34,6 +34,24 @@
       "parentUuid": "fa17e4ab_a338a64b",
       "revId": "a425a2e8f740eae1aadeeae5ee8e0156fc2a6751",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb81aa3c_840a33f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-04-23T23:36:46Z",
+      "side": 1,
+      "message": "This is a little bit weird. Normally we check all the requirement permission at the very beginning of the server side, in this case, SmsController. And after that we use the phone\u0027s identity to perform all the operations. It\u0027s a little bit weird to clear calling identity at that lower layer. Could you please check where is the best place to clear calling identity again?",
+      "parentUuid": "e7f10f54_4d073960",
+      "revId": "a425a2e8f740eae1aadeeae5ee8e0156fc2a6751",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
