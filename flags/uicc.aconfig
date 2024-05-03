@@ -1,5 +1,4 @@
 package: "com.android.internal.telephony.flags"
-container: "system"
 
 flag {
     name: "esim_bootstrap_provisioning_flag"
