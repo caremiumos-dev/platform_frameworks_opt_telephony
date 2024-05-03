@@ -1,5 +1,4 @@
 package: "com.android.internal.telephony.flags"
-container: "system"
 
 flag {
     name: "oem_enabled_satellite_flag"
