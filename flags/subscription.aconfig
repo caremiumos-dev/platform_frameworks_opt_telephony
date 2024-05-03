@@ -1,5 +1,4 @@
 package: "com.android.internal.telephony.flags"
-container: "system"
 
 flag {
   name: "work_profile_api_split"
