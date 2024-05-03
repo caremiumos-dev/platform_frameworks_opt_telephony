@@ -1,5 +1,4 @@
 package: "com.android.internal.telephony.flags"
-container: "system"
 
 flag {
     name: "enable_carrier_config_n1_control"
