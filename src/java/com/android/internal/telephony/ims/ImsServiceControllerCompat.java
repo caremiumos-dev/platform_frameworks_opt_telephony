@@ -39,6 +39,8 @@ import com.android.ims.internal.IImsMMTelFeature;
 import com.android.ims.internal.IImsServiceController;
 import com.android.internal.annotations.VisibleForTesting;
 
+import java.util.concurrent.Executor;
+
 /**
  * Manages the Binding lifecycle of one ImsService as well as the relevant ImsFeatures that the
  * ImsService will support.
@@ -53,6 +55,7 @@ public class ImsServiceControllerCompat extends ImsServiceController {
     private static final String TAG = "ImsSCCompat";
 
     private IImsServiceController mServiceController;
+    private Executor mExecutor = Runnable::run;
 
     private final SparseArray<MmTelFeatureCompatAdapter> mMmTelCompatAdapters = new SparseArray<>();
     private final SparseArray<ImsConfigCompatAdapter> mConfigCompatAdapters = new SparseArray<>();
@@ -249,12 +252,16 @@ public class ImsServiceControllerCompat extends ImsServiceController {
         MmTelInterfaceAdapter interfaceAdapter = getInterface(slotId);
         MmTelFeatureCompatAdapter mmTelAdapter = mMmTelFeatureFactory.create(mContext, slotId,
                 interfaceAdapter);
+        mmTelAdapter.setDefaultExecutor(mExecutor);
         mMmTelCompatAdapters.put(slotId, mmTelAdapter);
         ImsRegistrationCompatAdapter regAdapter = new ImsRegistrationCompatAdapter();
+        regAdapter.setDefaultExecutor(mExecutor);
         mmTelAdapter.addRegistrationAdapter(regAdapter);
         mRegCompatAdapters.put(slotId, regAdapter);
-        mConfigCompatAdapters.put(slotId, new ImsConfigCompatAdapter(
-                mmTelAdapter.getOldConfigInterface()));
+        ImsConfigCompatAdapter configAdapter = new ImsConfigCompatAdapter(
+                mmTelAdapter.getOldConfigInterface());
+        configAdapter.setDefaultExecutor(mExecutor);
+        mConfigCompatAdapters.put(slotId, configAdapter);
         return mmTelAdapter.getBinder();
     }
 
