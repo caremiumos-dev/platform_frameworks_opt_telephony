@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57eae0c9_77d1a2b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2024-05-06T17:41:35Z",
+      "side": 1,
+      "message": "I see this was done with git source editor - what manual/automated tests did you run to ensure no regressions here?\n\nCan you add a \n```\nTest: \u003c\u003cAdd the tests you performed here\u003e\u003e\n```\ntag?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 106
+      },
+      "revId": "dd320aa55dfe6220b7d14333098d0e2ef6d5f306",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85ddc2b2_9d191c84",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
