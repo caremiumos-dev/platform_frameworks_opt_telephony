@@ -16,6 +16,23 @@
       "message": "Hello, \nI have encountered NullPointerException when using compat ImsService layer, and was able to solve this problem through this change.\n\nPlease check if my solution has any problem(s), and suggest necessary modifications if needed.\n\nThank you.",
       "revId": "dd320aa55dfe6220b7d14333098d0e2ef6d5f306",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b84f4f9a_55121696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2024-05-06T17:37:42Z",
+      "side": 1,
+      "message": "Hello James, thanks for the upstream - please also consider moving your product to the non-compat version of ImsService, since this interface has only been around to support older version of ImsService using @hide interfaces",
+      "revId": "dd320aa55dfe6220b7d14333098d0e2ef6d5f306",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
