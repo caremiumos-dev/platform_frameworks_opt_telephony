@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c5202aa_60e67881",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-05-07T21:54:22Z",
+      "side": 1,
+      "message": "Please add more details so we have good reference in the future.",
+      "parentUuid": "41b9c421_0f3ecba5",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8946f424_98fe9af8",
         "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
         "patchSetId": 1
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "@Jack Yu, We are still on U OS and we don\u0027t see the API mentioned by you in U OS. Is this newly introduced in V OS?\nDo you mean to say that we need to register for DNC change and take action on each DNC update? Then we would end up monitoring DNC state changes also, which we don\u0027t intend to do.\nDo let us know if our understanding is different.",
       "parentUuid": "62e48703_ab17fbb8",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 5
+      },
+      "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a7b8786_cd61740f",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-05-07T21:54:22Z",
+      "side": 1,
+      "message": "Yes, it\u0027s V. In U you can use `onConnectedInternetDataNetworksChanged` https://cs.android.com/android/platform/superproject/main/+/main:frameworks/opt/telephony/src/java/com/android/internal/telephony/data/DataNetworkController.java;l\u003d580?q\u003ddatanetworkcontroller\u0026ss\u003dandroid%2Fplatform%2Fsuperproject%2Fmain\n\nBeing said that, I think the right approach is to listen to display info change in LinkBandwidthEstimator by using DisplayInfoListener.onDisplayInfoChanged(). It will allow you to monitor the changes you want.",
+      "parentUuid": "16bd9464_00d4d040",
       "range": {
         "startLine": 1042,
         "startChar": 0,
