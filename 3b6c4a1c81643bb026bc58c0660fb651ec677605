@@ -164,6 +164,30 @@
       },
       "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16bd9464_00d4d040",
+        "filename": "src/java/com/android/internal/telephony/data/LinkBandwidthEstimator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 2065277
+      },
+      "writtenOn": "2024-05-07T06:58:47Z",
+      "side": 1,
+      "message": "@Jack Yu, We are still on U OS and we don\u0027t see the API mentioned by you in U OS. Is this newly introduced in V OS?\nDo you mean to say that we need to register for DNC change and take action on each DNC update? Then we would end up monitoring DNC state changes also, which we don\u0027t intend to do.\nDo let us know if our understanding is different.",
+      "parentUuid": "62e48703_ab17fbb8",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 5
+      },
+      "revId": "3b6c4a1c81643bb026bc58c0660fb651ec677605",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
