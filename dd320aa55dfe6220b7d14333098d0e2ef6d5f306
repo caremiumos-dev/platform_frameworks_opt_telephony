@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de1f3879_f21a1532",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1098053
+      },
+      "writtenOn": "2024-05-13T20:56:13Z",
+      "side": 1,
+      "message": "If there is a lot of changes, then you may want to split up the fixes into one bug fix per CL and then put all of the fixes into a single gerrit topic so that none of the fixes are lost.\n\n\u003e I have discovered other issues\n\nthe code in the \"compat\" layer of IMS is deprecated and no longer actively supported - I can review these fixes, but have you also considered using the newer ImsService interface? That interface has the ability to specify things like executors to help with these race conditions",
+      "parentUuid": "4d171ceb_9442b2eb",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 106
+      },
+      "revId": "dd320aa55dfe6220b7d14333098d0e2ef6d5f306",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85ddc2b2_9d191c84",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
