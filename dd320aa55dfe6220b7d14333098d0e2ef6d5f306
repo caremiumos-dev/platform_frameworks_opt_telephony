@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d171ceb_9442b2eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 3428273
+      },
+      "writtenOn": "2024-05-13T07:44:41Z",
+      "side": 1,
+      "message": "sorry for replying late, I have tested this with my ImsService (originally for Android 11). While I have resolved the NPE, I have discovered other issues (inability to receive calls / deadlock afterwards, and inability to send SMS). I have found possible solutions to these, but need to make more changes and tests.\n\nI apologize for hastily posting those changes (without looking for more errors). Would it be possible for me to append more changes and do more tests?",
+      "parentUuid": "57eae0c9_77d1a2b8",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 106
+      },
+      "revId": "dd320aa55dfe6220b7d14333098d0e2ef6d5f306",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85ddc2b2_9d191c84",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
