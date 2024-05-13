@@ -269,7 +269,7 @@ public class SatelliteSOSMessageRecommender extends Handler {
         updateSatelliteViaCarrierAvailability();
 
         boolean isDialerNotified = false;
-        if (!isImsRegistered() && !isCellularAvailable()
+        if (!isCellularAvailable()
                 && mIsSatelliteAllowedInCurrentLocation.get()
                 && (isSatelliteViaOemAvailable() || isSatelliteViaCarrierAvailable())
                 && shouldTrackCall(mEmergencyConnection.getState())) {
@@ -442,9 +442,12 @@ public class SatelliteSOSMessageRecommender extends Handler {
     }
 
     private synchronized void handleStateChangedEventForHysteresisTimer() {
-        if (!isImsRegistered() && !isCellularAvailable()) {
+        logd("handleStateChangedEventForHysteresisTimer");
+        if (!isCellularAvailable()) {
+            logd("handleStateChangedEventForHysteresisTimer: start timer");
             startTimer();
         } else {
+            logd("handleStateChangedEventForHysteresisTimer: stop timer");
             stopTimer();
         }
     }
@@ -455,6 +458,7 @@ public class SatelliteSOSMessageRecommender extends Handler {
         }
         sendMessageDelayed(obtainMessage(EVENT_TIME_OUT), mTimeoutMillis);
         mCountOfTimerStarted++;
+        logd("startTimer: mCountOfTimerStarted = " + mCountOfTimerStarted);
     }
 
     private void stopTimer() {
