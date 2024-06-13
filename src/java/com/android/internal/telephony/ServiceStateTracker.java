@@ -5044,6 +5044,9 @@ public class ServiceStateTracker extends Handler {
         // For some cases like roaming/non-roaming overriding, we need carrier config. So it's
         // important to poll state again when carrier config is ready.
         pollStateInternal(false);
+        // Sometimes service state may not change after carrier config is ready. But spn may
+        // be overrided by carrier config. So it's important to update spn display here.
+        updateSpnDisplay();
     }
 
     /**
