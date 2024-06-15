@@ -19,7 +19,6 @@ package com.android.internal.telephony;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -88,23 +87,23 @@ public class CallManager {
     private static final CallManager INSTANCE = new CallManager();
 
     // list of registered phones, which are Phone objs
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final ArrayList<Phone> mPhones;
 
     // list of supported ringing calls
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final ArrayList<Call> mRingingCalls;
 
     // list of supported background calls
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final ArrayList<Call> mBackgroundCalls;
 
     // list of supported foreground calls
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final ArrayList<Call> mForegroundCalls;
 
     // empty connection list
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final ArrayList<Connection> mEmptyConnections = new ArrayList<Connection>();
 
     // mapping of phones to registered handler instances used for callbacks from RIL
@@ -351,7 +350,7 @@ public class CallManager {
      * @param phone to be registered
      * @return true if register successfully
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean registerPhone(Phone phone) {
         if (phone != null && !mPhones.contains(phone)) {
 
@@ -377,7 +376,7 @@ public class CallManager {
      * unregister phone from CallManager
      * @param phone to be unregistered
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void unregisterPhone(Phone phone) {
         if (phone != null && mPhones.contains(phone)) {
 
@@ -409,7 +408,7 @@ public class CallManager {
     /**
      * return the default phone or null if no phone available
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Phone getDefaultPhone() {
         return mDefaultPhone;
     }
@@ -417,7 +416,7 @@ public class CallManager {
     /**
      * @return the phone associated with the foreground call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Phone getFgPhone() {
         return getActiveFgCall().getPhone();
     }
@@ -434,7 +433,7 @@ public class CallManager {
     /**
      * @return the phone associated with the background call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Phone getBgPhone() {
         return getFirstActiveBgCall().getPhone();
     }
@@ -442,7 +441,7 @@ public class CallManager {
     /**
      * @return the phone associated with the ringing call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Phone getRingingPhone() {
         return getFirstActiveRingingCall().getPhone();
     }
@@ -530,7 +529,7 @@ public class CallManager {
     }
     */
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private Context getContext() {
         Phone defaultPhone = getDefaultPhone();
         return ((defaultPhone == null) ? null : defaultPhone.getContext());
@@ -727,7 +726,7 @@ public class CallManager {
      * @exception CallStateException if canConference() would return false.
      * In these cases, this operation may not be performed.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void conference(Call heldCall) throws CallStateException {
         int subId  = heldCall.getPhone().getSubId();
 
@@ -814,6 +813,9 @@ public class CallManager {
             }
         }
 
+        // FIXME Taken from klp-sprout-dev but setAudioMode was removed in L.
+        //mIsEccDialing = PhoneNumberUtils.isEmergencyNumber(dialString);
+
         result = phone.dial(dialString, new PhoneInternalInterface.DialArgs.Builder<>()
                 .setVideoState(videoState).build());
 
@@ -873,7 +875,7 @@ public class CallManager {
      * @param phone
      * @return true if the phone can make a new call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private boolean canDial(Phone phone) {
         int serviceState = phone.getServiceState().getState();
         int subId = phone.getSubId();
@@ -1164,7 +1166,7 @@ public class CallManager {
      *  <li>AsyncResult.result = a Connection object that is
      *  no longer connected.</li></ul>
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void registerForDisconnect(Handler h, int what, Object obj) {
         mDisconnectRegistrants.addUnique(h, what, obj);
     }
@@ -1173,7 +1175,7 @@ public class CallManager {
      * Unregisters for voice disconnection notification.
      * Extraneous calls are tolerated silently
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void unregisterForDisconnect(Handler h){
         mDisconnectRegistrants.remove(h);
     }
@@ -1187,7 +1189,7 @@ public class CallManager {
      * AsyncResult.userData will be set to the obj argument here.
      * The <em>h</em> parameter is held only by a weak reference.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void registerForPreciseCallStateChanged(Handler h, int what, Object obj){
         mPreciseCallStateRegistrants.addUnique(h, what, obj);
     }
@@ -1196,7 +1198,7 @@ public class CallManager {
      * Unregisters for voice call state change notifications.
      * Extraneous calls are tolerated silently.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void unregisterForPreciseCallStateChanged(Handler h){
         mPreciseCallStateRegistrants.remove(h);
     }
@@ -1229,7 +1231,7 @@ public class CallManager {
      *  If Connection.isRinging() is true, then
      *   Connection.getCall() == Phone.getRingingCall()
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void registerForNewRingingConnection(Handler h, int what, Object obj){
         mNewRingingConnectionRegistrants.addUnique(h, what, obj);
     }
@@ -1239,7 +1241,7 @@ public class CallManager {
      * Extraneous calls are tolerated silently
      */
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void unregisterForNewRingingConnection(Handler h){
         mNewRingingConnectionRegistrants.remove(h);
     }
@@ -1642,7 +1644,7 @@ public class CallManager {
     /**
      * @return list of all ringing calls
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public List<Call> getRingingCalls() {
         return Collections.unmodifiableList(mRingingCalls);
     }
@@ -1657,7 +1659,7 @@ public class CallManager {
     /**
      * @return list of all background calls
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public List<Call> getBackgroundCalls() {
         return Collections.unmodifiableList(mBackgroundCalls);
     }
@@ -1665,7 +1667,7 @@ public class CallManager {
     /**
      * Return true if there is at least one active foreground call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean hasActiveFgCall() {
         return (getFirstActiveCall(mForegroundCalls) != null);
     }
@@ -1682,7 +1684,7 @@ public class CallManager {
     /**
      * Return true if there is at least one active background call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean hasActiveBgCall() {
         // TODO since hasActiveBgCall may get called often
         // better to cache it to improve performance
@@ -1793,7 +1795,7 @@ public class CallManager {
      *
      * Complete background calls list can be get by getBackgroundCalls()
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Call getFirstActiveBgCall() {
         Call call = getFirstNonIdleCall(mBackgroundCalls);
         if (call == null) {
@@ -1899,7 +1901,7 @@ public class CallManager {
      * @return the connections of active foreground call
      * return empty list if there is no active foreground call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public List<Connection> getFgCallConnections() {
         Call fgCall = getActiveFgCall();
         if ( fgCall != null) {
@@ -1924,7 +1926,7 @@ public class CallManager {
      * @return the connections of active background call
      * return empty list if there is no active background call
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public List<Connection> getBgCallConnections() {
         Call bgCall = getFirstActiveBgCall();
         if ( bgCall != null) {
@@ -2016,7 +2018,7 @@ public class CallManager {
         return null;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private boolean hasMoreThanOneRingingCall() {
         int count = 0;
         for (Call call : mRingingCalls) {
@@ -2034,7 +2036,7 @@ public class CallManager {
      * subId and also active calls on SIP Phone.
      *
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private boolean hasMoreThanOneRingingCall(int subId) {
         int count = 0;
         for (Call call : mRingingCalls) {
@@ -2074,6 +2076,8 @@ public class CallManager {
                 case EVENT_DISCONNECT:
                     if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_DISCONNECT)");
                     mDisconnectRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    // FIXME Taken from klp-sprout-dev but setAudioMode was removed in L.
+                    //mIsEccDialing = false;
                     break;
                 case EVENT_PRECISE_CALL_STATE_CHANGED:
                     if (VDBG) Rlog.d(LOG_TAG, " handleMessage (EVENT_PRECISE_CALL_STATE_CHANGED)");

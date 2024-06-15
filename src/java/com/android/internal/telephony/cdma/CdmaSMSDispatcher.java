@@ -19,7 +19,6 @@ package com.android.internal.telephony.cdma;
 import static com.android.internal.telephony.SmsResponse.NO_ERROR_CODE;
 
 import android.compat.annotation.UnsupportedAppUsage;
-import android.os.Build;
 import android.os.Message;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -45,7 +44,7 @@ public class CdmaSMSDispatcher extends SMSDispatcher {
         Rlog.d(TAG, "CdmaSMSDispatcher created");
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public String getFormat() {
         return SmsConstants.FORMAT_3GPP2;

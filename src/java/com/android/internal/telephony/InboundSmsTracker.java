@@ -20,7 +20,6 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Build;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -56,7 +55,6 @@ public class InboundSmsTracker {
     private final boolean mIsClass0;
     private final int mSubId;
     private final long mMessageId;
-    private final @InboundSmsHandler.SmsSource int mSmsSource;
 
     // Fields for concatenating multi-part SMS messages
     private final String mAddress;
@@ -118,12 +116,10 @@ public class InboundSmsTracker {
      * @param address originating address
      * @param displayAddress email address if this message was from an email gateway, otherwise same
      *                       as originating address
-     * @param smsSource the source of the SMS message
      */
     public InboundSmsTracker(Context context, byte[] pdu, long timestamp, int destPort,
             boolean is3gpp2, boolean is3gpp2WapPdu, String address, String displayAddress,
-            String messageBody, boolean isClass0, int subId,
-            @InboundSmsHandler.SmsSource int smsSource) {
+            String messageBody, boolean isClass0, int subId) {
         mPdu = pdu;
         mTimestamp = timestamp;
         mDestPort = destPort;
@@ -139,7 +135,6 @@ public class InboundSmsTracker {
         mMessageCount = 1;
         mSubId = subId;
         mMessageId = createMessageId(context, timestamp, subId);
-        mSmsSource = smsSource;
     }
 
     /**
@@ -160,12 +155,11 @@ public class InboundSmsTracker {
      * @param sequenceNumber the sequence number of this segment (0-based)
      * @param messageCount the total number of segments
      * @param is3gpp2WapPdu true for 3GPP2 format WAP PDU; false otherwise
-     * @param smsSource the source of the SMS message
      */
     public InboundSmsTracker(Context context, byte[] pdu, long timestamp, int destPort,
              boolean is3gpp2, String address, String displayAddress, int referenceNumber,
              int sequenceNumber, int messageCount, boolean is3gpp2WapPdu, String messageBody,
-             boolean isClass0, int subId, @InboundSmsHandler.SmsSource int smsSource) {
+             boolean isClass0, int subId) {
         mPdu = pdu;
         mTimestamp = timestamp;
         mDestPort = destPort;
@@ -182,7 +176,6 @@ public class InboundSmsTracker {
         mMessageCount = messageCount;
         mSubId = subId;
         mMessageId = createMessageId(context, timestamp, subId);
-        mSmsSource = smsSource;
     }
 
     /**
@@ -247,8 +240,6 @@ public class InboundSmsTracker {
         }
         mMessageBody = cursor.getString(InboundSmsHandler.MESSAGE_BODY_COLUMN);
         mMessageId = createMessageId(context, mTimestamp, mSubId);
-        // TODO(b/167713264): Use the correct SMS source
-        mSmsSource = InboundSmsHandler.SOURCE_NOT_INJECTED;
     }
 
     public ContentValues getContentValues() {
@@ -356,7 +347,7 @@ public class InboundSmsTracker {
         return mSubId;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public String getFormat() {
         return mIs3gpp2 ? SmsConstants.FORMAT_3GPP2 : SmsConstants.FORMAT_3GPP;
     }
@@ -465,7 +456,7 @@ public class InboundSmsTracker {
      * messages, which use a 0-based index.
      * @return the offset to use to convert between mIndex and the sequence number
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public int getIndexOffset() {
         return (mIs3gpp2 && mIs3gpp2WapPdu) ? 0 : 1;
     }
@@ -504,9 +495,5 @@ public class InboundSmsTracker {
 
     public long getMessageId() {
         return mMessageId;
-    }
-
-    public @InboundSmsHandler.SmsSource int getSource() {
-        return mSmsSource;
     }
 }

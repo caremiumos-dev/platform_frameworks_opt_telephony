@@ -19,7 +19,6 @@ package com.android.internal.telephony.uicc;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -61,21 +60,21 @@ public class UiccCardApplication {
     public static final int AUTH_CONTEXT_EAP_AKA = PhoneConstants.AUTH_CONTEXT_EAP_AKA;
     public static final int AUTH_CONTEXT_UNDEFINED = PhoneConstants.AUTH_CONTEXT_UNDEFINED;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private final Object  mLock = new Object();
     private UiccProfile   mUiccProfile; //parent
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private AppState      mAppState;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private AppType       mAppType;
     private int           mAuthContext;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private PersoSubState mPersoSubState;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private String        mAid;
     private String        mAppLabel;
     private boolean       mPin1Replaced;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private PinState      mPin1State;
     private PinState      mPin2State;
     private boolean       mIccFdnEnabled;
@@ -87,13 +86,13 @@ public class UiccCardApplication {
     private boolean       mIgnoreApp;
     private boolean       mIccFdnAvailable = true; // Default is enabled.
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private CommandsInterface mCi;
     private Context mContext;
     private IccRecords mIccRecords;
     private IccFileHandler mIccFh;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private boolean mDestroyed;//set to true once this App is commanded to be disposed of.
 
     private RegistrantList mReadyRegistrants = new RegistrantList();
@@ -130,7 +129,7 @@ public class UiccCardApplication {
         mCi.registerForNotAvailable(mHandler, EVENT_RADIO_UNAVAILABLE, null);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void update (IccCardApplicationStatus as, Context c, CommandsInterface ci) {
         synchronized (mLock) {
             if (mDestroyed) {
@@ -185,7 +184,7 @@ public class UiccCardApplication {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     void dispose() {
         synchronized (mLock) {
             if (DBG) log(mAppType + " being Disposed");
@@ -445,7 +444,7 @@ public class UiccCardApplication {
         }
     };
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void registerForReady(Handler h, int what, Object obj) {
         synchronized (mLock) {
             Registrant r = new Registrant (h, what, obj);
@@ -621,7 +620,7 @@ public class UiccCardApplication {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public int getAuthContext() {
         synchronized (mLock) {
             return mAuthContext;
@@ -655,7 +654,7 @@ public class UiccCardApplication {
         return authContext;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public PersoSubState getPersoSubState() {
         synchronized (mLock) {
             return mPersoSubState;
@@ -673,7 +672,7 @@ public class UiccCardApplication {
         return mAppLabel;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public PinState getPin1State() {
         synchronized (mLock) {
             if (mPin1Replaced) {
@@ -954,7 +953,7 @@ public class UiccCardApplication {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public int getPhoneId() {
         return mUiccProfile.getPhoneId();
     }
@@ -971,12 +970,12 @@ public class UiccCardApplication {
         return mUiccProfile;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private void log(String msg) {
         Rlog.d(LOG_TAG, msg);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private void loge(String msg) {
         Rlog.e(LOG_TAG, msg);
     }

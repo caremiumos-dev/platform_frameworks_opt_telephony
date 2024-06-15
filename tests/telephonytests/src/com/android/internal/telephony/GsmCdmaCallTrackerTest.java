@@ -39,8 +39,6 @@ import android.testing.TestableLooper;
 
 import androidx.test.filters.FlakyTest;
 
-import com.android.internal.telephony.PhoneInternalInterface.DialArgs;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,7 +90,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         assertEquals(GsmCdmaCall.State.IDLE, mCTUT.mBackgroundCall.getState());
         assertEquals(0, mCTUT.mForegroundCall.getConnections().size());
         try {
-            mCTUT.dial(mDialString, new DialArgs.Builder().build());
+            mCTUT.dial(mDialString, new Bundle());
             processAllMessages();
         } catch(Exception ex) {
             ex.printStackTrace();
@@ -205,7 +203,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
 
         String mDialString = PhoneNumberUtils.stripSeparators("+17005554142");
         try {
-            mCTUT.dial(mDialString, new DialArgs.Builder().build());
+            mCTUT.dial(mDialString, new Bundle());
         } catch(Exception ex) {
             ex.printStackTrace();
             Assert.fail("unexpected exception thrown" + ex.getMessage());
@@ -451,7 +449,7 @@ public class GsmCdmaCallTrackerTest extends TelephonyTest {
         processAllMessages();
         // Try to place another call.
         try {
-            mCTUT.dial("650-555-1212", new DialArgs.Builder().build());
+            mCTUT.dial("650-555-1212", new Bundle());
         } catch (CallStateException cse) {
             assertEquals(CallStateException.ERROR_OTASP_PROVISIONING_IN_PROCESS, cse.getError());
             return;

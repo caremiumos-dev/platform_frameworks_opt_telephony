@@ -22,7 +22,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -105,8 +104,7 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
         String dateExpected = dt.format(expectedCal.getTime());
         ImsiEncryptionInfo imsiEncryptionInfo = new ImsiEncryptionInfo("mcc", "mnc", 1,
                 "keyIdentifier", publicKey, date);
-        when(mPhone.getCarrierInfoForImsiEncryption(anyInt(), anyBoolean()))
-                .thenReturn(imsiEncryptionInfo);
+        when(mPhone.getCarrierInfoForImsiEncryption(anyInt())).thenReturn(imsiEncryptionInfo);
         Date expirationDate = new Date(mCarrierKeyDM.getExpirationDate());
         assertTrue(dt.format(expirationDate).equals(dateExpected));
     }
@@ -132,8 +130,7 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
         Date maxExpirationDate = maxExpirationCal.getTime();
         ImsiEncryptionInfo imsiEncryptionInfo = new ImsiEncryptionInfo("mcc", "mnc", 1,
                 "keyIdentifier", publicKey, date);
-        when(mPhone.getCarrierInfoForImsiEncryption(anyInt(), anyBoolean()))
-                .thenReturn(imsiEncryptionInfo);
+        when(mPhone.getCarrierInfoForImsiEncryption(anyInt())).thenReturn(imsiEncryptionInfo);
         Date expirationDate = new Date(mCarrierKeyDM.getExpirationDate());
         assertTrue(expirationDate.before(minExpirationDate));
         assertTrue(expirationDate.after(maxExpirationDate));
@@ -284,30 +281,6 @@ public class CarrierKeyDownloadMgrTest extends TelephonyTest {
         SharedPreferences preferences = getDefaultSharedPreferences(mContext);
         String mccMnc = preferences.getString("CARRIER_KEY_DM_MCC_MNC" + slotId, null);
         assertTrue(mccMnc.equals("310:260"));
-    }
-
-    /**
-     * Tests sending the ACTION_CARRIER_CONFIG_CHANGED intent with an empty key.
-     * Verify that the carrier keys are removed if IMSI_KEY_DOWNLOAD_URL_STRING is null.
-     */
-    @Test
-    @SmallTest
-    public void testCarrierConfigChangedEmptyKey() {
-        CarrierConfigManager carrierConfigManager = (CarrierConfigManager)
-                mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        int slotId = mPhone.getPhoneId();
-        PersistableBundle bundle = carrierConfigManager.getConfigForSubId(slotId);
-        bundle.putInt(CarrierConfigManager.IMSI_KEY_AVAILABILITY_INT, 3);
-        bundle.putString(CarrierConfigManager.IMSI_KEY_DOWNLOAD_URL_STRING, null);
-
-        Intent mIntent = new Intent(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
-        mIntent.putExtra(PhoneConstants.PHONE_KEY, 0);
-        mContext.sendBroadcast(mIntent);
-        processAllMessages();
-        SharedPreferences preferences = getDefaultSharedPreferences(mContext);
-        String mccMnc = preferences.getString("CARRIER_KEY_DM_MCC_MNC" + slotId, null);
-        assertEquals(null, mccMnc);
-        verify(mPhone).deleteCarrierInfoForImsiEncryption();
     }
 
     /**

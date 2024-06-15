@@ -113,7 +113,8 @@ public class ApnContext {
      * @param tracker Data call tracker
      * @param priority Priority of APN type
      */
-    public ApnContext(Phone phone, String apnType, String logTag, DcTracker tracker, int priority) {
+    public ApnContext(Phone phone, String apnType, String logTag, DcTracker tracker,
+            int priority) {
         mPhone = phone;
         mApnType = apnType;
         mState = DctConstants.State.IDLE;
@@ -122,8 +123,7 @@ public class ApnContext {
         mPriority = priority;
         LOG_TAG = logTag;
         mDcTracker = tracker;
-        mRetryManager = new RetryManager(phone, tracker.getDataThrottler(),
-                ApnSetting.getApnTypesBitmaskFromString(apnType));
+        mRetryManager = new RetryManager(phone, apnType);
     }
 
 
@@ -234,9 +234,18 @@ public class ApnContext {
     }
 
     /**
+     * Save the modem suggested delay for retrying the current APN.
+     * This method is called when we get the suggested delay from RIL.
+     * @param delay The delay in milliseconds
+     */
+    public void setModemSuggestedDelay(long delay) {
+        mRetryManager.setModemSuggestedDelay(delay);
+    }
+
+    /**
      * Get the delay for trying the next APN setting if the current one failed.
      * @param failFastEnabled True if fail fast mode enabled. In this case we'll use a shorter
-     * delay.
+     *                        delay.
      * @return The delay in milliseconds
      */
     public long getDelayForNextApn(boolean failFastEnabled) {

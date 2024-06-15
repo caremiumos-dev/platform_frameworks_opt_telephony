@@ -18,7 +18,6 @@ package com.android.internal.telephony.gsm;
 
 import android.compat.annotation.UnsupportedAppUsage;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.SparseArray;
@@ -44,7 +43,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private static final boolean DBG = true;
     private ArrayList<PbrRecord> mPbrRecords;
     private Boolean mIsPbrPresent;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private IccFileHandler mFh;
     private AdnRecordCache mAdnCache;
     @UnsupportedAppUsage

@@ -18,11 +18,14 @@ package android.telephony.ims;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
+import android.content.pm.IPackageManager;
+import android.content.pm.PackageManager;
 import android.telephony.AccessNetworkConstants;
-import android.telephony.BinderCacheManager;
 import android.telephony.ims.aidl.IImsRegistrationCallback;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -38,8 +41,10 @@ import org.mockito.Mock;
 
 public class ImsMmTelManagerTests extends TelephonyTest {
 
-    @Mock ITelephony mMockTelephonyInterface;
-    @Mock BinderCacheManager<ITelephony> mBinderCache;
+    @Mock
+    ITelephony.Stub mMockTelephonyInterface;
+    @Mock
+    IPackageManager.Stub mMockPackageManager;
 
     public class LocalCallback extends ImsMmTelManager.RegistrationCallback {
         int mRegResult = -1;
@@ -53,7 +58,13 @@ public class ImsMmTelManagerTests extends TelephonyTest {
     @Before
     public void setUp() throws Exception {
         super.setUp("ImsMmTelManagerTests");
-        doReturn(mMockTelephonyInterface).when(mBinderCache).getBinder();
+        doReturn(mMockTelephonyInterface).when(mMockTelephonyInterface).queryLocalInterface(
+                anyString());
+        doReturn(mMockPackageManager).when(mMockPackageManager).queryLocalInterface(anyString());
+        doReturn(true).when(mMockPackageManager).hasSystemFeature(
+                eq(PackageManager.FEATURE_TELEPHONY_IMS), anyInt());
+        mServiceManagerMockedServices.put("phone", mMockTelephonyInterface);
+        mServiceManagerMockedServices.put("package", mMockPackageManager);
     }
 
     @After
@@ -69,7 +80,7 @@ public class ImsMmTelManagerTests extends TelephonyTest {
     @Test
     public void testCallbackValues() throws Exception {
         LocalCallback cb = new LocalCallback();
-        ImsMmTelManager managerUT = new ImsMmTelManager(0, mBinderCache);
+        ImsMmTelManager managerUT = new ImsMmTelManager(0);
         managerUT.registerImsRegistrationCallback(Runnable::run, cb);
 
         // Capture the RegistrationCallback that was registered.
