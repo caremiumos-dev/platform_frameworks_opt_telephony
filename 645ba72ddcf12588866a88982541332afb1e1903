@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbd557dc_ffdad272",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2024-07-01T17:53:22Z",
+      "side": 1,
+      "message": "the change looks good to me. could please format the commit message as\n\n```\nHandle emergency call prior to in-call MMI code\n\nIn some countries, emergency call numbers only have 2 digitals,\nwhich conflicts with in-call MMI code. To address this, handle\nemergency call prior to in-call MMI code.\n\nBug:297453115\nTest: atest FrameworksTelephonyTestsBug:297453115\nTest: Manual\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 52
+      },
+      "revId": "645ba72ddcf12588866a88982541332afb1e1903",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
