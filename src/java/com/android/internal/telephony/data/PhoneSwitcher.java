@@ -1403,10 +1403,16 @@ public class PhoneSwitcher extends Handler {
     private boolean shouldSwitchDataDueToInCall() {
         Phone voicePhone = findPhoneById(mPhoneIdInVoiceCall);
         Phone defaultDataPhone = getPhoneBySubId(mPrimaryDataSubId);
-        return defaultDataPhone != null // check user enabled data
+        boolean isDataAllowedOnVoicePhone = defaultDataPhone != null // check user enabled data
                 && defaultDataPhone.isUserDataEnabled()
                 && voicePhone != null // check user enabled voice during call feature
                 && voicePhone.getDataSettingsManager().isDataEnabled();
+        boolean isInEcm = isInEmergencyCallbackMode();
+        if (isDataAllowedOnVoicePhone && isInEcm) {
+            log("shouldSwitchDataDueToInCall: skip in call switch because in ECB ");
+            return false;
+        }
+        return isDataAllowedOnVoicePhone;
     }
 
     protected void transitionToEmergencyPhone() {
