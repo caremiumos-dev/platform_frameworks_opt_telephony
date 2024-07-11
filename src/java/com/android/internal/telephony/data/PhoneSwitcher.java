@@ -1360,13 +1360,17 @@ public class PhoneSwitcher extends Handler {
             mPreferredDataPhoneId = mEmergencyOverride.mPhoneId;
             mLastSwitchPreferredDataReason = DataSwitch.Reason.DATA_SWITCH_REASON_UNKNOWN;
         } else {
+            if (isInEmergencyCallbackMode()) {
+                logl("updatePreferredDataPhoneId: in emergency callback, skip switching data");
+                return;
+            }
             int imsRegTech = mImsRegTechProvider.get(mContext, mPhoneIdInVoiceCall);
             if (isAnyVoiceCallActiveOnDevice() && imsRegTech != REGISTRATION_TECH_IWLAN) {
                 if (imsRegTech != REGISTRATION_TECH_CROSS_SIM) {
                     mPreferredDataPhoneId = shouldSwitchDataDueToInCall()
                             ? mPhoneIdInVoiceCall : getFallbackDataPhoneIdForInternetRequests();
                 } else {
-                    logl("IMS call on cross-SIM, skip switching data to phone "
+                    logl("updatePreferredDataPhoneId: cross-SIM call, skip switching data to phone "
                             + mPhoneIdInVoiceCall);
                 }
             } else {
