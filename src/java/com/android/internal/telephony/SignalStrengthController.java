@@ -346,14 +346,18 @@ public class SignalStrengthController extends Handler {
      */
     @NonNull
     public SignalStrength getSignalStrength() {
-        if (shouldRefreshSignalStrength()) {
+        return  getSignalStrength(false);
+    }
+
+    public SignalStrength getSignalStrength(boolean allowRefresh) {
+        if (shouldRefreshSignalStrength(allowRefresh)) {
             log("getSignalStrength() refreshing signal strength.");
             obtainMessage(EVENT_POLL_SIGNAL_STRENGTH).sendToTarget();
         }
         return mSignalStrength;
     }
 
-    private boolean shouldRefreshSignalStrength() {
+    private boolean shouldRefreshSignalStrength(boolean allowRefresh) {
         long curTime = System.currentTimeMillis();
 
         // If last signal strength is older than 10 seconds, or somehow if curTime is smaller
@@ -361,6 +365,8 @@ public class SignalStrengthController extends Handler {
         boolean isStale = (mSignalStrengthUpdatedTime > curTime)
                 || (curTime - mSignalStrengthUpdatedTime > SIGNAL_STRENGTH_REFRESH_THRESHOLD_IN_MS);
         if (!isStale) return false;
+
+        if (allowRefresh) return true;
 
         List<SubscriptionInfo> subInfoList = SubscriptionManagerService.getInstance()
                 .getActiveSubscriptionInfoList(mPhone.getContext().getOpPackageName(),
