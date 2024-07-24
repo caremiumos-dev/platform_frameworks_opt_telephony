@@ -22,8 +22,8 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.CarrierConfigManager;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
-import android.telephony.SmsManager;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.aidl.IImsSmsListener;
@@ -45,7 +45,6 @@ import com.android.telephony.Rlog;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -56,19 +55,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ImsSmsDispatcher extends SMSDispatcher {
 
     private static final String TAG = "ImsSmsDispatcher";
-    private static final int CONNECT_DELAY_MS = 5000; // 5 seconds;
 
-    /**
-     * Creates FeatureConnector instances for ImsManager, used during testing to inject mock
-     * connector instances.
-     */
-    @VisibleForTesting
     public interface FeatureConnectorFactory {
-        /**
-         * Create a new FeatureConnector for ImsManager.
-         */
-        FeatureConnector<ImsManager> create(Context context, int phoneId, String logPrefix,
-                FeatureConnector.Listener<ImsManager> listener, Executor executor);
+        FeatureConnector<ImsManager> create(Context context, int phoneId,
+                FeatureConnector.Listener<ImsManager> listener, String logPrefix);
     }
 
     @VisibleForTesting
@@ -84,13 +74,6 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private TelephonyMetrics mMetrics = TelephonyMetrics.getInstance();
     private ImsManager mImsManager;
     private FeatureConnectorFactory mConnectorFactory;
-
-    private Runnable mConnectRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mImsManagerConnector.connect();
-        }
-    };
 
     /**
      * Listen to the IMS service state change
@@ -140,7 +123,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     private final IImsSmsListener mImsSmsListener = new IImsSmsListener.Stub() {
         @Override
         public void onSendSmsResult(int token, int messageRef, @SendStatusResult int status,
-                @SmsManager.Result int reason, int networkReasonCode) {
+                int reason, int networkReasonCode) {
             final long identity = Binder.clearCallingIdentity();
             try {
                 logd("onSendSmsResult token=" + token + " messageRef=" + messageRef
@@ -179,13 +162,6 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                         break;
                     default:
                 }
-                mPhone.getSmsStats().onOutgoingSms(
-                        true /* isOverIms */,
-                        SmsConstants.FORMAT_3GPP2.equals(getFormat()),
-                        status == ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK,
-                        reason,
-                        tracker.mMessageId,
-                        tracker.isFromDefaultSmsApplication(mContext));
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -203,12 +179,17 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     throw new RemoteException(
                             "Status report received with a PDU that could not be parsed.");
                 }
-                mSmsDispatchersController.handleSmsStatusReport(format, pdu);
+                int messageRef = message.mWrappedSmsMessage.mMessageRef;
+                boolean handled = mSmsDispatchersController.handleSmsStatusReport(format, pdu);
+                if (!handled) {
+                    loge("Can not handle the status report for messageRef " + messageRef);
+                }
                 try {
                     getImsManager().acknowledgeSmsReport(
                             token,
-                            message.mWrappedSmsMessage.mMessageRef,
-                            ImsSmsImplBase.STATUS_REPORT_STATUS_OK);
+                            messageRef,
+                            handled ? ImsSmsImplBase.STATUS_REPORT_STATUS_OK
+                                    : ImsSmsImplBase.STATUS_REPORT_STATUS_ERROR);
                 } catch (ImsException e) {
                     loge("Failed to acknowledgeSmsReport(). Error: " + e.getMessage());
                 }
@@ -253,7 +234,7 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     } catch (ImsException e) {
                         loge("Failed to acknowledgeSms(). Error: " + e.getMessage());
                     }
-                }, true /* ignoreClass */, true /* isOverIms */);
+                }, true);
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -265,8 +246,14 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         super(phone, smsDispatchersController);
         mConnectorFactory = factory;
 
-        mImsManagerConnector = mConnectorFactory.create(mContext, mPhone.getPhoneId(), TAG,
+        mImsManagerConnector = mConnectorFactory.create(mContext, mPhone.getPhoneId(),
                 new FeatureConnector.Listener<ImsManager>() {
+                    @Override
+                    public ImsManager getFeatureManager() {
+                        return ImsManager.getInstance(mContext, phone.getPhoneId());
+                    }
+
+                    @Override
                     public void connectionReady(ImsManager manager) throws ImsException {
                         logd("ImsManager: connection ready.");
                         synchronized (mLock) {
@@ -277,25 +264,20 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     }
 
                     @Override
-                    public void connectionUnavailable(int reason) {
-                        logd("ImsManager: connection unavailable, reason=" + reason);
-                        if (reason == FeatureConnector.UNAVAILABLE_REASON_SERVER_UNAVAILABLE) {
-                            loge("connectionUnavailable: unexpected, received server error");
-                            removeCallbacks(mConnectRunnable);
-                            postDelayed(mConnectRunnable, CONNECT_DELAY_MS);
-                        }
+                    public void connectionUnavailable() {
+                        logd("ImsManager: connection unavailable.");
                         synchronized (mLock) {
                             mImsManager = null;
                             mIsImsServiceUp = false;
                         }
                     }
-                }, this::post);
-        post(mConnectRunnable);
+                }, "ImsSmsDispatcher");
+        mImsManagerConnector.connect();
     }
 
     private void setListeners() throws ImsException {
-        getImsManager().addRegistrationCallback(mRegistrationCallback, this::post);
-        getImsManager().addCapabilitiesCallback(mCapabilityCallback, this::post);
+        getImsManager().addRegistrationCallback(mRegistrationCallback);
+        getImsManager().addCapabilitiesCallback(mCapabilityCallback);
         getImsManager().setSmsListener(getSmsListener());
         getImsManager().onSmsReady();
     }
@@ -318,14 +300,14 @@ public class ImsSmsDispatcher extends SMSDispatcher {
     public boolean isEmergencySmsSupport(String destAddr) {
         PersistableBundle b;
         boolean eSmsCarrierSupport = false;
-        if (!mTelephonyManager.isEmergencyNumber(destAddr)) {
-            logi(Rlog.pii(TAG, destAddr) + " is not emergency number");
+        if (!PhoneNumberUtils.isLocalEmergencyNumber(mContext, mPhone.getSubId(), destAddr)) {
+            loge("Emergency Sms is not supported for: " + Rlog.pii(TAG, destAddr));
             return false;
         }
 
         final long identity = Binder.clearCallingIdentity();
         try {
-            CarrierConfigManager configManager = (CarrierConfigManager) mContext
+            CarrierConfigManager configManager = (CarrierConfigManager) mPhone.getContext()
                     .getSystemService(Context.CARRIER_CONFIG_SERVICE);
             if (configManager == null) {
                 loge("configManager is null");
@@ -437,20 +419,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
                     isRetry,
                     pdu);
             mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
-                    ImsSmsImplBase.SEND_STATUS_OK, tracker.mMessageId);
+                    ImsSmsImplBase.SEND_STATUS_OK);
         } catch (ImsException e) {
             loge("sendSms failed. Falling back to PSTN. Error: " + e.getMessage());
             mTrackers.remove(token);
             fallbackToPstn(tracker);
             mMetrics.writeImsServiceSendSms(mPhone.getPhoneId(), format,
-                    ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK, tracker.mMessageId);
-            mPhone.getSmsStats().onOutgoingSms(
-                    true /* isOverIms */,
-                    SmsConstants.FORMAT_3GPP2.equals(format),
-                    true /* fallbackToCs */,
-                    SmsManager.RESULT_SYSTEM_ERROR,
-                    tracker.mMessageId,
-                    tracker.isFromDefaultSmsApplication(mContext));
+                    ImsSmsImplBase.SEND_STATUS_ERROR_FALLBACK);
         }
     }
 

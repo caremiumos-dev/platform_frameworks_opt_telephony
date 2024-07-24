@@ -23,12 +23,10 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -43,7 +41,6 @@ import android.sysprop.TelephonyProperties;
 import android.telecom.VideoProfile;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.Annotation.ApnType;
-import android.telephony.CarrierBandwidth;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CarrierRestrictionRules;
 import android.telephony.CellIdentity;
@@ -67,7 +64,6 @@ import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.text.TextUtils;
 import android.util.LocalLog;
 import android.util.SparseArray;
-import android.util.Xml;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsConfig;
@@ -81,7 +77,6 @@ import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.dataconnection.TransportManager;
 import com.android.internal.telephony.emergency.EmergencyNumberTracker;
 import com.android.internal.telephony.imsphone.ImsPhoneCall;
-import com.android.internal.telephony.metrics.SmsStats;
 import com.android.internal.telephony.metrics.VoiceCallSessionStats;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppType;
@@ -93,17 +88,9 @@ import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UsimServiceTable;
 import com.android.internal.telephony.util.TelephonyUtils;
-import com.android.internal.util.XmlUtils;
 import com.android.telephony.Rlog;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -226,9 +213,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     protected static final int EVENT_REAPPLY_UICC_APPS_ENABLEMENT_DONE    = 56;
     protected static final int EVENT_REGISTRATION_FAILED = 57;
     protected static final int EVENT_BARRING_INFO_CHANGED = 58;
-    protected static final int EVENT_LINK_CAPACITY_CHANGED = 59;
 
-    protected static final int EVENT_LAST = EVENT_LINK_CAPACITY_CHANGED;
+    protected static final int EVENT_LAST = EVENT_BARRING_INFO_CHANGED;
 
     // For shared prefs.
     private static final String GSM_ROAMING_LIST_OVERRIDE_PREFIX = "gsm_roaming_list_";
@@ -287,7 +273,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /* Instance Variables */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public CommandsInterface mCi;
     protected int mVmCount = 0;
     private boolean mDnsCheckDisabled;
@@ -317,14 +303,14 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     // Variable to cache the video capability. When RAT changes, we lose this info and are unable
     // to recover from the state. We cache it and notify listeners when they register.
     protected boolean mIsVideoCapable = false;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected UiccController mUiccController = null;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected final AtomicReference<IccRecords> mIccRecords = new AtomicReference<IccRecords>();
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public SmsStorageMonitor mSmsStorageMonitor;
     public SmsUsageMonitor mSmsUsageMonitor;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected AtomicReference<UiccCardApplication> mUiccApplication =
             new AtomicReference<UiccCardApplication>();
     TelephonyTester mTelephonyTester;
@@ -338,10 +324,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     // Used for identify the carrier of current subscription
     protected CarrierResolver mCarrierResolver;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected int mPhoneId;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected Phone mImsPhone = null;
 
     private final AtomicReference<RadioCapability> mRadioCapability =
@@ -427,7 +413,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     private Looper mLooper; /* to insure registrants are in correct thread*/
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected final Context mContext;
 
     /**
@@ -435,7 +421,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * state change notification. DefaultPhoneNotifier is
      * used here unless running we're inside a unit test.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected PhoneNotifier mNotifier;
 
     protected SimulatedRadioControl mSimulatedRadioControl;
@@ -445,7 +431,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private final CarrierPrivilegesTracker mCarrierPrivilegesTracker;
 
     protected VoiceCallSessionStats mVoiceCallSessionStats;
-    protected SmsStats mSmsStats;
 
     public IccRecords getIccRecords() {
         return mIccRecords.get();
@@ -468,7 +453,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Retrieves Nai for phones. Returns null if Nai is not set.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public String getNai(){
          return null;
     }
@@ -499,7 +484,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * Set a system property, unless we're in unit test mode
      */
     // CAF_MSIM TODO this need to be replated with TelephonyManager API ?
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public String getSystemProperty(String property, String defValue) {
         if(getUnitTestMode()) {
             return null;
@@ -586,9 +571,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
         mCallRingDelay = TelephonyProperties.call_ring_delay().orElse(3000);
         Rlog.d(LOG_TAG, "mCallRingDelay=" + mCallRingDelay);
-
-        // Initialize SMS stats
-        mSmsStats = new SmsStats(this);
 
         if (getPhoneType() == PhoneConstants.PHONE_TYPE_IMS) {
             return;
@@ -727,13 +709,10 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
                 Rlog.d(LOG_TAG, "Event EVENT_INITIATE_SILENT_REDIAL Received");
                 ar = (AsyncResult) msg.obj;
                 if ((ar.exception == null) && (ar.result != null)) {
-                    SilentRedialParam result = (SilentRedialParam) ar.result;
-                    String dialString = result.dialString;
-                    int causeCode = result.causeCode;
-                    DialArgs dialArgs = result.dialArgs;
+                    String dialString = (String) ar.result;
                     if (TextUtils.isEmpty(dialString)) return;
                     try {
-                        Connection cn = dialInternal(dialString, dialArgs);
+                        Connection cn = dialInternal(dialString, new DialArgs.Builder().build());
                         Rlog.d(LOG_TAG, "Notify redial connection changed cn: " + cn);
                         if (mImsPhone != null) {
                             // Don't care it is null or not.
@@ -1721,17 +1700,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Version of notifyServiceStateChangedP which allows us to specify the subId. This is used when
-     * we send out a final ServiceState update when a phone's subId becomes invalid.
-     */
-    protected void notifyServiceStateChangedPForSubId(ServiceState ss, int subId) {
-        AsyncResult ar = new AsyncResult(null, ss, null);
-        mServiceStateRegistrants.notifyRegistrants(ar);
-
-        mNotifier.notifyServiceStateForSubId(this, ss, subId);
-    }
-
-    /**
      * If this is a simulated phone interface, returns a SimulatedRadioControl.
      * @return SimulatedRadioControl if this is a simulated interface;
      * otherwise, null.
@@ -1812,7 +1780,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Retrieves the IccFileHandler of the Phone instance
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public IccFileHandler getIccFileHandler(){
         UiccCardApplication uiccApplication = mUiccApplication.get();
         IccFileHandler fh;
@@ -1846,7 +1814,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
     * Retrieves the ServiceStateTracker of the phone instance.
     */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public ServiceStateTracker getServiceStateTracker() {
         return null;
     }
@@ -1861,7 +1829,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
     * Get call tracker
     */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public CallTracker getCallTracker() {
         return null;
     }
@@ -2159,21 +2127,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Query the CDMA roaming preference setting.
+     *  Query the CDMA roaming preference setting
      *
-     * @param response is callback message to report one of TelephonyManager#CDMA_ROAMING_MODE_*
+     * @param response is callback message to report one of  CDMA_RM_*
      */
     public void queryCdmaRoamingPreference(Message response) {
         mCi.queryCdmaRoamingPreference(response);
-    }
-
-    /**
-     * Get the CDMA subscription mode setting.
-     *
-     * @param response is callback message to report one of TelephonyManager#CDMA_SUBSCRIPTION_*
-     */
-    public void queryCdmaSubscriptionMode(Message response) {
-        mCi.getCdmaSubscriptionSource(response);
     }
 
     /**
@@ -2205,8 +2164,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Requests to set the CDMA roaming preference
-     * @param cdmaRoamingType one of TelephonyManager#CDMA_ROAMING_MODE_*
+     *  Requests to set the CDMA roaming preference
+     * @param cdmaRoamingType one of  CDMA_RM_*
      * @param response is callback message
      */
     public void setCdmaRoamingPreference(int cdmaRoamingType, Message response) {
@@ -2214,11 +2173,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /**
-     * Requests to set the CDMA subscription mode
-     * @param cdmaSubscriptionType one of TelephonyManager#CDMA_SUBSCRIPTION_*
+     *  Requests to set the CDMA subscription mode
+     * @param cdmaSubscriptionType one of  CDMA_SUBSCRIPTION_*
      * @param response is callback message
      */
-    public void setCdmaSubscriptionMode(int cdmaSubscriptionType, Message response) {
+    public void setCdmaSubscription(int cdmaSubscriptionType, Message response) {
         mCi.setCdmaSubscriptionSource(cdmaSubscriptionType, response);
     }
 
@@ -2229,38 +2188,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public @TelephonyManager.NetworkTypeBitMask long getEffectiveAllowedNetworkTypes() {
         long allowedNetworkTypes = getAllowedNetworkTypes();
         return allowedNetworkTypes & getAllowedNetworkTypesForAllReasons();
-    }
-
-    /**
-     * Is E-UTRA-NR Dual Connectivity enabled
-     */
-    public void isNrDualConnectivityEnabled(Message message, WorkSource workSource) {
-        mCi.isNrDualConnectivityEnabled(message, workSource);
-    }
-
-    /**
-     * get carrier bandwidth per primary and secondary carrier
-     * @return CarrierBandwidth with bandwidth of both primary and secondary carrier.
-     */
-    public CarrierBandwidth getCarrierBandwidth() {
-        return new CarrierBandwidth();
-    }
-
-    /**
-     * Enable/Disable E-UTRA-NR Dual Connectivity
-     * @param nrDualConnectivityState expected NR dual connectivity state
-     * This can be passed following states
-     * <ol>
-     * <li>Enable NR dual connectivity {@link TelephonyManager#NR_DUAL_CONNECTIVITY_ENABLE}
-     * <li>Disable NR dual connectivity {@link TelephonyManager#NR_DUAL_CONNECTIVITY_DISABLE}
-     * <li>Disable NR dual connectivity and force secondary cell to be released
-     * {@link TelephonyManager#NR_DUAL_CONNECTIVITY_DISABLE_IMMEDIATE}
-     * </ol>
-     */
-    public void setNrDualConnectivityState(
-            @TelephonyManager.NrDualConnectivityState int nrDualConnectivityState,
-            Message message, WorkSource workSource) {
-        mCi.setNrDualConnectivityState(nrDualConnectivityState, message, workSource);
     }
 
     /**
@@ -2599,15 +2526,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mCi.setSystemSelectionChannels(specifiers, response);
     }
 
-    /**
-     * Get which bands the modem's background scan is acting on.
-     *
-     * @param response Callback message.
-     */
-    public void getSystemSelectionChannels(Message response) {
-        mCi.getSystemSelectionChannels(response);
-    }
-
     public void notifyDataActivity() {
         mNotifier.notifyDataActivity(this);
     }
@@ -2626,7 +2544,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mNotifier.notifyDataConnection(this, state);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void notifyOtaspChanged(int otaspMode) {
         mOtaspRegistrants.notifyRegistrants(new AsyncResult(null, otaspMode, null));
     }
@@ -2690,9 +2608,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     }
 
     /** Notify {@link PhysicalChannelConfig} changes. */
-    public void notifyPhysicalChannelConfig(List<PhysicalChannelConfig> configs) {
+    public void notifyPhysicalChannelConfiguration(List<PhysicalChannelConfig> configs) {
         mPhysicalChannelConfigRegistrants.notifyRegistrants(new AsyncResult(null, configs, null));
-        mNotifier.notifyPhysicalChannelConfig(this, configs);
     }
 
     public List<PhysicalChannelConfig> getPhysicalChannelConfigList() {
@@ -2709,6 +2626,11 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /** Notify the {@link EmergencyNumber} changes. */
     public void notifyEmergencyNumberList() {
         mNotifier.notifyEmergencyNumberList(this);
+    }
+
+    /** Notify the outgoing call {@link EmergencyNumber} changes. */
+    public void notifyOutgoingEmergencyCall(EmergencyNumber emergencyNumber) {
+        mNotifier.notifyOutgoingEmergencyCall(this, emergencyNumber);
     }
 
     /** Notify the outgoing Sms {@link EmergencyNumber} changes. */
@@ -2767,7 +2689,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mEcmCanceledForEmergency = isCanceled;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private static int getVideoState(Call call) {
         int videoState = VideoProfile.STATE_AUDIO_ONLY;
         Connection conn = call.getEarliestConnection();
@@ -3083,7 +3005,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Returns true if OTA Service Provisioning needs to be performed.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean needsOtaServiceProvisioning() {
         return false;
     }
@@ -3402,98 +3324,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return activeApnTypes.toArray(new String[activeApnTypes.size()]);
     }
 
-
-    /**
-     *  Location to an updatable file listing carrier provisioning urls.
-     *  An example:
-     *
-     * <?xml version="1.0" encoding="utf-8"?>
-     *  <provisioningUrls>
-     *   <provisioningUrl mcc="310" mnc="4">http://myserver.com/foo?mdn=%3$s&amp;iccid=%1$s&amp;imei=%2$s</provisioningUrl>
-     *  </provisioningUrls>
-     */
-    private static final String PROVISIONING_URL_PATH =
-            "/data/misc/radio/provisioning_urls.xml";
-    private final File mProvisioningUrlFile = new File(PROVISIONING_URL_PATH);
-
-    /** XML tag for root element. */
-    private static final String TAG_PROVISIONING_URLS = "provisioningUrls";
-    /** XML tag for individual url */
-    private static final String TAG_PROVISIONING_URL = "provisioningUrl";
-    /** XML attribute for mcc */
-    private static final String ATTR_MCC = "mcc";
-    /** XML attribute for mnc */
-    private static final String ATTR_MNC = "mnc";
-
-    private String getProvisioningUrlBaseFromFile() {
-        XmlPullParser parser;
-        final Configuration config = mContext.getResources().getConfiguration();
-
-        try (FileReader fileReader = new FileReader(mProvisioningUrlFile)) {
-            parser = Xml.newPullParser();
-            parser.setInput(fileReader);
-            XmlUtils.beginDocument(parser, TAG_PROVISIONING_URLS);
-
-            while (true) {
-                XmlUtils.nextElement(parser);
-
-                final String element = parser.getName();
-                if (element == null) break;
-
-                if (element.equals(TAG_PROVISIONING_URL)) {
-                    String mcc = parser.getAttributeValue(null, ATTR_MCC);
-                    try {
-                        if (mcc != null && Integer.parseInt(mcc) == config.mcc) {
-                            String mnc = parser.getAttributeValue(null, ATTR_MNC);
-                            if (mnc != null && Integer.parseInt(mnc) == config.mnc) {
-                                parser.next();
-                                if (parser.getEventType() == XmlPullParser.TEXT) {
-                                    return parser.getText();
-                                }
-                            }
-                        }
-                    } catch (NumberFormatException e) {
-                        Rlog.e(LOG_TAG, "Exception in getProvisioningUrlBaseFromFile: " + e);
-                    }
-                }
-            }
-            return null;
-        } catch (FileNotFoundException e) {
-            Rlog.e(LOG_TAG, "Carrier Provisioning Urls file not found");
-        } catch (XmlPullParserException e) {
-            Rlog.e(LOG_TAG, "Xml parser exception reading Carrier Provisioning Urls file: " + e);
-        } catch (IOException e) {
-            Rlog.e(LOG_TAG, "I/O exception reading Carrier Provisioning Urls file: " + e);
-        }
-        return null;
-    }
-
-    /**
-     * Get the mobile provisioning url.
-     */
-    public String getMobileProvisioningUrl() {
-        String url = getProvisioningUrlBaseFromFile();
-        if (TextUtils.isEmpty(url)) {
-            url = mContext.getResources().getString(R.string.mobile_provisioning_url);
-            Rlog.d(LOG_TAG, "getMobileProvisioningUrl: url from resource =" + url);
-        } else {
-            Rlog.d(LOG_TAG, "getMobileProvisioningUrl: url from File =" + url);
-        }
-        // Populate the iccid, imei and phone number in the provisioning url.
-        if (!TextUtils.isEmpty(url)) {
-            String phoneNumber = getLine1Number();
-            if (TextUtils.isEmpty(phoneNumber)) {
-                phoneNumber = "0000000000";
-            }
-            url = String.format(url,
-                    getIccSerialNumber() /* ICCID */,
-                    getDeviceId() /* IMEI */,
-                    phoneNumber /* Phone number */);
-        }
-
-        return url;
-    }
-
     /**
      * Check if there are matching tethering (i.e DUN) for the carrier.
      * @return true if there is a matching DUN APN.
@@ -3696,7 +3526,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * Return an interface to retrieve the ISIM records for IMS, if available.
      * @return the interface to retrieve the ISIM records, or null if not supported
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public IsimRecords getIsimRecords() {
         Rlog.e(LOG_TAG, "getIsimRecords() is only supported on LTE devices");
         return null;
@@ -3707,7 +3537,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * {@link #getLine1Number()}. For CDMA phones, {@link #getLine1Number()} returns
      * the MDN, so this method is provided to return the MSISDN on CDMA/LTE phones.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public String getMsisdn() {
         return null;
     }
@@ -3724,7 +3554,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * exists at this interface -- use
      * {@link android.telephony.PhoneStateListener} instead.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public PhoneConstants.DataState getDataConnectionState() {
         return getDataConnectionState(PhoneConstants.APN_TYPE_DEFAULT);
     }
@@ -3757,7 +3587,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * Gets the Uicc card corresponding to this phone.
      * @return the UiccCard object corresponding to the phone ID.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public UiccCard getUiccCard() {
         return mUiccController.getUiccCard(mPhoneId);
     }
@@ -3787,7 +3617,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Return an instance of a IMS phone
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public Phone getImsPhone() {
         return mImsPhone;
     }
@@ -3795,14 +3625,12 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Returns Carrier specific information that will be used to encrypt the IMSI and IMPI.
      * @param keyType whether the key is being used for WLAN or ePDG.
-     * @param fallback whether or not to fall back to the encryption key info stored in carrier
-     *                 config
      * @return ImsiEncryptionInfo which includes the Key Type, the Public Key
      *        {@link java.security.PublicKey} and the Key Identifier.
      *        The keyIdentifier This is used by the server to help it locate the private key to
      *        decrypt the permanent identity.
      */
-    public ImsiEncryptionInfo getCarrierInfoForImsiEncryption(int keyType, boolean fallback) {
+    public ImsiEncryptionInfo getCarrierInfoForImsiEncryption(int keyType) {
         return null;
     }
 
@@ -3813,13 +3641,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *        {@link java.security.PublicKey} and the Key identifier.
      */
     public void setCarrierInfoForImsiEncryption(ImsiEncryptionInfo imsiEncryptionInfo) {
-        return;
-    }
-
-    /**
-     * Deletes all the keys for a given Carrier from the device keystore.
-     */
-    public void deleteCarrierInfoForImsiEncryption() {
         return;
     }
 
@@ -3866,7 +3687,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Return if UT capability of ImsPhone is enabled or not
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean isUtEnabled() {
         if (mImsPhone != null) {
             return mImsPhone.isUtEnabled();
@@ -3874,7 +3695,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         return false;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void dispose() {
     }
 
@@ -3919,7 +3740,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Returns the phone id.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public int getPhoneId() {
         return mPhoneId;
     }
@@ -4020,7 +3841,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     /**
      * Get Wifi Calling Feature Availability
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean isWifiCallingEnabled() {
         Phone imsPhone = mImsPhone;
         boolean isWifiCallingEnabled = false;
@@ -4041,22 +3862,21 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         if (imsPhone != null) {
             isAvailable = imsPhone.isImsCapabilityAvailable(capability, regTech);
         }
-        Rlog.d(LOG_TAG, "isImsCapabilityAvailable, capability=" + capability + ", regTech="
-                + regTech + ", isAvailable=" + isAvailable);
+        Rlog.d(LOG_TAG, "isImsRegistered =" + isAvailable);
         return isAvailable;
     }
 
     /**
      * Get Volte Feature Availability
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean isVolteEnabled() {
         Phone imsPhone = mImsPhone;
         boolean isVolteEnabled = false;
         if (imsPhone != null) {
             isVolteEnabled = imsPhone.isVolteEnabled();
         }
-        Rlog.d(LOG_TAG, "isVolteEnabled=" + isVolteEnabled);
+        Rlog.d(LOG_TAG, "isImsRegistered =" + isVolteEnabled);
         return isVolteEnabled;
     }
 
@@ -4195,10 +4015,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *  here.
      *
      *  @param rc the phone radio capability currently in effect for this phone.
-     *  @param capabilitySwitched whether this method called after a radio capability switch
-     *      completion or called when radios first become available.
      */
-    public void radioCapabilityUpdated(RadioCapability rc, boolean capabilitySwitched) {
+    public void radioCapabilityUpdated(RadioCapability rc) {
         // Called when radios first become available or after a capability switch
         // Update the cached value
         mRadioCapability.set(rc);
@@ -4207,12 +4025,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
             boolean restoreSelection = !mContext.getResources().getBoolean(
                     com.android.internal.R.bool.skip_restoring_network_selection);
             sendSubscriptionSettings(restoreSelection);
-        }
-
-        // When radio capability switch is done, query IMEI value and update it in Phone objects
-        // to make it in sync with the IMEI value currently used by Logical-Modem.
-        if (capabilitySwitched) {
-            mCi.getDeviceIdentity(obtainMessage(EVENT_GET_DEVICE_IDENTITY_DONE));
         }
     }
 
@@ -4285,7 +4097,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      *
      * @return {@code true} if video calling is enabled, {@code false} otherwise.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public boolean isVideoEnabled() {
         Phone imsPhone = mImsPhone;
         if (imsPhone != null) {
@@ -4315,21 +4127,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     public void startLceAfterRadioIsAvailable() {
         mCi.startLceService(DEFAULT_REPORT_INTERVAL_MS, LCE_PULL_MODE,
                 obtainMessage(EVENT_CONFIG_LCE));
-    }
-
-    /**
-     * Control the data throttling at modem.
-     *
-     * @param result Message that will be sent back to the requester
-     * @param workSource calling Worksource
-     * @param dataThrottlingAction the DataThrottlingAction that is being requested. Defined in
-     *      android.telephony.TelephonyManger.
-     * @param completionWindowMillis milliseconds in which data throttling action has to be
-     *      achieved.
-     */
-    public void setDataThrottling(Message result, WorkSource workSource,
-            int dataThrottlingAction, long completionWindowMillis) {
-        mCi.setDataThrottling(result, workSource, dataThrottlingAction, completionWindowMillis);
     }
 
     /**
@@ -4495,8 +4292,8 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      * - {@link android.telephony.TelephonyManager#CARD_POWER_UP}
      * - {@link android.telephony.TelephonyManager#CARD_POWER_UP_PASS_THROUGH}
      **/
-    public void setSimPowerState(int state, Message result, WorkSource workSource) {
-        mCi.setSimCardPower(state, result, workSource);
+    public void setSimPowerState(int state, WorkSource workSource) {
+        mCi.setSimCardPower(state, null, workSource);
     }
 
     public void setCarrierTestOverride(String mccmnc, String imsi, String iccid, String gid1,
@@ -4588,17 +4385,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
         mVoiceCallSessionStats = voiceCallSessionStats;
     }
 
-    /** Returns the {@link SmsStats} for this phone ID. */
-    public SmsStats getSmsStats() {
-        return mSmsStats;
-    }
-
-    /** Sets the {@link SmsStats} mock for this phone ID during unit testing. */
-    @VisibleForTesting
-    public void setSmsStats(SmsStats smsStats) {
-        mSmsStats = smsStats;
-    }
-
     /** @hide */
     public CarrierPrivilegesTracker getCarrierPrivilegesTracker() {
         return mCarrierPrivilegesTracker;
@@ -4606,36 +4392,6 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
 
     public boolean useSsOverIms(Message onComplete) {
         return false;
-    }
-
-    /**
-     * Check if device is idle. Device is idle when it is not in high power consumption mode.
-     *
-     * @see DeviceStateMonitor#shouldEnableHighPowerConsumptionIndications()
-     *
-     * @return true if device is idle
-     */
-    public boolean isDeviceIdle() {
-        DeviceStateMonitor dsm = getDeviceStateMonitor();
-        if (dsm == null) {
-            Rlog.e(LOG_TAG, "isDeviceIdle: DeviceStateMonitor is null");
-            return false;
-        }
-        return !dsm.shouldEnableHighPowerConsumptionIndications();
-    }
-
-    /**
-     * Get notified when device idleness state has changed
-     *
-     * @param isIdle true if the new state is idle
-     */
-    public void notifyDeviceIdleStateChanged(boolean isIdle) {
-        ServiceStateTracker sst = getServiceStateTracker();
-        if (sst == null) {
-            Rlog.e(LOG_TAG, "notifyDeviceIdleStateChanged: SST is null");
-            return;
-        }
-        sst.onDeviceIdleStateChanged(isIdle);
     }
 
     /**

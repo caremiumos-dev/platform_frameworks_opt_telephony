@@ -16,7 +16,6 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -226,10 +225,8 @@ public class SmsBroadcastUndelivered {
                     }
                 }
             }
-            // Retrieve the phone and phone id, required for metrics
-            Phone phone = getPhone(gsmInboundSmsHandler, cdmaInboundSmsHandler);
-            int phoneId = phone != null ? phone.getPhoneId()
-                    : SubscriptionManager.INVALID_PHONE_INDEX;
+            // Retrieve the phone id, required for metrics
+            int phoneId = getPhoneId(gsmInboundSmsHandler, cdmaInboundSmsHandler);
 
             // Delete old incomplete message segments
             for (SmsReferenceKey message : oldMultiPartMessages) {
@@ -247,10 +244,6 @@ public class SmsBroadcastUndelivered {
                     TelephonyMetrics metrics = TelephonyMetrics.getInstance();
                     metrics.writeDroppedIncomingMultipartSms(phoneId, message.mFormat, rows,
                             message.mMessageCount);
-                    if (phone != null) {
-                        phone.getSmsStats().onDroppedIncomingMultipartSms(message.mIs3gpp2, rows,
-                                message.mMessageCount);
-                    }
                 }
             }
         } catch (SQLException e) {
@@ -265,17 +258,17 @@ public class SmsBroadcastUndelivered {
     }
 
     /**
-     * Retrieve the phone for the GSM or CDMA Inbound SMS handler
+     * Retrieve the phone id for the GSM or CDMA Inbound SMS handler
      */
-    @Nullable
-    private static Phone getPhone(GsmInboundSmsHandler gsmInboundSmsHandler,
+    private static int getPhoneId(GsmInboundSmsHandler gsmInboundSmsHandler,
             CdmaInboundSmsHandler cdmaInboundSmsHandler) {
+        int phoneId = SubscriptionManager.INVALID_PHONE_INDEX;
         if (gsmInboundSmsHandler != null) {
-            return gsmInboundSmsHandler.getPhone();
+            phoneId = gsmInboundSmsHandler.getPhone().getPhoneId();
         } else if (cdmaInboundSmsHandler != null) {
-            return cdmaInboundSmsHandler.getPhone();
+            phoneId = cdmaInboundSmsHandler.getPhone().getPhoneId();
         }
-        return null;
+        return phoneId;
     }
 
     /**
@@ -319,7 +312,6 @@ public class SmsBroadcastUndelivered {
         final int mReferenceNumber;
         final int mMessageCount;
         final String mQuery;
-        final boolean mIs3gpp2;
         final String mFormat;
 
         SmsReferenceKey(InboundSmsTracker tracker) {
@@ -327,7 +319,6 @@ public class SmsBroadcastUndelivered {
             mReferenceNumber = tracker.getReferenceNumber();
             mMessageCount = tracker.getMessageCount();
             mQuery = tracker.getQueryForSegments();
-            mIs3gpp2 = tracker.is3gpp2();
             mFormat = tracker.getFormat();
         }
 

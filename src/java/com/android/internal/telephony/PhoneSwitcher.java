@@ -41,7 +41,6 @@ import android.net.NetworkRequest;
 import android.net.NetworkSpecifier;
 import android.net.TelephonyNetworkSpecifier;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -184,7 +183,7 @@ public class PhoneSwitcher extends Handler {
                 }
             };
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     // How many phones (correspondingly logical modems) are allowed for PS attach. This is used
     // when we specifically use setDataAllowed to initiate on-demand PS(data) attach for each phone.
     protected int mMaxDataAttachModemCount;
@@ -676,8 +675,8 @@ public class PhoneSwitcher extends Handler {
         }
 
         @Override
-        protected void needNetworkFor(NetworkRequest networkRequest) {
-            if (VDBG) log("needNetworkFor " + networkRequest);
+        protected void needNetworkFor(NetworkRequest networkRequest, int score) {
+            if (VDBG) log("needNetworkFor " + networkRequest + ", " + score);
             Message msg = mPhoneSwitcher.obtainMessage(EVENT_REQUEST_NETWORK);
             msg.obj = networkRequest;
             msg.sendToTarget();
@@ -922,12 +921,12 @@ public class PhoneSwitcher extends Handler {
         public long lastRequested = 0;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected void activate(int phoneId) {
         switchPhone(phoneId, true);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected void deactivate(int phoneId) {
         switchPhone(phoneId, false);
     }
@@ -1364,7 +1363,7 @@ public class PhoneSwitcher extends Handler {
         return mPreferredDataPhoneId;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected void log(String l) {
         Rlog.d(LOG_TAG, l);
         mLocalLog.log(l);

@@ -23,7 +23,6 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.telephony.CarrierConfigManager;
@@ -59,7 +58,7 @@ public class SIMRecords extends IccRecords {
 
     // ***** Instance Variables
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     VoiceMailConstants mVmConfig;
 
     // ***** Cached SIM State; cleared on channel close
@@ -79,21 +78,21 @@ public class SIMRecords extends IccRecords {
     private byte[] mCphsInfo = null;
     boolean mCspPlmnEnabled = true;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfMWIS = null;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfCPHS_MWI =null;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfCff = null;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfCfis = null;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfLi = null;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     byte[] mEfPl = null;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     UsimServiceTable mUsimServiceTable;
 
     @Override
@@ -261,7 +260,7 @@ public class SIMRecords extends IccRecords {
 
     //***** Public Methods
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public String getMsisdnNumber() {
         return mMsisdn;
@@ -272,7 +271,7 @@ public class SIMRecords extends IccRecords {
         return mUsimServiceTable;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private int getExtFromEf(int ef) {
         int ext;
         switch (ef) {
@@ -328,7 +327,7 @@ public class SIMRecords extends IccRecords {
         return mMsisdnTag;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public String getVoiceMailNumber() {
         return mVoiceMailNum;
@@ -361,10 +360,6 @@ public class SIMRecords extends IccRecords {
     @Override
     public void setVoiceMailNumber(String alphaTag, String voiceNumber,
             Message onComplete) {
-        if (mDestroyed.get()) {
-            return;
-        }
-
         if (mIsVoiceMailFixed) {
             AsyncResult.forMessage((onComplete)).exception =
                     new IccVmFixedException("Voicemail number is fixed by operator");
@@ -512,7 +507,7 @@ public class SIMRecords extends IccRecords {
     /**
      * {@inheritDoc}
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public void setVoiceCallForwardingFlag(int line, boolean enable, String dialNumber) {
 
@@ -595,7 +590,7 @@ public class SIMRecords extends IccRecords {
     /**
      * {@inheritDoc}
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public String getOperatorNumeric() {
         String imsi = getIMSI();
@@ -1581,7 +1576,7 @@ public class SIMRecords extends IccRecords {
         mRecordsToLoad++;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected void fetchSimRecords() {
         mRecordsRequested = true;
 
@@ -1731,7 +1726,7 @@ public class SIMRecords extends IccRecords {
      *        ar.exception holds exception in error
      *        ar.result is byte[] for data in success
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private void getSpnFsm(boolean start, AsyncResult ar) {
         byte[] data;
 
@@ -2007,13 +2002,13 @@ public class SIMRecords extends IccRecords {
     /**
      * check to see if Mailbox Number is allocated and activated in CPHS SST
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private boolean isCphsMailboxEnabled() {
         if (mCphsInfo == null)  return false;
         return ((mCphsInfo[1] & CPHS_SST_MBN_MASK) == CPHS_SST_MBN_ENABLED );
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     protected void log(String s) {
         if (mParentApp != null) {
@@ -2023,7 +2018,7 @@ public class SIMRecords extends IccRecords {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     protected void loge(String s) {
         if (mParentApp != null) {
@@ -2041,7 +2036,7 @@ public class SIMRecords extends IccRecords {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected void logv(String s) {
         if (mParentApp != null) {
             Rlog.v(LOG_TAG, "[SIMRecords-" + mParentApp.getPhoneId() + "] " + s);

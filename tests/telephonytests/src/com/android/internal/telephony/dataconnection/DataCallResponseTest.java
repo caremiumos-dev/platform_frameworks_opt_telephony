@@ -27,11 +27,9 @@ import android.net.LinkAddress;
 import android.os.Parcel;
 import android.telephony.data.ApnSetting;
 import android.telephony.data.DataCallResponse;
-import android.telephony.data.EpsQos;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DataCallResponseTest extends AndroidTestCase {
@@ -40,7 +38,7 @@ public class DataCallResponseTest extends AndroidTestCase {
     public void testParcel() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryDurationMillis(-1L)
+                .setSuggestedRetryTime(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -53,8 +51,6 @@ public class DataCallResponseTest extends AndroidTestCase {
                         Arrays.asList(InetAddresses.parseNumericAddress(FAKE_PCSCF_ADDRESS)))
                 .setMtuV4(1440)
                 .setMtuV6(1440)
-                .setDefaultQos(new EpsQos())
-                .setQosSessions(new ArrayList<>())
                 .build();
 
         Parcel p = Parcel.obtain();
@@ -69,7 +65,7 @@ public class DataCallResponseTest extends AndroidTestCase {
     public void testEquals() throws Exception {
         DataCallResponse response = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryDurationMillis(-1L)
+                .setSuggestedRetryTime(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -86,7 +82,7 @@ public class DataCallResponseTest extends AndroidTestCase {
 
         DataCallResponse response1 = new DataCallResponse.Builder()
                 .setCause(0)
-                .setRetryDurationMillis(-1L)
+                .setSuggestedRetryTime(-1)
                 .setId(1)
                 .setLinkStatus(2)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)
@@ -106,7 +102,7 @@ public class DataCallResponseTest extends AndroidTestCase {
 
         DataCallResponse response2 = new DataCallResponse.Builder()
                 .setCause(1)
-                .setRetryDurationMillis(-1L)
+                .setSuggestedRetryTime(-1)
                 .setId(1)
                 .setLinkStatus(3)
                 .setProtocolType(ApnSetting.PROTOCOL_IP)

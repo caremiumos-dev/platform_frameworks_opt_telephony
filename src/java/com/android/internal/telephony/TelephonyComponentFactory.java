@@ -30,7 +30,6 @@ import android.system.StructStatVfs;
 import android.telephony.AccessNetworkConstants.TransportType;
 import android.text.TextUtils;
 
-import com.android.ims.ImsManager;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
 import com.android.internal.telephony.dataconnection.DataEnabledSettings;
@@ -350,10 +349,9 @@ public class TelephonyComponentFactory {
      */
     public InboundSmsTracker makeInboundSmsTracker(Context context, byte[] pdu, long timestamp,
             int destPort, boolean is3gpp2, boolean is3gpp2WapPdu, String address,
-            String displayAddr, String messageBody, boolean isClass0, int subId,
-            @InboundSmsHandler.SmsSource int smsSource) {
+            String displayAddr, String messageBody, boolean isClass0, int subId) {
         return new InboundSmsTracker(context, pdu, timestamp, destPort, is3gpp2, is3gpp2WapPdu,
-                address, displayAddr, messageBody, isClass0, subId, smsSource);
+                address, displayAddr, messageBody, isClass0, subId);
     }
 
     /**
@@ -362,10 +360,10 @@ public class TelephonyComponentFactory {
     public InboundSmsTracker makeInboundSmsTracker(Context context, byte[] pdu, long timestamp,
             int destPort, boolean is3gpp2, String address, String displayAddr, int referenceNumber,
             int sequenceNumber, int messageCount, boolean is3gpp2WapPdu, String messageBody,
-            boolean isClass0, int subId, @InboundSmsHandler.SmsSource int smsSource) {
+            boolean isClass0, int subId) {
         return new InboundSmsTracker(context, pdu, timestamp, destPort, is3gpp2, address,
                 displayAddr, referenceNumber, sequenceNumber, messageCount, is3gpp2WapPdu,
-                messageBody, isClass0, subId, smsSource);
+                messageBody, isClass0, subId);
     }
 
     /**
@@ -377,7 +375,7 @@ public class TelephonyComponentFactory {
     }
 
     public ImsPhoneCallTracker makeImsPhoneCallTracker(ImsPhone imsPhone) {
-        return new ImsPhoneCallTracker(imsPhone, ImsManager::getConnector);
+        return new ImsPhoneCallTracker(imsPhone);
     }
 
     public ImsExternalCallTracker makeImsExternalCallTracker(ImsPhone imsPhone) {
@@ -444,7 +442,7 @@ public class TelephonyComponentFactory {
     }
 
     public SubscriptionInfoUpdater makeSubscriptionInfoUpdater(Looper looper, Context context,
-            SubscriptionController sc) {
-        return new SubscriptionInfoUpdater(looper, context, sc);
+            CommandsInterface[] ci) {
+        return new SubscriptionInfoUpdater(looper, context, ci);
     }
 }

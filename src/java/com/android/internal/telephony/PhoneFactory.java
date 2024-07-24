@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.LocalServerSocket;
-import android.os.Build;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -221,7 +220,7 @@ public class PhoneFactory {
                 sSubInfoRecordUpdater = TelephonyComponentFactory.getInstance().inject(
                         SubscriptionInfoUpdater.class.getName()).
                         makeSubscriptionInfoUpdater(pfhandlerThread.
-                        getLooper(), context, SubscriptionController.getInstance());
+                        getLooper(), context, sCommandsInterfaces);
 
                 // Only bring up IMS if the device supports having an IMS stack.
                 if (context.getPackageManager().hasSystemFeature(
@@ -349,7 +348,7 @@ public class PhoneFactory {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public static Phone[] getPhones() {
         synchronized (sLockProxyPhones) {
             if (!sMadeDefaults) {
@@ -409,7 +408,7 @@ public class PhoneFactory {
      * @return the preferred network mode that should be set.
      */
     // TODO: Fix when we "properly" have TelephonyDevController/SubscriptionController ..
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public static int calculatePreferredNetworkType(Context context, int phoneSubId) {
         int networkType = android.provider.Settings.Global.getInt(context.getContentResolver(),
                 android.provider.Settings.Global.PREFERRED_NETWORK_MODE + phoneSubId,
@@ -433,7 +432,7 @@ public class PhoneFactory {
     }
 
     /* Gets the default subscription */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public static int getDefaultSubscription() {
         return SubscriptionController.getInstance().getDefaultSubId();
     }

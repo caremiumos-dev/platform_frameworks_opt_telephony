@@ -19,7 +19,6 @@ package com.android.internal.telephony;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.pm.PackageManager;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -41,12 +40,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class IccPhoneBookInterfaceManager {
     static final String LOG_TAG = "IccPhoneBookIM";
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected static final boolean DBG = true;
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected Phone mPhone;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     protected AdnRecordCache mAdnCache;
 
     protected static final int EVENT_GET_SIZE_DONE = 1;

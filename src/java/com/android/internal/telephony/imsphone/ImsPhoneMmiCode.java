@@ -16,10 +16,6 @@
 
 package com.android.internal.telephony.imsphone;
 
-import static android.telephony.CarrierConfigManager.USSD_OVER_CS_ONLY;
-import static android.telephony.CarrierConfigManager.USSD_OVER_CS_PREFERRED;
-import static android.telephony.CarrierConfigManager.USSD_OVER_IMS_ONLY;
-import static android.telephony.CarrierConfigManager.USSD_OVER_IMS_PREFERRED;
 import static android.telephony.ServiceState.STATE_IN_SERVICE;
 
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_DATA;
@@ -37,14 +33,10 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.os.ResultReceiver;
-import android.telephony.CarrierConfigManager;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsCallForwardInfo;
 import android.telephony.ims.ImsReasonInfo;
 import android.telephony.ims.ImsSsData;
@@ -183,9 +175,9 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
 
     //***** Instance Variables
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private ImsPhone mPhone;
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private Context mContext;
     private IccRecords mIccRecords;
 
@@ -258,7 +250,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
      * Please see flow chart in TS 22.030 6.5.3.2
      */
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     static ImsPhoneMmiCode newFromDialString(String dialString, ImsPhone phone) {
        return newFromDialString(dialString, phone, null);
     }
@@ -398,7 +390,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
     }
 
     /** returns true of the string is empty or null */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private static boolean
     isEmptyOrNull(CharSequence s) {
         return s == null || (s.length() == 0);
@@ -630,7 +622,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
 
     //***** Instance Methods
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     String getDialingNumber() {
         return mDialingNumber;
     }
@@ -673,9 +665,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
             return false;
         }
 
-        TelephonyManager tm =
-                (TelephonyManager) phone.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.isEmergencyNumber(dialString)) {
+        if (PhoneNumberUtils.isLocalEmergencyNumber(phone.getContext(), dialString)) {
             return false;
         } else {
             return isShortCodeUSSD(dialString, phone);
@@ -725,7 +715,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
      *  In temporary mode, to invoke CLIR for a single call enter:
      *       " # 31 # [called number] SEND "
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean
     isTemporaryModeCLIR() {
         return mSc != null && mSc.equals(SC_CLIR) && mDialingNumber != null
@@ -736,7 +726,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
      * returns CommandsInterface.CLIR_*
      * See also isTemporaryModeCLIR()
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     int
     getCLIRMode() {
         if (mSc != null && mSc.equals(SC_CLIR)) {
@@ -750,12 +740,12 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         return CommandsInterface.CLIR_DEFAULT;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean isActivate() {
         return mAction != null && mAction.equals(ACTION_ACTIVATE);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean isDeactivate() {
         return mAction != null && mAction.equals(ACTION_DEACTIVATE);
     }
@@ -764,12 +754,12 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         return mAction != null && mAction.equals(ACTION_INTERROGATE);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean isRegister() {
         return mAction != null && mAction.equals(ACTION_REGISTER);
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean isErasure() {
         return mAction != null && mAction.equals(ACTION_ERASURE);
     }
@@ -787,7 +777,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         return mIsUssdRequest;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     boolean
     isSupportedOverImsPhone() {
         if (isShortCode()) return true;
@@ -847,7 +837,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
     }
 
     /** Process a MMI code or short code...anything that isn't a dialing number */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void
     processCode () throws CallStateException {
         try {
@@ -1070,41 +1060,18 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
             } else if (mPoundString != null) {
                 if (mContext.getResources().getBoolean(
                         com.android.internal.R.bool.config_allow_ussd_over_ims)) {
-                    int ussd_method = getIntCarrierConfig(
-                                    CarrierConfigManager.KEY_CARRIER_USSD_METHOD_INT);
-
-                    switch (ussd_method) {
-                        case USSD_OVER_CS_PREFERRED:
-                            // We'll normally send USSD over the CS pipe, but if it happens that
-                            // the CS phone is out of service, we'll just try over IMS instead.
-                            if (mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
-                                    == STATE_IN_SERVICE) {
-                                Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
-                                        + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe "
-                                        + "(allowed over ims).");
-                                throw new CallStateException(Phone.CS_FALLBACK);
-                            } else {
-                                Rlog.i(LOG_TAG, "processCode: CS is out of service, "
-                                        + "sending ussd string '"
-                                        + Rlog.pii(LOG_TAG, mPoundString) + "' over IMS pipe.");
-                                sendUssd(mPoundString);
-                            }
-                            break;
-                        case USSD_OVER_IMS_PREFERRED:
-                        case USSD_OVER_IMS_ONLY:
-                            Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
-                                    + Rlog.pii(LOG_TAG, mPoundString) + "' over IMS pipe.");
-                            sendUssd(mPoundString);
-                            break;
-                        case USSD_OVER_CS_ONLY:
-                            Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
-                                    + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe.");
-                            throw new CallStateException(Phone.CS_FALLBACK);
-                        default:
-                            Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
-                                    + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe."
-                                    + "(unsupported method)");
-                            throw new CallStateException(Phone.CS_FALLBACK);
+                    // We'll normally send USSD over the CS pipe, but if it happens that
+                    // the CS phone is out of service, we'll just try over IMS instead.
+                    if (mPhone.getDefaultPhone().getServiceStateTracker().mSS.getState()
+                            == STATE_IN_SERVICE) {
+                        Rlog.i(LOG_TAG, "processCode: Sending ussd string '"
+                                + Rlog.pii(LOG_TAG, mPoundString) + "' over CS pipe "
+                                + "(allowed over ims).");
+                        throw new CallStateException(Phone.CS_FALLBACK);
+                    } else {
+                        Rlog.i(LOG_TAG, "processCode: CS is out of service, sending ussd string '"
+                                + Rlog.pii(LOG_TAG, mPoundString) + "' over IMS pipe.");
+                        sendUssd(mPoundString);
                     }
                 } else {
                     // USSD codes are not supported over IMS due to modem limitations; send over
@@ -1287,7 +1254,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private CharSequence getErrorMessage(AsyncResult ar) {
         CharSequence errorMessage;
         return ((errorMessage = getMmiErrorMessage(ar)) != null) ? errorMessage :
@@ -1329,7 +1296,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
         return null;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private CharSequence getScString() {
         if (mSc != null) {
             if (isServiceCodeCallBarring(mSc)) {
@@ -1431,7 +1398,7 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
      *        Returns null if unrecognized
      */
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private CharSequence
     serviceClassToCFString (int serviceClass) {
         switch (serviceClass) {
@@ -1842,28 +1809,6 @@ public final class ImsPhoneMmiCode extends Handler implements MmiCode {
             return error.getMessage();
         } else {
             return getErrorMessage(ar);
-        }
-    }
-
-    /**
-     * Get the int config from carrier config manager.
-     *
-     * @param key config key defined in CarrierConfigManager
-     * @return integer value of corresponding key.
-     */
-    private int getIntCarrierConfig(String key) {
-        CarrierConfigManager ConfigManager =
-                (CarrierConfigManager) mContext.getSystemService(Context.CARRIER_CONFIG_SERVICE);
-        PersistableBundle b = null;
-        if (ConfigManager != null) {
-            // If an invalid subId is used, this bundle will contain default values.
-            b = ConfigManager.getConfigForSubId(mPhone.getSubId());
-        }
-        if (b != null) {
-            return b.getInt(key);
-        } else {
-            // Return static default defined in CarrierConfigManager.
-            return CarrierConfigManager.getDefaultConfig().getInt(key);
         }
     }
 

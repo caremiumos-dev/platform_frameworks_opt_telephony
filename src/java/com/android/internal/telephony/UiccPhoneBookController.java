@@ -19,7 +19,6 @@
 package com.android.internal.telephony;
 
 import android.compat.annotation.UnsupportedAppUsage;
-import android.os.Build;
 import android.os.TelephonyServiceManager.ServiceRegisterer;
 import android.telephony.TelephonyFrameworkInitializer;
 
@@ -32,7 +31,7 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
     private static final String TAG = "UiccPhoneBookController";
 
     /* only one UiccPhoneBookController exists */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public UiccPhoneBookController() {
         ServiceRegisterer iccPhoneBookServiceRegisterer = TelephonyFrameworkInitializer
                 .getTelephonyServiceManager()
@@ -132,7 +131,7 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
     /**
      * get phone book interface manager object based on subscription.
      **/
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private IccPhoneBookInterfaceManager
             getIccPhoneBookInterfaceManager(int subId) {
 
@@ -150,7 +149,7 @@ public class UiccPhoneBookController extends IIccPhoneBook.Stub {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private int getDefaultSubscription() {
         return PhoneFactory.getDefaultSubscription();
     }

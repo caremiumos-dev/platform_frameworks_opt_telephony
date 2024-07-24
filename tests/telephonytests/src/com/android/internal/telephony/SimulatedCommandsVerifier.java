@@ -26,15 +26,14 @@ import android.telephony.NetworkScanRequest;
 import android.telephony.SignalThresholdInfo;
 import android.telephony.TelephonyManager;
 import android.telephony.data.DataProfile;
-import android.telephony.data.SliceInfo;
 import android.telephony.emergency.EmergencyNumber;
 
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.RadioCapability;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 import com.android.internal.telephony.cdma.CdmaSmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
-import com.android.internal.telephony.uicc.IccCardApplicationStatus.PersoSubState;
 
 public class SimulatedCommandsVerifier implements CommandsInterface {
     private static SimulatedCommandsVerifier sInstance;
@@ -178,16 +177,6 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
 
     @Override
     public void unregisterForDataCallListChanged(Handler h) {
-
-    }
-
-    @Override
-    public void registerForApnUnthrottled(Handler h, int what, Object obj) {
-
-    }
-
-    @Override
-    public void unregisterForApnUnthrottled(Handler h) {
 
     }
 
@@ -1060,17 +1049,6 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     }
 
     @Override
-    public void setAllowedNetworkTypeBitmask(
-            @TelephonyManager.NetworkTypeBitMask int networkTypeBitmask, Message response) {
-
-    }
-
-    @Override
-    public void getAllowedNetworkTypeBitmask(Message response) {
-
-    }
-
-    @Override
     public void setLocationUpdates(boolean enable, Message response) {
 
     }
@@ -1203,7 +1181,7 @@ public class SimulatedCommandsVerifier implements CommandsInterface {
     @Override
     public void setupDataCall(int accessNetworkType, DataProfile dataProfile, boolean isRoaming,
                               boolean allowRoaming, int reason, LinkProperties linkProperties,
-                              int pduSessionId, SliceInfo sliceInfo, Message result) {
+                              Message result) {
     }
 
     @Override

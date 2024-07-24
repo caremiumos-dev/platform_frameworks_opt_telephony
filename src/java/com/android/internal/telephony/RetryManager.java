@@ -16,22 +16,16 @@
 
 package com.android.internal.telephony;
 
-import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.Context;
-import android.os.Build;
 import android.os.PersistableBundle;
-import android.os.SystemClock;
 import android.os.SystemProperties;
-import android.telephony.Annotation.ApnType;
 import android.telephony.CarrierConfigManager;
 import android.telephony.data.ApnSetting;
-import android.telephony.data.DataCallResponse;
 import android.text.TextUtils;
 import android.util.Pair;
 
-import com.android.internal.telephony.dataconnection.DataThrottler;
 import com.android.internal.telephony.util.TelephonyUtils;
 import com.android.telephony.Rlog;
 
@@ -123,18 +117,18 @@ public class RetryManager {
     private static final long DEFAULT_APN_RETRY_AFTER_DISCONNECT_DELAY = 10000;
 
     /**
-     * The value indicating retry should not occur.
+     * The value indicating no retry is needed
      */
-    public static final long NO_RETRY = Long.MAX_VALUE;
+    public static final long NO_RETRY = -1;
 
     /**
-     * The value indicating network did not suggest any retry delay
+     * The value indicating modem did not suggest any retry delay
      */
-    public static final long NO_SUGGESTED_RETRY_DELAY = DataCallResponse.RETRY_DURATION_UNDEFINED;
+    public static final long NO_SUGGESTED_RETRY_DELAY = -2;
 
     /**
-     * If the network suggests a retry delay in the data call setup response, we will retry
-     * the current APN setting again. However, if the network keeps suggesting retrying the same
+     * If the modem suggests a retry delay in the data call setup response, we will retry
+     * the current APN setting again. However, if the modem keeps suggesting retrying the same
      * APN setting, we'll fall into an infinite loop. Therefore adding a counter to retry up to
      * MAX_SAME_APN_RETRY times can avoid it.
      */
@@ -143,14 +137,14 @@ public class RetryManager {
     /**
      * The delay (in milliseconds) between APN trying within the same round
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private long mInterApnDelay;
 
     /**
      * The delay (in milliseconds) between APN trying within the same round when we are in
      * fail fast mode
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private long mFailFastInterApnDelay;
 
     /**
@@ -158,6 +152,11 @@ public class RetryManager {
      * data call lost)
      */
     private long mApnRetryAfterDisconnectDelay;
+
+    /**
+     * Modem suggested delay for retrying the current APN
+     */
+    private long mModemSuggestedDelay = NO_SUGGESTED_RETRY_DELAY;
 
     /**
      * The counter for same APN retrying. See MAX_SAME_APN_RETRY for the details.
@@ -168,13 +167,13 @@ public class RetryManager {
      * Retry record with times in milli-seconds
      */
     private static class RetryRec {
-        long mDelayTime;
-        long mRandomizationTime;
-
-        RetryRec(long delayTime, long randomizationTime) {
+        RetryRec(int delayTime, int randomizationTime) {
             mDelayTime = delayTime;
             mRandomizationTime = randomizationTime;
         }
+
+        int mDelayTime;
+        int mRandomizationTime;
     }
 
     /**
@@ -182,10 +181,8 @@ public class RetryManager {
      */
     private ArrayList<RetryRec> mRetryArray = new ArrayList<RetryRec>();
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private Phone mPhone;
-
-    private final DataThrottler mDataThrottler;
 
     /**
      * Flag indicating whether retrying forever regardless the maximum retry count mMaxRetryCount
@@ -225,24 +222,19 @@ public class RetryManager {
     private int mCurrentApnIndex = -1;
 
     /**
-     * Apn context type.
+     * Apn context type. Could be "default, "mms", "supl", etc...
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private String mApnType;
-
-    private final @ApnType int apnType;
 
     /**
      * Retry manager constructor
      * @param phone Phone object
-     * @param dataThrottler Data throttler
      * @param apnType APN type
      */
-    public RetryManager(@NonNull Phone phone, @NonNull DataThrottler dataThrottler,
-            @ApnType int apnType) {
+    public RetryManager(Phone phone, String apnType) {
         mPhone = phone;
-        mDataThrottler = dataThrottler;
-        this.apnType = apnType;
+        mApnType = apnType;
     }
 
     /**
@@ -266,7 +258,7 @@ public class RetryManager {
         mConfig = configStr;
 
         if (!TextUtils.isEmpty(configStr)) {
-            long defaultRandomization = 0;
+            int defaultRandomization = 0;
 
             if (VDBG) log("configure: not empty");
 
@@ -373,14 +365,14 @@ public class RetryManager {
                     if (!TextUtils.isEmpty(s)) {
                         String splitStr[] = s.split(":", 2);
                         if (splitStr.length == 2) {
-                            String apnTypeStr = splitStr[0].trim();
+                            String apnType = splitStr[0].trim();
                             // Check if this retry pattern is for the APN we want.
-                            if (apnTypeStr.equals(ApnSetting.getApnTypeString(apnType))) {
+                            if (apnType.equals(mApnType)) {
                                 // Extract the config string. Note that an empty string is valid
                                 // here, meaning no retry for the specified APN.
                                 configString = splitStr[1];
                                 break;
-                            } else if (apnTypeStr.equals(OTHERS_APN_TYPE)) {
+                            } else if (apnType.equals(OTHERS_APN_TYPE)) {
                                 // Extract the config string. Note that an empty string is valid
                                 // here, meaning no retry for all other APNs.
                                 otherConfigString = splitStr[1];
@@ -421,7 +413,7 @@ public class RetryManager {
      * Return the timer that should be used to trigger the data reconnection
      */
     @UnsupportedAppUsage
-    private long getRetryTimer() {
+    private int getRetryTimer() {
         int index;
         if (mRetryCount < mRetryArray.size()) {
             index = mRetryCount;
@@ -429,7 +421,7 @@ public class RetryManager {
             index = mRetryArray.size() - 1;
         }
 
-        long retVal;
+        int retVal;
         if ((index >= 0) && (index < mRetryArray.size())) {
             retVal = mRetryArray.get(index).mDelayTime + nextRandomizationTime(index);
         } else {
@@ -451,13 +443,13 @@ public class RetryManager {
         Pair<Boolean, Integer> retVal;
         try {
             value = Integer.parseInt(stringValue);
-            retVal = new Pair<>(validateNonNegativeInt(name, value), value);
+            retVal = new Pair<Boolean, Integer>(validateNonNegativeInt(name, value), value);
         } catch (NumberFormatException e) {
             Rlog.e(LOG_TAG, name + " bad value: " + stringValue, e);
-            retVal = new Pair<>(false, 0);
+            retVal = new Pair<Boolean, Integer>(false, 0);
         }
         if (VDBG) {
-            log("parseNonNegativeInt: " + name + ", " + stringValue + ", "
+            log("parseNonNetativeInt: " + name + ", " + stringValue + ", "
                     + retVal.first + ", " + retVal.second);
         }
         return retVal;
@@ -469,7 +461,7 @@ public class RetryManager {
      * @param value Value
      * @return Pair.first
      */
-    private boolean validateNonNegativeInt(String name, long value) {
+    private boolean validateNonNegativeInt(String name, int value) {
         boolean retVal;
         if (value < 0) {
             Rlog.e(LOG_TAG, name + " bad value: is < 0");
@@ -485,24 +477,13 @@ public class RetryManager {
      * Return next random number for the index
      * @param index Retry index
      */
-    private long nextRandomizationTime(int index) {
-        long randomTime = mRetryArray.get(index).mRandomizationTime;
+    private int nextRandomizationTime(int index) {
+        int randomTime = mRetryArray.get(index).mRandomizationTime;
         if (randomTime == 0) {
             return 0;
         } else {
-            return mRng.nextInt((int) randomTime);
+            return mRng.nextInt(randomTime);
         }
-    }
-
-    private long getNetworkSuggestedRetryDelay() {
-        long retryElapseTime = mDataThrottler.getRetryTime(apnType);
-        if (retryElapseTime == NO_RETRY || retryElapseTime == NO_SUGGESTED_RETRY_DELAY) {
-            return retryElapseTime;
-        }
-
-        // The time from data throttler is system's elapsed time. We need to return the delta. If
-        // less than 0, then return 0 (i.e. retry immediately).
-        return Math.max(0, retryElapseTime - SystemClock.elapsedRealtime());
     }
 
     /**
@@ -515,17 +496,11 @@ public class RetryManager {
             return null;
         }
 
-        long networkSuggestedRetryDelay = getNetworkSuggestedRetryDelay();
-        if (networkSuggestedRetryDelay == NO_RETRY) {
-            log("Network suggested no retry.");
-            return null;
-        }
-
-        // If the network had suggested a retry delay, we should retry the current APN again
+        // If the modem had suggested a retry delay, we should retry the current APN again
         // (up to MAX_SAME_APN_RETRY times) instead of getting the next APN setting from
         // our own list. If the APN waiting list has been reset before a setup data responses
-        // arrive (i.e. mCurrentApnIndex=-1), then ignore the network suggested retry.
-        if (mCurrentApnIndex != -1 && networkSuggestedRetryDelay != NO_SUGGESTED_RETRY_DELAY
+        // arrive (i.e. mCurrentApnIndex=-1), then ignore the modem suggested retry.
+        if (mCurrentApnIndex != -1 && mModemSuggestedDelay != NO_SUGGESTED_RETRY_DELAY
                 && mSameApnRetryCount < MAX_SAME_APN_RETRY) {
             mSameApnRetryCount++;
             return mWaitingApns.get(mCurrentApnIndex);
@@ -566,20 +541,17 @@ public class RetryManager {
             return NO_RETRY;
         }
 
-        long networkSuggestedDelay = getNetworkSuggestedRetryDelay();
-        log("Network suggested delay=" + networkSuggestedDelay + "ms");
-
-        if (networkSuggestedDelay == NO_RETRY) {
-            log("Network suggested not retrying.");
+        if (mModemSuggestedDelay == NO_RETRY) {
+            log("Modem suggested not retrying.");
             return NO_RETRY;
         }
 
-        if (networkSuggestedDelay != NO_SUGGESTED_RETRY_DELAY
-                && mSameApnRetryCount < MAX_SAME_APN_RETRY) {
-            // If the network explicitly suggests a retry delay, we should use it, even in fail fast
+        if (mModemSuggestedDelay != NO_SUGGESTED_RETRY_DELAY &&
+                mSameApnRetryCount < MAX_SAME_APN_RETRY) {
+            // If the modem explicitly suggests a retry delay, we should use it, even in fail fast
             // mode.
-            log("Network suggested retry in " + networkSuggestedDelay + " ms.");
-            return networkSuggestedDelay;
+            log("Modem suggested retry in " + mModemSuggestedDelay + " ms.");
+            return mModemSuggestedDelay;
         }
 
         // In order to determine the delay to try next APN, we need to peek the next available APN.
@@ -647,6 +619,7 @@ public class RetryManager {
         mRetryCount = 0;
         mCurrentApnIndex = -1;
         mSameApnRetryCount = 0;
+        mModemSuggestedDelay = NO_SUGGESTED_RETRY_DELAY;
         mRetryArray.clear();
     }
 
@@ -688,6 +661,19 @@ public class RetryManager {
     }
 
     /**
+     * Save the modem suggested delay for retrying the current APN.
+     * This method is called when we get the suggested delay from RIL.
+     * @param delay The delay in milliseconds
+     */
+    public void setModemSuggestedDelay(long delay) {
+        if (mCurrentApnIndex == -1) {
+            log("Waiting APN list has been reset. Ignore the value from modem.");
+            return;
+        }
+        mModemSuggestedDelay = delay;
+    }
+
+    /**
      * Get the delay in milliseconds for APN retry after disconnect
      * @return The delay in milliseconds
      */
@@ -697,17 +683,16 @@ public class RetryManager {
 
     public String toString() {
         if (mConfig == null) return "";
-        return "RetryManager: apnType=" + ApnSetting.getApnTypeString(apnType) + " mRetryCount="
-                + mRetryCount + " mMaxRetryCount=" + mMaxRetryCount + " mCurrentApnIndex="
-                + mCurrentApnIndex + " mSameApnRtryCount=" + mSameApnRetryCount
-                + " networkSuggestedDelay=" + getNetworkSuggestedRetryDelay() + " mRetryForever="
-                + mRetryForever + " mInterApnDelay=" + mInterApnDelay
-                + " mApnRetryAfterDisconnectDelay=" + mApnRetryAfterDisconnectDelay
+        return "RetryManager: mApnType=" + mApnType + " mRetryCount=" + mRetryCount
+                + " mMaxRetryCount=" + mMaxRetryCount + " mCurrentApnIndex=" + mCurrentApnIndex
+                + " mSameApnRtryCount=" + mSameApnRetryCount + " mModemSuggestedDelay="
+                + mModemSuggestedDelay + " mRetryForever=" + mRetryForever + " mInterApnDelay="
+                + mInterApnDelay + " mApnRetryAfterDisconnectDelay=" + mApnRetryAfterDisconnectDelay
                 + " mConfig={" + mConfig + "}";
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private void log(String s) {
-        Rlog.d(LOG_TAG, "[" + ApnSetting.getApnTypeString(apnType) + "] " + s);
+        Rlog.d(LOG_TAG, "[" + mApnType + "] " + s);
     }
 }

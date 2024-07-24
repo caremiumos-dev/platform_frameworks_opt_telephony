@@ -280,7 +280,7 @@ public class TelephonyNetworkFactory extends NetworkFactory {
     }
 
     @Override
-    public void needNetworkFor(NetworkRequest networkRequest) {
+    public void needNetworkFor(NetworkRequest networkRequest, int score) {
         Message msg = mInternalHandler.obtainMessage(EVENT_NETWORK_REQUEST);
         msg.obj = networkRequest;
         msg.sendToTarget();

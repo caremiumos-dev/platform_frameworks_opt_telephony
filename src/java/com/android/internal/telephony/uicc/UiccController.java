@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncResult;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -132,7 +131,7 @@ public class UiccController extends Handler {
     // NOTE: any new EVENT_* values must be added to eventToString.
 
     // this needs to be here, because on bootup we dont know which index maps to which UiccSlot
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private CommandsInterface[] mCis;
     @VisibleForTesting
     public UiccSlot[] mUiccSlots;
@@ -422,7 +421,7 @@ public class UiccController extends Handler {
     }
 
     // Easy to use API
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public IccRecords getIccRecords(int phoneId, int family) {
         synchronized (mLock) {
             UiccCardApplication app = getUiccCardApplication(phoneId, family);
@@ -434,7 +433,7 @@ public class UiccController extends Handler {
     }
 
     // Easy to use API
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public IccFileHandler getIccFileHandler(int phoneId, int family) {
         synchronized (mLock) {
             UiccCardApplication app = getUiccCardApplication(phoneId, family);
@@ -613,7 +612,7 @@ public class UiccController extends Handler {
     }
 
     // Easy to use API
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public UiccCardApplication getUiccCardApplication(int phoneId, int family) {
         synchronized (mLock) {
             UiccCard uiccCard = getUiccCardForPhone(phoneId);
@@ -624,13 +623,7 @@ public class UiccController extends Handler {
         }
     }
 
-    /**
-     * Convert IccCardConstants.State enum values to corresponding IccCardConstants String
-     * constants
-     * @param state IccCardConstants.State enum value
-     * @return IccCardConstants String constant representing ICC state
-     */
-    public static String getIccStateIntentString(IccCardConstants.State state) {
+    static String getIccStateIntentString(IccCardConstants.State state) {
         switch (state) {
             case ABSENT: return IccCardConstants.INTENT_VALUE_ICC_ABSENT;
             case PIN_REQUIRED: return IccCardConstants.INTENT_VALUE_ICC_LOCKED;
@@ -1257,7 +1250,7 @@ public class UiccController extends Handler {
         return false;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     private void log(String string) {
         Rlog.d(LOG_TAG, string);
     }
@@ -1291,10 +1284,9 @@ public class UiccController extends Handler {
         pw.println(" mIsCdmaSupported=" + isCdmaSupported(mContext));
         pw.println(" mHasBuiltInEuicc=" + mHasBuiltInEuicc);
         pw.println(" mHasActiveBuiltInEuicc=" + mHasActiveBuiltInEuicc);
+        pw.println(" mUiccSlots: size=" + mUiccSlots.length);
         pw.println(" mCardStrings=" + mCardStrings);
         pw.println(" mDefaultEuiccCardId=" + mDefaultEuiccCardId);
-        pw.println(" mPhoneIdToSlotId=" + Arrays.toString(mPhoneIdToSlotId));
-        pw.println(" mUiccSlots: size=" + mUiccSlots.length);
         for (int i = 0; i < mUiccSlots.length; i++) {
             if (mUiccSlots[i] == null) {
                 pw.println("  mUiccSlots[" + i + "]=null");

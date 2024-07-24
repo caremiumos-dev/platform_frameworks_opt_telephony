@@ -17,7 +17,6 @@
 package com.android.internal.telephony.imsphone;
 
 import android.compat.annotation.UnsupportedAppUsage;
-import android.os.Build;
 import android.telephony.DisconnectCause;
 import android.telephony.ims.ImsStreamMediaProfile;
 import android.util.Log;
@@ -90,7 +89,7 @@ public class ImsPhoneCall extends Call {
 
     /************************** Overridden from Call *************************/
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public ArrayList<Connection> getConnections() {
         return super.getConnections();
@@ -116,7 +115,7 @@ public class ImsPhoneCall extends Call {
     /** Please note: if this is the foreground call and a
      *  background call exists, the background call will be resumed.
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @Override
     public void
     hangup() throws CallStateException {
@@ -174,7 +173,7 @@ public class ImsPhoneCall extends Call {
         mOwner.logState();
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void attach(Connection conn, State state) {
         if (VDBG) {
             Rlog.v(LOG_TAG, "attach : " + mCallContext + " state = " +
@@ -184,7 +183,7 @@ public class ImsPhoneCall extends Call {
         mState = state;
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public void attachFake(Connection conn, State state) {
         attach(conn, state);
     }
@@ -244,7 +243,7 @@ public class ImsPhoneCall extends Call {
     /**
      * Called when this Call is being hung up locally (eg, user pressed "end")
      */
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     @VisibleForTesting
     public void onHangupLocal() {
         ArrayList<Connection> connections = getConnections();
@@ -287,7 +286,7 @@ public class ImsPhoneCall extends Call {
         }
     }
 
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     /* package */ void
     merge(ImsPhoneCall that, State state) {
         // This call is the conference host and the "that" call is the one being merged in.
@@ -321,7 +320,7 @@ public class ImsPhoneCall extends Call {
      * @return The {@link ImsCall}.
      */
     @VisibleForTesting
-    @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
+    @UnsupportedAppUsage
     public ImsCall getImsCall() {
         ImsPhoneConnection connection = getFirstConnection();
         return (connection == null) ? null : connection.getImsCall();
