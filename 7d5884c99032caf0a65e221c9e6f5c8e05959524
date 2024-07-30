@@ -16,6 +16,23 @@
       "message": "np",
       "revId": "7d5884c99032caf0a65e221c9e6f5c8e05959524",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37804fac_39f5b3ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1695768
+      },
+      "writtenOn": "2024-07-30T02:28:43Z",
+      "side": 1,
+      "message": "Sometimes sim loaded broadcast is slower than carrierconfig change loaded. Because registerCarrierConfigChangeListener() is more efficient than receive broadcast to receive call back. Broadcast is unreliable.\nCan I remove the sim loaded judgment?\n\n07-15 02:51:41.035000  3427  3427 D CarrierConfigLoader: Broadcast CARRIER_CONFIG_CHANGED for phone: 0, currentProcessState: LOADED\n07-15 02:51:41.081028  3427  3427 D DCM-0   : EVENT_CARRIER_CONFIG_CHANGED\n07-15 02:51:41.135260  3427  3427 D DPM-0   : Update data profiles due to carrier config updated.\n07-15 02:51:44.224541  3427  3427 D DNC-0   : onSimStateChanged: state\u003dLOADED",
+      "revId": "7d5884c99032caf0a65e221c9e6f5c8e05959524",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
