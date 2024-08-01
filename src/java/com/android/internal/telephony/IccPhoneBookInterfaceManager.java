@@ -38,8 +38,11 @@ import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.uicc.UiccProfile;
 import com.android.telephony.Rlog;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -60,9 +63,10 @@ public class IccPhoneBookInterfaceManager {
     protected static final int EVENT_GET_SIZE_DONE = 1;
     protected static final int EVENT_LOAD_DONE = 2;
     protected static final int EVENT_UPDATE_DONE = 3;
+    protected static final int TIME_OUT_60_SEC_IN_MILLIS = 60 * 1000;
 
     private static final class Request {
-        AtomicBoolean mStatus = new AtomicBoolean(false);
+        CountDownLatch mLatch = new CountDownLatch(1);
         Object mResult = null;
     }
 
@@ -110,13 +114,8 @@ public class IccPhoneBookInterfaceManager {
         }
 
         private void notifyPending(Request request, Object result) {
-            if (request != null) {
-                synchronized (request) {
-                    request.mResult = result;
-                    request.mStatus.set(true);
-                    request.notifyAll();
-                }
-            }
+            request.mResult = result;
+            request.mLatch.countDown();
         }
     };
 
@@ -355,8 +354,9 @@ public class IccPhoneBookInterfaceManager {
                 if (mAdnCache != null) {
                     mAdnCache.requestLoadAllAdnLike(efid,
                             mAdnCache.extensionEfForEf(efid), response);
-                    waitForResult(loadRequest);
-                    return (List<AdnRecord>) loadRequest.mResult;
+                    waitForResult(loadRequest, TIME_OUT_60_SEC_IN_MILLIS);
+                    return (loadRequest.mResult == null) ? Collections.emptyList()
+                            : (List<AdnRecord>) loadRequest.mResult;
                 } else {
                     loge("Failure while trying to load from SIM due to uninitialised adncache");
                     return null;
@@ -376,14 +376,22 @@ public class IccPhoneBookInterfaceManager {
     }
 
     protected void waitForResult(Request request) {
-        synchronized (request) {
-            while (!request.mStatus.get()) {
-                try {
-                    request.wait();
-                } catch (InterruptedException e) {
-                    logd("interrupted while trying to update by search");
+        waitForResult(request, 0);
+    }
+
+    protected void waitForResult(Request request, int timeoutInMillis) {
+        try {
+            if (timeoutInMillis > 0) {
+                if (!request.mLatch.await(timeoutInMillis, TimeUnit.MILLISECONDS)) {
+                    logd("Timeout in waiting for method to result");
+                    request.mResult = null;
+                    request.mLatch.countDown();
                 }
+            } else {
+                request.mLatch.await();
             }
+        } catch (InterruptedException e) {
+            loge("InterruptedException occurred while waiting for latch in waitForResult");
         }
     }
 
