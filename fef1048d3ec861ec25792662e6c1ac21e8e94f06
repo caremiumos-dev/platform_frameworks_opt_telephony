@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca202e4_cf444b02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-08-01T22:01:15Z",
+      "side": 1,
+      "message": "Please rebase your change.",
+      "revId": "fef1048d3ec861ec25792662e6c1ac21e8e94f06",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eab952a_1cc51c87",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4880,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2024-08-01T22:01:15Z",
+      "side": 1,
+      "message": "Should be consistent on the naming. You have `updateDefaultEnable2gSettings` and `KEY_CARRIER_DEFAULT_ENABLE_2G_BOOL` here, so it\u0027s better to name it `mDefaultEnable2G`.",
+      "range": {
+        "startLine": 4880,
+        "startChar": 12,
+        "endLine": 4880,
+        "endChar": 31
+      },
+      "revId": "fef1048d3ec861ec25792662e6c1ac21e8e94f06",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
