@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "801004e4_75269147",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3562162
+      },
+      "writtenOn": "2024-08-06T22:36:57Z",
+      "side": 1,
+      "message": "I\u0027ll remove the -1 once I resolve an issue with PENDING_DOUBLE_CALL_HOLD.",
+      "revId": "ee8232aa28c14ca5d405ffa573a9a35dc807186c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
