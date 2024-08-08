@@ -297,13 +297,16 @@ public class DataServiceManager extends Handler {
                         + DataServiceCallback.resultCodeToString(resultCode));
             }
             Message msg = mMessageMap.remove(asBinder());
+            boolean isSendingDataListChangedRequired = true;
             if (msg != null) {
                 msg.getData().putParcelableList(DATA_CALL_RESPONSE, dataCallList);
+                isSendingDataListChangedRequired = msg.arg2 != 1;
             }
             sendCompleteMessage(msg, resultCode);
 
             // Handle data stall case on WWAN transport
-            if (mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
+            if (isSendingDataListChangedRequired
+                    && mTransportType == AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {
                 if (mLastDataCallResponseList.size() != dataCallList.size()
                         || !mLastDataCallResponseList.containsAll(dataCallList)) {
                     String message = "RIL reported mismatched data call response list for WWAN: "
