@@ -266,6 +266,11 @@ public class DataNetwork extends StateMachine {
     /** Event for response to data network validation request. */
     private static final int EVENT_DATA_NETWORK_VALIDATION_RESPONSE = 29;
 
+    /**
+     * Event for the retrieval of the setup data response.
+     */
+    private static final int EVENT_RETRIEVE_SETUP_DATA_CALL_RESPONSE = 30;
+
     /** Invalid context id. */
     private static final int INVALID_CID = -1;
 
@@ -1354,6 +1359,9 @@ public class DataNetwork extends StateMachine {
                     // handle the resultCode in response for the request.
                     handleDataNetworkValidationRequestResultCode(msg.arg1 /* resultCode */);
                     break;
+                case EVENT_RETRIEVE_SETUP_DATA_CALL_RESPONSE:
+                    log("Unexpected retrieving setup data call is complete.");
+                    break;
                 default:
                     loge("Unhandled event " + eventToString(msg.what));
                     break;
@@ -1447,6 +1455,12 @@ public class DataNetwork extends StateMachine {
                 case EVENT_DEACTIVATE_DATA_NETWORK_RESPONSE:
                     int responseCode = msg.arg1;
                     onDeactivateResponse(responseCode);
+                    break;
+                case EVENT_RETRIEVE_SETUP_DATA_CALL_RESPONSE:
+                    int resultCode = msg.arg1;
+                    List<DataCallResponse> dataCallList = msg.getData()
+                            .getParcelableArrayList(DataServiceManager.DATA_CALL_RESPONSE);
+                    onRetrieveSetupDataCall(resultCode, dataCallList);
                     break;
                 default:
                     return NOT_HANDLED;
@@ -1565,8 +1579,11 @@ public class DataNetwork extends StateMachine {
                     onTearDown(TEAR_DOWN_REASON_VCN_REQUESTED);
                     return;
                 }
-
-                transitionTo(mConnectedState);
+                // Once setup data call is complete, retrieve the coressponding data again to aviod
+                // missing some properites' update from UNSOL. Besides, make sure the call session
+                // there while performing UNSOL for another PDNs.
+                mDataServiceManagers.get(mTransport).requestDataCallList(
+                        obtainMessage(EVENT_RETRIEVE_SETUP_DATA_CALL_RESPONSE, 0, 1));
             } else {
                 // Setup data failed.
                 mRetryDelayMillis = response != null ? response.getRetryDurationMillis()
@@ -2732,6 +2749,37 @@ public class DataNetwork extends StateMachine {
     }
 
     /**
+     * Called when receiving request data call list response from the data service.
+     *
+     * @param resultCode The result code.
+     * @param dataCallList The data call list.
+     */
+    private void onRetrieveSetupDataCall(int resultCode, List<DataCallResponse> dataCallList) {
+        logl("onRetrieveSetupDataCall: resultCode = "
+                + DataServiceCallback.resultCodeToString(resultCode)
+                + ", dataCallList = " + dataCallList);
+        final int failCause = getFailCauseFromDataCallResponse(resultCode, null);
+        if (failCause == DataFailCause.NONE && dataCallList != null) {
+            DataCallResponse response = dataCallList.stream()
+                    .filter(r -> mCid.get(mTransport) == r.getId())
+                    .findFirst()
+                    .orElse(null);
+            if (response != null) {
+                if (!response.equals(mDataCallResponse)) {
+                    validateDataCallResponse(response, false);
+                    mDataCallResponse = response;
+                    updateDataNetwork(response);
+                }
+                transitionTo(mConnectedState);
+                return;
+            }
+        }
+        mRetryDelayMillis = DataCallResponse.RETRY_DURATION_UNDEFINED;
+        mFailCause = DataFailCause.NO_RETRY_FAILURE;
+        transitionTo(mDisconnectedState);
+    }
+
+    /**
      * If the {@link DataCallResponse} contains invalid info, triggers an anomaly report.
      *
      * @param response The response to be validated
@@ -2941,6 +2989,10 @@ public class DataNetwork extends StateMachine {
                 }
             }
         } else {
+            if (isConnecting()) {
+                log("onDataStateChanged data is connecting.");
+                return;
+            }
             // The data call response is missing from the list. This means the PDN is gone. This
             // is the PDN lost reported by the modem. We don't send another DEACTIVATE_DATA request
             // for that
