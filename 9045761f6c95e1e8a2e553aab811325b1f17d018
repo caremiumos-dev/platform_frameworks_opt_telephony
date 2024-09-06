@@ -16,6 +16,23 @@
       "message": "Updated the name based on your review comment. Could you review this again?",
       "revId": "9045761f6c95e1e8a2e553aab811325b1f17d018",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6dbc366_4a0346ca",
+        "filename": "src/java/com/android/internal/telephony/GsmCdmaPhone.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5303,
+      "author": {
+        "id": 1697853
+      },
+      "writtenOn": "2024-09-06T22:28:43Z",
+      "side": 1,
+      "message": "This carrier key doesn\u0027t exist in AOSP and I don\u0027t see it included in this change?\n\nAlso, doesn\u0027t this mean it ends up being disabled every time there\u0027s a carrier config change, even if that change is irrelevant? So, if a user has re-enabled 2G, then it would get disabled again. This would apply even when the user is roaming, because as I understand it the home carrier config continues to apply when the device is roaming.",
+      "revId": "9045761f6c95e1e8a2e553aab811325b1f17d018",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
