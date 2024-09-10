@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cae0d1d_551b21d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1733820
+      },
+      "writtenOn": "2024-09-10T15:10:04Z",
+      "side": 1,
+      "message": "Hi, Mengjun, could you add a flag for the change. you may refer to the flags in frameworks/opt/telephony/flags/",
+      "revId": "7240b8a0304df78be242b1bc3abdbbae4ed9b1ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
