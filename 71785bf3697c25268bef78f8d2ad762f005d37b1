@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c373f8ca_28e681e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1609802
+      },
+      "writtenOn": "2024-09-12T02:21:59Z",
+      "side": 1,
+      "message": "Hui, pls help to approve the CP-only CL used to clean up aconfig flag. Thanks!",
+      "revId": "71785bf3697c25268bef78f8d2ad762f005d37b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
