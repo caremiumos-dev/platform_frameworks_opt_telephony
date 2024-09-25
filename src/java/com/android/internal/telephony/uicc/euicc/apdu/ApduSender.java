@@ -96,7 +96,6 @@ public class ApduSender {
         mTransmitApdu = new TransmitApduLogicalChannelInvocation(ci);
         mChannelKey = CHANNEL_ID_PRE + "_" + phoneId;
         mChannelResponseKey = CHANNEL_RESPONSE_ID_PRE + "_" + phoneId;
-        closeExistingChannelIfExists();
     }
 
     /**
@@ -321,40 +320,5 @@ public class ApduSender {
                 }
             }
         }, handler);
-    }
-
-    /**
-     * Cleanup the existing opened channel which was remainined opened earlier due
-     * to failure or crash.
-     */
-    private void closeExistingChannelIfExists() {
-        if (mCloseChannel != null) {
-            int channelId = PreferenceManager.getDefaultSharedPreferences(mContext)
-                .getInt(mChannelKey, IccOpenLogicalChannelResponse.INVALID_CHANNEL);
-            if (channelId != IccOpenLogicalChannelResponse.INVALID_CHANNEL) {
-                logv("Trying to clean up the opened channel : " +  channelId);
-                synchronized (mChannelLock) {
-                    mChannelOpened = true;
-                    mChannelLock.notify();
-                }
-                mCloseChannel.invoke(channelId, new AsyncResultCallback<Boolean>() {
-                    @Override
-                    public void onResult(Boolean isSuccess) {
-                        if (isSuccess) {
-                          logv("Channel closed successfully: " +  channelId);
-                          PreferenceManager.getDefaultSharedPreferences(mContext)
-                                 .edit().remove(mChannelResponseKey).apply();
-                          PreferenceManager.getDefaultSharedPreferences(mContext)
-                                 .edit().remove(mChannelKey).apply();
-                       }
-
-                       synchronized (mChannelLock) {
-                           mChannelOpened = false;
-                           mChannelLock.notify();
-                      }
-                    }
-                }, new Handler());
-            }
-        }
     }
 }
