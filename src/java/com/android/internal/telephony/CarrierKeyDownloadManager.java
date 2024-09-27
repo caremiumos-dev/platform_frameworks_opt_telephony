@@ -166,8 +166,8 @@ public class CarrierKeyDownloadManager extends Handler {
                             updateSimOperator();
                             // If device is screen locked do not proceed to handle
                             // EVENT_ALARM_OR_CONFIG_CHANGE
-                            if (mKeyguardManager.isDeviceLocked()) {
-                                logd("Device is Locked");
+                            printDeviceLockStatus();
+                            if (!mUserManager.isUserUnlocked()) {
                                 mIsRequiredToHandleUnlock = true;
                             } else {
                                 logd("Carrier Config changed: slotIndex=" + slotIndex);
@@ -188,6 +188,11 @@ public class CarrierKeyDownloadManager extends Handler {
                     }
                 });
         mConnectivityManager = mContext.getSystemService(ConnectivityManager.class);
+    }
+
+    private void printDeviceLockStatus() {
+        logd(" Device Status: isDeviceLocked = " + mKeyguardManager.isDeviceLocked()
+                + "  iss User unlocked = " + mUserManager.isUserUnlocked());
     }
 
     // TODO remove this method upon imsiKeyRetryDownloadOnPhoneUnlock enabled.
@@ -529,14 +534,19 @@ public class CarrierKeyDownloadManager extends Handler {
                                 carrierKeyDownloadIdentifier);
                     }
                     parseJsonAndPersistKey(jsonStr, mccMnc, carrierId);
+                    logd("Completed downloading keys");
                 } catch (Exception e) {
                     loge( "Error in download:" + carrierKeyDownloadIdentifier
                             + ". " + e);
                 } finally {
                     mDownloadManager.remove(carrierKeyDownloadIdentifier);
                 }
+            } else {
+                loge("Download Failed reason = " + cursor.getInt(columnIndex)
+                        + "Failed Status reason" + cursor.getInt(
+                        cursor.getColumnIndex(DownloadManager.COLUMN_REASON)));
+                printDeviceLockStatus();
             }
-            logd("Completed downloading keys");
         }
         cursor.close();
     }
@@ -787,6 +797,7 @@ public class CarrierKeyDownloadManager extends Handler {
         } catch (Exception e) {
             loge( "exception trying to download key from url: " + mURL + ",  Exception = "
                     + e.getMessage());
+            printDeviceLockStatus();
             return false;
         }
         return true;
