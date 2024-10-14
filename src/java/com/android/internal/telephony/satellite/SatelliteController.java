@@ -21,6 +21,7 @@ import static android.telephony.CarrierConfigManager.KEY_CARRIER_ROAMING_SATELLI
 import static android.telephony.CarrierConfigManager.KEY_CARRIER_SUPPORTED_SATELLITE_SERVICES_PER_PROVIDER_BUNDLE;
 import static android.telephony.CarrierConfigManager.KEY_EMERGENCY_CALL_TO_SATELLITE_T911_HANDOVER_TIMEOUT_MILLIS_INT;
 import static android.telephony.CarrierConfigManager.KEY_EMERGENCY_MESSAGING_SUPPORTED_BOOL;
+import static android.telephony.CarrierConfigManager.KEY_REGIONAL_SATELLITE_EARFCN_BUNDLE;
 import static android.telephony.CarrierConfigManager.KEY_SATELLITE_ATTACH_SUPPORTED_BOOL;
 import static android.telephony.CarrierConfigManager.KEY_SATELLITE_CONNECTION_HYSTERESIS_SEC_INT;
 import static android.telephony.CarrierConfigManager.KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL;
@@ -102,6 +103,7 @@ import android.telephony.satellite.NtnSignalStrength;
 import android.telephony.satellite.SatelliteCapabilities;
 import android.telephony.satellite.SatelliteDatagram;
 import android.telephony.satellite.SatelliteManager;
+import android.telephony.satellite.SystemSelectionSpecifier;
 import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
@@ -220,6 +222,8 @@ public class SatelliteController extends Handler {
     private static final int EVENT_SATELLITE_CONFIG_DATA_UPDATED = 40;
     private static final int EVENT_SATELLITE_SUPPORTED_STATE_CHANGED = 41;
     private static final int EVENT_NOTIFY_NTN_HYSTERESIS_TIMED_OUT = 42;
+    private static final int CMD_UPDATE_SYSTEM_SELECTION_CHANNELS = 43;
+    private static final int EVENT_UPDATE_SYSTEM_SELECTION_CHANNELS_DONE = 44;
 
     @NonNull private static SatelliteController sInstance;
     @NonNull private final Context mContext;
@@ -360,6 +364,13 @@ public class SatelliteController extends Handler {
      * {@code true} for enabled and {@code false} for disabled. */
     @NonNull private final Map<Integer, Boolean> mIsSatelliteAttachEnabledForCarrierArrayPerSub =
             new HashMap<>();
+    /** Key: subId, value: (key: Regional satellite config Id string, value: Integer
+     * arrays of earfcns in the corresponding regions.)
+     */
+    @GuardedBy("mRegionalSatelliteEarfcnsLock")
+    @NonNull private final Map<Integer, Map<String, Set<Integer>>>
+            mRegionalSatelliteEarfcns = new HashMap<>();
+    @NonNull private final Object mRegionalSatelliteEarfcnsLock = new Object();
     @NonNull private final FeatureFlags mFeatureFlags;
     @NonNull private final Object mSatelliteConnectedLock = new Object();
     /** Key: Subscription ID; Value: Last satellite connected time */
@@ -875,6 +886,17 @@ public class SatelliteController extends Handler {
         }
     }
 
+    private static final class UpdateSystemSelectionChannelsArgument {
+        @NonNull SystemSelectionSpecifier selectionSpecifier;
+        @NonNull ResultReceiver result;
+
+        UpdateSystemSelectionChannelsArgument(SystemSelectionSpecifier selectionSpecifier,
+                ResultReceiver result) {
+            this.selectionSpecifier = selectionSpecifier;
+            this.result = result;
+        }
+    }
+
     /**
      * Arguments to send to SatelliteTransmissionUpdate registrants
      */
@@ -1160,6 +1182,27 @@ public class SatelliteController extends Handler {
                     }
                 }
                 ((ResultReceiver) request.argument).send(error, bundle);
+                break;
+            }
+
+            case CMD_UPDATE_SYSTEM_SELECTION_CHANNELS: {
+                plogd("CMD_UPDATE_SYSTEM_SELECTION_CHANNELS");
+                request = (SatelliteControllerHandlerRequest) msg.obj;
+                onCompleted = obtainMessage(EVENT_UPDATE_SYSTEM_SELECTION_CHANNELS_DONE, request);
+                mSatelliteModemInterface.updateSystemSelectionChannels(
+                        ((UpdateSystemSelectionChannelsArgument) (request.argument)).
+                        selectionSpecifier, onCompleted);
+                break;
+            }
+
+            case EVENT_UPDATE_SYSTEM_SELECTION_CHANNELS_DONE: {
+                ar = (AsyncResult) msg.obj;
+                request = (SatelliteControllerHandlerRequest) ar.userObj;
+                int error =  SatelliteServiceUtils.getSatelliteError(
+                        ar, "updateSystemSelectionChannel");
+                plogd("EVENT_UPDATE_SYSTEM_SELECTION_CHANNELS_DONE = " + error);
+                ((ResultReceiver) ((UpdateSystemSelectionChannelsArgument)(
+                        request.argument)).result).send(error, null);
                 break;
             }
 
@@ -1697,6 +1740,25 @@ public class SatelliteController extends Handler {
         }
 
         sendRequestAsync(CMD_IS_SATELLITE_SUPPORTED, result, null);
+    }
+
+    /**
+     * Request to update system selection channels.
+     *
+     * @param result The result receiver that returns if the request is successful or
+     *               an error code if the request failed.
+     */
+    public void updateSystemSelectionChannels(@NonNull SystemSelectionSpecifier selectionSpecifier,
+            @NonNull ResultReceiver result) {
+        if (!mFeatureFlags.carrierRoamingNbIotNtn()) {
+            plogd("updateSystemSelectionChannels: "
+                    + "carrierRoamingNbIotNtn flag is disabled");
+            result.send(SATELLITE_RESULT_REQUEST_NOT_SUPPORTED, null);
+            return;
+        }
+
+        sendRequestAsync(CMD_UPDATE_SYSTEM_SELECTION_CHANNELS,
+                new UpdateSystemSelectionChannelsArgument(selectionSpecifier, result), null);
     }
 
     /**
@@ -2480,7 +2542,6 @@ public class SatelliteController extends Handler {
     public boolean setSatelliteControllerTimeoutDuration(
             boolean reset, int timeoutType, long timeoutMillis) {
         if (!mFeatureFlags.oemEnabledSatelliteFlag()) {
-            plogd("setSatelliteControllerTimeoutDuration: oemEnabledSatelliteFlag is disabled");
             return false;
         }
         if (!isMockModemAllowed()) {
@@ -2764,6 +2825,27 @@ public class SatelliteController extends Handler {
                     + ", supportedServices does not contain key plmn=" + plmn
                     + ", return default values " + capabilitiesList);
             return capabilitiesList;
+        }
+    }
+
+    /**
+     * @param subId Subscription ID.
+     * @return The The map of earfcns with key: regional satellite config Id,
+     * value: set of earfcns in the corresponding regions associated with the {@code subId}.
+     */
+    @NonNull
+    public Map<String, Set<Integer>> getRegionalSatelliteEarfcns(int subId) {
+        if (!mFeatureFlags.carrierRoamingNbIotNtn()) {
+            logd("getRegionalSatelliteEarfcns: carrierRoamingNbIotNtnFlag is disabled");
+            return new HashMap<>();
+        }
+        synchronized (mRegionalSatelliteEarfcnsLock) {
+            if (mRegionalSatelliteEarfcns.containsKey(subId)) {
+                return mRegionalSatelliteEarfcns.get(subId);
+            } else {
+                logd("getRegionalSatelliteEarfcns: Earfcns for subId: " + subId + " not found");
+                return new HashMap<>();
+            }
         }
     }
 
@@ -3942,6 +4024,20 @@ public class SatelliteController extends Handler {
         }
     }
 
+    public void updateRegionalSatelliteEarfcns(int subId) {
+        plogd("updateRegionalSatelliteEarfcns with subId " + subId);
+        if (!mFeatureFlags.carrierRoamingNbIotNtn()) {
+            plogd("updateRegionalSatelliteEarfcns: "
+                    + "carrierRoamingNbIotNtn flag is disabled");
+            return;
+        }
+
+        synchronized (mRegionalSatelliteEarfcnsLock) {
+            mRegionalSatelliteEarfcns.put(subId,
+                    readRegionalSatelliteEarfcnsFromCarrierConfig(subId));
+        }
+    }
+
     @NonNull
     private List<String> readSatellitePlmnsFromOverlayConfig() {
         if (!mFeatureFlags.carrierEnabledSatelliteFlag()) {
@@ -3962,6 +4058,13 @@ public class SatelliteController extends Handler {
                         KEY_CARRIER_SUPPORTED_SATELLITE_SERVICES_PER_PROVIDER_BUNDLE));
     }
 
+    @NonNull
+    private Map<String, Set<Integer>> readRegionalSatelliteEarfcnsFromCarrierConfig(int subId) {
+        PersistableBundle config = getPersistableBundle(subId);
+        return SatelliteServiceUtils.parseRegionalSatelliteEarfcns(
+                config.getPersistableBundle(KEY_REGIONAL_SATELLITE_EARFCN_BUNDLE));
+    }
+
     @NonNull private PersistableBundle getConfigForSubId(int subId) {
         PersistableBundle config = mCarrierConfigManager.getConfigForSubId(subId,
                 KEY_CARRIER_SUPPORTED_SATELLITE_SERVICES_PER_PROVIDER_BUNDLE,
@@ -3970,7 +4073,8 @@ public class SatelliteController extends Handler {
                 KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL,
                 KEY_CARRIER_ROAMING_SATELLITE_DEFAULT_SERVICES_INT_ARRAY,
                 KEY_EMERGENCY_MESSAGING_SUPPORTED_BOOL,
-                KEY_EMERGENCY_CALL_TO_SATELLITE_T911_HANDOVER_TIMEOUT_MILLIS_INT);
+                KEY_EMERGENCY_CALL_TO_SATELLITE_T911_HANDOVER_TIMEOUT_MILLIS_INT,
+                KEY_REGIONAL_SATELLITE_EARFCN_BUNDLE);
         if (config == null || config.isEmpty()) {
             config = CarrierConfigManager.getDefaultConfig();
         }
@@ -3991,6 +4095,7 @@ public class SatelliteController extends Handler {
         updateSupportedSatelliteServicesForActiveSubscriptions();
         processNewCarrierConfigData(subId);
         resetCarrierRoamingSatelliteModeParams(subId);
+        updateRegionalSatelliteEarfcns(subId);
     }
 
     private void processNewCarrierConfigData(int subId) {
