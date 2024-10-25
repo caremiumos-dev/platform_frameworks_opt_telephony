@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a8d08cf_363338c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135107
+      },
+      "writtenOn": "2024-10-25T15:10:13Z",
+      "side": 1,
+      "message": "Sarah, Jack: in ag/23152009 (over a year ago), you claimed modem reboot will be required to be supported since Radio HAL 2.3. There\u0027s a number of problems here:\n1. Radio HAL 2.3 doesn\u0027t exist yet (I\u0027m just about to introduce it)\n2. V4 (HAL 2.3) is only used for IRadioData, not IRadioModem (so the test will still be a dead code after I merge Radio HAL 2.3 changes)\n3. Different HAL partitions use different version numbers, so freshly bumped data is at V4, but freshly bumped ims.media is at V3. It means most recent Radio HAL is 2.3 for data and 2.2 for ims.media. Is this well understood and documented?\n4. The test itself verifies `TelephonyManager::rebootModem` API, which uses `IRadioModem::nvResetConfig` HAL method. But the latter says `This will be deprecated in favor of a rebootModem API in Android U`. It hasn\u0027t been deprecated even in V and there\u0027s no alternative in the HAL yet.",
+      "revId": "4122fdd2da8280debaa61ec2852513da1f0bc9ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
