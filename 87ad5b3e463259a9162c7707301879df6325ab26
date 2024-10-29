@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4125517c_db283ea0",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2024-10-29T16:16:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a1cc4a2_2f1adf3e",
+      "range": {
+        "startLine": 1796,
+        "startChar": 46,
+        "endLine": 1797,
+        "endChar": 41
+      },
+      "revId": "87ad5b3e463259a9162c7707301879df6325ab26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6644f2bc_814075a4",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-28T16:51:21Z",
       "side": 1,
       "message": "Please add `KEY_REGIONAL_SATELLITE_EARFCN_BUNDLE` to this list",
+      "range": {
+        "startLine": 4134,
+        "startChar": 16,
+        "endLine": 4134,
+        "endChar": 80
+      },
+      "revId": "87ad5b3e463259a9162c7707301879df6325ab26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5118d0_13101c7f",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4134,
+      "author": {
+        "id": 1468489
+      },
+      "writtenOn": "2024-10-29T16:16:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6644f2bc_814075a4",
       "range": {
         "startLine": 4134,
         "startChar": 16,
