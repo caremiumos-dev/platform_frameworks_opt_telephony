@@ -245,6 +245,10 @@ public class ImsResolver implements ImsServiceController.ImsServiceControllerCal
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            if (action == null) {
+                Log.i(TAG, "Intent broadcast does not contain action: " + intent);
+                return;
+            }
             final String packageName = intent.getData().getSchemeSpecificPart();
             switch (action) {
                 case Intent.ACTION_PACKAGE_ADDED:
