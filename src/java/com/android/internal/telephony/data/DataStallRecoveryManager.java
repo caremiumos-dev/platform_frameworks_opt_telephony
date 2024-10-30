@@ -586,6 +586,7 @@ public class DataStallRecoveryManager extends Handler {
             mIsValidNetwork = false;
             log("trigger data stall recovery");
             mTimeLastRecoveryStartMs = SystemClock.elapsedRealtime();
+            log("Willy: EVENT_SEND_DATA_STALL_BROADCAST Trigger from validation failed.");
             sendMessage(obtainMessage(EVENT_SEND_DATA_STALL_BROADCAST));
         }
     }
@@ -754,6 +755,7 @@ public class DataStallRecoveryManager extends Handler {
         if (!mNetworkCheckTimerStarted) {
             mNetworkCheckTimerStarted = true;
             mTimeLastRecoveryStartMs = SystemClock.elapsedRealtime();
+            log("Willy: EVENT_SEND_DATA_STALL_BROADCAST Trigger from startNetworkCheckTimer.");
             sendMessageDelayed(
                     obtainMessage(EVENT_SEND_DATA_STALL_BROADCAST),
                     getDataStallRecoveryDelayMillis(action));
@@ -778,7 +780,7 @@ public class DataStallRecoveryManager extends Handler {
      *     action.
      */
     private boolean isRecoveryNeeded(boolean isNeedToCheckTimer) {
-        logv("enter: isRecoveryNeeded()");
+        logl("enter: isRecoveryNeeded()");
 
         // Skip if network is invalid and recovery was not started yet
         if (!mIsValidNetwork && !isRecoveryAlreadyStarted()) {
@@ -802,7 +804,7 @@ public class DataStallRecoveryManager extends Handler {
         // Skip recovery if it can cause a call to drop
         if (mPhone.getState() != PhoneConstants.State.IDLE
                 && getRecoveryAction() > RECOVERY_ACTION_CLEANUP) {
-            logl("skip data stall recovery as there is an active call");
+            logl("skip data stall recovery as there is an active call: " + mPhone.getState() + ", Action:" + getRecoveryAction());
             return false;
         }
 
