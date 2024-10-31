@@ -1530,9 +1530,7 @@ public class DataRetryManager extends Handler {
                     dataRetryEntry.retryDelayMillis);
         } else {
             if (mFlags.useAlarmCallback()) {
-                // No need to wake up the device, the retry can wait util next time the device wake
-                // up to save power.
-                mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME,
+                mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         dataRetryEntry.retryElapsedTime,
                         "dataRetryHash-" + dataRetryEntry.hashCode() /*debug tag*/,
                         Runnable::run,
