@@ -744,7 +744,7 @@ public class ServiceStateTracker extends Handler {
                 if (mSS.isIwlanPreferred() != isIwlanPreferred) {
                     log("onPreferredTransportChanged: IwlanPreferred is changed to "
                             + isIwlanPreferred);
-                    mSS.setIwlanPreferred(isIwlanPreferred);
+                    combinePsRegistrationStates(mSS);
                     mPhone.notifyServiceStateChanged(mPhone.getServiceState());
                 }
             }
