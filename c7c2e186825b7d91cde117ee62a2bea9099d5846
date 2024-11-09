@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c31fefa_db9c1959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1470463
+      },
+      "writtenOn": "2024-11-09T01:39:17Z",
+      "side": 1,
+      "message": "Hi Jack, I have all of the subscription plan changes ready for review if you could take a look? I am going to work on the NetworkPolicyManagerService changes next.",
+      "revId": "c7c2e186825b7d91cde117ee62a2bea9099d5846",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
