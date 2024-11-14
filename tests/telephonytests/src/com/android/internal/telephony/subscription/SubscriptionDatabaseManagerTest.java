@@ -448,7 +448,6 @@ public class SubscriptionDatabaseManagerTest extends TelephonyTest {
         doReturn(1).when(mUiccController).convertToPublicCardId(eq(FAKE_ICCID1));
         doReturn(2).when(mUiccController).convertToPublicCardId(eq(FAKE_ICCID2));
         when(mFeatureFlags.oemEnabledSatelliteFlag()).thenReturn(true);
-        when(mFeatureFlags.dataOnlyCellularService()).thenReturn(true);
         when(mFeatureFlags.supportPsimToEsimConversion()).thenReturn(true);
         mDatabaseManagerUT = new SubscriptionDatabaseManager(mContext, Looper.myLooper(),
                 mFeatureFlags, mSubscriptionDatabaseManagerCallback);

@@ -24,8 +24,6 @@ import android.telephony.SubscriptionManager;
 import android.telephony.UiccAccessRule;
 import android.telephony.ims.ImsMmTelManager;
 
-import com.android.internal.telephony.flags.Flags;
-
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -156,7 +154,6 @@ public class SubscriptionInfoInternalTest {
 
     @Test
     public void testSubscriptionInfoInternalSetAndGet() {
-        mSetFlagsRule.enableFlags(Flags.FLAG_DATA_ONLY_CELLULAR_SERVICE);
         assertThat(mSubInfo.getSubscriptionId()).isEqualTo(1);
         assertThat(mSubInfo.getIccId()).isEqualTo(SubscriptionDatabaseManagerTest.FAKE_ICCID1);
         assertThat(mSubInfo.getSimSlotIndex()).isEqualTo(0);
@@ -263,7 +260,6 @@ public class SubscriptionInfoInternalTest {
 
     @Test
     public void testConvertToSubscriptionInfo() {
-        mSetFlagsRule.enableFlags(Flags.FLAG_DATA_ONLY_CELLULAR_SERVICE);
         SubscriptionInfo subInfo = mSubInfo.toSubscriptionInfo();
 
         assertThat(subInfo.getSubscriptionId()).isEqualTo(1);
