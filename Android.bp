@@ -114,6 +114,8 @@ java_library {
         enabled: true,
         shrink: true,
         obfuscate: false,
+        // TODO(b/215530220): Enable R8 full mode.
+        proguard_compatibility: false,
         proguard_flags_files: ["proguard.flags"],
     },
     lint: {
