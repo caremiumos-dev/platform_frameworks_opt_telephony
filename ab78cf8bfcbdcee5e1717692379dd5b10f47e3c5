@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0aaaadb_83974c00",
+        "filename": "flags/data.aconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1135107
+      },
+      "writtenOn": "2025-01-21T20:33:51Z",
+      "side": 1,
+      "message": "nit: is it worth updating it to current git_main value?\n```\n# OWNER\u003djackyu TARGET\u003d25Q2\n```",
+      "revId": "ab78cf8bfcbdcee5e1717692379dd5b10f47e3c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
