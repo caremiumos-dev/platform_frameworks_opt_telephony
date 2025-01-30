@@ -44,6 +44,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyDisplayInfo;
+import android.telephony.TelephonyManager;
 import android.util.IndentingPrintWriter;
 import android.util.LocalLog;
 
@@ -627,6 +628,18 @@ public class AutoDataSwitchController extends Handler {
      * @param reason The reason for the evaluation.
      */
     public void evaluateAutoDataSwitch(@AutoDataSwitchEvaluationReason int reason) {
+        boolean isAutoDataSwitchUiEnabled = false;
+        Phone phone = PhoneFactory.getPhone(0);
+        if (phone == null) {
+            return;
+        }
+        isAutoDataSwitchUiEnabled =
+                phone.getDataSettingsManager().isMobileDataPolicyEnabled(
+                TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH);
+        loge("evaluateAutoDataSwitch: isAutoDataSwitchUiEnabled = " + isAutoDataSwitchUiEnabled);
+        if (!isAutoDataSwitchUiEnabled) {
+            return;
+        }
         long delayMs = reason == EVALUATION_REASON_RETRY_VALIDATION
                 ? mAutoDataSwitchAvailabilityStabilityTimeThreshold
                 << mAutoSwitchValidationFailedCount
