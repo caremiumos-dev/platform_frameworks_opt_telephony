@@ -44,6 +44,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyDisplayInfo;
+import android.telephony.TelephonyManager;
 import android.util.IndentingPrintWriter;
 import android.util.LocalLog;
 
@@ -627,6 +628,21 @@ public class AutoDataSwitchController extends Handler {
      * @param reason The reason for the evaluation.
      */
     public void evaluateAutoDataSwitch(@AutoDataSwitchEvaluationReason int reason) {
+        int numActiveModems = PhoneFactory.getPhones().length;
+        boolean isAutoDataSwitchUiEnabled = false;
+        for (int phoneId = 0; phoneId < numActiveModems; phoneId++) {
+            Phone phone = PhoneFactory.getPhone(phoneId);
+            isAutoDataSwitchUiEnabled = phone.getDataSettingsManager()
+                    .isMobileDataPolicyEnabled(
+                    TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH);
+            if (isAutoDataSwitchUiEnabled) {
+                break;
+            }
+        }
+        loge("evaluateAutoDataSwitch: isAutoDataSwitchUiEnabled = " + isAutoDataSwitchUiEnabled);
+        if (!isAutoDataSwitchUiEnabled) {
+            return;
+        }
         long delayMs = reason == EVALUATION_REASON_RETRY_VALIDATION
                 ? mAutoDataSwitchAvailabilityStabilityTimeThreshold
                 << mAutoSwitchValidationFailedCount

@@ -570,6 +570,18 @@ public class PhoneSwitcher extends Handler {
                 mDataSettingsManagerCallbacks.computeIfAbsent(phoneId,
                         v -> new DataSettingsManagerCallback(this::post) {
                             @Override
+                            public void onDataEnabledOverrideChanged(boolean enabled,
+                                    @TelephonyManager.MobileDataPolicy int policy) { 
+                                if (policy == TelephonyManager
+                                        .MOBILE_DATA_POLICY_AUTO_DATA_SWITCH) {
+                                    PhoneSwitcher.this.mAutoDataSwitchController
+                                            .evaluateAutoDataSwitch(
+                                                    AutoDataSwitchController
+                                                   .EVALUATION_REASON_DATA_SETTINGS_CHANGED);
+                                }
+                            }
+
+                            @Override
                             public void onDataEnabledChanged(boolean enabled,
                                     @TelephonyManager.DataEnabledChangedReason int reason,
                                     @NonNull String callingPackage) {
@@ -1050,6 +1062,18 @@ public class PhoneSwitcher extends Handler {
                                 @NonNull String callingPackage) {
                             PhoneSwitcher.this.onDataEnabledChanged();
                         }
+
+                        @Override
+                        public void onDataEnabledOverrideChanged(boolean enabled,
+                                @TelephonyManager.MobileDataPolicy int policy) { 
+                            if (policy == TelephonyManager
+                                    .MOBILE_DATA_POLICY_AUTO_DATA_SWITCH) {
+                                PhoneSwitcher.this.mAutoDataSwitchController.evaluateAutoDataSwitch(
+                                        AutoDataSwitchController
+                                                .EVALUATION_REASON_DATA_SETTINGS_CHANGED);
+                            }
+                        }
+
                         @Override
                         public void onDataRoamingEnabledChanged(boolean enabled) {
                             PhoneSwitcher.this.mAutoDataSwitchController.evaluateAutoDataSwitch(
