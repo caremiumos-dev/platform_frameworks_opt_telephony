@@ -52,6 +52,24 @@
       "parentUuid": "c6db882b_49ecc5fa",
       "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecf18cca_667873d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3229732
+      },
+      "writtenOn": "2025-01-31T13:17:08Z",
+      "side": 1,
+      "message": "Like, if UI is disabled then \"evaluateAutoDataSwitch\" api should not do anything.\n\nCurrently, this API is populating the thread which is of no use as when this message executes, since UI is disabled, then it will discard the evaluation for DDS switch.\n\nhttps://cs.android.com/android/platform/superproject/main/+/main:frameworks/opt/telephony/src/java/com/android/internal/telephony/data/AutoDataSwitchController.java;drc\u003d83db0626fad8c6e0508754fffcbbd58e539d14a5;l\u003d629",
+      "parentUuid": "a5c55712_f2e16bca",
+      "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
