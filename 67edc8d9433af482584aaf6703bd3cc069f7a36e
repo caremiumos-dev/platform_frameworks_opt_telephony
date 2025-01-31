@@ -34,6 +34,24 @@
       "parentUuid": "b0099eff_a2842d39",
       "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5c55712_f2e16bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3229732
+      },
+      "writtenOn": "2025-01-31T13:14:12Z",
+      "side": 1,
+      "message": "Yes, the reason for that is in QCOM, we maintain Mobile-Data toggle for each individual sims.\n\n\nBut, here the issue is why to unnecessarily post message EVENT_EVALUATE_AUTO_SWITCH on thread.\nIf UI itself is DISABLED then we should prevent any message to be posted in the message queue of the thread.",
+      "parentUuid": "c6db882b_49ecc5fa",
+      "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
