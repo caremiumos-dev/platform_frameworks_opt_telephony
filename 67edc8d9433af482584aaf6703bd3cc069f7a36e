@@ -70,6 +70,24 @@
       "parentUuid": "a5c55712_f2e16bca",
       "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c928ebf5_90c3c067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1929200
+      },
+      "writtenOn": "2025-01-31T20:25:25Z",
+      "side": 1,
+      "message": "1. I agree unnecessary EVENT_EVALUATE_AUTO_SWITCH is one thing that can be improved.\n2. \" we maintain Mobile-Data toggle for each individual sims.\" plz clarify this work - aka if both SIM enabled data toggle, how is the non-primary SIM being used for data if auto data switch toggle is disabled? \n\"isDataEnabled\"(for internet) should be the only check by design as semantically it means internet is allowed to be established on the target SIM, it\u0027s confusing to specifically check for one override policy.",
+      "parentUuid": "ecf18cca_667873d1",
+      "revId": "67edc8d9433af482584aaf6703bd3cc069f7a36e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
