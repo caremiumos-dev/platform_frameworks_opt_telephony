@@ -216,7 +216,6 @@ public class DataSettingsManager extends Handler {
                 break;
             }
             case EVENT_SUBSCRIPTIONS_CHANGED: {
-                mSubId = (int) msg.obj;
                 refreshEnabledMobileDataPolicy();
                 updateDataEnabledAndNotify(TelephonyManager.DATA_ENABLED_REASON_USER,
                         mPhone.getContext().getOpPackageName(),
@@ -313,11 +312,12 @@ public class DataSettingsManager extends Handler {
                     public void onSubscriptionsChanged() {
                         if (mSubId != mPhone.getSubId()) {
                             log("onSubscriptionsChanged: " + mSubId + " to " + mPhone.getSubId());
+                            mSubId = mPhone.getSubId();
                             obtainMessage(EVENT_SUBSCRIPTIONS_CHANGED, mPhone.getSubId())
                                     .sendToTarget();
                         }
                     }
-                }, this::post);
+                }, Runnable::run);
         // some overall mobile data override policy depend on whether DDS is user data enabled.
         for (Phone phone : PhoneFactory.getPhones()) {
             if (phone.getPhoneId() != mPhone.getPhoneId()) {
