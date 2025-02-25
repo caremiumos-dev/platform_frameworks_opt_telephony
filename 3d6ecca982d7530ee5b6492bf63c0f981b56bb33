@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5703bd48_e073376d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1929200
+      },
+      "writtenOn": "2025-02-25T23:02:08Z",
+      "side": 1,
+      "message": "Thanks for the proposal, could u plz explain the choice of concurrentLinkedQueue? It appears that the validation cache is only accessed from mHandler, what do you think of using arrayDeque?",
+      "revId": "3d6ecca982d7530ee5b6492bf63c0f981b56bb33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
