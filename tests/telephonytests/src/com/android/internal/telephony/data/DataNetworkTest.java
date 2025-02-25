@@ -1551,6 +1551,74 @@ public class DataNetworkTest extends TelephonyTest {
     }
 
     @Test
+    public void testSetupDataCallOnRadioNotAvailable() throws Exception {
+        NetworkRequestList networkRequestList = new NetworkRequestList();
+        networkRequestList.add(new TelephonyNetworkRequest(new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build(), mPhone, mFeatureFlags));
+
+        mDataNetworkUT = new DataNetwork(mPhone, mFeatureFlags, Looper.myLooper(),
+        mDataServiceManagers, mInternetDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_WWAN,
+                DataAllowedReason.NORMAL, mDataNetworkCallback);
+        assertThat(mDataNetworkUT.isConnecting()).isTrue();
+
+        mDataNetworkUT.sendEmptyMessage(4/*EVENT_RADIO_NOT_AVAILABLE*/);
+        processAllMessages();
+
+        verify(mDataNetworkCallback).onDisconnected(eq(mDataNetworkUT), eq(
+                DataFailCause.RADIO_NOT_AVAILABLE), eq(DataNetwork.TEAR_DOWN_REASON_NONE));
+        assertThat(mDataNetworkUT.isConnected()).isFalse();
+    }
+
+    @Test
+    public void testHandoverToIWlanOnRadioNotAvailable() throws Exception {
+        setupDataNetwork();
+        TelephonyNetworkAgent mockNetworkAgent = Mockito.mock(TelephonyNetworkAgent.class);
+        replaceInstance(DataNetwork.class, "mNetworkAgent",
+                mDataNetworkUT, mockNetworkAgent);
+
+        mDataNetworkUT.startHandover(AccessNetworkConstants.TRANSPORT_TYPE_WLAN, null);
+        processAllMessages();
+
+        assertThat(mDataNetworkUT.isHandoverInProgress()).isTrue();
+
+        mDataNetworkUT.sendEmptyMessage(4/*EVENT_RADIO_NOT_AVAILABLE*/);
+        processAllMessages();
+
+        assertThat(mDataNetworkUT.isHandoverInProgress()).isTrue();
+    }
+
+    @Test
+    public void testHandoverToWwanOnRadioNotAvailable() throws Exception {
+        NetworkRequestList networkRequestList = new NetworkRequestList();
+        networkRequestList.add(new TelephonyNetworkRequest(new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build(), mPhone, mFeatureFlags));
+        setSuccessfulSetupDataResponse(mMockedWlanDataServiceManager, 456);
+
+        mDataNetworkUT = new DataNetwork(mPhone, mFeatureFlags, Looper.myLooper(),
+        mDataServiceManagers, mInternetDataProfile, networkRequestList,
+                AccessNetworkConstants.TRANSPORT_TYPE_IWLAN,
+                DataAllowedReason.NORMAL, mDataNetworkCallback);
+        TelephonyNetworkAgent mockNetworkAgent = Mockito.mock(TelephonyNetworkAgent.class);
+        replaceInstance(DataNetwork.class, "mNetworkAgent",
+                mDataNetworkUT, mockNetworkAgent);
+
+        mDataNetworkUT.startHandover(AccessNetworkConstants.TRANSPORT_TYPE_WWAN, null);
+        processAllMessages();
+
+        assertThat(mDataNetworkUT.isHandoverInProgress()).isTrue();
+
+        mDataNetworkUT.sendEmptyMessage(4/*EVENT_RADIO_NOT_AVAILABLE*/);
+        processAllMessages();
+
+        assertThat(mDataNetworkUT.isDisconnected()).isTrue();
+        verify(mDataNetworkCallback).onDisconnected(eq(mDataNetworkUT), eq(
+                DataFailCause.RADIO_NOT_AVAILABLE), eq(DataNetwork.TEAR_DOWN_REASON_NONE));
+    }
+
+    @Test
     public void testNetworkAgentConfig() throws Exception {
         createImsDataNetwork(false/*IsMmtel*/);
 
