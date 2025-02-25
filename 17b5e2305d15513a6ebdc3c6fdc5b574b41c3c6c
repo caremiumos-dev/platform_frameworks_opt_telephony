@@ -1,0 +1,62 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e701147_f03492cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2025-02-25T17:17:40Z",
+      "side": 1,
+      "message": "Could you please add a unit test for this case?",
+      "revId": "17b5e2305d15513a6ebdc3c6fdc5b574b41c3c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb283c0_8b1c982f",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2025-02-25T17:17:40Z",
+      "side": 1,
+      "message": "When we start to handover to IWLAN (i.e. in the handover state), the transport is still WWAN, but we need to ignore radio unavailable state.\n\nIf handover fails, we still need to clean up the network.",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1470,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "ba84d380_0e2971ef",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+              "range": {
+                "startLine": 1467,
+                "startChar": 0,
+                "endLine": 1469,
+                "endChar": 0
+              },
+              "replacement": "                    if (mTransport !\u003d AccessNetworkConstants.TRANSPORT_TYPE_WWAN\n                            \u0026\u0026 !isHandoverInProgress()) {\n                        loge(eventToString(msg.what) + \": unexpected on non-WWAN and not handover\");\n"
+            }
+          ]
+        }
+      ],
+      "revId": "17b5e2305d15513a6ebdc3c6fdc5b574b41c3c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
