@@ -57,6 +57,30 @@
       ],
       "revId": "17b5e2305d15513a6ebdc3c6fdc5b574b41c3c6c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1685a3af_ef815e3b",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1301463
+      },
+      "writtenOn": "2025-02-26T01:42:52Z",
+      "side": 1,
+      "message": "Thanks, Jack. let\u0027s ignore it when handover to IWLAN is ongoing, but allow to close it immiediately when handover to WWAN. in case of handover to WWAN, as cellular network status is changed due to radio unavailable, let modem to perform it with the source targert for cleanup.\n\nso i changed this check statement as \n(mTransport !\u003d AccessNetworkConstants.TRANSPORT_TYPE_WWAN\n                            || isHandoverInProgress())\n                            \nbecause the suggested check \u0026\u0026 !isHandoverInProgress(), it false when handover is ongoing.",
+      "parentUuid": "afb283c0_8b1c982f",
+      "range": {
+        "startLine": 1467,
+        "startChar": 0,
+        "endLine": 1470,
+        "endChar": 21
+      },
+      "revId": "17b5e2305d15513a6ebdc3c6fdc5b574b41c3c6c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
