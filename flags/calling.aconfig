@@ -62,3 +62,10 @@ flag {
         purpose: PURPOSE_BUGFIX
     }
 }
+
+flag {
+    name: "allow_skip_password_validation_for_call_barring"
+    namespace: "telephony"
+    description: "Call Barring requires password by default, allow skip password validation for it"
+    bug: "396499971"
+}
