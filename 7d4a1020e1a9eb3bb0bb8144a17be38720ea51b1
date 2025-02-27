@@ -1,0 +1,75 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cd08acd_5f44c217",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2025-02-27T06:36:42Z",
+      "side": 1,
+      "message": "Instead of checking handover in default state, can we handle EVENT_RADIO_NOT_AVAILABLE in HandoverState? Also please add a unit test for this.",
+      "range": {
+        "startLine": 1471,
+        "startChar": 28,
+        "endLine": 1471,
+        "endChar": 56
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "86baff39_83306212",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+              "range": {
+                "startLine": 1470,
+                "startChar": 0,
+                "endLine": 1472,
+                "endChar": 0
+              },
+              "replacement": "                    if (mTransport !\u003d AccessNetworkConstants.TRANSPORT_TYPE_WWAN) {\n"
+            },
+            {
+              "path": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+              "range": {
+                "startLine": 1473,
+                "startChar": 0,
+                "endLine": 1474,
+                "endChar": 0
+              },
+              "replacement": "                                + \": unexpected on non-WWAN\");\n"
+            },
+            {
+              "path": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+              "range": {
+                "startLine": 1571,
+                "startChar": 0,
+                "endLine": 1571,
+                "endChar": 0
+              },
+              "replacement": "                case EVENT_RADIO_NOT_AVAILABLE:\n"
+            },
+            {
+              "path": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+              "range": {
+                "startLine": 1908,
+                "startChar": 0,
+                "endLine": 1908,
+                "endChar": 0
+              },
+              "replacement": "                case EVENT_RADIO_NOT_AVAILABLE:\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7d4a1020e1a9eb3bb0bb8144a17be38720ea51b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
