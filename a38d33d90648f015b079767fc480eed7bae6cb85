@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e517dfa5_7420a8a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1081638
+      },
+      "writtenOn": "2025-02-27T23:12:57Z",
+      "side": 1,
+      "message": "Looks like there is merge conflict. I\u0027ll merge this from our internal branch.",
+      "revId": "a38d33d90648f015b079767fc480eed7bae6cb85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
