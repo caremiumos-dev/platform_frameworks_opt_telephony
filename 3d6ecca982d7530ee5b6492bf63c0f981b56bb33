@@ -16,6 +16,24 @@
       "message": "Thanks for the proposal, could u plz explain the choice of concurrentLinkedQueue? It appears that the validation cache is only accessed from mHandler, what do you think of using arrayDeque?",
       "revId": "3d6ecca982d7530ee5b6492bf63c0f981b56bb33",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56822177_550074e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2025-02-27T06:16:21Z",
+      "side": 1,
+      "message": "I agree with you. ArrayDeque is not thread safe but storeLastValidationResult is protected by synchronized and mValidatedNetworkAQ is not used in other methods. So it\u0027s okay to use ArrayDeque and it has better performance.\n\nI updated the commit. Could you review again?",
+      "parentUuid": "5703bd48_e073376d",
+      "revId": "3d6ecca982d7530ee5b6492bf63c0f981b56bb33",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
