@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5811fc4_86504afb",
+        "filename": "flags/calling.aconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1237921
+      },
+      "writtenOn": "2025-03-03T05:13:52Z",
+      "side": 1,
+      "message": "I cannot decide on the release plan, so I have not included OWNER and TARGET like #55. It would be helpful if you could let me know how these values should be set.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 5
+      },
+      "revId": "66fdaff34f2a3457812ee28d1c876d6d9663f928",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
