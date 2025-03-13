@@ -117,9 +117,9 @@ public class NetworkScanRequestTrackerTest extends TelephonyTest {
 
     @After
     public void tearDown() throws Exception {
-        stopNetworkScanIfNeeded(mScanId);
-        mTestHandlerThread.quit();
-        mMessages.clear();
+//        stopNetworkScanIfNeeded(mScanId);
+//        mTestHandlerThread.quit();
+//        mMessages.clear();
         super.tearDown();
     }
 
