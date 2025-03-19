@@ -2464,10 +2464,14 @@ public class ImsPhone extends ImsPhoneBase {
             }
             CarrierConfigManager configManager = (CarrierConfigManager)
                     getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
-            // Don't set wfc mode if carrierconfig has not loaded. It will be set by GsmCdmaPhone
-            // when receives ACTION_CARRIER_CONFIG_CHANGED broadcast.
+            TelephonyManager tm = (TelephonyManager)
+                    getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            // Don't set wfc mode if carrierconfig or sim has not loaded. It will be set by
+            // ImsPhoneCallTracker when receives ACTION_CARRIER_CONFIG_CHANGED broadcast.
             if (configManager != null && CarrierConfigManager.isConfigForIdentifiedCarrier(
-                    configManager.getConfigForSubId(getSubId()))) {
+                    configManager.getConfigForSubId(getSubId())) && tm != null
+                            && (tm.getSimStateForSlotIndex(mPhoneId)
+                                    == TelephonyManager.SIM_STATE_LOADED)) {
                 ImsManager imsManager = mImsManagerFactory.create(mContext, mPhoneId);
                 imsManager.setWfcMode(imsManager.getWfcMode(newRoamingState), newRoamingState);
                 if (mFeatureFlags.updateRoamingStateToSetWfcMode()) {
