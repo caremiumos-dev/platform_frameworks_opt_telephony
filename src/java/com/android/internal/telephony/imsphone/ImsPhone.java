@@ -2450,9 +2450,13 @@ public class ImsPhone extends ImsPhoneBase {
         }
         boolean isInService = (ss.getState() == ServiceState.STATE_IN_SERVICE
                 || ss.getDataRegistrationState() == ServiceState.STATE_IN_SERVICE);
-        // If we are not IN_SERVICE for voice or data, ignore change roaming state, as we always
-        // move to home in this case.
-        if (!isInService || !mDefaultPhone.isRadioOn()) {
+        TelephonyManager tm = (TelephonyManager)
+                getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        // If we are not IN_SERVICE for voice or data or sim has not loaded, ignore change
+        // roaming state, as we always move to home in this case.
+        if (!isInService || !mDefaultPhone.isRadioOn() || tm == null
+                || tm.getSimStateForSlotIndex(mPhoneId)
+                        != TelephonyManager.SIM_STATE_LOADED) {
             logi("updateRoamingState: we are not IN_SERVICE, ignoring roaming change.");
             return;
         }
