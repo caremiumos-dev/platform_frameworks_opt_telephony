@@ -3840,6 +3840,10 @@ public class DataNetworkController extends Handler {
             return true;
         }
 
+        if (areNetworkAvailableServicesChanged(oldPsNri, newPsNri)) {
+            return true;
+        }
+
         // If CS connection is back to service on non-DDS, reevaluate for potential PS
         if (!serviceStateAllowsPSAttach(oldSS, transport)
                 && serviceStateAllowsPSAttach(newSS, transport)) {
