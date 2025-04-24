@@ -5492,6 +5492,11 @@ public class SatelliteController extends Handler {
                 + subId + "), carrierId(" + carrierId + "), specificCarrierId("
                 + specificCarrierId + ")");
         if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+            //Reset NTN mode when SIM is removed
+            synchronized (mSatelliteConnectedLock) {
+                mInitialized.put(slotIndex, false);
+                mLastNotifiedNtnMode.put(slotIndex, false);
+            }
             return;
         }
 
@@ -6091,14 +6096,19 @@ public class SatelliteController extends Handler {
             return;
         }
 
-        int subId = phone.getSubId();
+        int phoneId = phone.getPhoneId();
         synchronized (mSatelliteConnectedLock) {
-            boolean initialized = mInitialized.get(subId);
-            boolean lastNotifiedNtnMode = mLastNotifiedNtnMode.get(subId);
+            boolean initialized = mInitialized.get(phoneId);
+            boolean lastNotifiedNtnMode = mLastNotifiedNtnMode.get(phoneId);
             boolean currNtnMode = isInSatelliteModeForCarrierRoaming(phone);
+            plogd("updateLastNotifiedNtnModeAndNotify: phone=" + phoneId
+                    + " subId=" + phone.getSubId()
+                    + " initialized=" + initialized
+                    + " lastNotifiedNtnMode=" + lastNotifiedNtnMode
+                    + " currNtnMode=" + currNtnMode);
             if (!initialized || lastNotifiedNtnMode != currNtnMode) {
-                if (!initialized) mInitialized.put(subId, true);
-                mLastNotifiedNtnMode.put(subId, currNtnMode);
+                if (!initialized) mInitialized.put(phoneId, true);
+                mLastNotifiedNtnMode.put(phoneId, currNtnMode);
                 phone.notifyCarrierRoamingNtnModeChanged(currNtnMode);
                 updateLastNotifiedCarrierRoamingNtnSignalStrengthAndNotify(phone);
                 logCarrierRoamingSatelliteSessionStats(phone, lastNotifiedNtnMode, currNtnMode);
