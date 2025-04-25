@@ -416,7 +416,7 @@ public class GsmCdmaPhone extends Phone {
         mCallWaitingController = new CallWaitingController(this);
 
         if (hasCalling()) {
-            loadTtyMode();
+            post(() -> loadTtyMode());
 
             CallManager.getInstance().registerPhone(this);
         }
