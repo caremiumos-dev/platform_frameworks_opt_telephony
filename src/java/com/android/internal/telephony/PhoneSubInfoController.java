@@ -140,7 +140,7 @@ public class PhoneSubInfoController extends IPhoneSubInfo.Stub {
         callPhoneMethodForSubIdWithModifyCheck(subId, callingPackage,
                 "setCarrierInfoForImsiEncryption",
                 (phone)-> {
-                    phone.setCarrierInfoForImsiEncryption(imsiEncryptionInfo);
+                    phone.setCarrierInfoForImsiEncryption(imsiEncryptionInfo, true);
                     return null;
                 });
     }
