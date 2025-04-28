@@ -130,6 +130,7 @@ public class CarrierKeyDownloadManager extends Handler {
     private DefaultNetworkCallback mDefaultNetworkCallback;
     private ConnectivityManager mConnectivityManager;
     private KeyguardManager mKeyguardManager;
+    private boolean mIsKeySent = false;
 
     public CarrierKeyDownloadManager(Phone phone) {
         mPhone = phone;
@@ -155,6 +156,10 @@ public class CarrierKeyDownloadManager extends Handler {
         if (carrierConfigManager != null) {
             carrierConfigManager.registerCarrierConfigChangeListener(this::post,
                 (slotIndex, subId, carrierId, specificCarrierId) -> {
+                    if (((slotIndex == mPhone.getPhoneId())
+                            && !SubscriptionManager.isValidSubscriptionId(subId))) {
+                        mIsKeySent = false;
+                    }
                     if (Flags.imsiKeyRetryDownloadOnPhoneUnlock()) {
                         logd("CarrierConfig changed slotIndex = " + slotIndex + " subId = " + subId
                                 + " CarrierId = " + carrierId + " phoneId = "
@@ -197,7 +202,10 @@ public class CarrierKeyDownloadManager extends Handler {
                     } else {
                         boolean isUserUnlocked = mUserManager.isUserUnlocked();
 
-                        if (isUserUnlocked && slotIndex == mPhone.getPhoneId()) {
+                        if (isUserUnlocked && (slotIndex == mPhone.getPhoneId()
+                                // while another SIM is absent, attempt to look for
+                                // if key needs to be sent.
+                                || !SubscriptionManager.isValidSubscriptionId(subId))) {
                             Log.d(LOG_TAG, "Carrier Config changed: slotIndex=" + slotIndex);
                             handleAlarmOrConfigChange();
                         } else {
@@ -317,6 +325,8 @@ public class CarrierKeyDownloadManager extends Handler {
                     boolean hasActiveDataNetwork =
                             (mConnectivityManager.getActiveNetwork() != null);
                     boolean downloadStartedSuccessfully = hasActiveDataNetwork && downloadKey();
+                    logd("handleAlarmOrConfigChange :: downloadStartedSuccessfully "
+                            + downloadStartedSuccessfully);
                     // if the download was attempted, but not started successfully, and if
                     // carriers uses keys, we'll still want to renew the alarms, and try
                     // downloading the key a day later.
@@ -339,13 +349,22 @@ public class CarrierKeyDownloadManager extends Handler {
                         }
                         resetRenewalAlarm();
                     }
+                } else {
+                    logd("handleAlarmOrConfigChange :: mIsKeySent " + mIsKeySent);
+                    if (!mIsKeySent) {
+                        ImsiEncryptionInfo imsiEncryptionInfo = getExistingKey();
+                        if (imsiEncryptionInfo != null) {
+                            logd("handleAlarmOrConfigChange :: saving public key");
+                            savePublicKey(imsiEncryptionInfo);
+                        }
+                    }
                 }
-                logd("handleAlarmOrConfigChange :: areCarrierKeysAbsentOrExpiring returned false");
             } else {
                 cleanupRenewalAlarms();
                 if (!isOtherSlotHasCarrier()) {
                     // delete any existing alarms.
                     mPhone.deleteCarrierInfoForImsiEncryption(getSimCarrierId(), getSimOperator());
+                    mIsKeySent = false;
                 }
                 cleanupDownloadInfo();
             }
@@ -364,8 +383,19 @@ public class CarrierKeyDownloadManager extends Handler {
                 // delete any existing alarms.
                 cleanupRenewalAlarms();
                 mPhone.deleteCarrierInfoForImsiEncryption(getSimCarrierId());
+                mIsKeySent = false;
             }
         }
+    }
+
+    private ImsiEncryptionInfo getExistingKey() {
+        for (int type : CARRIER_KEY_TYPES) {
+            if (!isKeyEnabled(type)) {
+                continue;
+            }
+            return mPhone.getCarrierInfoForImsiEncryption(type, false);
+        }
+        return null;
     }
 
     private boolean isOtherSlotHasCarrier() {
@@ -859,6 +889,12 @@ public class CarrierKeyDownloadManager extends Handler {
         ImsiEncryptionInfo imsiEncryptionInfo = new ImsiEncryptionInfo(mcc, mnc,
                 type, identifier, publicKey, new Date(expirationDate), carrierId);
         mPhone.setCarrierInfoForImsiEncryption(imsiEncryptionInfo);
+        mIsKeySent = true;
+    }
+
+    public void savePublicKey(ImsiEncryptionInfo imsiEncryptionInfo) {
+        mPhone.setCarrierInfoForImsiEncryption(imsiEncryptionInfo);
+        mIsKeySent = true;
     }
 
     /**
