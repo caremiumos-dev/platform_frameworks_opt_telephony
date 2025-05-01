@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ab744d3_cf5579f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-01T19:14:33Z",
+      "side": 1,
+      "message": "Please add unit tests",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f506b19c_246fa582",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-01T19:14:33Z",
+      "side": 1,
+      "message": "To reset, you can get active subscription info list and reset ntn mode for all subIds that are not in activeSubId list.",
+      "range": {
+        "startLine": 5495,
+        "startChar": 12,
+        "endLine": 5499,
+        "endChar": 13
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0b7b457_43c75303",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6101,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-01T19:14:33Z",
+      "side": 1,
+      "message": "Please do not change the key to phoneId. We always use subId as the key for local cache objects. It might lead to inconsistencies if we use phoneId as key.",
+      "range": {
+        "startLine": 6101,
+        "startChar": 50,
+        "endLine": 6101,
+        "endChar": 60
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
