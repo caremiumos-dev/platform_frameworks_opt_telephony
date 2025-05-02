@@ -92,6 +92,30 @@
       },
       "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54efa022_79aed915",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6101,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-02T18:11:56Z",
+      "side": 1,
+      "message": "PTAL b/413426034#comment9",
+      "parentUuid": "54816a91_9e024a0c",
+      "range": {
+        "startLine": 6101,
+        "startChar": 50,
+        "endLine": 6101,
+        "endChar": 60
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
