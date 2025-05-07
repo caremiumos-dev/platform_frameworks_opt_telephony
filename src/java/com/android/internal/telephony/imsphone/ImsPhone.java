@@ -96,6 +96,8 @@ import android.telephony.ims.RegistrationManager;
 import android.telephony.ims.feature.MmTelFeature;
 import android.telephony.ims.stub.ImsRegistrationImplBase;
 import android.telephony.ims.stub.ImsUtImplBase;
+import android.telephonymodules.ParsedPhoneNumber;
+import android.telephonymodules.PhoneNumberNew;
 import android.text.TextUtils;
 import android.util.LocalLog;
 
@@ -2642,27 +2644,52 @@ public class ImsPhone extends ImsPhoneBase {
             loge("trigger setPhoneNumberForSourceIms, but subInfo is null");
             return;
         }
+        for (int i = 0; i < uris.length; i++) {
+            logd("Ims uri: " + uris[i]);
+        }
+        logd("Attempting to Parse number. Flag values- isAllowParsingMainlineModule:{" + isAllowParsingMainlineModule() + "} isAllowNonGlobalNumberFormat: {" + isAllowNonGlobalNumberFormat() + "}");
         String subCountryIso = subInfo.getCountryIso();
-        String phoneNumber = extractPhoneNumberFromAssociatedUris(uris, /*isGlobalFormat*/true);
-        if (phoneNumber != null) {
-            phoneNumber = PhoneNumberUtils.formatNumberToE164(phoneNumber, subCountryIso);
-            if (phoneNumber == null) {
-                loge("format to E164 failed");
+        if(isAllowParsingMainlineModule()) {
+            // new code
+            Trace.beginSection("ImsPhone#ParsePhoneNumber");
+            ParsedPhoneNumber result = new PhoneNumberNew().parsePhoneNumbers(
+                    Arrays.asList(uris),
+                    subCountryIso);
+            Trace.endSection();
+            if (result.isValidPhoneNumber()) {
+                logd("NEW: Phone number: " + result.getParsedPhoneNumber());
+                mSubscriptionManagerService.setNumberFromIms(subId, result.getParsedPhoneNumber());
+                return;
+            } else {
+                loge("Error received with the following error code: [" + result.getErrorCode() + "]");
                 return;
             }
-            mSubscriptionManagerService.setNumberFromIms(subId, phoneNumber);
-        } else if (isAllowNonGlobalNumberFormat()) {
-            // If carrier config has true for KEY_IGNORE_GLOBAL_PHONE_NUMBER_FORMAT_BOOL and
-            // P-Associated-Uri does not have global number,
-            // try to find phone number excluding '+' one more time.
-            phoneNumber = extractPhoneNumberFromAssociatedUris(uris, /*isGlobalFormat*/false);
-            if (phoneNumber == null) {
-                loge("extract phone number without '+' failed");
-                return;
-            }
-            mSubscriptionManagerService.setNumberFromIms(subId, phoneNumber);
         } else {
-            logd("extract phone number failed");
+            // old code
+            String phoneNumber = extractPhoneNumberFromAssociatedUris(uris, /*isGlobalFormat*/true);
+            if (phoneNumber != null) {
+                phoneNumber = PhoneNumberUtils.formatNumberToE164(phoneNumber, subCountryIso);
+                if (phoneNumber == null) {
+                    loge("OLD: format to E164 failed");
+                    return;
+                }
+                logd("OLD 1: extracted phone number: " + phoneNumber);
+                mSubscriptionManagerService.setNumberFromIms(subId, phoneNumber);
+            } else if (isAllowNonGlobalNumberFormat()) {
+                // If carrier config has true for KEY_IGNORE_GLOBAL_PHONE_NUMBER_FORMAT_BOOL and
+                // P-Associated-Uri does not have global number,
+                // try to find phone number excluding '+' one more time.
+                logd("OLD 2: National number is enabled.");
+                phoneNumber = extractPhoneNumberFromAssociatedUris(uris, /*isGlobalFormat*/false);
+                if (phoneNumber == null) {
+                    loge("OLD: extract phone number without '+' failed");
+                    return;
+                }
+                logd("OLD 2: extracted phone number:" + phoneNumber);
+                mSubscriptionManagerService.setNumberFromIms(subId, phoneNumber);
+            } else {
+                logd("OLD: extract phone number failed");
+            }
         }
     }
 
@@ -2942,6 +2969,22 @@ public class ImsPhone extends ImsPhoneBase {
         if (persistableBundle != null) {
             return persistableBundle.getBoolean(
                     CarrierConfigManager.Ims.KEY_ALLOW_NON_GLOBAL_PHONE_NUMBER_FORMAT_BOOL, false);
+        }
+
+        return false;
+    }
+
+    private boolean isAllowParsingMainlineModule() {
+        PersistableBundle persistableBundle = null;
+        CarrierConfigManager carrierConfigManager = (CarrierConfigManager) mContext
+            .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        if (carrierConfigManager != null) {
+            persistableBundle = carrierConfigManager.getConfigForSubId(getSubId(),
+                CarrierConfigManager.Ims.PARSE_PHONE_NUMBER_MAINLINE_MOD_BOOL);
+        }
+        if (persistableBundle != null) {
+            return persistableBundle.getBoolean(
+                CarrierConfigManager.Ims.PARSE_PHONE_NUMBER_MAINLINE_MOD_BOOL, false);
         }
 
         return false;
