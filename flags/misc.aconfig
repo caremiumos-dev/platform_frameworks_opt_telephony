@@ -246,3 +246,10 @@ flag {
     description: "Disable CDMA and NV backing code"
     bug: "379356026"
 }
+# OWNER=daleamyehu TARGET=25Q4
+flag {
+    name: "enable_oem_log_sources_collection"
+    namespace: "telephony"
+    description: "Allow OEMs to collect logs from specified logs sources for e911 calls"
+    bug:"412747188"
+}
