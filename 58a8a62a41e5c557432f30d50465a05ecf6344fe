@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49c27f84_460734a1",
+        "filename": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-05-15T06:41:00Z",
+      "side": 1,
+      "message": "this is a deadcode because Flag.imsiKeyRetryDownloadOnPhoneUnlock() already enabled. So avoid this change",
+      "range": {
+        "startLine": 203,
+        "startChar": 22,
+        "endLine": 215,
+        "endChar": 25
+      },
+      "revId": "58a8a62a41e5c557432f30d50465a05ecf6344fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1190cf7_9c5a754b",
+        "filename": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-05-15T06:41:00Z",
+      "side": 1,
+      "message": "add a new feature flag Flag.sendImsiKeyForDuplicateSim and check",
+      "range": {
+        "startLine": 352,
+        "startChar": 18,
+        "endLine": 361,
+        "endChar": 17
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "3588d1c1_67fa789a",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
+              "range": {
+                "startLine": 354,
+                "startChar": 0,
+                "endLine": 355,
+                "endChar": 0
+              },
+              "replacement": "                    if (Flags.sendImsiKeyForDuplicateSim() \u0026\u0026 !mIsKeySent) {\n"
+            },
+            {
+              "path": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
+              "range": {
+                "startLine": 896,
+                "startChar": 0,
+                "endLine": 896,
+                "endChar": 0
+              },
+              "replacement": "        if (!Flags.sendImsiKeyForDuplicateSim()) {\n            return;\n        }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "58a8a62a41e5c557432f30d50465a05ecf6344fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
