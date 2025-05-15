@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54bb8a5e_9d6be783",
+        "filename": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-05-15T06:41:42Z",
+      "side": 1,
+      "message": "add comment why this is done",
+      "range": {
+        "startLine": 159,
+        "startChar": 20,
+        "endLine": 162,
+        "endChar": 21
+      },
+      "revId": "58a8a62a41e5c557432f30d50465a05ecf6344fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49c27f84_460734a1",
         "filename": "src/java/com/android/internal/telephony/CarrierKeyDownloadManager.java",
         "patchSetId": 1
