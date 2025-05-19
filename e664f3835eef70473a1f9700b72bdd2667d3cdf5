@@ -47,6 +47,53 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0462231_ce3fccd6",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-19T19:10:43Z",
+      "side": 1,
+      "message": "Ignore",
+      "parentUuid": "f506b19c_246fa582",
+      "range": {
+        "startLine": 5495,
+        "startChar": 12,
+        "endLine": 5499,
+        "endChar": 13
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e7c1b7_fc8f94f7",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5510,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-19T19:10:43Z",
+      "side": 1,
+      "message": "create a new cl by just calling handleServiceStateForSatelliteConnectionViaCarrier() after this. This should reset TelephonyRegistry cache. Please test it if it is WAI and also add unit and cts tests.",
+      "range": {
+        "startLine": 5510,
+        "startChar": 52,
+        "endLine": 5510,
+        "endChar": 53
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0b7b457_43c75303",
@@ -132,6 +179,30 @@
       "side": 1,
       "message": "that is the best solution. but can we update below TelephonyRegistry.java cache when SIM is removed?\n\nmCarrierRoamingNtnMode[phoneId]",
       "parentUuid": "54efa022_79aed915",
+      "range": {
+        "startLine": 6101,
+        "startChar": 50,
+        "endLine": 6101,
+        "endChar": 60
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f440626_65aa0506",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6101,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-19T19:10:43Z",
+      "side": 1,
+      "message": "ok we can reset TelephonyRegistry.java cache by calling handleServiceStateForSatelliteConnectionViaCarrier() in handleCarrierConfigChanged()",
+      "parentUuid": "5b3ec278_e515af4b",
       "range": {
         "startLine": 6101,
         "startChar": 50,
