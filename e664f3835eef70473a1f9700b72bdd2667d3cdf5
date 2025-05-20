@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e39d4908_61ea792b",
+        "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1934235
+      },
+      "writtenOn": "2025-05-20T21:14:36Z",
+      "side": 1,
+      "message": "```java\nif (subId \u003d\u003d SubscriptionManager.INVALID_SUBSCRIPTION_ID) {\n            Phone phone \u003d PhoneFactory.getPhone(slotIndex);\n            if (phone !\u003d null) {\n                // Reset NTN mode when SIM is removed\n                phone.notifyCarrierRoamingNtnModeChanged(false);\n            }\n\n            List\u003cInteger\u003e activeSubIdsList \u003d Arrays.stream(\n                            mSubscriptionManagerService.getActiveSubIdList(true))\n                    .boxed().toList();\n            for (int i \u003d 0; i \u003c mInitialized.size(); i++) {\n                int key \u003d mInitialized.keyAt(i);\n                if (!activeSubIdsList.contains(key)) {\n                    mInitialized.put(key, false);\n                    mLastNotifiedNtnMode.put(key, false);\n                }\n            }\n            return;\n        }\n ```",
+      "parentUuid": "af1c4a9b_96905a82",
+      "range": {
+        "startLine": 5495,
+        "startChar": 12,
+        "endLine": 5499,
+        "endChar": 13
+      },
+      "revId": "e664f3835eef70473a1f9700b72bdd2667d3cdf5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66e7c1b7_fc8f94f7",
         "filename": "src/java/com/android/internal/telephony/satellite/SatelliteController.java",
         "patchSetId": 1
