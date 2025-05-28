@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a0c373_2f05dcec",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-05-28T15:40:36Z",
+      "side": 1,
+      "message": "can we move this check to line 2455 where we check for isInService",
+      "range": {
+        "startLine": 2472,
+        "startChar": 65,
+        "endLine": 2474,
+        "endChar": 75
+      },
+      "revId": "e474e549e1035f50e2e38467e2b258bcd3d1dcd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
