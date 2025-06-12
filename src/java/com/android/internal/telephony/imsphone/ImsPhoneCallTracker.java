@@ -3105,26 +3105,53 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             return;
         }
 
-        // processCallStateChange is triggered for onCallUpdated as well.
-        // onCallUpdated should not modify the state of the call
-        // It should modify only other capabilities of call through updateMediaCapabilities
-        // State updates will be triggered through individual callbacks
-        // i.e. onCallHeld, onCallResume, etc and conn.update will be responsible for the update
-        conn.updateMediaCapabilities(imsCall);
-        if (ignoreState) {
-            conn.updateAddressDisplay(imsCall);
-            conn.updateExtras(imsCall);
-            // Some devices will change the audio direction between major call state changes, so we
-            // need to check whether to start or stop ringback
-            conn.maybeChangeRingbackState();
+        if (com.android.server.telecom.flags.Flags.isUsingVideoRingback()
+                || com.android.server.telecom.flags.Flags.isUsingUnidirectionalVideoService()) {
+            // For CRBT/UVS call, video state is arriving earlier to call object than the extra,
+            // that is setVideoState and onVideoStateChanged are invoked earlier than putExtras
+            // in Call.java, it will lead that call audio manager enables the speaker for CRBT/UVS
+            // call since the onVideoStateChanged comes but the CRBT/UVS extra is not arrived yet.
+            // So exchange the execution order for media capabilities and extras.
+            if (ignoreState) {
+                conn.updateExtras(imsCall);
+            }
+            conn.updateMediaCapabilities(imsCall);
+            if (ignoreState) {
+                conn.updateAddressDisplay(imsCall);
+                // Some devices will change the audio direction between major call state changes,
+                // so we need to check whether to start or stop ringback
+                conn.maybeChangeRingbackState();
 
-            maybeSetVideoCallProvider(conn, imsCall);
-            // IMS call profile might be changed while call state is maintained. In this case, it's
-            // required to notify to CallAttributesListener.
-            // Since call state is not changed, TelephonyRegistry will not notify to
-            // PreciseCallStateListener.
-            mPhone.notifyPreciseCallStateToNotifier();
-            return;
+                maybeSetVideoCallProvider(conn, imsCall);
+                // IMS call profile might be changed while call state is maintained. In this case,
+                // it's required to notify to CallAttributesListener.
+                // Since call state is not changed, TelephonyRegistry will not notify to
+                // PreciseCallStateListener.
+                mPhone.notifyPreciseCallStateToNotifier();
+                return;
+            }
+        } else {
+            // processCallStateChange is triggered for onCallUpdated as well.
+            // onCallUpdated should not modify the state of the call
+            // It should modify only other capabilities of call through updateMediaCapabilities
+            // State updates will be triggered through individual callbacks
+            // i.e. onCallHeld, onCallResume, etc and conn.update will be responsible for the update
+            conn.updateMediaCapabilities(imsCall);
+            if (ignoreState) {
+                conn.updateAddressDisplay(imsCall);
+                conn.updateExtras(imsCall);
+                // Some devices will change the audio direction between major call state changes,
+                // so we need to check whether to start or stop ringback
+                conn.maybeChangeRingbackState();
+
+                maybeSetVideoCallProvider(conn, imsCall);
+                // IMS call profile might be changed while call state is maintained. In this case,
+                // it's required to notify to CallAttributesListener.
+                // Since call state is not changed, TelephonyRegistry will not notify to
+                // PreciseCallStateListener.
+                mPhone.notifyPreciseCallStateToNotifier();
+                return;
+            }
         }
 
         // Do not log operations that do not change the state
