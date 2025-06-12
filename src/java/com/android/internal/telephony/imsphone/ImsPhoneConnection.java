@@ -1390,6 +1390,9 @@ public class ImsPhoneConnection extends Connection implements
             if (com.android.server.telecom.flags.Flags.isUsingVideoRingback()) {
                 maybeInjectIsUsingVideoRingbackExtras(mExtras);
             }
+            if (com.android.server.telecom.flags.Flags.isUsingUnidirectionalVideoService()) {
+                maybeInjectIsUsingUnidirectionalVideoServiceExtras(mExtras);
+            }
             setConnectionExtras(mExtras);
         }
         return changed;
@@ -1449,6 +1452,31 @@ public class ImsPhoneConnection extends Connection implements
                 boolean v = extras.getBoolean(ImsCallProfile.EXTRA_IS_USING_VIDEO_RINGBACK);
                 Rlog.i(LOG_TAG, String.format("mIBCE: EXTRA_IS_USING_VIDEO_RINGBACK=[%s]", v));
                 extras.putBoolean(android.telecom.Call.EXTRA_IS_USING_VIDEO_RINGBACK, v);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The Ims Vendor is responsible for setting the ImsCallProfile Unidirectional Video Service
+     * value (ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE). This helper notifies
+     * Telecom of the Unidirectional Video Service value which will then be injected into
+     * the android.telecom.Call object.
+     */
+    @VisibleForTesting
+    public void maybeInjectIsUsingUnidirectionalVideoServiceExtras(Bundle extras) {
+        if (extras == null) {
+            return;
+        }
+        try {
+            if (extras.containsKey(ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE)) {
+                boolean v = extras.getBoolean(
+                        ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE);
+                Rlog.i(LOG_TAG, String.format(
+                        "mIBCE: EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE=[%s]", v));
+                extras.putBoolean(
+                        android.telecom.Call.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE, v);
             }
         } catch (Exception e) {
             e.printStackTrace();
