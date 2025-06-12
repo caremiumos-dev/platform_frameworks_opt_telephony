@@ -1390,6 +1390,9 @@ public class ImsPhoneConnection extends Connection implements
             if (com.android.server.telecom.flags.Flags.isUsingVideoRingback()) {
                 maybeInjectIsUsingVideoRingbackExtras(mExtras);
             }
+            if (com.android.server.telecom.flags.Flags.isUsingUnidirectionalVideoService()) {
+                maybeInjectIsUsingUnidirectionalVideoServiceExtras(mExtras);
+            }
             setConnectionExtras(mExtras);
         }
         return changed;
@@ -1455,6 +1458,35 @@ public class ImsPhoneConnection extends Connection implements
         }
     }
 
+    /**
+     * The Ims Vendor is responsible for setting the ImsCallProfile Unidirectional Video Service
+     * value (ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE). This helper notifies
+     * Telecom of the Unidirectional Video Service value which will then be injected into
+     * the android.telecom.Call object.
+     */
+    @VisibleForTesting
+    public void maybeInjectIsUsingUnidirectionalVideoServiceExtras(Bundle extras) {
+        if (extras == null) {
+            return;
+        }
+
+        if (!isUnidirectionalVideoServiceEnabledByConfig()) {
+            return;
+        }
+        try {
+            if (extras.containsKey(ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE)) {
+                boolean v = extras.getBoolean(
+                        ImsCallProfile.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE);
+                Rlog.i(LOG_TAG, String.format(
+                        "mIBCE: EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE=[%s]", v));
+                extras.putBoolean(
+                        android.telecom.Call.EXTRA_IS_USING_UNIDIRECTIONAL_VIDEO_SERVICE, v);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @VisibleForTesting
     public boolean getIsBusinessComposerFeatureEnabled() {
         return mIsBusinessComposerFeatureEnabled;
@@ -1474,6 +1506,14 @@ public class ImsPhoneConnection extends Connection implements
      */
     @VisibleForTesting
     public boolean isBusinessComposerEnabledByConfig(Phone phone) {
+        return isCarrierEnabledByConfig(phone,
+                CarrierConfigManager.KEY_SUPPORTS_BUSINESS_CALL_COMPOSER_BOOL);
+    }
+
+    /**
+     * Returns whether the carrier supports based on the config
+     */
+    private boolean isCarrierEnabledByConfig(Phone phone, String carrierConfig) {
         PersistableBundle b = null;
         CarrierConfigManager configMgr = phone.getContext().getSystemService(
                 CarrierConfigManager.class);
@@ -1483,12 +1523,19 @@ public class ImsPhoneConnection extends Connection implements
             b = configMgr.getConfigForSubId(phone.getSubId());
         }
         if (b != null) {
-            return b.getBoolean(CarrierConfigManager.KEY_SUPPORTS_BUSINESS_CALL_COMPOSER_BOOL);
+            return b.getBoolean(carrierConfig);
         } else {
             // Return static default defined in CarrierConfigManager.
-            return CarrierConfigManager.getDefaultConfig()
-                    .getBoolean(CarrierConfigManager.KEY_SUPPORTS_BUSINESS_CALL_COMPOSER_BOOL);
+            return CarrierConfigManager.getDefaultConfig().getBoolean(carrierConfig);
         }
+    }
+
+    /**
+     * Returns whether the carrier supports and has enabled unidirectional video service call
+     */
+    private boolean isUnidirectionalVideoServiceEnabledByConfig(Phone phone) {
+        return isCarrierEnabledByConfig(phone,
+                CarrierConfigManager.KEY_SUPPORTS_UNIDIRECTIONAL_VIDEO_SERVICE_BOOL);
     }
 
     /**
