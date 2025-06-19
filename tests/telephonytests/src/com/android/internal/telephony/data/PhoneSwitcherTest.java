@@ -156,7 +156,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
         mCommandsInterface0 = mock(CommandsInterface.class);
         mCommandsInterface1 = mock(CommandsInterface.class);
         mSST2 = mock(ServiceStateTracker.class);
-        mImsPhone = mock(Phone.class);
+        mImsPhone = mock(ImsPhone.class);
         mDataSettingsManager2 = mock(DataSettingsManager.class);
         mActivePhoneSwitchHandler = mock(Handler.class);
         mActiveCall = mock(GsmCdmaCall.class);
@@ -192,7 +192,7 @@ public class PhoneSwitcherTest extends TelephonyTest {
 
         doReturn(1).when(mMockedIsub).getDefaultDataSubId();
         doReturn(mMockedIsub).when(mIBinder).queryLocalInterface(anyString());
-        doReturn(mPhone).when(mPhone).getImsPhone();
+        doReturn(mImsPhone).when(mPhone).getImsPhone();
         mServiceManagerMockedServices.put("isub", mIBinder);
 
         doReturn(mTelephonyDisplayInfo).when(mDisplayInfoController).getTelephonyDisplayInfo();
