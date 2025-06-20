@@ -1387,6 +1387,9 @@ public class ImsPhoneConnection extends Connection implements
             if (com.android.server.telecom.flags.Flags.businessCallComposer()) {
                 maybeInjectBusinessComposerExtras(mExtras);
             }
+            if (com.android.server.telecom.flags.Flags.isVideoCustomizedRingingSignalCall()) {
+                maybeInjectVideoCustomizedRingingSignalCallExtras(mExtras);
+            }
             setConnectionExtras(mExtras);
         }
         return changed;
@@ -1423,6 +1426,46 @@ public class ImsPhoneConnection extends Connection implements
                 String v = extras.getString(ImsCallProfile.EXTRA_ASSERTED_DISPLAY_NAME);
                 Rlog.i(LOG_TAG, String.format("mIBCE: ASSERTED_DISPLAY_NAME=[%s]", v));
                 extras.putString(android.telecom.Call.EXTRA_ASSERTED_DISPLAY_NAME, v);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The Ims Vendor is responsible for setting the ImsCallProfile Video Customized Ringing
+     * Signal values (ImsCallProfile.EXTRA_VIDEO_CUSTOMIZED_RINGING_SIGNAL_CALL_TYPE,
+     * ImsCallProfile.EXTRA_ORIGINAL_CALL_TYPE and ImsCallProfile.EXTRA_IS_PREPARATORY).
+     * This helper notifies Telecom of the business video CRS values which will then be
+     * injected into the android.telecom.Call object.
+     */
+    @VisibleForTesting
+    public void maybeInjectVideoCustomizedRingingSignalCallExtras(Bundle extras) {
+        if (extras == null) {
+            return;
+        }
+        try {
+            if (extras.containsKey(
+                        ImsCallProfile.EXTRA_VIDEO_CUSTOMIZED_RINGING_SIGNAL_CALL_TYPE)) {
+                boolean v = extras.getBoolean(
+                        ImsCallProfile.EXTRA_VIDEO_CUSTOMIZED_RINGING_SIGNAL_CALL_TYPE);
+                Rlog.i(LOG_TAG, String.format(
+                            "mIBCE: EXTRA_VIDEO_CUSTOMIZED_RINGING_SIGNAL_CALL_TYPE=[%s]", v));
+                extras.putBoolean(
+                        android.telecom.Call.EXTRA_VIDEO_CUSTOMIZED_RINGING_SIGNAL_CALL_TYPE, v);
+            }
+
+            if (extras.containsKey(ImsCallProfile.EXTRA_ORIGINAL_CALL_TYPE)) {
+                String v = extras.getString(ImsCallProfile.EXTRA_ORIGINAL_CALL_TYPE);
+                Rlog.i(LOG_TAG, String.format("mIBCE: EXTRA_ORIGINAL_CALL_TYPE=[%s]", v));
+                extras.putString(android.telecom.Call.EXTRA_ORIGINAL_CALL_TYPE, v);
+            }
+
+            if (extras.containsKey(ImsCallProfile.EXTRA_IS_PREPARATORY)) {
+                String v = extras.getString(ImsCallProfile.EXTRA_IS_PREPARATORY);
+                Rlog.i(LOG_TAG, String.format("mIBCE: EXTRA_IS_PREPARATORY=[%s]", v));
+                extras.putString(android.telecom.Call.EXTRA_IS_PREPARATORY, v);
             }
 
         } catch (Exception e) {
