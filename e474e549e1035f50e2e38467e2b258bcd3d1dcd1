@@ -22,6 +22,30 @@
       },
       "revId": "e474e549e1035f50e2e38467e2b258bcd3d1dcd1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "503eee08_3e97dfc6",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhone.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-06-23T06:52:40Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f1a0c373_2f05dcec",
+      "range": {
+        "startLine": 2472,
+        "startChar": 65,
+        "endLine": 2474,
+        "endChar": 75
+      },
+      "revId": "e474e549e1035f50e2e38467e2b258bcd3d1dcd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
