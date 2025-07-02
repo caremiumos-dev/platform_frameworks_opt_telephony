@@ -464,6 +464,13 @@ public class ImsSmsDispatcher extends SMSDispatcher {
         }
     }
 
+    public boolean isSmsCapable() {
+        synchronized (mLock) {
+            logd("isSmsCapable: " + mIsSmsCapable);
+            return mIsSmsCapable;
+        }
+    }
+
     @Override
     protected String getFormat() {
         // This is called in the constructor before ImsSmsDispatcher has a chance to initialize
