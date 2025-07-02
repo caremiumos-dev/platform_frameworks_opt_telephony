@@ -984,6 +984,10 @@ public class SmsDispatchersController extends Handler {
         return mImsSmsDispatcher.isAvailable() ? true : mIms;
     }
 
+    public boolean isImsEx() {
+        return mImsSmsDispatcher.isAvailable();
+    }
+
     /**
      * Gets SMS format supported on IMS.
      *

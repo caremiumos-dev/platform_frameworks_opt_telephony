@@ -151,6 +151,16 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         }
     }
 
+    public boolean isImsEx() {
+        if (mSmsDispatchersController != null) {
+            return mSmsDispatchersController.isImsEx();
+        } else {
+            Rlog.e(TAG, "mSmsDispatchersController is null");
+            return false;
+        }
+    }
+
+
     /** {@inheritDoc} */
     @UnsupportedAppUsage
     @Override
@@ -172,7 +182,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         boolean mtPollingMessageThatsAllowedInOOS =
                 tracker.isMtSmsPollingMessage(mContext) && allowCheckMessageInNotConnected;
         // if sms over IMS is not supported on data and voice is not available...
-        if (!isIms() && ss != ServiceState.STATE_IN_SERVICE && !mtPollingMessageThatsAllowedInOOS) {
+        if (!isImsEx() && ss != ServiceState.STATE_IN_SERVICE && !mtPollingMessageThatsAllowedInOOS) {
         //In 5G case only Data Rat is reported.
             if(mPhone.getServiceState().getRilDataRadioTechnology()
                     != ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
