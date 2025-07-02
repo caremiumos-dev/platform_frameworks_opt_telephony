@@ -22,6 +22,8 @@ import android.compat.annotation.UnsupportedAppUsage;
 import android.os.AsyncResult;
 import android.os.Build;
 import android.os.Message;
+import android.telephony.AccessNetworkConstants;
+import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
 
 import com.android.internal.R;
@@ -151,6 +153,47 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         }
     }
 
+    public boolean isImsEx() {
+        if (mSmsDispatchersController != null) {
+            return mSmsDispatchersController.isImsEx();
+        } else {
+            Rlog.e(TAG, "mSmsDispatchersController is null");
+            return false;
+        }
+    }
+
+    private boolean isSmsInCSService() {
+        ServiceState ss = mPhone.getServiceState();
+        final NetworkRegistrationInfo regState = ss.getNetworkRegistrationInfo(
+                NetworkRegistrationInfo.DOMAIN_CS, AccessNetworkConstants.TRANSPORT_TYPE_WWAN);
+        if (regState != null) {
+            return regState.isInService();
+        }
+        return false;
+    }
+
+    private boolean isSmsInService() {
+        int ss = mPhone.getServiceState().getState();
+        if (ss == ServiceState.STATE_IN_SERVICE) {
+            if (isSmsInCSService()) {
+                return true;
+            } else {
+                return isSmsCapable();
+            }
+        }
+        return false;
+    }
+
+    private boolean isSmsCapable() {
+        if (mSmsDispatchersController != null) {
+            return mSmsDispatchersController.isSmsCapable();
+        } else {
+            Rlog.e(TAG, "mSmsDispatchersController is null");
+            return false;
+        }
+    }
+
+
     /** {@inheritDoc} */
     @UnsupportedAppUsage
     @Override
@@ -172,7 +215,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         boolean mtPollingMessageThatsAllowedInOOS =
                 tracker.isMtSmsPollingMessage(mContext) && allowCheckMessageInNotConnected;
         // if sms over IMS is not supported on data and voice is not available...
-        if (!isIms() && ss != ServiceState.STATE_IN_SERVICE && !mtPollingMessageThatsAllowedInOOS) {
+        if (!isImsEx() && !isSmsInService() && !mtPollingMessageThatsAllowedInOOS) {
         //In 5G case only Data Rat is reported.
             if(mPhone.getServiceState().getRilDataRadioTechnology()
                     != ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
