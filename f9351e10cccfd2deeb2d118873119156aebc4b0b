@@ -16,6 +16,23 @@
       "message": "11356",
       "revId": "f9351e10cccfd2deeb2d118873119156aebc4b0b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d5a8490_92e9680f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4246885
+      },
+      "writtenOn": "2025-07-26T22:47:14Z",
+      "side": 1,
+      "message": "I\u0027m trying to get my original code and repository directory for HTML/changes/myProject~master~I8473b95934b5732ac55d26311a706c9c2bde9940/revisions/b6b9c10649b9041884046119ab794374470a1b45/files/gerrit-server%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgoogle%2Fgerrit%2Fserver%2Fproject%2FRefControl.java/diff?intraline HTTP/1.0. Plus I\u0027ve been granted copyrights to apache 2.0 Java the original and other im.sure ur aware I have the Docs",
+      "revId": "f9351e10cccfd2deeb2d118873119156aebc4b0b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
