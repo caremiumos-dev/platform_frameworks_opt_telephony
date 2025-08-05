@@ -353,6 +353,11 @@ public class SimPhonebookRecordCache extends Handler {
                     if (!mIsInRetry.get()) {
                         sendGettingPhonebookRecordsRetry(0);
                     }
+                } else {
+                    if (hasMessages(EVENT_GET_PHONEBOOK_RECORDS_RETRY)) {
+                        mIsInRetry.set(false);
+                        removeMessages(EVENT_GET_PHONEBOOK_RECORDS_RETRY);
+                    }
                 }
                 break;
             case EVENT_GET_PHONEBOOK_CAPACITY_DONE:
@@ -578,7 +583,7 @@ public class SimPhonebookRecordCache extends Handler {
             removeMessages(EVENT_GET_PHONEBOOK_RECORDS_RETRY);
         }
         mIsInRetry.set(true);
-        Message message = obtainMessage(EVENT_GET_PHONEBOOK_RECORDS_RETRY, 1, 0);
+        Message message = obtainMessage(EVENT_GET_PHONEBOOK_RECORDS_RETRY, times, 0);
         sendMessageDelayed(message, RETRY_INTERVAL);
     }
 
