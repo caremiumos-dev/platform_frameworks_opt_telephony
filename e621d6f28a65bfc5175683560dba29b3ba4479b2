@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1e37cd4_5e7f7c2c",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-08-22T17:56:31Z",
+      "side": 1,
+      "message": "where are we using carrier config KEY_SUPPORTS_UNIDIRECTIONAL_VIDEO_SERVICE_BOOL",
+      "range": {
+        "startLine": 1468,
+        "startChar": 16,
+        "endLine": 1468,
+        "endChar": 66
+      },
+      "revId": "e621d6f28a65bfc5175683560dba29b3ba4479b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
