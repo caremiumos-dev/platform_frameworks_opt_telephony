@@ -22,6 +22,30 @@
       },
       "revId": "e621d6f28a65bfc5175683560dba29b3ba4479b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29944158_2aaf9c9f",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1970636
+      },
+      "writtenOn": "2025-08-25T03:34:35Z",
+      "side": 1,
+      "message": "this config will be used in vendor util functions to determine if updating the extras after receive the info from modem.",
+      "parentUuid": "d1e37cd4_5e7f7c2c",
+      "range": {
+        "startLine": 1468,
+        "startChar": 16,
+        "endLine": 1468,
+        "endChar": 66
+      },
+      "revId": "e621d6f28a65bfc5175683560dba29b3ba4479b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
