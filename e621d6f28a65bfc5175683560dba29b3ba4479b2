@@ -46,6 +46,30 @@
       },
       "revId": "e621d6f28a65bfc5175683560dba29b3ba4479b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f014d27_2b10f5ca",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1141163
+      },
+      "writtenOn": "2025-08-25T04:09:03Z",
+      "side": 1,
+      "message": "Can we do Carrier config check in this method ? We can correct this in case of CRBT ourselves",
+      "parentUuid": "29944158_2aaf9c9f",
+      "range": {
+        "startLine": 1468,
+        "startChar": 16,
+        "endLine": 1468,
+        "endChar": 66
+      },
+      "revId": "e621d6f28a65bfc5175683560dba29b3ba4479b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
