@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003a1dab_1fe9685e",
+        "filename": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2025-08-28T03:33:21Z",
+      "side": 1,
+      "message": "Not passing the phone object , where the method is expecting the phone object",
+      "range": {
+        "startLine": 1473,
+        "startChar": 13,
+        "endLine": 1473,
+        "endChar": 58
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "6802de72_32f3cd4a",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/java/com/android/internal/telephony/imsphone/ImsPhoneConnection.java",
+              "range": {
+                "startLine": 1473,
+                "startChar": 0,
+                "endLine": 1474,
+                "endChar": 0
+              },
+              "replacement": "        if (!isUnidirectionalVideoServiceEnabledByConfig(mOwner.getPhone())) {\n"
+            }
+          ]
+        }
+      ],
+      "revId": "ba25744183e2161a8aad430160966eba083c1e5c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
