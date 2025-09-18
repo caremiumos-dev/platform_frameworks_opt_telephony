@@ -314,7 +314,8 @@ public class SatelliteServiceUtils {
             errorCode = SatelliteManager.SATELLITE_RESULT_ERROR;
             if (ar.exception instanceof SatelliteManager.SatelliteException) {
                 errorCode = ((SatelliteManager.SatelliteException) ar.exception).getErrorCode();
-                loge(caller + " SatelliteException: " + ar.exception);
+                loge(caller + " SatelliteException: " + ar.exception + " message: " +
+                    + ar.exception.getMessage() + " stacktrace: " + ar.exception.getStackTrace());
             } else {
                 loge(caller + " unknown exception: " + ar.exception);
             }
