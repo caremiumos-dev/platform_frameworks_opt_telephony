@@ -3205,6 +3205,8 @@ public class ServiceStateTracker extends Handler {
                     == SatelliteManager.SATELLITE_RESULT_SUCCESS) {
                 mSatelliteModemStateListener = listener;
                 log("created SatelliteModemStateListener");
+            } else {
+                sc.unregisterForModemStateChanged(listener);
             }
         }
         return mSatelliteModemStateListener;
