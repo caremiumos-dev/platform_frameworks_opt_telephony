@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1431dbd_2e3367aa",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1870790
+      },
+      "writtenOn": "2025-09-24T06:12:50Z",
+      "side": 1,
+      "message": "use named constants",
+      "revId": "f9bc24fb5a26364ff937ce138f9db892f5dc4d73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53318788_4211fc44",
+        "filename": "src/java/com/android/internal/telephony/data/DataNetwork.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2778,
+      "author": {
+        "id": 1870790
+      },
+      "writtenOn": "2025-09-24T06:12:50Z",
+      "side": 1,
+      "message": "mFailCause \u003d mEverConnected ? DataFailCause.LOST_CONNECTION\n                    : DataFailCause.NO_RETRY_FAILURE",
+      "revId": "f9bc24fb5a26364ff937ce138f9db892f5dc4d73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
