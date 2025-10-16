@@ -1762,6 +1762,8 @@ public class ServiceStateTracker extends Handler {
                     }
                     mLastPhysicalChannelConfigList = list;
                     boolean hasChanged = false;
+                    ServiceState oldMergedSS = new ServiceState(mPhone.getServiceState());
+                    ServiceState oldSS = new ServiceState(mSS);
                     if (updateNrStateFromPhysicalChannelConfigs(list, mSS)) {
                         mNrStateChangedRegistrants.notifyRegistrants();
                         hasChanged = true;
@@ -1775,17 +1777,23 @@ public class ServiceStateTracker extends Handler {
 
                     mPhone.notifyPhysicalChannelConfig(list);
                     // Notify NR frequency, NR connection status or bandwidths changed.
+
                     if (hasChanged) {
-                        mPhone.notifyServiceStateChanged(mPhone.getServiceState());
-                        mServiceStateChangedRegistrants.notifyRegistrants();
-                        TelephonyMetrics.getInstance().writeServiceStateChanged(
-                                mPhone.getPhoneId(), mSS);
-                        mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
-                        ImsPhone imsPhone = (ImsPhone) mPhone.getImsPhone();
-                        if (imsPhone != null) {
-                            imsPhone.getImsStats().onServiceStateChanged(mSS);
+                        if (!oldMergedSS.equals(mPhone.getServiceState())) {
+                            mPhone.notifyServiceStateChanged(mPhone.getServiceState());
+                            mServiceStateChangedRegistrants.notifyRegistrants();
                         }
-                        mServiceStateStats.onServiceStateChanged(mSS);
+
+                        if (!oldSS.equals(mSS)) {
+                            TelephonyMetrics.getInstance().writeServiceStateChanged(
+                                    mPhone.getPhoneId(), mSS);
+                            mPhone.getVoiceCallSessionStats().onServiceStateChanged(mSS);
+                            ImsPhone imsPhone = (ImsPhone) mPhone.getImsPhone();
+                            if (imsPhone != null) {
+                                imsPhone.getImsStats().onServiceStateChanged(mSS);
+                            }
+                            mServiceStateStats.onServiceStateChanged(mSS);
+                        }
                     }
                 }
                 break;
