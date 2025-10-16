@@ -1775,7 +1775,8 @@ public class ServiceStateTracker extends Handler {
 
                     mPhone.notifyPhysicalChannelConfig(list);
                     // Notify NR frequency, NR connection status or bandwidths changed.
-                    if (hasChanged) {
+
+                    if (hasChanged && !mSS.equals(mNewSS)) {
                         mPhone.notifyServiceStateChanged(mPhone.getServiceState());
                         mServiceStateChangedRegistrants.notifyRegistrants();
                         TelephonyMetrics.getInstance().writeServiceStateChanged(
