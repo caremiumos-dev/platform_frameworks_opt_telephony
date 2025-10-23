@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc46cf2_14469852",
+        "filename": "src/java/com/android/internal/telephony/SmsController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1427525
+      },
+      "writtenOn": "2025-10-23T20:48:57Z",
+      "side": 1,
+      "message": "I left details on the issuetracker, but we don\u0027t want to magically flip the subID used, nor *always* prefer remote to local sims, nor *always* pick the first remote sim.\n\nThis breaks multiple remote SIMs and mixing of local and remote SIMs.\n\nInstead, callers should create an SmsManager instance using the subID they wish to target to send the message.\n\nSomething needs to disambiguate in the case that there\u0027s multiple SIMs, local or remote. I believe APIs exist to set the default subscription too, but someone needs to help the user do that.",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 56
+      },
+      "revId": "48df93cc741e48e1522844d83456f23728cbdd75",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
