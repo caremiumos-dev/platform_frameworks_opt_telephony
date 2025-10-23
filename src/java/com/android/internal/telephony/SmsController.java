@@ -300,10 +300,11 @@ public class SmsController extends ISmsImplBase {
 
         long token = Binder.clearCallingIdentity();
         SubscriptionInfo info;
+        int remoteSubId = findBluetoothSubscription();
         try {
-            info = getSubscriptionInfo(subId);
-
-            if (isBluetoothSubscription(info)) {
+            // Attempt to send SMS via remote SIM (Bluetooth) if available
+            if(remoteSubId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                info = getSubscriptionInfo(remoteSubId);
                 sendBluetoothText(info, destAddr, text, sentIntent, deliveryIntent);
             } else {
                 sendIccText(subId, callingPackage, destAddr, scAddr, text, sentIntent,
@@ -313,6 +314,18 @@ public class SmsController extends ISmsImplBase {
         } finally {
             Binder.restoreCallingIdentity(token);
         }
+    }
+
+    private int findBluetoothSubscription() {
+        List<SubscriptionInfo> subs = SubscriptionManager.from(mContext).getActiveSubscriptionInfoList();
+        if (subs != null) {
+            for (SubscriptionInfo info : subs) {
+                if (isBluetoothSubscription(info)) {
+                    return info.getSubscriptionId();
+                }
+            }
+        }
+        return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     }
 
     private boolean isBluetoothSubscription(SubscriptionInfo info) {
