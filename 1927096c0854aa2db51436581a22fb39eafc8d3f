@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78831678_faac700c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1898255
+      },
+      "writtenOn": "2025-11-11T20:23:44Z",
+      "side": 1,
+      "message": "Can you please introduce a unit test case that make sure to hit the max retries and then stop.",
+      "revId": "1927096c0854aa2db51436581a22fb39eafc8d3f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
