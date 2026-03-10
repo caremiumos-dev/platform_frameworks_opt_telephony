@@ -146,6 +146,7 @@ public class EuiccConnector extends StateMachine implements ServiceConnection {
     private static final int CMD_DOWNLOAD_SUBSCRIPTION = 102;
     private static final int CMD_GET_EUICC_PROFILE_INFO_LIST = 103;
     private static final int CMD_GET_DEFAULT_DOWNLOADABLE_SUBSCRIPTION_LIST = 104;
+    //Test
     private static final int CMD_GET_EUICC_INFO = 105;
     private static final int CMD_DELETE_SUBSCRIPTION = 106;
     private static final int CMD_SWITCH_TO_SUBSCRIPTION = 107;
