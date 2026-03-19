@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// This is a test comment for b/494083710
+
 package com.android.internal.telephony;
 
 import static com.android.internal.telephony.TelephonyTestUtils.waitForMs;
