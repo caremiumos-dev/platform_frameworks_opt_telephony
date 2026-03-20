@@ -1091,8 +1091,14 @@ public class GsmCdmaCallTracker extends CallTracker {
 
         // Safety check so that obj is not stuck with mIsInEmergencyCall set to true (and data
         // disabled). This should never happen though.
-        if (!isPhoneTypeGsm() && noConnectionExists) {
-            checkAndEnableDataCallAfterEmergencyCallDropped();
+        if (noConnectionExists) {
+            if (!isPhoneTypeGsm()) {
+                checkAndEnableDataCallAfterEmergencyCallDropped();
+            } else if (mIsInEmergencyCall) {
+                mIsInEmergencyCall = false;
+                mPhone.notifyEmergencyCallRegistrants(false);
+                mPhone.sendEmergencyCallStateChange(false);
+            }
         }
 
         // This is the first poll after an ATD.
