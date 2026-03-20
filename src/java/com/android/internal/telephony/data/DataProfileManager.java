@@ -249,22 +249,23 @@ public class DataProfileManager extends Handler {
             return null;
         }
 
-        DataProfile dataProfile = null;
+        DataProfile enterpriseDataProfile = null;
         while (cursor.moveToNext()) {
             ApnSetting apn = ApnSetting.makeApnSetting(cursor);
             if (apn != null) {
-                dataProfile = new DataProfile.Builder()
+                DataProfile dataProfile = new DataProfile.Builder()
                         .setApnSetting(apn)
                         .setTrafficDescriptor(new TrafficDescriptor(apn.getApnName(), null))
                         .setPreferred(false)
                         .build();
                 if (dataProfile.canSatisfy(NetworkCapabilities.NET_CAPABILITY_ENTERPRISE)) {
+                    enterpriseDataProfile = dataProfile;
                     break;
                 }
             }
         }
         cursor.close();
-        return dataProfile;
+        return enterpriseDataProfile;
     }
 
     /**
@@ -925,6 +926,7 @@ public class DataProfileManager extends Handler {
                             + "directly configure the merged profile " + merged + " in the APN "
                             + "config.");
                     dataProfiles.set(i, merged);
+                    first = merged;
                     dataProfiles.remove(j);
                 } else {
                     j++;
