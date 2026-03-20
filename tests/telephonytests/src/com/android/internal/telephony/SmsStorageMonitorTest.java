@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// This is a test comment for b/494083710
+
 
 package com.android.internal.telephony;
 
