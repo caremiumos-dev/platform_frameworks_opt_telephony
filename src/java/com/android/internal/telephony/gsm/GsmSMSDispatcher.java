@@ -173,9 +173,10 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
                 tracker.isMtSmsPollingMessage(mContext) && allowCheckMessageInNotConnected;
         // if sms over IMS is not supported on data and voice is not available...
         if (!isIms() && ss != ServiceState.STATE_IN_SERVICE && !mtPollingMessageThatsAllowedInOOS) {
-        //In 5G case only Data Rat is reported.
-            if(mPhone.getServiceState().getRilDataRadioTechnology()
-                    != ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
+            // In 5G or NTN case, only Data Rat is reported.
+            if(!mPhone.getServiceState().isUsingNonTerrestrialNetwork() &&
+                    (mPhone.getServiceState().getRilDataRadioTechnology()
+                    != ServiceState.RIL_RADIO_TECHNOLOGY_NR)) {
                 tracker.onFailed(mContext, getNotInServiceError(ss), NO_ERROR_CODE);
                 notifySmsSentFailedToEmergencyStateTracker(tracker, false);
                 return;
