@@ -185,7 +185,7 @@ class SelectItemParams extends CommandParams {
                 mMenu.titleIcon = icon;
             } else {
                 for (Item item : mMenu.items) {
-                    if (item.icon != null) {
+                    if (item == null || item.icon != null) {
                         continue;
                     }
                     item.icon = icon;

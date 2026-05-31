@@ -659,7 +659,10 @@ public class CommandParamsFactory extends Handler {
         while (true) {
             ctlv = searchForNextTag(ComprehensionTlvTag.ITEM, iter);
             if (ctlv != null) {
-                menu.items.add(ValueParser.retrieveItem(ctlv));
+                Item item = ValueParser.retrieveItem(ctlv);
+                if (item != null) {
+                    menu.items.add(item);
+                }
             } else {
                 break;
             }
