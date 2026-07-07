@@ -22,6 +22,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "042b5149_b54e1592",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1122483
+      },
+      "writtenOn": "2026-07-07T06:51:14Z",
+      "side": 1,
+      "message": "Dear Sooraj.\n\nAndroid has to send SMS over NAS in NTN scenario.\n\nI know that all NTNs(NBIOT,LTE DTC, NR NTN) are PS-only and IMS is not regi and CS is OUT_OF_SERVICE.\n\nHere, sending SMS is blocked because IMS is not regi and CS is not regi and RadioTech is not NR.\n\nDo you have good idea for sending SMS over NAS during NTN connection?",
+      "parentUuid": "2d8ad48e_20499fab",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
