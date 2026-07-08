@@ -46,6 +46,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b963467c_ead18d1e",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2026-07-08T03:51:34Z",
+      "side": 1,
+      "message": "Why not report VOICE_REGISTRATION_STATE as in service if SMS over NAS is supported. There is no other registration state to be aware of SMS support",
+      "parentUuid": "042b5149_b54e1592",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
