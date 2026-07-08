@@ -70,6 +70,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be83d20c_fbb1d784",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1122483
+      },
+      "writtenOn": "2026-07-08T08:57:02Z",
+      "side": 1,
+      "message": "According to 3GPP spec, NB-iot is EPS only(PS only).\nTherefore, modem sends voice regi with not regi to android framework.\n\nWe can decide whether SendSMS is allowed or not using below API.\nisSatelliteServiceSupportedByCarrier() in satellitecontroller.java.\n\n\nIf isUsingNonTerrestrialNetwork() is true and SMS service is included in SatelliteServiceSupportedByCarrier, SendSMS is allowed.\nThis is my idea.\n\nCould you check again?",
+      "parentUuid": "b963467c_ead18d1e",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
