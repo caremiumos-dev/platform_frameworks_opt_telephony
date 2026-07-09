@@ -94,6 +94,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aed0067b_bb60e022",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1112039
+      },
+      "writtenOn": "2026-07-09T04:44:55Z",
+      "side": 1,
+      "message": "Voice Reg State need directly match to CS. Currently VOICE REG state is used to identify voic ecapability and sms capability . So technically haing SMS over NAS can mean voice reg is available for Telephony\n\nisSatelliteServiceSupportedByCarrier \u0026\u0026 isUsingNonTerrestrialNetwork.. doesnt not really tell that we are doing it because SMS over NAS is available.. I would like sme information from RIL that can show that SMS over NAS is available and use that to send sms",
+      "parentUuid": "be83d20c_fbb1d784",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
