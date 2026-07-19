@@ -56,6 +56,7 @@ import android.util.LocalLog;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.CarrierResolver;
 import com.android.internal.telephony.CarrierServiceBindHelper;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.CommandsInterface;
@@ -1291,6 +1292,18 @@ public class UiccController extends Handler {
                 }
             }
             Rlog.d(LOG_TAG, "getCardIdForDefaultEuicc: No removable eSIM slot is found");
+        }
+        if (mDefaultEuiccCardId == UNINITIALIZED_CARD_ID) {
+            for (UiccSlot slot : mUiccSlots) {
+                if (slot != null
+                        && slot.getSimType() != TelephonyManager.SIM_TYPE_EMBEDDED
+                        && IntStream.of(slot.getSupportedSimTypes()).anyMatch(
+                                type -> type == TelephonyManager.SIM_TYPE_EMBEDDED)) {
+                    log("getCardIdForDefaultEuicc: eSIM supported but not active, returning "
+                            + "UNSUPPORTED_CARD_ID");
+                    return UNSUPPORTED_CARD_ID;
+                }
+            }
         }
         return mDefaultEuiccCardId;
     }
