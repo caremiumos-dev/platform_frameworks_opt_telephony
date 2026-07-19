@@ -803,6 +803,19 @@ public class UiccControllerTest extends TelephonyTest {
         simTypes[0] = TelephonyManager.SIM_TYPE_EMBEDDED;
         verify(mMockRadioConfig, times(1)).setSimType(simTypes, message);
     }
+
+    @Test
+    @SmallTest
+    public void testGetCardIdForDefaultEuicc_esimSupportedButNotActive() throws Exception {
+        mUiccControllerUT.setUiccSlot(0, mMockSlot);
+        doReturn(TelephonyManager.SIM_TYPE_PHYSICAL).when(mMockSlot).getSimType();
+        doReturn(new int[]{TelephonyManager.SIM_TYPE_PHYSICAL, TelephonyManager.SIM_TYPE_EMBEDDED})
+                .when(mMockSlot).getSupportedSimTypes();
+
+        assertEquals(TelephonyManager.UNSUPPORTED_CARD_ID,
+                mUiccControllerUT.getCardIdForDefaultEuicc());
+    }
+
     /**
      * Wrapper method to get the first api level to allow mocking it in tests.
      */

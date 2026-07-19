@@ -428,6 +428,9 @@ public class UiccSlot extends Handler {
 
     // Return true if a slot index is for removable UICCs or eUICCs
     private boolean isSlotRemovable(int slotIndex) {
+        if (mActiveSimType == TelephonyManager.SIM_TYPE_EMBEDDED) {
+            return false;
+        }
         int[] euiccSlots = mContext.getResources()
                 .getIntArray(com.android.internal.R.array.non_removable_euicc_slots);
         if (euiccSlots == null) {
@@ -678,9 +681,11 @@ public class UiccSlot extends Handler {
         }
         mActiveSimType = getMappedSimType(simTypeInfo.mCurrentSimType);
         mSupportedSimTypes = convertSupportedSimTypesBitMaskToArray(simTypeInfo);
+        mIsRemovable = isSlotRemovable(simTypeInfo.mPhysicalSlotIndex);
         log("updateSimTypeInfo for slotIndex=" + simTypeInfo.mPhysicalSlotIndex
                 + " mActiveSimType: " + mActiveSimType
-                + " mSupportedSimTypes: " + Arrays.toString(mSupportedSimTypes));
+                + " mSupportedSimTypes: " + Arrays.toString(mSupportedSimTypes)
+                + " mIsRemovable: " + mIsRemovable);
     }
 
     /**
