@@ -118,6 +118,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c1e632c_18b7c5d0",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1799194
+      },
+      "writtenOn": "2026-07-20T05:40:14Z",
+      "side": 1,
+      "message": "You said VOICE_REGISTRATION_STATE need directly match to CS state, but you suggested reporting VOICE_REGISTRATION_STATE as IN_SERVICE for NB-Iot case(PS only). Could you clarify which approach you prefer?\n\nDo you suggest if SMS over NAS is avaliable in NB-Iot, reporting VOICE_REGISTRATION_STATE as IN_SERVICE although CS is not registered?\n\nI thought there needs to be another exception when VOICE_REGISTRATION_STATE is not registered but SMS over NB-Iot can be sent, like 5G data case.",
+      "parentUuid": "aed0067b_bb60e022",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
