@@ -172,7 +172,9 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         boolean mtPollingMessageThatsAllowedInOOS =
                 tracker.isMtSmsPollingMessage(mContext) && allowCheckMessageInNotConnected;
         // if sms over IMS is not supported on data and voice is not available...
-        if (!isIms() && ss != ServiceState.STATE_IN_SERVICE && !mtPollingMessageThatsAllowedInOOS) {
+        if ((!isIms() || tracker.mUsesImsServiceForIms)
+                && ss != ServiceState.STATE_IN_SERVICE
+                && !mtPollingMessageThatsAllowedInOOS) {
         //In 5G case only Data Rat is reported.
             if(mPhone.getServiceState().getRilDataRadioTechnology()
                     != ServiceState.RIL_RADIO_TECHNOLOGY_NR) {
