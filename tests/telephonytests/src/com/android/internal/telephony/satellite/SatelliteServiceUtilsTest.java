@@ -26,6 +26,7 @@ import android.os.PersistableBundle;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
+import android.telephony.SubscriptionManager;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 
@@ -222,6 +223,56 @@ public class SatelliteServiceUtilsTest extends TelephonyTest {
         when(mServiceState.getNetworkRegistrationInfoListForTransportType(
                 eq(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)))
                 .thenReturn(List.of(nri));
+        assertTrue(SatelliteServiceUtils.isSatellitePlmn(subId, mServiceState));
+    }
+
+    @Test
+    public void testIsCellularAvailable_inactiveSlotIgnoredWhenActiveSubscriptionExists() {
+        // Slot 0 has no SIM / invalid subscription, but enters emergency scan state
+        when(mPhone.getSubId()).thenReturn(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        when(mServiceState.getState()).thenReturn(ServiceState.STATE_EMERGENCY_ONLY);
+        when(mServiceState.isEmergencyOnly()).thenReturn(true);
+
+        // Slot 1 has active SIM and is out of service
+        when(mPhone2.getSubId()).thenReturn(SUB_ID1);
+        when(mServiceState2.getState()).thenReturn(ServiceState.STATE_OUT_OF_SERVICE);
+        when(mServiceState2.isEmergencyOnly()).thenReturn(false);
+
+        // Inactive slot 0 should be ignored since active subscription exists on slot 1
+        assertFalse(SatelliteServiceUtils.isCellularAvailable());
+
+        // When active subscription enters service, cellular becomes available
+        when(mServiceState2.getState()).thenReturn(ServiceState.STATE_IN_SERVICE);
+        assertTrue(SatelliteServiceUtils.isCellularAvailable());
+    }
+
+    @Test
+    public void testIsCellularAvailable_noSimAllSlotsEmergencyOnly() {
+        // Both slots have no SIM / invalid subscriptions
+        when(mPhone.getSubId()).thenReturn(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        when(mPhone2.getSubId()).thenReturn(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+
+        when(mServiceState.getState()).thenReturn(ServiceState.STATE_EMERGENCY_ONLY);
+        when(mServiceState2.getState()).thenReturn(ServiceState.STATE_OUT_OF_SERVICE);
+
+        // On a device with no SIMs, emergency only service is recognized
+        assertTrue(SatelliteServiceUtils.isCellularAvailable());
+    }
+
+    @Test
+    public void testIsSatellitePlmn_nonTerrestrialNetwork() {
+        int subId = 1;
+
+        // Carrier PLMN list is empty, but NRI explicitly reports non-terrestrial network
+        when(mSatelliteController.getSatellitePlmnsForCarrier(eq(subId)))
+                .thenReturn(new ArrayList<>());
+        NetworkRegistrationInfo nri = new NetworkRegistrationInfo.Builder()
+                .setIsNonTerrestrialNetwork(true)
+                .build();
+        when(mServiceState.getNetworkRegistrationInfoListForTransportType(
+                eq(AccessNetworkConstants.TRANSPORT_TYPE_WWAN)))
+                .thenReturn(List.of(nri));
+
         assertTrue(SatelliteServiceUtils.isSatellitePlmn(subId, mServiceState));
     }
 }

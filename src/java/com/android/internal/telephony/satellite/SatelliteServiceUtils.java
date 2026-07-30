@@ -500,7 +500,26 @@ public class SatelliteServiceUtils {
 
     /** Return {@code true} if device has cellular coverage, else return {@code false}. */
     public static boolean isCellularAvailable() {
-        for (Phone phone : PhoneFactory.getPhones()) {
+        Phone[] phones = PhoneFactory.getPhones();
+        if (phones == null) return false;
+
+        boolean hasActiveSubscriptions = false;
+        for (Phone phone : phones) {
+            if (phone != null && SubscriptionManager.isValidSubscriptionId(phone.getSubId())) {
+                hasActiveSubscriptions = true;
+                break;
+            }
+        }
+
+        for (Phone phone : phones) {
+            if (phone == null) continue;
+
+            // If the device has active subscriptions, ignore inactive/empty SIM slots
+            if (hasActiveSubscriptions
+                    && !SubscriptionManager.isValidSubscriptionId(phone.getSubId())) {
+                continue;
+            }
+
             ServiceState serviceState = phone.getServiceState();
             if (serviceState != null) {
                 int state = serviceState.getState();
@@ -518,6 +537,15 @@ public class SatelliteServiceUtils {
 
     /** Check whether device is connected to satellite PLMN */
     public static boolean isSatellitePlmn(int subId, @NonNull ServiceState serviceState) {
+        for (NetworkRegistrationInfo nri :
+                serviceState.getNetworkRegistrationInfoListForTransportType(
+                        AccessNetworkConstants.TRANSPORT_TYPE_WWAN)) {
+            if (nri.isNonTerrestrialNetwork()) {
+                logd("isSatellitePlmn: nri.isNonTerrestrialNetwork() is true");
+                return true;
+            }
+        }
+
         List<String> satellitePlmnList =
                 SatelliteController.getInstance().getSatellitePlmnsForCarrier(subId);
         if (satellitePlmnList.isEmpty()) {
