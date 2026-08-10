@@ -142,6 +142,30 @@
       },
       "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ab87e1_8edf4dce",
+        "filename": "src/java/com/android/internal/telephony/gsm/GsmSMSDispatcher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1799194
+      },
+      "writtenOn": "2026-08-10T09:11:04Z",
+      "side": 1,
+      "message": "phoebegail@google.com\u003cphoebegail@google.com\u003e #8Jul 24, 2026 03:27AM\nAssigned to \n\nsihwan14.lee@samsung-slsi.corp-partner.google.com.\nUpdate from engineering team:\n\nThe only way Telephoiny knows SMS is available is using VOICE_REG state.. so we need RIL to report VOICE_REG state if SMS over NAS is available even if CS is not registered",
+      "parentUuid": "5c1e632c_18b7c5d0",
+      "range": {
+        "startLine": 177,
+        "startChar": 41,
+        "endLine": 177,
+        "endChar": 69
+      },
+      "revId": "dcd15b3660ffb76732d1579578b4dff16cf9e0b6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
