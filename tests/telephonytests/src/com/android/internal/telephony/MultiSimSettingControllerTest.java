@@ -23,6 +23,7 @@ import static android.telephony.TelephonyManager.EXTRA_DEFAULT_SUBSCRIPTION_SELE
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -73,6 +74,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(AndroidTestingRunner.class)
 @TestableLooper.RunWithLooper
@@ -1069,4 +1071,184 @@ public class MultiSimSettingControllerTest extends TelephonyTest {
         verify(mContext, never()).sendBroadcast(any());
     }
 
+    /** A Bluetooth MAP-client subscription: no SIM slot, but active. */
+    private void addRemoteSimSub(int subId) {
+        mSubInfo[subId] = new SubscriptionInfoInternal.Builder()
+                .setId(subId)
+                .setIccId("remoteSim" + subId + " IccId")
+                .setSimSlotIndex(SubscriptionManager.INVALID_SIM_SLOT_INDEX)
+                .setType(SubscriptionManager.SUBSCRIPTION_TYPE_REMOTE_SIM)
+                .setDisplayName("Bluetooth phone")
+                .setCarrierName("Bluetooth phone")
+                .setDisplayNameSource(SubscriptionManager.NAME_SOURCE_CARRIER)
+                .build();
+    }
+
+    /**
+     * Makes the default data sub id mock stateful, so that a value written by
+     * MultiSimSettingController is visible to code that reads it back later (in particular
+     * disableDataForNonDefaultNonOpportunisticSubscriptions()).
+     */
+    private AtomicInteger trackDefaultDataSubId(int initialValue) {
+        AtomicInteger defaultDataSubId = new AtomicInteger(initialValue);
+        doAnswer(invocation -> defaultDataSubId.get())
+                .when(mSubscriptionManagerService).getDefaultDataSubId();
+        doAnswer(invocation -> {
+            defaultDataSubId.set((int) invocation.getArguments()[0]);
+            return null;
+        }).when(mSubscriptionManagerService).setDefaultDataSubId(anyInt());
+        return defaultDataSubId;
+    }
+
+    /**
+     * Verifies that a Bluetooth REMOTE_SIM subscription is never selected as
+     * the default data, voice, or SMS subscription when it is the only active
+     * subscription visible during subscription reevaluation.
+     */
+    @Test
+    @SmallTest
+    public void testRemoteSimIsNotSelectedAsDefaultDataSub() throws Exception {
+        final int remoteSubId = 5;
+        addRemoteSimSub(remoteSubId);
+        AtomicInteger defaultDataSubId = trackDefaultDataSubId(1);
+
+        // Simulate a state where only the REMOTE_SIM is visible during
+        // subscription reevaluation.
+        markSubscriptionInactive(1);
+        markSubscriptionInactive(2);
+
+        doReturn(new int[0]).when(mSubscriptionManagerService).getActiveSubIdList(anyBoolean());
+
+        doAnswer(invocation -> {
+            List<SubscriptionInfo> list = new ArrayList<>();
+            list.add(mSubInfo[remoteSubId].toSubscriptionInfo());
+            return list;
+        }).when(mSubscriptionManagerService).getActiveSubscriptionInfoList(
+                anyString(), nullable(String.class), anyBoolean());
+
+        mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
+        mMultiSimSettingControllerUT.notifySubscriptionInfoChanged();
+        processAllMessages();
+
+        assertNotEquals("A Bluetooth REMOTE_SIM subscription must never become the default data "
+                        + "subscription", remoteSubId, defaultDataSubId.get());
+        verify(mSubscriptionManagerService, never()).setDefaultDataSubId(remoteSubId);
+        verify(mSubscriptionManagerService, never()).setDefaultVoiceSubId(remoteSubId);
+        verify(mSubscriptionManagerService, never()).setDefaultSmsSubId(remoteSubId);
+    }
+
+    /**
+     * Verifies that a stale REMOTE_SIM default data subscription does not
+     * disable user data on the local SIM.
+     */
+    @Test
+    @SmallTest
+    public void testStaleRemoteSimDefaultDataSubDoesNotDisableDataOnRealSim() throws Exception {
+        final int remoteSubId = 5;
+        AtomicInteger defaultDataSubId = trackDefaultDataSubId(1);
+
+        // Initial state: single active local SIM.
+        setSimSlotIndex(1, 0);
+        markSubscriptionInactive(2);
+        doReturn(true).when(mPhoneMock1).isUserDataEnabled();
+
+        mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
+        sendCarrierConfigChanged(0 /*phoneId*/, 1 /*subId*/);
+        processAllMessages();
+        assertEquals(1, defaultDataSubId.get());
+
+        // Simulate a stale default data sub ID pointing to a disconnected REMOTE_SIM.
+        defaultDataSubId.set(remoteSubId);
+        clearInvocations(mDataSettingsManagerMock1);
+
+        mMultiSimSettingControllerUT.notifyDefaultDataSubChanged();
+        processAllMessages();
+
+        verify(mDataSettingsManagerMock1, never()).setDataEnabled(
+                eq(TelephonyManager.DATA_ENABLED_REASON_USER), eq(false), anyString());
+    }
+
+    /**
+     * Verifies that a stale default data subscription ID referencing a
+     * re-created local SIM record does not disable user data on the active SIM.
+     */
+    @Test
+    @SmallTest
+    public void testRecreatedLocalSimRecordDoesNotDisableDataOnRealSim() throws Exception {
+        final int oldLocalSubId = 1;
+        final int newLocalSubId = 6;
+        AtomicInteger defaultDataSubId = trackDefaultDataSubId(oldLocalSubId);
+
+        // Initial state: single active local SIM.
+        setSimSlotIndex(oldLocalSubId, 0);
+        markSubscriptionInactive(2);
+        doReturn(true).when(mPhoneMock1).isUserDataEnabled();
+
+        mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
+        sendCarrierConfigChanged(0 /*phoneId*/, oldLocalSubId);
+        processAllMessages();
+        assertEquals(oldLocalSubId, defaultDataSubId.get());
+
+        // Re-create the subscription record for the same SIM.
+        mSubInfo[newLocalSubId] = new SubscriptionInfoInternal.Builder(mSubInfo[oldLocalSubId])
+                .setId(newLocalSubId)
+                .setSimSlotIndex(0)
+                .build();
+        markSubscriptionInactive(oldLocalSubId);
+        assertEquals("phone 0 should now report the re-created record",
+                newLocalSubId, mPhoneMock1.getSubId());
+
+        // Allow the new subscription to become fully initialized.
+        sendCarrierConfigChanged(0 /*phoneId*/, newLocalSubId);
+        mMultiSimSettingControllerUT.notifySubscriptionInfoChanged();
+        processAllMessages();
+        assertEquals(newLocalSubId, defaultDataSubId.get());
+
+        // Simulate a stale default data sub ID.
+        defaultDataSubId.set(oldLocalSubId);
+        clearInvocations(mDataSettingsManagerMock1);
+
+        mMultiSimSettingControllerUT.notifyDefaultDataSubChanged();
+        processAllMessages();
+        verify(mDataSettingsManagerMock1, never()).setDataEnabled(
+                eq(TelephonyManager.DATA_ENABLED_REASON_USER), eq(false), anyString());
+    }
+
+    /**
+     * Verifies that updateDefaults() repairs a stale default data
+     * subscription ID after a local SIM record is re-created, preventing
+     * user data from being disabled on the active SIM.
+     */
+    @Test
+    @SmallTest
+    public void testRecreatedLocalSimRecordViaSubscriptionChangeIsRepairedFirst() throws Exception {
+        final int oldLocalSubId = 1;
+        final int newLocalSubId = 6;
+        AtomicInteger defaultDataSubId = trackDefaultDataSubId(oldLocalSubId);
+
+        setSimSlotIndex(oldLocalSubId, 0);
+        markSubscriptionInactive(2);
+        doReturn(true).when(mPhoneMock1).isUserDataEnabled();
+
+        mMultiSimSettingControllerUT.notifyAllSubscriptionLoaded();
+        sendCarrierConfigChanged(0 /*phoneId*/, oldLocalSubId);
+        processAllMessages();
+        assertEquals(oldLocalSubId, defaultDataSubId.get());
+
+        mSubInfo[newLocalSubId] = new SubscriptionInfoInternal.Builder(mSubInfo[oldLocalSubId])
+                .setId(newLocalSubId)
+                .setSimSlotIndex(0)
+                .build();
+        markSubscriptionInactive(oldLocalSubId);
+
+        clearInvocations(mDataSettingsManagerMock1);
+        sendCarrierConfigChanged(0 /*phoneId*/, newLocalSubId);
+        mMultiSimSettingControllerUT.notifySubscriptionInfoChanged();
+        processAllMessages();
+
+        assertEquals("updateDefaults() should have repaired the default data sub id",
+                newLocalSubId, defaultDataSubId.get());
+        verify(mDataSettingsManagerMock1, never()).setDataEnabled(
+                eq(TelephonyManager.DATA_ENABLED_REASON_USER), eq(false), anyString());
+    }
 }

@@ -540,6 +540,7 @@ public class MultiSimSettingController extends Handler {
      */
     private void onDefaultDataSettingChanged() {
         if (DBG) log("onDefaultDataSettingChanged");
+        updateDefaults();
         disableDataForNonDefaultNonOpportunisticSubscriptions();
     }
 
@@ -732,6 +733,8 @@ public class MultiSimSettingController extends Handler {
         mPrimarySubList = activeSubList.stream()
                 .filter(info -> !info.isOpportunistic())
                 .filter(info -> info.getProfileClass() != PROFILE_CLASS_PROVISIONING)
+                .filter(info -> info.getSubscriptionType()
+                        != SubscriptionManager.SUBSCRIPTION_TYPE_REMOTE_SIM)
                 .map(info -> info.getSubscriptionId())
                 .collect(Collectors.toList());
 
@@ -997,23 +1000,61 @@ public class MultiSimSettingController extends Handler {
     protected void disableDataForNonDefaultNonOpportunisticSubscriptions() {
         if (!isReadyToReevaluate()) return;
 
+        Phone[] phones = PhoneFactory.getPhones();
+
+        // There cannot be a non-default physical phone when the device has only
+        // one physical phone. This also prevents a transient stale or remote
+        // default-data subscription from disabling data on the only local modem.
+        if (phones.length <= 1) {
+            log("Not disabling data because the device has only "
+                    + phones.length + " physical phone(s)");
+            return;
+        }
+
         int defaultDataSub = mSubscriptionManagerService.getDefaultDataSubId();
 
-        for (Phone phone : PhoneFactory.getPhones()) {
+        // Do not disable data if the current default-data subscription is invalid,
+        // stale, or otherwise not mapped to an active physical Phone. This includes
+        // REMOTE_SIM subscriptions that have no backing Phone instance.
+        if (!isDefaultDataSubMappedToPhone(defaultDataSub, phones)) {
+            log("Not disabling data because defaultDataSub=" + defaultDataSub
+                    + " is not mapped to an active physical phone");
+            return;
+        }
+
+        for (Phone phone : phones) {
+            int phoneSubId = phone.getSubId();
+
             SubscriptionInfoInternal subInfo = mSubscriptionManagerService
-                    .getSubscriptionInfoInternal(phone.getSubId());
+                    .getSubscriptionInfoInternal(phoneSubId);
             boolean isOpportunistic = subInfo != null && subInfo.isOpportunistic();
-            if (phone.getSubId() != defaultDataSub
-                    && SubscriptionManager.isValidSubscriptionId(phone.getSubId())
+
+            if (phoneSubId != defaultDataSub
+                    && SubscriptionManager.isValidSubscriptionId(phoneSubId)
                     && !isOpportunistic
                     && phone.isUserDataEnabled()
-                    && !areSubscriptionsInSameGroup(defaultDataSub, phone.getSubId())) {
-                log("setting data to false on " + phone.getSubId());
+                    && !areSubscriptionsInSameGroup(defaultDataSub, phoneSubId)) {
+                log("Setting data to false on subId=" + phoneSubId
+                        + ", defaultDataSub=" + defaultDataSub);
+
                 phone.getDataSettingsManager().setDataEnabled(
                         TelephonyManager.DATA_ENABLED_REASON_USER, false,
                         mContext.getOpPackageName());
             }
         }
+    }
+
+    private boolean isDefaultDataSubMappedToPhone(int defaultDataSub, Phone[] phones) {
+        if (!SubscriptionManager.isValidSubscriptionId(defaultDataSub)) {
+            return false;
+        }
+
+        for (Phone phone : phones) {
+            if (phone.getSubId() == defaultDataSub) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean areSubscriptionsInSameGroup(int subId1, int subId2) {
