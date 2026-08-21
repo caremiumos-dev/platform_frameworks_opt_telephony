@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d47c434d_e0e24f55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1976460
+      },
+      "writtenOn": "2026-08-21T15:02:59Z",
+      "side": 1,
+      "message": "Presumably, ag/41613545 (as shared with the partner) is the prefered choice by the component owner. I\u0027m sending this commit through presubmit nevertheless.",
+      "revId": "29acd3a4501973985a11f4e3d5897c6552aad958",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
