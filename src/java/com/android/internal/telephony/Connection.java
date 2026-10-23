@@ -203,6 +203,8 @@ public abstract class Connection {
     private int mPhoneType;
     private boolean mAnsweringDisconnectsActiveCall;
     private boolean mAllowAddCallDuringVideoCall;
+    // XTC/CAF 差异：是否允许保持视频通话。
+    private boolean mAllowHoldingVideoCall;
 
     /**
      * Used to indicate that this originated from pulling a {@link android.telecom.Connection} with
@@ -879,6 +881,15 @@ public abstract class Connection {
 
     public void setAllowAddCallDuringVideoCall(boolean allowAddCallDuringVideoCall) {
         mAllowAddCallDuringVideoCall = allowAddCallDuringVideoCall;
+    }
+
+    // XTC/CAF 差异：设置是否允许保持视频通话。
+    public void setAllowHoldingVideoCall(boolean allowHoldingVideoCall) {
+        mAllowHoldingVideoCall = allowHoldingVideoCall;
+    }
+
+    public boolean shouldAllowHoldingVideoCall() {
+        return mAllowHoldingVideoCall;
     }
 
     /**

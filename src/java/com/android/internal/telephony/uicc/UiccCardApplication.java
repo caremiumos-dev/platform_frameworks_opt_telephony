@@ -594,6 +594,21 @@ public class UiccCardApplication {
         }
     }
 
+    /**
+     * CAF 差异：当前应用是否处于 PERSO 锁定态。
+     * IN_PROGRESS/READY/UNKNOWN 视为未锁定，其余 PERSO 子状态视为锁定。
+     */
+    public boolean isPersoLocked() {
+        switch (mPersoSubState) {
+            case PERSOSUBSTATE_IN_PROGRESS:
+            case PERSOSUBSTATE_READY:
+            case PERSOSUBSTATE_UNKNOWN:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     public String getAid() {
         synchronized (mLock) {
             return mAid;

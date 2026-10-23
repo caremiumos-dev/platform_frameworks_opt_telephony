@@ -74,6 +74,9 @@ public class DcController extends StateMachine {
     TelephonyManager mTelephonyManager;
     private PhoneStateListener mPhoneStateListener;
 
+    /** XTC device addition: data-call-active / network-sight monitor. */
+    private com.android.internal.telephony.datacallactive.DataCallActiveMonitor mDataCallActiveMonitor;
+
     //mExecutingCarrierChange tracks whether the phone is currently executing
     //carrier network change
     private volatile boolean mExecutingCarrierChange;
@@ -108,6 +111,10 @@ public class DcController extends StateMachine {
         if(mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener,
                     PhoneStateListener.LISTEN_CARRIER_NETWORK_CHANGE);
+        }
+        if (mDataCallActiveMonitor == null) {
+            mDataCallActiveMonitor = new com.android.internal.telephony.datacallactive
+                    .DataCallActiveMonitor(phone.getContext());
         }
     }
 
@@ -357,6 +364,15 @@ public class DcController extends StateMachine {
                 }
                 if (newState.active == DATA_CONNECTION_ACTIVE_PH_LINK_DORMANT) {
                     isAnyDataCallDormant = true;
+                }
+
+                // XTC device addition: feed the data-call-active monitor.
+                if (mDataCallActiveMonitor != null && mTelephonyManager != null) {
+                    if (mTelephonyManager.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
+                        mDataCallActiveMonitor.startDataCallMonitorAlarm(newState.active);
+                    } else {
+                        mDataCallActiveMonitor.startDataCallMonitorAlarm(0);
+                    }
                 }
             }
 

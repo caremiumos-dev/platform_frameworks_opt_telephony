@@ -285,7 +285,7 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
     private boolean mImsServiceReady = false;
     protected Phone mImsPhone = null;
 
-    private final AtomicReference<RadioCapability> mRadioCapability =
+    protected final AtomicReference<RadioCapability> mRadioCapability =
             new AtomicReference<RadioCapability>();
 
     private static final int DEFAULT_REPORT_INTERVAL_MS = 200;
@@ -3295,6 +3295,21 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public RadioCapability getRadioCapability() {
         return mRadioCapability.get();
+    }
+
+    /**
+     * CAF 差异：返回当前运营商数字代码。AOSP 8.1 基座无此入口，默认空串，
+     * 由 {@link GsmCdmaPhone} 覆盖为从 IccRecords 读取。
+     */
+    public String getOperatorNumeric() {
+        return "";
+    }
+
+    /**
+     * CAF 差异：请求刷新 IMEI 缓存。设备基座无该机制，AOSP 基座保留空实现；
+     * 仅用于 QTI 无线能力切换流程编译兼容。
+     */
+    public void fetchIMEI() {
     }
 
     /**

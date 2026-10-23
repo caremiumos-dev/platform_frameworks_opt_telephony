@@ -135,7 +135,7 @@ public class ServiceStateTracker extends Handler {
      * and ignore stale responses.  The value is a count-down of
      * expected responses in this pollingContext.
      */
-    private int[] mPollingContext;
+    protected int[] mPollingContext;
     private boolean mDesiredPowerState;
 
     /**
@@ -368,7 +368,7 @@ public class ServiceStateTracker extends Handler {
     };
 
     //Common
-    private GsmCdmaPhone mPhone;
+    protected GsmCdmaPhone mPhone;
     public CellLocation mCellLoc;
     private CellLocation mNewCellLoc;
     public static final int MS_PER_HOUR = 60 * 60 * 1000;
@@ -443,6 +443,10 @@ public class ServiceStateTracker extends Handler {
     private boolean mReportedGprsNoReg;
 
     private CarrierServiceStateTracker mCSST;
+
+    /** XTC device addition: RAT policy manager and modem report data source. */
+    private com.android.internal.telephony.ratswitch.NetworkRatPolicyManager mNetworkRatPolicyManager;
+    private com.android.internal.telephony.reportdata.ReportDataResource mReportDataResource;
     /**
      * The Notification object given to the NotificationManager.
      */
@@ -609,6 +613,11 @@ public class ServiceStateTracker extends Handler {
                 CarrierServiceStateTracker.CARRIER_EVENT_DATA_REGISTRATION, null);
         registerForDataConnectionDetached(mCSST,
                 CarrierServiceStateTracker.CARRIER_EVENT_DATA_DEREGISTRATION, null);
+
+        // XTC device addition: RAT policy manager and modem report data.
+        mNetworkRatPolicyManager = new com.android.internal.telephony.ratswitch
+                .NetworkRatPolicyManager(mCi, mPhone.getContext());
+        mReportDataResource = new com.android.internal.telephony.reportdata.ReportDataResource();
     }
 
     @VisibleForTesting
@@ -1805,7 +1814,7 @@ public class ServiceStateTracker extends Handler {
         }
     }
 
-    void handlePollStateResultMessage(int what, AsyncResult ar) {
+    protected void handlePollStateResultMessage(int what, AsyncResult ar) {
         int ints[];
         switch (what) {
             case EVENT_POLL_STATE_REGISTRATION: {
@@ -2514,6 +2523,18 @@ public class ServiceStateTracker extends Handler {
     }
 
     /**
+     * XTC: decode the {@code log.tag.network.server.type} property (encoded as
+     * {@code 20<minutes>}).
+     */
+    private int getLogType() {
+        String value = SystemProperties.getInt("log.tag.network.server.type", CS_NOTIFICATION) + "";
+        if (value.substring(0, 2).equals("20")) {
+            return Integer.parseInt(value.substring(2));
+        }
+        return 0;
+    }
+
+    /**
      * @return The current GPRS state. IN_SERVICE is the same as "attached"
      * and OUT_OF_SERVICE is the same as detached.
      */
@@ -2786,6 +2807,16 @@ public class ServiceStateTracker extends Handler {
                             + " -> "
                             + ServiceState.rilRadioTechnologyToString(
                             mNewSS.getRilVoiceRadioTechnology()) + " at cell " + cid);
+                }
+                // XTC device addition: report the off-LTE RAT combination.
+                if (SystemProperties.getBoolean("log.tag.network.server", VDBG)
+                        && getLogType() > 0) {
+                    log("ReportDataType.COLLECT_FOR_NO_LTE voice_Re"
+                            + mNewSS.getRilVoiceRadioTechnology() + ".data_Re = "
+                            + mNewSS.getRilDataRadioTechnology());
+                    mReportDataResource.putOrginDataForInt(mPhone.getContext(), 31,
+                            mNewSS.getRilVoiceRadioTechnology(),
+                            mNewSS.getRilDataRadioTechnology());
                 }
             }
             mReasonDataDenied = mNewReasonDataDenied;

@@ -20,6 +20,7 @@ import android.app.AppGlobals;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.res.XmlResourceParser;
 import android.database.ContentObserver;
 import android.os.Binder;
@@ -251,7 +252,15 @@ public class SmsUsageMonitor {
     }
 
     /**
-     * Create SMS usage monitor.
+     * 出站短信授权回调（CAF 差异）：厂商安全服务实现该接口，在放行/拦截时回调。
+     * AOSP 8.1 无此机制，基座默认放行。
+     */
+    public interface SmsAuthorizationCallback {
+        void onAuthorizationResult(boolean authorized);
+    }
+
+    /**
+     * 创建 SMS usage monitor.
      * @param context the context to use to load resources and get TelephonyManager service
      */
     public SmsUsageMonitor(Context context) {
@@ -373,6 +382,16 @@ public class SmsUsageMonitor {
 
             return isUnderLimit(sentList, smsWaiting);
         }
+    }
+
+    /**
+     * 请求对一条出站短信授权（CAF 差异）。
+     * AOSP 基座无短信安全服务，直接放行；设备侧由 QtiSmsUsageMonitor 覆盖并转给
+     * 厂商 {@code QtiSmsSecurityService}。
+     */
+    public void authorizeOutgoingSms(PackageInfo packageInfo, String destAddr, String smsBody,
+            SmsAuthorizationCallback callback, Handler handler) {
+        callback.onAuthorizationResult(true);
     }
 
     /**

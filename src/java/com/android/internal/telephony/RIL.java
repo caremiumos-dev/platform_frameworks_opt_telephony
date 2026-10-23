@@ -271,7 +271,7 @@ class RILRequest {
  *
  * {@hide}
  */
-public final class RIL extends BaseCommands implements CommandsInterface {
+public class RIL extends BaseCommands implements CommandsInterface {
     static final String RILJ_LOG_TAG = "RILJ";
     // Have a separate wakelock instance for Ack
     static final String RILJ_ACK_WAKELOCK_NAME = "RILJ_ACK_WL";
@@ -322,7 +322,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     final Integer mPhoneId;
 
     /* default work source which will blame phone process */
-    private WorkSource mRILDefaultWorkSource;
+    protected WorkSource mRILDefaultWorkSource;
+
+    /** XTC device addition: modem activity/sleep-exception reporter. */
+    private com.android.internal.telephony.reportdata.GetModemInfoForReport mGetModemInfoForReport;
 
     /* Worksource containing all applications causing wakelock to be held */
     private WorkSource mActiveWakelockWorkSource;
@@ -480,7 +483,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    private void resetProxyAndRequestList() {
+    protected void resetProxyAndRequestList() {
         mRadioProxy = null;
         mOemHookProxy = null;
 
@@ -642,6 +645,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         // wakelock stuff is initialized above as callbacks are received on separate binder threads)
         getRadioProxy(null);
         getOemHookProxy(null);
+
+        // XTC device addition: modem activity/sleep-exception reporter.
+        mGetModemInfoForReport = new com.android.internal.telephony.reportdata
+                .GetModemInfoForReport(context);
     }
 
     @Override public void
@@ -668,6 +675,22 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         RILRequest rr = RILRequest.obtain(request, result, workSource);
         addRequest(rr);
         return rr;
+    }
+
+    // CAF 差异：设备基座暴露给 OEM 扩展（QtiRIL.getAtr 等）使用的请求序列号接口。
+    protected int obtainRequestSerial(int request, Message result, WorkSource workSource) {
+        RILRequest rr = RILRequest.obtain(request, result, workSource);
+        addRequest(rr);
+        return rr.mSerial;
+    }
+
+    // CAF 差异：设备基座允许 OEM 扩展从 RILRequest 取回 result Message。
+    protected Message getMessageFromRequest(Object obj) {
+        RILRequest rr = (RILRequest) obj;
+        if (rr != null) {
+            return rr.mResult;
+        }
+        return null;
     }
 
     private void handleRadioProxyExceptionForRR(RILRequest rr, String caller, Exception e) {
@@ -3936,7 +3959,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * @param responseInfo RadioResponseInfo received in response callback
      * @return RILRequest corresponding to the response
      */
-    RILRequest processResponse(RadioResponseInfo responseInfo) {
+    protected RILRequest processResponse(RadioResponseInfo responseInfo) {
         int serial = responseInfo.serial;
         int error = responseInfo.error;
         int type = responseInfo.type;
@@ -4057,6 +4080,11 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             }
             rr.release();
         }
+    }
+
+    // CAF 差异：设备基座为 OEM 扩展提供以 Object 传递 RILRequest 的重载。
+    protected void processResponseDone(Object obj, RadioResponseInfo responseInfo, Object ret) {
+        processResponseDone((RILRequest) obj, responseInfo, ret);
     }
 
     /**

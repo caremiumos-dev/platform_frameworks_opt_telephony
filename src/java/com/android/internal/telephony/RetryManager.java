@@ -184,6 +184,12 @@ public class RetryManager {
      */
     private boolean mRetryForever = false;
 
+    // XTC 差异：无 APN 不重试的大数据上报（厂商遥测，仅记录行为）。
+    public static boolean IS_REPORT = true;
+    private static final long TIME_DD = 600000;
+    private int max_count = 0;
+    private long time_duration = 0;
+
     /**
      * The maximum number of retries to attempt
      */
@@ -526,11 +532,13 @@ public class RetryManager {
 
         if (mWaitingApns == null || mWaitingApns.size() == 0) {
             log("Waiting APN list is null or empty.");
+            reportBigData("Waiting-APN-null");
             return NO_RETRY;
         }
 
         if (mModemSuggestedDelay == NO_RETRY) {
             log("Modem suggested not retrying.");
+            reportBigData("Modem suggested not retrying.");
             return NO_RETRY;
         }
 
@@ -559,6 +567,7 @@ public class RetryManager {
             // permanently failed
             if (index == mCurrentApnIndex) {
                 log("All APNs have permanently failed.");
+                reportBigData("All-APNs-permanently-failed");
                 return NO_RETRY;
             }
         }
@@ -568,6 +577,7 @@ public class RetryManager {
             // Case 1, if the next APN is in the next round.
             if (!mRetryForever && mRetryCount + 1 > mMaxRetryCount) {
                 log("Reached maximum retry count " + mMaxRetryCount + ".");
+                reportBigData("Reached-maximum-retry-count-" + mMaxRetryCount);
                 return NO_RETRY;
             }
             delay = getRetryTimer();
@@ -672,6 +682,49 @@ public class RetryManager {
                 + mModemSuggestedDelay + " mRetryForever=" + mRetryForever + " mInterApnDelay="
                 + mInterApnDelay + " mApnRetryAfterDisconnectDelay=" + mApnRetryAfterDisconnectDelay
                 + " mConfig={" + mConfig + "}";
+    }
+
+    private long getRealtime() {
+        return android.os.SystemClock.elapsedRealtime();
+    }
+
+    private java.util.LinkedHashMap getReportValue(String noRetryType) {
+        String numeric = "no-numeric";
+        if (mWaitingApns != null && mWaitingApns.size() > 0) {
+            numeric = mWaitingApns.get(0).numeric;
+        }
+        java.util.LinkedHashMap map = new java.util.LinkedHashMap();
+        map.put("no_retry_type", noRetryType);
+        map.put("no_retry_numeric", numeric);
+        return map;
+    }
+
+    private boolean shouldSendLog() {
+        return SystemProperties.getBoolean("log.tag.network.server", false);
+    }
+
+    // XTC 差异：无 APN/不重试时上报 XtcBehavior（厂商遥测）。
+    private void reportBigData(String noRetryType) {
+        if (IS_REPORT) {
+            if (shouldSendLog()) {
+                max_count++;
+                if (max_count == 1) {
+                    time_duration = getRealtime();
+                }
+            }
+            if (max_count == 3) {
+                if (time_duration != 0 && getRealtime() - time_duration < TIME_DD) {
+                    mPhone.getContext().sendBroadcast(
+                            new android.content.Intent(
+                                    "com.qualcomm.qcrilmsgtunnel.ACTION_APN_MAX"));
+                    log("ACTION_APN_MAX sendBroadcast ...");
+                }
+                max_count = 0;
+            }
+            new com.xtc.behavior.XtcBehavior.Builder(mPhone.getContext(), "SST_NO_APN_NO_RETRY",
+                    getReportValue(noRetryType)).build().sendData();
+            log("reportBigData mNoTryType = " + noRetryType);
+        }
     }
 
     private void log(String s) {

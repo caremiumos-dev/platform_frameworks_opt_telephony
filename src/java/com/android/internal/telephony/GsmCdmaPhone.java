@@ -106,6 +106,17 @@ public class GsmCdmaPhone extends Phone {
     private static final boolean DBG = true;
     private static final boolean VDBG = false; /* STOPSHIP if true */
 
+    // XTC 差异：USSD 重复拨号（India 运营商场景）支持。
+    private static String[] responseUSSD;
+    private static String ACTION_USSD_DATA = "com.xtc.ina.action.message";
+    private static int checkType = -1;
+    private static boolean isRunningUSSD = VDBG;
+    private static ArrayList<String> ussdCmdList = new ArrayList<>();
+    private static int ussdCmdListID = 0;
+    private static int ussdCmdListIndex = 1;
+    private static boolean isNeedRepeatedDial = VDBG;
+    private static int ussdRequestTimes = 0;
+
     //GSM
     // Key used to read/write voice mail number
     private static final String VM_NUMBER = "vm_number_key";
@@ -227,6 +238,25 @@ public class GsmCdmaPhone extends Phone {
         }
     };
 
+    // XTC 差异：接收厂商 USSD 指令广播（com.xtc.ina.action.message）。
+    private BroadcastReceiver mUssdBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Rlog.d(LOG_TAG, "xtc_ussd mUssdBroadcastReceiver: action " + intent.getAction());
+            if (!intent.getAction().equals(ACTION_USSD_DATA)) {
+                Rlog.d(LOG_TAG, "xtc_ussd  the ACTION  is not applicable.");
+                return;
+            }
+            String mccMnc = SystemProperties.get("gsm.sim.operator.numeric");
+            Rlog.d(LOG_TAG, "xtc_ussd mccMncs=" + mccMnc);
+            if (mccMnc != null) {
+                String messageData = intent.getStringExtra("messageData");
+                Rlog.d(LOG_TAG, "xtc_ussd data---->>" + messageData);
+                parseIntentmessage(messageData);
+            }
+        }
+    };
+
     private void initOnce(CommandsInterface ci) {
         if (ci instanceof SimulatedRadioControl) {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
@@ -270,6 +300,11 @@ public class GsmCdmaPhone extends Phone {
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(
                 CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED));
         mCDM = new CarrierKeyDownloadManager(this);
+        // XTC 差异：注册 USSD 指令广播接收器。
+        mContext.registerReceiver(mUssdBroadcastReceiver, new IntentFilter(ACTION_USSD_DATA));
+        if (!ussdCmdList.isEmpty()) {
+            clearUSSDcmd();
+        }
     }
 
     private void initRatSpecific(int precisePhoneType) {
@@ -2010,6 +2045,171 @@ public class GsmCdmaPhone extends Phone {
     }
 
     /** ussdMode is one of CommandsInterface.USSD_MODE_* */
+    // XTC 差异：USSD 重复拨号相关方法（India 运营商场景）。仅记录行为。
+    private void clearUSSDcmd() {
+        ussdCmdList.clear();
+        if (ussdCmdListID != 0) {
+            ussdCmdListID = 0;
+        }
+        if (isNeedRepeatedDial) {
+            isNeedRepeatedDial = VDBG;
+        }
+        if (ussdRequestTimes != 0) {
+            ussdRequestTimes = 0;
+        }
+        Rlog.d(LOG_TAG, "xtc_ussd clearUSSDcmd 2G_networkType.");
+    }
+
+    private void dialUSSD(String ussd) {
+        try {
+            Rlog.d(LOG_TAG, "xtc_ussd dialUSSD dialInternal ussd=" + ussd);
+            if (ussdCmdListIndex != 1) {
+                ussdCmdListIndex = 1;
+            }
+            SystemProperties.set("gsm.ussd.type", "app");
+            dialInternal(ussd, null, 0, null);
+        } catch (CallStateException e) {
+            Rlog.d(LOG_TAG, "xtc_ussd\tException thrown trying to merge call into a conference", e);
+        }
+    }
+
+    private void disposeCommandCode(String cmdCode) {
+        if (cmdCode == null || cmdCode.length() == 0) {
+            Rlog.d(LOG_TAG, "xtc_ussd cmdCode is null.");
+            return;
+        }
+        Rlog.d(LOG_TAG, "xtc_ussd cmdCode=" + cmdCode);
+        if ((cmdCode.startsWith("*") || cmdCode.startsWith("#")) && cmdCode.endsWith("#")) {
+            if (isRunningUSSD) {
+                isRunningUSSD = VDBG;
+            }
+            if (!ussdCmdList.isEmpty()) {
+                clearUSSDcmd();
+            }
+            dialUSSD(cmdCode);
+        } else {
+            Rlog.d(LOG_TAG, "xtc_ussd the command code is Ussd Response =" + cmdCode);
+            if (isNeedRepeatedDial) {
+                repeatedDialUssd();
+            } else {
+                sendCommandCode(cmdCode);
+            }
+        }
+        saveCommandCode(cmdCode);
+    }
+
+    private void disposeUssdResponse(String response) {
+        if (response == null || response.length() <= 0) {
+            return;
+        }
+        sendBroadcastMessage(response);
+    }
+
+    private int getCurrentVoiceType() {
+        return TelephonyManager.getNetworkClass(
+                ((TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE))
+                        .getVoiceNetworkType());
+    }
+
+    private void parseIMmessage(String messageContent) {
+        if (messageContent == null || messageContent.length() == 0) {
+            return;
+        }
+        Rlog.d(LOG_TAG, "xtc_ussd translateMessage messageContent=" + messageContent);
+        try {
+            String content = new org.json.JSONObject(messageContent).getString("content");
+            if (TextUtils.isEmpty(content)) {
+                return;
+            }
+            String inInstruction = new org.json.JSONObject(content).getString("inInstruction");
+            if (inInstruction == null || inInstruction.length() == 0) {
+                return;
+            }
+            Rlog.d(LOG_TAG, "xtc_ussd  get command code form inInstruction=" + inInstruction);
+            disposeCommandCode(inInstruction);
+        } catch (org.json.JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseIntentmessage(String message) {
+        int type;
+        if (message == null || message.length() == 0) {
+            return;
+        }
+        String messageStr = "";
+        try {
+            messageStr = new org.json.JSONObject(message).getString("message");
+            Rlog.d(LOG_TAG, "xtc_ussd messageStr---->>" + messageStr);
+            if (TextUtils.isEmpty(messageStr)) {
+                return;
+            }
+            type = new org.json.JSONObject(messageStr).getInt("type");
+        } catch (org.json.JSONException e) {
+            e.printStackTrace();
+            type = 0;
+        }
+        if (type != 23) {
+            Rlog.d(LOG_TAG, "type:" + type);
+        } else {
+            parseIMmessage(messageStr);
+        }
+    }
+
+    private void repeatedDialUssd() {
+        if (!ussdCmdList.isEmpty()) {
+            String cmd = ussdCmdList.get(0);
+            if ((cmd.startsWith("*") || cmd.startsWith("#")) && cmd.endsWith("#")) {
+                Rlog.d(LOG_TAG, "xtc_ussd 2G_networkType repeatedDialUssd,the ussd ussdCode = "
+                        + cmd + ",ussdRequestTimes=" + ussdRequestTimes);
+                dialUSSD(cmd);
+                if (ussdRequestTimes != 0) {
+                    ussdRequestTimes = 0;
+                }
+            }
+        }
+        if (isNeedRepeatedDial) {
+            return;
+        }
+        isNeedRepeatedDial = true;
+    }
+
+    private void saveCommandCode(String cmdCode) {
+        if (cmdCode == null || cmdCode.length() == 0) {
+            Rlog.d(LOG_TAG, "xtc_ussd saveCommandCode,the cmdCode is null.");
+            return;
+        }
+        ussdCmdList.add(ussdCmdListID, cmdCode);
+        for (int i = 0; i < ussdCmdList.size(); i++) {
+            Rlog.d(LOG_TAG, "xtc_ussd saveCommandCode,the index :" + i + " listItem:"
+                    + ussdCmdList.get(i));
+        }
+        ussdCmdListID++;
+    }
+
+    private void sendBroadcastMessage(String message) {
+        if (message == null || message.length() <= 0) {
+            return;
+        }
+        Rlog.d(LOG_TAG, "xtc_ussd\tsendBroadcastMessage\tmessage=" + message);
+        Intent intent = new Intent();
+        intent.setAction("com.xtc.getIndia.message");
+        intent.putExtra("message", message);
+        mContext.sendBroadcast(intent);
+    }
+
+    private void sendCommandCode(String cmdCode) {
+        Rlog.d(LOG_TAG, "xtc_ussd isRunningUSSD =" + isRunningUSSD);
+        if (cmdCode == null || cmdCode.length() <= 0) {
+            return;
+        }
+        if (isRunningUSSD) {
+            sendUssdResponse(cmdCode);
+        } else {
+            repeatedDialUssd();
+        }
+    }
+
     private void onIncomingUSSD (int ussdMode, String ussdMessage) {
         if (!isPhoneTypeGsm()) {
             loge("onIncomingUSSD: not expected on GSM");
@@ -2027,6 +2227,15 @@ public class GsmCdmaPhone extends Phone {
 
         isUssdRelease = (ussdMode == CommandsInterface.USSD_MODE_NW_RELEASE);
 
+        // XTC 差异：USSD 重复拨号状态跟踪。
+        Rlog.d(LOG_TAG, "xtc_ussd\t   onIncomingUSSD  ussdMode=" + ussdMode
+                + ",ussdMessage=" + ussdMessage);
+        if (isUssdRequest) {
+            isRunningUSSD = true;
+            ussdRequestTimes++;
+        } else {
+            isRunningUSSD = VDBG;
+        }
 
         // See comments in GsmMmiCode.java
         // USSD requests aren't finished until one
@@ -2039,6 +2248,7 @@ public class GsmCdmaPhone extends Phone {
             }
         }
 
+        String ussdType = SystemProperties.get("gsm.ussd.type", "system");
         if (found != null) {
             // Complete pending USSD
 
@@ -2048,6 +2258,35 @@ public class GsmCdmaPhone extends Phone {
                 found.onUssdFinishedError();
             } else {
                 found.onUssdFinished(ussdMessage, isUssdRequest);
+            }
+
+            // XTC 差异：2G 网络下重复拨号逻辑。
+            int currentVoiceType = getCurrentVoiceType();
+            Rlog.d(LOG_TAG, "xtc_ussd  networkType = " + currentVoiceType
+                    + ",isNeedRepeatedDial = " + isNeedRepeatedDial);
+            if (ussdType.equals("system")) {
+                Rlog.d(LOG_TAG, "xtc_ussd USSD_DIAL_TYPE this is system dial ussd.");
+            } else if (currentVoiceType == 1 || isNeedRepeatedDial) {
+                if (!isNeedRepeatedDial) {
+                    isNeedRepeatedDial = true;
+                }
+                int size2 = ussdCmdList.size();
+                Rlog.d(LOG_TAG, "xtc_ussd onIncomingUSSD  2G isUssdRequest=" + isUssdRequest
+                        + ",saveCmdSize=" + size2 + ",ussdRequestTimes=" + ussdRequestTimes);
+                if (isUssdRequest && size2 > 1 && ussdRequestTimes < size2) {
+                    String nextCmd = ussdCmdList.get(ussdCmdListIndex);
+                    ussdCmdListIndex++;
+                    sendCommandCode(nextCmd);
+                    Rlog.d(LOG_TAG, "xtc_ussd onIncomingUSSD  2G sendCommandCode ussdResponse="
+                            + nextCmd);
+                }
+                if (ussdRequestTimes == size2
+                        || ussdMode == CommandsInterface.USSD_MODE_NOTIFY) {
+                    found.cancel();
+                    disposeUssdResponse(ussdMessage);
+                }
+            } else {
+                disposeUssdResponse(ussdMessage);
             }
         } else if (!isUssdError && ussdMessage != null) {
             // pending USSD not found
@@ -2062,6 +2301,13 @@ public class GsmCdmaPhone extends Phone {
                                                    mUiccApplication.get());
             onNetworkInitiatedUssd(mmi);
         }
+
+        // XTC 差异：非 app 发起时恢复 USSD_DIAL_TYPE。
+        if (ussdMode == CommandsInterface.USSD_MODE_REQUEST || !ussdType.equals("app")) {
+            return;
+        }
+        Rlog.d(LOG_TAG, "xtc_ussd recover USSD_DIAL_TYPE.");
+        SystemProperties.set("gsm.ussd.type", "system");
     }
 
     /**
@@ -3158,7 +3404,7 @@ public class GsmCdmaPhone extends Phone {
         }
     }
 
-    private void phoneObjectUpdater(int newVoiceRadioTech) {
+    protected void phoneObjectUpdater(int newVoiceRadioTech) {
         logd("phoneObjectUpdater: newVoiceRadioTech=" + newVoiceRadioTech);
 
         // Check for a voice over lte replacement
@@ -3371,7 +3617,7 @@ public class GsmCdmaPhone extends Phone {
     /**
      * @return operator numeric.
      */
-    private String getOperatorNumeric() {
+    public String getOperatorNumeric() {
         String operatorNumeric = null;
         if (isPhoneTypeGsm()) {
             IccRecords r = mIccRecords.get();

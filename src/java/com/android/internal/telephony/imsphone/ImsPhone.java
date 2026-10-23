@@ -45,6 +45,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.NetworkStats;
 import android.net.Uri;
 import android.os.AsyncResult;
@@ -150,6 +151,9 @@ public class ImsPhone extends ImsPhoneBase {
 
     private boolean mRoaming = false;
 
+    // XTC/CAF 差异：RTT（实时文本）广播接收器。
+    private BroadcastReceiver mRttReceiver;
+
     // List of Registrants to send supplementary service notifications to.
     private RegistrantList mSsnRegistrants = new RegistrantList();
 
@@ -230,6 +234,165 @@ public class ImsPhone extends ImsPhoneBase {
         mDefaultPhone.registerForServiceStateChanged(this, EVENT_SERVICE_STATE_CHANGED, null);
         // Force initial roaming state update later, on EVENT_CARRIER_CONFIG_CHANGED.
         // Settings provider or CarrierConfig may not be loaded now.
+
+        // XTC/CAF 差异：注册 RTT 文本/操作广播接收器。
+        mRttReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (org.codeaurora.ims.QtiCallConstants.ACTION_SEND_RTT_TEXT.equals(
+                        intent.getAction())) {
+                    Rlog.d(LOG_TAG, "RTT: Received ACTION_SEND_RTT_TEXT");
+                    sendRttMessage(intent.getStringExtra(
+                            org.codeaurora.ims.QtiCallConstants.RTT_TEXT_VALUE));
+                } else {
+                    if (!org.codeaurora.ims.QtiCallConstants.ACTION_RTT_OPERATION.equals(
+                            intent.getAction())) {
+                        Rlog.d(LOG_TAG, "RTT: unknown intent");
+                        return;
+                    }
+                    Rlog.d(LOG_TAG, "RTT: Received ACTION_RTT_OPERATION");
+                    checkIfModifyRequestOrResponse(intent.getIntExtra(
+                            org.codeaurora.ims.QtiCallConstants.RTT_OPERATION_TYPE, 0));
+                }
+            }
+        };
+        IntentFilter rttFilter = new IntentFilter();
+        rttFilter.addAction(org.codeaurora.ims.QtiCallConstants.ACTION_SEND_RTT_TEXT);
+        rttFilter.addAction(org.codeaurora.ims.QtiCallConstants.ACTION_RTT_OPERATION);
+        mDefaultPhone.getContext().registerReceiver(mRttReceiver, rttFilter);
+    }
+
+    private boolean canSendRttModifyRequest() {
+        if (getForegroundCall().getImsCall() != null) {
+            return true;
+        }
+        Rlog.d(LOG_TAG, "RTT: imsCall null");
+        return false;
+    }
+
+    private void checkIfModifyRequestOrResponse(int data) {
+        if (!canProcessRttReqest() || !isFgCallActive()) {
+            return;
+        }
+        Rlog.d(LOG_TAG, "RTT: checkIfModifyRequestOrResponse data =  " + data);
+        switch (data) {
+            case org.codeaurora.ims.QtiCallConstants.RTT_UPGRADE_INITIATE:
+                packRttModifyRequestToProfile(1);
+                break;
+            case org.codeaurora.ims.QtiCallConstants.RTT_UPGRADE_CONFIRM:
+            case org.codeaurora.ims.QtiCallConstants.RTT_UPGRADE_REJECT:
+                sendRttModifyResponse(data);
+                break;
+            case org.codeaurora.ims.QtiCallConstants.RTT_DOWNGRADE_INITIATE:
+                packRttModifyRequestToProfile(0);
+                break;
+        }
+    }
+
+    private boolean isInFullRttMode() {
+        int rttOperatingMode = org.codeaurora.ims.utils.QtiImsExtUtils.getRttOperatingMode(mContext);
+        Rlog.d(LOG_TAG, "RTT: isInFullRttMode mode = " + rttOperatingMode);
+        return rttOperatingMode == 1;
+    }
+
+    private boolean mapRequestToResponse(int request) {
+        switch (request) {
+            case org.codeaurora.ims.QtiCallConstants.RTT_UPGRADE_CONFIRM:
+                return true;
+            case org.codeaurora.ims.QtiCallConstants.RTT_UPGRADE_REJECT:
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    private void packRttModifyRequestToProfile(int rttMode) {
+        if (!canSendRttModifyRequest()) {
+            Rlog.d(LOG_TAG, "RTT: cannot send rtt modify request");
+            return;
+        }
+        ImsCallProfile callProfile = getForegroundCall().getImsCall().getCallProfile();
+        ImsCallProfile imsCallProfile = new ImsCallProfile(callProfile.mServiceType,
+                callProfile.mCallType);
+        imsCallProfile.mMediaProfile.setRttMode(rttMode);
+        Rlog.d(LOG_TAG, "RTT: packRttModifyRequestToProfile");
+        sendRttModifyRequest(imsCallProfile);
+    }
+
+    public boolean isFgCallActive() {
+        if (Call.State.ACTIVE == getForegroundCall().getState()) {
+            return true;
+        }
+        Rlog.d(LOG_TAG, "RTT: isFgCallActive fg call not active");
+        return false;
+    }
+
+    public boolean canProcessRttReqest() {
+        if (org.codeaurora.ims.utils.QtiImsExtUtils.isRttSupported(mPhoneId, mContext)
+                ? org.codeaurora.ims.utils.QtiImsExtUtils.isRttOn(mContext) : false) {
+            Rlog.d(LOG_TAG, "RTT: canProcessRttReqest rtt supported = "
+                    + org.codeaurora.ims.utils.QtiImsExtUtils.isRttSupported(mPhoneId, mContext)
+                    + ", is Rtt on = "
+                    + org.codeaurora.ims.utils.QtiImsExtUtils.isRttOn(mContext)
+                    + ", Rtt mode = "
+                    + org.codeaurora.ims.utils.QtiImsExtUtils.getRttMode(mContext));
+            return true;
+        }
+        Rlog.d(LOG_TAG, "RTT: canProcessRttReqest RTT is not supported/off");
+        return false;
+    }
+
+    public boolean isRttVtCallAllowed(com.android.ims.ImsCall imsCall) {
+        Rlog.d(LOG_TAG, "RTT: isRttVtCallAllowed mode = "
+                + org.codeaurora.ims.utils.QtiImsExtUtils.getRttOperatingMode(mContext));
+        return !(imsCall.getCallProfile().isVideoCall()
+                && !org.codeaurora.ims.utils.QtiImsExtUtils.isRttSupportedOnVtCalls(
+                        mPhoneId, mContext));
+    }
+
+    public void sendRttMessage(String rttMessage) {
+        if (!canProcessRttReqest() || !isFgCallActive()) {
+            return;
+        }
+        if (TextUtils.isEmpty(rttMessage)) {
+            Rlog.d(LOG_TAG, "RTT: Text null");
+            return;
+        }
+        com.android.ims.ImsCall imsCall = getForegroundCall().getImsCall();
+        if (imsCall == null) {
+            Rlog.d(LOG_TAG, "RTT: imsCall null");
+        } else if (!isRttVtCallAllowed(imsCall)) {
+            Rlog.d(LOG_TAG, "RTT: InCorrect mode");
+        } else {
+            Rlog.d(LOG_TAG, "RTT: sendRttMessage");
+            imsCall.sendRttMessage(rttMessage);
+        }
+    }
+
+    public void sendRttModifyRequest(ImsCallProfile imsCallProfile) {
+        Rlog.d(LOG_TAG, "RTT: sendRttModifyRequest");
+        com.android.ims.ImsCall imsCall = getForegroundCall().getImsCall();
+        if (imsCall == null) {
+            Rlog.d(LOG_TAG, "RTT: imsCall null");
+            return;
+        }
+        try {
+            imsCall.sendRttModifyRequest(imsCallProfile);
+        } catch (ImsException e) {
+            Rlog.e(LOG_TAG, "RTT: sendRttModifyRequest exception = " + e);
+        }
+    }
+
+    public void sendRttModifyResponse(int request) {
+        com.android.ims.ImsCall imsCall = getForegroundCall().getImsCall();
+        if (imsCall == null) {
+            Rlog.d(LOG_TAG, "RTT: imsCall null");
+        } else if (!isRttVtCallAllowed(imsCall)) {
+            Rlog.d(LOG_TAG, "RTT: Not allowed for VT");
+        } else {
+            Rlog.d(LOG_TAG, "RTT: sendRttModifyResponse");
+            imsCall.sendRttModifyResponse(mapRequestToResponse(request));
+        }
     }
 
     //todo: get rid of this function. It is not needed since parentPhone obj never changes
@@ -1697,7 +1860,16 @@ public class ImsPhone extends ImsPhoneBase {
 
     @Override
     public boolean isUtEnabled() {
-        return mCT.isUtEnabled();
+        // XTC/CAF 差异：需 IMS 服务状态为 READY(2) 才允许 UT。
+        int imsServiceStatus;
+        try {
+            imsServiceStatus = com.android.ims.ImsManager.getInstance(mContext, mPhoneId)
+                    .getImsServiceStatus();
+        } catch (ImsException e) {
+            Rlog.d(LOG_TAG, "Exception when trying to get ImsServiceStatus: " + e);
+            imsServiceStatus = 0;
+        }
+        return mCT.isUtEnabled() && imsServiceStatus == 2;
     }
 
     @Override

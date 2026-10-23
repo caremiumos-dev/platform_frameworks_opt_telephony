@@ -332,6 +332,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      */
     private boolean mAllowAddCallDuringVideoCall = true;
 
+    // XTC/CAF 差异：是否允许保持视频通话（厂商 carrier config 控制）。
+    private boolean mAllowHoldingVideoCall = true;
+
     /**
      * Carrier configuration option which determines whether to notify the connection if a handover
      * to wifi fails.
@@ -972,6 +975,38 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
      *
      * @param subId The sub id.
      */
+    // XTC/CAF 差异：RTT 媒体属性（需要时把 RTT 模式加入媒体 profile）。
+    private com.android.ims.ImsStreamMediaProfile addRttAttributeIfRequired(ImsCall imsCall,
+            com.android.ims.ImsStreamMediaProfile mediaProfile) {
+        if (!mPhone.canProcessRttReqest()) {
+            return mediaProfile;
+        }
+        ImsCallProfile callProfile = imsCall.getCallProfile();
+        if (callProfile.mMediaProfile != null && callProfile.mMediaProfile.isRttCall()
+                && mPhone.isRttVtCallAllowed(imsCall)) {
+            log("RTT: addRttAttributeIfRequired = " + callProfile.mMediaProfile.isRttCall());
+            mediaProfile.setRttMode(1);
+        }
+        return mediaProfile;
+    }
+
+    // XTC/CAF 差异：按运营商 RTT 配置设置呼叫 profile 的 RTT 模式。
+    private ImsCallProfile setRttModeBasedOnOperator(ImsCallProfile imsCallProfile) {
+        if (!mPhone.canProcessRttReqest()) {
+            return imsCallProfile;
+        }
+        int rttOperatingMode =
+                org.codeaurora.ims.utils.QtiImsExtUtils.getRttOperatingMode(mPhone.getContext());
+        log("RTT: setRttModeBasedOnOperator mode = " + rttOperatingMode);
+        if ((org.codeaurora.ims.utils.QtiImsExtUtils.isRttSupportedOnVtCalls(
+                mPhone.getPhoneId(), mPhone.getContext()) || !imsCallProfile.isVideoCall())
+                && org.codeaurora.ims.utils.QtiImsExtUtils.isRttSupported(
+                        mPhone.getPhoneId(), mPhone.getContext())) {
+            imsCallProfile.mMediaProfile.setRttMode(rttOperatingMode);
+        }
+        return imsCallProfile;
+    }
+
     private void cacheCarrierConfiguration(int subId) {
         CarrierConfigManager carrierConfigManager = (CarrierConfigManager)
                 mPhone.getContext().getSystemService(Context.CARRIER_CONFIG_SERVICE);
@@ -997,6 +1032,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
         mAllowAddCallDuringVideoCall =
                 carrierConfig.getBoolean(
                         CarrierConfigManager.KEY_ALLOW_ADD_CALL_DURING_VIDEO_CALL_BOOL);
+        // XTC/CAF 差异：视频通话保持能力由厂商 carrier config 键控制。
+        mAllowHoldingVideoCall = carrierConfig.getBoolean(
+                org.codeaurora.ims.QtiCarrierConfigs.ALLOW_HOLD_IN_VIDEO_CALL);
         mNotifyVtHandoverToWifiFail = carrierConfig.getBoolean(
                 CarrierConfigManager.KEY_NOTIFY_VT_HANDOVER_TO_WIFI_FAILURE_BOOL);
         mSupportDowngradeVtToAudio = carrierConfig.getBoolean(
@@ -1111,7 +1149,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // being sent to the lower layers/to the network.
             }
 
-            ImsCall imsCall = mImsManager.makeCall(mServiceId, profile,
+            // XTC/CAF 差异：按运营商配置设置 RTT 模式。
+            ImsCall imsCall = mImsManager.makeCall(mServiceId, setRttModeBasedOnOperator(profile),
                     callees, mImsCallListener);
             conn.setImsCall(imsCall);
 
@@ -1120,6 +1159,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             setVideoCallProvider(conn, imsCall);
             conn.setAllowAddCallDuringVideoCall(mAllowAddCallDuringVideoCall);
+            // XTC/CAF 差异：视频通话保持能力。
+            conn.setAllowHoldingVideoCall(mAllowHoldingVideoCall);
         } catch (ImsException e) {
             loge("dialInternal : " + e);
             conn.setDisconnectCause(DisconnectCause.ERROR_UNSPECIFIED);
@@ -1144,6 +1185,10 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             throw new CallStateException("cannot accept call");
         }
 
+        // XTC/CAF 差异：RTT 媒体属性。
+        com.android.ims.ImsStreamMediaProfile imsStreamMediaProfile =
+                new com.android.ims.ImsStreamMediaProfile();
+
         if ((mRingingCall.getState() == ImsPhoneCall.State.WAITING)
                 && mForegroundCall.getState().isAlive()) {
             setMute(false);
@@ -1163,7 +1208,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 // We need to disconnect the foreground call before answering the background call.
                 mForegroundCall.hangup();
                 try {
-                    ringingCall.accept(ImsCallProfile.getCallTypeFromVideoState(videoState));
+                    ringingCall.accept(ImsCallProfile.getCallTypeFromVideoState(videoState),
+                            addRttAttributeIfRequired(ringingCall, imsStreamMediaProfile));
                 } catch (ImsException e) {
                     throw new CallStateException("cannot accept call");
                 }
@@ -1177,7 +1223,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             try {
                 ImsCall imsCall = mRingingCall.getImsCall();
                 if (imsCall != null) {
-                    imsCall.accept(ImsCallProfile.getCallTypeFromVideoState(videoState));
+                    imsCall.accept(ImsCallProfile.getCallTypeFromVideoState(videoState),
+                            addRttAttributeIfRequired(imsCall, imsStreamMediaProfile));
                     mMetrics.writeOnImsCommand(mPhone.getPhoneId(), imsCall.getSession(),
                             ImsCommand.IMS_CMD_ACCEPT);
                 } else {
@@ -1636,7 +1683,9 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
                 ImsCall imsCall = mRingingCall.getImsCall();
                 if (imsCall != null) {
                     imsCall.accept(
-                        ImsCallProfile.getCallTypeFromVideoState(mPendingCallVideoState));
+                        ImsCallProfile.getCallTypeFromVideoState(mPendingCallVideoState),
+                        addRttAttributeIfRequired(imsCall,
+                                new com.android.ims.ImsStreamMediaProfile()));
                     mMetrics.writeOnImsCommand(mPhone.getPhoneId(), imsCall.getSession(),
                             ImsCommand.IMS_CMD_ACCEPT);
                 }

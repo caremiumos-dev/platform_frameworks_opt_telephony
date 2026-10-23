@@ -1464,6 +1464,8 @@ public class GsmCdmaCallTracker extends CallTracker {
                     GsmCdmaConnection conn = mDroppedDuringPoll.get(i);
 
                     conn.onRemoteDisconnect(causeCode, vendorCause);
+                    // XTC 差异：通话失败上报。
+                    judgeCallFailed(conn, causeCode, vendorCause);
                 }
 
                 updatePhoneState();
@@ -1623,6 +1625,47 @@ public class GsmCdmaCallTracker extends CallTracker {
 
     private boolean isPhoneTypeGsm() {
         return mPhone.getPhoneType() == PhoneConstants.PHONE_TYPE_GSM;
+    }
+
+    // XTC 差异：通话失败（特定 cause code）时上报大数据。这是厂商遥测代码，仅记录行为。
+    private void judgeCallFailed(GsmCdmaConnection conn, int causeCode, String vendorCause) {
+        if (causeCode == 34 || causeCode == 41 || causeCode == 42 || causeCode == 44
+                || causeCode == 49 || causeCode == 58 || causeCode == 3 || causeCode == 6
+                || causeCode == 27 || causeCode == 38 || causeCode == 63 || causeCode == 111
+                || causeCode == 127 || causeCode == 1001 || causeCode == 1002
+                || causeCode == 1006 || causeCode == 65535) {
+            CellLocation cellLocation = TelephonyManager.getDefault().getCellLocation();
+            int cid = -1;
+            if (cellLocation != null && mPhone != null) {
+                cid = isPhoneTypeGsm()
+                        ? ((GsmCellLocation) cellLocation).getCid()
+                        : ((CdmaCellLocation) cellLocation).getBaseStationId();
+                Rlog.i(LOG_TAG, "reportCallFailLD cell = " + cellLocation + " , GSM = "
+                        + isPhoneTypeGsm() + " , phoneType = " + mPhone.getPhoneType()
+                        + " , telephm phone type = " + TelephonyManager.getDefault().getPhoneType());
+            }
+            sendCallLargeData(conn, cid, causeCode, vendorCause);
+        }
+    }
+
+    private void sendCallLargeData(GsmCdmaConnection conn, int cid, int causeCode,
+            String vendorCause) {
+        if (mPhone == null || conn == null) {
+            return;
+        }
+        ReportCallFailLD report = new ReportCallFailLD(mPhone.getContext());
+        report.setOtherNumber(conn.getAddress());
+        report.setVoiceNetWorkType();
+        report.setNetWorkType("gsmCdma");
+        report.setSelfDialMode(conn.isIncoming() ? "MT" : "MO");
+        report.setCallFailStartTime(String.valueOf(System.currentTimeMillis()));
+        report.setCallFailCauseCode(String.valueOf(causeCode));
+        report.setCallFailVendorCause(vendorCause);
+        report.setSelfCellId(String.valueOf(cid));
+        report.report2App(mPhone.getContext());
+        android.util.Log.d(LOG_TAG, "Gsm call fail. and we end fetch modem");
+        new FetchModemLog().endModem2App(mPhone.getContext(), DBG_POLL);
+        Rlog.i(LOG_TAG, "reportCallFailLD = " + report);
     }
 
     public GsmCdmaPhone getPhone() {

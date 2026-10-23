@@ -20,7 +20,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.IDeviceIdleController;
+import android.os.Looper;
 import android.os.ServiceManager;
+import android.telephony.Rlog;
 
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriManager;
@@ -30,19 +32,61 @@ import com.android.internal.telephony.imsphone.ImsPhone;
 import com.android.internal.telephony.imsphone.ImsPhoneCallTracker;
 import com.android.internal.telephony.uicc.IccCardProxy;
 
+import dalvik.system.PathClassLoader;
+
+import java.lang.reflect.Constructor;
+
 /**
  * This class has one-line methods to instantiate objects only. The purpose is to make code
  * unit-test friendly and use this class as a way to do dependency injection. Instantiating objects
  * this way makes it easier to mock them in tests.
  */
 public class TelephonyComponentFactory {
+    protected static String LOG_TAG = "TelephonyComponentFactory";
     private static TelephonyComponentFactory sInstance;
 
     public static TelephonyComponentFactory getInstance() {
         if (sInstance == null) {
-            sInstance = new TelephonyComponentFactory();
+            // CAF 差异：设备基座通过反射从 qti-telephony-common.jar 载入 QTI 工厂实现，
+            // 失败时回退到 AOSP 默认工厂。
+            String factoryClassName =
+                    "com.qualcomm.qti.internal.telephony.QtiTelephonyComponentFactory";
+            PathClassLoader classLoader = new PathClassLoader(
+                    "/system/framework/qti-telephony-common.jar",
+                    ClassLoader.getSystemClassLoader());
+            Rlog.d(LOG_TAG, "classLoader = " + classLoader);
+            if (factoryClassName == null || factoryClassName.length() == 0) {
+                Rlog.d(LOG_TAG, "no customized TelephonyPlugin available, fallback to default");
+                factoryClassName = "com.android.internal.telephony.TelephonyComponentFactory";
+            }
+            try {
+                Class<?> clazz = Class.forName(factoryClassName, false, classLoader);
+                Rlog.d(LOG_TAG, "cls = " + clazz);
+                Constructor<?> constructor = clazz.getConstructor(new Class[0]);
+                Rlog.d(LOG_TAG, "constructor method = " + constructor);
+                sInstance = (TelephonyComponentFactory) constructor.newInstance(new Object[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Rlog.e(LOG_TAG, "Error loading TelephonyComponentFactory");
+                sInstance = new TelephonyComponentFactory();
+            } catch (NoClassDefFoundError e) {
+                e.printStackTrace();
+                Rlog.e(LOG_TAG, "error loading TelephonyComponentFactory");
+                sInstance = new TelephonyComponentFactory();
+            }
         }
         return sInstance;
+    }
+
+    public SubscriptionController initSubscriptionController(Context context,
+            CommandsInterface[] ci) {
+        Rlog.d(LOG_TAG, "initSubscriptionController");
+        return SubscriptionController.init(context, ci);
+    }
+
+    public void makeExtTelephonyClasses(Context context, Phone[] phoneArr,
+            CommandsInterface[] commandsInterfaceArr) {
+        Rlog.d(LOG_TAG, "makeExtTelephonyClasses");
     }
 
     public GsmCdmaCallTracker makeGsmCdmaCallTracker(GsmCdmaPhone phone) {
@@ -142,6 +186,42 @@ public class TelephonyComponentFactory {
 
     public DeviceStateMonitor makeDeviceStateMonitor(Phone phone) {
         return new DeviceStateMonitor(phone);
+    }
+
+    // CAF 差异：设备基座由工厂创建 Phone/RIL/PhoneSwitcher/SubscriptionInfoUpdater。
+    public Phone makePhone(Context context, CommandsInterface commandsInterface,
+            PhoneNotifier phoneNotifier, int phoneId, int phoneType,
+            TelephonyComponentFactory telephonyComponentFactory) {
+        Rlog.d(LOG_TAG, "makePhone");
+        if (phoneType == 1) {
+            return new GsmCdmaPhone(context, commandsInterface, phoneNotifier, phoneId, 1,
+                    telephonyComponentFactory);
+        }
+        if (phoneType == 2) {
+            return new GsmCdmaPhone(context, commandsInterface, phoneNotifier, phoneId, 6,
+                    telephonyComponentFactory);
+        }
+        return null;
+    }
+
+    public PhoneSwitcher makePhoneSwitcher(int maxActivePhones, int numPhones, Context context,
+            SubscriptionController subscriptionController, Looper looper,
+            ITelephonyRegistry telephonyRegistry, CommandsInterface[] cis, Phone[] phones) {
+        Rlog.d(LOG_TAG, "makePhoneSwitcher");
+        return new PhoneSwitcher(maxActivePhones, numPhones, context, subscriptionController,
+                looper, telephonyRegistry, cis, phones);
+    }
+
+    public RIL makeRIL(Context context, int preferredNetworkType, int cdmaSubscription,
+            Integer instanceId) {
+        Rlog.d(LOG_TAG, "makeRIL");
+        return new RIL(context, preferredNetworkType, cdmaSubscription, instanceId);
+    }
+
+    public SubscriptionInfoUpdater makeSubscriptionInfoUpdater(Looper looper, Context context,
+            Phone[] phoneArr, CommandsInterface[] commandsInterfaceArr) {
+        Rlog.d(LOG_TAG, "makeSubscriptionInfoUpdater");
+        return new SubscriptionInfoUpdater(looper, context, phoneArr, commandsInterfaceArr);
     }
 
     public CdmaSubscriptionSourceManager

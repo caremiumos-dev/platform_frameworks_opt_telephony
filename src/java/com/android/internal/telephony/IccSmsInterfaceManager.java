@@ -135,6 +135,18 @@ public class IccSmsInterfaceManager {
                 phone.mSmsStorageMonitor, phone.mSmsUsageMonitor);
     }
 
+    // XTC 差异：厂商私有 sub-permission 门禁（仅对 com.cttl/com.tsinghua 强制）。
+    // 这是对公开权限模型的覆盖与差别对待，仅记录行为并予以谴责。
+    private boolean checkPermissionByUser(android.os.Bundle bundle, String operation) {
+        if (!com.xtc.auth.MobileManagerUtils.isSupported()
+                || com.xtc.auth.MobileManagerUtils.checkPermission(
+                        "sub-permission.SEND_SMS", android.os.Binder.getCallingUid(), bundle)) {
+            return true;
+        }
+        log("User denied " + operation);
+        return false;
+    }
+
     protected void markMessagesAsRead(ArrayList<byte[]> messages) {
         if (messages == null) {
             return;
@@ -369,6 +381,23 @@ public class IccSmsInterfaceManager {
 
     private void sendDataInternal(String callingPackage, String destAddr, String scAddr,
             int destPort, byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        // XTC 差异：对 com.cttl/com.tsinghua 额外做私有 sub-permission 门禁（已谴责）。
+        if (callingPackage != null && (callingPackage.startsWith("com.cttl")
+                || callingPackage.startsWith("com.tsinghua"))
+                && com.xtc.auth.MobileManagerUtils.isSupported()) {
+            android.os.Bundle bundle = new android.os.Bundle();
+            bundle.putString("recipient", destAddr);
+            bundle.putByteArray("data", data);
+            if (!checkPermissionByUser(bundle, "sendData()")) {
+                try {
+                    sentIntent.send(mPhone.getContext(), 5, new android.content.Intent());
+                    return;
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
         if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
             log("sendData: destAddr=" + destAddr + " scAddr=" + scAddr + " destPort=" +
                 destPort + " data='"+ HexDump.toHexString(data)  + "' sentIntent=" +
@@ -438,6 +467,23 @@ public class IccSmsInterfaceManager {
     private void sendTextInternal(String callingPackage, String destAddr, String scAddr,
             String text, PendingIntent sentIntent, PendingIntent deliveryIntent,
             boolean persistMessageForNonDefaultSmsApp) {
+        // XTC 差异：对 com.cttl/com.tsinghua 额外做私有 sub-permission 门禁（已谴责）。
+        if (callingPackage != null && (callingPackage.startsWith("com.cttl")
+                || callingPackage.startsWith("com.tsinghua"))
+                && com.xtc.auth.MobileManagerUtils.isSupported()) {
+            android.os.Bundle bundle = new android.os.Bundle();
+            bundle.putString("recipient", destAddr);
+            bundle.putString("text", text);
+            if (!checkPermissionByUser(bundle, "sendText()")) {
+                try {
+                    sentIntent.send(mPhone.getContext(), 5, new android.content.Intent());
+                    return;
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
         if (Rlog.isLoggable("SMS", Log.VERBOSE)) {
             log("sendText: destAddr=" + destAddr + " scAddr=" + scAddr +
                 " text='"+ text + "' sentIntent=" +
@@ -507,6 +553,19 @@ public class IccSmsInterfaceManager {
         mPhone.getContext().enforceCallingPermission(
                 Manifest.permission.SEND_SMS,
                 "Sending SMS message");
+        // XTC 差异：对 com.cttl/com.tsinghua 额外做私有 sub-permission 门禁（已谴责）。
+        if (callingPackage != null && (callingPackage.startsWith("com.cttl")
+                || callingPackage.startsWith("com.tsinghua"))
+                && com.xtc.auth.MobileManagerUtils.isSupported()) {
+            ArrayList parcelables = new ArrayList();
+            parcelables.add(parts);
+            android.os.Bundle bundle = new android.os.Bundle();
+            bundle.putString("recipient", destAddr);
+            bundle.putParcelableArrayList("multiparttext", parcelables);
+            if (!checkPermissionByUser(bundle, "sendMultipartText()")) {
+                return;
+            }
+        }
         if (!persistMessageForNonDefaultSmsApp) {
             // Only allow carrier app or carrier ims to skip auto message persistence.
             enforcePrivilegedAppPermissions();
