@@ -111,6 +111,9 @@ public class ServiceStateTracker extends Handler {
 
     private static final String PROP_FORCE_ROAMING = "telephony.test.forceRoaming";
 
+    // XTC：把 PLMN/SPN 显示状态写进系统属性，供厂商 UI/诊断读取。
+    protected static final String XTC_PLMN_PROPERTY = "gsm.xtcplmn.plmnstatus";
+
     private CommandsInterface mCi;
     private UiccController mUiccController = null;
     private UiccCardApplication mUiccApplcation = null;
@@ -2336,6 +2339,8 @@ public class ServiceStateTracker extends Handler {
                         showPlmn, plmn, showSpn, spn)) {
                     mSpnUpdatePending = true;
                 }
+                setXtcSystemProperty(XTC_PLMN_PROPERTY,
+                        setXtcPlmnInfo(showPlmn, plmn, showSpn, spn, dataSpn));
             }
 
             mSubId = subId;
@@ -2400,6 +2405,8 @@ public class ServiceStateTracker extends Handler {
                         showPlmn, plmn, false, "")) {
                     mSpnUpdatePending = true;
                 }
+                setXtcSystemProperty(XTC_PLMN_PROPERTY,
+                        setXtcPlmnInfo(showPlmn, plmn, false, "", ""));
             }
 
             mSubId = subId;
@@ -2408,6 +2415,34 @@ public class ServiceStateTracker extends Handler {
             mCurSpn = "";
             mCurPlmn = plmn;
         }
+    }
+
+    /**
+     * XTC：把 showPlmn/plmn/showSpn/spn/dataSpn 拼成 "*" 分隔的状态串。
+     *
+     * 注：设备反编译里 null 分支调用 getText(R.string.lockscreen_pattern_correct)，
+     * 但该资源名与当前 AOSP 8.1 的资源 ID 无法一一对应；这里按反编译行为保留该调用。
+     */
+    public String setXtcPlmnInfo(boolean showPlmn, String plmn, boolean showSpn,
+            String spn, String dataSpn) {
+        if (plmn == null) {
+            plmn = android.content.res.Resources.getSystem().getText(
+                    com.android.internal.R.string.lockscreen_pattern_correct).toString();
+        }
+        if (spn == null) {
+            spn = android.content.res.Resources.getSystem().getText(
+                    com.android.internal.R.string.lockscreen_pattern_correct).toString();
+        }
+        if (dataSpn == null) {
+            dataSpn = android.content.res.Resources.getSystem().getText(
+                    com.android.internal.R.string.lockscreen_pattern_correct).toString();
+        }
+        return showPlmn + "*" + plmn + "*" + showSpn + "*" + spn + "*" + dataSpn;
+    }
+
+    public void setXtcSystemProperty(String key, String value) {
+        SystemProperties.set(key, value);
+        loge("xtc set plmn status info = " + value);
     }
 
     protected void setPowerStateToDesired() {
@@ -4527,6 +4562,13 @@ public class ServiceStateTracker extends Handler {
                     " prevOperatorNumeric=" + prevOperatorNumeric + " prevMcc=" + prevMcc +
                     " needToFixTimeZone=" + needToFixTimeZone +
                     " ltod=" + TimeUtils.logTimeOfDay(ctm));
+        }
+        // XTC：回到中国大陆（MCC 460）时强制把时区拉回 Asia/Shanghai。
+        if (SystemProperties.get("ro.product.manufacturer", "XTC").equals("XTC")
+                && mcc == 460
+                && !SystemProperties.get(TIMEZONE_PROPERTY, "null").equals("Asia/Shanghai")) {
+            log("bbklhj set TIMEZONE_PROPERTY Asia/Shangha for back china.");
+            setAndBroadcastNetworkSetTimeZone("Asia/Shanghai");
         }
         return retVal;
     }

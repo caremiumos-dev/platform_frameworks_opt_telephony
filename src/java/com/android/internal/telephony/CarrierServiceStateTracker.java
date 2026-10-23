@@ -20,6 +20,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -325,6 +326,30 @@ public class CarrierServiceStateTracker extends Handler {
         public Notification.Builder getNotificationBuilder() {
             Context context = mPhone.getContext();
             Intent notificationIntent = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
+            // XTC/CAF：优先跳到 QTI 的 networksetting 应用，否则回落到 phone 应用。
+            org.codeaurora.internal.IExtTelephony extTelephony =
+                    org.codeaurora.internal.IExtTelephony.Stub.asInterface(
+                            android.os.ServiceManager.getService("extphone"));
+            if (extTelephony != null) {
+                try {
+                    if (extTelephony.isVendorApkAvailable("com.qualcomm.qti.networksetting")) {
+                        notificationIntent.setComponent(new ComponentName(
+                                "com.qualcomm.qti.networksetting",
+                                "com.qualcomm.qti.networksetting.MobileNetworkSettings"));
+                    } else {
+                        notificationIntent.setComponent(new ComponentName(
+                                "com.android.phone",
+                                "com.android.phone.MobileNetworkSettings"));
+                    }
+                } catch (android.os.RemoteException e) {
+                    notificationIntent.setComponent(new ComponentName(
+                            "com.android.phone",
+                            "com.android.phone.MobileNetworkSettings"));
+                }
+            } else {
+                notificationIntent.setComponent(new ComponentName(
+                        "com.android.phone", "com.android.phone.MobileNetworkSettings"));
+            }
             PendingIntent settingsIntent = PendingIntent.getActivity(context, 0, notificationIntent,
                     PendingIntent.FLAG_ONE_SHOT);
             CharSequence title = context.getText(

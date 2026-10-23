@@ -37,6 +37,7 @@ import android.text.TextUtils;
 
 import com.android.ims.ImsCall;
 import com.android.ims.ImsCallProfile;
+import com.android.internal.telephony.TelephonyProperties;
 import com.android.ims.ImsException;
 import com.android.ims.ImsStreamMediaProfile;
 import com.android.ims.internal.ImsVideoCallProviderWrapper;
@@ -208,6 +209,14 @@ public class ImsPhoneConnection extends Connection implements
     /** This is an MO call, created when dialing */
     public ImsPhoneConnection(Phone phone, String dialString, ImsPhoneCallTracker ct,
             ImsPhoneCall parent, boolean isEmergency) {
+        this(phone, dialString, ct, parent, isEmergency, null);
+    }
+
+    /**
+     * MO call with the dial intent extras, needed for CAF conference-URI dialing.
+     */
+    public ImsPhoneConnection(Phone phone, String dialString, ImsPhoneCallTracker ct,
+            ImsPhoneCall parent, boolean isEmergency, Bundle extras) {
         super(PhoneConstants.PHONE_TYPE_IMS);
         createWakeLock(phone.getContext());
         acquireWakeLock();
@@ -217,8 +226,18 @@ public class ImsPhoneConnection extends Connection implements
 
         mDialString = dialString;
 
-        mAddress = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
-        mPostDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
+        // XTC/CAF：conference URI / 跳过号码 schema 解析时原样保留拨号串。
+        boolean dialConferenceUri = extras != null
+                && extras.getBoolean(TelephonyProperties.EXTRA_DIAL_CONFERENCE_URI, false);
+        boolean skipSchemaParsing = extras != null
+                && extras.getBoolean(TelephonyProperties.EXTRA_SKIP_SCHEMA_PARSING, false);
+        if (dialConferenceUri || skipSchemaParsing) {
+            mAddress = dialString;
+            mPostDialString = "";
+        } else {
+            mAddress = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
+            mPostDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
+        }
 
         //mIndex = -1;
 

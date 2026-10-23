@@ -671,6 +671,17 @@ public class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
+    /**
+     * XTC：出厂/测试配置下禁止关闭 LTE（把除 11 以外的首选网络类型强制改回 22）。
+     * 批评：这是运营商/厂商对用户与第三方应用选择网络模式的强制干预。
+     */
+    private boolean isXtcNotAllowedDisableLte() {
+        if (SystemProperties.getInt("gsm.xtctest.modemtest", 0) == 0) {
+            return true;
+        }
+        return RILJ_LOGV;
+    }
+
     private RILRequest obtainRequest(int request, Message result, WorkSource workSource) {
         RILRequest rr = RILRequest.obtain(request, result, workSource);
         addRequest(rr);
@@ -2310,6 +2321,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
     public void setPreferredNetworkType(int networkType , Message result) {
         IRadio radioProxy = getRadioProxy(result);
         if (radioProxy != null) {
+            if (isXtcNotAllowedDisableLte() && networkType != 11) {
+                networkType = 22;
+                if (SystemProperties.get("gsm.sim.operator.numeric", "").equals("46015")) {
+                    networkType = 11;
+                }
+            }
             RILRequest rr = obtainRequest(RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE, result,
                     mRILDefaultWorkSource);
 

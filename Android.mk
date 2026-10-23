@@ -25,7 +25,8 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src/java) \
 	$(call all-logtags-files-under, src/java) \
 	$(call all-proto-files-under, proto)
 
-LOCAL_JAVA_LIBRARIES := voip-common ims-common services bouncycastle
+# telephony-ext 提供 org.codeaurora.internal.IExtTelephony（设备上同在 bootclasspath）。
+LOCAL_JAVA_LIBRARIES := voip-common ims-common services bouncycastle telephony-ext
 LOCAL_STATIC_JAVA_LIBRARIES := android.hardware.radio-V1.1-java-static \
     android.hardware.radio.deprecated-V1.0-java-static
 

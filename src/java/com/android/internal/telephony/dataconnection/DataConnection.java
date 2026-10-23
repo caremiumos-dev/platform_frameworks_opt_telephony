@@ -17,7 +17,10 @@
 package com.android.internal.telephony.dataconnection;
 
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.NetworkAgent;
@@ -174,6 +177,10 @@ public class DataConnection extends StateMachine {
     public HashMap<ApnContext, ConnectionParams> mApnContexts = null;
     PendingIntent mReconnectIntent = null;
 
+    // CAF：DDS 切换广播（仅 default APN 在 Active 状态时注册）。
+    private BroadcastReceiver mBroadcastReceiver;
+    private boolean mRegistered;
+
 
     // ***** Event codes for driving the state machine, package visible for Dcc
     static final int BASE = Protocol.BASE_DATA_CONNECTION;
@@ -193,9 +200,14 @@ public class DataConnection extends StateMachine {
     static final int EVENT_BW_REFRESH_RESPONSE = BASE + 14;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_STARTED = BASE + 15;
     static final int EVENT_DATA_CONNECTION_VOICE_CALL_ENDED = BASE + 16;
+    // CAF：DDS 切换完成后重新通告网络分数。
+    static final int EVENT_DATA_CONNECTION_DDS_SWITCHED = BASE + 17;
+
+    private static final String ACTION_DDS_SWITCH_DONE =
+            "org.codeaurora.intent.action.ACTION_DDS_SWITCH_DONE";
 
     private static final int CMD_TO_STRING_COUNT =
-            EVENT_DATA_CONNECTION_VOICE_CALL_ENDED - BASE + 1;
+            EVENT_DATA_CONNECTION_DDS_SWITCHED - BASE + 1;
 
     private static String[] sCmdToString = new String[CMD_TO_STRING_COUNT];
     static {
@@ -219,6 +231,8 @@ public class DataConnection extends StateMachine {
                 "EVENT_DATA_CONNECTION_VOICE_CALL_STARTED";
         sCmdToString[EVENT_DATA_CONNECTION_VOICE_CALL_ENDED - BASE] =
                 "EVENT_DATA_CONNECTION_VOICE_CALL_ENDED";
+        sCmdToString[EVENT_DATA_CONNECTION_DDS_SWITCHED - BASE] =
+                "EVENT_DATA_CONNECTION_DDS_SWITCHED";
     }
     // Convert cmd to string or null if unknown
     static String cmdToString(int cmd) {
@@ -421,6 +435,24 @@ public class DataConnection extends StateMachine {
         setInitialState(mInactiveState);
 
         mApnContexts = new HashMap<ApnContext, ConnectionParams>();
+
+        mRegistered = false;
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                log("mBroadcastReceiver - " + action);
+                if (ACTION_DDS_SWITCH_DONE.equals(action)) {
+                    int newDds = intent.getIntExtra("subscription", -1);
+                    log("got ACTION_DDS_SWITCH_DONE, new DDS = " + newDds
+                            + "update network score");
+                    if (mNetworkAgent == null || mPhone.getSubId() == newDds) {
+                        return;
+                    }
+                    sendMessage(obtainMessage(EVENT_DATA_CONNECTION_DDS_SWITCHED));
+                }
+            }
+        };
     }
 
     /**
@@ -700,6 +732,15 @@ public class DataConnection extends StateMachine {
         }
 
         return result;
+    }
+
+    private boolean isApnTypeDefault() {
+        for (String type : mApnSetting.types) {
+            if (type.equals(PhoneConstants.APN_TYPE_DEFAULT)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isDnsOk(String[] domainNameServers) {
@@ -1226,6 +1267,12 @@ public class DataConnection extends StateMachine {
                     mNetworkInfo.setRoaming(false);
                     break;
 
+                case EVENT_DATA_CONNECTION_DDS_SWITCHED:
+                    if (mNetworkAgent != null) {
+                        mNetworkAgent.sendNetworkScore(50);
+                    }
+                    break;
+
                 default:
                     if (DBG) {
                         log("DcDefaultState: shouldn't happen but ignore msg.what="
@@ -1582,6 +1629,13 @@ public class DataConnection extends StateMachine {
             mNetworkAgent = new DcNetworkAgent(getHandler().getLooper(), mPhone.getContext(),
                     "DcNetworkAgent", mNetworkInfo, getNetworkCapabilities(), mLinkProperties,
                     50, misc);
+
+            // CAF：default APN 在 Active 状态监听 DDS 切换，切换后刷新网络分数。
+            if (isApnTypeDefault() && !mRegistered) {
+                mPhone.getContext().registerReceiver(mBroadcastReceiver,
+                        new IntentFilter(ACTION_DDS_SWITCH_DONE));
+                mRegistered = true;
+            }
         }
 
         @Override
@@ -1600,6 +1654,10 @@ public class DataConnection extends StateMachine {
 
             mNetworkInfo.setDetailedState(NetworkInfo.DetailedState.DISCONNECTED,
                     reason, mNetworkInfo.getExtraInfo());
+            if (mRegistered) {
+                mPhone.getContext().unregisterReceiver(mBroadcastReceiver);
+                mRegistered = false;
+            }
             if (mNetworkAgent != null) {
                 mNetworkAgent.sendNetworkInfo(mNetworkInfo);
                 mNetworkAgent = null;

@@ -934,7 +934,7 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
 
             mPendingMO = new ImsPhoneConnection(mPhone,
                     checkForTestEmergencyNumber(dialString), this, mForegroundCall,
-                    isEmergencyNumber);
+                    isEmergencyNumber, intentExtras);
             mPendingMO.setVideoState(videoState);
         }
         addConnection(mPendingMO);
@@ -1099,8 +1099,14 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             return;
         }
 
-        if (conn.getAddress()== null || conn.getAddress().length() == 0
-                || conn.getAddress().indexOf(PhoneNumberUtils.WILD) >= 0) {
+        // XTC/CAF：conference URI 或跳过 schema 解析时不校验号码合法性。
+        boolean dialConferenceUri = intentExtras != null
+                && intentExtras.getBoolean(TelephonyProperties.EXTRA_DIAL_CONFERENCE_URI, false);
+        boolean skipSchemaParsing = intentExtras != null
+                && intentExtras.getBoolean(TelephonyProperties.EXTRA_SKIP_SCHEMA_PARSING, false);
+        if (!dialConferenceUri && !skipSchemaParsing
+                && (conn.getAddress() == null || conn.getAddress().length() == 0
+                        || conn.getAddress().indexOf(PhoneNumberUtils.WILD) >= 0)) {
             // Phone number is invalid
             conn.setDisconnectCause(DisconnectCause.INVALID_NUMBER);
             sendEmptyMessageDelayed(EVENT_HANGUP_PENDINGMO, TIMEOUT_HANGUP_PENDINGMO);
@@ -1120,6 +1126,8 @@ public class ImsPhoneCallTracker extends CallTracker implements ImsPullCall {
             ImsCallProfile profile = mImsManager.createCallProfile(mServiceId,
                     serviceType, callType);
             profile.setCallExtraInt(ImsCallProfile.EXTRA_OIR, clirMode);
+            profile.setCallExtraBoolean(TelephonyProperties.EXTRAS_IS_CONFERENCE_URI,
+                    dialConferenceUri);
 
             // Translate call subject intent-extra from Telecom-specific extra key to the
             // ImsCallProfile key.

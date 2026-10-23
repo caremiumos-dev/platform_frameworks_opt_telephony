@@ -47,6 +47,12 @@ public interface AppInterface {
     public static final String CAT_ICC_STATUS_CHANGE =
                                     "com.android.internal.stk.icc_status_change";
 
+    // XTC/CAF: STK activate-notify and HCI connectivity events.
+    public static final String CAT_ACTIVATE_NOTIFY_ACTION =
+                                    "org.codeaurora.intent.action.stk.activate_notify";
+    public static final String CAT_HCI_CONNECTIVITY_ACTION =
+                                    "org.codeaurora.intent.action.stk.hci_connectivity";
+
     // Permission required by STK command receiver
     public static final String STK_PERMISSION = "android.permission.RECEIVE_STK_COMMANDS";
 

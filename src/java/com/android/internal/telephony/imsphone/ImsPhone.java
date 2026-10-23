@@ -782,8 +782,14 @@ public class ImsPhone extends ImsPhoneBase {
     private Connection dialInternal(String dialString, int videoState,
                                     Bundle intentExtras, ResultReceiver wrappedCallback)
             throws CallStateException {
+        // XTC/CAF：conference URI 或跳过 schema 解析时不要去掉分隔符。
+        boolean dialConferenceUri = intentExtras != null
+                && intentExtras.getBoolean(TelephonyProperties.EXTRA_DIAL_CONFERENCE_URI, false);
+        boolean skipSchemaParsing = intentExtras != null
+                && intentExtras.getBoolean(TelephonyProperties.EXTRA_SKIP_SCHEMA_PARSING, false);
         // Need to make sure dialString gets parsed properly
-        String newDialString = PhoneNumberUtils.stripSeparators(dialString);
+        String newDialString = (dialConferenceUri || skipSchemaParsing)
+                ? dialString : PhoneNumberUtils.stripSeparators(dialString);
 
         // handle in-call MMI first if applicable
         if (handleInCallMmiCommands(newDialString)) {
