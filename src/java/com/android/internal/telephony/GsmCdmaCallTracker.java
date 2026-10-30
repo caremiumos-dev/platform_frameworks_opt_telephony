@@ -616,11 +616,14 @@ public class GsmCdmaCallTracker extends CallTracker {
         int serviceState = mPhone.getServiceState().getState();
         String disableCall = SystemProperties.get(
                 TelephonyProperties.PROPERTY_DISABLE_CALL, "false");
+        // Vendor: a remote switch can block all outgoing calls.
+        boolean callEnd = SystemProperties.getBoolean("persist.sys.call.end", false);
 
         ret = (serviceState != ServiceState.STATE_POWER_OFF)
                 && mPendingMO == null
                 && !mRingingCall.isRinging()
                 && !disableCall.equals("true")
+                && !callEnd
                 && (!mForegroundCall.getState().isAlive()
                     || !mBackgroundCall.getState().isAlive()
                     || (!isPhoneTypeGsm()
